@@ -10,8 +10,6 @@ import useTreeChanges from 'tree-changes-hook';
 import { useAppSelector } from 'modules/hooks';
 import theme, { headerHeight } from 'modules/theme';
 
-import { name } from 'config';
-
 import { showAlert } from 'actions';
 
 import Footer from 'components/Footer';
@@ -24,6 +22,7 @@ import NotFound from 'routes/NotFound';
 import Private from 'routes/Private';
 
 import { UserState } from 'types';
+import Login from 'routes/Login';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -44,11 +43,13 @@ function Root() {
   const user = useAppSelector(selectUser);
   const { changed } = useTreeChanges(user);
 
-  const { isAuthenticated } = user;
+  const { isAuthenticated, name } = user;
 
   useEffect(() => {
     if (changed('isAuthenticated', true)) {
-      dispatch(showAlert('Hello! And welcome!', { variant: 'success', icon: 'bell', timeout: 10 }));
+      dispatch(
+        showAlert(`Hello! And welcome ${name}!`, { variant: 'success', icon: 'bell', timeout: 10 }),
+      );
     }
   }, [dispatch, changed]);
 
@@ -79,6 +80,14 @@ function Root() {
                   </PublicRoute>
                 }
                 path="/"
+              />
+              <Route
+                element={
+                  <PublicRoute isAuthenticated={isAuthenticated} to="/private">
+                    <Login />
+                  </PublicRoute>
+                }
+                path="/login"
               />
               <Route
                 element={

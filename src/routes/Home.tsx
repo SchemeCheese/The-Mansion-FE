@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Button, Container, responsive, Text } from 'styled-minimal';
@@ -53,10 +53,17 @@ const Heading = styled.h1`
 
 function Home() {
   const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const status = useSelector<RootState>(({ user }) => user.status);
 
   const handleClickLogin = () => {
-    dispatch(login());
+    dispatch(login({email, password}));
+    console.log('Email ', email);
+    console.log('Password ', password);
+    
+    
   };
 
   return (
@@ -66,6 +73,17 @@ function Home() {
           <Logo />
         </Header>
         <Heading>{name}</Heading>
+        <div>
+            <label>
+              Email:
+              <input type="text" onChange={(e) => setEmail(e.target.value)}/>
+            </label>
+            <label>
+              Password:
+              <input type="text" onChange={(e) => setPassword(e.target.value)}/>
+            </label>
+            <button onClick={handleClickLogin}>Loginnnn</button>
+        </div>
         <Button
           busy={status === STATUS.RUNNING}
           data-testid="Login"

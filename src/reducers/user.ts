@@ -2,13 +2,15 @@ import { createReducer } from '@reduxjs/toolkit';
 
 import { STATUS } from 'literals';
 
-import { login, loginSuccess, logOut, logOutSuccess } from 'actions';
+import { getLogginedUserInfo, login, loginSuccess, logOut, logOutSuccess } from 'actions';
 
 import { UserState } from 'types';
 
 export const userState = {
   isAuthenticated: false,
   status: STATUS.IDLE,
+  email: '',
+  name: '',
 };
 
 export default {
@@ -17,8 +19,14 @@ export default {
       .addCase(login, draft => {
         draft.status = STATUS.RUNNING;
       })
-      .addCase(loginSuccess, draft => {
+      .addCase(loginSuccess, (draft, { payload }) => {
         draft.isAuthenticated = true;
+        draft.status = STATUS.READY;
+        draft.email = payload.email;
+        draft.name = payload.name;
+      })
+      .addCase(getLogginedUserInfo, draft => {
+        draft.isAuthenticated = false;
         draft.status = STATUS.READY;
       });
 
@@ -27,6 +35,8 @@ export default {
         draft.status = STATUS.RUNNING;
       })
       .addCase(logOutSuccess, draft => {
+        localStorage.removeItem('access_token');
+
         draft.isAuthenticated = false;
         draft.status = STATUS.IDLE;
       });
