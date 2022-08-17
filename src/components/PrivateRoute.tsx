@@ -1,6 +1,8 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 
+import MLayout from './MLayout';
+
 interface Props {
   children: React.ReactElement;
   isAuthenticated: boolean;
@@ -12,7 +14,7 @@ export default function PrivateRoute(props: Props): JSX.Element {
   const { pathname } = useLocation();
 
   return isAuthenticated ? (
-    children
+    <MLayout>{children}</MLayout>
   ) : (
     <Navigate state={{ redirect: pathname, isAuthenticated }} to={to} />
   );

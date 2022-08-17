@@ -11,3 +11,9 @@ export const topic: Topic = {
   status: STATUS.IDLE,
   updatedAt: 0,
 };
+
+/* API Path */
+export const AuthPath = {
+  LOGIN_PATH: 'auth/login',
+  PROFILE_PATH: 'auth/me',
+};
