@@ -20,6 +20,7 @@
   "dependencies": {
     "@gilbarbara/helpers": "^0.5.1",
     "@reduxjs/toolkit": "^1.8.0",
+    "antd": "^4.22.6",
     "immer": "^9.0.12",
     "is-lite": "^0.8.1",
     "react": "^17.0.2",
