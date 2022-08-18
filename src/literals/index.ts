@@ -15,6 +15,7 @@ export const ActionTypes = keyMirror({
   USER_LOGOUT_REQUEST: undefined,
   USER_LOGOUT_SUCCESS: undefined,
   USER_LOGOUT_FAILURE: undefined,
+  USER_GET_LOGGINED_USER_INFO: undefined,
 });
 
 export const STATUS: Status = {
