@@ -1,0 +1,65 @@
+.trigger {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.breadcrumb {
+  margin: 16px 0;
+  font-size: 13px;
+  padding: 0 24px 0px 24px;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.site-layout .site-layout-background {
+  background: #ffffff;
+  box-shadow: 0px 1px 4px rgba(0, 21, 41, 0.1);
+}
+
+.ant-layout-has-sider {
+  min-height: 100vh;
+}
+
+.title {
+  margin-bottom: 1rem;
+  font-size: 14px;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.ant-tabs-tab {
+  font-size: 12px;
+}
+
+.ant-tabs-nav {
+  margin-bottom: 0px !important;
+  padding-left: 24px;
+}
+
+.ant-tabs-content-holder {
+  background-color: #e5e5e5;
+  padding: 24px 24px 0px 24px;
+}
+
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #1d39c4;
+}
+
+.ant-tabs-tab:hover {
+  color: #1d39c4;
+}
+
+.ant-tabs-ink-bar {
+  background: #1d39c4;
+}

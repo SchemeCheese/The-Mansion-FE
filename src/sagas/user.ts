@@ -1,17 +1,17 @@
 import { request } from '@gilbarbara/helpers';
+import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, delay, put, takeLatest } from 'redux-saga/effects';
 
+import { AuthPath } from 'config';
 import { ActionTypes } from 'literals';
 
 import { getLogginedUserInfo, login, loginSuccess, logOutSuccess, showAlert } from 'actions';
 
 export function* loginSaga({ payload }: ReturnType<typeof login>) {
   try {
-    yield delay(400);
-
     let accessToken = '';
 
-    ({ access_token: accessToken } = yield call(request, `http://localhost:8096/auth/login`, {
+    ({ access_token: accessToken } = yield call(request, apiEndPoint(AuthPath.LOGIN_PATH), {
       method: 'POST',
       body: payload,
     }));
@@ -34,11 +34,9 @@ export function* getLogginedUserInfoSaga() {
   let name = '';
   const accessToken = localStorage.getItem('access_token');
 
-  ({ email, name } = yield call(request, `http://localhost:8096/auth/me`, {
+  ({ email, name } = yield call(request, apiEndPoint(AuthPath.PROFILE_PATH), {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+    headers: headerWithAuthorization(),
   }));
 
   console.log('accessToken', accessToken, email, name);

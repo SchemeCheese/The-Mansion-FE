@@ -18,6 +18,7 @@
     "ES6"
   ],
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@gilbarbara/helpers": "^0.5.1",
     "@reduxjs/toolkit": "^1.8.0",
     "antd": "^4.22.6",

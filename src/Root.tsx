@@ -2,27 +2,27 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Reservation from 'pages/reservation';
 import { selectUser } from 'selectors';
 import styled, { ThemeProvider } from 'styled-components';
-import { px } from 'styled-minimal';
 import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
-import theme, { headerHeight } from 'modules/theme';
+import theme from 'modules/theme';
 
 import { showAlert } from 'actions';
 
-import Footer from 'components/Footer';
-import Header from 'components/Header';
+// import Footer from 'components/Footer';
+// import Header from 'components/Header';
 import PrivateRoute from 'components/PrivateRoute';
 import PublicRoute from 'components/PublicRoute';
 import SystemAlerts from 'containers/SystemAlerts';
-import Home from 'routes/Home';
+// import Home from 'routes/Home';
+import Login from 'routes/Login';
 import NotFound from 'routes/NotFound';
 import Private from 'routes/Private';
 
 import { UserState } from 'types';
-import Login from 'routes/Login';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -34,8 +34,7 @@ const AppWrapper = styled.div`
 `;
 
 const Main = styled.main<Pick<UserState, 'isAuthenticated'>>`
-  min-height: 100vh;
-  padding: ${({ isAuthenticated }) => (isAuthenticated ? `${px(headerHeight)} 0 0` : 0)};
+  padding: 0;
 `;
 
 function Root() {
@@ -70,20 +69,20 @@ function Root() {
               rel="stylesheet"
             />
           </Helmet>
-          {isAuthenticated && <Header />}
+          {/* {isAuthenticated && <Header />} */}
           <Main isAuthenticated={isAuthenticated}>
             <Routes>
               <Route
                 element={
-                  <PublicRoute isAuthenticated={isAuthenticated} to="/private">
-                    <Home />
+                  <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
+                    <Login />
                   </PublicRoute>
                 }
                 path="/"
               />
               <Route
                 element={
-                  <PublicRoute isAuthenticated={isAuthenticated} to="/private">
+                  <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
                     <Login />
                   </PublicRoute>
                 }
@@ -97,10 +96,18 @@ function Root() {
                 }
                 path="/private"
               />
+              <Route
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated} to="/">
+                    <Reservation />
+                  </PrivateRoute>
+                }
+                path="/reservation"
+              />
               <Route element={<NotFound />} path="*" />
             </Routes>
           </Main>
-          <Footer />
+          {/* <Footer /> */}
           <SystemAlerts />
         </AppWrapper>
       </ThemeProvider>
