@@ -63,3 +63,10 @@
 .ant-tabs-ink-bar {
   background: #1d39c4;
 }
+
+.ant-checkbox {
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  box-sizing: border-box;
+}

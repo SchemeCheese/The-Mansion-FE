@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Checkbox, Form, Input } from 'antd';
 
+import { colors } from 'modules/theme';
+
 import { login } from 'actions';
 
 import PattonButton from 'components/PattonButton';
@@ -90,10 +92,14 @@ function Login() {
       </Form.Item>
       <Form.Item>
         <Form.Item name="remember" noStyle>
-          <Checkbox>Keep logged in</Checkbox>
+          <Checkbox style={{ color: 'rgba(0, 0, 0, 0.65)' }}>Keep logged in</Checkbox>
         </Form.Item>
 
-        <a className="login-form-forgot" href="/reset-password" style={{ float: 'right' }}>
+        <a
+          className="login-form-forgot"
+          href="/reset-password"
+          style={{ float: 'right', color: colors.pattron }}
+        >
           Reset password
         </a>
       </Form.Item>
