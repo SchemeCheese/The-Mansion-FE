@@ -9,7 +9,7 @@ import PattonButton from 'components/PattonButton';
 
 const { Option } = Select;
 
-function Waitlist() {
+function Reserved() {
   const [showMore, setShowMore] = useState(false);
 
   function handleChange() {
@@ -18,22 +18,81 @@ function Waitlist() {
 
   const dataWaitlist = [];
 
-  for (let index = 0; index < 1000; index++) {
-    dataWaitlist.push({
-      id: index,
-      folio_id: '1234',
-      status: 'Waitlist',
-      created_date: '12/08/2010',
-      source_ta: 'Ming',
-      checkin: '12/08/2010',
-      checkout: '12/08/2010',
-      booker_name: 'Ming',
-      email: 'test@gmail.com',
-      phone: '0989878765',
-      total_room: '2',
-      agent: '-',
-    });
+  for (let index = 0; index < 100; index++) {
+    dataWaitlist.push(
+      {
+        id: index,
+        folio_id: '2944',
+        status: 'Reserved',
+        source_ta: 'Trang',
+        checkin: '12/08/2010',
+        checkout: '12/08/2010',
+        booker_name: 'Du Vu',
+        email: 'du.vu@gmail.com',
+        phone: '0989878765',
+        total_room: '2',
+        agent: '-',
+      },
+      {
+        id: index,
+        folio_id: '2944',
+        status: 'Inhouse',
+        source_ta: 'Trang',
+        checkin: '12/08/2010',
+        checkout: '12/08/2010',
+        booker_name: 'Du Vu',
+        email: 'du.vu@gmail.com',
+        phone: '0989878765',
+        total_room: '2',
+        agent: '-',
+      },
+      {
+        id: index,
+        folio_id: '2944',
+        status: 'Checkout',
+        source_ta: 'Trang',
+        checkin: '12/08/2010',
+        checkout: '12/08/2010',
+        booker_name: 'Du Vu',
+        email: 'du.vu@gmail.com',
+        phone: '0989878765',
+        total_room: '2',
+        agent: '-',
+      },
+      {
+        id: index,
+        folio_id: '2944',
+        status: 'Cancelled',
+        source_ta: 'Trang',
+        checkin: '12/08/2010',
+        checkout: '12/08/2010',
+        booker_name: 'Du Vu',
+        email: 'du.vu@gmail.com',
+        phone: '0989878765',
+        total_room: '2',
+        agent: '-',
+      },
+    );
   }
+
+  // const colorArray = [
+  //   {
+  //     value: 'Reserved',
+  //     color: '#1D39C4',
+  //   },
+  //   {
+  //     value: 'Inhouse',
+  //     color: '#52C41A',
+  //   },
+  //   {
+  //     value: 'Checkout',
+  //     color: '#9254DE',
+  //   },
+  //   {
+  //     value: 'Cancelled',
+  //     color: '#F5222D',
+  //   },
+  // ];
 
   const columnsWaitlist = [
     {
@@ -55,17 +114,20 @@ function Waitlist() {
             width="6"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle cx="3" cy="3" fill="black" fillOpacity="0.25" r="3" />
+            <circle
+              cx="3"
+              cy="3"
+              // fill={colorArray
+              //   .filter(item => item.value === text)
+              //   .map(_item => {
+              //     return _item.color;
+              //   })}
+              r="3"
+            />
           </svg>
           {text}
         </span>
       ),
-      hidden: !showMore,
-    },
-    {
-      title: 'Created Date',
-      dataIndex: 'created_date',
-      key: 'created_date',
     },
     {
       title: 'Source TA',
@@ -107,7 +169,7 @@ function Waitlist() {
       dataIndex: 'agent',
       key: 'agent',
     },
-  ].filter(item => !item.hidden);
+  ];
 
   const navigate = useNavigate();
 
@@ -224,4 +286,4 @@ function Waitlist() {
   );
 }
 
-export default Waitlist;
+export default Reserved;
