@@ -1,6 +1,9 @@
 import React from 'react';
-import { Breadcrumb, Col, Tabs } from 'antd';
+import { Col, Tabs } from 'antd';
 
+import BreadcrumbList from 'components/BreadcrumbList';
+
+import Reserved from './Reserved';
 import Waitlist from './Waitlist';
 
 const { TabPane } = Tabs;
@@ -50,13 +53,11 @@ function Reservation() {
     );
   }
 
+  const breadcrumbData = ['Home', 'List', 'App'];
+
   return (
     <>
-      <Breadcrumb className="breadcrumb">
-        <Breadcrumb.Item>Home</Breadcrumb.Item>
-        <Breadcrumb.Item>List</Breadcrumb.Item>
-        <Breadcrumb.Item>App</Breadcrumb.Item>
-      </Breadcrumb>
+      <BreadcrumbList data={breadcrumbData} />
 
       <p className="title">Reservation List</p>
 
@@ -65,7 +66,7 @@ function Reservation() {
           <Waitlist />
         </TabPane>
         <TabPane key="2" tab="Reserved">
-          Content of Tab Pane 2
+          <Reserved />
         </TabPane>
         <TabPane key="3" tab="Calendar">
           Content of Tab Pane 3
