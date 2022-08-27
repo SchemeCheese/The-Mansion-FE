@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Reservation from 'pages/reservation';
+import Create from 'pages/reservation/Create';
 import ReservationDetail from 'pages/reservation/ReservationDetail';
 import { selectUser } from 'selectors';
 import styled, { ThemeProvider } from 'styled-components';
@@ -112,6 +113,14 @@ function Root() {
                   </PrivateRoute>
                 }
                 path="/reservation/:id"
+              />
+              <Route
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated} to="/">
+                    <Create />
+                  </PrivateRoute>
+                }
+                path="/reservation/create"
               />
               <Route element={<NotFound />} path="*" />
             </Routes>

@@ -124,7 +124,8 @@ function MLayout(props: Props) {
         <Header
           className="site-layout-background"
           style={{
-            padding: 0,
+            height: 48,
+            lineHeight: '48px',
           }}
         >
           {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
@@ -137,8 +138,12 @@ function MLayout(props: Props) {
             <SearchOutlined style={{ marginRight: 28 }} />
             <BellOutlined style={{ marginRight: 28 }} />
             <Dropdown overlay={menu} placement="bottom" trigger={['click']}>
-              <Avatar src="https://joeschmoe.io/api/v1/random" style={{ marginRight: 28 }} />
+              <Avatar
+                src="https://joeschmoe.io/api/v1/random"
+                style={{ marginBottom: 5, marginRight: 10 }}
+              />
             </Dropdown>
+            <span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>Mr.Minh</span>
           </div>
         </Header>
         <Content
