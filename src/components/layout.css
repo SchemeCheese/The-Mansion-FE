@@ -25,6 +25,12 @@
 .site-layout .site-layout-background {
   background: #ffffff;
   box-shadow: 0px 1px 4px rgba(0, 21, 41, 0.1);
+  padding: 0;
+}
+
+.site-layout .ant-avatar {
+  width: 24px;
+  height: 24px;
 }
 
 .ant-layout-has-sider {
@@ -47,9 +53,27 @@
   padding-left: 24px;
 }
 
-.ant-tabs-content-holder {
+.content {
   background-color: #e5e5e5;
   padding: 24px 24px 0px 24px;
+}
+
+.ant-card-head {
+  background: #fafafa;
+  box-shadow: inset 0px -1px 0px #e8e8e8;
+  border-radius: 2px;
+  border-bottom: none;
+}
+
+.ant-card-head .ant-card-head-title {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #1d39c4;
+  border-color: #1d39c4;
 }
 
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {

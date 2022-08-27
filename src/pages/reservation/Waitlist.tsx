@@ -115,6 +115,10 @@ function Waitlist() {
     navigate(`/reservation/${id}`);
   };
 
+  const redirectNewPage = () => {
+    navigate(`/reservation/create`);
+  };
+
   return (
     <Row style={{ background: 'white', padding: 16 }}>
       <Col span={24}>
@@ -204,7 +208,7 @@ function Waitlist() {
         </Input.Group>
       </Col>
       <Col span={24} style={{ paddingTop: 16 }}>
-        <PattonButton>
+        <PattonButton onClick={() => redirectNewPage()}>
           {' '}
           <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> New
         </PattonButton>
