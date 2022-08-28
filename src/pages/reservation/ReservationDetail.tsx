@@ -1,3 +1,13 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 24/08/2022
+Updated Date : 30/08/2022
+Main functions : Reservation Detail Page
+************************************ */
+
+import './reservation.css';
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
@@ -24,6 +34,8 @@ import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
 import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
+
+import GuestList from './GuestList';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -764,7 +776,7 @@ function ReservationDetail() {
                 Content of Tab Pane 3
               </TabPane>
               <TabPane key="4" tab="Guest List">
-                Content of Tab Pane 3
+                <GuestList />
               </TabPane>
               <TabPane key="5" tab="Transactions">
                 Content of Tab Pane 3

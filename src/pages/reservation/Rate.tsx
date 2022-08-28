@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : KienNT
+Created Date : 24/08/2022
+Updated Date : 28/08/2022
+Main functions : Rate Tab
+************************************ */
+
 import React from 'react';
 import { Col, Input, Row, Table } from 'antd';
 

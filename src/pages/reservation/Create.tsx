@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 24/08/2022
+Updated Date : 30/08/2022
+Main functions : Create Reservation Page
+************************************ */
+
 import React from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Col, Form, Input, Row, Select, Table } from 'antd';
