@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   Card,
@@ -145,6 +146,7 @@ function ReservationDetail() {
   };
 
   const [form] = Form.useForm();
+  const { t } = useTranslation();
 
   const onGenderChange = (value: string) => {
     switch (value) {
@@ -213,7 +215,7 @@ function ReservationDetail() {
         <Col span={6}>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>Branch Code:</BreadscrumTitle>
+              <BreadscrumTitle>{t('branch_code')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
               <p style={{ color: '#1D39C4', fontSize: 14 }}>TMHA</p>
@@ -221,7 +223,7 @@ function ReservationDetail() {
           </Row>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>Status:</BreadscrumTitle>
+              <BreadscrumTitle>{t('status')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
               <BreadscrumData>Reserved</BreadscrumData>
@@ -229,7 +231,7 @@ function ReservationDetail() {
           </Row>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>Created by:</BreadscrumTitle>
+              <BreadscrumTitle>{t('created_by')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
               <BreadscrumData>TrangVo</BreadscrumData>
@@ -242,7 +244,7 @@ function ReservationDetail() {
         <Col span={8} style={{ paddingRight: 20 }}>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>Total Amount (VND)</BreadscrumTitle>
+              <BreadscrumTitle>{t('reservation:total_amount')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               <p>4.800.000</p>
