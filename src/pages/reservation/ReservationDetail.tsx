@@ -16,6 +16,7 @@ import {
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
+import Rate from 'pages/reservation/Rate';
 import styled from 'styled-components';
 
 import BreadcrumbList from 'components/BreadcrumbList';
@@ -755,7 +756,7 @@ function ReservationDetail() {
                 </Row>
               </TabPane>
               <TabPane key="2" tab="Rates">
-                Content of Tab Pane 2
+                <Rate />
               </TabPane>
               <TabPane key="3" tab="Schedule">
                 Content of Tab Pane 3
