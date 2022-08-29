@@ -31,7 +31,7 @@ function Waitlist() {
       email: 'test@gmail.com',
       phone: '0989878765',
       total_room: '2',
-      agent: '-',
+      alert: '-',
     });
   }
 
@@ -101,11 +101,12 @@ function Waitlist() {
       title: 'Total Room',
       dataIndex: 'total_room',
       key: 'total_room',
+      render: (text: string) => <p style={{ textAlign: 'center' }}>{text}</p>,
     },
     {
-      title: 'Agent',
-      dataIndex: 'agent',
-      key: 'agent',
+      title: 'Alert',
+      dataIndex: 'alert',
+      key: 'alert',
     },
   ].filter(item => !item.hidden);
 
