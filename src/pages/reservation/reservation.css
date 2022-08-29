@@ -7,3 +7,23 @@
   border-top: 1px solid rgba(0, 0, 0, 0.15);
   background: #f7f9fa;
 }
+
+/* Create Guest Modal CSS */
+.new-guest-modal .ant-upload-list-picture-card-container {
+  width: 300px;
+  height: 300px;
+}
+
+.new-guest-modal .ant-upload-select-picture-card {
+  width: 300px !important;
+  height: 300px !important;
+}
+
+.new-guest-modal .ant-modal-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.new-guest-modal .ant-btn-primary {
+  background: #1d39c4;
+}
