@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : HangNTT
+Created Date : 24/08/2022
+Updated Date : 26/08/2022
+Main functions : Reservation List Page
+************************************ */
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
