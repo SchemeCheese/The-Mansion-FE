@@ -1,3 +1,112 @@
 {
-  "total_amount": "Total Amount (VND)"
+  "Total Amount": "Total Amount (VND)",
+  "Hide room rates in confirmation": "Hide room rates in confirmation",
+  "Deposit": "Deposit (VND)",
+  "Amount Due": "Amount Due (VND)",
+  "Subtotal": "Subtotal (VND)",
+  "Copy to new reservation": "Copy to new reservation",
+  "Folio": "Folio",
+  "Folio ID": "Folio ID",
+  "Checkin": "Checkin",
+  "Checkin Time": "Checkin Time",
+  "Checkout": "Checkout",
+  "Checkout Time": "Checkout Time",
+  "Pickup Time": "Pickup Time",
+  "Early Checkin": "Early Checkin",
+  "Honeymoon Setup": "Honeymoon Setup",
+  "Pickup Request": "Pickup Request",
+  "Late Checkout": "Late Checkout",
+  "Birthday Setup": "Birthday Setup",
+  "Dropoff Request": "Dropoff Request",
+  "Dropoff Time": "Dropoff Time",
+  "Paid": "Paid",
+  "Email reservation confirmation": "Email reservation confirmation",
+  "Hide room rates": "Hide room rates",
+  "Confirm reservation without deposit": "Confirm reservation without deposit",
+  "Save and add more details": "Save and add more details",
+  "Rates": "Rates",
+  "Rate": "Rate",
+  "Schedule": "Schedule",
+  "Guest List": "Guest List",
+  "Transactions": "Transactions",
+  "Room No": "Room No",
+  "C/I": "C/I",
+  "C/O": "C/O",
+  "Nights": "Nights",
+  "Rooming List": "Rooming List",
+  "Adl": "Adl",
+  "Create New Reservation": "Create New Reservation",
+  "Create New Reservation Note": "Create new reservation for your branch. Please note that pricing is depends on selected market and booking source.",
+  "Market": {
+    "title": "Market",
+    "placeholder": "Select market"
+  },
+  "Source": {
+    "title": "Source",
+    "placeholder": "Select source"
+  },
+  "Notes": {
+    "title": "Notes",
+    "placeholder": "Input notes"
+  },
+  "Type": {
+    "title": "Type",
+    "placeholder": "Select type"
+  },
+  "First Name": {
+    "title": "First Name",
+    "placeholder": "Steve"
+  },
+  "Last Name": {
+    "title": "Last Name",
+    "placeholder": "Nagaoka"
+  },
+  "Email": {
+    "title": "Email",
+    "placeholder": "Input email"
+  },
+  "Mobile Phone": {
+    "title": "Mobile Phone",
+    "placeholder": "Input phone number"
+  },
+  "Rank": {
+    "title": "Rank",
+    "placeholder": "Select rank"
+  },
+  "Additional Email": {
+    "title": "Additional Email",
+    "placeholder": "Input email"
+  },
+  "Room Type": {
+    "title": "Room Type",
+    "placeholder": "Select room type"
+  },
+  "Adults": {
+    "title": "Adults",
+    "placeholder": "Select adults"
+  },
+  "Child": {
+    "title": "Child",
+    "placeholder": "Select child"
+  },
+  "Baby": {
+    "title": "Baby",
+    "placeholder": "Select baby"
+  },
+  "Pickup Transport Code": {
+    "title": "Pickup Transport Code",
+    "placeholder": "Airline/Train PRN Code"
+  },
+  "Dropoff Transport Code": {
+    "title": "Dropoff Transport Codee",
+    "placeholder": "Airline/Train PRN Code"
+  },
+  "OTA Booking ID": {
+    "title": "OTA Booking ID",
+    "placeholder": "Input Booking ID"
+  },
+  "Payment Method": {
+    "title": "Payment Method",
+    "placeholder": "Select payment method"
+  }
 }

@@ -1,5 +1,19 @@
 {
-  "branch_code": "Branch Code",
-  "status": "Status",
-  "created_by": "Created By"
+  "Branch Code": "Branch Code",
+  "Status": "Status",
+  "Created By": "Created By",
+  "Created Date": "Created Date",
+  "General Informations": "General Informations",
+  "Booker Informations": "Booker Informations",
+  "Payment Informations": "Payment Informations",
+  "General Infos": "General Infos",
+  "Update": "Update",
+  "Save": "Save",
+  "New": "New",
+  "Name": "Name",
+  "Delete Selected": "Delete Selected",
+  "Resend Email": "Resend Email",
+  "TMHA": "TMHA",
+  "Reservation": "Reservation",
+  "Reservation Detail": "Reservation Detail"
 }

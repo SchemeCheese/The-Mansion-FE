@@ -11,26 +11,35 @@ i18n.use(initReactI18next).init({
   // We init with resources
   resources: {
     en: {
-      common: commonEn,
-      reservation: reservationEn,
-    },
-    vi: {
-      common: commonVi,
-      reservation: reservationJa,
+      translation: {
+        'Welcome to React': 'Welcome to React and react-i18next',
+        common: commonEn,
+        reservation: reservationEn,
+      },
     },
     ja: {
-      common: commonJa,
-      reservation: reservationVi,
+      translation: {
+        'Welcome to React': 'Welcome to React and react-i18next',
+        common: commonJa,
+        reservation: reservationJa,
+      },
+    },
+    vi: {
+      translation: {
+        'Welcome to React': 'Welcome to React and react-i18next',
+        common: commonVi,
+        reservation: reservationVi,
+      },
     },
   },
   fallbackLng: 'en',
   debug: true,
 
   // Have a common namespace used around the full app
-  ns: ['common'],
-  defaultNS: 'common',
+  ns: ['translation'],
+  defaultNS: 'translation',
 
-  keySeparator: false, // We use content as keys
+  // keySeparator: false, // We use content as keys
 
   interpolation: {
     escapeValue: false,
