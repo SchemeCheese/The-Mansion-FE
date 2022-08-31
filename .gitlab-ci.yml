@@ -19,7 +19,7 @@ build:
 lint:
   stage: test
   script:
-    - npm lint
-    - npm lint:styles
+    - npm run lint
+    - npm run lint:styles
   only:
     - merge_requests
