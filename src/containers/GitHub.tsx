@@ -17,7 +17,7 @@ import {
 import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
-import theme, { appColor, spacer } from 'modules/theme';
+import { appColor, colors, spacer } from 'modules/theme';
 
 import { topic } from 'config';
 import { STATUS } from 'literals';
@@ -61,7 +61,7 @@ const ItemHeader = styled.div`
   margin-bottom: ${spacer(3)};
 
   small {
-    color: ${theme.colors.gray60};
+    color: ${colors.pattron};
   }
 `;
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Button, Container, responsive, Text } from 'styled-minimal';
@@ -59,11 +59,9 @@ function Home() {
   const status = useSelector<RootState>(({ user }) => user.status);
 
   const handleClickLogin = () => {
-    dispatch(login({email, password}));
+    dispatch(login({ email, password }));
     console.log('Email ', email);
     console.log('Password ', password);
-    
-    
   };
 
   return (
@@ -74,15 +72,17 @@ function Home() {
         </Header>
         <Heading>{name}</Heading>
         <div>
-            <label>
-              Email:
-              <input type="text" onChange={(e) => setEmail(e.target.value)}/>
-            </label>
-            <label>
-              Password:
-              <input type="text" onChange={(e) => setPassword(e.target.value)}/>
-            </label>
-            <button onClick={handleClickLogin}>Loginnnn</button>
+          <label htmlFor="email">
+            Email:
+            <input id="email" onChange={e => setEmail(e.target.value)} type="text" />
+          </label>
+          <label htmlFor="password">
+            Password:
+            <input id="password" onChange={e => setPassword(e.target.value)} type="text" />
+          </label>
+          <button onClick={handleClickLogin} type="submit">
+            Loginnnn
+          </button>
         </div>
         <Button
           busy={status === STATUS.RUNNING}
@@ -90,6 +90,7 @@ function Home() {
           onClick={handleClickLogin}
           size="xl"
           textTransform="uppercase"
+          type="submit"
           variant="white"
         >
           <Icon name="sign-in" />

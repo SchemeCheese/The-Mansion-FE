@@ -8,8 +8,8 @@ export const appColor = '#00b4d5';
 export const easing = 'cubic-bezier(0.35, 0.01, 0.77, 0.34);';
 
 export const colors = {
-  pattron: '#1D39C4'
-}
+  pattron: '#1D39C4',
+};
 
 const theme = getTheme({
   button: {
