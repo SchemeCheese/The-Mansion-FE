@@ -7,6 +7,7 @@ Main functions : Create Reservation Page
 ************************************ */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Col, Form, Input, Row, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
@@ -18,61 +19,6 @@ import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
 const { Option } = Select;
-
-const columns = [
-  {
-    title: 'Status',
-    dataIndex: 'status',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Room Type',
-    dataIndex: 'room_type',
-  },
-  {
-    title: 'Room No',
-    dataIndex: 'room_no',
-  },
-  {
-    title: 'C/I',
-    dataIndex: 'ci',
-  },
-  {
-    title: 'C/O',
-    dataIndex: 'co',
-  },
-  {
-    title: 'Nights',
-    dataIndex: 'nights',
-  },
-  {
-    title: 'Adl',
-    dataIndex: 'adl',
-  },
-  {
-    title: 'Child',
-    dataIndex: 'child',
-  },
-  {
-    title: 'Baby',
-    dataIndex: 'baby',
-  },
-  {
-    title: 'Rate',
-    dataIndex: 'rate',
-  },
-  {
-    title: 'Subtotal(VND)',
-    dataIndex: 'subtotal',
-  },
-  {
-    title: 'Deposit(VND)',
-    dataIndex: 'deposit',
-  },
-];
 
 const data: object[] = [];
 
@@ -106,7 +52,63 @@ const rowSelection = {
 };
 
 function Create() {
-  const breadcrumbData = ['TMHA', 'Reservation'];
+  const { t } = useTranslation();
+  const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
+
+  const columns = [
+    {
+      title: t('common.Status'),
+      dataIndex: 'status',
+    },
+    {
+      title: t('common.Name'),
+      dataIndex: 'name',
+    },
+    {
+      title: t('reservation.Room Type.title'),
+      dataIndex: 'room_type',
+    },
+    {
+      title: t('reservation.Room No'),
+      dataIndex: 'room_no',
+    },
+    {
+      title: t('reservation.C/I'),
+      dataIndex: 'ci',
+    },
+    {
+      title: t('reservation.C/O'),
+      dataIndex: 'co',
+    },
+    {
+      title: t('reservation.Nights'),
+      dataIndex: 'nights',
+    },
+    {
+      title: t('reservation.Adl'),
+      dataIndex: 'adl',
+    },
+    {
+      title: t('reservation.Child.title'),
+      dataIndex: 'child',
+    },
+    {
+      title: t('reservation.Baby.title'),
+      dataIndex: 'baby',
+    },
+    {
+      title: t('reservation.Rate'),
+      dataIndex: 'rate',
+    },
+    {
+      title: t('reservation.Subtotal'),
+      dataIndex: 'subtotal',
+    },
+    {
+      title: t('reservation.Deposit'),
+      dataIndex: 'deposit',
+    },
+  ];
 
   const onFinish = (values: any) => {
     console.log('Success:', values);
@@ -144,10 +146,9 @@ function Create() {
   return (
     <>
       <BreadcrumbList data={breadcrumbData} />
-      <p className="title">Create New Reservation</p>
+      <p className="title">{t('reservation.Create New Reservation')}</p>
       <p style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.45)', paddingLeft: 24 }}>
-        Create new reservation for your branch. Please note that pricing is depends on selected
-        market and booking source.
+        {t('reservation.Create New Reservation Note')}
       </p>
       <Form
         autoComplete="off"
@@ -171,7 +172,7 @@ function Create() {
               <Row>
                 <Col span={8}>
                   <Form.Item
-                    label="Folio ID"
+                    label={t('reservation.Folio ID')}
                     name="folio_id"
                     rules={[
                       {
@@ -183,7 +184,7 @@ function Create() {
                     <Input defaultValue="2808" disabled value="2000" />
                   </Form.Item>
                   <Form.Item
-                    label="OTA Booking ID"
+                    label={t('reservation.OTA Booking ID.title')}
                     name="ota_booking_id"
                     rules={[
                       {
@@ -192,12 +193,12 @@ function Create() {
                       },
                     ]}
                   >
-                    <Input placeholder="Input Booking ID" />
+                    <Input placeholder={t('reservation.OTA Booking ID.placeholder')} />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Market"
+                    label={t('reservation.Market.title')}
                     name="market"
                     rules={[
                       {
@@ -205,14 +206,18 @@ function Create() {
                       },
                     ]}
                   >
-                    <Select allowClear onChange={onGenderChange} placeholder="Select market">
+                    <Select
+                      allowClear
+                      onChange={onGenderChange}
+                      placeholder={t('reservation.Market.placeholder')}
+                    >
                       <Option value="male">male</Option>
                       <Option value="female">female</Option>
                       <Option value="other">other</Option>
                     </Select>
                   </Form.Item>
                   <Form.Item
-                    label="Source"
+                    label={t('reservation.Source.title')}
                     name="source"
                     rules={[
                       {
@@ -220,7 +225,11 @@ function Create() {
                       },
                     ]}
                   >
-                    <Select allowClear onChange={onGenderChange} placeholder="Select source">
+                    <Select
+                      allowClear
+                      onChange={onGenderChange}
+                      placeholder={t('reservation.Source.placeholder')}
+                    >
                       <Option value="male">male</Option>
                       <Option value="female">female</Option>
                       <Option value="other">other</Option>
@@ -229,7 +238,7 @@ function Create() {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Notes"
+                    label={t('reservation.Notes.title')}
                     name="note"
                     rules={[
                       {
@@ -237,7 +246,7 @@ function Create() {
                       },
                     ]}
                   >
-                    <TextArea placeholder="Input notes" rows={5} />
+                    <TextArea placeholder={t('reservation.Notes.placeholder')} rows={5} />
                   </Form.Item>
                 </Col>
               </Row>
@@ -246,12 +255,12 @@ function Create() {
               bordered={false}
               size="small"
               style={{ marginTop: 20 }}
-              title="Booker Informations"
+              title={t('common.Booker Informations')}
             >
               <Row>
                 <Col span={8}>
                   <Form.Item
-                    label="Type"
+                    label={t('reservation.Type.title')}
                     name="type"
                     rules={[
                       {
@@ -259,14 +268,18 @@ function Create() {
                       },
                     ]}
                   >
-                    <Select allowClear onChange={onGenderChange} placeholder="Select type">
+                    <Select
+                      allowClear
+                      onChange={onGenderChange}
+                      placeholder={t('reservation.Type.placeholder')}
+                    >
                       <Option value="male">male</Option>
                       <Option value="female">female</Option>
                       <Option value="other">other</Option>
                     </Select>
                   </Form.Item>
                   <Form.Item
-                    label="First Name"
+                    label={t('reservation.First Name.title')}
                     name="first_name"
                     rules={[
                       {
@@ -278,7 +291,7 @@ function Create() {
                     <Input placeholder="Steve" />
                   </Form.Item>
                   <Form.Item
-                    label="Last Name"
+                    label={t('reservation.Last Name.title')}
                     name="last_name"
                     rules={[
                       {
@@ -292,7 +305,7 @@ function Create() {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Email"
+                    label={t('reservation.Email.title')}
                     name="email"
                     rules={[
                       {
@@ -301,10 +314,10 @@ function Create() {
                       },
                     ]}
                   >
-                    <Input placeholder="Input email" />
+                    <Input placeholder={t('reservation.Email.placeholder')} />
                   </Form.Item>
                   <Form.Item
-                    label="Mobile Phone"
+                    label={t('reservation.Mobile Phone.title')}
                     name="mobile_phone"
                     rules={[
                       {
@@ -313,10 +326,10 @@ function Create() {
                       },
                     ]}
                   >
-                    <Input placeholder="Input phone number" />
+                    <Input placeholder={t('reservation.Mobile Phone.placeholder')} />
                   </Form.Item>
                   <Form.Item
-                    label="Rank"
+                    label={t('reservation.Rank.title')}
                     name="rank"
                     rules={[
                       {
@@ -324,7 +337,11 @@ function Create() {
                       },
                     ]}
                   >
-                    <Select allowClear onChange={onGenderChange} placeholder="Select rank">
+                    <Select
+                      allowClear
+                      onChange={onGenderChange}
+                      placeholder={t('reservation.Rank.placeholder')}
+                    >
                       <Option value="male">male</Option>
                       <Option value="female">female</Option>
                       <Option value="other">other</Option>
@@ -333,7 +350,7 @@ function Create() {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Additional Email"
+                    label={t('reservation.Additional Email.title')}
                     name="email_2"
                     rules={[
                       {
@@ -342,10 +359,10 @@ function Create() {
                       },
                     ]}
                   >
-                    <Input placeholder="Input email" />
+                    <Input placeholder={t('reservation.Additional Email.placeholder')} />
                   </Form.Item>
                   <Form.Item
-                    label="Note"
+                    label={t('reservation.Notes.title')}
                     name="gender"
                     rules={[
                       {
@@ -353,20 +370,25 @@ function Create() {
                       },
                     ]}
                   >
-                    <TextArea placeholder="Input notes" rows={5} />
+                    <TextArea placeholder={t('reservation.Notes.placeholder')} rows={5} />
                   </Form.Item>
                 </Col>
               </Row>
             </Card>
 
-            <Card bordered={false} size="small" style={{ marginTop: 20 }} title="Rooming List">
+            <Card
+              bordered={false}
+              size="small"
+              style={{ marginTop: 20 }}
+              title={t('reservation.Rooming List')}
+            >
               <Row>
                 <Col span={24}>
                   <PattonButton>
                     {' '}
-                    <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> New
+                    <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
                   </PattonButton>
-                  <MButton style={{ marginLeft: 15 }}>Delete Selected</MButton>
+                  <MButton style={{ marginLeft: 15 }}>{t('common.Delete Selected')}</MButton>
                 </Col>
                 <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                   <Table
@@ -384,16 +406,16 @@ function Create() {
               bordered={false}
               size="small"
               style={{ marginTop: 20 }}
-              title="Payment Informations"
+              title={t('common.Payment Informations')}
             >
               <Row style={{ paddingTop: 10 }}>
                 <Col span={8}>
                   <p style={{ marginBottom: 25 }}>
-                    <span>Total Amount (VND) </span>
+                    <span>{t('reservation.Total Amount')}</span>
                     <span style={{ float: 'right', paddingRight: '12.5%' }}>4,800,000</span>{' '}
                   </p>
                   <Form.Item
-                    label="Payment Method"
+                    label={t('reservation.Payment Method.title')}
                     name="gender"
                     wrapperCol={{
                       span: 21,
@@ -402,7 +424,7 @@ function Create() {
                     <Select
                       allowClear
                       onChange={onGenderChange}
-                      placeholder="Select payment method"
+                      placeholder={t('reservation.Payment Method.placeholder')}
                     >
                       <Option value="male">male</Option>
                       <Option value="female">female</Option>
@@ -412,18 +434,18 @@ function Create() {
                 </Col>
                 <Col span={8} style={{ marginTop: -6 }}>
                   <Form.Item name="remember" style={{ marginBottom: 12 }} valuePropName="checked">
-                    <Checkbox>Paid</Checkbox>
+                    <Checkbox>{t('reservation.Paid')}</Checkbox>
                   </Form.Item>
                   <Form.Item name="remember" style={{ marginBottom: 12 }} valuePropName="checked">
-                    <Checkbox>Email reservation confirmation</Checkbox>
+                    <Checkbox>{t('reservation.Email reservation confirmation')}</Checkbox>
                   </Form.Item>
                   <Form.Item name="remember" style={{ marginBottom: 12 }} valuePropName="checked">
-                    <Checkbox>Hide room rates</Checkbox>
+                    <Checkbox>{t('reservation.Hide room rates')}</Checkbox>
                   </Form.Item>
                 </Col>
                 <Col span={8} style={{ marginTop: -6 }}>
                   <Form.Item name="remember" valuePropName="checked">
-                    <Checkbox>Confirm reservation without deposit</Checkbox>
+                    <Checkbox>{t('reservation.Confirm reservation without deposit')}</Checkbox>
                   </Form.Item>
                 </Col>
               </Row>
@@ -438,9 +460,9 @@ function Create() {
                 backgroundColor: '#e5e5e5',
               }}
             >
-              Save and add more details
+              {t('reservation.Save and add more details')}
             </MButton>
-            <PattonButton>Save</PattonButton>
+            <PattonButton>{t('common.Save')}</PattonButton>
           </Col>
         </Row>
       </Form>

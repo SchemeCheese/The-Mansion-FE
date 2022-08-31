@@ -44,61 +44,6 @@ const onChange = (key: string) => {
   console.log(key);
 };
 
-const columns = [
-  {
-    title: 'Status',
-    dataIndex: 'status',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-  },
-  {
-    title: 'Room Type',
-    dataIndex: 'room_type',
-  },
-  {
-    title: 'Room No',
-    dataIndex: 'room_no',
-  },
-  {
-    title: 'C/I',
-    dataIndex: 'ci',
-  },
-  {
-    title: 'C/O',
-    dataIndex: 'co',
-  },
-  {
-    title: 'Nights',
-    dataIndex: 'nights',
-  },
-  {
-    title: 'Adl',
-    dataIndex: 'adl',
-  },
-  {
-    title: 'Child',
-    dataIndex: 'child',
-  },
-  {
-    title: 'Baby',
-    dataIndex: 'baby',
-  },
-  {
-    title: 'Rate',
-    dataIndex: 'rate',
-  },
-  {
-    title: 'Subtotal(VND)',
-    dataIndex: 'subtotal',
-  },
-  {
-    title: 'Deposit(VND)',
-    dataIndex: 'deposit',
-  },
-];
-
 const data: object[] = [];
 
 for (let index = 0; index < 5; index++) {
@@ -143,8 +88,6 @@ const BreadscrumData = styled.p`
 `;
 
 function ReservationDetail() {
-  const breadcrumbData = ['TMHA', 'Reservation', 'Reservation Detail'];
-
   const onFinish = (values: any) => {
     console.log('Success:', values);
   };
@@ -159,6 +102,67 @@ function ReservationDetail() {
 
   const [form] = Form.useForm();
   const { t } = useTranslation();
+
+  const breadcrumbData = [
+    t('common.TMHA'),
+    t('common.Reservation'),
+    t('common.Reservation Detail'),
+  ];
+
+  const columns = [
+    {
+      title: t('common.Status'),
+      dataIndex: 'status',
+    },
+    {
+      title: t('common.Name'),
+      dataIndex: 'name',
+    },
+    {
+      title: t('reservation.Room Type.title'),
+      dataIndex: 'room_type',
+    },
+    {
+      title: t('reservation.Room No'),
+      dataIndex: 'room_no',
+    },
+    {
+      title: t('reservation.C/I'),
+      dataIndex: 'ci',
+    },
+    {
+      title: t('reservation.C/O'),
+      dataIndex: 'co',
+    },
+    {
+      title: t('reservation.Nights'),
+      dataIndex: 'nights',
+    },
+    {
+      title: t('reservation.Adl'),
+      dataIndex: 'adl',
+    },
+    {
+      title: t('reservation.Child.title'),
+      dataIndex: 'child',
+    },
+    {
+      title: t('reservation.Baby.title'),
+      dataIndex: 'baby',
+    },
+    {
+      title: t('reservation.Rate'),
+      dataIndex: 'rate',
+    },
+    {
+      title: t('reservation.Subtotal'),
+      dataIndex: 'subtotal',
+    },
+    {
+      title: t('reservation.Deposit'),
+      dataIndex: 'deposit',
+    },
+  ];
 
   const onGenderChange = (value: string) => {
     switch (value) {
@@ -201,11 +205,13 @@ function ReservationDetail() {
               fillOpacity="0.45"
             />
           </svg>
-          <span style={{ paddingLeft: 10, fontSize: 20 }}>Folio：234231029431</span>
+          <span style={{ paddingLeft: 10, fontSize: 20 }}>
+            {t('reservation.Folio')}：234231029431
+          </span>
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
-            <MInfoButton>Copy to new reservation</MInfoButton>
+            <MInfoButton>{t('reservation.Copy to new reservation')}</MInfoButton>
             <Select
               className="download-select"
               onChange={handleChange}
@@ -218,8 +224,8 @@ function ReservationDetail() {
               <Option value="pdf">PDF</Option>
               <Option value="docx">Docx</Option>
             </Select>
-            <MButton>Resend Email</MButton>
-            <PattonButton>Update</PattonButton>
+            <MButton>{t('common.Resend Email')}</MButton>
+            <PattonButton>{t('common.Update')}</PattonButton>
           </Space>
         </Col>
       </Row>
@@ -227,7 +233,7 @@ function ReservationDetail() {
         <Col span={6}>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>{t('branch_code')}:</BreadscrumTitle>
+              <BreadscrumTitle>{t('common.Branch Code')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
               <p style={{ color: '#1D39C4', fontSize: 14 }}>TMHA</p>
@@ -235,7 +241,7 @@ function ReservationDetail() {
           </Row>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>{t('status')}:</BreadscrumTitle>
+              <BreadscrumTitle>{t('common.Status')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
               <BreadscrumData>Reserved</BreadscrumData>
@@ -243,7 +249,7 @@ function ReservationDetail() {
           </Row>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>{t('created_by')}:</BreadscrumTitle>
+              <BreadscrumTitle>{t('common.Created By')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
               <BreadscrumData>TrangVo</BreadscrumData>
@@ -251,12 +257,12 @@ function ReservationDetail() {
           </Row>
         </Col>
         <Col span={6}>
-          <Checkbox>Hide room rates in confirmation</Checkbox>
+          <Checkbox>{t('reservation.Hide room rates in confirmation')}</Checkbox>
         </Col>
         <Col span={8} style={{ paddingRight: 20 }}>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>{t('reservation:total_amount')}</BreadscrumTitle>
+              <BreadscrumTitle>{t('reservation.Total Amount')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               <p>4.800.000</p>
@@ -264,7 +270,7 @@ function ReservationDetail() {
           </Row>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>Deposit (VND)</BreadscrumTitle>
+              <BreadscrumTitle>{t('reservation.Deposit')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               <p>4.800.000</p>
@@ -272,7 +278,7 @@ function ReservationDetail() {
           </Row>
           <Row>
             <Col span={12}>
-              <BreadscrumTitle>Amount Due (VND)</BreadscrumTitle>
+              <BreadscrumTitle>{t('reservation.Amount Due')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               <p>4.800.000</p>
@@ -298,7 +304,7 @@ function ReservationDetail() {
       >
         <Row className="content">
           <Col span={24}>
-            <Card bordered={false} size="small" title="General Informations">
+            <Card bordered={false} size="small" title={t('common.General Informations')}>
               <Row>
                 <Col span={8}>
                   <Form.Item
@@ -328,7 +334,7 @@ function ReservationDetail() {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Market"
+                    label={t('reservation.Market.title')}
                     name="market"
                     rules={[
                       {
@@ -336,14 +342,18 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <Select allowClear onChange={onGenderChange} placeholder="Select market">
+                    <Select
+                      allowClear
+                      onChange={onGenderChange}
+                      placeholder={t('reservation.Market.placeholder')}
+                    >
                       <Option value="male">male</Option>
                       <Option value="female">female</Option>
                       <Option value="other">other</Option>
                     </Select>
                   </Form.Item>
                   <Form.Item
-                    label="Source"
+                    label={t('reservation.Source.title')}
                     name="source"
                     rules={[
                       {
@@ -351,7 +361,11 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <Select allowClear onChange={onGenderChange} placeholder="Select source">
+                    <Select
+                      allowClear
+                      onChange={onGenderChange}
+                      placeholder={t('reservation.Source.placeholder')}
+                    >
                       <Option value="male">male</Option>
                       <Option value="female">female</Option>
                       <Option value="other">other</Option>
@@ -360,7 +374,7 @@ function ReservationDetail() {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Notes"
+                    label={t('reservation.Notes.title')}
                     name="note"
                     rules={[
                       {
@@ -368,7 +382,7 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <TextArea placeholder="Input notes" rows={5} />
+                    <TextArea placeholder={t('reservation.Notes.placeholder')} rows={5} />
                   </Form.Item>
                 </Col>
               </Row>
@@ -377,12 +391,12 @@ function ReservationDetail() {
               bordered={false}
               size="small"
               style={{ marginTop: 20 }}
-              title="Booker Informations"
+              title={t('common.Booker Informations')}
             >
               <Row>
                 <Col span={8}>
                   <Form.Item
-                    label="Type"
+                    label={t('reservation.Type.title')}
                     name="type"
                     rules={[
                       {
@@ -390,14 +404,18 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <Select allowClear onChange={onGenderChange} placeholder="Select type">
+                    <Select
+                      allowClear
+                      onChange={onGenderChange}
+                      placeholder={t('reservation.Type.placeholder')}
+                    >
                       <Option value="male">male</Option>
                       <Option value="female">female</Option>
                       <Option value="other">other</Option>
                     </Select>
                   </Form.Item>
                   <Form.Item
-                    label="First Name"
+                    label={t('reservation.First Name.title')}
                     name="first_name"
                     rules={[
                       {
@@ -406,10 +424,10 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <Input placeholder="Steve" />
+                    <Input placeholder={t('reservation.First Name.placeholder')} />
                   </Form.Item>
                   <Form.Item
-                    label="Last Name"
+                    label={t('reservation.Last Name.title')}
                     name="last_name"
                     rules={[
                       {
@@ -418,12 +436,12 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <Input placeholder="Nagaoka" />
+                    <Input placeholder={t('reservation.Last Name.placeholder')} />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Email"
+                    label={t('reservation.Email.title')}
                     name="email"
                     rules={[
                       {
@@ -432,10 +450,10 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <Input placeholder="Input email" />
+                    <Input placeholder={t('reservation.Email.placeholder')} />
                   </Form.Item>
                   <Form.Item
-                    label="Mobile Phone"
+                    label={t('reservation.Mobile Phone.title')}
                     name="mobile_phone"
                     rules={[
                       {
@@ -444,10 +462,10 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <Input placeholder="Input phone number" />
+                    <Input placeholder={t('reservation.Mobile Phone.placeholder')} />
                   </Form.Item>
                   <Form.Item
-                    label="Rank"
+                    label={t('reservation.Rank.title')}
                     name="rank"
                     rules={[
                       {
@@ -455,7 +473,11 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <Select allowClear onChange={onGenderChange} placeholder="Select rank">
+                    <Select
+                      allowClear
+                      onChange={onGenderChange}
+                      placeholder={t('reservation.Rank.placeholder')}
+                    >
                       <Option value="male">male</Option>
                       <Option value="female">female</Option>
                       <Option value="other">other</Option>
@@ -464,7 +486,7 @@ function ReservationDetail() {
                 </Col>
                 <Col span={8}>
                   <Form.Item
-                    label="Additional Email"
+                    label={t('reservation.Additional Email.title')}
                     name="email_2"
                     rules={[
                       {
@@ -473,10 +495,10 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <Input placeholder="Input email" />
+                    <Input placeholder={t('reservation.Additional Email.placeholder')} />
                   </Form.Item>
                   <Form.Item
-                    label="Note"
+                    label={t('reservation.Notes.title')}
                     name="gender"
                     rules={[
                       {
@@ -484,20 +506,25 @@ function ReservationDetail() {
                       },
                     ]}
                   >
-                    <TextArea placeholder="Input notes" rows={5} />
+                    <TextArea placeholder={t('reservation.Notes.placeholder')} rows={5} />
                   </Form.Item>
                 </Col>
               </Row>
             </Card>
 
-            <Card bordered={false} size="small" style={{ marginTop: 20 }} title="Rooming List">
+            <Card
+              bordered={false}
+              size="small"
+              style={{ marginTop: 20 }}
+              title={t('reservation.Rooming List')}
+            >
               <Row>
                 <Col span={24}>
                   <PattonButton>
                     {' '}
-                    <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> New
+                    <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
                   </PattonButton>
-                  <MButton style={{ marginLeft: 15 }}>Delete Selected</MButton>
+                  <MButton style={{ marginLeft: 15 }}>{t('common.Delete Selected')}</MButton>
                 </Col>
                 <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                   <Table
@@ -513,16 +540,16 @@ function ReservationDetail() {
           </Col>
           <Col span={24} style={{ marginTop: 20 }}>
             <Tabs className="tabs-cart" defaultActiveKey="1" onChange={onChange}>
-              <TabPane key="1" tab="General Infos">
+              <TabPane key="1" tab={t('common.General Infos')}>
                 <Row style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
                   <Col span={24} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
-                    <span style={{ paddingRight: 15 }}>Created Date: </span>
+                    <span style={{ paddingRight: 15 }}>{t('common.Created Date')}: </span>
                     <span>2017-08-08</span>
-                    <PattonButton style={{ float: 'right' }}>Update</PattonButton>
+                    <PattonButton style={{ float: 'right' }}>{t('common.Update')}</PattonButton>
                   </Col>
                   <Col span={8}>
                     <Form.Item
-                      label="Room Type"
+                      label={t('reservation.Room Type.title')}
                       name="room_type"
                       rules={[
                         {
@@ -530,59 +557,63 @@ function ReservationDetail() {
                         },
                       ]}
                     >
-                      <Select allowClear onChange={onGenderChange} placeholder="Select market">
+                      <Select
+                        allowClear
+                        onChange={onGenderChange}
+                        placeholder={t('reservation.Room Type.placeholder')}
+                      >
                         <Option value="male">male</Option>
                         <Option value="female">female</Option>
                         <Option value="other">other</Option>
                       </Select>
                     </Form.Item>
                     <Form.Item
-                      label="Adults"
-                      name="room_type"
+                      label={t('reservation.Adults.title')}
+                      name="adults"
                       rules={[
                         {
                           required: true,
                         },
                       ]}
                     >
-                      <Select allowClear onChange={onGenderChange} placeholder="Select market">
-                        <Option value="male">male</Option>
-                        <Option value="female">female</Option>
+                      <Select defaultValue="2" onChange={onGenderChange}>
+                        <Option value="1">1</Option>
+                        <Option value="2">2</Option>
                         <Option value="other">other</Option>
                       </Select>
                     </Form.Item>
                     <Form.Item
-                      label="Child"
-                      name="room_type"
+                      label={t('reservation.Child.title')}
+                      name="child"
                       rules={[
                         {
                           required: true,
                         },
                       ]}
                     >
-                      <Select allowClear onChange={onGenderChange} placeholder="Select market">
-                        <Option value="male">male</Option>
+                      <Select defaultValue="0" onChange={onGenderChange}>
+                        <Option value="0">0</Option>
                         <Option value="female">female</Option>
                         <Option value="other">other</Option>
                       </Select>
                     </Form.Item>
                     <Form.Item
-                      label="Baby"
-                      name="room_type"
+                      label={t('reservation.Baby.title')}
+                      name="baby"
                       rules={[
                         {
                           required: true,
                         },
                       ]}
                     >
-                      <Select allowClear onChange={onGenderChange} placeholder="Select market">
-                        <Option value="male">male</Option>
+                      <Select defaultValue="0" onChange={onGenderChange}>
+                        <Option value="0">0</Option>
                         <Option value="female">female</Option>
                         <Option value="other">other</Option>
                       </Select>
                     </Form.Item>
                     <Form.Item
-                      label="Notes"
+                      label={t('reservation.Notes.title')}
                       name="note"
                       rules={[
                         {
@@ -590,13 +621,13 @@ function ReservationDetail() {
                         },
                       ]}
                     >
-                      <TextArea placeholder="Input notes" rows={5} />
+                      <TextArea placeholder={t('reservation.Notes.placeholder')} rows={5} />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
                     <Form.Item
-                      label="Checkin"
-                      name="market"
+                      label={t('reservation.Checkin')}
+                      name="checkin"
                       rules={[
                         {
                           required: true,
@@ -615,8 +646,8 @@ function ReservationDetail() {
                     </Form.Item>
 
                     <Form.Item
-                      label="Checkin Time"
-                      name="market"
+                      label={t('reservation.Checkin Time')}
+                      name="checkin_time"
                       rules={[
                         {
                           required: true,
@@ -635,17 +666,17 @@ function ReservationDetail() {
                       />
                     </Form.Item>
                     <Form.Item name="remember" style={{ marginBottom: 12 }} valuePropName="checked">
-                      <Checkbox>Early Checkin</Checkbox>
+                      <Checkbox>{t('reservation.Early Checkin')}</Checkbox>
                     </Form.Item>
                     <Form.Item name="remember" style={{ marginBottom: 12 }} valuePropName="checked">
-                      <Checkbox>Honeymoon Setup</Checkbox>
+                      <Checkbox>{t('reservation.Honeymoon Setup')}</Checkbox>
                     </Form.Item>
                     <Form.Item name="remember" style={{ marginBottom: 12 }} valuePropName="checked">
-                      <Checkbox>Pickup Request</Checkbox>
+                      <Checkbox>{t('reservation.Pickup Request')}</Checkbox>
                     </Form.Item>
                     <Form.Item
-                      label="Pickup Time"
-                      name="market"
+                      label={t('reservation.Pickup Time')}
+                      name="pickup_time"
                       rules={[
                         {
                           required: true,
@@ -665,15 +696,19 @@ function ReservationDetail() {
                       />
                     </Form.Item>
                     <Form.Item
-                      label="Pickup Transport Code"
-                      name="room_type"
+                      label={t('reservation.Pickup Transport Code.title')}
+                      name="pickup_transport_code"
                       rules={[
                         {
                           required: true,
                         },
                       ]}
                     >
-                      <Select allowClear onChange={onGenderChange} placeholder="Select market">
+                      <Select
+                        allowClear
+                        onChange={onGenderChange}
+                        placeholder={t('reservation.Pickup Transport Code.placeholder')}
+                      >
                         <Option value="male">male</Option>
                         <Option value="female">female</Option>
                         <Option value="other">other</Option>
@@ -682,8 +717,8 @@ function ReservationDetail() {
                   </Col>
                   <Col span={8}>
                     <Form.Item
-                      label="Checkout"
-                      name="market"
+                      label={t('reservation.Checkout')}
+                      name="checkout"
                       rules={[
                         {
                           required: true,
@@ -702,8 +737,8 @@ function ReservationDetail() {
                     </Form.Item>
 
                     <Form.Item
-                      label="Checkout Time"
-                      name="market"
+                      label={t('reservation.Checkout Time')}
+                      name="checkout_time"
                       rules={[
                         {
                           required: true,
@@ -722,16 +757,16 @@ function ReservationDetail() {
                       />
                     </Form.Item>
                     <Form.Item name="remember" style={{ marginBottom: 12 }} valuePropName="checked">
-                      <Checkbox>Late Checkout</Checkbox>
+                      <Checkbox>{t('reservation.Late Checkout')}</Checkbox>
                     </Form.Item>
                     <Form.Item name="remember" style={{ marginBottom: 12 }} valuePropName="checked">
-                      <Checkbox>Birthday Setup</Checkbox>
+                      <Checkbox>{t('reservation.Birthday Setup')}</Checkbox>
                     </Form.Item>
                     <Form.Item name="remember" style={{ marginBottom: 12 }} valuePropName="checked">
-                      <Checkbox>Dropoff Request</Checkbox>
+                      <Checkbox>{t('reservation.Dropoff Request')}</Checkbox>
                     </Form.Item>
                     <Form.Item
-                      label="Dropoff Time"
+                      label={t('reservation.Dropoff Time')}
                       name="market"
                       rules={[
                         {
@@ -752,7 +787,7 @@ function ReservationDetail() {
                       />
                     </Form.Item>
                     <Form.Item
-                      label="Dropoff Transport Code"
+                      label={t('reservation.Dropoff Transport Code.title')}
                       name="room_type"
                       rules={[
                         {
@@ -760,7 +795,11 @@ function ReservationDetail() {
                         },
                       ]}
                     >
-                      <Select allowClear onChange={onGenderChange} placeholder="Select market">
+                      <Select
+                        allowClear
+                        onChange={onGenderChange}
+                        placeholder={t('reservation.Dropoff Transport Code.placeholder')}
+                      >
                         <Option value="male">male</Option>
                         <Option value="female">female</Option>
                         <Option value="other">other</Option>
@@ -769,16 +808,16 @@ function ReservationDetail() {
                   </Col>
                 </Row>
               </TabPane>
-              <TabPane key="2" tab="Rates">
+              <TabPane key="2" tab={t('reservation.Rates')}>
                 <Rate />
               </TabPane>
-              <TabPane key="3" tab="Schedule">
+              <TabPane key="3" tab={t('reservation.Schedule')}>
                 Content of Tab Pane 3
               </TabPane>
-              <TabPane key="4" tab="Guest List">
+              <TabPane key="4" tab={t('reservation.Guest List')}>
                 <GuestList />
               </TabPane>
-              <TabPane key="5" tab="Transactions">
+              <TabPane key="5" tab={t('reservation.Transactions')}>
                 Content of Tab Pane 3
               </TabPane>
             </Tabs>
