@@ -1,0 +1,25 @@
+# Docker Runner
+image: node:16-alpine
+
+cache:
+  paths:
+    - node_modules/
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - npm install --legacy-peer-deps
+  only:
+    - merge_requests
+
+lint:
+  stage: test
+  script:
+    - npm lint
+    - npm lint:styles
+  only:
+    - merge_requests
