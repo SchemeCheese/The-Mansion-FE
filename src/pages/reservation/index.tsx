@@ -3,6 +3,7 @@ import { Col, Tabs } from 'antd';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 
+import Calendar from './Calendar';
 import ChannelManager from './ChannelManager';
 import Reserved from './Reserved';
 import Waitlist from './Waitlist';
@@ -70,7 +71,7 @@ function Reservation() {
           <Reserved />
         </TabPane>
         <TabPane key="3" className="content" tab="Calendar">
-          Content of Tab Pane 3
+          <Calendar />
         </TabPane>
         <TabPane key="4" className="content" tab="Channel Manager">
           <ChannelManager />

@@ -27,3 +27,45 @@
 .new-guest-modal .ant-btn-primary {
   background: #1d39c4;
 }
+
+.calendar-table .fc-col-header thead {
+  height: 45px;
+}
+
+.row-calendar {
+  height: 95px;
+}
+
+tr {
+  height: 50px;
+}
+
+.aa tbody > tr {
+  height: 95px;
+}
+
+/** Fullcalendar custom **/
+.fc-h-event {
+  background: #1d39c4;
+  border-radius: 30px;
+  border-color: #1d39c4;
+  top: 12px;
+  font-size: 12px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: 400;
+  height: 24px;
+}
+
+.fc-datagrid-header colgroup,
+.fc-timeline-header colgroup {
+  background: #fafafa;
+}
+
+.fc-icon-chevron-left::before {
+  content: '<';
+}
+
+.fc-icon-chevron-right::before {
+  content: '>';
+}
