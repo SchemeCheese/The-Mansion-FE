@@ -8,16 +8,18 @@ Main functions : Reservation Detail Page
 
 import './reservation.css';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
 import {
+  Button,
   Card,
   Checkbox,
   Col,
   DatePicker,
   Form,
   Input,
+  Modal,
   Row,
   Select,
   Space,
@@ -34,6 +36,7 @@ import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
 import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
+import TableSummary from 'components/TableSummary';
 
 import GuestList from './GuestList';
 
@@ -186,6 +189,170 @@ function ReservationDetail() {
         });
     }
   };
+
+  const onChangeRoomType = (value: string) => {
+    console.log(`selected ${value}`);
+  };
+
+  const onChangeQuantity = (value: string) => {
+    console.log(`selected ${value}`);
+  };
+
+  const onChangeRate = (value: string) => {
+    console.log(`selected ${value}`);
+  };
+
+  const onSearchRate = (value: string) => {
+    console.log('search:', value);
+  };
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const columnsSearchRoom = [
+    {
+      title: 'Date',
+      dataIndex: 'date',
+      key: 'date',
+    },
+    {
+      title: 'Rate Name',
+      dataIndex: 'rate_name',
+      key: 'rate_name',
+      render: () => (
+        <Select
+          onChange={onChangeRate}
+          onSearch={onSearchRate}
+          placeholder="Select rate"
+          showSearch
+          style={{ width: '100%' }}
+        >
+          <Option value="rate name 1">Rate Name 1</Option>
+          <Option value="rate name 2">Rate Name 2</Option>
+          <Option value="rate name 3">Rate Name 3</Option>
+        </Select>
+      ),
+    },
+    {
+      title: 'Adl',
+      dataIndex: 'adult',
+      key: 'adult',
+    },
+    {
+      title: 'Child',
+      dataIndex: 'child',
+      key: 'child',
+    },
+    {
+      title: 'Rate detail',
+      dataIndex: 'rate_detail',
+      key: 'rate_detail',
+    },
+    {
+      title: 'Unit price',
+      dataIndex: 'unit_price',
+      key: 'unit_price',
+    },
+    {
+      title: 'Updated price',
+      dataIndex: 'updated_price',
+      key: 'updated_price',
+      render: () => <Input name="updated_price" placeholder="0" style={{ borderRadius: 4 }} />,
+    },
+    {
+      title: 'Task',
+      dataIndex: 'task',
+      key: 'task',
+      render: () => (
+        <Button style={{ color: '#1D39C4', paddingLeft: 0 }} type="link">
+          Duplicate
+        </Button>
+      ),
+    },
+  ];
+
+  const dataSearchRoom = [];
+
+  for (let index = 0; index < 3; index++) {
+    dataSearchRoom.push({
+      created_date: '',
+      rate_name: '',
+      adult: '',
+      child: '',
+      rate_detail: '',
+      unit_price: '',
+      updated_price: '',
+      task: '',
+    });
+  }
+
+  const columnsSelectedRoomsResult = [
+    {
+      title: 'Checkin',
+      dataIndex: 'checkin',
+      key: 'checkin',
+    },
+    {
+      title: 'Checkout',
+      dataIndex: 'checkout',
+      key: 'checkout',
+    },
+    {
+      title: 'Room Type',
+      dataIndex: 'room_type',
+      key: 'room_type',
+    },
+    {
+      title: 'Rate Name',
+      dataIndex: 'rate_name',
+      key: 'rate_name',
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      key: 'quantity',
+    },
+    {
+      title: 'Subtotal',
+      dataIndex: 'subtotal',
+      key: 'subtotal',
+    },
+    {
+      title: 'Task',
+      dataIndex: 'task',
+      key: 'task',
+      render: () => (
+        <Button style={{ color: '#F5222D', paddingLeft: 0 }} type="link">
+          Delete
+        </Button>
+      ),
+    },
+  ];
+
+  const dataSelectedRoomsResult = [];
+
+  for (let index = 0; index < 3; index++) {
+    dataSelectedRoomsResult.push({
+      checkin: '',
+      checkout: '',
+      room_type: '',
+      rate_name: '',
+      quantity: '',
+      subtotal: '',
+      task: '',
+    });
+  }
 
   return (
     <>
@@ -458,7 +625,7 @@ function ReservationDetail() {
                     rules={[
                       {
                         required: true,
-                        message: 'Please input your username!',
+                        message: 'Please input your mobile phone!',
                       },
                     ]}
                   >
@@ -520,11 +687,109 @@ function ReservationDetail() {
             >
               <Row>
                 <Col span={24}>
-                  <PattonButton>
+                  <PattonButton onClick={showModal} type="primary">
                     {' '}
                     <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
                   </PattonButton>
-                  <MButton style={{ marginLeft: 15 }}>{t('common.Delete Selected')}</MButton>
+                  <Modal
+                    bodyStyle={{ backgroundColor: '#F0F2F5' }}
+                    okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
+                    okText="Save"
+                    onCancel={handleCancel}
+                    onOk={handleOk}
+                    style={{ top: 80, borderRadius: 4 }}
+                    title={<b>Select room and rate</b>}
+                    visible={isModalVisible}
+                    width={1000}
+                  >
+                    <Card bordered={false} size="small" title="Search room">
+                      <Row>
+                        <Col span={6}>
+                          <Form.Item label="Checkin" name="checkin">
+                            <DatePicker
+                              defaultValue={moment('2017-08-08')}
+                              style={{
+                                height: 32,
+                                borderRadius: 4,
+                                marginRight: 11,
+                                width: '100%',
+                              }}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                          <Form.Item label="Checkout" name="checkout">
+                            <DatePicker
+                              defaultValue={moment('2017-08-08')}
+                              style={{
+                                height: 32,
+                                borderRadius: 4,
+                                marginRight: 11,
+                                width: '100%',
+                              }}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                          <Form.Item label="Room type" name="room_type">
+                            <Select
+                              allowClear
+                              onChange={onChangeRoomType}
+                              placeholder="Select room type"
+                            >
+                              <Option value="room1">Room 1</Option>
+                              <Option value="room2">Room 2</Option>
+                              <Option value="room3">Room 3</Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={6}>
+                          <Form.Item label="Quantity" name="quantity">
+                            <Select
+                              allowClear
+                              onChange={onChangeQuantity}
+                              placeholder="Select quantity"
+                            >
+                              <Option value="quantity1">Quantity 1</Option>
+                              <Option value="quantity2">Quantity 2</Option>
+                              <Option value="quantity3">Quantity 3</Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col span={24} style={{ paddingTop: 16 }}>
+                          <Table
+                            columns={columnsSearchRoom}
+                            dataSource={dataSearchRoom}
+                            pagination={false}
+                            size="small"
+                            style={{ border: 0 }}
+                            summary={TableSummary}
+                          />
+                        </Col>
+                      </Row>
+                    </Card>
+                    <Card
+                      bordered={false}
+                      size="small"
+                      style={{ marginTop: 16 }}
+                      title="Selected Rooms Result"
+                    >
+                      <Row>
+                        <Col span={24}>
+                          <Table
+                            columns={columnsSelectedRoomsResult}
+                            dataSource={dataSelectedRoomsResult}
+                            pagination={false}
+                            size="small"
+                            style={{ border: 0 }}
+                          />
+                        </Col>
+                      </Row>
+                    </Card>
+                  </Modal>
+                  <MButton style={{ marginLeft: 15 }}>Delete Selected</MButton>
                 </Col>
                 <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                   <Table
