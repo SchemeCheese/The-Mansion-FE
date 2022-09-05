@@ -6,9 +6,11 @@
   "General Informations": "General Informations",
   "Booker Informations": "Booker Informations",
   "Payment Informations": "Payment Informations",
+  "Invoice Information": "Invoice Information",
   "General Infos": "General Infos",
   "Update": "Update",
   "Save": "Save",
+  "Remove": "Remove",
   "New": "New",
   "Name": "Name",
   "Delete": "Delete",
@@ -17,5 +19,27 @@
   "TMHA": "TMHA",
   "Reservation": "Reservation",
   "Reservation Detail": "Reservation Detail",
-  "Print Registration Card": "Print Registration Card"
+  "Print Registration Card": "Print Registration Card",
+  "Add New": "Add New",
+  "ID": "ID",
+  "Nationality": {
+    "title": "Nationality",
+    "placeholder": "Select nationality"
+  },
+  "Email": {
+    "title": "Email",
+    "placeholder": "steve.mark@gmail.com"
+  },
+  "Mobile Phone": {
+    "title": "Mobile Phone",
+    "placeholder": "1800 882 3639"
+  },
+  "Date Of Birth": "Date Of Birth",
+  "Gender": "Gender",
+  "Language": "Language",
+  "Zip Code": {
+    "title": "Zip Code",
+    "placeholder": "Zip Code"
+  },
+  "Currency": "Currency"
 }

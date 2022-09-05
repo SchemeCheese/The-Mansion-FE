@@ -1,0 +1,58 @@
+{
+  "Main Guest": "Main Guest",
+  "Place Of Issue": "Place Of Issue",
+  "Date Of Issue": "Date Of Issue",
+  "Visa Expire Date": "Visa Expire Date",
+  "Guest Type": "Guest Type",
+  "First Name": {
+    "title": "First Name",
+    "placeholder": "Steve"
+  },
+  "Last Name": {
+    "title": "Last Name",
+    "placeholder": "Mark"
+  },
+  "Rank": {
+    "title": "Rank",
+    "placeholder": "Select rank"
+  },
+  "Identity / Passport No": {
+    "title": "Identity / Passport No",
+    "placeholder": "233202783028"
+  },
+  "Passport Expire Date": "Passport Expire Date",
+  "Marital Status": "Marital Status",
+  "Smoking": "Smoking",
+  "Email 2": {
+    "title": "Email 2",
+    "placeholder": "Email 2"
+  },
+  "Mobile Number 2": {
+    "title": "Mobile Number 2",
+    "placeholder": "Mobile Number 2"
+  },
+  "Address 1": {
+    "title": "Address 1",
+    "placeholder": "Address 1"
+  },
+  "Address 2": {
+    "title": "Address 2",
+    "placeholder": "Address 2"
+  },
+  "Preferred Room Type 1": "Preferred Room Type 1",
+  "Preferred Room Type 2": "Preferred Room Type 2",
+  "Guest Face Recognition": "Guest Face Recognition",
+  "Pictures": "Pictures",
+  "Company Name": {
+    "title": "Company Name",
+    "placeholder": "ACS"
+  },
+  "Tax Code": {
+    "title": "Tax Code",
+    "placeholder": "2187432093842"
+  },
+  "Address": {
+    "title": "Address",
+    "placeholder": "Address"
+  }
+}

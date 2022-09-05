@@ -1,6 +1,7 @@
 import { initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import commonEn from 'translations/en/common.json';
+import guestEn from 'translations/en/guest.json';
 import reservationEn from 'translations/en/reservation.json';
 import commonJa from 'translations/ja/common.json';
 import reservationJa from 'translations/ja/reservation.json';
@@ -15,6 +16,7 @@ i18n.use(initReactI18next).init({
         'Welcome to React': 'Welcome to React and react-i18next',
         common: commonEn,
         reservation: reservationEn,
+        guest: guestEn,
       },
     },
     ja: {
