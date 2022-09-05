@@ -7,6 +7,7 @@ Main functions : Guest List Tab
 ************************************ */
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, Col, Radio, Row, Typography } from 'antd';
 
 import CreateGuestModal from './CreateGuestModal';
@@ -63,6 +64,7 @@ const data = [
 
 function GuestList() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const { t } = useTranslation();
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -107,14 +109,17 @@ function GuestList() {
                 transform: 'translate(-50%, -50%)',
               }}
             >
-              + Add New
+              +{t('common.Add New')}
             </p>
           </div>
         </Col>
         {data.map(value => (
           <Col span={8}>
             <Card
-              actions={[<Text type="secondary">Remove</Text>, <Text type="secondary">Update</Text>]}
+              actions={[
+                <Text type="secondary">{t('common.Remove')}</Text>,
+                <Text type="secondary">{t('common.Update')}</Text>,
+              ]}
               className="guest-list-card"
               style={{
                 width: '95%',
@@ -128,13 +133,13 @@ function GuestList() {
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
                   <Radio checked={value.check} style={{ left: 15, fontSize: 13 }} value={1}>
-                    Main Guest
+                    {t('guest.Main Guest')}
                   </Radio>
                 </Col>
               </Row>
               <Row style={{ marginBottom: 12 }}>
                 <Col span={12}>
-                  <Text style={{ fontSize: 12 }}>ID:</Text>
+                  <Text style={{ fontSize: 12 }}>{t('common.ID')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
                   <Text style={{ fontSize: 12 }}>{value.id}</Text>
@@ -142,7 +147,7 @@ function GuestList() {
               </Row>
               <Row style={{ marginBottom: 12 }}>
                 <Col span={12}>
-                  <Text style={{ fontSize: 12 }}>Nationality:</Text>
+                  <Text style={{ fontSize: 12 }}>{t('common.Nationality')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
                   <Text style={{ fontSize: 12 }}>{value.nationality}</Text>
@@ -150,7 +155,7 @@ function GuestList() {
               </Row>
               <Row style={{ marginBottom: 12 }}>
                 <Col span={12}>
-                  <Text style={{ fontSize: 12 }}>Place Of Issue:</Text>
+                  <Text style={{ fontSize: 12 }}>{t('guest.Place Of Issue')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
                   <Text style={{ fontSize: 12 }}>{value.place_of_issue}</Text>
@@ -158,7 +163,7 @@ function GuestList() {
               </Row>
               <Row style={{ marginBottom: 12 }}>
                 <Col span={12}>
-                  <Text style={{ fontSize: 12 }}>Date Of Issue:</Text>
+                  <Text style={{ fontSize: 12 }}>{t('guest.Date Of Issue')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
                   <Text style={{ fontSize: 12 }}>{value.date}</Text>
@@ -166,7 +171,7 @@ function GuestList() {
               </Row>
               <Row>
                 <Col span={12}>
-                  <Text style={{ fontSize: 12 }}>Visa Expire Date:</Text>
+                  <Text style={{ fontSize: 12 }}>{t('guest.Visa Expire Date')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
                   <Text style={{ fontSize: 12 }}>{value.expire}</Text>
