@@ -19,6 +19,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { Col, Row } from 'antd';
+import moment from 'moment';
 
 import { createEventId, INITIAL_EVENTS } from './event-utils';
 
@@ -79,7 +80,7 @@ function Calendar() {
             left: 'prev,next',
           }}
           initialEvents={INITIAL_EVENTS}
-          initialView="resourceTimelineMonth"
+          initialView="timeGrid15Day"
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
           resourceAreaColumns={[
             {
@@ -107,26 +108,25 @@ function Calendar() {
             { id: 'm', title: '114', occupancy: 'Family' },
             { id: 'n', title: '115', occupancy: 'Family' },
             { id: 'o', title: '116', occupancy: 'Family' },
-            { id: 'p', title: '117', occupancy: 'Superior' },
-            { id: 'q', title: '118', occupancy: 'Superior' },
-            { id: 'r', title: '119', occupancy: 'Superior' },
-            { id: 's', title: '120', occupancy: 'Superior' },
-            { id: 't', title: '121', occupancy: 'Superior' },
-            { id: 'u', title: '122', occupancy: 'Superior' },
-            { id: 'v', title: '123', occupancy: 'Superior' },
-            { id: 'w', title: '124', occupancy: 'Superior' },
-            { id: 'x', title: '125', occupancy: 'Superior' },
-            { id: 'y', title: '126', occupancy: 'Superior' },
-            { id: 'z', title: '127', occupancy: 'Superior' },
           ]}
           select={handleDateSelect}
           selectMirror // alternatively, use the `events` setting to fetch from a feed
           selectable
-          viewClassNames="calendar-table" // custom render function
+          titleFormat={{
+            month: 'long',
+            year: 'numeric',
+            // day: 'numeric',
+            // weekday: 'long',
+          }} // custom render function
+          viewClassNames="calendar-table"
           views={{
-            timeGridFourDay: {
-              type: 'dayGridWeek',
+            timeGrid15Day: {
+              type: 'resourceTimelineWeek',
               duration: { days: 15 },
+              slotDuration: { days: 1 },
+              slotLabelFormat(argument) {
+                return moment(argument.date).format('DD dd');
+              },
             },
           }}
           weekends // called after events are initialized/added/changed/removed

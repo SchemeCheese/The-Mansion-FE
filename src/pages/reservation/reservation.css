@@ -57,6 +57,10 @@ tr {
   height: 24px;
 }
 
+.fc-h-event i {
+  font-style: normal;
+}
+
 .fc-datagrid-header colgroup,
 .fc-timeline-header colgroup {
   background: #fafafa;
@@ -68,4 +72,40 @@ tr {
 
 .fc-icon-chevron-right::before {
   content: '>';
+}
+
+.fc-timeline-header-row .fc-timeline-slot-cushion {
+  color: rgba(0, 0, 0, 0.85);
+  text-transform: uppercase;
+  font-weight: 400;
+  padding-top: 10px;
+  word-spacing: 15px;
+  white-space: initial;
+}
+
+.fc-datagrid-header .fc-datagrid-cell-main {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 400;
+}
+
+.fc-day-sat .fc-timeline-slot-cushion {
+  color: #f5222d;
+}
+
+.fc-day-sun .fc-timeline-slot-cushion {
+  color: #f5222d;
+}
+
+.fc-scrollgrid-section-body .fc-datagrid-cell-main {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border: none;
+  box-shadow: inset 0px -1px 0px #e8e8e8;
+}
+
+.fc .fc-resource-timeline-divider {
+  width: 0px;
 }
