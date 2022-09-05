@@ -108,5 +108,11 @@
   "Payment Method": {
     "title": "Payment Method",
     "placeholder": "Select payment method"
+  },
+  "Receptionist": "Receptionist",
+  "Send confirmation email": "Send confirmation email",
+  "Reason for booking cancellation (Optional)": {
+    "title": "Reason for booking cancellation (Optional)",
+    "placeholder": "Input Reason for booking cancellation"
   }
 }

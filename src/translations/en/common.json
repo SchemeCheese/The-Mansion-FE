@@ -11,9 +11,11 @@
   "Save": "Save",
   "New": "New",
   "Name": "Name",
+  "Delete": "Delete",
   "Delete Selected": "Delete Selected",
   "Resend Email": "Resend Email",
   "TMHA": "TMHA",
   "Reservation": "Reservation",
-  "Reservation Detail": "Reservation Detail"
+  "Reservation Detail": "Reservation Detail",
+  "Print Registration Card": "Print Registration Card"
 }
