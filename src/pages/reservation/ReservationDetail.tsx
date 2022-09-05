@@ -38,6 +38,7 @@ import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
 import TableSummary from 'components/TableSummary';
 
+import CancelBookingModal from './CancelBookingModal';
 import GuestList from './GuestList';
 
 const { Option } = Select;
@@ -207,6 +208,7 @@ function ReservationDetail() {
   };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -334,7 +336,7 @@ function ReservationDetail() {
       key: 'task',
       render: () => (
         <Button style={{ color: '#F5222D', paddingLeft: 0 }} type="link">
-          Delete
+          {t('common.Delete')}
         </Button>
       ),
     },
@@ -691,6 +693,10 @@ function ReservationDetail() {
                     {' '}
                     <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
                   </PattonButton>
+                  <CancelBookingModal
+                    isModalVisible={isCancelBookingModalVisible}
+                    setModalVisible={setIsCancelBookingModalVisible}
+                  />
                   <Modal
                     bodyStyle={{ backgroundColor: '#F0F2F5' }}
                     okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
@@ -789,7 +795,15 @@ function ReservationDetail() {
                       </Row>
                     </Card>
                   </Modal>
-                  <MButton style={{ marginLeft: 15 }}>Delete Selected</MButton>
+                  <MButton
+                    onClick={() => setIsCancelBookingModalVisible(true)}
+                    style={{ marginLeft: 15 }}
+                  >
+                    {t('common.Delete Selected')}
+                  </MButton>
+                  <MButton style={{ marginLeft: 15 }}>
+                    {t('common.Print Registration Card')}
+                  </MButton>
                 </Col>
                 <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                   <Table
