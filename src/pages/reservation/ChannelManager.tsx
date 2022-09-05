@@ -73,7 +73,7 @@ function ChannelManager() {
       ),
       dataIndex: 'name',
       key: 'name',
-      width: 305,
+      width: '25%',
       render: (value: any, record: object, index: number) => {
         console.log('Text', value, record);
 
@@ -294,7 +294,7 @@ function ChannelManager() {
       title: 'AVAIL',
       dataIndex: 'age',
       key: 'age',
-      width: 75,
+      width: '12.5%',
       render: (value: any, record: object, index: number) => {
         console.log(value, record);
 
