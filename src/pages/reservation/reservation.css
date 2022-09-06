@@ -49,12 +49,12 @@ tr {
   background: #1d39c4;
   border-radius: 30px;
   border-color: #1d39c4;
-  top: 12px;
-  font-size: 12px;
+  top: 10px;
+  font-size: 13px;
   text-align: center;
   color: #ffffff;
   font-weight: 400;
-  height: 24px;
+  height: 28px;
 }
 
 .fc-h-event i {
@@ -79,8 +79,8 @@ tr {
   text-transform: uppercase;
   font-weight: 400;
   padding-top: 10px;
-  word-spacing: 15px;
-  white-space: initial;
+  /* For new line moment: https://stackoverflow.com/questions/51216748/react-momentjs-date-formatting-with-line-break */
+  white-space: pre;
 }
 
 .fc-datagrid-header .fc-datagrid-cell-main {
@@ -88,11 +88,13 @@ tr {
   font-weight: 400;
 }
 
-.fc-day-sat .fc-timeline-slot-cushion {
+.fc-day-sat .fc-timeline-slot-cushion,
+.fc-day-sat {
   color: #f5222d;
 }
 
-.fc-day-sun .fc-timeline-slot-cushion {
+.fc-day-sun .fc-timeline-slot-cushion,
+.fc-day-sun {
   color: #f5222d;
 }
 
@@ -108,4 +110,46 @@ tr {
 
 .fc .fc-resource-timeline-divider {
   width: 0px;
+}
+
+.slot-fc-day-monthly,
+.slot-fc-day-weekly {
+  white-space: break-spaces;
+  word-spacing: 100px;
+  line-height: 50px;
+}
+
+.slot-fc-day-monthly > div {
+  padding-left: 34% !important;
+}
+
+.slot-fc-day-weekly > div {
+  padding-left: 41% !important;
+}
+
+.fc-header-toolbar .fc-toolbar-chunk:last-child {
+  position: relative;
+  top: -87px;
+}
+
+.fc-timeGridWeekly-button {
+  border-radius: 4px !important;
+  background-color: #1d39c4 !important;
+  border-color: #1d39c4 !important;
+  margin-right: 15px !important;
+}
+
+.fc-timeGridMonthly-button {
+  border-radius: 4px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #d9d9d9 !important;
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+.fc-toolbar-title {
+  color: #000000;
+  font-size: 20px !important;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
 }
