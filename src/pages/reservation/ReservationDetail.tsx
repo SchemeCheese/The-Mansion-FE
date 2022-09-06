@@ -40,6 +40,7 @@ import TableSummary from 'components/TableSummary';
 
 import CancelBookingModal from './CancelBookingModal';
 import GuestList from './GuestList';
+import Transaction from './Transaction';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -1097,7 +1098,7 @@ function ReservationDetail() {
                 <GuestList />
               </TabPane>
               <TabPane key="5" tab={t('reservation.Transactions')}>
-                Content of Tab Pane 3
+                <Transaction />
               </TabPane>
             </Tabs>
           </Col>
