@@ -40,6 +40,7 @@ import TableSummary from 'components/TableSummary';
 
 import CancelBookingModal from './CancelBookingModal';
 import GuestList from './GuestList';
+import Schedule from './Schedule';
 import Transaction from './Transaction';
 
 const { Option } = Select;
@@ -1092,7 +1093,7 @@ function ReservationDetail() {
                 <Rate />
               </TabPane>
               <TabPane key="3" tab={t('reservation.Schedule')}>
-                Content of Tab Pane 3
+                <Schedule />
               </TabPane>
               <TabPane key="4" tab={t('reservation.Guest List')}>
                 <GuestList />

@@ -7,6 +7,7 @@
   border-top: 1px solid rgba(0, 0, 0, 0.15);
   background: #f7f9fa;
 }
+/* End Guest List Tab CSS */
 
 /* Create Guest Modal CSS */
 .new-guest-modal .ant-upload-list-picture-card-container {
@@ -27,3 +28,147 @@
 .new-guest-modal .ant-btn-primary {
   background: #1d39c4;
 }
+/** End Create Guest Modal CSS */
+
+/** Fullcalendar custom **/
+.fc-resource-timeline tr {
+  height: 50px;
+}
+.fc-h-event {
+  background: #1d39c4;
+  border-radius: 30px;
+  border-color: #1d39c4;
+  top: 10px;
+  font-size: 13px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: 400;
+  height: 28px;
+}
+
+.fc-h-event i {
+  font-style: normal;
+}
+
+.fc-datagrid-header colgroup,
+.fc-timeline-header colgroup {
+  background: #fafafa;
+}
+
+.fc-icon-chevron-left::before {
+  content: '<';
+}
+
+.fc-icon-chevron-right::before {
+  content: '>';
+}
+
+.fc-timeline-header-row .fc-timeline-slot-cushion {
+  color: rgba(0, 0, 0, 0.85);
+  text-transform: uppercase;
+  font-weight: 400;
+  padding-top: 10px;
+  /* For new line moment: https://stackoverflow.com/questions/51216748/react-momentjs-date-formatting-with-line-break */
+  white-space: pre;
+}
+
+/* Room Type, Room Ro Column */
+.fc-datagrid-header .fc-datagrid-cell-main {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 400;
+}
+
+/* Weekend date */
+.fc-day-sat .fc-timeline-slot-cushion,
+.fc-day-sat {
+  color: #f5222d;
+}
+
+.fc-day-sun .fc-timeline-slot-cushion,
+.fc-day-sun {
+  color: #f5222d;
+}
+
+/* Cell Text Color */
+.fc-scrollgrid-section-body .fc-datagrid-cell-main {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border: none;
+  box-shadow: inset 0px -1px 0px #e8e8e8;
+}
+
+.fc .fc-resource-timeline-divider {
+  width: 0px;
+}
+
+.slot-fc-day-monthly,
+.slot-fc-day-weekly {
+  white-space: pre;
+  line-height: 50px;
+}
+
+.slot-fc-day-monthly > div {
+  padding-left: 39% !important;
+}
+
+.slot-fc-day-weekly > div {
+  padding-left: 45% !important;
+}
+
+.fc-header-toolbar .fc-toolbar-chunk:last-child {
+  position: relative;
+  top: -87px;
+}
+
+/* Weekly Button */
+.fc-timeGridWeekly-button {
+  border-radius: 4px !important;
+  background-color: #1d39c4 !important;
+  border-color: #1d39c4 !important;
+  margin-right: 15px !important;
+}
+
+/* Monthly Button */
+.fc-timeGridMonthly-button {
+  border-radius: 4px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #d9d9d9 !important;
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+/* Title */
+.fc-toolbar-title {
+  color: #000000;
+  font-size: 20px !important;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
+}
+
+/* For MAC 15' */
+@media (max-width: 1440px) {
+  .slot-fc-day-monthly > div {
+    padding-left: 34% !important;
+  }
+
+  .slot-fc-day-weekly > div {
+    padding-left: 41% !important;
+  }
+}
+
+/* .fc-day-today {
+  background: rgba(29, 57, 196, 0.5);
+} */
+/* 
+.fc-timeline-header-row .fc-day-today {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.fc-timeline-body .fc-day-today {
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+} */
+/** End Fullcalendar custom **/
