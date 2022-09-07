@@ -40,8 +40,8 @@ import TableSummary from 'components/TableSummary';
 
 import CancelBookingModal from './CancelBookingModal';
 import GuestList from './GuestList';
-import Transaction from './Transaction';
 import Schedule from './Schedule';
+import Transaction from './Transaction';
 
 const { Option } = Select;
 const { TabPane } = Tabs;

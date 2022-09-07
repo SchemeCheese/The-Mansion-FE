@@ -201,6 +201,7 @@
     "build:serve": "npm run build && npm run serve",
     "analyze": "NODE_ENV=production webpack --config config/webpack.config.js --profile --json > webpack.stats.json",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src config test tools",
+    "lint:fix": "eslint --fix --ext .js,.jsx,.ts,.tsx src config test tools",
     "lint:styles": "stylelint 'src/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit -p test/tsconfig.json",
     "test": "is-ci \"test:coverage\" \"test:watch\"",

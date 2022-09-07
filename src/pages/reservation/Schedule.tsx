@@ -181,12 +181,13 @@ function Schedule() {
           events="http://localhost:8096/events"
           eventsSet={handleEvents}
           headerToolbar={{
+            // left: 'today,prev,next',
+            left: '',
             center: 'title',
             right: '',
-            left: '',
           }}
           initialEvents={INITIAL_EVENTS}
-          initialView="timeGrid15Day"
+          initialView="timeGridMonthly"
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
           resourceAreaColumns={[
             {
@@ -219,20 +220,50 @@ function Schedule() {
           selectMirror // alternatively, use the `events` setting to fetch from a feed
           selectable
           titleFormat={{
-            month: 'long',
+            month: 'short',
             year: 'numeric',
-            // day: 'numeric',
-            // weekday: 'long',
-          }} // custom render function
+            day: 'numeric',
+          }}
           viewClassNames="calendar-table"
           views={{
-            timeGrid15Day: {
-              type: 'resourceTimelineWeek',
+            timeGridMonthly: {
+              type: 'resourceTimelineMonth',
               duration: { days: 15 },
               slotDuration: { days: 1 },
               slotLabelFormat(argument) {
-                return moment(argument.date).format('DD dd');
+                return moment(argument.date).format('DD[\n]dd');
               },
+              slotLaneContent(argument) {
+                const days = [];
+
+                for (let index = 0; index < 15; index++) {
+                  days.push(moment(argument.date).format('DD'));
+                }
+
+                return days.join('\n');
+              },
+              slotLaneClassNames: 'slot-fc-day-monthly',
+              buttonText: 'Monthly',
+            },
+            timeGridWeekly: {
+              type: 'resourceTimelineWeek',
+              duration: { days: 7 },
+              slotDuration: { days: 1 },
+              slotLabelFormat(argument) {
+                return moment(argument.date).format('DD[\n]dd');
+              },
+              slotLaneContent(argument) {
+                const days = [];
+
+                for (let index = 0; index < 15; index++) {
+                  days.push(moment(argument.date).format('DD'));
+                }
+
+                return days.join('\n');
+              },
+              slotLaneClassNames: 'slot-fc-day-weekly',
+              slotLabelClassNames: 'monthly',
+              buttonText: 'Weekly',
             },
           }}
           weekends // called after events are initialized/added/changed/removed

@@ -87,7 +87,8 @@ function Calendar() {
             events="http://localhost:8096/events"
             eventsSet={handleEvents}
             headerToolbar={{
-              left: 'today,prev,next',
+              // left: 'today,prev,next',
+              left: '',
               center: 'title',
               right: 'timeGridWeekly,timeGridMonthly',
             }}
@@ -145,7 +146,7 @@ function Calendar() {
                     days.push(moment(argument.date).format('DD'));
                   }
 
-                  return days.join(' ');
+                  return days.join('\n');
                 },
                 slotLaneClassNames: 'slot-fc-day-monthly',
                 buttonText: 'Monthly',
@@ -164,7 +165,7 @@ function Calendar() {
                     days.push(moment(argument.date).format('DD'));
                   }
 
-                  return days.join(' ');
+                  return days.join('\n');
                 },
                 slotLaneClassNames: 'slot-fc-day-weekly',
                 slotLabelClassNames: 'monthly',

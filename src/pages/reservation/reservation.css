@@ -7,6 +7,7 @@
   border-top: 1px solid rgba(0, 0, 0, 0.15);
   background: #f7f9fa;
 }
+/* End Guest List Tab CSS */
 
 /* Create Guest Modal CSS */
 .new-guest-modal .ant-upload-list-picture-card-container {
@@ -27,24 +28,12 @@
 .new-guest-modal .ant-btn-primary {
   background: #1d39c4;
 }
-
-.calendar-table .fc-col-header thead {
-  height: 45px;
-}
-
-.row-calendar {
-  height: 95px;
-}
-
-tr {
-  height: 50px;
-}
-
-.aa tbody > tr {
-  height: 95px;
-}
+/** End Create Guest Modal CSS */
 
 /** Fullcalendar custom **/
+.fc-resource-timeline tr {
+  height: 50px;
+}
 .fc-h-event {
   background: #1d39c4;
   border-radius: 30px;
@@ -83,11 +72,13 @@ tr {
   white-space: pre;
 }
 
+/* Room Type, Room Ro Column */
 .fc-datagrid-header .fc-datagrid-cell-main {
   color: rgba(0, 0, 0, 0.85);
   font-weight: 400;
 }
 
+/* Weekend date */
 .fc-day-sat .fc-timeline-slot-cushion,
 .fc-day-sat {
   color: #f5222d;
@@ -98,6 +89,7 @@ tr {
   color: #f5222d;
 }
 
+/* Cell Text Color */
 .fc-scrollgrid-section-body .fc-datagrid-cell-main {
   color: rgba(0, 0, 0, 0.65);
 }
@@ -114,17 +106,16 @@ tr {
 
 .slot-fc-day-monthly,
 .slot-fc-day-weekly {
-  white-space: break-spaces;
-  word-spacing: 100px;
+  white-space: pre;
   line-height: 50px;
 }
 
 .slot-fc-day-monthly > div {
-  padding-left: 34% !important;
+  padding-left: 39% !important;
 }
 
 .slot-fc-day-weekly > div {
-  padding-left: 41% !important;
+  padding-left: 45% !important;
 }
 
 .fc-header-toolbar .fc-toolbar-chunk:last-child {
@@ -132,6 +123,7 @@ tr {
   top: -87px;
 }
 
+/* Weekly Button */
 .fc-timeGridWeekly-button {
   border-radius: 4px !important;
   background-color: #1d39c4 !important;
@@ -139,6 +131,7 @@ tr {
   margin-right: 15px !important;
 }
 
+/* Monthly Button */
 .fc-timeGridMonthly-button {
   border-radius: 4px !important;
   background-color: #ffffff !important;
@@ -146,6 +139,7 @@ tr {
   color: rgba(0, 0, 0, 0.65) !important;
 }
 
+/* Title */
 .fc-toolbar-title {
   color: #000000;
   font-size: 20px !important;
@@ -153,3 +147,28 @@ tr {
   font-style: normal;
   text-transform: uppercase;
 }
+
+/* For MAC 15' */
+@media (max-width: 1440px) {
+  .slot-fc-day-monthly > div {
+    padding-left: 34% !important;
+  }
+
+  .slot-fc-day-weekly > div {
+    padding-left: 41% !important;
+  }
+}
+
+/* .fc-day-today {
+  background: rgba(29, 57, 196, 0.5);
+} */
+/* 
+.fc-timeline-header-row .fc-day-today {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+.fc-timeline-body .fc-day-today {
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 2px;
+} */
+/** End Fullcalendar custom **/
