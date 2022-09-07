@@ -84,7 +84,7 @@ function Calendar() {
             editable
             eventClick={handleEventClick}
             eventContent={renderEventContent}
-            events="http://localhost:8096/events"
+            events={`${process.env.REACT_APP_API_HOST}/events`}
             eventsSet={handleEvents}
             headerToolbar={{
               // left: 'today,prev,next',
