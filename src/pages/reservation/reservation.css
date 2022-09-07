@@ -30,6 +30,21 @@
 }
 /** End Create Guest Modal CSS */
 
+/** Custom select **/
+.ant-select-selector {
+  border-radius: 4px !important;
+}
+
+.download-select .ant-select-selection-placeholder,
+.download-select .ant-select-arrow {
+  color: rgba(0, 0, 0, 0.85);
+}
+.channel-filter .ant-select-selector {
+  font-size: 14px;
+  padding-right: 20px !important;
+}
+/** End custome select **/
+
 /** Fullcalendar custom **/
 .fc-resource-timeline tr {
   height: 50px;

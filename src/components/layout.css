@@ -97,22 +97,3 @@
 .tabs-cart > .ant-tabs-nav {
   background: #fafafa;
 }
-
-/* Custom select */
-.download-select > .ant-select-selector {
-  border-color: #1d39c4 !important;
-}
-
-.ant-select-selector {
-  border-radius: 4px !important;
-}
-
-.download-select .ant-select-selection-placeholder,
-.download-select .ant-select-arrow {
-  color: #1d39c4;
-}
-.channel-filter .ant-select-selector {
-  font-size: 14px;
-  padding-right: 20px !important;
-}
-/* End custome select */

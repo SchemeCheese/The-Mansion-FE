@@ -109,7 +109,7 @@ function GuestList() {
                 transform: 'translate(-50%, -50%)',
               }}
             >
-              +{t('common.Add New')}
+              + {t('common.Add New')}
             </p>
           </div>
         </Col>
@@ -147,7 +147,7 @@ function GuestList() {
               </Row>
               <Row style={{ marginBottom: 12 }}>
                 <Col span={12}>
-                  <Text style={{ fontSize: 12 }}>{t('common.Nationality')}:</Text>
+                  <Text style={{ fontSize: 12 }}>{t('common.Nationality.title')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
                   <Text style={{ fontSize: 12 }}>{value.nationality}</Text>
