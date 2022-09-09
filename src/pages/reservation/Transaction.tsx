@@ -1,268 +1,206 @@
+import './transaction.css';
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
+import { Card, Col, Row } from 'antd';
+import DiskA from 'pages/reservation/DiskA';
+import Paid from 'pages/reservation/Paid';
 
 import MButton from 'components/MButton';
-
-interface DataTypePaySelected {
-  amount: number;
-  date: string;
-  description: string;
-  total: string;
-  unit_price: string;
-}
+import PattonButton from 'components/PattonButton';
 
 function Transaction() {
   const { t } = useTranslation();
-  const { Option } = Select;
 
-  const [isModalOpenPaySelected, setIsModalOpenPaySelected] = useState(false);
-  const [isModalOpenChangeDisk, setIsModalOpenChangeDisk] = useState(false);
-  const [isModalOpenAditRoomCharge, setIsModalOpenAditRoomCharge] = useState(false);
-
-  const columnsPaySelected: ColumnsType<DataTypePaySelected> = [
+  const tabList = [
     {
-      title: t('paySelected.Date'),
-      dataIndex: 'date',
+      key: 'tab1',
+      tab: t('transaction.Disk A'),
     },
     {
-      title: t('paySelected.Description'),
-      dataIndex: 'description',
-    },
-    {
-      title: t('paySelected.Unit price'),
-      dataIndex: 'unit_price',
-      align: 'right',
-    },
-    {
-      title: t('paySelected.Amount'),
-      dataIndex: 'amount',
-    },
-    {
-      title: t('paySelected.Total'),
-      dataIndex: 'total',
-      align: 'right',
+      key: 'tab2',
+      tab: t('transaction.Paid'),
     },
   ];
+  const [activeTabKey1, setActiveTabKey1] = useState<string>('tab1');
 
-  const dataPaySelected = [
-    {
-      date: '28/07/2020',
-      description: 'PEPSI',
-      unit_price: '20.000',
-      amount: 2,
-      total: '40.000',
-    },
-    {
-      date: '28/07/2020',
-      description: 'Coca Cola',
-      unit_price: '20.000',
-      amount: 2,
-      total: '40.000',
-    },
-  ];
-
-  const rowSelectionPaySelected = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
+  const contentList: any = {
+    tab1: <DiskA />,
+    tab2: <Paid />,
   };
 
-  const columnsAuditRoomCharge = [
-    {
-      title: t('auditRoomCharge.Date'),
-      dataIndex: 'date',
-    },
-    {
-      title: t('auditRoomCharge.Room Type'),
-      dataIndex: 'room_type',
-    },
-    {
-      title: t('auditRoomCharge.Rate Name'),
-      dataIndex: 'rate_name',
-    },
-
-    {
-      title: t('auditRoomCharge.Rate Detail'),
-      dataIndex: 'rate_detail',
-    },
-
-    {
-      title: t('auditRoomCharge.Unit price'),
-      dataIndex: 'unit_price',
-    },
-
-    {
-      title: t('auditRoomCharge.Updated price'),
-      dataIndex: 'updated_price',
-      render: () => <Input placeholder="0" />,
-    },
-  ];
-
-  const dataAuditRoomCharge = [
-    {
-      date: '2017-08-08',
-      room_type: 'Deluxe with balcony',
-      rate_name: '',
-      rate_detail: '',
-      unit_price: '',
-      updated_price: '',
-    },
-    {
-      date: '2017-08-08',
-      room_type: 'Deluxe with balcony',
-      rate_name: '',
-      rate_detail: '',
-      unit_price: '',
-      updated_price: '',
-    },
-    {
-      date: '2017-08-08',
-      room_type: 'Grand Suite',
-      rate_name: '',
-      rate_detail: '',
-      unit_price: '',
-      updated_price: '',
-    },
-    {
-      date: '2017-08-08',
-      room_type: 'Grand Suite',
-      rate_name: '',
-      rate_detail: '',
-      unit_price: '',
-      updated_price: '',
-    },
-  ];
-
-  // rowSelection object indicates the need for row selection
-  const rowSelectionAuditRoomCharge = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
+  const gridStyleLeft: React.CSSProperties = {
+    width: '50%',
+    textAlign: 'left',
+    color: '#1D39C4',
+    paddingLeft: 16,
+    paddingTop: 15,
   };
 
-  const handleChangePaySelected = (value: string) => {
-    console.log(`selected ${value}`);
-  };
-
-  const handleChangeDisk = (value: string) => {
-    console.log(`selected ${value}`);
+  const gridStyleRight: React.CSSProperties = {
+    width: '50%',
+    textAlign: 'right',
+    color: '#1D39C4',
+    paddingRight: 16,
+    paddingTop: 15,
   };
 
   return (
-    <>
-      <MButton onClick={() => setIsModalOpenPaySelected(true)}>
-        {t('paySelected.Pay Selected')}
-      </MButton>
-      <Modal
-        bodyStyle={{ backgroundColor: '#F0F2F5' }}
-        cancelButtonProps={{ style: { borderRadius: 4 } }}
-        okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
-        okText={t('paySelected.Select Payment Method')}
-        onCancel={() => setIsModalOpenPaySelected(false)}
-        onOk={() => setIsModalOpenPaySelected(false)}
-        title={<b>{t('paySelected.Pay Selected')}</b>}
-        visible={isModalOpenPaySelected}
-        width={850}
-      >
-        <Form colon={false} layout="horizontal">
-          <Table
-            columns={columnsPaySelected}
-            dataSource={dataPaySelected}
-            pagination={false}
-            rowSelection={{
-              ...rowSelectionPaySelected,
-            }}
-            size="small"
-          />
-          <Row style={{ paddingTop: 30 }}>
-            <Col span={16} />
-            <Col span={6}>
-              <Form.Item label={t('paySelected.Discount')}>
-                <Input placeholder="20.000" style={{ width: 120, height: 32, borderRadius: 2 }} />
-              </Form.Item>
-            </Col>
-            <Col span={2}>
-              <Select defaultValue="VND" onChange={handleChangePaySelected}>
-                <Option value="VND">VND</Option>
-                <Option value="EUR">EUR</Option>
-              </Select>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={16} />
-            <Col span={8} style={{ marginBottom: 17 }}>
-              <span>{t('paySelected.Total Amount')}</span>
-              <span style={{ fontSize: 16, float: 'right' }}>4.800.000</span>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={16} />
-            <Col span={8}>
-              <span>{t('paySelected.Sub Total')}</span>
-              <span style={{ fontSize: 16, float: 'right' }}>4.800.000</span>
-            </Col>
-          </Row>
-        </Form>
-      </Modal>
+    <Row
+      style={{
+        paddingTop: 16,
+        background: '#F0F2F5',
+        paddingBottom: 25,
+        paddingRight: 15,
+        paddingLeft: 15,
+      }}
+    >
+      <Col span={16} style={{ paddingRight: 16 }}>
+        <Card
+          activeTabKey={activeTabKey1}
+          className="transaction-tabs"
+          onTabChange={key => {
+            setActiveTabKey1(key);
+          }}
+          style={{ width: '100%' }}
+          tabList={tabList}
+        >
+          {contentList[activeTabKey1]}
+        </Card>
+      </Col>
+      <Col span={8}>
+        <div className="site-card-border-less-wrapper transaction-checkout">
+          <Card bordered={false} style={{ border: '1px solid #1D39C4' }} title="Checkout">
+            <div style={{ flexGrow: 1, background: '#F7F9FA', marginTop: 1 }}>
+              <div className="checkout-card-grid">
+                <Card.Grid hoverable={false} style={gridStyleLeft}>
+                  {t('common.Sub total')}
+                </Card.Grid>
+                <Card.Grid hoverable={false} style={gridStyleRight}>
+                  <span style={{ fontSize: 16 }}>12.000.000 </span>
+                </Card.Grid>
+              </div>
+              <div className="checkout-card-grid">
+                <Card.Grid hoverable={false} style={gridStyleLeft}>
+                  {t('common.Deposit')}{' '}
+                  <svg
+                    fill="none"
+                    height="14"
+                    style={{ marginLeft: 12 }}
+                    viewBox="0 0 14 14"
+                    width="14"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.99992 0.333496C3.38087 0.333496 0.333252 3.38111 0.333252 7.00016C0.333252 10.6192 3.38087 13.6668 6.99992 13.6668C10.619 13.6668 13.6666 10.6192 13.6666 7.00016C13.6666 3.38111 10.619 0.333496 6.99992 0.333496ZM10.8094 7.00016C10.8094 7.26316 10.5962 7.47635 10.3333 7.47635H7.47611V10.3335C7.47611 10.5965 7.26291 10.8097 6.99992 10.8097C6.73693 10.8097 6.52373 10.5965 6.52373 10.3335V7.47635H3.66658C3.40359 7.47635 3.19039 7.26316 3.19039 7.00016C3.19039 6.73717 3.40359 6.52397 3.66659 6.52397H6.52373V3.66683C6.52373 3.40384 6.73693 3.19064 6.99992 3.19064C7.26291 3.19064 7.47611 3.40384 7.47611 3.66683V6.52397H10.3333C10.5962 6.52397 10.8094 6.73717 10.8094 7.00016Z"
+                      fill="#1D39C4"
+                    />
+                  </svg>
+                </Card.Grid>
+                <Card.Grid hoverable={false} style={gridStyleRight}>
+                  <span style={{ fontSize: 16 }}>1.000.000</span>
+                </Card.Grid>
+              </div>
+              <div className="checkout-card-grid">
+                <Card.Grid hoverable={false} style={gridStyleLeft}>
+                  {t('common.Discount')}{' '}
+                  <svg
+                    fill="none"
+                    height="14"
+                    style={{ marginLeft: 12 }}
+                    viewBox="0 0 14 14"
+                    width="14"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.99992 0.333496C3.38087 0.333496 0.333252 3.38111 0.333252 7.00016C0.333252 10.6192 3.38087 13.6668 6.99992 13.6668C10.619 13.6668 13.6666 10.6192 13.6666 7.00016C13.6666 3.38111 10.619 0.333496 6.99992 0.333496ZM10.8094 7.00016C10.8094 7.26316 10.5962 7.47635 10.3333 7.47635H7.47611V10.3335C7.47611 10.5965 7.26291 10.8097 6.99992 10.8097C6.73693 10.8097 6.52373 10.5965 6.52373 10.3335V7.47635H3.66658C3.40359 7.47635 3.19039 7.26316 3.19039 7.00016C3.19039 6.73717 3.40359 6.52397 3.66659 6.52397H6.52373V3.66683C6.52373 3.40384 6.73693 3.19064 6.99992 3.19064C7.26291 3.19064 7.47611 3.40384 7.47611 3.66683V6.52397H10.3333C10.5962 6.52397 10.8094 6.73717 10.8094 7.00016Z"
+                      fill="#1D39C4"
+                    />
+                  </svg>
+                </Card.Grid>
+                <Card.Grid hoverable={false} style={gridStyleRight}>
+                  <span style={{ fontSize: 16 }}>1.000.000</span>
+                </Card.Grid>
+              </div>
+              <div className="checkout-card-grid">
+                <Card.Grid hoverable={false} style={gridStyleLeft}>
+                  VAT
+                </Card.Grid>
+                <Card.Grid hoverable={false} style={gridStyleRight}>
+                  <span style={{ fontSize: 16 }}>1.000.000</span>
+                </Card.Grid>
+              </div>
+              <div className="checkout-card-grid">
+                <Card.Grid hoverable={false} style={gridStyleLeft}>
+                  {t('common.Exchange currency')}{' '}
+                  <svg
+                    fill="none"
+                    height="14"
+                    style={{ marginLeft: 12 }}
+                    viewBox="0 0 14 14"
+                    width="14"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.99992 0.333496C3.38087 0.333496 0.333252 3.38111 0.333252 7.00016C0.333252 10.6192 3.38087 13.6668 6.99992 13.6668C10.619 13.6668 13.6666 10.6192 13.6666 7.00016C13.6666 3.38111 10.619 0.333496 6.99992 0.333496ZM10.8094 7.00016C10.8094 7.26316 10.5962 7.47635 10.3333 7.47635H7.47611V10.3335C7.47611 10.5965 7.26291 10.8097 6.99992 10.8097C6.73693 10.8097 6.52373 10.5965 6.52373 10.3335V7.47635H3.66658C3.40359 7.47635 3.19039 7.26316 3.19039 7.00016C3.19039 6.73717 3.40359 6.52397 3.66659 6.52397H6.52373V3.66683C6.52373 3.40384 6.73693 3.19064 6.99992 3.19064C7.26291 3.19064 7.47611 3.40384 7.47611 3.66683V6.52397H10.3333C10.5962 6.52397 10.8094 6.73717 10.8094 7.00016Z"
+                      fill="#1D39C4"
+                    />
+                  </svg>
+                </Card.Grid>
+                <Card.Grid hoverable={false} style={gridStyleRight}>
+                  <span style={{ fontSize: 16 }}>USD</span>
+                </Card.Grid>
+              </div>
 
-      <MButton onClick={() => setIsModalOpenChangeDisk(true)}>
-        {t('paySelected.Change Disk')}
-      </MButton>
-      <Modal
-        bodyStyle={{ backgroundColor: '#F0F2F5' }}
-        cancelButtonProps={{ style: { borderRadius: 4 } }}
-        okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
-        onCancel={() => setIsModalOpenChangeDisk(false)}
-        onOk={() => setIsModalOpenChangeDisk(false)}
-        title={<b>{t('paySelected.Change Disk')}</b>}
-        visible={isModalOpenChangeDisk}
-      >
-        <Form layout="vertical">
-          <Form.Item label={t('paySelected.Select Disk')}>
-            <Select defaultValue="A" onChange={handleChangeDisk}>
-              <Option value="A">A</Option>
-              <Option value="B">B</Option>
-            </Select>
-          </Form.Item>
-        </Form>
-      </Modal>
+              <div className="checkout-card-grid">
+                <Card.Grid hoverable={false} style={gridStyleLeft}>
+                  {t('common.Exchange rate')}
+                </Card.Grid>
+                <Card.Grid hoverable={false} style={gridStyleRight}>
+                  <span style={{ fontSize: 16 }}>23.000</span>
+                </Card.Grid>
+              </div>
+              <div className="checkout-card-grid">
+                <Card.Grid hoverable={false} style={gridStyleLeft}>
+                  {t('common.Amount')}
+                </Card.Grid>
+                <Card.Grid hoverable={false} style={gridStyleRight}>
+                  <span style={{ fontSize: 16 }}>450</span>
+                </Card.Grid>
+              </div>
+            </div>
+            <div style={{ display: 'flex', borderTop: '1px solid #1D39C4', height: 60 }}>
+              <Card.Grid hoverable={false} style={gridStyleLeft}>
+                {t('common.Grand Total')}
+              </Card.Grid>
+              <Card.Grid hoverable={false} style={{ ...gridStyleRight, fontWeight: 900 }}>
+                <span style={{ fontSize: 14 }}>10.000.000</span>
+              </Card.Grid>
+            </div>
+          </Card>
+        </div>
+        <Row style={{ paddingTop: 17 }}>
+          <Col span={12} style={{ paddingRight: 18 }}>
+            <MButton
+              style={{
+                width: '100%',
+                border: '1px solid #1D39C4',
+                color: '#1D39C4',
+                background: '#F0F2F5',
+              }}
+            >
+              {t('common.Print Invoice')}
+            </MButton>
+          </Col>
 
-      <MButton onClick={() => setIsModalOpenAditRoomCharge(true)}>
-        {t('auditRoomCharge.Add Pre Audit Room Charge')}
-      </MButton>
-      <Modal
-        bodyStyle={{ backgroundColor: '#F0F2F5' }}
-        cancelButtonProps={{ style: { borderRadius: 4 } }}
-        okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
-        okText={t('common.Save')}
-        onCancel={() => setIsModalOpenAditRoomCharge(false)}
-        onOk={() => setIsModalOpenAditRoomCharge(false)}
-        title={<b>{t('auditRoomCharge.Add Pre Audit Room Charge')}</b>}
-        visible={isModalOpenAditRoomCharge}
-        width={1000}
-      >
-        <Form>
-          <Table
-            columns={columnsAuditRoomCharge}
-            dataSource={dataAuditRoomCharge}
-            pagination={false}
-            rowSelection={{
-              ...rowSelectionAuditRoomCharge,
-            }}
-            size="small"
-          />
-          <Row style={{ paddingTop: 30 }}>
-            <Col span={16} />
-            <Col span={8}>
-              <span>{t('auditRoomCharge.Total Amount')}</span>
-              <span style={{ fontSize: 16, float: 'right' }}>4.800.000</span>
-            </Col>
-          </Row>
-        </Form>
-      </Modal>
-    </>
+          <Col span={12}>
+            <PattonButton style={{ width: '100%' }} type="primary">
+              {t('common.Payment')}
+            </PattonButton>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   );
 }
 

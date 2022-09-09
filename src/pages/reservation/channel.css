@@ -11,7 +11,7 @@
   margin-left: -15px;
   font-size: 12px;
   width: 99px;
-  color: #1D39C4;
+  color: #1d39c4;
   font-size: 12px;
   font-weight: 600;
 }
@@ -24,7 +24,7 @@
 
 .green .ant-select-selection-item {
   font-weight: 600;
-  color: #1D39C4;
+  color: #1d39c4;
 }
 
 .search-room-rate input {
@@ -32,12 +32,12 @@
 }
 
 .search-room-rate .ant-input-search-button {
-  background: #F0F2F5;
+  background: #f0f2f5;
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .search-room-rate .ant-input-search-button:hover {
-  background: #F0F2F5;
+  background: #f0f2f5;
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
@@ -47,19 +47,19 @@
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
-.search-room-rate>.ant-input-group>.ant-input-group-addon:last-child .ant-input-search-button {
+.search-room-rate > .ant-input-group > .ant-input-group-addon:last-child .ant-input-search-button {
   padding-top: 0;
   padding-bottom: 0;
   border-radius: 0 4px 4px 0;
 }
 
-.pick-date .ant-picker>.ant-picker-input>input {
+.pick-date .ant-picker > .ant-picker-input > input {
   font-size: 16px;
-  color: #1D39C4;
+  color: #1d39c4;
   font-weight: 600;
 }
 
-.channel-table .ant-table-thead>tr>th {
+.channel-table .ant-table-thead > tr > th {
   font-size: 13px;
   font-weight: 600;
   color: rgba(0, 0, 0, 0.65);
