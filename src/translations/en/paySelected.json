@@ -1,14 +1,7 @@
 {
   "Pay Selected": "Pay Selected",
-  "Date": "Date",
-  "Description": "Description",
-  "Unit price": "Unit price (VND)",
-  "Amount": "Amount",
-  "Total": "Total (VND)",
   "Select Payment Method": "Select Payment Method",
-  "Discount": "Discount",
-  "Total Amount": "Total Amount (VND)",
-  "Sub Total": "Sub Total (VND)",
   "Change Disk": "Change Disk",
-  "Select Disk": "Select Disk"
+  "Select Disk": "Select Disk",
+  "Transfer Disk": "Transfer Disk"
 }

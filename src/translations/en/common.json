@@ -41,5 +41,24 @@
     "title": "Zip Code",
     "placeholder": "Zip Code"
   },
-  "Currency": "Currency"
+  "Currency": "Currency",
+  "Date": "Date",
+  "Description": "Description",
+  "Unit price": "Unit price (VND)",
+  "Amount": "Amount",
+  "Total": "Total (VND)",
+  "Add Item": "Add Item",
+  "Sub total": "Sub total",
+  "Deposit": "Deposit",
+  "Discount": "Discount",
+  "Exchange currency": "Exchange currency",
+  "Exchange rate": "Exchange rate",
+  "Grand Total": "Grand Total",
+  "Print Invoice": "Print Invoice",
+  "Payment": "Payment",
+  "Balance": "Balance (VND)",
+  "Payment Method": "Payment Method",
+  "Paid (VND)": "Paid (VND)",
+  "Total Amount": "Total Amount (VND)",
+  "Sub Total": "Sub Total (VND)"
 }
