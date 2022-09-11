@@ -1,0 +1,36 @@
+{
+  "Select Payment Method": "Select Payment Method",
+  "Add new amount": "Add new amount",
+  "Payment Method": {
+    "title": "Payment Method",
+    "placeholder": ""
+  },
+  "Amount to pay": {
+    "title": "Amount to pay",
+    "placeholder": ""
+  },
+  "Currency": {
+    "title": "Currency",
+    "placeholder": ""
+  },
+  "Amount in VND": {
+    "title": "Amount in VND",
+    "placeholder": ""
+  },
+  "Credit Card Type": {
+    "title": "Credit Card Type",
+    "placeholder": ""
+  },
+  "Credit Card Number": {
+    "title": "Credit Card Number",
+    "placeholder": ""
+  },
+  "Card Holder Name": {
+    "title": "Card Holder Name",
+    "placeholder": ""
+  },
+  "Authorized Person": {
+    "title": "Authorized Person",
+    "placeholder": ""
+  }
+}

@@ -60,5 +60,12 @@
   "Payment Method": "Payment Method",
   "Paid (VND)": "Paid (VND)",
   "Total Amount": "Total Amount (VND)",
-  "Sub Total": "Sub Total (VND)"
+  "Sub Total": "Sub Total (VND)",
+  "Exchange Rate": "Exchange Rate",
+  "Amount in VND": "Amount in VND",
+  "OK": "OK",
+  "Cancel": "Cancel",
+  "Pay": "Pay",
+  "Select Type": "Select Type",
+  "Total amount to pay": "Total amount to pay (VND)"
 }
