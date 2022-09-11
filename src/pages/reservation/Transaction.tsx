@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { Card, Col, Row } from 'antd';
 import DiskA from 'pages/reservation/DiskA';
 import Paid from 'pages/reservation/Paid';
+import PayDetailModal from 'pages/reservation/TransactionModal/PayDetailModal';
+import SelectedPayMethodModal from 'pages/reservation/TransactionModal/SelectedPayMethodModal';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -23,6 +25,8 @@ function Transaction() {
     },
   ];
   const [activeTabKey1, setActiveTabKey1] = useState<string>('tab1');
+  const [isModalOpenPaymentDetail, setIsModalOpenPaymentDetail] = useState(false);
+  const [isModalOpenSelectedPaymentMethod, setIsModalOpenSelectedPaymentMethod] = useState(false);
 
   const contentList: any = {
     tab1: <DiskA />,
@@ -182,6 +186,7 @@ function Transaction() {
         <Row style={{ paddingTop: 17 }}>
           <Col span={12} style={{ paddingRight: 18 }}>
             <MButton
+              onClick={() => setIsModalOpenPaymentDetail(true)}
               style={{
                 width: '100%',
                 border: '1px solid #1D39C4',
@@ -191,12 +196,24 @@ function Transaction() {
             >
               {t('common.Print Invoice')}
             </MButton>
+            <PayDetailModal
+              setIsModalOpen={setIsModalOpenPaymentDetail}
+              visible={isModalOpenPaymentDetail}
+            />
           </Col>
 
           <Col span={12}>
-            <PattonButton style={{ width: '100%' }} type="primary">
+            <PattonButton
+              onClick={() => setIsModalOpenSelectedPaymentMethod(true)}
+              style={{ width: '100%' }}
+              type="primary"
+            >
               {t('common.Payment')}
             </PattonButton>
+            <SelectedPayMethodModal
+              setIsModalOpen={setIsModalOpenSelectedPaymentMethod}
+              visible={isModalOpenSelectedPaymentMethod}
+            />
           </Col>
         </Row>
       </Col>
