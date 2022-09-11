@@ -41,10 +41,19 @@ export interface UserState {
   status: ValueOf<Status>;
 }
 
+export interface ReservationSearchState {
+  booker_info: string;
+  current_page: number;
+  data: Array<Record<string, any>>;
+  is_searching: boolean;
+  total: number;
+}
+
 export interface RootState {
   alerts: AlertsState;
   app: AppState;
   github: GitHubState;
+  reservation: ReservationSearchState;
   user: UserState;
 }
 

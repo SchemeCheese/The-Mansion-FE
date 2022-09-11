@@ -64,7 +64,7 @@ function Reservation() {
       <p className="title">Reservation List</p>
 
       <Tabs className="reservation-tabs" defaultActiveKey="1" style={{ minHeight: '90%' }}>
-        <TabPane key="1" className="content" tab="Waitlist">
+        <TabPane key="1" className="content" style={{ paddingBottom: 6 }} tab="Waitlist">
           <Waitlist />
         </TabPane>
         <TabPane key="2" className="content" tab="Reserved">
