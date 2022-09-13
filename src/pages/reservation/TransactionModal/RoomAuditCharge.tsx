@@ -35,7 +35,7 @@ function RoomAuditCharge({ setIsModalOpen, visible }: Props) {
     },
 
     {
-      title: t('auditRoomCharge.Updated price'),
+      title: t('common.Updated price'),
       dataIndex: 'updated_price',
       render: () => <Input placeholder="0" />,
     },
