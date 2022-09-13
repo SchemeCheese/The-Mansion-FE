@@ -9,6 +9,8 @@ import SelectDiskModal from 'pages/reservation/TransactionModal/SelectDiskModal'
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
+import AddItem from './TransactionModal/AddItem';
+
 interface DataTypeDiskA {
   amount: number;
   date: string;
@@ -20,6 +22,7 @@ interface DataTypeDiskA {
 function DiskA() {
   const { t } = useTranslation();
 
+  const [isModalOpenAddItem, setIsModalOpenAddItem] = useState(false);
   const [isModalOpenPaySelected, setIsModalOpenPaySelected] = useState(false);
   const [isModalOpenChangeDisk, setIsModalOpenChangeDisk] = useState(false);
   const [isModalOpenAditRoomCharge, setIsModalOpenAditRoomCharge] = useState(false);
@@ -112,9 +115,14 @@ function DiskA() {
       <div className="transaction-tab-button-footer">
         <Row>
           <Col span={8} style={{ paddingRight: 17 }}>
-            <PattonButton style={{ width: '100%' }} type="primary">
+            <PattonButton
+              onClick={() => setIsModalOpenAddItem(true)}
+              style={{ width: '100%' }}
+              type="primary"
+            >
               {t('common.Add Item')}
             </PattonButton>
+            <AddItem setIsModalOpen={setIsModalOpenAddItem} visible={isModalOpenAddItem} />
           </Col>
           <Col span={8} style={{ paddingRight: 17 }}>
             <MButton onClick={() => setIsModalOpenPaySelected(true)} style={{ width: '100%' }}>
