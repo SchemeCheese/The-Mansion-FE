@@ -26,7 +26,7 @@ function Waitlist() {
   const [showMore, setShowMore] = useState(false);
   const [searchCondition, setSearchCondition] = useState({
     current_page: 1,
-    per_page: 8,
+    per_page: 7,
     booker_info: '',
     folio_number: '',
     agent_name: '',
@@ -417,13 +417,13 @@ function Waitlist() {
                 };
               }}
               pagination={false}
-              style={{ height: 500, overflowX: 'hidden', overflowY: 'auto' }}
+              style={{ overflowX: 'hidden', overflowY: 'auto', minHeight: 450 }}
             />
             {total > 0 && (
               <Pagination
                 defaultCurrent={currentPage}
                 onChange={onChangeCurrentPage}
-                pageSize={8}
+                pageSize={7}
                 showSizeChanger={false}
                 style={{ float: 'right', marginTop: 15 }}
                 total={total}

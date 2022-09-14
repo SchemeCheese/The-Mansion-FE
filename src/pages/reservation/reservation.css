@@ -189,3 +189,7 @@
   border-bottom-left-radius: 2px;
 } */
 /** End Fullcalendar custom **/
+
+.reservation-tabs .ant-tabs-content-holder {
+  background-color: #e5e5e5;
+}
