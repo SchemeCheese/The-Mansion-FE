@@ -3,5 +3,25 @@
   "Paid": "Paid",
   "Add Disk": "Add Disk",
   "Transfer Room": "Transfer Room",
-  "Add Product / Service": "Add Product / Service"
+  "Add Product / Service": "Add Product / Service",
+  "Status": "Status",
+  "Guest Name": "Guest Name",
+  "Current Balance": "Current Balance",
+  "Select Currency": {
+    "title": "Select Currency",
+    "placeholder": "Select Currency"
+  },
+  "Exchanged Amount": "Exchanged Amount",
+  "Transaction Type": {
+    "title": "Transaction Type",
+    "placeholder": "Transaction Type"
+  },
+  "Print Bill": "Print Bill",
+  "Receive Email": "Receive Email",
+  "Comment": "Comment",
+  "Actual Deposit Date": "Actual Deposit Date",
+  "Transfer to Folio ID": "Transfer to Folio ID",
+  "Target Folio ID": "Target Folio ID",
+  "Select Disk Target": "Select Disk Target",
+  "Total Amount": "Total Amount"
 }

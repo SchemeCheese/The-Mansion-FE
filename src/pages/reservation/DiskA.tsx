@@ -5,6 +5,7 @@ import Table, { ColumnsType } from 'antd/lib/table';
 import PaySelectedModal from 'pages/reservation/TransactionModal/PaySelectedModal';
 import RoomAuditCharge from 'pages/reservation/TransactionModal/RoomAuditCharge';
 import SelectDiskModal from 'pages/reservation/TransactionModal/SelectDiskModal';
+import TransferRoom from 'pages/reservation/TransactionModal/TransferRoom';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -26,6 +27,7 @@ function DiskA() {
   const [isModalOpenPaySelected, setIsModalOpenPaySelected] = useState(false);
   const [isModalOpenChangeDisk, setIsModalOpenChangeDisk] = useState(false);
   const [isModalOpenAditRoomCharge, setIsModalOpenAditRoomCharge] = useState(false);
+  const [isModalOpenTransferRoom, setIsModalOpenTransferRoom] = useState(false);
 
   const columnsDiskA: ColumnsType<DataTypeDiskA> = [
     {
@@ -157,7 +159,13 @@ function DiskA() {
             />
           </Col>
           <Col span={8}>
-            <MButton style={{ width: '100%' }}>{t('transaction.Transfer Room')}</MButton>
+            <MButton onClick={() => setIsModalOpenTransferRoom(true)} style={{ width: '100%' }}>
+              {t('transaction.Transfer Room')}
+            </MButton>
+            <TransferRoom
+              setIsModalOpen={setIsModalOpenTransferRoom}
+              visible={isModalOpenTransferRoom}
+            />
           </Col>
         </Row>
       </div>
