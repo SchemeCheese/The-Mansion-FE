@@ -97,3 +97,42 @@
 .tabs-cart > .ant-tabs-nav {
   background: #fafafa;
 }
+
+/* Custome All Table CSS */
+.ant-table-tbody {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.ant-table-thead > tr > th::before {
+  display: none;
+}
+
+/* End Custome All Table CSS */
+
+/* Pagination CSS */
+.ant-pagination > .ant-pagination-item,
+.ant-pagination > .ant-pagination-prev > button,
+.ant-pagination > .ant-pagination-next > button {
+  border-radius: 6px;
+}
+
+.ant-pagination > .ant-pagination-item:hover,
+.ant-pagination > .ant-pagination-prev > button:hover,
+.ant-pagination > .ant-pagination-next > button:hover {
+  border-color: #1d39c4;
+}
+
+.ant-pagination-item a:hover {
+  color: #1d39c4;
+}
+
+.ant-pagination > .ant-pagination-item-active {
+  background: #1d39c4;
+  border-color: #1d39c4;
+}
+
+.ant-pagination-item-active a,
+.ant-pagination-item-active a:hover {
+  color: #ffffff;
+}
+/* End Pagination CSS */

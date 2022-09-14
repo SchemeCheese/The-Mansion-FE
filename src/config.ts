@@ -17,3 +17,7 @@ export const AuthPath = {
   LOGIN_PATH: 'auth/login',
   PROFILE_PATH: 'auth/me',
 };
+
+export const ReservationEndpoint = {
+  SEARCH: 'api/v1/reservations',
+};

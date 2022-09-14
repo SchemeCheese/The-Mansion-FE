@@ -1,5 +1,4 @@
 /* Guest List Tab CSS */
-
 .guest-list-card .ant-card-actions > li:not(:last-child) {
   border-right: 1px solid rgba(0, 0, 0, 0.15);
 }
@@ -8,11 +7,9 @@
   border-top: 1px solid rgba(0, 0, 0, 0.15);
   background: #f7f9fa;
 }
-
 /* End Guest List Tab CSS */
 
 /* Create Guest Modal CSS */
-
 .new-guest-modal .ant-upload-list-picture-card-container {
   width: 300px;
   height: 300px;
@@ -31,11 +28,9 @@
 .new-guest-modal .ant-btn-primary {
   background: #1d39c4;
 }
-
 /** End Create Guest Modal CSS */
 
 /** Custom select **/
-
 .ant-select-selector {
   border-radius: 4px !important;
 }
@@ -49,11 +44,9 @@
   font-size: 14px;
   padding-right: 20px !important;
 }
-
 /** End custome select **/
 
 /** Fullcalendar custom **/
-
 .fc-resource-timeline tr {
   height: 50px;
 }
@@ -97,14 +90,12 @@
 }
 
 /* Room Type, Room Ro Column */
-
 .fc-datagrid-header .fc-datagrid-cell-main {
   color: rgba(0, 0, 0, 0.85);
   font-weight: 400;
 }
 
 /* Weekend date */
-
 .fc-day-sat .fc-timeline-slot-cushion,
 .fc-day-sat {
   color: #f5222d;
@@ -116,7 +107,6 @@
 }
 
 /* Cell Text Color */
-
 .fc-scrollgrid-section-body .fc-datagrid-cell-main {
   color: rgba(0, 0, 0, 0.65);
 }
@@ -151,7 +141,6 @@
 }
 
 /* Weekly Button */
-
 .fc-timeGridWeekly-button {
   border-radius: 4px !important;
   background-color: #1d39c4 !important;
@@ -160,7 +149,6 @@
 }
 
 /* Monthly Button */
-
 .fc-timeGridMonthly-button {
   border-radius: 4px !important;
   background-color: #ffffff !important;
@@ -169,7 +157,6 @@
 }
 
 /* Title */
-
 .fc-toolbar-title {
   color: #000000;
   font-size: 20px !important;
@@ -179,7 +166,6 @@
 }
 
 /* For MAC 15' */
-
 @media (max-width: 1440px) {
   .slot-fc-day-monthly > div {
     padding-left: 34% !important;
@@ -202,5 +188,4 @@
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 2px;
 } */
-
 /** End Fullcalendar custom **/
