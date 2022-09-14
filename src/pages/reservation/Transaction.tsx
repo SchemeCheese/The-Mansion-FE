@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Card, Col, Row } from 'antd';
 import DiskA from 'pages/reservation/DiskA';
 import Paid from 'pages/reservation/Paid';
+import Deposit from 'pages/reservation/TransactionModal/Deposit';
 import PayDetailModal from 'pages/reservation/TransactionModal/PayDetailModal';
 import SelectedPayMethodModal from 'pages/reservation/TransactionModal/SelectedPayMethodModal';
 
@@ -30,6 +31,7 @@ function Transaction() {
   const [isModalOpenPaymentDetail, setIsModalOpenPaymentDetail] = useState(false);
   const [isModalOpenSelectedPaymentMethod, setIsModalOpenSelectedPaymentMethod] = useState(false);
   const [isModalOpenAddDiscount, setIsModalOpenAddDiscount] = useState(false);
+  const [isModalOpenDeposit, setIsModalOpenDeposit] = useState(false);
 
   const contentList: any = {
     tab1: <DiskA />,
@@ -90,7 +92,7 @@ function Transaction() {
               <div className="checkout-card-grid">
                 <Card.Grid hoverable={false} style={gridStyleLeft}>
                   {t('common.Deposit')}{' '}
-                  <Button className="btn-checkout-icon">
+                  <Button className="btn-checkout-icon" onClick={() => setIsModalOpenDeposit(true)}>
                     <svg
                       fill="none"
                       height="14"
@@ -104,6 +106,10 @@ function Transaction() {
                       />
                     </svg>
                   </Button>
+                  <Deposit
+                    isModalVisible={isModalOpenDeposit}
+                    setModalVisible={setIsModalOpenDeposit}
+                  />
                 </Card.Grid>
                 <Card.Grid hoverable={false} style={gridStyleRight}>
                   <span style={{ fontSize: 16 }}>1.000.000</span>

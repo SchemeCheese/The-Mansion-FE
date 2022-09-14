@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : Xuan
+Created Date : 14/09/2022
+Updated Date : 14/09/2022
+Main functions : Transaction Add Item
+************************************ */
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form, Input, Modal, Row, Select, Table } from 'antd';
