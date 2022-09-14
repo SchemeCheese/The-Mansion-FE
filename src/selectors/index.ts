@@ -16,3 +16,8 @@ export const selectUser = createSelector(
   (state: RootState) => state.user,
   user => user,
 );
+
+export const selectCreateReservation = createSelector(
+  (state: RootState) => state.createReservation,
+  createReservation => createReservation,
+);

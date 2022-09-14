@@ -74,11 +74,11 @@ function Home() {
         <div>
           <label htmlFor="email">
             Email:
-            <input id="email" onChange={e => setEmail(e.target.value)} type="text" />
+            <input id="email" onChange={event => setEmail(event.target.value)} type="text" />
           </label>
           <label htmlFor="password">
             Password:
-            <input id="password" onChange={e => setPassword(e.target.value)} type="text" />
+            <input id="password" onChange={event => setPassword(event.target.value)} type="text" />
           </label>
           <button onClick={handleClickLogin} type="submit">
             Loginnnn

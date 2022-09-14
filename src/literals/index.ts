@@ -18,6 +18,9 @@ export const ActionTypes = keyMirror({
   USER_GET_LOGGINED_USER_INFO: undefined,
   RESERVATION_SEARCH: undefined,
   RESERVATION_SEARCH_FINISH: undefined,
+  RESERVATION_CREATE: undefined,
+  RESERVATION_CREATE_SUCCESS: undefined,
+  RESERVATION_CREATE_FAILURE: undefined,
 });
 
 export const STATUS: Status = {

@@ -8,9 +8,21 @@ Main functions : Reservation List Page
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { DownOutlined, PlusOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Input, Pagination, Row, Select, Spin, Table, Tag } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Input,
+  message,
+  Pagination,
+  Row,
+  Select,
+  Spin,
+  Table,
+  Tag,
+} from 'antd';
 import moment from 'moment';
 
 import { searchReservation } from 'actions';
@@ -121,7 +133,6 @@ function Waitlist() {
       dataIndex: 'alert',
       key: 'alert',
       render: (text: string, record: any) => {
-        console.log('textt', text, record);
         const alert = [];
 
         if (record.isEarlyCheckin) {
@@ -144,12 +155,14 @@ function Waitlist() {
           return <div style={{ minWidth: 0, lineHeight: '27px' }}>{alert}</div>;
         }
 
-        return <div style={{ textAlign: 'center' }}>-</div>;
+        return <div style={{ textAlign: 'center' }}>{text ?? '-'}</div>;
       },
     },
   ];
 
   const navigate = useNavigate();
+
+  const localtion: any = useLocation();
 
   const handleClickRow = (id: number) => {
     navigate(`/reservation/${id}`);
@@ -164,6 +177,15 @@ function Waitlist() {
   useEffect(() => {
     dispatch(searchReservation(searchCondition));
   }, []);
+
+  useEffect(() => {
+    if (localtion.state?.message) {
+      message.success(localtion.state?.message);
+
+      // Remove state: https://stackoverflow.com/a/66359848
+      window.history.replaceState({}, document.title);
+    }
+  }, [localtion.state]);
 
   const onChangeCurrentPage = (page: number, pageSize: number) => {
     setSearchCondition({
@@ -213,8 +235,8 @@ function Waitlist() {
     return [];
   };
 
-  const searchInput = (e: any) => {
-    if (e.keyCode === 13) {
+  const searchInput = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
       fetchSearchReservation({
         ...searchCondition,
         current_page: 1,
@@ -267,7 +289,7 @@ function Waitlist() {
                     booker_info: e.target.value,
                   })
                 }
-                onKeyUp={e => searchInput(e)}
+                onKeyUp={event => searchInput(event)}
                 placeholder="Email/Phone/Name"
                 style={{ height: 32, fontSize: 12 }}
               />
@@ -280,7 +302,7 @@ function Waitlist() {
                     folio_number: e.target.value,
                   })
                 }
-                onKeyUp={e => searchInput(e)}
+                onKeyUp={event => searchInput(event)}
                 placeholder="Folio ID"
                 style={{ height: 32, fontSize: 12 }}
               />
@@ -293,7 +315,7 @@ function Waitlist() {
                     agent_name: e.target.value,
                   })
                 }
-                onKeyUp={e => searchInput(e)}
+                onKeyUp={event => searchInput(event)}
                 placeholder="Travel Agent"
                 style={{ height: 32, fontSize: 12 }}
               />
