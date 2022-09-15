@@ -22,3 +22,7 @@ export const ReservationEndpoint = {
   SEARCH: 'api/v1/reservations',
   CREATE: 'api/v1/reservations/create',
 };
+
+export const RoomEndpoint = {
+  SEARCH: 'api/v1/check-room-info',
+};

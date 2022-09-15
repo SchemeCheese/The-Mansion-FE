@@ -37,7 +37,7 @@ export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchR
   );
 }
 
-export function* createReservationSaga({ payload }: ReturnType<typeof createReservation>) {
+export function* postCreateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
   let success = '';
 
   ({ success } = yield call(request, apiEndPoint(ReservationEndpoint.CREATE), {
@@ -109,6 +109,6 @@ export function* createReservationSaga({ payload }: ReturnType<typeof createRese
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
-    takeLatest(ActionTypes.RESERVATION_CREATE, createReservationSaga),
+    takeLatest(ActionTypes.RESERVATION_CREATE, postCreateReservationSaga),
   ]);
 }

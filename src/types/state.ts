@@ -49,6 +49,15 @@ export interface ReservationSearchState {
   total: number;
 }
 
+export interface RoomSearchState {
+  charges: Array<Record<string, any>>;
+  checkin: string;
+  checkout: string;
+  is_searching: boolean;
+  room_type?: string;
+  total: number;
+}
+
 export interface CreateReservationPayload {
   booker_email: string;
   booker_email_2?: string;
@@ -79,6 +88,7 @@ export interface RootState {
   createReservation: CreateReservationState;
   github: GitHubState;
   reservation: ReservationSearchState;
+  searchRoom: RoomSearchState;
   user: UserState;
 }
 
