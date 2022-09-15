@@ -1,12 +1,14 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Col, Tabs } from 'antd';
+
+import { searchReservation } from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 
 import Calendar from './Calendar';
 import ChannelManager from './ChannelManager';
-import Reserved from './Reserved';
-import Waitlist from './Waitlist';
+import ReservationList from './ReservationList';
 
 const { TabPane } = Tabs;
 
@@ -55,7 +57,51 @@ function Reservation() {
     );
   }
 
+  const dispatch = useDispatch();
+
   const breadcrumbData = ['Home', 'List', 'App'];
+
+  const handeleActive = (activeKey: string) => {
+    if (activeKey === '1') {
+      dispatch(
+        searchReservation({
+          current_page: 1,
+          per_page: 7,
+          booker_info: '',
+          folio_number: '',
+          agent_name: '',
+          status: '',
+          market: '',
+          source: '',
+          checkin_from: '',
+          checkin_to: '',
+          checkout_from: '',
+          checkout_to: '',
+          inhouse: '',
+          type: 'waitlist',
+        }),
+      );
+    } else {
+      dispatch(
+        searchReservation({
+          current_page: 1,
+          per_page: 7,
+          booker_info: '',
+          folio_number: '',
+          agent_name: '',
+          status: '',
+          market: '',
+          source: '',
+          checkin_from: '',
+          checkin_to: '',
+          checkout_from: '',
+          checkout_to: '',
+          inhouse: '',
+          type: 'reserved',
+        }),
+      );
+    }
+  };
 
   return (
     <>
@@ -63,12 +109,17 @@ function Reservation() {
 
       <p className="title">Reservation List</p>
 
-      <Tabs className="reservation-tabs" defaultActiveKey="1" style={{ minHeight: '90%' }}>
+      <Tabs
+        className="reservation-tabs"
+        defaultActiveKey="1"
+        onChange={activeKey => handeleActive(activeKey)}
+        style={{ minHeight: '90%' }}
+      >
         <TabPane key="1" className="content" tab="Waitlist">
-          <Waitlist />
+          <ReservationList type="waitlist" />
         </TabPane>
         <TabPane key="2" className="content" tab="Reserved">
-          <Reserved />
+          <ReservationList type="reserved" />
         </TabPane>
         <TabPane key="3" className="content" tab="Calendar">
           <Calendar />

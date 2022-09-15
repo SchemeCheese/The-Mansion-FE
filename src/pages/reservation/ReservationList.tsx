@@ -34,7 +34,11 @@ import { ReservationSearch, RootState } from 'types';
 
 const { Option } = Select;
 
-function Waitlist() {
+interface Props {
+  type: string;
+}
+
+function ReservationList({ type }: Props) {
   const [showMore, setShowMore] = useState(false);
   const [searchCondition, setSearchCondition] = useState({
     current_page: 1,
@@ -50,7 +54,7 @@ function Waitlist() {
     checkout_from: '',
     checkout_to: '',
     inhouse: '',
-    type: 'waitlist',
+    type,
   });
 
   function handleChange() {
@@ -276,6 +280,8 @@ function Waitlist() {
     dispatch(searchReservation(data));
   };
 
+  console.log('Renderr Waitlist');
+
   return (
     <Row style={{ background: 'white', padding: 16 }}>
       <Col span={24}>
@@ -460,4 +466,4 @@ function Waitlist() {
   );
 }
 
-export default Waitlist;
+export default ReservationList;
