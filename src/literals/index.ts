@@ -21,6 +21,9 @@ export const ActionTypes = keyMirror({
   RESERVATION_CREATE: undefined,
   RESERVATION_CREATE_SUCCESS: undefined,
   RESERVATION_CREATE_FAILURE: undefined,
+  ROOM_SEARCH: undefined,
+  ROOM_SEARCH_FINISH: undefined,
+  ROOM_SEARCH_RESET: undefined,
 });
 
 export const STATUS: Status = {

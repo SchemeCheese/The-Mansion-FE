@@ -36,8 +36,8 @@ import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
 import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
-import TableSummary from 'components/TableSummary';
 
+// import TableSummary from 'components/TableSummary';
 import CancelBookingModal from './CancelBookingModal';
 import GuestList from './GuestList';
 import Schedule from './Schedule';
@@ -773,7 +773,7 @@ function ReservationDetail() {
                             pagination={false}
                             size="small"
                             style={{ border: 0 }}
-                            summary={TableSummary}
+                            // summary={TableSummary}
                           />
                         </Col>
                       </Row>

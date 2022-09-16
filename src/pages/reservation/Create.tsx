@@ -25,14 +25,14 @@ import {
   Table,
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import moment from 'moment';
 import { selectCreateReservation } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
+import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 import { colors } from 'modules/theme';
 
-import { createReservation } from 'actions';
+import { createReservation, searchRoom, searchRoomReset } from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
@@ -80,6 +80,7 @@ const rowSelection = {
 function Create() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const [roomList, setRoomList] = useState<any>([]);
 
   const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
@@ -142,10 +143,34 @@ function Create() {
   const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
 
   const showModal = () => {
+    dispatch(searchRoomReset());
+    setRoomSelected([]);
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
+    const data1 = [...roomList];
+
+    roomSelected.forEach((item: any) => {
+      data1.push({
+        status: 'Waitlist',
+        name: '-',
+        room_type: item.room_type,
+        room_no: '-',
+        ci: item.checkin,
+        co: item.checkout,
+        nights: 1,
+        adl: 2,
+        child: '-',
+        baby: '-',
+        rate: item.rate_name,
+        subtotal: item.subtotal,
+        deposit: '-',
+      });
+    });
+
+    setRoomList(data1);
+
     setIsModalVisible(false);
   };
 
@@ -193,13 +218,17 @@ function Create() {
       title: 'Rate Name',
       dataIndex: 'rate_name',
       key: 'rate_name',
-      render: () => (
-        <Select placeholder="Select rate" showSearch style={{ width: '100%' }}>
-          <Option value="rate name 1">Rate Name 1</Option>
-          <Option value="rate name 2">Rate Name 2</Option>
-          <Option value="rate name 3">Rate Name 3</Option>
-        </Select>
-      ),
+      // render: (text: any) => {
+      //   const option123: any[] = text?.map((item: any) => {
+      //     return <Option value="rate name 1">{item.rate_name}</Option>;
+      //   });
+
+      //   return (
+      //     <Select placeholder="Select rate" showSearch style={{ width: '100%' }}>
+      //       {option123}
+      //     </Select>
+      //   );
+      // },
     },
     {
       title: 'Adl',
@@ -225,7 +254,29 @@ function Create() {
       title: 'Updated price',
       dataIndex: 'updated_price',
       key: 'updated_price',
-      render: () => <Input name="updated_price" placeholder="0" style={{ borderRadius: 4 }} />,
+      render: (text: string, record: any, index: number) => {
+        console.log('searchRoomResultState', record, index, text);
+
+        return (
+          <Input
+            name="updated_price"
+            onChange={event => {
+              const stateTemporary = [...searchRoomResultState];
+              const xxx = { ...searchRoomResultState[index] };
+
+              stateTemporary[index] = {
+                ...xxx,
+                updated_price: event.target.value,
+              };
+
+              setSearchRoomResultState(stateTemporary);
+            }}
+            placeholder="0"
+            style={{ borderRadius: 4 }}
+            value={searchRoomResultState[index]?.updated_price}
+          />
+        );
+      },
     },
     {
       title: 'Task',
@@ -239,20 +290,39 @@ function Create() {
     },
   ];
 
-  const dataSearchRoom = [];
+  // const dataSearchRoom = [];
 
-  for (let index = 0; index < 3; index++) {
-    dataSearchRoom.push({
-      created_date: '',
-      rate_name: '',
-      adult: '',
-      child: '',
-      rate_detail: '',
-      unit_price: '',
-      updated_price: '',
-      task: '',
+  // for (let index = 0; index < 3; index++) {
+  //   dataSearchRoom.push({
+  //     created_date: '',
+  //     rate_name: '',
+  //     adult: '',
+  //     child: '',
+  //     rate_detail: '',
+  //     unit_price: '',
+  //     updated_price: '',
+  //     task: '',
+  //   });
+  // }
+
+  const convertDataSearchRoom = (charges: any) => {
+    const result: any[] = [];
+
+    charges.forEach((item: any) => {
+      result.push({
+        date: item.date,
+        rate_name: item.rate_name,
+        adult: '',
+        child: '',
+        rate_detail: item.rate_detail,
+        unit_price: item.price,
+        updated_price: item.price,
+        task: '',
+      });
     });
-  }
+
+    return result;
+  };
 
   const columnsSelectedRoomsResult = [
     {
@@ -297,7 +367,7 @@ function Create() {
     },
   ];
 
-  const dataSelectedRoomsResult = [];
+  const dataSelectedRoomsResult: any = [];
 
   for (let index = 0; index < 3; index++) {
     dataSelectedRoomsResult.push({
@@ -310,6 +380,71 @@ function Create() {
       task: '',
     });
   }
+
+  const [roomSelected, setRoomSelected] = useState<any>([]);
+  const [roomTotalForm, setRoomTotalForm] = useState([]);
+
+  const [roomCondition, setRoomCondition] = useState({
+    checkin: '',
+    checkout: '',
+    room_type: '',
+  });
+
+  const [quantity, setQuantity] = useState(0);
+
+  const searchRoomsResult: any = useSelector<RootState>(
+    ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.charges,
+  );
+
+  const searchRoomDate = (date: any, key: string) => {
+    const stateTemporary = {
+      ...roomCondition,
+      [key]: date?.format('YYYY-MM-DD') ?? '',
+    };
+
+    setRoomCondition(stateTemporary);
+    // dispatch(searchRoom(stateTemporary));
+  };
+
+  const searchRoomSelect = (value: string, key: string) => {
+    let valueTemporary = value;
+
+    if (value === undefined) {
+      valueTemporary = '';
+    }
+
+    const stateTemporary = {
+      ...roomCondition,
+      [key]: valueTemporary,
+      current_page: 1,
+    };
+
+    setRoomCondition(stateTemporary);
+    dispatch(searchRoom(stateTemporary));
+  };
+
+  const [searchRoomResultState, setSearchRoomResultState] = useState<any>([]);
+
+  useEffect(() => {
+    const temporary = [...searchRoomsResult];
+
+    setSearchRoomResultState(
+      temporary.map(item => {
+        return {
+          ...item,
+          updated_price: item.price,
+        };
+      }),
+    );
+  }, [searchRoomsResult]);
+
+  const totalAmount = _.reduce(
+    searchRoomResultState,
+    function (memo, number_: any) {
+      return parseInt(number_.updated_price, 10) + memo;
+    },
+    0,
+  );
 
   return (
     <>
@@ -520,7 +655,7 @@ function Create() {
                         <Col span={6}>
                           <Form.Item label="Checkin" name="checkin">
                             <DatePicker
-                              defaultValue={moment('2017-08-08')}
+                              onChange={date => searchRoomDate(date, 'checkin')}
                               style={{
                                 height: 32,
                                 borderRadius: 4,
@@ -533,7 +668,7 @@ function Create() {
                         <Col span={6}>
                           <Form.Item label="Checkout" name="checkout">
                             <DatePicker
-                              defaultValue={moment('2017-08-08')}
+                              onChange={date => searchRoomDate(date, 'checkout')}
                               style={{
                                 height: 32,
                                 borderRadius: 4,
@@ -545,19 +680,27 @@ function Create() {
                         </Col>
                         <Col span={6}>
                           <Form.Item label="Room type" name="room_type">
-                            <Select allowClear placeholder="Select room type">
-                              <Option value="room1">Room 1</Option>
-                              <Option value="room2">Room 2</Option>
-                              <Option value="room3">Room 3</Option>
+                            <Select
+                              allowClear
+                              onChange={value => searchRoomSelect(value, 'room_type')}
+                              placeholder="Select room type"
+                            >
+                              <Option value="1">Room 1</Option>
+                              <Option value="2">Room 2</Option>
+                              <Option value="3">Room 3</Option>
                             </Select>
                           </Form.Item>
                         </Col>
                         <Col span={6}>
                           <Form.Item label="Quantity" name="quantity">
-                            <Select allowClear placeholder="Select quantity">
-                              <Option value="quantity1">Quantity 1</Option>
-                              <Option value="quantity2">Quantity 2</Option>
-                              <Option value="quantity3">Quantity 3</Option>
+                            <Select
+                              allowClear
+                              onChange={value => setQuantity(value)}
+                              placeholder="Select quantity"
+                            >
+                              <Option value="1">1</Option>
+                              <Option value="2">2</Option>
+                              <Option value="3">3</Option>
                             </Select>
                           </Form.Item>
                         </Col>
@@ -566,11 +709,22 @@ function Create() {
                         <Col span={24} style={{ paddingTop: 16 }}>
                           <Table
                             columns={columnsSearchRoom}
-                            dataSource={dataSearchRoom}
+                            dataSource={convertDataSearchRoom(searchRoomResultState)}
                             pagination={false}
                             size="small"
                             style={{ border: 0 }}
-                            summary={TableSummary}
+                            summary={() => {
+                              return (
+                                <TableSummary
+                                  quantity={quantity}
+                                  roomTotalForm={roomTotalForm}
+                                  searchRoomResultState={searchRoomResultState}
+                                  setRoomSelected={setRoomSelected}
+                                  setRoomTotalForm={setRoomTotalForm}
+                                  totalAmount={totalAmount}
+                                />
+                              );
+                            }}
                           />
                         </Col>
                       </Row>
@@ -585,7 +739,7 @@ function Create() {
                         <Col span={24}>
                           <Table
                             columns={columnsSelectedRoomsResult}
-                            dataSource={dataSelectedRoomsResult}
+                            dataSource={roomSelected}
                             pagination={false}
                             size="small"
                             style={{ border: 0 }}
@@ -607,7 +761,7 @@ function Create() {
                 <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                   <Table
                     columns={columns}
-                    dataSource={data}
+                    dataSource={roomList}
                     pagination={false}
                     rowSelection={rowSelection}
                     size="small"

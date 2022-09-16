@@ -3,6 +3,7 @@ import app, { appState } from './app';
 import createReservation, { createReservationState } from './createReservation';
 import github, { githubState } from './github';
 import reservation, { reservationSearchState } from './reservation';
+import searchRoom, { roomSearchState } from './searchRoom';
 import user, { userState } from './user';
 
 export const initialState = {
@@ -12,6 +13,7 @@ export const initialState = {
   user: userState,
   reservation: reservationSearchState,
   createReservation: createReservationState,
+  searchRoom: roomSearchState,
 };
 
 export default {
@@ -21,4 +23,5 @@ export default {
   ...user,
   ...reservation,
   ...createReservation,
+  ...searchRoom,
 };
