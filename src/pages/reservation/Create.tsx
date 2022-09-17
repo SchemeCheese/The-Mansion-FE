@@ -181,7 +181,10 @@ function Create() {
   const onFinish = (values: any) => {
     dispatch(
       createReservation({
-        payload: values,
+        payload: {
+          ...values,
+          rooms: roomTotalForm,
+        },
       }),
     );
   };
@@ -211,8 +214,8 @@ function Create() {
   const columnsSearchRoom = [
     {
       title: 'Date',
-      dataIndex: 'date',
-      key: 'date',
+      dataIndex: 'use_date',
+      key: 'use_date',
     },
     {
       title: 'Rate Name',
@@ -252,28 +255,28 @@ function Create() {
     },
     {
       title: 'Updated price',
-      dataIndex: 'updated_price',
-      key: 'updated_price',
+      dataIndex: 'actual_amount',
+      key: 'actual_amount',
       render: (text: string, record: any, index: number) => {
         console.log('searchRoomResultState', record, index, text);
 
         return (
           <Input
-            name="updated_price"
+            name="actual_amount"
             onChange={event => {
               const stateTemporary = [...searchRoomResultState];
               const xxx = { ...searchRoomResultState[index] };
 
               stateTemporary[index] = {
                 ...xxx,
-                updated_price: event.target.value,
+                actual_amount: event.target.value,
               };
 
               setSearchRoomResultState(stateTemporary);
             }}
             placeholder="0"
             style={{ borderRadius: 4 }}
-            value={searchRoomResultState[index]?.updated_price}
+            value={searchRoomResultState[index]?.actual_amount}
           />
         );
       },
@@ -310,13 +313,13 @@ function Create() {
 
     charges.forEach((item: any) => {
       result.push({
-        date: item.date,
+        use_date: item.date,
         rate_name: item.rate_name,
         adult: '',
         child: '',
         rate_detail: item.rate_detail,
         unit_price: item.price,
-        updated_price: item.price,
+        actual_amount: item.price,
         task: '',
       });
     });
@@ -432,7 +435,7 @@ function Create() {
       temporary.map(item => {
         return {
           ...item,
-          updated_price: item.price,
+          actual_amount: item.price,
         };
       }),
     );
@@ -441,7 +444,7 @@ function Create() {
   const totalAmount = _.reduce(
     searchRoomResultState,
     function (memo, number_: any) {
-      return parseInt(number_.updated_price, 10) + memo;
+      return parseInt(number_.actual_amount, 10) + memo;
     },
     0,
   );

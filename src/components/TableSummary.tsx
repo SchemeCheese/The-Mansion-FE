@@ -32,7 +32,7 @@ function TableSummary({
 }: Props) {
   const handleClick = () => {
     const dataSelectedRoomsResult: any[] = [];
-    const dataRoomTotalForm = [...roomTotalForm, ...searchRoomResultState];
+    const dataRoomTotalForm = [...roomTotalForm];
     const groupRooms: any = _.groupBy(searchRoomResultState, 'rate_name');
 
     _.values(groupRooms).forEach((element: any) => {
@@ -41,21 +41,27 @@ function TableSummary({
       const sum = _.reduce(
         element,
         function (memo: any, number_: any) {
-          return memo + parseInt(number_.updated_price, 10);
+          return memo + parseInt(number_.actual_amount, 10);
         },
         0,
       );
 
-      console.log('summ', sum);
-
       dataSelectedRoomsResult.push({
-        checkin: _.first(x).date,
-        checkout: _.last(x).date,
+        checkin: _.first(x).use_date,
+        checkout: _.last(x).use_date,
         room_type: _.first(x).room_type,
         rate_name: _.first(x).rate_name,
         quantity,
         subtotal: sum * quantity,
         task: '',
+      });
+
+      dataRoomTotalForm.push({
+        room_type: 2,
+        checkin_date: _.first(x).use_date,
+        checkout_date: _.last(x).use_date,
+        actual_amount: sum * quantity,
+        charges: searchRoomResultState,
       });
     });
 

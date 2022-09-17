@@ -31,6 +31,7 @@ export interface ReservationPayload {
   path_of_reservation: string;
   payment_method?: string;
   reservation_number: string;
+  rooms: any;
   send_mail?: string;
 }
 
