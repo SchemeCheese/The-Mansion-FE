@@ -6,5 +6,6 @@ export interface RoomSearch {
 
 export interface RoomSearchResult {
   charges: Array<Record<string, any>>;
+  rates: Array<Record<string, any>>;
   total: number;
 }

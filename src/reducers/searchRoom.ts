@@ -10,6 +10,7 @@ export const roomSearchState = {
   room_type: '',
   is_searching: false,
   charges: [],
+  rates: [],
   total: 0,
 };
 
@@ -25,6 +26,7 @@ export default {
       .addCase(searchRoomFinish, (draft, { payload }) => {
         draft.is_searching = false;
         draft.charges = payload.charges;
+        draft.rates = payload.rates;
         draft.total = payload.total;
       })
       .addCase(searchRoomReset, draft => {

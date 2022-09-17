@@ -54,6 +54,7 @@ export interface RoomSearchState {
   checkin: string;
   checkout: string;
   is_searching: boolean;
+  rates: Array<Record<string, any>>;
   room_type?: string;
   total: number;
 }
