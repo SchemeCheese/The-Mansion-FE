@@ -1,7 +1,15 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 03/09/2022
+Updated Date : 18/09/2022
+Main functions : Schedule Tab
+************************************ */
+
+/* eslint simple-import-sort/imports: 0 */
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar, {
   DateSelectArg,
   EventApi,
@@ -10,6 +18,8 @@ import FullCalendar, {
 } from '@fullcalendar/react';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import { Checkbox, Col, DatePicker, Form, Row, Select } from 'antd';
 import moment from 'moment';
 

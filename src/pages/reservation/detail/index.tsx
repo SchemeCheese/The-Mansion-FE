@@ -6,10 +6,11 @@ Updated Date : 30/08/2022
 Main functions : Reservation Detail Page
 ************************************ */
 
-import './reservation.css';
+import 'styles/reservation.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   Button,
@@ -29,19 +30,22 @@ import {
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-import Rate from 'pages/reservation/Rate';
+import GuestList from 'pages/reservation/detail//GuestList';
+import Rate from 'pages/reservation/detail/Rate';
+import Transaction from 'pages/reservation/detail/Transaction';
+import Schedule from 'pages/reservation/list/Schedule';
+// import TableSummary from 'components/TableSummary';
+import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import styled from 'styled-components';
+
+import { getReservationDetail } from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
 import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
 
-// import TableSummary from 'components/TableSummary';
-import CancelBookingModal from './CancelBookingModal';
-import GuestList from './GuestList';
-import Schedule from './Schedule';
-import Transaction from './Transaction';
+import { RootState } from 'types';
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -357,6 +361,51 @@ function ReservationDetail() {
       task: '',
     });
   }
+
+  // const [dataState, setDataState] = useState();
+  const dispatch = useDispatch();
+  const data123: any = useSelector<RootState>(
+    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
+  );
+  // const isFinish = useSelector<RootState>(
+  //   ({ getReservationDetail }) => getReservationDetail.is_finish,
+  // );
+
+  console.log('dataaaa1233', data123);
+
+  const [roomList, setRoomList] = useState<any>([]);
+
+  useEffect(() => {
+    dispatch(
+      getReservationDetail({
+        id: '3185',
+      }),
+    );
+  }, []);
+
+  useEffect(() => {
+    const xx: any = [];
+
+    data123.rooms.forEach((item: any) => {
+      xx.push({
+        status: 'Waitlist',
+        name: '-',
+        room_type: item.equipment_type_id,
+        room_no: '-',
+        ci: item.arrival_date,
+        co: item.departure_date,
+        nights: 1,
+        adl: 2,
+        child: '-',
+        baby: '-',
+        rate: '',
+        subtotal: item.total_price,
+        deposit: '-',
+      });
+    });
+
+    setRoomList(xx);
+  }, [data123]);
 
   return (
     <>
@@ -810,7 +859,7 @@ function ReservationDetail() {
                 <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                   <Table
                     columns={columns}
-                    dataSource={data}
+                    dataSource={roomList}
                     pagination={false}
                     rowSelection={rowSelection}
                     size="small"

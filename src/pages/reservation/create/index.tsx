@@ -11,20 +11,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  Modal,
-  Row,
-  Select,
-  Table,
-} from 'antd';
+import { Card, Checkbox, Col, Form, Row, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import useColumns from 'pages/reservation/create/useColumns';
+import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import { selectCreateReservation } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -32,39 +22,18 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 import { colors } from 'modules/theme';
 
-import { createReservation, searchRoom, searchRoomReset } from 'actions';
+import { createReservation, searchRoomReset } from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
-import TableSummary from 'components/TableSummary';
 
 import { RootState } from 'types';
 
-import CancelBookingModal from './CancelBookingModal';
+import SelectRoomModal from './SelectRoomModal';
 
 const { Option } = Select;
-
-const data: object[] = [];
-
-for (let index = 0; index < 5; index++) {
-  data.push({
-    status: 'Waitlist',
-    name: 'Ming',
-    room_type: 'Premium Alex',
-    room_no: '-',
-    ci: '28/07/2020',
-    co: '28/07/2020',
-    nights: 1,
-    adl: 2,
-    child: '-',
-    baby: '-',
-    rate: 'Premium Alex TA',
-    subtotal: '4.320.000',
-    deposit: '-',
-  });
-}
 
 const rowSelection = {
   onChange: (selectedRowKeys: any, selectedRows: any) => {
@@ -80,64 +49,27 @@ const rowSelection = {
 function Create() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  /** State */
+  /** Rooming List Table */
   const [roomList, setRoomList] = useState<any>([]);
+  /** Search room Table In Modal */
+  const [roomSelected, setRoomSelected] = useState<any>([]);
+  /** Data of payload to transfer from API */
+  const [roomTotalForm, setRoomTotalForm] = useState([]);
+  /** Room Search Condition In Modal */
+  const [roomCondition, setRoomCondition] = useState({
+    checkin: '',
+    checkout: '',
+    room_type: '',
+  });
+  const [quantity, setQuantity] = useState(0);
 
+  /** Response from API */
+  const searchRoomsResult: any = useSelector<RootState>(
+    ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.charges,
+  );
   const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
-
-  const columns = [
-    {
-      title: t('common.Status'),
-      dataIndex: 'status',
-    },
-    {
-      title: t('common.Name'),
-      dataIndex: 'name',
-    },
-    {
-      title: t('reservation.Room Type.title'),
-      dataIndex: 'room_type',
-    },
-    {
-      title: t('reservation.Room No'),
-      dataIndex: 'room_no',
-    },
-    {
-      title: t('reservation.C/I'),
-      dataIndex: 'ci',
-    },
-    {
-      title: t('reservation.C/O'),
-      dataIndex: 'co',
-    },
-    {
-      title: t('reservation.Nights'),
-      dataIndex: 'nights',
-    },
-    {
-      title: t('reservation.Adl'),
-      dataIndex: 'adl',
-    },
-    {
-      title: t('reservation.Child.title'),
-      dataIndex: 'child',
-    },
-    {
-      title: t('reservation.Baby.title'),
-      dataIndex: 'baby',
-    },
-    {
-      title: t('reservation.Rate'),
-      dataIndex: 'rate',
-    },
-    {
-      title: t('reservation.Subtotal'),
-      dataIndex: 'subtotal',
-    },
-    {
-      title: t('reservation.Deposit'),
-      dataIndex: 'deposit',
-    },
-  ];
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
@@ -152,36 +84,6 @@ function Create() {
     setQuantity(0);
     setRoomSelected([]);
     setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    const data1 = [...roomList];
-
-    roomSelected.forEach((item: any) => {
-      data1.push({
-        status: 'Waitlist',
-        name: '-',
-        room_type: item.room_type,
-        room_no: '-',
-        ci: item.checkin,
-        co: item.checkout,
-        nights: 1,
-        adl: 2,
-        child: '-',
-        baby: '-',
-        rate: item.rate_name,
-        subtotal: item.subtotal,
-        deposit: '-',
-      });
-    });
-
-    setRoomList(data1);
-
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
   };
 
   const onFinish = (values: any) => {
@@ -202,6 +104,7 @@ function Create() {
   const createReservationData = useAppSelector(selectCreateReservation);
 
   const { changed } = useTreeChanges(createReservationData);
+  const { roomingListColumns } = useColumns();
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
@@ -217,188 +120,6 @@ function Create() {
     console.log('Failed:', errorInfo);
   };
 
-  const columnsSearchRoom = [
-    {
-      title: 'Date',
-      dataIndex: 'use_date',
-      key: 'use_date',
-    },
-    {
-      title: 'Rate Name',
-      dataIndex: 'rate_name',
-      key: 'rate_name',
-      render: (text: any, record: any, index: number) => {
-        console.log('record', record, ratesResult);
-
-        const option: any = ratesResult?.map((item: any) => {
-          return <Option value={item.rate_id}>{item.rate_name}</Option>;
-        });
-
-        return (
-          <Select
-            defaultValue={text}
-            onChange={value => {
-              console.log('value', value);
-              const xy = _.findWhere(ratesResult, {
-                rate_id: value,
-              });
-
-              const stateTemporary = [...searchRoomResultState];
-              const xxx = { ...searchRoomResultState[index] };
-
-              stateTemporary[index] = {
-                ...xxx,
-                price: xy.price,
-                actual_amount: xy.price,
-              };
-
-              setSearchRoomResultState(stateTemporary);
-            }}
-            placeholder="Select rate"
-            style={{ width: '100%' }}
-          >
-            {option}
-          </Select>
-        );
-      },
-    },
-    {
-      title: 'Adl',
-      dataIndex: 'adult',
-      key: 'adult',
-    },
-    {
-      title: 'Child',
-      dataIndex: 'child',
-      key: 'child',
-    },
-    {
-      title: 'Rate detail',
-      dataIndex: 'rate_detail',
-      key: 'rate_detail',
-    },
-    {
-      title: 'Unit price',
-      dataIndex: 'unit_price',
-      key: 'unit_price',
-    },
-    {
-      title: 'Updated price',
-      dataIndex: 'actual_amount',
-      key: 'actual_amount',
-      render: (text: string, record: any, index: number) => {
-        console.log('searchRoomResultState', record, index, text);
-
-        return (
-          <Input
-            name="actual_amount"
-            onChange={event => {
-              const stateTemporary = [...searchRoomResultState];
-              const xxx = { ...searchRoomResultState[index] };
-
-              stateTemporary[index] = {
-                ...xxx,
-                actual_amount: event.target.value,
-              };
-
-              setSearchRoomResultState(stateTemporary);
-            }}
-            placeholder="0"
-            style={{ borderRadius: 4 }}
-            value={searchRoomResultState[index]?.actual_amount}
-          />
-        );
-      },
-    },
-    {
-      title: 'Task',
-      dataIndex: 'task',
-      key: 'task',
-      render: () => (
-        <Button style={{ color: '#1D39C4', paddingLeft: 0 }} type="link">
-          Duplicate
-        </Button>
-      ),
-    },
-  ];
-
-  // const dataSearchRoom = [];
-
-  // for (let index = 0; index < 3; index++) {
-  //   dataSearchRoom.push({
-  //     created_date: '',
-  //     rate_name: '',
-  //     adult: '',
-  //     child: '',
-  //     rate_detail: '',
-  //     unit_price: '',
-  //     updated_price: '',
-  //     task: '',
-  //   });
-  // }
-
-  const convertDataSearchRoom = (charges: any) => {
-    const result: any[] = [];
-
-    charges.forEach((item: any) => {
-      result.push({
-        use_date: item.use_date,
-        rate_name: item.selected_rate_id,
-        adult: '',
-        child: '',
-        rate_detail: item.rate_detail,
-        unit_price: item.price,
-        actual_amount: item.price,
-        task: '',
-      });
-    });
-
-    return result;
-  };
-
-  const columnsSelectedRoomsResult = [
-    {
-      title: 'Checkin',
-      dataIndex: 'checkin',
-      key: 'checkin',
-    },
-    {
-      title: 'Checkout',
-      dataIndex: 'checkout',
-      key: 'checkout',
-    },
-    {
-      title: 'Room Type',
-      dataIndex: 'room_type',
-      key: 'room_type',
-    },
-    {
-      title: 'Rate Name',
-      dataIndex: 'rate_name',
-      key: 'rate_name',
-    },
-    {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      key: 'quantity',
-    },
-    {
-      title: 'Subtotal',
-      dataIndex: 'subtotal',
-      key: 'subtotal',
-    },
-    {
-      title: 'Task',
-      dataIndex: 'task',
-      key: 'task',
-      render: () => (
-        <Button style={{ color: '#F5222D', paddingLeft: 0 }} type="link">
-          {t('common.Delete')}
-        </Button>
-      ),
-    },
-  ];
-
   const dataSelectedRoomsResult: any = [];
 
   for (let index = 0; index < 3; index++) {
@@ -412,57 +133,6 @@ function Create() {
       task: '',
     });
   }
-
-  const [roomSelected, setRoomSelected] = useState<any>([]);
-  const [roomTotalForm, setRoomTotalForm] = useState([]);
-
-  const [roomCondition, setRoomCondition] = useState({
-    checkin: '',
-    checkout: '',
-    room_type: '',
-  });
-
-  const [quantity, setQuantity] = useState(0);
-
-  const searchRoomsResult: any = useSelector<RootState>(
-    ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.charges,
-  );
-  const ratesResult: any = useSelector<RootState>(
-    ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.rates,
-  );
-
-  const searchRoomDate = (date: any, key: string) => {
-    const stateTemporary = {
-      ...roomCondition,
-      [key]: date?.format('YYYY-MM-DD') ?? '',
-    };
-
-    setRoomCondition(stateTemporary);
-
-    if (stateTemporary.checkin && stateTemporary.checkout && stateTemporary.room_type) {
-      dispatch(searchRoom(stateTemporary));
-    }
-  };
-
-  const searchRoomSelect = (value: string, key: string) => {
-    let valueTemporary = value;
-
-    if (value === undefined) {
-      valueTemporary = '';
-    }
-
-    const stateTemporary = {
-      ...roomCondition,
-      [key]: valueTemporary,
-      current_page: 1,
-    };
-
-    setRoomCondition(stateTemporary);
-
-    if (stateTemporary.checkin && stateTemporary.checkout && stateTemporary.room_type) {
-      dispatch(searchRoom(stateTemporary));
-    }
-  };
 
   const [searchRoomResultState, setSearchRoomResultState] = useState<any>([]);
 
@@ -494,6 +164,27 @@ function Create() {
       <p style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.45)', paddingLeft: 24 }}>
         {t('reservation.Create New Reservation Note')}
       </p>
+      <SelectRoomModal
+        isModalVisible={isModalVisible}
+        quantity={quantity}
+        roomCondition={roomCondition}
+        roomList={roomList}
+        roomSelected={roomSelected}
+        roomTotalForm={roomTotalForm}
+        searchRoomResultState={searchRoomResultState}
+        setIsModalVisible={setIsModalVisible}
+        setQuantity={setQuantity}
+        setRoomCondition={setRoomCondition}
+        setRoomList={setRoomList}
+        setRoomSelected={setRoomSelected}
+        setRoomTotalForm={setRoomTotalForm}
+        setSearchRoomResultState={setSearchRoomResultState}
+        totalAmount={totalAmount}
+      />
+      <CancelBookingModal
+        isModalVisible={isCancelBookingModalVisible}
+        setModalVisible={setIsCancelBookingModalVisible}
+      />
       <Form
         autoComplete="off"
         initialValues={{
@@ -676,118 +367,6 @@ function Create() {
                     {' '}
                     <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
                   </PattonButton>
-                  <CancelBookingModal
-                    isModalVisible={isCancelBookingModalVisible}
-                    setModalVisible={setIsCancelBookingModalVisible}
-                  />
-                  <Modal
-                    bodyStyle={{ backgroundColor: '#F0F2F5' }}
-                    destroyOnClose
-                    okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
-                    okText="Save"
-                    onCancel={handleCancel}
-                    onOk={handleOk}
-                    style={{ top: 80, borderRadius: 4 }}
-                    title={<b>Select room and rate</b>}
-                    visible={isModalVisible}
-                    width={1000}
-                  >
-                    <Card bordered={false} size="small" title="Search room">
-                      <Row>
-                        <Col span={6}>
-                          <span style={{ paddingBottom: 5, display: 'inherit' }}>Checkin </span>
-                          <DatePicker
-                            onChange={date => searchRoomDate(date, 'checkin')}
-                            style={{
-                              height: 32,
-                              borderRadius: 4,
-                              marginRight: 11,
-                              width: '90%',
-                            }}
-                          />
-                        </Col>
-                        <Col span={6}>
-                          <span style={{ paddingBottom: 5, display: 'inherit' }}> Checkout</span>
-                          <DatePicker
-                            onChange={date => searchRoomDate(date, 'checkout')}
-                            style={{
-                              height: 32,
-                              borderRadius: 4,
-                              marginRight: 11,
-                              width: '90%',
-                            }}
-                          />
-                        </Col>
-                        <Col span={6}>
-                          <span style={{ paddingBottom: 5, display: 'inherit' }}>Room Type</span>
-                          <Select
-                            allowClear
-                            onChange={value => searchRoomSelect(value, 'room_type')}
-                            placeholder="Select room type"
-                            style={{ width: '93%' }}
-                          >
-                            <Option value="1">Room 1</Option>
-                            <Option value="2">Room 2</Option>
-                            <Option value="3">Room 3</Option>
-                          </Select>
-                        </Col>
-                        <Col span={6}>
-                          <span style={{ paddingBottom: 5, display: 'inherit' }}>Quantity</span>
-                          <Select
-                            allowClear
-                            onChange={value => setQuantity(value)}
-                            placeholder="Select quantity"
-                            style={{ width: '100%' }}
-                          >
-                            <Option value="1">1</Option>
-                            <Option value="2">2</Option>
-                            <Option value="3">3</Option>
-                          </Select>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col span={24} style={{ paddingTop: 16 }}>
-                          <Table
-                            columns={columnsSearchRoom}
-                            dataSource={convertDataSearchRoom(searchRoomResultState)}
-                            pagination={false}
-                            size="small"
-                            style={{ border: 0 }}
-                            summary={() => {
-                              return (
-                                <TableSummary
-                                  quantity={quantity}
-                                  roomTotalForm={roomTotalForm}
-                                  searchRoomResultState={searchRoomResultState}
-                                  setRoomSelected={setRoomSelected}
-                                  setRoomTotalForm={setRoomTotalForm}
-                                  totalAmount={totalAmount}
-                                />
-                              );
-                            }}
-                          />
-                        </Col>
-                      </Row>
-                    </Card>
-                    <Card
-                      bordered={false}
-                      size="small"
-                      style={{ marginTop: 16 }}
-                      title="Selected Rooms Result"
-                    >
-                      <Row>
-                        <Col span={24}>
-                          <Table
-                            columns={columnsSelectedRoomsResult}
-                            dataSource={roomSelected}
-                            pagination={false}
-                            size="small"
-                            style={{ border: 0 }}
-                          />
-                        </Col>
-                      </Row>
-                    </Card>
-                  </Modal>
                   <MButton
                     onClick={() => setIsCancelBookingModalVisible(true)}
                     style={{ marginLeft: 15 }}
@@ -800,7 +379,7 @@ function Create() {
                 </Col>
                 <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                   <Table
-                    columns={columns}
+                    columns={roomingListColumns}
                     dataSource={roomList}
                     pagination={false}
                     rowSelection={rowSelection}

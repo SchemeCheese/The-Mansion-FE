@@ -1,18 +1,18 @@
-import './transaction.css';
+import 'styles/transaction.css';
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Col, Row } from 'antd';
-import DiskA from 'pages/reservation/DiskA';
-import Paid from 'pages/reservation/Paid';
-import Deposit from 'pages/reservation/TransactionModal/Deposit';
-import PayDetailModal from 'pages/reservation/TransactionModal/PayDetailModal';
-import SelectedPayMethodModal from 'pages/reservation/TransactionModal/SelectedPayMethodModal';
+import DiskA from 'pages/reservation/detail/DiskA';
+import Paid from 'pages/reservation/detail/Paid';
+import Deposit from 'pages/reservation/modal/TransactionModal/Deposit';
+import PayDetailModal from 'pages/reservation/modal/TransactionModal/PayDetailModal';
+import SelectedPayMethodModal from 'pages/reservation/modal/TransactionModal/SelectedPayMethodModal';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
-import AddDiscount from './TransactionModal/AddDiscount';
+import AddDiscount from '../modal/TransactionModal/AddDiscount';
 
 function Transaction() {
   const { t } = useTranslation();

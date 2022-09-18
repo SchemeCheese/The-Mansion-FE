@@ -44,3 +44,11 @@ export interface ReservationSearchResult {
 export interface ReservationCreate {
   payload: ReservationPayload;
 }
+
+export interface ReservationDetail {
+  id: string;
+}
+
+export interface ReservationDetailFinish {
+  data: Record<string, any>;
+}

@@ -11,7 +11,7 @@ import PlusOutlined from '@ant-design/icons/lib/icons/PlusOutlined';
 import { Table } from 'antd';
 import _ from 'underscore';
 
-import PattonButton from './PattonButton';
+import PattonButton from 'components/PattonButton';
 
 interface Props {
   quantity: number;

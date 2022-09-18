@@ -83,10 +83,17 @@ export interface CreateReservationState {
   status: string;
 }
 
+export interface ReservationDetailState {
+  data: Record<string, any>;
+  id: string;
+  is_finish: boolean;
+}
+
 export interface RootState {
   alerts: AlertsState;
   app: AppState;
   createReservation: CreateReservationState;
+  getReservationDetail: ReservationDetailState;
   github: GitHubState;
   reservation: ReservationSearchState;
   searchRoom: RoomSearchState;
