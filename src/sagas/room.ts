@@ -9,13 +9,17 @@ import { searchRoom, searchRoomFinish } from 'actions';
 
 export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) {
   let charges = [];
+  let rates = [];
   let total = 0;
+  const additionalPayload = {
+    ...payload,
+    source_type: 1,
+    source_id: 2,
+  };
 
-  console.log(payload);
+  const query = new URLSearchParams(Object(additionalPayload)).toString();
 
-  // const query = new URLSearchParams(Object(payload)).toString();
-
-  ({ charges, total } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH)}?room_type=1`, {
+  ({ charges, rates, total } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH)}?${query}`, {
     method: 'GET',
     headers: headerWithAuthorization(),
   }));
@@ -24,6 +28,7 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
     searchRoomFinish({
       charges,
       total,
+      rates,
     }),
   );
 }

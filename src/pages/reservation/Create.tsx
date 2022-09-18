@@ -144,6 +144,12 @@ function Create() {
 
   const showModal = () => {
     dispatch(searchRoomReset());
+    setRoomCondition({
+      checkin: '',
+      checkout: '',
+      room_type: '',
+    });
+    setQuantity(0);
     setRoomSelected([]);
     setIsModalVisible(true);
   };
@@ -221,17 +227,40 @@ function Create() {
       title: 'Rate Name',
       dataIndex: 'rate_name',
       key: 'rate_name',
-      // render: (text: any) => {
-      //   const option123: any[] = text?.map((item: any) => {
-      //     return <Option value="rate name 1">{item.rate_name}</Option>;
-      //   });
+      render: (text: any, record: any, index: number) => {
+        console.log('record', record, ratesResult);
 
-      //   return (
-      //     <Select placeholder="Select rate" showSearch style={{ width: '100%' }}>
-      //       {option123}
-      //     </Select>
-      //   );
-      // },
+        const option: any = ratesResult?.map((item: any) => {
+          return <Option value={item.rate_id}>{item.rate_name}</Option>;
+        });
+
+        return (
+          <Select
+            defaultValue={text}
+            onChange={value => {
+              console.log('value', value);
+              const xy = _.findWhere(ratesResult, {
+                rate_id: value,
+              });
+
+              const stateTemporary = [...searchRoomResultState];
+              const xxx = { ...searchRoomResultState[index] };
+
+              stateTemporary[index] = {
+                ...xxx,
+                price: xy.price,
+                actual_amount: xy.price,
+              };
+
+              setSearchRoomResultState(stateTemporary);
+            }}
+            placeholder="Select rate"
+            style={{ width: '100%' }}
+          >
+            {option}
+          </Select>
+        );
+      },
     },
     {
       title: 'Adl',
@@ -313,8 +342,8 @@ function Create() {
 
     charges.forEach((item: any) => {
       result.push({
-        use_date: item.date,
-        rate_name: item.rate_name,
+        use_date: item.use_date,
+        rate_name: item.selected_rate_id,
         adult: '',
         child: '',
         rate_detail: item.rate_detail,
@@ -398,6 +427,9 @@ function Create() {
   const searchRoomsResult: any = useSelector<RootState>(
     ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.charges,
   );
+  const ratesResult: any = useSelector<RootState>(
+    ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.rates,
+  );
 
   const searchRoomDate = (date: any, key: string) => {
     const stateTemporary = {
@@ -406,7 +438,10 @@ function Create() {
     };
 
     setRoomCondition(stateTemporary);
-    // dispatch(searchRoom(stateTemporary));
+
+    if (stateTemporary.checkin && stateTemporary.checkout && stateTemporary.room_type) {
+      dispatch(searchRoom(stateTemporary));
+    }
   };
 
   const searchRoomSelect = (value: string, key: string) => {
@@ -423,7 +458,10 @@ function Create() {
     };
 
     setRoomCondition(stateTemporary);
-    dispatch(searchRoom(stateTemporary));
+
+    if (stateTemporary.checkin && stateTemporary.checkout && stateTemporary.room_type) {
+      dispatch(searchRoom(stateTemporary));
+    }
   };
 
   const [searchRoomResultState, setSearchRoomResultState] = useState<any>([]);
@@ -644,6 +682,7 @@ function Create() {
                   />
                   <Modal
                     bodyStyle={{ backgroundColor: '#F0F2F5' }}
+                    destroyOnClose
                     okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
                     okText="Save"
                     onCancel={handleCancel}
@@ -656,56 +695,54 @@ function Create() {
                     <Card bordered={false} size="small" title="Search room">
                       <Row>
                         <Col span={6}>
-                          <Form.Item label="Checkin" name="checkin">
-                            <DatePicker
-                              onChange={date => searchRoomDate(date, 'checkin')}
-                              style={{
-                                height: 32,
-                                borderRadius: 4,
-                                marginRight: 11,
-                                width: '100%',
-                              }}
-                            />
-                          </Form.Item>
+                          <span style={{ paddingBottom: 5, display: 'inherit' }}>Checkin </span>
+                          <DatePicker
+                            onChange={date => searchRoomDate(date, 'checkin')}
+                            style={{
+                              height: 32,
+                              borderRadius: 4,
+                              marginRight: 11,
+                              width: '90%',
+                            }}
+                          />
                         </Col>
                         <Col span={6}>
-                          <Form.Item label="Checkout" name="checkout">
-                            <DatePicker
-                              onChange={date => searchRoomDate(date, 'checkout')}
-                              style={{
-                                height: 32,
-                                borderRadius: 4,
-                                marginRight: 11,
-                                width: '100%',
-                              }}
-                            />
-                          </Form.Item>
+                          <span style={{ paddingBottom: 5, display: 'inherit' }}> Checkout</span>
+                          <DatePicker
+                            onChange={date => searchRoomDate(date, 'checkout')}
+                            style={{
+                              height: 32,
+                              borderRadius: 4,
+                              marginRight: 11,
+                              width: '90%',
+                            }}
+                          />
                         </Col>
                         <Col span={6}>
-                          <Form.Item label="Room type" name="room_type">
-                            <Select
-                              allowClear
-                              onChange={value => searchRoomSelect(value, 'room_type')}
-                              placeholder="Select room type"
-                            >
-                              <Option value="1">Room 1</Option>
-                              <Option value="2">Room 2</Option>
-                              <Option value="3">Room 3</Option>
-                            </Select>
-                          </Form.Item>
+                          <span style={{ paddingBottom: 5, display: 'inherit' }}>Room Type</span>
+                          <Select
+                            allowClear
+                            onChange={value => searchRoomSelect(value, 'room_type')}
+                            placeholder="Select room type"
+                            style={{ width: '93%' }}
+                          >
+                            <Option value="1">Room 1</Option>
+                            <Option value="2">Room 2</Option>
+                            <Option value="3">Room 3</Option>
+                          </Select>
                         </Col>
                         <Col span={6}>
-                          <Form.Item label="Quantity" name="quantity">
-                            <Select
-                              allowClear
-                              onChange={value => setQuantity(value)}
-                              placeholder="Select quantity"
-                            >
-                              <Option value="1">1</Option>
-                              <Option value="2">2</Option>
-                              <Option value="3">3</Option>
-                            </Select>
-                          </Form.Item>
+                          <span style={{ paddingBottom: 5, display: 'inherit' }}>Quantity</span>
+                          <Select
+                            allowClear
+                            onChange={value => setQuantity(value)}
+                            placeholder="Select quantity"
+                            style={{ width: '100%' }}
+                          >
+                            <Option value="1">1</Option>
+                            <Option value="2">2</Option>
+                            <Option value="3">3</Option>
+                          </Select>
                         </Col>
                       </Row>
                       <Row>

@@ -8,7 +8,8 @@ const PattonButton: React.FunctionComponent<ButtonProps> = styled(MButton)`
   background-color: #1d39c4;
   color: #fff;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: #1d39c4;
     color: #fff;
   }
