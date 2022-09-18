@@ -3,4 +3,5 @@ export * from './app';
 export * from './github';
 export * from './user';
 export * from './reservation';
+export * from './product';
 export * from './room';

@@ -6,10 +6,15 @@ Updated Date : 14/09/2022
 Main functions : Transaction Add Item
 ************************************ */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form, Input, Modal, Row, Select, Table } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Form, Input, Modal, Row, Select, Spin, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+
+import { searchProduct } from 'actions';
+
+import { RootState } from 'types';
 
 interface Props {
   setIsModalOpen: (visible: boolean) => void;
@@ -17,61 +22,76 @@ interface Props {
 }
 
 interface DataType {
+  description_category_id: string | number;
   id: number;
+  mount: string | number;
   product: string;
   total: string;
   unit_price: string;
+  update_price: string | number;
 }
 
 function AddItem({ setIsModalOpen, visible }: Props) {
   const { t } = useTranslation();
   const { Option } = Select;
 
+  const [searchProductType, setSearchProductType] = useState('');
+  const [dataAmount, setDataAmount] = useState<any>([]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(searchProduct({ type_product: searchProductType }));
+  }, []);
+
   const onChangeProductType = (value: string) => {
     console.log(`selected ${value}`);
+    setSearchProductType(value);
   };
 
   const onChangeDisk = (value: string) => {
     console.log(`selected ${value}`);
   };
 
-  const plusAmount = (id: number) => () => {
-    setData(old => {
-      const result = [...old];
+  const handleClickUpdateAmount =
+    (item: any, type: string = '') =>
+    () => {
+      const dataAmountState = [...dataAmount];
 
-      result.map((it: any) => {
-        const itTemporary = it;
+      if (dataAmountState.length < 0) {
+        dataAmountState.push(item);
+      } else {
+        const checkAmount = dataAmountState.findIndex(element => element.id === item.id);
 
-        if (itTemporary.id === id) {
-          itTemporary.amount += 1;
+        if (checkAmount < 0) {
+          dataAmountState.push(item);
+        }
+      }
+
+      const indexAmount = dataAmountState.findIndex(element => element.id === item.id);
+
+      if (indexAmount >= 0) {
+        const itTemporary = { ...dataAmountState[indexAmount] };
+
+        if (type === 'minus') {
+          if (itTemporary.amount > 0) {
+            itTemporary.amount--;
+          }
+        } else {
+          itTemporary.amount++;
         }
 
-        return itTemporary;
-      });
+        dataAmountState[indexAmount] = itTemporary;
+      }
 
-      return result;
-    });
-  };
+      setDataAmount(dataAmountState);
+    };
 
-  const minusAmount = (id: number) => () => {
-    setData(old => {
-      const result = [...old];
-
-      result.map((it: any) => {
-        const itTemporary = it;
-
-        if (itTemporary.id === id && itTemporary.amount > 0) {
-          itTemporary.amount -= 1;
-        }
-
-        return itTemporary;
-      });
-
-      return result;
-    });
-  };
-
-  const productTypes = ['Type 1', 'Type 2', 'Type 3'];
+  const productTypes = [
+    { name: 'Type 1', value: 1 },
+    { name: 'Type 2', value: 2 },
+    { name: 'Type 3', value: 3 },
+  ];
   const diskData = ['A', 'A 2', 'A 3'];
 
   const columns: ColumnsType<DataType> = [
@@ -99,7 +119,7 @@ function AddItem({ setIsModalOpen, visible }: Props) {
       align: 'center',
       render: (value, record) => (
         <span style={{ float: 'right', display: 'inline-flex', lineHeight: '28px' }}>
-          <Button onClick={minusAmount(record.id)} style={{ border: 'none' }}>
+          <Button onClick={handleClickUpdateAmount(record, 'minus')} style={{ border: 'none' }}>
             <svg
               fill="none"
               height="14"
@@ -122,7 +142,7 @@ function AddItem({ setIsModalOpen, visible }: Props) {
             </svg>
           </Button>
           {value}
-          <Button onClick={plusAmount(record.id)} style={{ border: 'none' }}>
+          <Button onClick={handleClickUpdateAmount(record)} style={{ border: 'none' }}>
             <svg
               fill="none"
               height="14"
@@ -192,22 +212,38 @@ function AddItem({ setIsModalOpen, visible }: Props) {
     },
   ];
 
-  const [data, setData] = useState([
-    {
-      id: 1,
-      product: 'PEPSI',
-      unit_price: '20.000',
-      total: '40.000',
-      amount: 0,
-    },
-    {
-      id: 2,
-      product: 'PEPSI',
-      unit_price: '20.000',
-      total: '40.000',
-      amount: 0,
-    },
-  ]);
+  const convertData = (data: any) => {
+    if (data) {
+      const stateAmount = [...dataAmount];
+
+      return data
+        .filter((currentValue: DataType) => {
+          if (searchProductType) {
+            return currentValue.description_category_id === parseInt(searchProductType, 10);
+          }
+
+          return true;
+        })
+        .map((item: any) => {
+          const amountItem = stateAmount.find(element => element.id === item.id);
+          const total = amountItem ? amountItem.amount * item.price : 0;
+
+          return {
+            id: item.id,
+            key: item.id,
+            product: item.name,
+            unit_price: item.price,
+            amount: amountItem ? amountItem.amount : 0,
+            total,
+          };
+        });
+    }
+
+    return [];
+  };
+
+  const isSearching = useSelector<RootState>(({ product }) => product.is_searching);
+  const items = useSelector<RootState>(({ product }) => product.data);
 
   return (
     <Modal
@@ -230,14 +266,18 @@ function AddItem({ setIsModalOpen, visible }: Props) {
               style={{ borderRadius: 2, width: 223, height: 32 }}
             >
               {productTypes.map(productType => (
-                <Option key={productType}>{productType}</Option>
+                <Option key={productType.value}>{productType.name}</Option>
               ))}
             </Select>
           </Form.Item>
         </Form>
       </Row>
       <Row>
-        <Table columns={columns} dataSource={data} pagination={false} />
+        {!isSearching ? (
+          <Table columns={columns} dataSource={convertData(items)} pagination={false} />
+        ) : (
+          <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />
+        )}
       </Row>
     </Modal>
   );

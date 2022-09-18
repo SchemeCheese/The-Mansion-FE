@@ -27,3 +27,7 @@ export const ReservationEndpoint = {
 export const RoomEndpoint = {
   SEARCH: 'api/v1/check-room-info',
 };
+
+export const ProductEndpoint = {
+  SEARCH: 'api/v1/products',
+};
