@@ -9,8 +9,7 @@ Main functions : Guest List Tab
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, Col, Radio, Row, Typography } from 'antd';
-
-import CreateGuestModal from './CreateGuestModal';
+import CreateGuestModal from 'pages/reservation/modal/CreateGuestModal';
 
 const { Text, Title } = Typography;
 

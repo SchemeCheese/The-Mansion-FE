@@ -7,6 +7,10 @@ Main functions : Calendar Tab
 ************************************ */
 
 /* eslint simple-import-sort/imports: 0 */
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import React, { useState } from 'react';
 import FullCalendar, {
   DateSelectArg,
@@ -14,16 +18,12 @@ import FullCalendar, {
   EventClickArg,
   EventContentArg,
 } from '@fullcalendar/react';
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
 import { Col, Row } from 'antd';
 import moment from 'moment';
 
 import PattonButton from 'components/PattonButton';
 import MButton from 'components/MButton';
-import { createEventId, INITIAL_EVENTS } from './event-utils';
+import { createEventId, INITIAL_EVENTS } from 'pages/reservation/list/event-utils';
 
 interface DemoAppState {
   currentEvents: EventApi[];

@@ -25,6 +25,7 @@ import {
   Table,
 } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import { selectCreateReservation } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -41,8 +42,6 @@ import PattonButton from 'components/PattonButton';
 import TableSummary from 'components/TableSummary';
 
 import { RootState } from 'types';
-
-import CancelBookingModal from './CancelBookingModal';
 
 const { Option } = Select;
 

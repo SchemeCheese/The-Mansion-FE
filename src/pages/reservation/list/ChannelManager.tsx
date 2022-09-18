@@ -6,7 +6,7 @@ Updated Date : 03/09/2022
 Main functions : Channel Manager Tab
 ************************************ */
 
-import './channel.css';
+import 'styles/channel.css';
 
 import React from 'react';
 import { RedoOutlined } from '@ant-design/icons';

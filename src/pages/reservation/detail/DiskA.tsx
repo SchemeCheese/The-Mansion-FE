@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Row } from 'antd';
 import Table, { ColumnsType } from 'antd/lib/table';
-import PaySelectedModal from 'pages/reservation/TransactionModal/PaySelectedModal';
-import RoomAuditCharge from 'pages/reservation/TransactionModal/RoomAuditCharge';
-import SelectDiskModal from 'pages/reservation/TransactionModal/SelectDiskModal';
-import TransferRoom from 'pages/reservation/TransactionModal/TransferRoom';
+import PaySelectedModal from 'pages/reservation/modal/TransactionModal/PaySelectedModal';
+import RoomAuditCharge from 'pages/reservation/modal/TransactionModal/RoomAuditCharge';
+import SelectDiskModal from 'pages/reservation/modal/TransactionModal/SelectDiskModal';
+import TransferRoom from 'pages/reservation/modal/TransactionModal/TransferRoom';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
-import AddItem from './TransactionModal/AddItem';
+import AddItem from '../modal/TransactionModal/AddItem';
 
 interface DataTypeDiskA {
   amount: number;

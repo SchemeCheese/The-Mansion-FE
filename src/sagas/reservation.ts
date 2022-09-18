@@ -8,6 +8,8 @@ import { ActionTypes } from 'literals';
 import {
   createReservation,
   createReservationSuccess,
+  getReservationDetail,
+  getReservationDetailFinish,
   searchReservation,
   searchReservationFinish,
 } from 'actions';
@@ -58,9 +60,23 @@ export function* postCreateReservationSaga({ payload }: ReturnType<typeof create
   }
 }
 
+export function* getReservationDetailSaga({ payload }: ReturnType<typeof getReservationDetail>) {
+  let data = [];
+
+  // const query = new URLSearchParams(Object(payload)).toString();
+
+  ({ data } = yield call(request, `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${payload.id}`, {
+    method: 'GET',
+    headers: headerWithAuthorization(),
+  }));
+
+  yield put(getReservationDetailFinish({ data }));
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
     takeLatest(ActionTypes.RESERVATION_CREATE, postCreateReservationSaga),
+    takeLatest(ActionTypes.RESERVATION_GET_DETAIL, getReservationDetailSaga),
   ]);
 }

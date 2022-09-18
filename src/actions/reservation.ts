@@ -4,7 +4,13 @@ import { actionPayload } from 'modules/helpers';
 
 import { ActionTypes } from 'literals';
 
-import { ReservationCreate, ReservationSearch, ReservationSearchResult } from 'types';
+import {
+  ReservationCreate,
+  ReservationDetail,
+  ReservationDetailFinish,
+  ReservationSearch,
+  ReservationSearchResult,
+} from 'types';
 
 export const searchReservation = createAction(
   ActionTypes.RESERVATION_SEARCH,
@@ -22,3 +28,13 @@ export const createReservation = createAction(
 );
 
 export const createReservationSuccess = createAction(ActionTypes.RESERVATION_CREATE_SUCCESS);
+
+export const getReservationDetail = createAction(
+  ActionTypes.RESERVATION_GET_DETAIL,
+  (payload: ReservationDetail) => actionPayload(payload),
+);
+
+export const getReservationDetailFinish = createAction(
+  ActionTypes.RESERVATION_GET_DETAIL_FINISH,
+  (payload: ReservationDetailFinish) => actionPayload(payload),
+);
