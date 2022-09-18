@@ -8,8 +8,8 @@ interface Props {
 function BreadcrumbList({ data }: Props) {
   return (
     <Breadcrumb className="breadcrumb">
-      {data.map((item: string) => {
-        return <Breadcrumb.Item>{item}</Breadcrumb.Item>;
+      {data.map((item: string, index: number) => {
+        return <Breadcrumb.Item key={index}>{item}</Breadcrumb.Item>;
       })}
     </Breadcrumb>
   );
