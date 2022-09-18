@@ -105,23 +105,7 @@ function Calendar() {
                 headerContent: 'Room Type',
               },
             ]}
-            resources={[
-              { id: 'a', title: '102', occupancy: 'Superior' },
-              { id: 'b', title: '103', occupancy: 'Superior' },
-              { id: 'c', title: '104', occupancy: 'Superior' },
-              { id: 'd', title: '105', occupancy: 'Superior' },
-              { id: 'e', title: '106', occupancy: 'Deluxe' },
-              { id: 'f', title: '107', occupancy: 'Deluxe' },
-              { id: 'g', title: '108', occupancy: 'Deluxe' },
-              { id: 'h', title: '109', occupancy: 'Deluxe' },
-              { id: 'i', title: '110', occupancy: 'Deluxe' },
-              { id: 'j', title: '111', occupancy: 'Deluxe' },
-              { id: 'k', title: '112', occupancy: 'Family' },
-              { id: 'l', title: '113', occupancy: 'Family' },
-              { id: 'm', title: '114', occupancy: 'Family' },
-              { id: 'n', title: '115', occupancy: 'Family' },
-              { id: 'o', title: '116', occupancy: 'Family' },
-            ]}
+            resources={`${process.env.REACT_APP_API_HOST}/resources`}
             select={handleDateSelect}
             selectMirror // alternatively, use the `events` setting to fetch from a feed
             selectable

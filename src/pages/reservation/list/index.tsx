@@ -81,7 +81,9 @@ function Reservation() {
           type: 'waitlist',
         }),
       );
-    } else {
+    }
+
+    if (activeKey === '2') {
       dispatch(
         searchReservation({
           current_page: 1,
