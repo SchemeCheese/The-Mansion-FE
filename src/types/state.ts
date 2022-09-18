@@ -89,12 +89,18 @@ export interface ReservationDetailState {
   is_finish: boolean;
 }
 
+export interface ProductSearchState {
+  data: Array<Record<string, any>>;
+  is_searching: boolean;
+}
+
 export interface RootState {
   alerts: AlertsState;
   app: AppState;
   createReservation: CreateReservationState;
   getReservationDetail: ReservationDetailState;
   github: GitHubState;
+  product: ProductSearchState;
   reservation: ReservationSearchState;
   searchRoom: RoomSearchState;
   user: UserState;
