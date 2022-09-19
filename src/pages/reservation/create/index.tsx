@@ -178,6 +178,7 @@ function Create() {
         setModalVisible={setIsCancelBookingModalVisible}
       />
       <ReservationForm
+        isCreateForm
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         roomList={roomList}

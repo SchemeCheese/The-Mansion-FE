@@ -10,11 +10,15 @@ import MButton from 'components/MButton';
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
 
+import ReservationDetailCard from '../detail/ReservationDetailCard';
+
 const { Option } = Select;
 
 interface Props {
+  isCreateForm: boolean;
   onFinish: any;
   onFinishFailed: any;
+  reservationDetail?: any;
   roomList: any;
   roomingListColumns: any;
   rowSelection: any;
@@ -23,8 +27,10 @@ interface Props {
 }
 
 function ReservationForm({
+  isCreateForm,
   onFinish,
   onFinishFailed,
+  reservationDetail,
   roomingListColumns,
   roomList,
   rowSelection,
@@ -69,6 +75,7 @@ function ReservationForm({
               </Col>
               <Col span={8}>
                 <Form.Item
+                  initialValue={reservationDetail?.market_segment_id.toString()}
                   label={t('reservation.Market.title')}
                   name="market_segment_id"
                   rules={[
@@ -84,6 +91,7 @@ function ReservationForm({
                   </Select>
                 </Form.Item>
                 <Form.Item
+                  initialValue={reservationDetail?.path_of_reservation.toString()}
                   label={t('reservation.Source.title')}
                   name="path_of_reservation"
                   rules={[
@@ -233,69 +241,74 @@ function ReservationForm({
                   size="small"
                 />
               </Col>
+              {!isCreateForm && <ReservationDetailCard />}
             </Row>
           </Card>
 
-          <Card
-            bordered={false}
-            size="small"
-            style={{ marginTop: 20 }}
-            title={t('common.Payment Informations')}
-          >
-            <Row style={{ paddingTop: 10 }}>
-              <Col span={8}>
-                <p style={{ marginBottom: 25 }}>
-                  <span>{t('reservation.Total Amount')}</span>
-                  <span style={{ float: 'right', paddingRight: '12.5%', fontSize: 16 }}>
-                    4,800,000
-                  </span>
-                </p>
-                <Form.Item
-                  label={t('reservation.Payment Method.title')}
-                  name="payment_method"
-                  wrapperCol={{
-                    span: 21,
-                  }}
-                >
-                  <Select allowClear placeholder={t('reservation.Payment Method.placeholder')}>
-                    <Option value="male">male</Option>
-                    <Option value="female">female</Option>
-                    <Option value="other">other</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={8} style={{ marginTop: -6 }}>
-                <Form.Item name="paid" style={{ marginBottom: 12 }} valuePropName="checked">
-                  <Checkbox>{t('reservation.Paid')}</Checkbox>
-                </Form.Item>
-                <Form.Item name="send_mail" style={{ marginBottom: 12 }} valuePropName="checked">
-                  <Checkbox>{t('reservation.Email reservation confirmation')}</Checkbox>
-                </Form.Item>
-                <Form.Item name="no_show" style={{ marginBottom: 12 }} valuePropName="checked">
-                  <Checkbox>{t('reservation.Hide room rates')}</Checkbox>
-                </Form.Item>
-              </Col>
-              <Col span={8} style={{ marginTop: -6 }}>
-                <Form.Item name="no_deposit" valuePropName="checked">
-                  <Checkbox>{t('reservation.Confirm reservation without deposit')}</Checkbox>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Card>
+          {isCreateForm && (
+            <Card
+              bordered={false}
+              size="small"
+              style={{ marginTop: 20 }}
+              title={t('common.Payment Informations')}
+            >
+              <Row style={{ paddingTop: 10 }}>
+                <Col span={8}>
+                  <p style={{ marginBottom: 25 }}>
+                    <span>{t('reservation.Total Amount')}</span>
+                    <span style={{ float: 'right', paddingRight: '12.5%', fontSize: 16 }}>
+                      4,800,000
+                    </span>
+                  </p>
+                  <Form.Item
+                    label={t('reservation.Payment Method.title')}
+                    name="payment_method"
+                    wrapperCol={{
+                      span: 21,
+                    }}
+                  >
+                    <Select allowClear placeholder={t('reservation.Payment Method.placeholder')}>
+                      <Option value="male">male</Option>
+                      <Option value="female">female</Option>
+                      <Option value="other">other</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={8} style={{ marginTop: -6 }}>
+                  <Form.Item name="paid" style={{ marginBottom: 12 }} valuePropName="checked">
+                    <Checkbox>{t('reservation.Paid')}</Checkbox>
+                  </Form.Item>
+                  <Form.Item name="send_mail" style={{ marginBottom: 12 }} valuePropName="checked">
+                    <Checkbox>{t('reservation.Email reservation confirmation')}</Checkbox>
+                  </Form.Item>
+                  <Form.Item name="no_show" style={{ marginBottom: 12 }} valuePropName="checked">
+                    <Checkbox>{t('reservation.Hide room rates')}</Checkbox>
+                  </Form.Item>
+                </Col>
+                <Col span={8} style={{ marginTop: -6 }}>
+                  <Form.Item name="no_deposit" valuePropName="checked">
+                    <Checkbox>{t('reservation.Confirm reservation without deposit')}</Checkbox>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Card>
+          )}
         </Col>
-        <Col span={24} style={{ textAlign: 'center', marginTop: 20, marginBottom: 140 }}>
-          <MButton
-            style={{
-              color: colors.pattron,
-              borderColor: colors.pattron,
-              marginRight: 32,
-              backgroundColor: '#e5e5e5',
-            }}
-          >
-            {t('reservation.Save and add more details')}
-          </MButton>
-          <PattonButton htmlType="submit">{t('common.Save')}</PattonButton>
-        </Col>
+        {isCreateForm && (
+          <Col span={24} style={{ textAlign: 'center', marginTop: 20, marginBottom: 140 }}>
+            <MButton
+              style={{
+                color: colors.pattron,
+                borderColor: colors.pattron,
+                marginRight: 32,
+                backgroundColor: '#e5e5e5',
+              }}
+            >
+              {t('reservation.Save and add more details')}
+            </MButton>
+            <PattonButton htmlType="submit">{t('common.Save')}</PattonButton>
+          </Col>
+        )}
       </Row>
     </Form>
   );
