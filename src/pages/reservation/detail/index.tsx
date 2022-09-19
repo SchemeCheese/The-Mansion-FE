@@ -13,6 +13,8 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Checkbox, Col, Row, Select, Space } from 'antd';
+import ReservationForm from 'pages/reservation/component/ReservationForm';
+import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 // import TableSummary from 'components/TableSummary';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
@@ -27,9 +29,6 @@ import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
 
 import { RootState } from 'types';
-
-import ReservationForm from '../create/ReservationForm';
-import SelectRoomModal from '../create/SelectRoomModal';
 
 const { Option } = Select;
 
@@ -240,7 +239,7 @@ function ReservationDetail() {
             />
           </svg>
           <span style={{ paddingLeft: 10, fontSize: 20 }}>
-            {t('reservation.Folio')}：234231029431
+            {t('reservation.Folio')}：{data123.reservation_number}
           </span>
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
@@ -320,18 +319,19 @@ function ReservationDetail() {
           </Row>
         </Col>
       </Row>
-
-      <ReservationForm
-        isCreateForm={false}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        reservationDetail={data123}
-        roomList={roomList}
-        roomingListColumns={roomingListColumns}
-        rowSelection={rowSelection}
-        setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
-        showModal={showModal}
-      />
+      {data123 && (
+        <ReservationForm
+          isCreateForm={false}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          reservationDetail={data123}
+          roomList={roomList}
+          roomingListColumns={roomingListColumns}
+          rowSelection={rowSelection}
+          setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
+          showModal={showModal}
+        />
+      )}
     </>
   );
 }

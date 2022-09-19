@@ -10,6 +10,8 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import ReservationForm from 'pages/reservation/component/ReservationForm';
+import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import { selectCreateReservation } from 'selectors';
@@ -23,9 +25,6 @@ import { createReservation, searchRoomReset } from 'actions';
 import BreadcrumbList from 'components/BreadcrumbList';
 
 import { RootState } from 'types';
-
-import ReservationForm from './ReservationForm';
-import SelectRoomModal from './SelectRoomModal';
 
 const rowSelection = {
   onChange: (selectedRowKeys: any, selectedRows: any) => {

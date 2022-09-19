@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Checkbox, Col, DatePicker, Form, Row, Select, Tabs, TimePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-import GuestList from 'pages/reservation/detail//GuestList';
-import Rate from 'pages/reservation/detail/Rate';
-import Transaction from 'pages/reservation/detail/Transaction';
-import Schedule from 'pages/reservation/list/Schedule';
+import GuestList from 'pages/reservation/component/ReservationDetailTab/GuestList';
+import Rate from 'pages/reservation/component/ReservationDetailTab/Rate';
+import Schedule from 'pages/reservation/component/ReservationDetailTab/Schedule';
+import Transaction from 'pages/reservation/component/ReservationDetailTab/Transaction';
 
 import PattonButton from 'components/PattonButton';
 

@@ -3,14 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Col, Form, Row, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import ReservationDetailCard from 'pages/reservation/component/ReservationDetailCard';
 
 import { colors } from 'modules/theme';
 
 import MButton from 'components/MButton';
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
-
-import ReservationDetailCard from '../detail/ReservationDetailCard';
 
 const { Option } = Select;
 
