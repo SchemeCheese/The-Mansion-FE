@@ -21,7 +21,9 @@ export const AuthPath = {
 export const ReservationEndpoint = {
   SEARCH: 'api/v1/reservations',
   CREATE: 'api/v1/reservations/create',
+  UPDATE: 'api/v1/reservations/update',
   GET_DETAIL: 'api/v1/reservations',
+  GET_RESERVATION_NUMBER: 'api/v1/reservation-numbers/create',
 };
 
 export const RoomEndpoint = {

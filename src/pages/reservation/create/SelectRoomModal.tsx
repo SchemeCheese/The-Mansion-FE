@@ -294,9 +294,8 @@ function SelectRoomModal({
           <Col span={6}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>Quantity</span>
             <Select
-              allowClear
+              defaultValue="1"
               onChange={value => setQuantity(value)}
-              placeholder="Select quantity"
               style={{ width: '100%' }}
             >
               <Option value="1">1</Option>

@@ -10,8 +10,11 @@ import {
   createReservationSuccess,
   getReservationDetail,
   getReservationDetailFinish,
+  getReservationNumber,
+  getReservationNumberFinish,
   searchReservation,
   searchReservationFinish,
+  updateReservationSuccess,
 } from 'actions';
 
 export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchReservation>) {
@@ -51,12 +54,31 @@ export function* postCreateReservationSaga({ payload }: ReturnType<typeof create
       branch_code: 'the_mansion',
       operator_code: 'the_mansion',
       facility_code: 'hotel',
-      reservation_number: '6666',
     },
   }));
 
   if (success) {
     yield put(createReservationSuccess());
+  }
+}
+
+export function* postUpdateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
+  let success = '';
+
+  ({ success } = yield call(request, apiEndPoint(ReservationEndpoint.UPDATE), {
+    method: 'POST',
+    headers: headerWithAuthorization(),
+    body: {
+      ...payload.payload,
+      online_reservation: true,
+      branch_code: 'the_mansion',
+      operator_code: 'the_mansion',
+      facility_code: 'hotel',
+    },
+  }));
+
+  if (success) {
+    yield put(updateReservationSuccess());
   }
 }
 
@@ -73,10 +95,31 @@ export function* getReservationDetailSaga({ payload }: ReturnType<typeof getRese
   yield put(getReservationDetailFinish({ data }));
 }
 
+export function* getReservationNumberSaga({ payload }: ReturnType<typeof getReservationNumber>) {
+  let success = '';
+  let reservationNumber = '';
+
+  ({ reservation_number: reservationNumber, success } = yield call(
+    request,
+    apiEndPoint(ReservationEndpoint.GET_RESERVATION_NUMBER),
+    {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: { ...payload },
+    },
+  ));
+
+  if (success) {
+    yield put(getReservationNumberFinish({ reservation_number: reservationNumber }));
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
     takeLatest(ActionTypes.RESERVATION_CREATE, postCreateReservationSaga),
+    takeLatest(ActionTypes.RESERVATION_UPDATE, postUpdateReservationSaga),
     takeLatest(ActionTypes.RESERVATION_GET_DETAIL, getReservationDetailSaga),
+    takeLatest(ActionTypes.RESERVATION_NUMBER_GET, getReservationNumberSaga),
   ]);
 }

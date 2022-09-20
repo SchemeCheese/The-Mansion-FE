@@ -21,7 +21,7 @@ import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import styled from 'styled-components';
 import _ from 'underscore';
 
-import { getReservationDetail } from 'actions';
+import { getReservationDetail, searchRoomReset } from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
@@ -98,6 +98,14 @@ function ReservationDetail() {
   const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
 
   const showModal = () => {
+    dispatch(searchRoomReset());
+    setRoomCondition({
+      checkin: '',
+      checkout: '',
+      room_type: '',
+    });
+    setQuantity(0);
+    setRoomSelected([]);
     setIsModalVisible(true);
   };
 
@@ -133,8 +141,11 @@ function ReservationDetail() {
   // const [dataState, setDataState] = useState();
   const dispatch = useDispatch();
   const data123: any = useSelector<RootState>(
-    ({ getReservationDetail: getReservationDetailTemporary }) =>
-      getReservationDetailTemporary.data ?? null,
+    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
+  );
+  /** Response from API */
+  const searchRoomsResult: any = useSelector<RootState>(
+    ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.charges,
   );
   // const isFinish = useSelector<RootState>(
   //   ({ getReservationDetail }) => getReservationDetail.is_finish,
@@ -153,27 +164,42 @@ function ReservationDetail() {
   }, []);
 
   useEffect(() => {
-    const xx: any = [];
+    const temporary = [...searchRoomsResult];
 
-    data123.rooms.forEach((item: any) => {
-      xx.push({
-        status: 'Waitlist',
-        name: '-',
-        room_type: item.equipment_type_id,
-        room_no: '-',
-        ci: item.arrival_date,
-        co: item.departure_date,
-        nights: 1,
-        adl: 2,
-        child: '-',
-        baby: '-',
-        rate: '',
-        subtotal: item.total_price,
-        deposit: '-',
+    setSearchRoomResultState(
+      temporary.map(item => {
+        return {
+          ...item,
+          actual_amount: item.price,
+        };
+      }),
+    );
+  }, [searchRoomsResult]);
+
+  useEffect(() => {
+    if (!_.isEmpty(data123)) {
+      const xx: any = [];
+
+      data123.rooms.forEach((item: any) => {
+        xx.push({
+          status: 'Waitlist',
+          name: '-',
+          room_type: item.equipment_type_id,
+          room_no: '-',
+          ci: item.arrival_date,
+          co: item.departure_date,
+          nights: 1,
+          adl: 2,
+          child: '-',
+          baby: '-',
+          rate: '',
+          subtotal: item.total_price,
+          deposit: '-',
+        });
       });
-    });
 
-    setRoomList(xx);
+      setRoomList(xx);
+    }
   }, [data123]);
   const { roomingListColumns } = useColumns();
 
@@ -327,7 +353,7 @@ function ReservationDetail() {
           </Row>
         </Col>
       </Row>
-      {data123 && (
+      {!_.isEmpty(data123) && (
         <ReservationForm
           formRef={formRef}
           isCreateForm={false}
