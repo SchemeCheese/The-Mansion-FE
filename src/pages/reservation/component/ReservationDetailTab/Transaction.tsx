@@ -5,14 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { Button, Card, Col, Row } from 'antd';
 import DiskA from 'pages/reservation/detail/DiskA';
 import Paid from 'pages/reservation/detail/Paid';
+import AddDiscount from 'pages/reservation/modal/TransactionModal/AddDiscount';
 import Deposit from 'pages/reservation/modal/TransactionModal/Deposit';
 import PayDetailModal from 'pages/reservation/modal/TransactionModal/PayDetailModal';
 import SelectedPayMethodModal from 'pages/reservation/modal/TransactionModal/SelectedPayMethodModal';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
-
-import AddDiscount from '../modal/TransactionModal/AddDiscount';
 
 function Transaction() {
   const { t } = useTranslation();

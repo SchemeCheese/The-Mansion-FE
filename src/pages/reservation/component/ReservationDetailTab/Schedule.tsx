@@ -25,7 +25,10 @@ import moment from 'moment';
 
 import PattonButton from 'components/PattonButton';
 
-import { createEventId, INITIAL_EVENTS } from './event-utils';
+import {
+  createEventId,
+  INITIAL_EVENTS,
+} from 'pages/reservation/component/ReservationDetailTab/event-utils';
 
 interface DemoAppState {
   currentEvents: EventApi[];
