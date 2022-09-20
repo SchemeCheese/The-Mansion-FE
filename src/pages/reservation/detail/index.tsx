@@ -133,7 +133,8 @@ function ReservationDetail() {
   // const [dataState, setDataState] = useState();
   const dispatch = useDispatch();
   const data123: any = useSelector<RootState>(
-    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
+    ({ getReservationDetail: getReservationDetailTemporary }) =>
+      getReservationDetailTemporary.data ?? null,
   );
   // const isFinish = useSelector<RootState>(
   //   ({ getReservationDetail }) => getReservationDetail.is_finish,
@@ -146,7 +147,7 @@ function ReservationDetail() {
   useEffect(() => {
     dispatch(
       getReservationDetail({
-        id: '3185',
+        id: id ?? '',
       }),
     );
   }, []);
@@ -198,6 +199,13 @@ function ReservationDetail() {
     },
     0,
   );
+
+  const formRef: any = React.createRef();
+
+  const submitUpdateForm = (e: any) => {
+    console.log('EEEE ', e);
+    formRef.current?.submit();
+  };
 
   return (
     <>
@@ -258,7 +266,7 @@ function ReservationDetail() {
               <Option value="docx">Docx</Option>
             </Select>
             <MButton>{t('common.Resend Email')}</MButton>
-            <PattonButton>{t('common.Update')}</PattonButton>
+            <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
           </Space>
         </Col>
       </Row>
@@ -321,6 +329,7 @@ function ReservationDetail() {
       </Row>
       {data123 && (
         <ReservationForm
+          formRef={formRef}
           isCreateForm={false}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}

@@ -84,7 +84,7 @@ function ReservationList({ type }: Props) {
     if (data) {
       return data.map((item: any) => {
         return {
-          id: item.index,
+          id: item.id,
           key: item.id,
           folio_id: item.reservationNumber,
           status: 'Waitlist',
