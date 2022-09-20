@@ -49,6 +49,11 @@ export interface ReservationSearchState {
   total: number;
 }
 
+export interface ReservationNumberState {
+  operator_code: string;
+  reservation_number: string;
+}
+
 export interface RoomSearchState {
   charges: Array<Record<string, any>>;
   checkin: string;
@@ -99,6 +104,7 @@ export interface RootState {
   app: AppState;
   createReservation: CreateReservationState;
   getReservationDetail: ReservationDetailState;
+  getReservationNumber: ReservationNumberState;
   github: GitHubState;
   product: ProductSearchState;
   reservation: ReservationSearchState;

@@ -8,9 +8,9 @@ Main functions : Reservation List Page
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
-import { Col, message, Pagination, Row, Spin, Table, Tag } from 'antd';
+import { Col, Pagination, Row, Spin, Table, Tag } from 'antd';
 
 import { searchReservation } from 'actions';
 
@@ -43,7 +43,6 @@ function ReservationList({ type }: Props) {
   });
 
   const navigate = useNavigate();
-  const localtion: any = useLocation();
   const dispatch = useDispatch();
 
   const isSearching = useSelector<RootState>(({ reservation }) => reservation.is_searching);
@@ -54,15 +53,6 @@ function ReservationList({ type }: Props) {
   useEffect(() => {
     dispatch(searchReservation(searchCondition));
   }, []);
-
-  useEffect(() => {
-    if (localtion.state?.message) {
-      message.success(localtion.state?.message);
-
-      // Remove state: https://stackoverflow.com/a/66359848
-      window.history.replaceState({}, document.title);
-    }
-  }, [localtion.state]);
 
   const onChangeCurrentPage = (page: number, pageSize: number) => {
     setSearchCondition({

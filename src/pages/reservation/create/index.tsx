@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { message } from 'antd';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -20,7 +21,7 @@ import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { createReservation, searchRoomReset } from 'actions';
+import { createReservation, getReservationNumber, searchRoomReset } from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 
@@ -54,11 +55,15 @@ function Create() {
     checkout: '',
     room_type: '',
   });
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   /** Response from API */
   const searchRoomsResult: any = useSelector<RootState>(
     ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.charges,
+  );
+  const reservationNumberResult: any = useSelector<RootState>(
+    ({ getReservationNumber: getReservationNumberTemporary }) =>
+      getReservationNumberTemporary.reservation_number,
   );
   const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
@@ -72,7 +77,7 @@ function Create() {
       checkout: '',
       room_type: '',
     });
-    setQuantity(0);
+    setQuantity(1);
     setRoomSelected([]);
     setIsModalVisible(true);
   };
@@ -83,6 +88,7 @@ function Create() {
         payload: {
           ...values,
           rooms: roomTotalForm,
+          reservation_number: reservationNumberResult,
         },
       }),
     );
@@ -99,31 +105,25 @@ function Create() {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      navigate('/reservation', {
-        state: {
-          message: 'Create reservation successfully!',
-        },
-      });
+      message.success('Create reservation successfully!');
+
+      navigate('/reservation');
     }
   }, [changed, status]);
+
+  useEffect(() => {
+    dispatch(
+      getReservationNumber({
+        operator_code: 'the_mansion',
+        branch_code: 'the_mansion',
+        facility_code: 'hotel',
+      }),
+    );
+  }, []);
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
   };
-
-  const dataSelectedRoomsResult: any = [];
-
-  for (let index = 0; index < 3; index++) {
-    dataSelectedRoomsResult.push({
-      checkin: '',
-      checkout: '',
-      room_type: '',
-      rate_name: '',
-      quantity: '',
-      subtotal: '',
-      task: '',
-    });
-  }
 
   const [searchRoomResultState, setSearchRoomResultState] = useState<any>([]);
 
@@ -180,6 +180,7 @@ function Create() {
         isCreateForm
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        reservationNumber={reservationNumberResult}
         roomList={roomList}
         roomingListColumns={roomingListColumns}
         rowSelection={rowSelection}

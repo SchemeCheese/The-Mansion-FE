@@ -19,6 +19,7 @@ interface Props {
   onFinish: any;
   onFinishFailed: any;
   reservationDetail?: any;
+  reservationNumber?: number;
   roomList: any;
   roomingListColumns: any;
   rowSelection: any;
@@ -32,6 +33,7 @@ function ReservationForm({
   onFinish,
   onFinishFailed,
   reservationDetail,
+  reservationNumber,
   roomingListColumns,
   roomList,
   rowSelection,
@@ -45,6 +47,7 @@ function ReservationForm({
       ref={formRef}
       autoComplete="off"
       initialValues={{
+        reservation_number: reservationNumber,
         paid: true,
         send_mail: true,
         no_show: true,
@@ -77,7 +80,7 @@ function ReservationForm({
             <Row>
               <Col span={8}>
                 <Form.Item label={t('reservation.Folio ID')} name="reservation_number">
-                  <MInput disabled value="2808" />
+                  <MInput disabled />
                 </Form.Item>
                 <Form.Item
                   label={t('reservation.OTA Booking ID.title')}

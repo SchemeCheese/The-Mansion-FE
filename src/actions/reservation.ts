@@ -8,6 +8,8 @@ import {
   ReservationCreate,
   ReservationDetail,
   ReservationDetailFinish,
+  ReservationNumberGetPayload,
+  ReservationNumberResult,
   ReservationSearch,
   ReservationSearchResult,
 } from 'types';
@@ -28,6 +30,23 @@ export const createReservation = createAction(
 );
 
 export const createReservationSuccess = createAction(ActionTypes.RESERVATION_CREATE_SUCCESS);
+
+export const updateReservation = createAction(
+  ActionTypes.RESERVATION_UPDATE,
+  (payload: ReservationCreate) => actionPayload(payload),
+);
+
+export const updateReservationSuccess = createAction(ActionTypes.RESERVATION_UPDATE_SUCCESS);
+
+export const getReservationNumber = createAction(
+  ActionTypes.RESERVATION_NUMBER_GET,
+  (payload: ReservationNumberGetPayload) => actionPayload(payload),
+);
+
+export const getReservationNumberFinish = createAction(
+  ActionTypes.RESERVATION_NUMBER_GET_FINISH,
+  (payload: ReservationNumberResult) => actionPayload(payload),
+);
 
 export const getReservationDetail = createAction(
   ActionTypes.RESERVATION_GET_DETAIL,

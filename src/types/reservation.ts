@@ -45,6 +45,16 @@ export interface ReservationCreate {
   payload: ReservationPayload;
 }
 
+export interface ReservationNumberGetPayload {
+  branch_code: string;
+  facility_code: string;
+  operator_code: string;
+}
+
+export interface ReservationNumberResult {
+  reservation_number: string;
+}
+
 export interface ReservationDetail {
   id: string;
 }
