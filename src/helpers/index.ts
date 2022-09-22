@@ -14,3 +14,7 @@ export const headerWithAuthorization = (headers = {}): AnyObject => {
 export const apiEndPoint = (path: string): string => {
   return `${process.env.REACT_APP_API_HOST}/${path}`;
 };
+
+export const formatNumber = (data: number): string => {
+  return new Intl.NumberFormat().format(data);
+};

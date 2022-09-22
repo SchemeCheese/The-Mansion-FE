@@ -52,6 +52,7 @@ const useColumns = () => {
     {
       title: t('reservation.Subtotal'),
       dataIndex: 'subtotal',
+      render: (text: string) => <div style={{ textAlign: 'right', paddingRight: 20 }}>{text}</div>,
     },
     {
       title: t('reservation.Deposit'),

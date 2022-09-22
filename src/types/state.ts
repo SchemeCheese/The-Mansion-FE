@@ -94,6 +94,16 @@ export interface ReservationDetailState {
   is_finish: boolean;
 }
 
+export interface ReservationTypeState {
+  data: Record<string, any>;
+  is_finish: boolean;
+}
+
+export interface RoomTypeState {
+  data: Record<string, any>;
+  is_finish: boolean;
+}
+
 export interface ProductSearchState {
   data: Array<Record<string, any>>;
   is_searching: boolean;
@@ -105,6 +115,7 @@ export interface RootState {
   createReservation: CreateReservationState;
   getReservationDetail: ReservationDetailState;
   getReservationNumber: ReservationNumberState;
+  getRoomType: RoomTypeState;
   github: GitHubState;
   product: ProductSearchState;
   reservation: ReservationSearchState;

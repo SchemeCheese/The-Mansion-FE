@@ -173,28 +173,10 @@ function ReservationForm({
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item
-                  label={t('reservation.Email.title')}
-                  name="booker_email"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input booker's email",
-                    },
-                  ]}
-                >
+                <Form.Item label={t('reservation.Email.title')} name="booker_email">
                   <MInput placeholder={t('reservation.Email.placeholder')} />
                 </Form.Item>
-                <Form.Item
-                  label={t('reservation.Mobile Phone.title')}
-                  name="booker_phone_number"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input booker's phone number",
-                    },
-                  ]}
-                >
+                <Form.Item label={t('reservation.Mobile Phone.title')} name="booker_phone_number">
                   <MInput placeholder={t('reservation.Mobile Phone.placeholder')} />
                 </Form.Item>
                 <Form.Item
@@ -282,9 +264,10 @@ function ReservationForm({
                     }}
                   >
                     <Select allowClear placeholder={t('reservation.Payment Method.placeholder')}>
-                      <Option value="male">male</Option>
-                      <Option value="female">female</Option>
-                      <Option value="other">other</Option>
+                      <Option value="1">Cash</Option>
+                      <Option value="2">Credit Cash</Option>
+                      <Option value="3">Coupon</Option>
+                      <Option value="99">Other</Option>
                     </Select>
                   </Form.Item>
                 </Col>

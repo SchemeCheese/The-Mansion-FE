@@ -9,12 +9,14 @@ Main functions : Table Summary Componnent
 import React from 'react';
 import PlusOutlined from '@ant-design/icons/lib/icons/PlusOutlined';
 import { Table } from 'antd';
+import { formatNumber } from 'helpers';
 import _ from 'underscore';
 
 import PattonButton from 'components/PattonButton';
 
 interface Props {
   quantity: number;
+  roomSelected: any;
   roomTotalForm: any;
   searchRoomResultState: any;
   setRoomSelected: (data: any) => void;
@@ -24,6 +26,7 @@ interface Props {
 
 function TableSummary({
   quantity,
+  roomSelected,
   roomTotalForm,
   searchRoomResultState,
   setRoomSelected,
@@ -31,7 +34,7 @@ function TableSummary({
   totalAmount,
 }: Props) {
   const handleClick = () => {
-    const dataSelectedRoomsResult: any[] = [];
+    const dataSelectedRoomsResult: any = [...roomSelected];
     const dataRoomTotalForm = [...roomTotalForm];
     const groupRooms: any = _.groupBy(searchRoomResultState, 'rate_name');
 
@@ -52,7 +55,7 @@ function TableSummary({
         room_type: _.first(x).room_type,
         rate_name: _.first(x).rate_name,
         quantity,
-        subtotal: sum * quantity,
+        subtotal: formatNumber(sum * quantity),
         task: '',
       });
 
@@ -76,10 +79,14 @@ function TableSummary({
           Total Amount (VND)
         </Table.Summary.Cell>
         <Table.Summary.Cell colSpan={5} index={1}>
-          <span style={{ fontSize: 16 }}>{totalAmount} </span>
+          <span style={{ fontSize: 16 }}>{formatNumber(totalAmount)}</span>
         </Table.Summary.Cell>
         <Table.Summary.Cell index={3}>
-          <PattonButton onClick={handleClick} style={{ float: 'right' }}>
+          <PattonButton
+            disabled={totalAmount === 0}
+            onClick={handleClick}
+            style={{ float: 'right' }}
+          >
             {' '}
             <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} />{' '}
             <span style={{ marginLeft: -5 }}>Add</span>
