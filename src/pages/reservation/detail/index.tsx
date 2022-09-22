@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Checkbox, Col, Row, Select, Space } from 'antd';
+import { formatNumber } from 'helpers';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -173,7 +174,7 @@ function ReservationDetail() {
           child: '-',
           baby: '-',
           rate: '',
-          subtotal: new Intl.NumberFormat('en-IN').format(item.total_price),
+          subtotal: formatNumber(item.total_price),
           deposit: '-',
         });
       });

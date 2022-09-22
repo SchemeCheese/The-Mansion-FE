@@ -17,25 +17,25 @@ import PattonButton from 'components/PattonButton';
 interface Props {
   quantity: number;
   roomSelected: any;
-  roomTotalForm: any;
+  // roomTotalForm: any;
   searchRoomResultState: any;
   setRoomSelected: (data: any) => void;
-  setRoomTotalForm: (data: any) => void;
+  // setRoomTotalForm: (data: any) => void;
   totalAmount: number;
 }
 
 function TableSummary({
   quantity,
   roomSelected,
-  roomTotalForm,
+  // roomTotalForm,
   searchRoomResultState,
   setRoomSelected,
-  setRoomTotalForm,
+  // setRoomTotalForm,
   totalAmount,
 }: Props) {
   const handleClick = () => {
     const dataSelectedRoomsResult: any = [...roomSelected];
-    const dataRoomTotalForm = [...roomTotalForm];
+    // const dataRoomTotalForm = [...roomTotalForm];
     const groupRooms: any = _.groupBy(searchRoomResultState, 'rate_name');
 
     _.values(groupRooms).forEach((element: any) => {
@@ -57,19 +57,21 @@ function TableSummary({
         quantity,
         subtotal: formatNumber(sum * quantity),
         task: '',
-      });
-
-      dataRoomTotalForm.push({
-        room_type: 2,
-        checkin_date: _.first(x).use_date,
-        checkout_date: _.last(x).use_date,
-        actual_amount: sum * quantity,
+        actual_amount: sum,
         charges: searchRoomResultState,
       });
+
+      // dataRoomTotalForm.push({
+      //   room_type: 2,
+      //   checkin_date: _.first(x).use_date,
+      //   checkout_date: _.last(x).use_date,
+      //   actual_amount: sum * quantity,
+      //   charges: searchRoomResultState,
+      // });
     });
 
     setRoomSelected(dataSelectedRoomsResult);
-    setRoomTotalForm(dataRoomTotalForm);
+    // setRoomTotalForm(dataRoomTotalForm);
   };
 
   return (
