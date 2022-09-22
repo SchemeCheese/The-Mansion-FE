@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+// import useColumns from 'pages/reservation/create/useColumns';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Col, DatePicker, Input, Modal, Row, Select, Table } from 'antd';
+import moment from 'moment';
 import TableSummary from 'pages/reservation/create/TableSummary';
-import useColumns from 'pages/reservation/create/useColumns';
 import _ from 'underscore';
 
-import { searchRoom } from 'actions';
+import { getRoomType, searchRoom } from 'actions';
 
 import { RootState } from 'types';
 
@@ -46,12 +48,22 @@ function SelectRoomModal({
   setSearchRoomResultState,
   totalAmount,
 }: Props) {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { selectedRoomsResultColumns } = useColumns();
+  // const { selectedRoomsResultColumns } = useColumns();
 
   const ratesResult: any = useSelector<RootState>(
     ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.rates,
   );
+  const quantityResult: any = useSelector<RootState>(
+    ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.total,
+  );
+  const roomTypes: any = useSelector<RootState>(
+    ({ getRoomType: getRoomTypeTemporary }) => getRoomTypeTemporary.data,
+  );
+
+  console.log('Roooom type', roomTypes);
+
   const searchRoomColumns = [
     {
       title: 'Date',
@@ -149,11 +161,30 @@ function SelectRoomModal({
       title: 'Task',
       dataIndex: 'task',
       key: 'task',
-      render: () => (
-        <Button style={{ color: '#1D39C4', paddingLeft: 0 }} type="link">
-          Duplicate
-        </Button>
-      ),
+      render: (text: string, record: any, index: number) => {
+        console.log('Duplicate', record, index, text);
+
+        return (
+          <Button
+            onClick={event => {
+              const stateTemporary = [...searchRoomResultState];
+              const duplicateRecord = stateTemporary[index];
+
+              const stateTemporaryWithDuplicate = [
+                ...stateTemporary.slice(0, index + 1),
+                duplicateRecord,
+              ].concat(stateTemporary.slice(index + 1));
+
+              setSearchRoomResultState(stateTemporaryWithDuplicate);
+              console.log('AAA', event.target);
+            }}
+            style={{ color: '#1D39C4', paddingLeft: 0 }}
+            type="link"
+          >
+            Duplicate
+          </Button>
+        );
+      },
     },
   ];
 
@@ -172,7 +203,7 @@ function SelectRoomModal({
         room_no: '-',
         ci: item.checkin,
         co: item.checkout,
-        nights: 1,
+        nights: moment.duration(moment(item.checkout).diff(moment(item.checkin))).asDays(),
         adl: 2,
         child: '-',
         baby: '-',
@@ -239,11 +270,90 @@ function SelectRoomModal({
     return result;
   };
 
+  const selectedRoomsResultColumns = [
+    {
+      title: 'Checkin',
+      dataIndex: 'checkin',
+      key: 'checkin',
+    },
+    {
+      title: 'Checkout',
+      dataIndex: 'checkout',
+      key: 'checkout',
+    },
+    {
+      title: 'Room Type',
+      dataIndex: 'room_type',
+      key: 'room_type',
+    },
+    {
+      title: 'Rate Name',
+      dataIndex: 'rate_name',
+      key: 'rate_name',
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      key: 'quantity',
+    },
+    {
+      title: 'Subtotal',
+      dataIndex: 'subtotal',
+      key: 'subtotal',
+    },
+    {
+      title: 'Task',
+      dataIndex: 'task',
+      key: 'task',
+      render: (text: any, record: any, index: number) => {
+        console.log('AAAAA', text, record, index);
+
+        return (
+          <Button
+            onClick={() => {
+              const roomSelectedTemporary = [...roomSelected];
+              const dataRoomTotalForm = [...roomTotalForm];
+
+              roomSelectedTemporary.splice(index, 1);
+              dataRoomTotalForm.splice(
+                dataRoomTotalForm.length - roomSelectedTemporary.length + index - 1,
+                1,
+              );
+
+              setRoomSelected(roomSelectedTemporary);
+              setRoomTotalForm(dataRoomTotalForm);
+            }}
+            style={{ color: '#F5222D', paddingLeft: 0 }}
+            type="link"
+          >
+            {t('common.Delete')}
+          </Button>
+        );
+      },
+    },
+  ];
+
+  useEffect(() => {
+    dispatch(getRoomType());
+  }, []);
+
+  const roomTypeOption = _.keys(roomTypes).map((key: any) => {
+    console.log('itemmm', key);
+
+    return <Option value={key}>{roomTypes[key]}</Option>;
+  });
+
+  const quantityOption = [];
+
+  for (let index = 0; index < quantityResult; index++) {
+    quantityOption.push(<Option value={index + 1}>{index + 1}</Option>);
+  }
+
   return (
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
       destroyOnClose
-      okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
+      okButtonProps={{ style: { backgroundColor: '#1D39C4' }, disabled: roomSelected.length === 0 }}
       okText="Save"
       onCancel={handleCancel}
       onOk={handleOk}
@@ -286,21 +396,18 @@ function SelectRoomModal({
               placeholder="Select room type"
               style={{ width: '93%' }}
             >
-              <Option value="1">Room 1</Option>
-              <Option value="2">Room 2</Option>
-              <Option value="3">Room 3</Option>
+              {roomTypeOption}
             </Select>
           </Col>
           <Col span={6}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>Quantity</span>
             <Select
               defaultValue="1"
+              disabled={quantityResult === 0}
               onChange={value => setQuantity(value)}
               style={{ width: '100%' }}
             >
-              <Option value="1">1</Option>
-              <Option value="2">2</Option>
-              <Option value="3">3</Option>
+              {quantityOption}
             </Select>
           </Col>
         </Row>
@@ -316,6 +423,7 @@ function SelectRoomModal({
                 return (
                   <TableSummary
                     quantity={quantity}
+                    roomSelected={roomSelected}
                     roomTotalForm={roomTotalForm}
                     searchRoomResultState={searchRoomResultState}
                     setRoomSelected={setRoomSelected}

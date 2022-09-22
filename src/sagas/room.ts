@@ -5,7 +5,7 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { RoomEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { searchRoom, searchRoomFinish } from 'actions';
+import { getRoomTypeFinish, searchRoom, searchRoomFinish } from 'actions';
 
 export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) {
   let charges = [];
@@ -33,6 +33,24 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
   );
 }
 
+export function* getRoomTypeSaga() {
+  let data = [];
+
+  ({ data } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH_TYPE)}`, {
+    method: 'GET',
+    headers: headerWithAuthorization(),
+  }));
+
+  yield put(
+    getRoomTypeFinish({
+      data,
+    }),
+  );
+}
+
 export default function* root() {
-  yield all([takeLatest(ActionTypes.ROOM_SEARCH, getSearchRoomnSaga)]);
+  yield all([
+    takeLatest(ActionTypes.ROOM_SEARCH, getSearchRoomnSaga),
+    takeLatest(ActionTypes.ROOM_TYPE_GET, getRoomTypeSaga),
+  ]);
 }

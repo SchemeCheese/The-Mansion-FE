@@ -32,26 +32,6 @@ import { RootState } from 'types';
 
 const { Option } = Select;
 
-const data: object[] = [];
-
-for (let index = 0; index < 5; index++) {
-  data.push({
-    status: 'Waitlist',
-    name: 'Ming',
-    room_type: 'Premium Alex',
-    room_no: '-',
-    ci: '28/07/2020',
-    co: '28/07/2020',
-    nights: 1,
-    adl: 2,
-    child: '-',
-    baby: '-',
-    rate: 'Premium Alex TA',
-    subtotal: '4.320.000',
-    deposit: '-',
-  });
-}
-
 const rowSelection = {
   onChange: (selectedRowKeys: any, selectedRows: any) => {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -193,7 +173,7 @@ function ReservationDetail() {
           child: '-',
           baby: '-',
           rate: '',
-          subtotal: item.total_price,
+          subtotal: new Intl.NumberFormat('en-IN').format(item.total_price),
           deposit: '-',
         });
       });

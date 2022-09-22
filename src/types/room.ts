@@ -9,3 +9,7 @@ export interface RoomSearchResult {
   rates: Array<Record<string, any>>;
   total: number;
 }
+
+export interface RoomTypeResult {
+  data: Array<Record<string, any>>;
+}

@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
+import { formatNumber } from 'helpers';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -134,6 +135,7 @@ function Create() {
       temporary.map(item => {
         return {
           ...item,
+          price: formatNumber(item.price),
           actual_amount: item.price,
         };
       }),
@@ -142,11 +144,13 @@ function Create() {
 
   const totalAmount = _.reduce(
     searchRoomResultState,
-    function (memo, number_: any) {
-      return parseInt(number_.actual_amount, 10) + memo;
+    function (total, item: any) {
+      return parseInt(item.actual_amount, 10) + total;
     },
     0,
   );
+
+  console.log('totall Room', roomTotalForm);
 
   return (
     <>
