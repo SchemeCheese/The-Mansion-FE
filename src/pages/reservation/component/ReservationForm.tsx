@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Col, Form, Row, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import { formatNumber } from 'helpers';
 import ReservationDetailCard from 'pages/reservation/component/ReservationDetailCard';
+import _ from 'underscore';
 
 import { colors } from 'modules/theme';
 
@@ -41,6 +43,13 @@ function ReservationForm({
   showModal,
 }: Props) {
   const { t } = useTranslation();
+  const totalPriceReservation = _.reduce(
+    roomList,
+    function (memo, number_: any) {
+      return memo + number_.actual_amount;
+    },
+    0,
+  );
 
   return (
     <Form
@@ -253,7 +262,7 @@ function ReservationForm({
                   <p style={{ marginBottom: 25 }}>
                     <span>{t('reservation.Total Amount')}</span>
                     <span style={{ float: 'right', paddingRight: '12.5%', fontSize: 16 }}>
-                      4,800,000
+                      {formatNumber(totalPriceReservation)}
                     </span>
                   </p>
                   <Form.Item

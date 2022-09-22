@@ -62,8 +62,6 @@ function SelectRoomModal({
     ({ getRoomType: getRoomTypeTemporary }) => getRoomTypeTemporary.data,
   );
 
-  console.log('Roooom type', roomTypes);
-
   const searchRoomColumns = [
     {
       title: 'Date',
@@ -85,7 +83,6 @@ function SelectRoomModal({
           <Select
             defaultValue={text}
             onChange={value => {
-              console.log('value', value);
               const xy = _.findWhere(ratesResult, {
                 rate_id: value,
               });
@@ -166,7 +163,7 @@ function SelectRoomModal({
 
         return (
           <Button
-            onClick={event => {
+            onClick={() => {
               const stateTemporary = [...searchRoomResultState];
               const duplicateRecord = stateTemporary[index];
 
@@ -176,7 +173,6 @@ function SelectRoomModal({
               ].concat(stateTemporary.slice(index + 1));
 
               setSearchRoomResultState(stateTemporaryWithDuplicate);
-              console.log('AAA', event.target);
             }}
             style={{ color: '#1D39C4', paddingLeft: 0 }}
             type="link"
@@ -194,27 +190,40 @@ function SelectRoomModal({
 
   const handleOk = () => {
     const data1 = [...roomList];
+    const dataRoomTotalForm = [...roomTotalForm];
 
     roomSelected.forEach((item: any) => {
-      data1.push({
-        status: 'Waitlist',
-        name: '-',
-        room_type: item.room_type,
-        room_no: '-',
-        ci: item.checkin,
-        co: item.checkout,
-        nights: moment.duration(moment(item.checkout).diff(moment(item.checkin))).asDays(),
-        adl: 2,
-        child: '-',
-        baby: '-',
-        rate: item.rate_name,
-        subtotal: item.subtotal,
-        deposit: '-',
-      });
+      for (let index = 0; index < item.quantity; index++) {
+        data1.push({
+          status: 'Waitlist',
+          name: '-',
+          room_type: item.room_type,
+          room_no: '-',
+          ci: item.checkin,
+          co: item.checkout,
+          nights: moment.duration(moment(item.checkout).diff(moment(item.checkin))).asDays(),
+          adl: 2,
+          child: '-',
+          baby: '-',
+          rate: item.rate_name,
+          subtotal: item.subtotal,
+          deposit: '-',
+          actual_amount: item.actual_amount,
+        });
+
+        dataRoomTotalForm.push({
+          room_type: 2,
+          quantity: item.quantity,
+          checkin_date: item.checkin,
+          checkout_date: item.checkout,
+          actual_amount: item.actual_amount,
+          charges: item.charges,
+        });
+      }
     });
 
     setRoomList(data1);
-
+    setRoomTotalForm(dataRoomTotalForm);
     setIsModalVisible(false);
   };
 
@@ -321,7 +330,7 @@ function SelectRoomModal({
               );
 
               setRoomSelected(roomSelectedTemporary);
-              setRoomTotalForm(dataRoomTotalForm);
+              // setRoomTotalForm(dataRoomTotalForm);
             }}
             style={{ color: '#F5222D', paddingLeft: 0 }}
             type="link"
@@ -338,15 +347,21 @@ function SelectRoomModal({
   }, []);
 
   const roomTypeOption = _.keys(roomTypes).map((key: any) => {
-    console.log('itemmm', key);
-
-    return <Option value={key}>{roomTypes[key]}</Option>;
+    return (
+      <Option key={key} value={key}>
+        {roomTypes[key]}
+      </Option>
+    );
   });
 
   const quantityOption = [];
 
   for (let index = 0; index < quantityResult; index++) {
-    quantityOption.push(<Option value={index + 1}>{index + 1}</Option>);
+    quantityOption.push(
+      <Option key={index} value={index + 1}>
+        {index + 1}
+      </Option>,
+    );
   }
 
   return (
@@ -424,10 +439,10 @@ function SelectRoomModal({
                   <TableSummary
                     quantity={quantity}
                     roomSelected={roomSelected}
-                    roomTotalForm={roomTotalForm}
+                    // roomTotalForm={roomTotalForm}
                     searchRoomResultState={searchRoomResultState}
                     setRoomSelected={setRoomSelected}
-                    setRoomTotalForm={setRoomTotalForm}
+                    // setRoomTotalForm={setRoomTotalForm}
                     totalAmount={totalAmount}
                   />
                 );
