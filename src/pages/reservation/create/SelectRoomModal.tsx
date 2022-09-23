@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Col, DatePicker, Input, Modal, Row, Select, Table } from 'antd';
+import { randomKey } from 'helpers';
 import moment from 'moment';
 import TableSummary from 'pages/reservation/create/TableSummary';
 import _ from 'underscore';
@@ -195,6 +196,7 @@ function SelectRoomModal({
     roomSelected.forEach((item: any) => {
       for (let index = 0; index < item.quantity; index++) {
         data1.push({
+          key: randomKey(5),
           status: 'Waitlist',
           name: '-',
           room_type: item.room_type,
