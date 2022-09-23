@@ -33,17 +33,6 @@ import { RootState } from 'types';
 
 const { Option } = Select;
 
-const rowSelection = {
-  onChange: (selectedRowKeys: any, selectedRows: any) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: (record: any) => ({
-    disabled: record.name === 'Disabled User',
-    // Column configuration not to be checked
-    name: record.name,
-  }),
-};
-
 const BreadscrumTitle = styled.p`
   color: rgba(0 0 0 85%);
   font-size: 14px;
@@ -55,6 +44,18 @@ const BreadscrumData = styled.p`
 `;
 
 function ReservationDetail() {
+  const rowSelection = {
+    onChange: (selectedRowKeys: any, selectedRows: any) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setSelectedRowKeys(selectedRowKeys);
+    },
+    getCheckboxProps: (record: any) => ({
+      disabled: record.name === 'Disabled User',
+      // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
+
   const onFinish = (values: any) => {
     console.log('Success:', values);
   };
@@ -176,6 +177,7 @@ function ReservationDetail() {
           rate: '',
           subtotal: formatNumber(item.total_price),
           deposit: '-',
+          actual_amount: item.total_price,
         });
       });
 
@@ -206,6 +208,11 @@ function ReservationDetail() {
     },
     0,
   );
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const deleteSelectedRoom = () => {
+    console.log('aaaa', selectedRowKeys);
+  };
 
   const formRef: any = React.createRef();
 
@@ -221,14 +228,12 @@ function ReservationDetail() {
         isModalVisible={isModalVisible}
         quantity={quantity}
         roomCondition={roomCondition}
-        roomList={roomList}
         roomSelected={roomSelected}
         roomTotalForm={roomTotalForm}
         searchRoomResultState={searchRoomResultState}
         setIsModalVisible={setIsModalVisible}
         setQuantity={setQuantity}
         setRoomCondition={setRoomCondition}
-        setRoomList={setRoomList}
         setRoomSelected={setRoomSelected}
         setRoomTotalForm={setRoomTotalForm}
         setSearchRoomResultState={setSearchRoomResultState}
@@ -336,12 +341,13 @@ function ReservationDetail() {
       </Row>
       {!_.isEmpty(data123) && (
         <ReservationForm
+          deleteSelectedRoom={deleteSelectedRoom}
           formRef={formRef}
           isCreateForm={false}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           reservationDetail={data123}
-          roomList={roomList}
+          roomTotalForm={roomList}
           roomingListColumns={roomingListColumns}
           rowSelection={rowSelection}
           setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}

@@ -2,7 +2,7 @@
 Module Name : Reservation
 Developer Name : HangNT
 Created Date : 02/09/2022
-Updated Date : 04/09/2022
+Updated Date : 24/09/2022
 Main functions : Table Summary Componnent
 ************************************ */
 
@@ -17,29 +17,24 @@ import PattonButton from 'components/PattonButton';
 interface Props {
   quantity: number;
   roomSelected: any;
-  // roomTotalForm: any;
   searchRoomResultState: any;
   setRoomSelected: (data: any) => void;
-  // setRoomTotalForm: (data: any) => void;
   totalAmount: number;
 }
 
 function TableSummary({
   quantity,
   roomSelected,
-  // roomTotalForm,
   searchRoomResultState,
   setRoomSelected,
-  // setRoomTotalForm,
   totalAmount,
 }: Props) {
   const handleClick = () => {
     const dataSelectedRoomsResult: any = [...roomSelected];
-    // const dataRoomTotalForm = [...roomTotalForm];
     const groupRooms: any = _.groupBy(searchRoomResultState, 'rate_name');
 
     _.values(groupRooms).forEach((element: any) => {
-      const x = _.sortBy(element, 'date');
+      const reservationDetail = _.sortBy(element, 'date');
 
       const sum = _.reduce(
         element,
@@ -50,28 +45,19 @@ function TableSummary({
       );
 
       dataSelectedRoomsResult.push({
-        checkin: _.first(x).use_date,
-        checkout: _.last(x).use_date,
-        room_type: _.first(x).room_type,
-        rate_name: _.first(x).rate_name,
+        checkin: _.first(reservationDetail).use_date,
+        checkout: _.last(reservationDetail).use_date,
+        room_type: _.first(reservationDetail).room_type,
+        rate_name: _.first(reservationDetail).rate_name,
         quantity,
         subtotal: formatNumber(sum * quantity),
         task: '',
         actual_amount: sum,
         charges: searchRoomResultState,
       });
-
-      // dataRoomTotalForm.push({
-      //   room_type: 2,
-      //   checkin_date: _.first(x).use_date,
-      //   checkout_date: _.last(x).use_date,
-      //   actual_amount: sum * quantity,
-      //   charges: searchRoomResultState,
-      // });
     });
 
     setRoomSelected(dataSelectedRoomsResult);
-    // setRoomTotalForm(dataRoomTotalForm);
   };
 
   return (

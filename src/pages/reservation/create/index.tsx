@@ -28,24 +28,11 @@ import BreadcrumbList from 'components/BreadcrumbList';
 
 import { RootState } from 'types';
 
-const rowSelection = {
-  onChange: (selectedRowKeys: any, selectedRows: any) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  getCheckboxProps: (record: any) => ({
-    disabled: record.name === 'Disabled User',
-    // Column configuration not to be checked
-    name: record.name,
-  }),
-};
-
 function Create() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   /** State */
-  /** Rooming List Table */
-  const [roomList, setRoomList] = useState<any>([]);
   /** Search room Table In Modal */
   const [roomSelected, setRoomSelected] = useState<any>([]);
   /** Data of payload to transfer from API */
@@ -57,6 +44,27 @@ function Create() {
     room_type: '',
   });
   const [quantity, setQuantity] = useState(1);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
+  const rowSelection = {
+    onChange: (newSelectedRowKeys: any, selectedRows: any) => {
+      console.log(`selectedRowKeys: ${newSelectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setSelectedRowKeys(newSelectedRowKeys);
+    },
+    getCheckboxProps: (record: any) => ({
+      disabled: record.name === 'Disabled User',
+      // Column configuration not to be checked
+      name: record.name,
+    }),
+  };
+
+  const deleteSelectedRoom = () => {
+    const remainRoomFormTotal = _.reject(roomTotalForm, (item: any) => {
+      return selectedRowKeys.includes(item.key as never);
+    });
+
+    setRoomTotalForm(remainRoomFormTotal);
+  };
 
   /** Response from API */
   const searchRoomsResult: any = useSelector<RootState>(
@@ -163,14 +171,12 @@ function Create() {
         isModalVisible={isModalVisible}
         quantity={quantity}
         roomCondition={roomCondition}
-        roomList={roomList}
         roomSelected={roomSelected}
         roomTotalForm={roomTotalForm}
         searchRoomResultState={searchRoomResultState}
         setIsModalVisible={setIsModalVisible}
         setQuantity={setQuantity}
         setRoomCondition={setRoomCondition}
-        setRoomList={setRoomList}
         setRoomSelected={setRoomSelected}
         setRoomTotalForm={setRoomTotalForm}
         setSearchRoomResultState={setSearchRoomResultState}
@@ -181,11 +187,12 @@ function Create() {
         setModalVisible={setIsCancelBookingModalVisible}
       />
       <ReservationForm
+        deleteSelectedRoom={deleteSelectedRoom}
         isCreateForm
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         reservationNumber={reservationNumberResult}
-        roomList={roomList}
+        roomTotalForm={roomTotalForm}
         roomingListColumns={roomingListColumns}
         rowSelection={rowSelection}
         setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
