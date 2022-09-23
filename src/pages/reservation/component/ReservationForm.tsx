@@ -16,13 +16,14 @@ import PattonButton from 'components/PattonButton';
 const { Option } = Select;
 
 interface Props {
+  deleteSelectedRoom: any;
   formRef?: any;
   isCreateForm: boolean;
   onFinish: any;
   onFinishFailed: any;
   reservationDetail?: any;
   reservationNumber?: number;
-  roomList: any;
+  roomTotalForm: any;
   roomingListColumns: any;
   rowSelection: any;
   setIsCancelBookingModalVisible: any;
@@ -30,6 +31,7 @@ interface Props {
 }
 
 function ReservationForm({
+  deleteSelectedRoom,
   formRef,
   isCreateForm,
   onFinish,
@@ -37,16 +39,17 @@ function ReservationForm({
   reservationDetail,
   reservationNumber,
   roomingListColumns,
-  roomList,
+  roomTotalForm,
   rowSelection,
   setIsCancelBookingModalVisible,
   showModal,
 }: Props) {
   const { t } = useTranslation();
+
   const totalPriceReservation = _.reduce(
-    roomList,
-    function (memo, number_: any) {
-      return memo + number_.actual_amount;
+    roomTotalForm,
+    function (memo, reservationDetailItem: any) {
+      return memo + reservationDetailItem.actual_amount * reservationDetailItem.quantity;
     },
     0,
   );
@@ -182,7 +185,16 @@ function ReservationForm({
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label={t('reservation.Email.title')} name="booker_email">
+                <Form.Item
+                  label={t('reservation.Email.title')}
+                  name="booker_email"
+                  rules={[
+                    {
+                      type: 'email',
+                      message: 'The input is not valid E-mail!',
+                    },
+                  ]}
+                >
                   <MInput placeholder={t('reservation.Email.placeholder')} />
                 </Form.Item>
                 <Form.Item label={t('reservation.Mobile Phone.title')} name="booker_phone_number">
@@ -207,7 +219,16 @@ function ReservationForm({
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item label={t('reservation.Additional Email.title')} name="booker_email_2">
+                <Form.Item
+                  label={t('reservation.Additional Email.title')}
+                  name="booker_email_2"
+                  rules={[
+                    {
+                      type: 'email',
+                      message: 'The input is not valid E-mail!',
+                    },
+                  ]}
+                >
                   <MInput placeholder={t('reservation.Additional Email.placeholder')} />
                 </Form.Item>
                 <Form.Item label={t('reservation.Notes.title')} name="booker_note">
@@ -229,24 +250,34 @@ function ReservationForm({
                   {' '}
                   <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
                 </PattonButton>
-                <MButton
-                  onClick={() => setIsCancelBookingModalVisible(true)}
-                  style={{ marginLeft: 15 }}
-                >
-                  {t('common.Delete Selected')}
-                </MButton>
-                <MButton style={{ marginLeft: 15 }}>{t('common.Print Registration Card')}</MButton>
+                {isCreateForm ? (
+                  <MButton onClick={() => deleteSelectedRoom()} style={{ marginLeft: 15 }}>
+                    {t('common.Delete Selected')}
+                  </MButton>
+                ) : (
+                  <MButton
+                    onClick={() => setIsCancelBookingModalVisible(true)}
+                    style={{ marginLeft: 15 }}
+                  >
+                    {t('common.Delete Selected')}
+                  </MButton>
+                )}
+                {!isCreateForm && (
+                  <MButton style={{ marginLeft: 15 }}>
+                    {t('common.Print Registration Card')}
+                  </MButton>
+                )}
               </Col>
               <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                 <Table
                   columns={roomingListColumns}
-                  dataSource={roomList}
+                  dataSource={roomTotalForm}
                   pagination={false}
                   rowSelection={rowSelection}
                   size="small"
                 />
               </Col>
-              {!isCreateForm && <ReservationDetailCard />}
+              {!true && <ReservationDetailCard />}
             </Row>
           </Card>
 
@@ -312,7 +343,9 @@ function ReservationForm({
             >
               {t('reservation.Save and add more details')}
             </MButton>
-            <PattonButton htmlType="submit">{t('common.Save')}</PattonButton>
+            <PattonButton disabled={roomTotalForm.length === 0} htmlType="submit">
+              {t('common.Save')}
+            </PattonButton>
           </Col>
         )}
       </Row>

@@ -15,7 +15,7 @@ const useColumns = () => {
     },
     {
       title: t('reservation.Room Type.title'),
-      dataIndex: 'room_type',
+      dataIndex: 'room_type_text',
     },
     {
       title: t('reservation.Room No'),

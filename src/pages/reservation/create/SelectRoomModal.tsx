@@ -1,5 +1,12 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 24/09/2022
+Updated Date : 24/09/2022
+Main functions : Select Room Modal Componnent
+************************************ */
+
 import React, { useEffect } from 'react';
-// import useColumns from 'pages/reservation/create/useColumns';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Col, DatePicker, Input, Modal, Row, Select, Table } from 'antd';
@@ -18,14 +25,12 @@ interface Props {
   isModalVisible: boolean;
   quantity: number;
   roomCondition: any;
-  roomList: any;
   roomSelected: any;
   roomTotalForm: any;
   searchRoomResultState: any;
   setIsModalVisible: (data: boolean) => void;
   setQuantity: (data: any) => void;
   setRoomCondition: (data: any) => void;
-  setRoomList: (data: any) => void;
   setRoomSelected: (data: any) => void;
   setRoomTotalForm: (data: any) => void;
   setSearchRoomResultState: (data: any) => void;
@@ -36,14 +41,12 @@ function SelectRoomModal({
   isModalVisible,
   quantity,
   roomCondition,
-  roomList,
   roomSelected,
   roomTotalForm,
   searchRoomResultState,
   setIsModalVisible,
   setQuantity,
   setRoomCondition,
-  setRoomList,
   setRoomSelected,
   setRoomTotalForm,
   setSearchRoomResultState,
@@ -51,7 +54,6 @@ function SelectRoomModal({
 }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  // const { selectedRoomsResultColumns } = useColumns();
 
   const ratesResult: any = useSelector<RootState>(
     ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.rates,
@@ -190,19 +192,27 @@ function SelectRoomModal({
   };
 
   const handleOk = () => {
-    const data1 = [...roomList];
     const dataRoomTotalForm = [...roomTotalForm];
 
     roomSelected.forEach((item: any) => {
       for (let index = 0; index < item.quantity; index++) {
-        data1.push({
-          key: randomKey(5),
+        const uniqueKey = randomKey(5);
+
+        dataRoomTotalForm.push({
+          key: uniqueKey,
           status: 'Waitlist',
           name: '-',
-          room_type: item.room_type,
+          room_type_text: item.room_type,
           room_no: '-',
           ci: item.checkin,
           co: item.checkout,
+          quantity: item.quantity,
+          // Data to send API
+          room_type: roomCondition.room_type,
+          checkin_date: item.checkin,
+          checkout_date: item.checkout,
+          actual_amount: item.actual_amount,
+          charges: item.charges,
           nights: moment.duration(moment(item.checkout).diff(moment(item.checkin))).asDays(),
           adl: 2,
           child: '-',
@@ -210,21 +220,10 @@ function SelectRoomModal({
           rate: item.rate_name,
           subtotal: item.subtotal,
           deposit: '-',
-          actual_amount: item.actual_amount,
-        });
-
-        dataRoomTotalForm.push({
-          room_type: 2,
-          quantity: item.quantity,
-          checkin_date: item.checkin,
-          checkout_date: item.checkout,
-          actual_amount: item.actual_amount,
-          charges: item.charges,
         });
       }
     });
 
-    setRoomList(data1);
     setRoomTotalForm(dataRoomTotalForm);
     setIsModalVisible(false);
   };
