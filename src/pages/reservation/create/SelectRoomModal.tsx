@@ -195,33 +195,31 @@ function SelectRoomModal({
     const dataRoomTotalForm = [...roomTotalForm];
 
     roomSelected.forEach((item: any) => {
-      for (let index = 0; index < item.quantity; index++) {
-        const uniqueKey = randomKey(5);
+      const uniqueKey = randomKey(5);
 
-        dataRoomTotalForm.push({
-          key: uniqueKey,
-          status: 'Waitlist',
-          name: '-',
-          room_type_text: item.room_type,
-          room_no: '-',
-          ci: item.checkin,
-          co: item.checkout,
-          quantity: item.quantity,
-          // Data to send API
-          room_type: roomCondition.room_type,
-          checkin_date: item.checkin,
-          checkout_date: item.checkout,
-          actual_amount: item.actual_amount,
-          charges: item.charges,
-          nights: moment.duration(moment(item.checkout).diff(moment(item.checkin))).asDays(),
-          adl: 2,
-          child: '-',
-          baby: '-',
-          rate: item.rate_name,
-          subtotal: item.subtotal,
-          deposit: '-',
-        });
-      }
+      dataRoomTotalForm.push({
+        key: uniqueKey,
+        status: 'Waitlist',
+        name: '-',
+        room_type_text: item.room_type,
+        room_no: '-',
+        ci: item.checkin,
+        co: item.checkout,
+        quantity: item.quantity,
+        // Data to send API
+        room_type: roomCondition.room_type,
+        checkin_date: item.checkin,
+        checkout_date: item.checkout,
+        actual_amount: item.actual_amount,
+        charges: item.charges,
+        nights: moment.duration(moment(item.checkout).diff(moment(item.checkin))).asDays(),
+        adl: 2,
+        child: '-',
+        baby: '-',
+        rate: item.rate_name,
+        subtotal: item.subtotal,
+        deposit: '-',
+      });
     });
 
     setRoomTotalForm(dataRoomTotalForm);
