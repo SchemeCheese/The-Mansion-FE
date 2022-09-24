@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { PlusOutlined } from '@ant-design/icons';
-import { Card, Checkbox, Col, Form, Row, Select, Table } from 'antd';
+import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Card, Checkbox, Col, Form, Modal, Row, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
 import ReservationDetailCard from 'pages/reservation/component/ReservationDetailCard';
@@ -23,10 +23,13 @@ interface Props {
   onFinishFailed: any;
   reservationDetail?: any;
   reservationNumber?: number;
+  roomCondition: any;
   roomTotalForm: any;
   roomingListColumns: any;
   rowSelection: any;
+  selectedRowKeys: any;
   setIsCancelBookingModalVisible: any;
+  setRoomCondition: any;
   showModal: any;
 }
 
@@ -38,13 +41,28 @@ function ReservationForm({
   onFinishFailed,
   reservationDetail,
   reservationNumber,
+  roomCondition,
   roomingListColumns,
   roomTotalForm,
   rowSelection,
+  selectedRowKeys,
   setIsCancelBookingModalVisible,
+  setRoomCondition,
   showModal,
 }: Props) {
   const { t } = useTranslation();
+
+  const confirm = () => {
+    Modal.confirm({
+      title: 'Delete Confirm',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Do you Want to delete these items?',
+
+      onOk() {
+        deleteSelectedRoom();
+      },
+    });
+  };
 
   const totalPriceReservation = _.reduce(
     roomTotalForm,
@@ -112,9 +130,21 @@ function ReservationForm({
                     },
                   ]}
                 >
-                  <Select allowClear placeholder={t('reservation.Market.placeholder')}>
+                  <Select
+                    allowClear
+                    onChange={value =>
+                      setRoomCondition({
+                        ...roomCondition,
+                        source_type: value,
+                      })
+                    }
+                    placeholder={t('reservation.Market.placeholder')}
+                  >
                     <Option value="1">OTA</Option>
                     <Option value="2">CDT</Option>
+                    <Option value="4">CORPORATE</Option>
+                    <Option value="5">WHOLESALE</Option>
+                    <Option value="7">FIT</Option>
                   </Select>
                 </Form.Item>
                 <Form.Item
@@ -127,7 +157,16 @@ function ReservationForm({
                     },
                   ]}
                 >
-                  <Select allowClear placeholder={t('reservation.Source.placeholder')}>
+                  <Select
+                    allowClear
+                    onChange={value =>
+                      setRoomCondition({
+                        ...roomCondition,
+                        source_id: value,
+                      })
+                    }
+                    placeholder={t('reservation.Source.placeholder')}
+                  >
                     <Option value="1">Agent</Option>
                     <Option value="2">Website</Option>
                     <Option value="4">Telephone</Option>
@@ -251,7 +290,11 @@ function ReservationForm({
                   <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
                 </PattonButton>
                 {isCreateForm ? (
-                  <MButton onClick={() => deleteSelectedRoom()} style={{ marginLeft: 15 }}>
+                  <MButton
+                    disabled={selectedRowKeys.length === 0}
+                    onClick={confirm}
+                    style={{ marginLeft: 15 }}
+                  >
                     {t('common.Delete Selected')}
                   </MButton>
                 ) : (

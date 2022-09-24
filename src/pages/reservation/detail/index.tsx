@@ -347,10 +347,13 @@ function ReservationDetail() {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           reservationDetail={data123}
+          roomCondition={roomCondition}
           roomTotalForm={roomList}
           roomingListColumns={roomingListColumns}
           rowSelection={rowSelection}
+          selectedRowKeys={[]}
           setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
+          setRoomCondition={setRoomCondition}
           showModal={showModal}
         />
       )}
