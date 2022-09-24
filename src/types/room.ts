@@ -1,7 +1,9 @@
 export interface RoomSearch {
   checkin: string;
   checkout: string;
-  room_type?: string;
+  room_type: string;
+  source_id: string;
+  source_type: string;
 }
 
 export interface RoomSearchResult {

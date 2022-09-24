@@ -11,13 +11,8 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
   let charges = [];
   let rates = [];
   let total = 0;
-  const additionalPayload = {
-    ...payload,
-    source_type: 1,
-    source_id: 2,
-  };
 
-  const query = new URLSearchParams(Object(additionalPayload)).toString();
+  const query = new URLSearchParams(Object(payload)).toString();
 
   ({ charges, rates, total } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH)}?${query}`, {
     method: 'GET',

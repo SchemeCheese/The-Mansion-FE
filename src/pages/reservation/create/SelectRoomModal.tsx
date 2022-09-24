@@ -10,7 +10,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Col, DatePicker, Input, Modal, Row, Select, Table } from 'antd';
-import { randomKey } from 'helpers';
+import { formatNumber, randomKey } from 'helpers';
 import moment from 'moment';
 import TableSummary from 'pages/reservation/create/TableSummary';
 import _ from 'underscore';
@@ -95,7 +95,7 @@ function SelectRoomModal({
 
               stateTemporary[index] = {
                 ...xxx,
-                price: xy.price,
+                price: formatNumber(xy.price),
                 actual_amount: xy.price,
               };
 

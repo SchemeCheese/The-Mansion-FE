@@ -42,6 +42,8 @@ function Create() {
     checkin: '',
     checkout: '',
     room_type: '',
+    source_type: '',
+    source_id: '',
   });
   const [quantity, setQuantity] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -80,15 +82,20 @@ function Create() {
   const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
 
   const showModal = () => {
-    dispatch(searchRoomReset());
-    setRoomCondition({
-      checkin: '',
-      checkout: '',
-      room_type: '',
-    });
-    setQuantity(1);
-    setRoomSelected([]);
-    setIsModalVisible(true);
+    if (roomCondition.source_id && roomCondition.source_type) {
+      dispatch(searchRoomReset());
+      setRoomCondition({
+        ...roomCondition,
+        checkin: '',
+        checkout: '',
+        room_type: '',
+      });
+      setQuantity(1);
+      setRoomSelected([]);
+      setIsModalVisible(true);
+    } else {
+      message.warning('Please select market and source!');
+    }
   };
 
   const onFinish = (values: any) => {
@@ -192,10 +199,13 @@ function Create() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         reservationNumber={reservationNumberResult}
+        roomCondition={roomCondition}
         roomTotalForm={roomTotalForm}
         roomingListColumns={roomingListColumns}
         rowSelection={rowSelection}
+        selectedRowKeys={selectedRowKeys}
         setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
+        setRoomCondition={setRoomCondition}
         showModal={showModal}
       />
     </>
