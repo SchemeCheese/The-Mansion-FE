@@ -193,21 +193,23 @@ function Create() {
         isModalVisible={isCancelBookingModalVisible}
         setModalVisible={setIsCancelBookingModalVisible}
       />
-      <ReservationForm
-        deleteSelectedRoom={deleteSelectedRoom}
-        isCreateForm
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        reservationNumber={reservationNumberResult}
-        roomCondition={roomCondition}
-        roomTotalForm={roomTotalForm}
-        roomingListColumns={roomingListColumns}
-        rowSelection={rowSelection}
-        selectedRowKeys={selectedRowKeys}
-        setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
-        setRoomCondition={setRoomCondition}
-        showModal={showModal}
-      />
+      {reservationNumberResult && (
+        <ReservationForm
+          deleteSelectedRoom={deleteSelectedRoom}
+          isCreateForm
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          reservationNumber={reservationNumberResult}
+          roomCondition={roomCondition}
+          roomTotalForm={roomTotalForm}
+          roomingListColumns={roomingListColumns}
+          rowSelection={rowSelection}
+          selectedRowKeys={selectedRowKeys}
+          setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
+          setRoomCondition={setRoomCondition}
+          showModal={showModal}
+        />
+      )}
     </>
   );
 }
