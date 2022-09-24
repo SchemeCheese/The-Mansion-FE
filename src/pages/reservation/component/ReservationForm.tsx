@@ -22,7 +22,7 @@ interface Props {
   onFinish: any;
   onFinishFailed: any;
   reservationDetail?: any;
-  reservationNumber?: number;
+  reservationNumber: number;
   roomCondition: any;
   roomTotalForm: any;
   roomingListColumns: any;

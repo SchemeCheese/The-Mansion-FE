@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Checkbox, Col, Row, Select, Space } from 'antd';
 import { formatNumber } from 'helpers';
+import moment from 'moment';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -167,10 +168,13 @@ function ReservationDetail() {
           status: 'Waitlist',
           name: '-',
           room_type: item.equipment_type_id,
+          room_type_text: item.room_type_text,
           room_no: '-',
           ci: item.arrival_date,
           co: item.departure_date,
-          nights: 1,
+          nights: moment
+            .duration(moment(item.departure_date).diff(moment(item.arrival_date)))
+            .asDays(),
           adl: 2,
           child: '-',
           baby: '-',
@@ -347,6 +351,7 @@ function ReservationDetail() {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           reservationDetail={data123}
+          reservationNumber={data123.reservation_number}
           roomCondition={roomCondition}
           roomTotalForm={roomList}
           roomingListColumns={roomingListColumns}
