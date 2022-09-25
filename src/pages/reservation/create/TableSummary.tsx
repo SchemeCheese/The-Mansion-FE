@@ -64,7 +64,7 @@ function TableSummary({
     <Table.Summary fixed>
       <Table.Summary.Row>
         <Table.Summary.Cell colSpan={2} index={0}>
-          Total Amount (VND)
+          Total Amount for each room (VND)
         </Table.Summary.Cell>
         <Table.Summary.Cell colSpan={5} index={1}>
           <span style={{ fontSize: 16 }}>{formatNumber(totalAmount)}</span>
