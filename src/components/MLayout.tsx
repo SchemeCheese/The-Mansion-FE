@@ -129,7 +129,7 @@ function MLayout(props: Props) {
               }}
             >
               {' '}
-              The Mansion{' '}
+              The Mansions{' '}
             </span>
           )}
         </div>
