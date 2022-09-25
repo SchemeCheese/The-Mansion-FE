@@ -92,6 +92,7 @@ function ReservationForm({
         booker_email_2: reservationDetail?.booker?.email_address2,
         booker_phone_number: reservationDetail?.booker?.telephone_number1,
         booker_rank: reservationDetail?.booker?.client_rank.toString(),
+        booker_note: reservationDetail?.note_sale,
       }}
       labelCol={{
         span: 24,
@@ -167,13 +168,14 @@ function ReservationForm({
                     }
                     placeholder={t('reservation.Source.placeholder')}
                   >
-                    <Option value="1">Agent</Option>
-                    <Option value="2">Website</Option>
-                    <Option value="4">Telephone</Option>
-                    <Option value="8">Fax</Option>
-                    <Option value="16">Email</Option>
-                    <Option value="32">Walkin</Option>
-                    <Option value="28">Direct</Option>
+                    <Option value="1">Booking.com</Option>
+                    <Option value="2">Agoda</Option>
+                    <Option value="3">Airbnb</Option>
+                    <Option value="4">Ctrip</Option>
+                    <Option value="5">Vntrip</Option>
+                    <Option value="6">Traveloka</Option>
+                    <Option value="7">Expedia</Option>
+                    <Option value="8">Rakuten</Option>
                   </Select>
                 </Form.Item>
               </Col>
