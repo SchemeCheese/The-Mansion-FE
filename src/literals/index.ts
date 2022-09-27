@@ -24,6 +24,8 @@ export const ActionTypes = keyMirror({
   RESERVATION_UPDATE: undefined,
   RESERVATION_UPDATE_SUCCESS: undefined,
   RESERVATION_UPDATE_FAILURE: undefined,
+  RESERVATION_GET: undefined,
+  RESERVATION_GET_FINISH: undefined,
   RESERVATION_GET_DETAIL: undefined,
   RESERVATION_GET_DETAIL_FINISH: undefined,
   RESERVATION_NUMBER_GET: undefined,

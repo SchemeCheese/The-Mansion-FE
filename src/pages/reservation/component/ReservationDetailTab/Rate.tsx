@@ -8,6 +8,7 @@ Main functions : Rate Tab
 
 import React from 'react';
 import { Col, Input, Row, Table } from 'antd';
+import { formatNumber } from 'helpers';
 
 import { colors } from 'modules/theme';
 
@@ -43,8 +44,8 @@ const columns = [
     title: 'Update Price',
     dataIndex: 'update_price',
     key: 'update_price',
-    render: () => {
-      return <Input style={{ width: 100 }} />;
+    render: (text: string) => {
+      return <Input style={{ width: 100 }} value={text} />;
     },
   },
   {
@@ -61,21 +62,23 @@ const columns = [
   },
 ];
 
-const data: object[] = [];
-
-for (let index = 0; index < 5; index++) {
-  data.push({
-    date: '2022-01-02',
-    room_type: 'Premium Alex',
-    rate_name: 'AA',
-    rate_detail: 'BB',
-    unit_price: 'VND',
-    update_price: 'a',
-    task: 'aa',
-  });
+interface Props {
+  rates: any;
 }
 
-function Rate() {
+function Rate({ rates }: Props) {
+  const data = rates.map((item: any) => {
+    return {
+      date: item.use_date,
+      room_type: item.room_type_text,
+      rate_name: item.rate_name,
+      rate_detail: item.rate_detail,
+      unit_price: formatNumber(item.actual_amount),
+      update_price: item.actual_amount,
+      task: 'aa',
+    };
+  });
+
   return (
     <Row justify="end" style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
       <Col span={24}>

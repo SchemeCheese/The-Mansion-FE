@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Card, Checkbox, Col, Form, Modal, Row, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
@@ -9,9 +10,13 @@ import _ from 'underscore';
 
 import { colors } from 'modules/theme';
 
+import { getReservationDetail } from 'actions';
+
 import MButton from 'components/MButton';
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
+
+import { RootState } from 'types';
 
 const { Option } = Select;
 
@@ -51,6 +56,13 @@ function ReservationForm({
   showModal,
 }: Props) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const reservationDetailInfo: any = useSelector<RootState>(
+    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
+  );
+
+  console.log('3211', reservationDetailInfo);
 
   const confirm = () => {
     Modal.confirm({
@@ -72,28 +84,37 @@ function ReservationForm({
     0,
   );
 
+  const [form] = Form.useForm();
+
+  form.setFieldsValue({
+    reservation_number: reservationNumber,
+  });
+
+  if (reservationDetail) {
+    form.setFieldsValue({
+      paid: true,
+      send_mail: true,
+      no_show: true,
+      market_segment_id: reservationDetail?.market_segment_id.toString(),
+      path_of_reservation: reservationDetail?.path_of_reservation.toString(),
+      external_reservation_number: reservationDetail?.external_reservation_number,
+      note: reservationDetail?.note,
+      booker_type: reservationDetail?.booker?.client_kind?.toString(),
+      booker_firstname: reservationDetail?.booker?.first_name,
+      booker_lastname: reservationDetail?.booker?.last_name,
+      booker_email: reservationDetail?.booker?.email_address1,
+      booker_email_2: reservationDetail?.booker?.email_address2,
+      booker_phone_number: reservationDetail?.booker?.telephone_number1,
+      booker_rank: reservationDetail?.booker?.client_rank.toString(),
+      booker_note: reservationDetail?.note_sale,
+    });
+  }
+
   return (
     <Form
       ref={formRef}
       autoComplete="off"
-      initialValues={{
-        reservation_number: reservationNumber,
-        paid: true,
-        send_mail: true,
-        no_show: true,
-        market_segment_id: reservationDetail?.market_segment_id.toString(),
-        path_of_reservation: reservationDetail?.path_of_reservation.toString(),
-        external_reservation_number: reservationDetail?.external_reservation_number,
-        note: reservationDetail?.note,
-        booker_type: reservationDetail?.booker?.client_kind.toString(),
-        booker_firstname: reservationDetail?.booker?.first_name,
-        booker_lastname: reservationDetail?.booker?.last_name,
-        booker_email: reservationDetail?.booker?.email_address1,
-        booker_email_2: reservationDetail?.booker?.email_address2,
-        booker_phone_number: reservationDetail?.booker?.telephone_number1,
-        booker_rank: reservationDetail?.booker?.client_rank.toString(),
-        booker_note: reservationDetail?.note_sale,
-      }}
+      form={form}
       labelCol={{
         span: 24,
       }}
@@ -113,10 +134,7 @@ function ReservationForm({
                 <Form.Item label={t('reservation.Folio ID')} name="reservation_number">
                   <MInput disabled />
                 </Form.Item>
-                <Form.Item
-                  label={t('reservation.OTA Booking ID.title')}
-                  name="external_reservation_number"
-                >
+                <Form.Item label={t('reservation.OTA Booking ID.title')}>
                   <MInput placeholder={t('reservation.OTA Booking ID.placeholder')} />
                 </Form.Item>
               </Col>
@@ -317,12 +335,28 @@ function ReservationForm({
                 <Table
                   columns={roomingListColumns}
                   dataSource={roomTotalForm}
+                  onRow={(record: any) => {
+                    return {
+                      onClick: () => {
+                        if (record.reservation_detail_id) {
+                          dispatch(
+                            getReservationDetail({
+                              reservation_id: reservationDetail.id,
+                              reservation_detail_id: record.reservation_detail_id,
+                            }),
+                          );
+                        }
+                      },
+                    };
+                  }}
                   pagination={false}
                   rowSelection={rowSelection}
                   size="small"
                 />
               </Col>
-              {!true && <ReservationDetailCard />}
+              {!_.isEmpty(reservationDetailInfo) && (
+                <ReservationDetailCard reservationDetail={reservationDetailInfo} />
+              )}
             </Row>
           </Card>
 

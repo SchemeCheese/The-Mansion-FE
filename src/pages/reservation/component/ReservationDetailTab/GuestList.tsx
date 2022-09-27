@@ -13,61 +13,32 @@ import CreateGuestModal from 'pages/reservation/modal/CreateGuestModal';
 
 const { Text, Title } = Typography;
 
-const data = [
-  {
-    name: 'Wei Fang',
-    check: true,
-    id: '330212198903214921',
-    nationality: 'China',
-    place_of_issue: 'China',
-    date: '2017-07-17',
-    expire: '2017-07-17',
-  },
-  {
-    name: 'Serati Ma',
-    id: '330212198903214921',
-    check: false,
-    nationality: 'China',
-    place_of_issue: 'China',
-    date: '2017-07-17',
-    expire: '2017-07-17',
-  },
-  {
-    name: 'Kenneth Chan',
-    id: '330212198903214921',
-    check: false,
-    nationality: 'China',
-    place_of_issue: 'China',
-    date: '2017-07-17',
-    expire: '2017-07-17',
-  },
-  {
-    name: 'Joey Tang',
-    id: '330212198903214921',
-    check: false,
-    nationality: 'China',
-    place_of_issue: 'China',
-    date: '2017-07-17',
-    expire: '2017-07-17',
-  },
-  {
-    name: 'Ken Ng',
-    id: '330212198903214921',
-    check: false,
-    nationality: 'China',
-    place_of_issue: 'China',
-    date: '2017-07-17',
-    expire: '2017-07-17',
-  },
-];
+interface Props {
+  guests: any;
+}
 
-function GuestList() {
+function GuestList({ guests }: Props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { t } = useTranslation();
 
   const showModal = () => {
     setIsModalVisible(true);
   };
+
+  const data = guests.map((item: any) => {
+    console.log('Iteeeemm', item);
+
+    return {
+      key: item.id,
+      name: item.name,
+      id: item.id,
+      check: false,
+      nationality: item.nationality,
+      place_of_issue: item.place_of_issue,
+      date: item.date,
+      expire: item.expire,
+    };
+  });
 
   return (
     <>
@@ -112,7 +83,7 @@ function GuestList() {
             </p>
           </div>
         </Col>
-        {data.map(value => (
+        {data.map((value: any) => (
           <Col span={8}>
             <Card
               actions={[

@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Checkbox, Col, Row, Select, Space } from 'antd';
+import { Checkbox, Col, message, Row, Select, Space } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
@@ -20,10 +20,14 @@ import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 // import TableSummary from 'components/TableSummary';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
+import { selectUpdateReservation } from 'selectors';
 import styled from 'styled-components';
+import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
 
-import { getReservationDetail, searchRoomReset } from 'actions';
+import { useAppSelector } from 'modules/hooks';
+
+import { getReservation, searchRoomReset, updateReservation } from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
@@ -124,7 +128,7 @@ function ReservationDetail() {
   // const [dataState, setDataState] = useState();
   const dispatch = useDispatch();
   const data123: any = useSelector<RootState>(
-    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
+    ({ getReservation: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
   /** Response from API */
   const searchRoomsResult: any = useSelector<RootState>(
@@ -140,10 +144,14 @@ function ReservationDetail() {
 
   useEffect(() => {
     dispatch(
-      getReservationDetail({
-        id: id ?? '',
+      getReservation({
+        reservation_id: id ?? '',
       }),
     );
+
+    return function cleanup() {
+      console.log('Cleanup Detail');
+    };
   }, []);
 
   useEffect(() => {
@@ -165,6 +173,7 @@ function ReservationDetail() {
 
       data123.rooms.forEach((item: any) => {
         xx.push({
+          reservation_detail_id: item.id,
           status: 'Waitlist',
           name: '-',
           room_type: item.equipment_type_id,
@@ -221,9 +230,43 @@ function ReservationDetail() {
   const formRef: any = React.createRef();
 
   const submitUpdateForm = (e: any) => {
+    const formValues = formRef.current?.getFieldsValue();
+
+    console.log('formValues ', formValues);
+
+    dispatch(
+      updateReservation({
+        payload: {
+          reservation_id: id,
+          booker_email: formValues.booker_email,
+          booker_email_2: formValues.booker_email_2,
+          booker_firstname: formValues.booker_firstname,
+          booker_lastname: formValues.booker_lastname,
+          booker_note: formValues.booker_note,
+          booker_phone_number: formValues.booker_phone_number,
+          booker_rank: formValues.booker_rank,
+          booker_type: formValues.booker_type,
+          market_segment_id: formValues.market_segment_id,
+          path_of_reservation: formValues.path_of_reservation,
+          // payment_method: '1',
+          reservation_number: formValues.reservation_number,
+          rooms: [],
+          note: formValues.note,
+        },
+      }),
+    );
+
     console.log('EEEE ', e);
-    formRef.current?.submit();
   };
+
+  const updateReservationData = useAppSelector(selectUpdateReservation);
+  const { changed } = useTreeChanges(updateReservationData);
+
+  useEffect(() => {
+    if (changed('status', 'SUCCESS')) {
+      message.success('Update reservation successfully!');
+    }
+  }, [changed]);
 
   return (
     <>

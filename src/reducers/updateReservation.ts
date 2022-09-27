@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { createReservation, createReservationSuccess } from 'actions';
+import { updateReservation, updateReservationSuccess } from 'actions';
 
 import { CreateReservationState } from 'types';
 
@@ -29,11 +29,11 @@ export const updateReservationState = {
 export default {
   updateReservation: createReducer<CreateReservationState>(updateReservationState, builder => {
     builder
-      .addCase(createReservation, (draft, { payload }) => {
+      .addCase(updateReservation, (draft, { payload }) => {
         draft.payload = payload.payload;
         draft.status = 'INIT';
       })
-      .addCase(createReservationSuccess, draft => {
+      .addCase(updateReservationSuccess, draft => {
         draft.status = 'SUCCESS';
       });
   }),
