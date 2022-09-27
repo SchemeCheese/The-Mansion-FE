@@ -69,3 +69,7 @@ export const getReservationFinish = createAction(
   ActionTypes.RESERVATION_GET_FINISH,
   (payload: GetReservationFinishPayload) => actionPayload(payload),
 );
+
+export const resetReservation = createAction(ActionTypes.RESERVATION_RESET);
+
+export const resetReservationDetail = createAction(ActionTypes.RESERVATION_GET_DETAIL_RESET);

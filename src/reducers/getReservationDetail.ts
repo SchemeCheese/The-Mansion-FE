@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { getReservationDetail, getReservationDetailFinish } from 'actions';
+import { getReservationDetail, getReservationDetailFinish, resetReservationDetail } from 'actions';
 
 import { ReservationDetailState } from 'types';
 
@@ -22,6 +22,12 @@ export default {
       .addCase(getReservationDetailFinish, (draft, { payload }) => {
         draft.data = payload.data;
         draft.is_finish = true;
+      })
+      .addCase(resetReservationDetail, draft => {
+        draft.reservation_id = '';
+        draft.reservation_detail_id = '';
+        draft.is_finish = false;
+        draft.data = {};
       });
   }),
 };

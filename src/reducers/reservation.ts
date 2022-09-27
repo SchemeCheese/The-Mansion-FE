@@ -16,8 +16,6 @@ export default {
   reservation: createReducer<ReservationSearchState>(reservationSearchState, builder => {
     builder
       .addCase(searchReservation, (draft, { payload }) => {
-        console.log('searchReservation Reduce');
-
         draft.booker_info = payload.booker_info ?? '';
         draft.is_searching = true;
       })

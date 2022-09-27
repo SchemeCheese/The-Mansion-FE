@@ -27,7 +27,13 @@ import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { getReservation, searchRoomReset, updateReservation } from 'actions';
+import {
+  getReservation,
+  resetReservation,
+  resetReservationDetail,
+  searchRoomReset,
+  updateReservation,
+} from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
@@ -150,7 +156,8 @@ function ReservationDetail() {
     );
 
     return function cleanup() {
-      console.log('Cleanup Detail');
+      dispatch(resetReservationDetail());
+      dispatch(resetReservation());
     };
   }, []);
 
