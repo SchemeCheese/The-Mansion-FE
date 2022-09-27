@@ -1,6 +1,7 @@
 import alerts, { alertsState } from './alerts';
 import app, { appState } from './app';
 import createReservation, { createReservationState } from './createReservation';
+import getReservation, { getReservationState } from './getReservation';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
 import getRoomType, { roomTypeState } from './getRoomType';
@@ -24,6 +25,7 @@ export const initialState = {
   product: productSearchState,
   getReservationNumber: reservationNumberState,
   getRoomType: roomTypeState,
+  getReservation: getReservationState,
 };
 
 export default {
@@ -39,4 +41,5 @@ export default {
   ...product,
   ...getReservationNumber,
   ...getRoomType,
+  ...getReservation,
 };

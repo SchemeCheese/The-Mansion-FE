@@ -15,8 +15,14 @@ const { TabPane } = Tabs;
 const { Option } = Select;
 const format = 'HH:mm';
 
-function ReservationDetailCard() {
+interface Props {
+  reservationDetail: any;
+}
+
+function ReservationDetailCard({ reservationDetail }: Props) {
   const { t } = useTranslation();
+
+  console.log('reservationDetailInfo', reservationDetail);
 
   return (
     <Col span={24} style={{ marginTop: 20 }}>
@@ -281,13 +287,13 @@ function ReservationDetailCard() {
           </Row>
         </TabPane>
         <TabPane key="2" tab={t('reservation.Rates')}>
-          <Rate />
+          <Rate rates={reservationDetail.charges} />
         </TabPane>
         <TabPane key="3" tab={t('reservation.Schedule')}>
           <Schedule />
         </TabPane>
         <TabPane key="4" tab={t('reservation.Guest List')}>
-          <GuestList />
+          <GuestList guests={reservationDetail.guests} />
         </TabPane>
         <TabPane key="5" tab={t('reservation.Transactions')}>
           <Transaction />

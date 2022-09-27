@@ -19,6 +19,7 @@ export interface ReservationPayload {
   booker_email: string;
   booker_email_2?: string;
   booker_firstname: string;
+  booker_lastname?: string;
   booker_note?: string;
   booker_phone_number: string;
   booker_rank: string;
@@ -30,9 +31,18 @@ export interface ReservationPayload {
   paid?: string;
   path_of_reservation: string;
   payment_method?: string;
+  reservation_id?: number | string;
   reservation_number: string;
   rooms: any;
   send_mail?: string;
+}
+
+export interface GetReservationPayload {
+  reservation_id: string;
+}
+
+export interface GetReservationFinishPayload {
+  data: Array<Record<string, any>>;
 }
 
 export interface ReservationSearchResult {
@@ -56,7 +66,8 @@ export interface ReservationNumberResult {
 }
 
 export interface ReservationDetail {
-  id: string;
+  reservation_detail_id: string;
+  reservation_id: string;
 }
 
 export interface ReservationDetailFinish {

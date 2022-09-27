@@ -5,6 +5,8 @@ import { actionPayload } from 'modules/helpers';
 import { ActionTypes } from 'literals';
 
 import {
+  GetReservationFinishPayload,
+  GetReservationPayload,
   ReservationCreate,
   ReservationDetail,
   ReservationDetailFinish,
@@ -56,4 +58,14 @@ export const getReservationDetail = createAction(
 export const getReservationDetailFinish = createAction(
   ActionTypes.RESERVATION_GET_DETAIL_FINISH,
   (payload: ReservationDetailFinish) => actionPayload(payload),
+);
+
+export const getReservation = createAction(
+  ActionTypes.RESERVATION_GET,
+  (payload: GetReservationPayload) => actionPayload(payload),
+);
+
+export const getReservationFinish = createAction(
+  ActionTypes.RESERVATION_GET_FINISH,
+  (payload: GetReservationFinishPayload) => actionPayload(payload),
 );

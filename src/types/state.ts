@@ -90,8 +90,15 @@ export interface CreateReservationState {
 
 export interface ReservationDetailState {
   data: Record<string, any>;
-  id: string;
   is_finish: boolean;
+  reservation_detail_id: string;
+  reservation_id: string;
+}
+
+export interface GetReservationState {
+  data: Record<string, any>;
+  is_finish: boolean;
+  reservation_id: string;
 }
 
 export interface ReservationTypeState {
@@ -113,6 +120,7 @@ export interface RootState {
   alerts: AlertsState;
   app: AppState;
   createReservation: CreateReservationState;
+  getReservation: GetReservationState;
   getReservationDetail: ReservationDetailState;
   getReservationNumber: ReservationNumberState;
   getRoomType: RoomTypeState;
@@ -120,6 +128,7 @@ export interface RootState {
   product: ProductSearchState;
   reservation: ReservationSearchState;
   searchRoom: RoomSearchState;
+  updateReservation: CreateReservationState;
   user: UserState;
 }
 

@@ -21,3 +21,8 @@ export const selectCreateReservation = createSelector(
   (state: RootState) => state.createReservation,
   createReservation => createReservation,
 );
+
+export const selectUpdateReservation = createSelector(
+  (state: RootState) => state.updateReservation,
+  updateReservation => updateReservation,
+);

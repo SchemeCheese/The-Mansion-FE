@@ -8,8 +8,10 @@ import { ActionTypes } from 'literals';
 import {
   createReservation,
   createReservationSuccess,
+  getReservation,
   getReservationDetail,
   getReservationDetailFinish,
+  getReservationFinish,
   getReservationNumber,
   getReservationNumberFinish,
   searchReservation,
@@ -65,17 +67,21 @@ export function* postCreateReservationSaga({ payload }: ReturnType<typeof create
 export function* postUpdateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
   let success = '';
 
-  ({ success } = yield call(request, apiEndPoint(ReservationEndpoint.UPDATE), {
-    method: 'POST',
-    headers: headerWithAuthorization(),
-    body: {
-      ...payload.payload,
-      online_reservation: true,
-      branch_code: 'the_mansion',
-      operator_code: 'the_mansion',
-      facility_code: 'hotel',
+  ({ success } = yield call(
+    request,
+    apiEndPoint(`${ReservationEndpoint.UPDATE}/${payload.payload.reservation_id}/update`),
+    {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        online_reservation: true,
+        branch_code: 'the_mansion',
+        operator_code: 'the_mansion',
+        facility_code: 'hotel',
+      },
     },
-  }));
+  ));
 
   if (success) {
     yield put(updateReservationSuccess());
@@ -87,12 +93,35 @@ export function* getReservationDetailSaga({ payload }: ReturnType<typeof getRese
 
   // const query = new URLSearchParams(Object(payload)).toString();
 
-  ({ data } = yield call(request, `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${payload.id}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  }));
+  ({ data } = yield call(
+    request,
+    `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${
+      payload.reservation_id
+    }/get-reservation-detail/${payload.reservation_detail_id}`,
+    {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    },
+  ));
 
   yield put(getReservationDetailFinish({ data }));
+}
+
+export function* getReservationSaga({ payload }: ReturnType<typeof getReservation>) {
+  let data = [];
+
+  console.log('7777');
+
+  ({ data } = yield call(
+    request,
+    `${apiEndPoint(ReservationEndpoint.DETAIL)}/${payload.reservation_id}`,
+    {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    },
+  ));
+
+  yield put(getReservationFinish({ data }));
 }
 
 export function* getReservationNumberSaga({ payload }: ReturnType<typeof getReservationNumber>) {
@@ -121,5 +150,6 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_UPDATE, postUpdateReservationSaga),
     takeLatest(ActionTypes.RESERVATION_GET_DETAIL, getReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_NUMBER_GET, getReservationNumberSaga),
+    takeLatest(ActionTypes.RESERVATION_GET, getReservationSaga),
   ]);
 }
