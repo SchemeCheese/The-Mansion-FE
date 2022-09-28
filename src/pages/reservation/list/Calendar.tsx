@@ -6,6 +6,7 @@ Updated Date : 04/09/2022
 Main functions : Calendar Tab
 ************************************ */
 
+/* Demo: https://github.com/fullcalendar/fullcalendar-example-projects/tree/master/react-typescript */
 /* eslint simple-import-sort/imports: 0 */
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import timeGridPlugin from '@fullcalendar/timegrid';

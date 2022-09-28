@@ -6,8 +6,8 @@ Updated Date : 18/09/2022
 Main functions : Schedule Tab
 ************************************ */
 
+/* Demo: https://github.com/fullcalendar/fullcalendar-example-projects/tree/master/react-typescript */
 /* eslint simple-import-sort/imports: 0 */
-
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FullCalendar, {
@@ -57,6 +57,7 @@ function Schedule() {
         start: selectInfo.startStr,
         end: selectInfo.endStr,
         allDay: selectInfo.allDay,
+        resourceId: 'd',
       });
     }
   };
