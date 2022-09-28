@@ -192,7 +192,7 @@ function ReservationList({ type }: Props) {
         }
 
         if (alert.length > 0) {
-          return <div style={{ minWidth: 0, lineHeight: '27px' }}>{alert}</div>;
+          return <div style={{ minWidth: 0 }}>{alert}</div>;
         }
 
         return <div style={{ textAlign: 'center' }}>{text ?? '-'}</div>;
