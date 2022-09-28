@@ -91,13 +91,11 @@ export function* postUpdateReservationSaga({ payload }: ReturnType<typeof create
 export function* getReservationDetailSaga({ payload }: ReturnType<typeof getReservationDetail>) {
   let data = [];
 
-  // const query = new URLSearchParams(Object(payload)).toString();
-
   ({ data } = yield call(
     request,
-    `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${
-      payload.reservation_id
-    }/get-reservation-detail/${payload.reservation_detail_id}`,
+    `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${payload.reservation_id}/reservation-detail/${
+      payload.reservation_detail_id
+    }/show`,
     {
       method: 'GET',
       headers: headerWithAuthorization(),
@@ -109,8 +107,6 @@ export function* getReservationDetailSaga({ payload }: ReturnType<typeof getRese
 
 export function* getReservationSaga({ payload }: ReturnType<typeof getReservation>) {
   let data = [];
-
-  console.log('7777');
 
   ({ data } = yield call(
     request,
