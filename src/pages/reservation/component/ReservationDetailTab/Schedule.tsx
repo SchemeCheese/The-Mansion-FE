@@ -8,6 +8,7 @@ Main functions : Schedule Tab
 
 /* Demo: https://github.com/fullcalendar/fullcalendar-example-projects/tree/master/react-typescript */
 /* eslint simple-import-sort/imports: 0 */
+/* eslint no-underscore-dangle: 0 */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import FullCalendar, {
@@ -45,21 +46,18 @@ function Schedule() {
   const { t } = useTranslation();
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
-    const title = prompt('Please enter a new title for your event');
     const calendarApi = selectInfo.view.calendar;
 
     calendarApi.unselect(); // clear date selection
 
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-        resourceId: 'd',
-      });
-    }
+    calendarApi.addEvent({
+      id: createEventId(),
+      title: 'Minh NV - Agoda',
+      start: selectInfo.startStr,
+      end: selectInfo.endStr,
+      allDay: selectInfo.allDay,
+      resourceId: selectInfo.resource?._resource.id,
+    });
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
@@ -74,6 +72,24 @@ function Schedule() {
       currentEvents: events,
     });
   };
+
+  const resources = [
+    { id: 'a', title: '102', occupancy: 'Superior' },
+    { id: 'b', title: '103', occupancy: 'Superior' },
+    { id: 'c', title: '104', occupancy: 'Superior' },
+    { id: 'd', title: '105', occupancy: 'Superior' },
+    { id: 'e', title: '106', occupancy: 'Deluxe' },
+    { id: 'f', title: '107', occupancy: 'Deluxe' },
+    { id: 'g', title: '108', occupancy: 'Deluxe' },
+    { id: 'h', title: '109', occupancy: 'Deluxe' },
+    { id: 'i', title: '110', occupancy: 'Deluxe' },
+    { id: 'j', title: '111', occupancy: 'Deluxe' },
+    { id: 'k', title: '112', occupancy: 'Family' },
+    { id: 'l', title: '113', occupancy: 'Family' },
+    { id: 'm', title: '114', occupancy: 'Family' },
+    { id: 'n', title: '115', occupancy: 'Family' },
+    { id: 'o', title: '116', occupancy: 'Family' },
+  ];
 
   return (
     <Row style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
@@ -201,7 +217,7 @@ function Schedule() {
             right: '',
           }}
           initialEvents={INITIAL_EVENTS}
-          initialView="timeGridMonthly"
+          initialView="timeGridWeekly"
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
           resourceAreaColumns={[
             {
@@ -213,31 +229,20 @@ function Schedule() {
               headerContent: 'Room Type',
             },
           ]}
-          resources={[
-            { id: 'a', title: '102', occupancy: 'Superior' },
-            { id: 'b', title: '103', occupancy: 'Superior' },
-            { id: 'c', title: '104', occupancy: 'Superior' },
-            { id: 'd', title: '105', occupancy: 'Superior' },
-            { id: 'e', title: '106', occupancy: 'Deluxe' },
-            { id: 'f', title: '107', occupancy: 'Deluxe' },
-            { id: 'g', title: '108', occupancy: 'Deluxe' },
-            { id: 'h', title: '109', occupancy: 'Deluxe' },
-            { id: 'i', title: '110', occupancy: 'Deluxe' },
-            { id: 'j', title: '111', occupancy: 'Deluxe' },
-            { id: 'k', title: '112', occupancy: 'Family' },
-            { id: 'l', title: '113', occupancy: 'Family' },
-            { id: 'm', title: '114', occupancy: 'Family' },
-            { id: 'n', title: '115', occupancy: 'Family' },
-            { id: 'o', title: '116', occupancy: 'Family' },
-          ]}
+          resources={resources}
           select={handleDateSelect}
-          selectMirror // alternatively, use the `events` setting to fetch from a feed
+          selectConstraint={{
+            start: moment().format('YYYY-MM-DD'),
+            end: moment().add(2, 'days').format('YYYY-MM-DD'),
+          }} // alternatively, use the `events` setting to fetch from a feed
+          selectMirror
           selectable
           titleFormat={{
             month: 'short',
             year: 'numeric',
             day: 'numeric',
           }}
+          // initialDate={'2022-10-01'}
           viewClassNames="calendar-table"
           views={{
             timeGridMonthly: {

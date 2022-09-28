@@ -271,6 +271,12 @@ function ReservationDetail() {
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
       message.success('Update reservation successfully!');
+
+      dispatch(
+        getReservation({
+          reservation_id: id ?? '',
+        }),
+      );
     }
   }, [changed]);
 
