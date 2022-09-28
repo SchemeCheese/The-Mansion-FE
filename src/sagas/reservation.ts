@@ -6,6 +6,8 @@ import { ReservationEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import {
+  bookRoom,
+  bookRoomSuccess,
   createReservation,
   createReservationSuccess,
   getReservation,
@@ -16,6 +18,8 @@ import {
   getReservationNumberFinish,
   searchReservation,
   searchReservationFinish,
+  updateRate,
+  updateRateSuccess,
   updateReservationSuccess,
 } from 'actions';
 
@@ -139,6 +143,49 @@ export function* getReservationNumberSaga({ payload }: ReturnType<typeof getRese
   }
 }
 
+export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) {
+  let success = '';
+
+  ({ success } = yield call(
+    request,
+    `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
+      payload.payload.reservation_id
+    }/reservation-detail/${payload.payload.reservation_detail_id}/update-rate`,
+    {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        operator_code: 'the_mansion',
+      },
+    },
+  ));
+
+  if (success) {
+    yield put(updateRateSuccess());
+  }
+}
+
+export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
+  let success = '';
+
+  ({ success } = yield call(request, apiEndPoint(ReservationEndpoint.BOOK_ROOM), {
+    method: 'POST',
+    headers: headerWithAuthorization(),
+    body: {
+      ...payload.payload,
+      online_reservation: true,
+      branch_code: 'the_mansion',
+      operator_code: 'the_mansion',
+      facility_code: 'hotel',
+    },
+  }));
+
+  if (success) {
+    yield put(bookRoomSuccess());
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
@@ -147,5 +194,7 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_GET_DETAIL, getReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_NUMBER_GET, getReservationNumberSaga),
     takeLatest(ActionTypes.RESERVATION_GET, getReservationSaga),
+    takeLatest(ActionTypes.RESERVATION_RATE_UPDATE, postUpdateRateSaga),
+    takeLatest(ActionTypes.RESERVATION_BOOK_ROOM, postBookRoomSaga),
   ]);
 }

@@ -25,6 +25,8 @@ export const ReservationEndpoint = {
   DETAIL: 'api/v1/reservations',
   GET_DETAIL: 'api/v1/reservations',
   GET_RESERVATION_NUMBER: 'api/v1/reservation-numbers/create',
+  UPDATE_RATE: 'api/v1/reservations',
+  BOOK_ROOM: 'api/v1/reservations',
 };
 
 export const RoomEndpoint = {

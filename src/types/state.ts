@@ -83,8 +83,28 @@ export interface CreateReservationPayload {
   send_mail?: string;
 }
 
+export interface UpdateRatePayload {
+  charges: Array<Record<string, any>>;
+  reservation_detail_id: string;
+  reservation_id: string;
+}
+
+export interface BookRoomPayload {
+  id: string;
+}
+
 export interface CreateReservationState {
   payload: CreateReservationPayload;
+  status: string;
+}
+
+export interface UpdateRateState {
+  payload: UpdateRatePayload;
+  status: string;
+}
+
+export interface BookRoomState {
+  payload: BookRoomPayload;
   status: string;
 }
 
@@ -126,6 +146,7 @@ export interface RootState {
   agentInfos: AgentInfosState;
   alerts: AlertsState;
   app: AppState;
+  bookRoom: BookRoomState;
   createReservation: CreateReservationState;
   getReservation: GetReservationState;
   getReservationDetail: ReservationDetailState;
@@ -135,6 +156,7 @@ export interface RootState {
   product: ProductSearchState;
   reservation: ReservationSearchState;
   searchRoom: RoomSearchState;
+  updateRate: UpdateRateState;
   updateReservation: CreateReservationState;
   user: UserState;
 }

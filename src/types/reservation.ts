@@ -55,6 +55,24 @@ export interface ReservationCreate {
   payload: ReservationPayload;
 }
 
+export interface ReservationUpdateRatePayload {
+  charges: Array<Record<string, any>>;
+  reservation_detail_id: string;
+  reservation_id: string;
+}
+
+export interface UpdateRate {
+  payload: ReservationUpdateRatePayload;
+}
+
+export interface ReservationBookRoomPayload {
+  id: string;
+}
+
+export interface BookRoom {
+  payload: ReservationBookRoomPayload;
+}
+
 export interface ReservationNumberGetPayload {
   branch_code: string;
   facility_code: string;

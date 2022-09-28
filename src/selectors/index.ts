@@ -26,3 +26,8 @@ export const selectUpdateReservation = createSelector(
   (state: RootState) => state.updateReservation,
   updateReservation => updateReservation,
 );
+
+export const selectUpdateRate = createSelector(
+  (state: RootState) => state.updateRate,
+  updateRate => updateRate,
+);
