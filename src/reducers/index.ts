@@ -1,3 +1,4 @@
+import agentInfos, { agentInfosState } from './agentInfos';
 import alerts, { alertsState } from './alerts';
 import app, { appState } from './app';
 import createReservation, { createReservationState } from './createReservation';
@@ -26,6 +27,7 @@ export const initialState = {
   getReservationNumber: reservationNumberState,
   getRoomType: roomTypeState,
   getReservation: getReservationState,
+  agentInfos: agentInfosState,
 };
 
 export default {
@@ -42,4 +44,5 @@ export default {
   ...getReservationNumber,
   ...getRoomType,
   ...getReservation,
+  ...agentInfos,
 };

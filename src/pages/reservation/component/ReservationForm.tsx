@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
@@ -10,7 +10,7 @@ import _ from 'underscore';
 
 import { colors } from 'modules/theme';
 
-import { getReservationDetail } from 'actions';
+import { getAgentInfos, getReservationDetail } from 'actions';
 
 import MButton from 'components/MButton';
 import MInput from 'components/MInput';
@@ -110,6 +110,16 @@ function ReservationForm({
     });
   }
 
+  const agentInfos: any = useSelector<RootState>(
+    ({ agentInfos: agentInfosData }) => agentInfosData.data,
+  );
+
+  useEffect(() => {
+    if (roomCondition.source_type === '2') {
+      dispatch(getAgentInfos());
+    }
+  }, [roomCondition]);
+
   return (
     <Form
       ref={formRef}
@@ -186,14 +196,24 @@ function ReservationForm({
                     }
                     placeholder={t('reservation.Source.placeholder')}
                   >
-                    <Option value="1">Booking.com</Option>
-                    <Option value="2">Agoda</Option>
-                    <Option value="3">Airbnb</Option>
-                    <Option value="4">Ctrip</Option>
-                    <Option value="5">Vntrip</Option>
-                    <Option value="6">Traveloka</Option>
-                    <Option value="7">Expedia</Option>
-                    <Option value="8">Rakuten</Option>
+                    {roomCondition.source_type === '2' ? (
+                      agentInfos?.map((agent: any) => (
+                        <Option key={agent.id} value={agent.id}>
+                          {agent.name}
+                        </Option>
+                      ))
+                    ) : (
+                      <>
+                        <Option value="1">Booking.com</Option>
+                        <Option value="2">Agoda</Option>
+                        <Option value="3">Airbnb</Option>
+                        <Option value="4">Ctrip</Option>
+                        <Option value="5">Vntrip</Option>
+                        <Option value="6">Traveloka</Option>
+                        <Option value="7">Expedia</Option>
+                        <Option value="8">Rakuten</Option>
+                      </>
+                    )}
                   </Select>
                 </Form.Item>
               </Col>
