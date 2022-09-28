@@ -35,3 +35,7 @@ export const RoomEndpoint = {
 export const ProductEndpoint = {
   SEARCH: 'api/v1/products',
 };
+
+export const AgentInfoEndpoint = {
+  GET_AGENT: 'api/v1/agent_infos',
+};

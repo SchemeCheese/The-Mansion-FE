@@ -5,3 +5,4 @@ export * from './user';
 export * from './reservation';
 export * from './product';
 export * from './room';
+export * from './agentInfos';

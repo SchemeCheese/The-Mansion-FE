@@ -116,7 +116,14 @@ export interface ProductSearchState {
   is_searching: boolean;
 }
 
+export interface AgentInfosState {
+  data: Array<Record<string, any>>;
+  is_searching: boolean;
+  total: number;
+}
+
 export interface RootState {
+  agentInfos: AgentInfosState;
   alerts: AlertsState;
   app: AppState;
   createReservation: CreateReservationState;

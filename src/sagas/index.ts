@@ -1,5 +1,6 @@
 import { all, fork } from 'redux-saga/effects';
 
+import agentInfos from './agentInfos';
 import github from './github';
 import product from './product';
 import reservation from './reservation';
@@ -10,5 +11,12 @@ import user from './user';
  * rootSaga
  */
 export default function* root() {
-  yield all([fork(github), fork(user), fork(reservation), fork(room), fork(product)]);
+  yield all([
+    fork(github),
+    fork(user),
+    fork(reservation),
+    fork(room),
+    fork(product),
+    fork(agentInfos),
+  ]);
 }

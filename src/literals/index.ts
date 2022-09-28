@@ -39,6 +39,8 @@ export const ActionTypes = keyMirror({
   ROOM_TYPE_GET_FINISH: undefined,
   PRODUCT_SEARCH: undefined,
   PRODUCT_SEARCH_FINISH: undefined,
+  AGENT_INFOS_GET: undefined,
+  AGENT_INFOS_GET_FINISH: undefined,
 });
 
 export const STATUS: Status = {
