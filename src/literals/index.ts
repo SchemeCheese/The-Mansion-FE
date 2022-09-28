@@ -41,6 +41,12 @@ export const ActionTypes = keyMirror({
   PRODUCT_SEARCH_FINISH: undefined,
   AGENT_INFOS_GET: undefined,
   AGENT_INFOS_GET_FINISH: undefined,
+  RESERVATION_RATE_UPDATE: undefined,
+  RESERVATION_RATE_UPDATE_SUCCESS: undefined,
+  RESERVATION_RATE_UPDATE_FAILURE: undefined,
+  RESERVATION_BOOK_ROOM: undefined,
+  RESERVATION_BOOK_ROOM_SUCCESS: undefined,
+  RESERVATION_BOOK_ROOM_FAILURE: undefined,
 });
 
 export const STATUS: Status = {

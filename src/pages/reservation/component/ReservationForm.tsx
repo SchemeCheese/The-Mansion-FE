@@ -27,6 +27,7 @@ interface Props {
   onFinish: any;
   onFinishFailed: any;
   reservationDetail?: any;
+  reservationId: string;
   reservationNumber: number;
   roomCondition: any;
   roomTotalForm: any;
@@ -45,6 +46,7 @@ function ReservationForm({
   onFinish,
   onFinishFailed,
   reservationDetail,
+  reservationId,
   reservationNumber,
   roomCondition,
   roomingListColumns,
@@ -375,7 +377,10 @@ function ReservationForm({
                 />
               </Col>
               {!_.isEmpty(reservationDetailInfo) && (
-                <ReservationDetailCard reservationDetail={reservationDetailInfo} />
+                <ReservationDetailCard
+                  reservationDetail={reservationDetailInfo}
+                  reservationId={reservationId}
+                />
               )}
             </Row>
           </Card>

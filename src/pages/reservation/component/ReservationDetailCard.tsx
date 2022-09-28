@@ -17,9 +17,10 @@ const format = 'HH:mm';
 
 interface Props {
   reservationDetail: any;
+  reservationId: string;
 }
 
-function ReservationDetailCard({ reservationDetail }: Props) {
+function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
   const { t } = useTranslation();
 
   console.log('reservationDetailInfo', reservationDetail);
@@ -287,7 +288,11 @@ function ReservationDetailCard({ reservationDetail }: Props) {
           </Row>
         </TabPane>
         <TabPane key="2" tab={t('reservation.Rates')}>
-          <Rate rates={reservationDetail.charges} />
+          <Rate
+            rates={reservationDetail.charges}
+            reservationDetailId={reservationDetail.id}
+            reservationId={reservationId}
+          />
         </TabPane>
         <TabPane key="3" tab={t('reservation.Schedule')}>
           <Schedule />

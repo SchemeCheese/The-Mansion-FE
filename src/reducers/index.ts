@@ -1,6 +1,7 @@
 import agentInfos, { agentInfosState } from './agentInfos';
 import alerts, { alertsState } from './alerts';
 import app, { appState } from './app';
+import bookRoom, { bookRoomState } from './bookRoom';
 import createReservation, { createReservationState } from './createReservation';
 import getReservation, { getReservationState } from './getReservation';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
@@ -10,6 +11,7 @@ import github, { githubState } from './github';
 import product, { productSearchState } from './product';
 import reservation, { reservationSearchState } from './reservation';
 import searchRoom, { roomSearchState } from './searchRoom';
+import updateRate, { updateRateState } from './updateRate';
 import updateReservation, { updateReservationState } from './updateReservation';
 import user, { userState } from './user';
 
@@ -28,6 +30,8 @@ export const initialState = {
   getRoomType: roomTypeState,
   getReservation: getReservationState,
   agentInfos: agentInfosState,
+  bookRoom: bookRoomState,
+  updateRate: updateRateState,
 };
 
 export default {
@@ -45,4 +49,6 @@ export default {
   ...getRoomType,
   ...getReservation,
   ...agentInfos,
+  ...bookRoom,
+  ...updateRate,
 };

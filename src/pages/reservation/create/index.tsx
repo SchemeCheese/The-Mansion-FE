@@ -110,9 +110,6 @@ function Create() {
     );
   };
 
-  const status = useSelector<RootState>(
-    ({ createReservation: createReservationTemporary }) => createReservationTemporary.status,
-  );
   const navigate = useNavigate();
   const createReservationData = useAppSelector(selectCreateReservation);
 
@@ -125,7 +122,7 @@ function Create() {
 
       navigate('/reservation');
     }
-  }, [changed, status]);
+  }, [changed]);
 
   useEffect(() => {
     dispatch(
@@ -199,6 +196,7 @@ function Create() {
           isCreateForm
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
+          reservationId=""
           reservationNumber={reservationNumberResult}
           roomCondition={roomCondition}
           roomTotalForm={roomTotalForm}

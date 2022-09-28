@@ -144,11 +144,12 @@ function ReservationDetail() {
   //   ({ getReservationDetail }) => getReservationDetail.is_finish,
   // );
 
-  console.log('dataaaa1233', data123);
-
   const { id } = useParams();
 
   useEffect(() => {
+    dispatch(resetReservationDetail());
+    dispatch(resetReservation());
+
     dispatch(
       getReservation({
         reservation_id: id ?? '',
@@ -238,8 +239,6 @@ function ReservationDetail() {
 
   const submitUpdateForm = (e: any) => {
     const formValues = formRef.current?.getFieldsValue();
-
-    console.log('formValues ', formValues);
 
     dispatch(
       updateReservation({
@@ -393,7 +392,7 @@ function ReservationDetail() {
           </Row>
         </Col>
       </Row>
-      {!_.isEmpty(data123) && (
+      {!_.isEmpty(data123) && id && (
         <ReservationForm
           deleteSelectedRoom={deleteSelectedRoom}
           formRef={formRef}
@@ -401,6 +400,7 @@ function ReservationDetail() {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           reservationDetail={data123}
+          reservationId={id}
           reservationNumber={data123.reservation_number}
           roomCondition={roomCondition}
           roomTotalForm={roomList}
