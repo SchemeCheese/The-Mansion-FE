@@ -86,17 +86,17 @@ function SelectRoomModal({
           <Select
             defaultValue={text}
             onChange={value => {
-              const xy = _.findWhere(ratesResult, {
+              const selectedRate = _.findWhere(ratesResult, {
                 rate_id: value,
               });
 
               const stateTemporary = [...searchRoomResultState];
-              const xxx = { ...searchRoomResultState[index] };
+              const selectedRoom = { ...searchRoomResultState[index] };
 
               stateTemporary[index] = {
-                ...xxx,
-                price: formatNumber(xy.price),
-                actual_amount: xy.price,
+                ...selectedRoom,
+                price: formatNumber(selectedRate.price),
+                actual_amount: selectedRate.price,
               };
 
               setSearchRoomResultState(stateTemporary);
@@ -141,10 +141,10 @@ function SelectRoomModal({
             name="actual_amount"
             onChange={event => {
               const stateTemporary = [...searchRoomResultState];
-              const xxx = { ...searchRoomResultState[index] };
+              const selectedRoom = { ...searchRoomResultState[index] };
 
               stateTemporary[index] = {
-                ...xxx,
+                ...selectedRoom,
                 actual_amount: event.target.value,
               };
 

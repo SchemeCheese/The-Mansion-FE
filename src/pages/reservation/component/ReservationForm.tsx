@@ -86,32 +86,6 @@ function ReservationForm({
     0,
   );
 
-  const [form] = Form.useForm();
-
-  form.setFieldsValue({
-    reservation_number: reservationNumber,
-  });
-
-  if (reservationDetail) {
-    form.setFieldsValue({
-      paid: true,
-      send_mail: true,
-      no_show: true,
-      market_segment_id: reservationDetail?.market_segment_id.toString(),
-      path_of_reservation: reservationDetail?.path_of_reservation.toString(),
-      external_reservation_number: reservationDetail?.external_reservation_number,
-      note: reservationDetail?.note,
-      booker_type: reservationDetail?.booker?.client_kind?.toString(),
-      booker_firstname: reservationDetail?.booker?.first_name,
-      booker_lastname: reservationDetail?.booker?.last_name,
-      booker_email: reservationDetail?.booker?.email_address1,
-      booker_email_2: reservationDetail?.booker?.email_address2,
-      booker_phone_number: reservationDetail?.booker?.telephone_number1,
-      booker_rank: reservationDetail?.booker?.client_rank.toString(),
-      booker_note: reservationDetail?.note_sale,
-    });
-  }
-
   const agentInfos: any = useSelector<RootState>(
     ({ agentInfos: agentInfosData }) => agentInfosData.data,
   );
@@ -126,7 +100,24 @@ function ReservationForm({
     <Form
       ref={formRef}
       autoComplete="off"
-      form={form}
+      initialValues={{
+        reservation_number: reservationNumber,
+        paid: true,
+        send_mail: true,
+        no_show: true,
+        market_segment_id: reservationDetail?.market_segment_id.toString(),
+        path_of_reservation: reservationDetail?.path_of_reservation.toString(),
+        external_reservation_number: reservationDetail?.external_reservation_number,
+        note: reservationDetail?.note,
+        booker_type: reservationDetail?.booker?.client_kind?.toString(),
+        booker_firstname: reservationDetail?.booker?.first_name,
+        booker_lastname: reservationDetail?.booker?.last_name,
+        booker_email: reservationDetail?.booker?.email_address1,
+        booker_email_2: reservationDetail?.booker?.email_address2,
+        booker_phone_number: reservationDetail?.booker?.telephone_number1,
+        booker_rank: reservationDetail?.booker?.client_rank.toString(),
+        booker_note: reservationDetail?.note_sale,
+      }}
       labelCol={{
         span: 24,
       }}
@@ -355,6 +346,7 @@ function ReservationForm({
               </Col>
               <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                 <Table
+                  className="rooming-table"
                   columns={roomingListColumns}
                   dataSource={roomTotalForm}
                   onRow={(record: any) => {
