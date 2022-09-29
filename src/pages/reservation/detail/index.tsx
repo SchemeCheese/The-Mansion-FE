@@ -131,19 +131,14 @@ function ReservationDetail() {
     });
   }
 
-  // const [dataState, setDataState] = useState();
   const dispatch = useDispatch();
-  const data123: any = useSelector<RootState>(
+  const reservationDetailRedux: any = useSelector<RootState>(
     ({ getReservation: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
   /** Response from API */
   const searchRoomsResult: any = useSelector<RootState>(
     ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.charges,
   );
-  // const isFinish = useSelector<RootState>(
-  //   ({ getReservationDetail }) => getReservationDetail.is_finish,
-  // );
-
   const { id } = useParams();
 
   useEffect(() => {
@@ -176,11 +171,12 @@ function ReservationDetail() {
   }, [searchRoomsResult]);
 
   useEffect(() => {
-    if (!_.isEmpty(data123)) {
-      const xx: any = [];
+    if (!_.isEmpty(reservationDetailRedux)) {
+      const roomsTemporary: any = [];
 
-      data123.rooms.forEach((item: any) => {
-        xx.push({
+      reservationDetailRedux.rooms.forEach((item: any) => {
+        roomsTemporary.push({
+          key: item.id,
           reservation_detail_id: item.id,
           status: 'Waitlist',
           name: '-',
@@ -202,14 +198,12 @@ function ReservationDetail() {
         });
       });
 
-      setRoomList(xx);
+      setRoomTotalForm(roomsTemporary);
     }
-  }, [data123]);
+  }, [reservationDetailRedux]);
   const { roomingListColumns } = useColumns();
 
   /** State */
-  /** Rooming List Table */
-  const [roomList, setRoomList] = useState<any>([]);
   /** Search room Table In Modal */
   const [roomSelected, setRoomSelected] = useState<any>([]);
   /** Data of payload to transfer from API */
@@ -318,7 +312,7 @@ function ReservationDetail() {
             />
           </svg>
           <span style={{ paddingLeft: 10, fontSize: 20 }}>
-            {t('reservation.Folio')}：{data123.reservation_number}
+            {t('reservation.Folio')}：{reservationDetailRedux.reservation_number}
           </span>
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
@@ -398,18 +392,18 @@ function ReservationDetail() {
           </Row>
         </Col>
       </Row>
-      {!_.isEmpty(data123) && id && (
+      {!_.isEmpty(reservationDetailRedux) && id && (
         <ReservationForm
           deleteSelectedRoom={deleteSelectedRoom}
           formRef={formRef}
           isCreateForm={false}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          reservationDetail={data123}
+          reservationDetail={reservationDetailRedux}
           reservationId={id}
-          reservationNumber={data123.reservation_number}
+          reservationNumber={reservationDetailRedux.reservation_number}
           roomCondition={roomCondition}
-          roomTotalForm={roomList}
+          roomTotalForm={roomTotalForm}
           roomingListColumns={roomingListColumns}
           rowSelection={rowSelection}
           selectedRowKeys={[]}

@@ -297,7 +297,6 @@ function Schedule() {
                 return days.join('\n');
               },
               slotLaneClassNames(hookProps) {
-                console.log('hookProps', hookProps);
                 const slotDate = hookProps.date;
 
                 if (moment(slotDate) >= moment().add(1, 'days')) {
@@ -307,7 +306,6 @@ function Schedule() {
                 return 'slot-fc-day-weekly';
               },
               slotLabelClassNames(hookProps) {
-                console.log('hookProps', hookProps);
                 const slotDate = hookProps.date;
 
                 if (moment(slotDate) >= moment().add(1, 'days')) {

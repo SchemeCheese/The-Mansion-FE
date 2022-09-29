@@ -7,7 +7,7 @@ Main functions : Rate Tab
 ************************************ */
 
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Col, Input, message, Row, Table } from 'antd';
 import { formatNumber } from 'helpers';
 import { selectUpdateRate } from 'selectors';
@@ -20,18 +20,29 @@ import { getReservation, getReservationDetail, updateRate } from 'actions';
 
 import PattonButton from 'components/PattonButton';
 
+import { RootState } from 'types';
+
 interface Props {
-  rates: any;
   reservationDetailId: string;
   reservationId: string;
 }
 
-function Rate({ rates, reservationDetailId, reservationId }: Props) {
-  const [ratesState, setRatesState] = useState(rates);
+function Rate({ reservationDetailId, reservationId }: Props) {
+  const [ratesState, setRatesState] = useState<any>([]);
   const dispatch = useDispatch();
+  const reservationDetailInfo: any = useSelector<RootState>(
+    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
+  );
 
-  const data = ratesState.map((item: any) => {
+  console.log('reservationDetailInfo Rate', reservationDetailInfo);
+
+  useEffect(() => {
+    setRatesState(reservationDetailInfo.charges);
+  }, [reservationDetailInfo.charges]);
+
+  const data = ratesState.map((item: any, index: number) => {
     return {
+      key: index,
       date: item.use_date,
       room_type: item.room_type_text,
       rate_name: item.rate_name,
@@ -78,11 +89,11 @@ function Rate({ rates, reservationDetailId, reservationId }: Props) {
           <Input
             name="actual_amount"
             onChange={event => {
-              const stateTemporary = [...ratesState];
-              const xxx = { ...stateTemporary[index] };
+              const stateTemporary: any = [...ratesState];
+              const duplicationItem = { ...stateTemporary[index] };
 
               stateTemporary[index] = {
-                ...xxx,
+                ...duplicationItem,
                 actual_amount: event.target.value,
               };
 
@@ -163,6 +174,8 @@ function Rate({ rates, reservationDetailId, reservationId }: Props) {
       );
     }
   }, [changed]);
+
+  console.log('Rateee render');
 
   return (
     <Row justify="end" style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>

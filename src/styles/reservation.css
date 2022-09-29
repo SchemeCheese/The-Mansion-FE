@@ -199,3 +199,7 @@
 .reservation-tabs .ant-tabs-content-holder {
   background-color: #e5e5e5;
 }
+
+.rooming-table .ant-table-row {
+  cursor: pointer;
+}

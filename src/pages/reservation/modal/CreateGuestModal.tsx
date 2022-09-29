@@ -54,7 +54,7 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
       url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     },
     {
-      uid: '-xxx',
+      uid: '-6',
       percent: 50,
       name: 'image.png',
       status: 'uploading',
