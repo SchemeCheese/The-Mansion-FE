@@ -45,6 +45,8 @@ function Schedule() {
   });
   const { t } = useTranslation();
 
+  const [bookRoomInfo, setBookRoomInfo] = useState<any>([]);
+
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     const calendarApi = selectInfo.view.calendar;
 
@@ -58,7 +60,21 @@ function Schedule() {
       allDay: selectInfo.allDay,
       resourceId: selectInfo.resource?._resource.id,
     });
+
+    const bookRoomInfoTemporary = [...bookRoomInfo];
+
+    bookRoomInfoTemporary.push({
+      reservation_equipment_id: null,
+      room_type: selectInfo.resource?.extendedProps.roomType,
+      room_id: selectInfo.resource?.extendedProps.roomId,
+      use_start_date: selectInfo.startStr,
+      use_end_date: selectInfo.endStr,
+    });
+
+    setBookRoomInfo(bookRoomInfoTemporary);
   };
+
+  console.log('Schedule setBookRoomInfo', bookRoomInfo);
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
@@ -74,21 +90,21 @@ function Schedule() {
   };
 
   const resources = [
-    { id: 'a', title: '102', occupancy: 'Superior' },
-    { id: 'b', title: '103', occupancy: 'Superior' },
-    { id: 'c', title: '104', occupancy: 'Superior' },
-    { id: 'd', title: '105', occupancy: 'Superior' },
-    { id: 'e', title: '106', occupancy: 'Deluxe' },
-    { id: 'f', title: '107', occupancy: 'Deluxe' },
-    { id: 'g', title: '108', occupancy: 'Deluxe' },
-    { id: 'h', title: '109', occupancy: 'Deluxe' },
-    { id: 'i', title: '110', occupancy: 'Deluxe' },
-    { id: 'j', title: '111', occupancy: 'Deluxe' },
-    { id: 'k', title: '112', occupancy: 'Family' },
-    { id: 'l', title: '113', occupancy: 'Family' },
-    { id: 'm', title: '114', occupancy: 'Family' },
-    { id: 'n', title: '115', occupancy: 'Family' },
-    { id: 'o', title: '116', occupancy: 'Family' },
+    { id: 'a', title: '102', occupancy: 'Superior', roomId: '1', roomType: '1' },
+    { id: 'b', title: '103', occupancy: 'Superior', roomId: '2', roomType: '1' },
+    { id: 'c', title: '104', occupancy: 'Superior', roomId: '3', roomType: '1' },
+    { id: 'd', title: '105', occupancy: 'Superior', roomId: '4', roomType: '1' },
+    { id: 'e', title: '106', occupancy: 'Deluxe', roomId: '5', roomType: '1' },
+    { id: 'f', title: '107', occupancy: 'Deluxe', roomId: '6', roomType: '1' },
+    { id: 'g', title: '108', occupancy: 'Deluxe', roomId: '7', roomType: '1' },
+    { id: 'h', title: '109', occupancy: 'Deluxe', roomId: '8', roomType: '1' },
+    { id: 'i', title: '110', occupancy: 'Deluxe', roomId: '9', roomType: '1' },
+    { id: 'j', title: '111', occupancy: 'Deluxe', roomId: '10', roomType: '1' },
+    { id: 'k', title: '112', occupancy: 'Family', roomId: '11', roomType: '1' },
+    { id: 'l', title: '113', occupancy: 'Family', roomId: '12', roomType: '1' },
+    { id: 'm', title: '114', occupancy: 'Family', roomId: '13', roomType: '1' },
+    { id: 'n', title: '115', occupancy: 'Family', roomId: '14', roomType: '1' },
+    { id: 'o', title: '116', occupancy: 'Family', roomId: '15', roomType: '1' },
   ];
 
   return (
@@ -280,8 +296,28 @@ function Schedule() {
 
                 return days.join('\n');
               },
-              slotLaneClassNames: 'slot-fc-day-weekly',
-              slotLabelClassNames: 'monthly',
+              slotLaneClassNames(hookProps) {
+                console.log('hookProps', hookProps);
+                const slotDate = hookProps.date;
+
+                if (moment(slotDate) >= moment().add(1, 'days')) {
+                  return 'slot-fc-day-weekly disabled';
+                }
+
+                return 'slot-fc-day-weekly';
+              },
+              slotLabelClassNames(hookProps) {
+                console.log('hookProps', hookProps);
+                const slotDate = hookProps.date;
+
+                if (moment(slotDate) >= moment().add(1, 'days')) {
+                  return 'weekly disabled';
+                }
+
+                return 'weekly';
+              },
+              // slotLaneClassNames: 'slot-fc-day-weekly',
+              // slotLabelClassNames: 'monthly',
               buttonText: 'Weekly',
             },
           }}
