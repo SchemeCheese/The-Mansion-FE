@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'antd';
+import { Badge, Button } from 'antd';
 
 const useColumns = () => {
   const { t } = useTranslation();
@@ -8,6 +8,13 @@ const useColumns = () => {
     {
       title: t('common.Status'),
       dataIndex: 'status',
+      render: (text: string) => {
+        if (text === 'Cancel') {
+          return <Badge count={text} />;
+        }
+
+        return <span>{text}</span>;
+      },
     },
     {
       title: t('common.Name'),

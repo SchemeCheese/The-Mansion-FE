@@ -6,30 +6,88 @@ Updated Date : 05/09/2022
 Main functions : Cancel Booking Modal
 ************************************ */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Checkbox, Col, Form, Input, Modal, Row, Select } from 'antd';
+import { useDispatch } from 'react-redux';
+import { Checkbox, Col, Form, Input, message, Modal, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import { selectCancelReservationDetail, selectUser } from 'selectors';
+import useTreeChanges from 'tree-changes-hook';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { cancelReservationDetail, getReservation } from 'actions';
 
 const { Option } = Select;
 
 interface Props {
   isModalVisible: boolean;
+  reservation: any;
+  selectedRowKeys: any;
   setModalVisible: (value: boolean) => void;
+  setSelectedRowKeys: (value: any) => void;
 }
 
-function CancelBookingModal({ isModalVisible, setModalVisible }: Props) {
+function CancelBookingModal({
+  isModalVisible,
+  reservation,
+  selectedRowKeys,
+  setModalVisible,
+  setSelectedRowKeys,
+}: Props) {
+  const dispatch = useDispatch();
+
   const handleCancel = () => {
     setModalVisible(false);
-    console.log('Handle Cancel');
+  };
+
+  const onFinish = (values: any) => {
+    setModalVisible(false);
+
+    dispatch(
+      cancelReservationDetail({
+        payload: {
+          reservation_id: reservation.id,
+          client_info_id: reservation.client_info_id,
+          cancel_reason: values.cancel_reason,
+          cancel_type: values.cancel_type,
+          reservation_detail_id: selectedRowKeys,
+        },
+      }),
+    );
   };
 
   const handleOk = () => {
-    setModalVisible(false);
-    console.log('Handle OK');
+    form.submit();
   };
 
   const { t } = useTranslation();
+  const [form] = Form.useForm();
+  const cancelReservationData = useAppSelector(selectCancelReservationDetail);
+  const { changed } = useTreeChanges(cancelReservationData);
+
+  const userData = useAppSelector(selectUser);
+
+  useEffect(() => {
+    if (changed('status', 'SUCCESS')) {
+      message.success('Cancel reservation successfully!');
+
+      setSelectedRowKeys([]);
+
+      dispatch(
+        getReservation({
+          reservation_id: reservation.id ?? '',
+        }),
+      );
+    }
+  }, [changed]);
+
+  useEffect(() => {
+    form.setFieldsValue({
+      cancel_type: undefined,
+      cancel_reason: '',
+    });
+  }, [isModalVisible]);
 
   return (
     <Modal
@@ -44,19 +102,24 @@ function CancelBookingModal({ isModalVisible, setModalVisible }: Props) {
     >
       <Form
         autoComplete="off"
+        form={form}
+        initialValues={{
+          folio_id: reservation.reservation_number,
+        }}
         labelCol={{
           span: 24,
         }}
         layout="vertical"
         name="basic"
+        onFinish={onFinish}
         wrapperCol={{
           span: 23,
         }}
       >
         <Row>
           <Col span={8}>
-            <Form.Item label={t('reservation.Folio ID')}>
-              <Input defaultValue="2808" disabled value="2000" />
+            <Form.Item label={t('reservation.Folio ID')} name="folio_id">
+              <Input disabled />
             </Form.Item>
           </Col>
           <Col span={8}>
@@ -69,12 +132,14 @@ function CancelBookingModal({ isModalVisible, setModalVisible }: Props) {
                 paddingLeft: 34,
               }}
             >
-              <span>{t('reservation.Receptionist')}: Nguyen Dac Trung</span>
+              <span>
+                {t('reservation.Receptionist')}: {userData.name}
+              </span>
             </div>
           </Col>
           <Col span={8}>
             <Form.Item
-              name="remember"
+              name="send_email_confirm"
               style={{
                 marginBottom: 12,
                 bottom: 0,
@@ -89,18 +154,30 @@ function CancelBookingModal({ isModalVisible, setModalVisible }: Props) {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label={t('reservation.Type.title')} name="type">
+            <Form.Item
+              label={t('reservation.Type.title')}
+              name="cancel_type"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select a cancel type',
+                },
+              ]}
+            >
               <Select allowClear placeholder={t('reservation.Type.placeholder')}>
-                <Option value="room1">Room 1</Option>
-                <Option value="room2">Room 2</Option>
-                <Option value="room3">Room 3</Option>
+                <Option value="1">Request by guest </Option>
+                <Option value="2">No-show </Option>
+                <Option value="3">Invalid credit card </Option>
+                <Option value="4">No deposit/pre-payment received </Option>
+                <Option value="5">Overbooking</Option>
+                <Option value="6">Double booking</Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item
               label={t('reservation.Reason for booking cancellation (Optional).title')}
-              name="type"
+              name="cancel_reason"
               wrapperCol={{ span: 24 }}
             >
               <TextArea

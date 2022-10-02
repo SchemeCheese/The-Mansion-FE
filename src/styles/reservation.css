@@ -200,6 +200,16 @@
   background-color: #e5e5e5;
 }
 
-.rooming-table .ant-table-row {
+.rooming-table .ant-table-row,
+.reservation-list .ant-table-row {
   cursor: pointer;
+}
+
+.rooming-table .disabled-click {
+  background: #e5e5e5;
+  cursor: inherit;
+}
+
+.rooming-table .disabled-click .ant-table-cell-row-hover {
+  background: #e5e5e5 !important;
 }

@@ -6,8 +6,12 @@ import { ReservationEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import {
+  addReservationDetail,
+  addReservationDetailSuccess,
   bookRoom,
   bookRoomSuccess,
+  cancelReservationDetail,
+  cancelReservationDetailSuccess,
   createReservation,
   createReservationSuccess,
   getReservation,
@@ -186,6 +190,56 @@ export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
   }
 }
 
+export function* postAddReservationDetailSaga({
+  payload,
+}: ReturnType<typeof addReservationDetail>) {
+  let success = '';
+
+  ({ success } = yield call(
+    request,
+    `${apiEndPoint(ReservationEndpoint.ADD_RESERVATION_DETAIL)}/${
+      payload.payload.reservation_id
+    }/add-reservation-detail`,
+    {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        operator_code: 'the_mansion',
+      },
+    },
+  ));
+
+  if (success) {
+    yield put(addReservationDetailSuccess());
+  }
+}
+
+export function* postCancelReservationDetailSaga({
+  payload,
+}: ReturnType<typeof cancelReservationDetail>) {
+  let success = '';
+
+  ({ success } = yield call(
+    request,
+    `${apiEndPoint(ReservationEndpoint.CANCEL_RESERVATION_DETAIL)}/${
+      payload.payload.reservation_id
+    }/cancel-reservation-detail`,
+    {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        operator_code: 'the_mansion',
+      },
+    },
+  ));
+
+  if (success) {
+    yield put(cancelReservationDetailSuccess());
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
@@ -196,5 +250,7 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_GET, getReservationSaga),
     takeLatest(ActionTypes.RESERVATION_RATE_UPDATE, postUpdateRateSaga),
     takeLatest(ActionTypes.RESERVATION_BOOK_ROOM, postBookRoomSaga),
+    takeLatest(ActionTypes.RESERVATION_ADD_RESERVATION_DETAIL, postAddReservationDetailSaga),
+    takeLatest(ActionTypes.RESERVATION_CANCEL_RESERVATION_DETAIL, postCancelReservationDetailSaga),
   ]);
 }

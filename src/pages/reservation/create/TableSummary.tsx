@@ -16,6 +16,7 @@ import PattonButton from 'components/PattonButton';
 
 interface Props {
   quantity: number;
+  roomCondition: any;
   roomSelected: any;
   searchRoomResultState: any;
   setRoomSelected: (data: any) => void;
@@ -24,6 +25,7 @@ interface Props {
 
 function TableSummary({
   quantity,
+  roomCondition,
   roomSelected,
   searchRoomResultState,
   setRoomSelected,
@@ -45,9 +47,10 @@ function TableSummary({
       );
 
       dataSelectedRoomsResult.push({
-        checkin: _.first(reservationDetail).use_date,
-        checkout: _.last(reservationDetail).use_date,
-        room_type: _.first(reservationDetail).room_type,
+        checkin_date: _.first(reservationDetail).use_date,
+        checkout_date: _.last(reservationDetail).use_date,
+        room_type: roomCondition.room_type,
+        room_type_text: _.first(reservationDetail).room_type,
         rate_name: _.first(reservationDetail).rate_name,
         quantity,
         subtotal: formatNumber(sum * quantity),

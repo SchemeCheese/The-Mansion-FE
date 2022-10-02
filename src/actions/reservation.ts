@@ -5,7 +5,9 @@ import { actionPayload } from 'modules/helpers';
 import { ActionTypes } from 'literals';
 
 import {
+  AddReservationDetail,
   BookRoom,
+  CancelReservationDetail,
   GetReservationFinishPayload,
   GetReservationPayload,
   ReservationCreate,
@@ -87,3 +89,21 @@ export const bookRoomSuccess = createAction(ActionTypes.RESERVATION_BOOK_ROOM_SU
 export const resetReservation = createAction(ActionTypes.RESERVATION_RESET);
 
 export const resetReservationDetail = createAction(ActionTypes.RESERVATION_GET_DETAIL_RESET);
+
+export const addReservationDetail = createAction(
+  ActionTypes.RESERVATION_ADD_RESERVATION_DETAIL,
+  (payload: AddReservationDetail) => actionPayload(payload),
+);
+
+export const addReservationDetailSuccess = createAction(
+  ActionTypes.RESERVATION_ADD_RESERVATION_DETAIL_SUCCESS,
+);
+
+export const cancelReservationDetail = createAction(
+  ActionTypes.RESERVATION_CANCEL_RESERVATION_DETAIL,
+  (payload: CancelReservationDetail) => actionPayload(payload),
+);
+
+export const cancelReservationDetailSuccess = createAction(
+  ActionTypes.RESERVATION_CANCEL_RESERVATION_DETAIL_SUCCESS,
+);

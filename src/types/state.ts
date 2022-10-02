@@ -108,6 +108,30 @@ export interface BookRoomState {
   status: string;
 }
 
+export interface ReservationAddReservationDetailPayload {
+  client_info_id: string;
+  reservation_id: string;
+  rooms: Array<Record<string, any>>;
+}
+
+export interface AddReservationDetailState {
+  payload: ReservationAddReservationDetailPayload;
+  status: string;
+}
+
+export interface ReservationCancelReservationDetailPayload {
+  cancel_reason: string;
+  cancel_type: string;
+  client_info_id: string;
+  reservation_detail_id: number[];
+  reservation_id: string;
+}
+
+export interface CancelReservationDetailState {
+  payload: ReservationCancelReservationDetailPayload;
+  status: string;
+}
+
 export interface ReservationDetailState {
   data: Record<string, any>;
   is_finish: boolean;
@@ -143,10 +167,12 @@ export interface AgentInfosState {
 }
 
 export interface RootState {
+  addReservationDetail: AddReservationDetailState;
   agentInfos: AgentInfosState;
   alerts: AlertsState;
   app: AppState;
   bookRoom: BookRoomState;
+  cancelReservationDetail: CancelReservationDetailState;
   createReservation: CreateReservationState;
   getReservation: GetReservationState;
   getReservationDetail: ReservationDetailState;

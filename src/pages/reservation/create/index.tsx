@@ -15,7 +15,6 @@ import { formatNumber } from 'helpers';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
-import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import { selectCreateReservation } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -79,7 +78,6 @@ function Create() {
   const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
 
   const showModal = () => {
     if (roomCondition.source_id && roomCondition.source_type) {
@@ -186,10 +184,6 @@ function Create() {
         setSearchRoomResultState={setSearchRoomResultState}
         totalAmount={totalAmount}
       />
-      <CancelBookingModal
-        isModalVisible={isCancelBookingModalVisible}
-        setModalVisible={setIsCancelBookingModalVisible}
-      />
       {reservationNumberResult && (
         <ReservationForm
           deleteSelectedRoom={deleteSelectedRoom}
@@ -203,7 +197,6 @@ function Create() {
           roomingListColumns={roomingListColumns}
           rowSelection={rowSelection}
           selectedRowKeys={selectedRowKeys}
-          setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
           setRoomCondition={setRoomCondition}
           showModal={showModal}
         />

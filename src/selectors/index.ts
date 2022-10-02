@@ -31,3 +31,13 @@ export const selectUpdateRate = createSelector(
   (state: RootState) => state.updateRate,
   updateRate => updateRate,
 );
+
+export const selectAddReservationDetail = createSelector(
+  (state: RootState) => state.addReservationDetail,
+  addReservationDetail => addReservationDetail,
+);
+
+export const selectCancelReservationDetail = createSelector(
+  (state: RootState) => state.cancelReservationDetail,
+  cancelReservationDetail => cancelReservationDetail,
+);
