@@ -9,13 +9,17 @@ Main functions : Select Room Modal Componnent
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, Col, DatePicker, Input, Modal, Row, Select, Table } from 'antd';
+import { Button, Card, Col, DatePicker, Input, message, Modal, Row, Select, Table } from 'antd';
 import { formatNumber, randomKey } from 'helpers';
 import moment from 'moment';
 import TableSummary from 'pages/reservation/create/TableSummary';
+import { selectAddReservationDetail } from 'selectors';
+import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
 
-import { getRoomType, searchRoom } from 'actions';
+import { useAppSelector } from 'modules/hooks';
+
+import { addReservationDetail, getReservation, getRoomType, searchRoom } from 'actions';
 
 import { RootState } from 'types';
 
@@ -24,6 +28,7 @@ const { Option } = Select;
 interface Props {
   isModalVisible: boolean;
   quantity: number;
+  reservation?: any;
   roomCondition: any;
   roomSelected: any;
   roomTotalForm: any;
@@ -40,6 +45,7 @@ interface Props {
 function SelectRoomModal({
   isModalVisible,
   quantity,
+  reservation,
   roomCondition,
   roomSelected,
   roomTotalForm,
@@ -64,6 +70,9 @@ function SelectRoomModal({
   const roomTypes: any = useSelector<RootState>(
     ({ getRoomType: getRoomTypeTemporary }) => getRoomTypeTemporary.data,
   );
+
+  const addReservationDetailData = useAppSelector(selectAddReservationDetail);
+  const { changed } = useTreeChanges(addReservationDetailData);
 
   const searchRoomColumns = [
     {
@@ -201,15 +210,15 @@ function SelectRoomModal({
         key: uniqueKey,
         status: 'Waitlist',
         name: '-',
-        room_type_text: item.room_type,
+        room_type_text: item.room_type_text,
         room_no: '-',
-        ci: item.checkin,
-        co: item.checkout,
+        ci: item.checkin_date,
+        co: item.checkout_date,
         quantity: item.quantity,
         // Data to send API
         room_type: roomCondition.room_type,
-        checkin_date: item.checkin,
-        checkout_date: item.checkout,
+        checkin_date: item.checkin_date,
+        checkout_date: item.checkout_date,
         actual_amount: item.actual_amount,
         charges: item.charges,
         nights: moment.duration(moment(item.checkout).diff(moment(item.checkin))).asDays(),
@@ -224,7 +233,31 @@ function SelectRoomModal({
 
     setRoomTotalForm(dataRoomTotalForm);
     setIsModalVisible(false);
+
+    if (reservation) {
+      dispatch(
+        addReservationDetail({
+          payload: {
+            client_info_id: reservation.client_info_id,
+            reservation_id: reservation.id,
+            rooms: roomSelected,
+          },
+        }),
+      );
+    }
   };
+
+  useEffect(() => {
+    if (changed('status', 'SUCCESS')) {
+      message.success('Add reservation booking successfully!');
+
+      dispatch(
+        getReservation({
+          reservation_id: reservation.id,
+        }),
+      );
+    }
+  }, [changed]);
 
   const searchRoomDate = (date: any, key: string) => {
     const stateTemporary = {
@@ -281,17 +314,17 @@ function SelectRoomModal({
   const selectedRoomsResultColumns = [
     {
       title: 'Checkin',
-      dataIndex: 'checkin',
-      key: 'checkin',
+      dataIndex: 'checkin_date',
+      key: 'checkin_date',
     },
     {
       title: 'Checkout',
-      dataIndex: 'checkout',
-      key: 'checkout',
+      dataIndex: 'checkout_date',
+      key: 'checkout_date',
     },
     {
       title: 'Room Type',
-      dataIndex: 'room_type',
+      dataIndex: 'room_type_text',
       key: 'room_type',
     },
     {
@@ -437,11 +470,12 @@ function SelectRoomModal({
                 return (
                   <TableSummary
                     quantity={quantity}
-                    roomSelected={roomSelected}
+                    roomCondition={roomCondition}
                     // roomTotalForm={roomTotalForm}
+                    roomSelected={roomSelected}
                     searchRoomResultState={searchRoomResultState}
-                    setRoomSelected={setRoomSelected}
                     // setRoomTotalForm={setRoomTotalForm}
+                    setRoomSelected={setRoomSelected}
                     totalAmount={totalAmount}
                   />
                 );

@@ -218,6 +218,7 @@ function ReservationList({ type }: Props) {
         {!isSearching ? (
           <>
             <Table
+              className="reservation-list"
               columns={columnsWaitlist}
               dataSource={convertData(items)}
               onRow={(record: any) => {

@@ -1,7 +1,9 @@
+import addReservationDetail, { addReservationDetailState } from './addReservationDetail';
 import agentInfos, { agentInfosState } from './agentInfos';
 import alerts, { alertsState } from './alerts';
 import app, { appState } from './app';
 import bookRoom, { bookRoomState } from './bookRoom';
+import cancelReservationDetail, { cancelReservationDetailState } from './cancelReservationDetail';
 import createReservation, { createReservationState } from './createReservation';
 import getReservation, { getReservationState } from './getReservation';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
@@ -32,6 +34,8 @@ export const initialState = {
   agentInfos: agentInfosState,
   bookRoom: bookRoomState,
   updateRate: updateRateState,
+  addReservationDetail: addReservationDetailState,
+  cancelReservationDetail: cancelReservationDetailState,
 };
 
 export default {
@@ -51,4 +55,6 @@ export default {
   ...agentInfos,
   ...bookRoom,
   ...updateRate,
+  ...addReservationDetail,
+  ...cancelReservationDetail,
 };

@@ -21,20 +21,20 @@ import { RootState } from 'types';
 const { Option } = Select;
 
 interface Props {
-  deleteSelectedRoom: any;
+  deleteSelectedRoom?: any;
   formRef?: any;
   isCreateForm: boolean;
   onFinish: any;
   onFinishFailed: any;
-  reservationDetail?: any;
   reservationId: string;
+  reservationInfo?: any;
   reservationNumber: number;
   roomCondition: any;
   roomTotalForm: any;
   roomingListColumns: any;
   rowSelection: any;
   selectedRowKeys: any;
-  setIsCancelBookingModalVisible: any;
+  setIsCancelBookingModalVisible?: any;
   setRoomCondition: any;
   showModal: any;
 }
@@ -45,8 +45,8 @@ function ReservationForm({
   isCreateForm,
   onFinish,
   onFinishFailed,
-  reservationDetail,
   reservationId,
+  reservationInfo,
   reservationNumber,
   roomCondition,
   roomingListColumns,
@@ -63,8 +63,6 @@ function ReservationForm({
   const reservationDetailInfo: any = useSelector<RootState>(
     ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
-
-  console.log('3211', reservationDetailInfo);
 
   const confirm = () => {
     Modal.confirm({
@@ -105,18 +103,18 @@ function ReservationForm({
         paid: true,
         send_mail: true,
         no_show: true,
-        market_segment_id: reservationDetail?.market_segment_id.toString(),
-        path_of_reservation: reservationDetail?.path_of_reservation.toString(),
-        external_reservation_number: reservationDetail?.external_reservation_number,
-        note: reservationDetail?.note,
-        booker_type: reservationDetail?.booker?.client_kind?.toString(),
-        booker_firstname: reservationDetail?.booker?.first_name,
-        booker_lastname: reservationDetail?.booker?.last_name,
-        booker_email: reservationDetail?.booker?.email_address1,
-        booker_email_2: reservationDetail?.booker?.email_address2,
-        booker_phone_number: reservationDetail?.booker?.telephone_number1,
-        booker_rank: reservationDetail?.booker?.client_rank.toString(),
-        booker_note: reservationDetail?.note_sale,
+        market_segment_id: reservationInfo?.market_segment_id.toString(),
+        path_of_reservation: reservationInfo?.path_of_reservation.toString(),
+        external_reservation_number: reservationInfo?.external_reservation_number,
+        note: reservationInfo?.note,
+        booker_type: reservationInfo?.booker?.client_kind?.toString(),
+        booker_firstname: reservationInfo?.booker?.first_name,
+        booker_lastname: reservationInfo?.booker?.last_name,
+        booker_email: reservationInfo?.booker?.email_address1,
+        booker_email_2: reservationInfo?.booker?.email_address2,
+        booker_phone_number: reservationInfo?.booker?.telephone_number1,
+        booker_rank: reservationInfo?.booker?.client_rank.toString(),
+        booker_note: reservationInfo?.note_sale,
       }}
       labelCol={{
         span: 24,
@@ -332,6 +330,7 @@ function ReservationForm({
                   </MButton>
                 ) : (
                   <MButton
+                    disabled={selectedRowKeys.length === 0}
                     onClick={() => setIsCancelBookingModalVisible(true)}
                     style={{ marginLeft: 15 }}
                   >
@@ -350,20 +349,31 @@ function ReservationForm({
                   columns={roomingListColumns}
                   dataSource={roomTotalForm}
                   onRow={(record: any) => {
-                    return {
-                      onClick: () => {
-                        if (record.reservation_detail_id) {
-                          dispatch(
-                            getReservationDetail({
-                              reservation_id: reservationDetail.id,
-                              reservation_detail_id: record.reservation_detail_id,
-                            }),
-                          );
-                        }
-                      },
-                    };
+                    if (record.status !== 'Cancel') {
+                      return {
+                        onClick: () => {
+                          if (record.reservation_detail_id) {
+                            dispatch(
+                              getReservationDetail({
+                                reservation_id: reservationInfo.id,
+                                reservation_detail_id: record.reservation_detail_id,
+                              }),
+                            );
+                          }
+                        },
+                      };
+                    }
+
+                    return {};
                   }}
                   pagination={false}
+                  rowClassName={(record: any) => {
+                    if (record.status === 'Cancel') {
+                      return 'disabled-click';
+                    }
+
+                    return '';
+                  }}
                   rowSelection={rowSelection}
                   size="small"
                 />

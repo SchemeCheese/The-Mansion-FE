@@ -18,7 +18,6 @@ import moment from 'moment';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
-// import TableSummary from 'components/TableSummary';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import { selectUpdateReservation } from 'selectors';
 import styled from 'styled-components';
@@ -55,13 +54,15 @@ const BreadscrumData = styled.p`
 `;
 
 function ReservationDetail() {
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+
   const rowSelection = {
-    onChange: (selectedRowKeys: any, selectedRows: any) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-      setSelectedRowKeys(selectedRowKeys);
+    selectedRowKeys,
+    onChange: (selectedRowKeysTable: any) => {
+      setSelectedRowKeys(selectedRowKeysTable);
     },
     getCheckboxProps: (record: any) => ({
-      disabled: record.name === 'Disabled User',
+      disabled: record.status === 'Cancel',
       // Column configuration not to be checked
       name: record.name,
     }),
@@ -93,11 +94,12 @@ function ReservationDetail() {
   const showModal = () => {
     dispatch(searchRoomReset());
     setRoomCondition({
+      ...roomCondition,
       checkin: '',
       checkout: '',
       room_type: '',
     });
-    setQuantity(0);
+    setQuantity(1);
     setRoomSelected([]);
     setIsModalVisible(true);
   };
@@ -132,8 +134,8 @@ function ReservationDetail() {
   }
 
   const dispatch = useDispatch();
-  const reservationDetailRedux: any = useSelector<RootState>(
-    ({ getReservation: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
+  const reservationRedux: any = useSelector<RootState>(
+    ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
   );
   /** Response from API */
   const searchRoomsResult: any = useSelector<RootState>(
@@ -171,14 +173,14 @@ function ReservationDetail() {
   }, [searchRoomsResult]);
 
   useEffect(() => {
-    if (!_.isEmpty(reservationDetailRedux)) {
+    if (!_.isEmpty(reservationRedux)) {
       const roomsTemporary: any = [];
 
-      reservationDetailRedux.rooms.forEach((item: any) => {
+      reservationRedux.rooms.forEach((item: any) => {
         roomsTemporary.push({
           key: item.id,
           reservation_detail_id: item.id,
-          status: 'Waitlist',
+          status: item.canceled ? 'Cancel' : 'Waitlist',
           name: '-',
           room_type: item.equipment_type_id,
           room_type_text: item.room_type_text,
@@ -200,7 +202,7 @@ function ReservationDetail() {
 
       setRoomTotalForm(roomsTemporary);
     }
-  }, [reservationDetailRedux]);
+  }, [reservationRedux]);
   const { roomingListColumns } = useColumns();
 
   /** State */
@@ -213,8 +215,10 @@ function ReservationDetail() {
     checkin: '',
     checkout: '',
     room_type: '',
+    source_type: '',
+    source_id: '',
   });
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const [searchRoomResultState, setSearchRoomResultState] = useState<any>([]);
   const totalAmount = _.reduce(
     searchRoomResultState,
@@ -223,12 +227,6 @@ function ReservationDetail() {
     },
     0,
   );
-  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
-
-  const deleteSelectedRoom = () => {
-    console.log('aaaa', selectedRowKeys);
-  };
-
   const formRef: any = React.createRef();
 
   const submitUpdateForm = (e: any) => {
@@ -274,12 +272,23 @@ function ReservationDetail() {
     }
   }, [changed]);
 
+  useEffect(() => {
+    console.log('reservationDetailRedux', reservationRedux);
+
+    setRoomCondition({
+      ...roomCondition,
+      source_type: reservationRedux.market_segment_id,
+      source_id: reservationRedux.path_of_reservation,
+    });
+  }, [reservationRedux]);
+
   return (
     <>
       <BreadcrumbList data={breadcrumbData} />
       <SelectRoomModal
         isModalVisible={isModalVisible}
         quantity={quantity}
+        reservation={reservationRedux}
         roomCondition={roomCondition}
         roomSelected={roomSelected}
         roomTotalForm={roomTotalForm}
@@ -294,7 +303,10 @@ function ReservationDetail() {
       />
       <CancelBookingModal
         isModalVisible={isCancelBookingModalVisible}
+        reservation={reservationRedux}
+        selectedRowKeys={selectedRowKeys}
         setModalVisible={setIsCancelBookingModalVisible}
+        setSelectedRowKeys={setSelectedRowKeys}
       />
       <Row style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}>
         <Col span={8}>
@@ -312,7 +324,7 @@ function ReservationDetail() {
             />
           </svg>
           <span style={{ paddingLeft: 10, fontSize: 20 }}>
-            {t('reservation.Folio')}：{reservationDetailRedux.reservation_number}
+            {t('reservation.Folio')}：{reservationRedux.reservation_number}
           </span>
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
@@ -392,21 +404,20 @@ function ReservationDetail() {
           </Row>
         </Col>
       </Row>
-      {!_.isEmpty(reservationDetailRedux) && id && (
+      {!_.isEmpty(reservationRedux) && id && (
         <ReservationForm
-          deleteSelectedRoom={deleteSelectedRoom}
           formRef={formRef}
           isCreateForm={false}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          reservationDetail={reservationDetailRedux}
           reservationId={id}
-          reservationNumber={reservationDetailRedux.reservation_number}
+          reservationInfo={reservationRedux}
+          reservationNumber={reservationRedux.reservation_number}
           roomCondition={roomCondition}
           roomTotalForm={roomTotalForm}
           roomingListColumns={roomingListColumns}
           rowSelection={rowSelection}
-          selectedRowKeys={[]}
+          selectedRowKeys={selectedRowKeys}
           setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
           setRoomCondition={setRoomCondition}
           showModal={showModal}

@@ -65,6 +65,28 @@ export interface UpdateRate {
   payload: ReservationUpdateRatePayload;
 }
 
+export interface AddReservationDetailPayload {
+  client_info_id: string;
+  reservation_id: string;
+  rooms: Array<Record<string, any>>;
+}
+
+export interface AddReservationDetail {
+  payload: AddReservationDetailPayload;
+}
+
+export interface CancelReservationDetailPayload {
+  cancel_reason: string;
+  cancel_type: string;
+  client_info_id: string;
+  reservation_detail_id: number[];
+  reservation_id: string;
+}
+
+export interface CancelReservationDetail {
+  payload: CancelReservationDetailPayload;
+}
+
 export interface ReservationBookRoomPayload {
   id: string;
 }
