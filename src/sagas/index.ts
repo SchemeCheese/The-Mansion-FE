@@ -5,6 +5,7 @@ import github from './github';
 import product from './product';
 import reservation from './reservation';
 import room from './room';
+import schedule from './schedule';
 import user from './user';
 
 /**
@@ -18,5 +19,6 @@ export default function* root() {
     fork(room),
     fork(product),
     fork(agentInfos),
+    fork(schedule),
   ]);
 }

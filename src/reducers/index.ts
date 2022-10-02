@@ -13,6 +13,7 @@ import github, { githubState } from './github';
 import product, { productSearchState } from './product';
 import reservation, { reservationSearchState } from './reservation';
 import searchRoom, { roomSearchState } from './searchRoom';
+import searchSchedule, { searchScheduleState } from './searchSchedule';
 import updateGeneralInfo, { updateGeneralInfoState } from './updateGeneralInfo';
 import updateRate, { updateRateState } from './updateRate';
 import updateReservation, { updateReservationState } from './updateReservation';
@@ -38,6 +39,7 @@ export const initialState = {
   addReservationDetail: addReservationDetailState,
   cancelReservationDetail: cancelReservationDetailState,
   updateGeneralInfo: updateGeneralInfoState,
+  searchSchedule: searchScheduleState,
 };
 
 export default {
@@ -60,4 +62,5 @@ export default {
   ...addReservationDetail,
   ...cancelReservationDetail,
   ...updateGeneralInfo,
+  ...searchSchedule,
 };

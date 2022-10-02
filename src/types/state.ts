@@ -195,6 +195,13 @@ export interface AgentInfosState {
   total: number;
 }
 
+export interface SearchScheduleState {
+  data: Array<Record<string, any>>;
+  end_date: string;
+  is_searching: boolean;
+  start_date: string;
+}
+
 export interface RootState {
   addReservationDetail: AddReservationDetailState;
   agentInfos: AgentInfosState;
@@ -211,6 +218,7 @@ export interface RootState {
   product: ProductSearchState;
   reservation: ReservationSearchState;
   searchRoom: RoomSearchState;
+  searchSchedule: SearchScheduleState;
   updateGeneralInfo: UpdateGeneralInfoState;
   updateRate: UpdateRateState;
   updateReservation: CreateReservationState;

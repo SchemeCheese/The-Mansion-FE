@@ -1,0 +1,21 @@
+.schedule-calendar .ant-picker > .ant-picker-input > input {
+  font-size: 18px;
+  color: #1d39c4;
+  font-weight: 600;
+}
+
+.schedule-calendar .ant-picker {
+  border: none;
+}
+
+.schedule-calendar .ant-picker-suffix {
+  display: none;
+}
+
+.schedule-calendar .fc-view-harness {
+  max-height: 500px;
+}
+
+.schedule-calendar .fc-header-toolbar {
+  margin-bottom: -20px !important;
+}
