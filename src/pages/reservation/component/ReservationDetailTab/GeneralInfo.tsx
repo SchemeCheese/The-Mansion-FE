@@ -144,11 +144,13 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
     return <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />;
   }
 
+  console.log('generalInfoState', reservationDetailInfo);
+
   return (
     <Row style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
       <Col span={24} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
         <span style={{ paddingRight: 15 }}>{t('common.Created Date')}: </span>
-        <span>2017-08-08</span>
+        <span>{reservationDetailInfo.created_date}</span>
         <PattonButton onClick={() => handleUpdateGeneralInfo()} style={{ float: 'right' }}>
           {t('common.Update')}
         </PattonButton>

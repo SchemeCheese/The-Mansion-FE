@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Checkbox, Col, message, Row, Select, Space } from 'antd';
+import { Checkbox, Col, message, Row, Select, Skeleton, Space } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
@@ -354,7 +354,7 @@ function ReservationDetail() {
               <BreadscrumTitle>{t('common.Branch Code')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <p style={{ color: '#1D39C4', fontSize: 14 }}>TMHA</p>
+              <p style={{ color: '#1D39C4', fontSize: 14 }}>{reservationRedux.operator_code}</p>
             </Col>
           </Row>
           <Row>
@@ -370,7 +370,7 @@ function ReservationDetail() {
               <BreadscrumTitle>{t('common.Created By')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <BreadscrumData>TrangVo</BreadscrumData>
+              <BreadscrumData>{reservationRedux.created_user}</BreadscrumData>
             </Col>
           </Row>
         </Col>
@@ -383,7 +383,11 @@ function ReservationDetail() {
               <BreadscrumTitle>{t('reservation.Total Amount')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <p>4.800.000</p>
+              {reservationRedux.price ? (
+                <p>{formatNumber(reservationRedux.price.total)}</p>
+              ) : (
+                <Skeleton.Button />
+              )}
             </Col>
           </Row>
           <Row>
@@ -391,7 +395,11 @@ function ReservationDetail() {
               <BreadscrumTitle>{t('reservation.Deposit')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <p>4.800.000</p>
+              {reservationRedux.price ? (
+                <p>{formatNumber(reservationRedux.price.deposit)}</p>
+              ) : (
+                <Skeleton.Button />
+              )}
             </Col>
           </Row>
           <Row>
@@ -399,7 +407,11 @@ function ReservationDetail() {
               <BreadscrumTitle>{t('reservation.Amount Due')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <p>4.800.000</p>
+              {reservationRedux.price ? (
+                <p>{formatNumber(reservationRedux.price.amount_due)}</p>
+              ) : (
+                <Skeleton.Button />
+              )}
             </Col>
           </Row>
         </Col>
