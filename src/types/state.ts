@@ -93,6 +93,30 @@ export interface BookRoomPayload {
   id: string;
 }
 
+export interface UpdateGeneralInfoPayload {
+  adults: number;
+  baby: number | string;
+  birthday: number | string;
+  checkin_date: string;
+  checkin_time: string;
+  checkout_date: string;
+  checkout_time: string;
+  child: number;
+  dropoff_required: number | string;
+  dropoff_time: string;
+  early_check_in: number;
+  honeymoon: number | string;
+  late_check_out: number;
+  note: string;
+  pickup_required: number | string;
+  pickup_time: string;
+  reservation_detail_id: string;
+  reservation_id: string;
+  room_type: number;
+  transport_no_dropoff: string | number;
+  transport_no_pickup: string | number;
+}
+
 export interface CreateReservationState {
   payload: CreateReservationPayload;
   status: string;
@@ -129,6 +153,11 @@ export interface ReservationCancelReservationDetailPayload {
 
 export interface CancelReservationDetailState {
   payload: ReservationCancelReservationDetailPayload;
+  status: string;
+}
+
+export interface UpdateGeneralInfoState {
+  payload: UpdateGeneralInfoPayload;
   status: string;
 }
 
@@ -182,6 +211,7 @@ export interface RootState {
   product: ProductSearchState;
   reservation: ReservationSearchState;
   searchRoom: RoomSearchState;
+  updateGeneralInfo: UpdateGeneralInfoState;
   updateRate: UpdateRateState;
   updateReservation: CreateReservationState;
   user: UserState;

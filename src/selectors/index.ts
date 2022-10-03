@@ -41,3 +41,8 @@ export const selectCancelReservationDetail = createSelector(
   (state: RootState) => state.cancelReservationDetail,
   cancelReservationDetail => cancelReservationDetail,
 );
+
+export const selectUpdateGeneralInfo = createSelector(
+  (state: RootState) => state.updateGeneralInfo,
+  updateGeneralInfo => updateGeneralInfo,
+);

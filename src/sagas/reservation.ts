@@ -22,6 +22,8 @@ import {
   getReservationNumberFinish,
   searchReservation,
   searchReservationFinish,
+  updateGeneralInfo,
+  updateGeneralInfoSuccess,
   updateRate,
   updateRateSuccess,
   updateReservationSuccess,
@@ -237,6 +239,30 @@ export function* postCancelReservationDetailSaga({
 
   if (success) {
     yield put(cancelReservationDetailSuccess());
+    yield put(updateGeneralInfoSuccess());
+  }
+}
+
+export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof updateGeneralInfo>) {
+  let success = '';
+
+  ({ success } = yield call(
+    request,
+    `${apiEndPoint(ReservationEndpoint.UPDATE_GENERAL_INFO)}/${
+      payload.payload.reservation_id
+    }/reservation-detail/${payload.payload.reservation_detail_id}/update`,
+    {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        operator_code: 'the_mansion',
+      },
+    },
+  ));
+
+  if (success) {
+    yield put(updateGeneralInfoSuccess());
   }
 }
 
@@ -252,5 +278,6 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_BOOK_ROOM, postBookRoomSaga),
     takeLatest(ActionTypes.RESERVATION_ADD_RESERVATION_DETAIL, postAddReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_CANCEL_RESERVATION_DETAIL, postCancelReservationDetailSaga),
+    takeLatest(ActionTypes.RESERVATION_GENERAL_INFO_UPDATE, postUpdateGeneralInfoSaga),
   ]);
 }

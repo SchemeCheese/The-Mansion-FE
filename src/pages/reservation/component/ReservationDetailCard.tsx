@@ -22,7 +22,7 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
     <Col span={24} style={{ marginTop: 20 }}>
       <Tabs className="tabs-cart" defaultActiveKey="1">
         <TabPane key="1" tab={t('common.General Infos')}>
-          <GeneralInfo />
+          <GeneralInfo reservationDetailId={reservationDetail.id} reservationId={reservationId} />
         </TabPane>
         <TabPane key="2" tab={t('reservation.Rates')}>
           <Rate reservationDetailId={reservationDetail.id} reservationId={reservationId} />
