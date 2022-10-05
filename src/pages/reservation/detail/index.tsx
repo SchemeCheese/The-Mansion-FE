@@ -190,10 +190,10 @@ function ReservationDetail() {
           nights: moment
             .duration(moment(item.departure_date).diff(moment(item.arrival_date)))
             .asDays(),
-          adl: 2,
-          child: '-',
-          baby: '-',
-          rate: '',
+          adl: item.person_number ?? '-',
+          child: item.children_number ?? '-',
+          baby: item.infant_number ?? '-',
+          rate: item.rate_name,
           subtotal: formatNumber(item.total_price),
           deposit: '-',
           actual_amount: item.total_price,
