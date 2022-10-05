@@ -30,6 +30,7 @@ export const ReservationEndpoint = {
   ADD_RESERVATION_DETAIL: 'api/v1/reservations',
   CANCEL_RESERVATION_DETAIL: 'api/v1/reservations',
   UPDATE_GENERAL_INFO: 'api/v1/reservations',
+  SEARCH_SCHEDULE: 'api/v1/events',
 };
 
 export const RoomEndpoint = {

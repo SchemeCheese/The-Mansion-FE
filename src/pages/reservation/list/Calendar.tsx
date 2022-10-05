@@ -8,60 +8,48 @@ Main functions : Calendar Tab
 
 /* Demo: https://github.com/fullcalendar/fullcalendar-example-projects/tree/master/react-typescript */
 /* eslint simple-import-sort/imports: 0 */
+/* eslint no-underscore-dangle: 0 */
+
+import 'styles/calendar.css';
+
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import React, { useState } from 'react';
-import FullCalendar, {
-  DateSelectArg,
-  EventApi,
-  EventClickArg,
-  EventContentArg,
-} from '@fullcalendar/react';
-import { Col, Row } from 'antd';
+import React, { useState, useEffect } from 'react';
+import FullCalendar, { EventApi, EventContentArg } from '@fullcalendar/react';
+import { Col, DatePicker, Row, Select } from 'antd';
 import moment from 'moment';
+import { useDispatch } from 'react-redux';
 
-import PattonButton from 'components/PattonButton';
-import MButton from 'components/MButton';
 import {
   createEventId,
   INITIAL_EVENTS,
 } from 'pages/reservation/component/ReservationDetailTab/event-utils';
+import MInput from 'components/MInput';
+import { searchScheduleAction } from 'actions';
+import { selectSearchSchedule } from 'selectors';
+import { useAppSelector } from 'modules/hooks';
+import useTreeChanges from 'tree-changes-hook';
 
 interface DemoAppState {
   currentEvents: EventApi[];
   weekendsVisible: boolean;
 }
 
+const { Option } = Select;
+
 function Calendar() {
+  const dispatch = useDispatch();
   const [state, setState] = useState<DemoAppState>({
     weekendsVisible: true,
     currentEvents: [],
   });
 
-  const handleDateSelect = (selectInfo: DateSelectArg) => {
-    const title = prompt('Please enter a new title for your event');
-    const calendarApi = selectInfo.view.calendar;
+  const sarchScheduleRedux: any = useAppSelector(selectSearchSchedule);
+  const { changed } = useTreeChanges(sarchScheduleRedux.data);
 
-    calendarApi.unselect(); // clear date selection
-
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      });
-    }
-  };
-
-  const handleEventClick = (clickInfo: EventClickArg) => {
-    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove();
-    }
-  };
+  const fullCalendarRef: any = React.createRef();
 
   const handleEvents = (events: EventApi[]) => {
     setState({
@@ -70,34 +58,78 @@ function Calendar() {
     });
   };
 
+  const [resources, setResources] = useState([]);
+
+  useEffect(() => {
+    dispatch(
+      searchScheduleAction({
+        start_date: '2022-05-01',
+        end_date: '2022-05-15',
+      }),
+    );
+  }, []);
+
+  useEffect(() => {
+    setResources(sarchScheduleRedux.data.resources);
+    const calendarApi = fullCalendarRef.current.getApi().view.calendar;
+
+    sarchScheduleRedux.data.events.forEach((item: any) => {
+      calendarApi.addEvent({
+        id: createEventId(),
+        title: item.title,
+        start: item.start,
+        end: item.end,
+        allDay: true,
+        resourceId: item.resourceId,
+      });
+    });
+  }, [changed]);
+
   return (
     <>
       <Row style={{ background: 'white', padding: 16 }}>
         <Col span={24}>
-          <PattonButton style={{ marginRight: 15 }}>Empty Room</PattonButton>
-          <MButton>Booked Room</MButton>
+          <span> Filter </span>
+          <Select
+            placeholder="Room Type"
+            style={{
+              width: 150,
+              marginLeft: 15,
+            }}
+          >
+            <Option value="0">0</Option>
+            <Option value="1">1</Option>
+            <Option value="2">2</Option>
+            <Option value="3">3</Option>
+            <Option value="4">4</Option>
+            <Option value="5">5</Option>
+          </Select>
+          <MInput
+            placeholder="Room Number"
+            style={{
+              width: 150,
+              marginLeft: 15,
+            }}
+          />
           <div style={{ float: 'right', paddingTop: 5 }}>
             <span style={{ marginRight: 165 }}>Display</span>
           </div>
         </Col>
       </Row>
       <Row style={{ background: 'white', padding: 16, marginTop: 20 }}>
-        <Col span={24}>
+        <Col className="schedule-calendar" span={24} style={{ textAlign: 'center' }}>
+          <DatePicker defaultValue={moment()} format="MMM Y" />
           <FullCalendar
-            dayMaxEvents
-            editable
-            eventClick={handleEventClick}
+            ref={fullCalendarRef}
             eventContent={renderEventContent}
-            events={`${process.env.REACT_APP_API_HOST}/events`}
             eventsSet={handleEvents}
             headerToolbar={{
-              // left: 'today,prev,next',
               left: '',
-              center: 'title',
               right: 'timeGridWeekly,timeGridMonthly',
             }}
+            initialDate="2022-05-01"
             initialEvents={INITIAL_EVENTS}
-            initialView="timeGridMonthly"
+            initialView="timeGridWeekly"
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
             resourceAreaColumns={[
               {
@@ -109,10 +141,8 @@ function Calendar() {
                 headerContent: 'Room Type',
               },
             ]}
-            resources={`${process.env.REACT_APP_API_HOST}/resources`}
-            select={handleDateSelect}
-            selectMirror // alternatively, use the `events` setting to fetch from a feed
-            selectable
+            // resources={`${process.env.REACT_APP_API_HOST}/resources`}
+            resources={resources} // alternatively, use the `events` setting to fetch from a feed
             titleFormat={{
               month: 'short',
               year: 'numeric',
@@ -130,7 +160,11 @@ function Calendar() {
                 slotLaneContent(argument) {
                   const days = [];
 
-                  for (let index = 0; index < 15; index++) {
+                  for (
+                    let index = 0;
+                    index < sarchScheduleRedux.data.resources.length ?? 0;
+                    index++
+                  ) {
                     days.push(moment(argument.date).format('DD'));
                   }
 
@@ -149,7 +183,11 @@ function Calendar() {
                 slotLaneContent(argument) {
                   const days = [];
 
-                  for (let index = 0; index < 15; index++) {
+                  for (
+                    let index = 0;
+                    index < sarchScheduleRedux.data.resources.length ?? 0;
+                    index++
+                  ) {
                     days.push(moment(argument.date).format('DD'));
                   }
 
@@ -160,12 +198,7 @@ function Calendar() {
                 buttonText: 'Weekly',
               },
             }}
-            weekends // called after events are initialized/added/changed/removed
-            /* you can update a remote database when these fire:
-            eventAdd={function(){}}
-            eventChange={function(){}}
-            eventRemove={function(){}}
-            */
+            weekends
           />
         </Col>
       </Row>

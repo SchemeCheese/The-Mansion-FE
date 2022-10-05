@@ -46,3 +46,8 @@ export const selectUpdateGeneralInfo = createSelector(
   (state: RootState) => state.updateGeneralInfo,
   updateGeneralInfo => updateGeneralInfo,
 );
+
+export const selectSearchSchedule = createSelector(
+  (state: RootState) => state.searchSchedule,
+  searchSchedule => searchSchedule,
+);
