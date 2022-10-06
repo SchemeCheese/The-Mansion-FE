@@ -364,7 +364,6 @@ function SelectRoomModal({
               );
 
               setRoomSelected(roomSelectedTemporary);
-              // setRoomTotalForm(dataRoomTotalForm);
             }}
             style={{ color: '#F5222D', paddingLeft: 0 }}
             type="link"
