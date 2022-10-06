@@ -179,12 +179,14 @@ function SelectRoomModal({
               const stateTemporary = [...searchRoomResultState];
               const duplicateRecord = stateTemporary[index];
 
-              const stateTemporaryWithDuplicate = [
-                ...stateTemporary.slice(0, index + 1),
-                duplicateRecord,
-              ].concat(stateTemporary.slice(index + 1));
-
-              setSearchRoomResultState(stateTemporaryWithDuplicate);
+              setSearchRoomResultState(
+                searchRoomResultState.map((item: any) => {
+                  return {
+                    ...item,
+                    actual_amount: duplicateRecord.actual_amount,
+                  };
+                }),
+              );
             }}
             style={{ color: '#1D39C4', paddingLeft: 0 }}
             type="link"

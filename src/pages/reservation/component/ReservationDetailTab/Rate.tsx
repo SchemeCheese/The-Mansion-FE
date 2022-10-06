@@ -83,17 +83,17 @@ function Rate({ reservationDetailId, reservationId }: Props) {
       dataIndex: 'actual_amount',
       key: 'actual_amount',
       render: (text: string, record: any, index: number) => {
-        console.log('Duplicate', record, index, text);
+        console.log('Current', record, index, text);
 
         return (
           <Input
             name="actual_amount"
             onChange={event => {
               const stateTemporary: any = [...ratesState];
-              const duplicationItem = { ...stateTemporary[index] };
+              const currentItem = { ...stateTemporary[index] };
 
               stateTemporary[index] = {
-                ...duplicationItem,
+                ...currentItem,
                 actual_amount: event.target.value,
               };
 
@@ -117,18 +117,16 @@ function Rate({ reservationDetailId, reservationId }: Props) {
           <button
             onClick={() => {
               const stateTemporary = [...ratesState];
-              const duplicateRecord = {
-                ...stateTemporary[index],
-                reservation_charge_id: null,
-                paid_up: 0,
-              };
+              const duplicateRecord = stateTemporary[index];
 
-              const stateTemporaryWithDuplicate = [
-                ...stateTemporary.slice(0, index + 1),
-                duplicateRecord,
-              ].concat(stateTemporary.slice(index + 1));
-
-              setRatesState(stateTemporaryWithDuplicate);
+              setRatesState(
+                ratesState.map((item: any) => {
+                  return {
+                    ...item,
+                    actual_amount: duplicateRecord.actual_amount,
+                  };
+                }),
+              );
             }}
             style={{ color: colors.pattron }}
             type="button"
