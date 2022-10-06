@@ -90,7 +90,9 @@ export interface UpdateRatePayload {
 }
 
 export interface BookRoomPayload {
-  id: string;
+  reservation_detail_id: string;
+  reservation_id: string;
+  rooms: Array<Record<string, any>>;
 }
 
 export interface UpdateGeneralInfoPayload {

@@ -1,8 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Col, Tabs } from 'antd';
+import moment from 'moment';
+import { selectSearchSchedule } from 'selectors';
 
-import { searchReservation } from 'actions';
+import { useAppSelector } from 'modules/hooks';
+
+import { searchReservation, searchScheduleAction } from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 
@@ -59,6 +63,7 @@ function Reservation() {
 
   const dispatch = useDispatch();
 
+  const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
   const breadcrumbData = ['Home', 'List', 'App'];
 
   const handeleActive = (activeKey: string) => {
@@ -100,6 +105,17 @@ function Reservation() {
           checkout_to: '',
           inhouse: '',
           type: 'reserved',
+        }),
+      );
+    }
+
+    if (activeKey === '3') {
+      dispatch(
+        searchScheduleAction({
+          start_date: searchScheduleRedux.start_date ?? moment().format('YYYY-MM-DD'),
+          end_date: searchScheduleRedux.end_date ?? moment().add(15, 'days').format('YYYY-MM-DD'),
+          room_type: searchScheduleRedux.room_type ?? '',
+          room_number: searchScheduleRedux.room_number ?? '',
         }),
       );
     }

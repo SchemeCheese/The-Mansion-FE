@@ -58,7 +58,7 @@ function Calendar() {
   };
 
   const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
-  const { changed } = useTreeChanges(searchScheduleRedux.data);
+  const { changed } = useTreeChanges(searchScheduleRedux);
 
   const fullCalendarRef: any = React.createRef();
 
@@ -90,7 +90,7 @@ function Calendar() {
   useEffect(() => {
     setResources(searchScheduleRedux.data.resources);
 
-    if (changed('events')) {
+    if (changed('is_searching', false)) {
       const calendarApi = fullCalendarRef.current.getApi().view.calendar;
 
       searchScheduleRedux.data.events.forEach((item: any) => {
@@ -184,7 +184,7 @@ function Calendar() {
             onChange={date => handleChangePickDate(date)}
             open={isShowDatePicker}
           />
-          {searchScheduleRedux.is_searching ? (
+          {searchScheduleRedux.is_searching === false ? (
             <FullCalendar
               ref={fullCalendarRef}
               eventContent={renderEventContent}
