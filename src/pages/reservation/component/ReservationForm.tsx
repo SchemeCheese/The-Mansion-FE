@@ -378,7 +378,7 @@ function ReservationForm({
                   size="small"
                 />
               </Col>
-              {!_.isEmpty(reservationDetailInfo) && (
+              {!_.isEmpty(reservationDetailInfo) && !isCreateForm && (
                 <ReservationDetailCard
                   reservationDetail={reservationDetailInfo}
                   reservationId={reservationId}
