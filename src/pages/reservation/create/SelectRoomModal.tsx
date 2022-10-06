@@ -85,10 +85,10 @@ function SelectRoomModal({
       dataIndex: 'rate_name',
       key: 'rate_name',
       render: (text: any, record: any, index: number) => {
-        console.log('record', record, ratesResult);
+        console.log('record', record);
 
         const option: any = ratesResult?.map((item: any) => {
-          return <Option value={item.rate_id}>{item.rate_name}</Option>;
+          return <Option value={item.equipment_charge_detail_id}>{item.rate_name}</Option>;
         });
 
         return (
@@ -96,7 +96,7 @@ function SelectRoomModal({
             defaultValue={text}
             onChange={value => {
               const selectedRate = _.findWhere(ratesResult, {
-                rate_id: value,
+                equipment_charge_detail_id: value,
               });
 
               const stateTemporary = [...searchRoomResultState];
@@ -179,12 +179,14 @@ function SelectRoomModal({
               const stateTemporary = [...searchRoomResultState];
               const duplicateRecord = stateTemporary[index];
 
-              const stateTemporaryWithDuplicate = [
-                ...stateTemporary.slice(0, index + 1),
-                duplicateRecord,
-              ].concat(stateTemporary.slice(index + 1));
-
-              setSearchRoomResultState(stateTemporaryWithDuplicate);
+              setSearchRoomResultState(
+                searchRoomResultState.map((item: any) => {
+                  return {
+                    ...item,
+                    actual_amount: duplicateRecord.actual_amount,
+                  };
+                }),
+              );
             }}
             style={{ color: '#1D39C4', paddingLeft: 0 }}
             type="link"
@@ -298,13 +300,14 @@ function SelectRoomModal({
     charges.forEach((item: any) => {
       result.push({
         use_date: item.use_date,
-        rate_name: item.selected_rate_id,
+        rate_name: item.rate_name,
         adult: '',
         child: '',
         rate_detail: item.rate_detail,
         unit_price: item.price,
         actual_amount: item.price,
         task: '',
+        rate_id: item.equipment_charge_detail_id,
       });
     });
 
@@ -362,7 +365,6 @@ function SelectRoomModal({
               );
 
               setRoomSelected(roomSelectedTemporary);
-              // setRoomTotalForm(dataRoomTotalForm);
             }}
             style={{ color: '#F5222D', paddingLeft: 0 }}
             type="link"

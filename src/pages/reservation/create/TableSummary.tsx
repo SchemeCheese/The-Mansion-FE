@@ -47,8 +47,8 @@ function TableSummary({
       );
 
       dataSelectedRoomsResult.push({
-        checkin_date: _.first(reservationDetail).use_date,
-        checkout_date: _.last(reservationDetail).use_date,
+        checkin_date: roomCondition.checkin,
+        checkout_date: roomCondition.checkout,
         room_type: roomCondition.room_type,
         room_type_text: _.first(reservationDetail).room_type,
         rate_name: _.first(reservationDetail).rate_name,
