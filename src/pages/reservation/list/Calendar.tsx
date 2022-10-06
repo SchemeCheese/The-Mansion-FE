@@ -45,9 +45,20 @@ function Calendar() {
     weekendsVisible: true,
     currentEvents: [],
   });
+  const [searchCondition, setSearchCondition] = useState({
+    start_date: moment().format('YYYY-MM-DD'),
+    end_date: moment().add(15, 'days').format('YYYY-MM-DD'),
+    room_type: '',
+    room_number: '',
+  });
+  const [isShowDatePicker, setIsShowDatePicker] = useState(false);
 
-  const sarchScheduleRedux: any = useAppSelector(selectSearchSchedule);
-  const { changed } = useTreeChanges(sarchScheduleRedux.data);
+  const toggleShowDatePicker = () => {
+    setIsShowDatePicker(!isShowDatePicker);
+  };
+
+  const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
+  const { changed } = useTreeChanges(searchScheduleRedux.data);
 
   const fullCalendarRef: any = React.createRef();
 
@@ -58,31 +69,41 @@ function Calendar() {
     });
   };
 
+  const handleChangePickDate = (date: any) => {
+    const temporaryState = {
+      ...searchCondition,
+      start_date: date.format('YYYY-MM-DD'),
+      end_date: date.add(15, 'days').format('YYYY-MM-DD'),
+    };
+
+    setSearchCondition(temporaryState);
+    setIsShowDatePicker(false);
+    dispatch(searchScheduleAction(temporaryState));
+  };
+
   const [resources, setResources] = useState([]);
 
   useEffect(() => {
-    dispatch(
-      searchScheduleAction({
-        start_date: '2022-05-01',
-        end_date: '2022-05-15',
-      }),
-    );
+    dispatch(searchScheduleAction(searchCondition));
   }, []);
 
   useEffect(() => {
-    setResources(sarchScheduleRedux.data.resources);
-    const calendarApi = fullCalendarRef.current.getApi().view.calendar;
+    setResources(searchScheduleRedux.data.resources);
 
-    sarchScheduleRedux.data.events.forEach((item: any) => {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title: item.title,
-        start: item.start,
-        end: item.end,
-        allDay: true,
-        resourceId: item.resourceId,
+    if (changed('events')) {
+      const calendarApi = fullCalendarRef.current.getApi().view.calendar;
+
+      searchScheduleRedux.data.events.forEach((item: any) => {
+        calendarApi.addEvent({
+          id: createEventId(),
+          title: item.title,
+          start: item.start,
+          end: item.end,
+          allDay: true,
+          resourceId: item.resourceId,
+        });
       });
-    });
+    }
   }, [changed]);
 
   return (
@@ -91,13 +112,18 @@ function Calendar() {
         <Col span={24}>
           <span> Filter </span>
           <Select
+            onChange={value =>
+              setSearchCondition({
+                ...searchCondition,
+                room_type: value,
+              })
+            }
             placeholder="Room Type"
             style={{
               width: 150,
               marginLeft: 15,
             }}
           >
-            <Option value="0">0</Option>
             <Option value="1">1</Option>
             <Option value="2">2</Option>
             <Option value="3">3</Option>
@@ -105,6 +131,17 @@ function Calendar() {
             <Option value="5">5</Option>
           </Select>
           <MInput
+            onChange={event =>
+              setSearchCondition({
+                ...searchCondition,
+                room_number: event.target.value,
+              })
+            }
+            onKeyUp={event => {
+              if (event.key === 'Enter') {
+                dispatch(searchScheduleAction(searchCondition));
+              }
+            }}
             placeholder="Room Number"
             style={{
               width: 150,
@@ -118,88 +155,118 @@ function Calendar() {
       </Row>
       <Row style={{ background: 'white', padding: 16, marginTop: 20 }}>
         <Col className="schedule-calendar" span={24} style={{ textAlign: 'center' }}>
-          <DatePicker defaultValue={moment()} format="MMM Y" />
-          <FullCalendar
-            ref={fullCalendarRef}
-            eventContent={renderEventContent}
-            eventsSet={handleEvents}
-            headerToolbar={{
-              left: '',
-              right: 'timeGridWeekly,timeGridMonthly',
+          <b
+            aria-hidden="true"
+            className="title-date"
+            onClick={toggleShowDatePicker}
+            role="button"
+            tabIndex={0}
+          >
+            {moment(searchCondition.start_date).format('MMMM Y')}
+          </b>
+          <DatePicker
+            allowClear={false}
+            dateRender={current => {
+              const style: React.CSSProperties = {};
+
+              if (current.day() === 0 || current.day() === 6) {
+                style.color = 'red';
+              }
+
+              return (
+                <div className="ant-picker-cell-inner" style={style}>
+                  {current.date()}
+                </div>
+              );
             }}
-            initialDate="2022-05-01"
-            initialEvents={INITIAL_EVENTS}
-            initialView="timeGridWeekly"
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
-            resourceAreaColumns={[
-              {
-                field: 'title',
-                headerContent: 'Room No',
-              },
-              {
-                field: 'occupancy',
-                headerContent: 'Room Type',
-              },
-            ]}
-            // resources={`${process.env.REACT_APP_API_HOST}/resources`}
-            resources={resources} // alternatively, use the `events` setting to fetch from a feed
-            titleFormat={{
-              month: 'short',
-              year: 'numeric',
-              day: 'numeric',
-            }}
-            viewClassNames="calendar-table"
-            views={{
-              timeGridMonthly: {
-                type: 'resourceTimelineMonth',
-                duration: { days: 15 },
-                slotDuration: { days: 1 },
-                slotLabelFormat(argument) {
-                  return moment(argument.date).format('DD[\n]dd');
-                },
-                slotLaneContent(argument) {
-                  const days = [];
-
-                  for (
-                    let index = 0;
-                    index < sarchScheduleRedux.data.resources.length ?? 0;
-                    index++
-                  ) {
-                    days.push(moment(argument.date).format('DD'));
-                  }
-
-                  return days.join('\n');
-                },
-                slotLaneClassNames: 'slot-fc-day-monthly',
-                buttonText: 'Monthly',
-              },
-              timeGridWeekly: {
-                type: 'resourceTimelineWeek',
-                duration: { days: 7 },
-                slotDuration: { days: 1 },
-                slotLabelFormat(argument) {
-                  return moment(argument.date).format('DD[\n]dd');
-                },
-                slotLaneContent(argument) {
-                  const days = [];
-
-                  for (
-                    let index = 0;
-                    index < sarchScheduleRedux.data.resources.length ?? 0;
-                    index++
-                  ) {
-                    days.push(moment(argument.date).format('DD'));
-                  }
-
-                  return days.join('\n');
-                },
-                slotLaneClassNames: 'slot-fc-day-weekly',
-                slotLabelClassNames: 'monthly',
-                buttonText: 'Weekly',
-              },
-            }}
-            weekends
+            defaultValue={moment()}
+            format="MMMM Y"
+            onChange={date => handleChangePickDate(date)}
+            open={isShowDatePicker}
           />
+          {searchScheduleRedux.is_searching ? (
+            <FullCalendar
+              ref={fullCalendarRef}
+              eventContent={renderEventContent}
+              eventsSet={handleEvents}
+              headerToolbar={{
+                left: '',
+                right: 'timeGridWeekly,timeGridMonthly',
+              }}
+              initialDate={searchCondition.start_date}
+              initialEvents={INITIAL_EVENTS}
+              initialView="timeGridWeekly"
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
+              resourceAreaColumns={[
+                {
+                  field: 'title',
+                  headerContent: 'Room No',
+                },
+                {
+                  field: 'occupancy',
+                  headerContent: 'Room Type',
+                },
+              ]}
+              // resources={`${process.env.REACT_APP_API_HOST}/resources`}
+              resources={resources} // alternatively, use the `events` setting to fetch from a feed
+              titleFormat={{
+                month: 'short',
+                year: 'numeric',
+                day: 'numeric',
+              }}
+              viewClassNames="calendar-table"
+              views={{
+                timeGridMonthly: {
+                  type: 'resourceTimelineMonth',
+                  duration: { days: 15 },
+                  slotDuration: { days: 1 },
+                  slotLabelFormat(argument) {
+                    return moment(argument.date).format('DD[\n]dd');
+                  },
+                  slotLaneContent(argument) {
+                    const days = [];
+
+                    for (
+                      let index = 0;
+                      index < searchScheduleRedux.data.resources.length ?? 0;
+                      index++
+                    ) {
+                      days.push(moment(argument.date).format('DD'));
+                    }
+
+                    return days.join('\n');
+                  },
+                  slotLaneClassNames: 'slot-fc-day-monthly',
+                  buttonText: 'Monthly',
+                },
+                timeGridWeekly: {
+                  type: 'resourceTimelineWeek',
+                  duration: { days: 7 },
+                  slotDuration: { days: 1 },
+                  slotLabelFormat(argument) {
+                    return moment(argument.date).format('DD[\n]dd');
+                  },
+                  slotLaneContent(argument) {
+                    const days = [];
+
+                    for (
+                      let index = 0;
+                      index < searchScheduleRedux.data.resources.length ?? 0;
+                      index++
+                    ) {
+                      days.push(moment(argument.date).format('DD'));
+                    }
+
+                    return days.join('\n');
+                  },
+                  slotLaneClassNames: 'slot-fc-day-weekly',
+                  slotLabelClassNames: 'monthly',
+                  buttonText: 'Weekly',
+                },
+              }}
+              weekends
+            />
+          ) : null}
         </Col>
       </Row>
     </>
