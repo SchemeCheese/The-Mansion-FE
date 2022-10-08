@@ -27,3 +27,15 @@ export const randomKey = (length: number) => {
       [Math.random() < 0.5 ? 'toString' : 'toUpperCase']();
   });
 };
+
+export const getDaysBetweenDates = function (startDate: any, endDate: any) {
+  const now = startDate.clone();
+  const dates = [];
+
+  while (now.isSameOrBefore(endDate)) {
+    dates.push(now.format('YYYY-MM-DD'));
+    now.add(1, 'days');
+  }
+
+  return dates;
+};

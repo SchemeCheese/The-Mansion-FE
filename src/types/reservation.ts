@@ -33,7 +33,7 @@ export interface ReservationPayload {
   payment_method?: string;
   reservation_id?: number | string;
   reservation_number: string;
-  rooms: any;
+  rooms: Array<Record<string, any>>;
   send_mail?: string;
 }
 
@@ -88,7 +88,9 @@ export interface CancelReservationDetail {
 }
 
 export interface ReservationBookRoomPayload {
-  id: string;
+  reservation_detail_id: string;
+  reservation_id: string;
+  rooms: Array<Record<string, any>>;
 }
 
 export interface BookRoom {

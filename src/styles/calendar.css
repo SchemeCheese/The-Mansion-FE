@@ -4,7 +4,8 @@
   left: 41%;
 }
 
-.schedule-calendar .fc-view-harness {
+.schedule-calendar .fc-view-harness,
+.schedule-tab .fc-view-harness {
   max-height: 500px;
 }
 

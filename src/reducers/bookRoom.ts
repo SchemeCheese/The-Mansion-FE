@@ -6,7 +6,9 @@ import { BookRoomState } from 'types';
 
 export const bookRoomState = {
   payload: {
-    id: '',
+    rooms: [],
+    reservation_id: '',
+    reservation_detail_id: '',
   },
   status: '',
 };

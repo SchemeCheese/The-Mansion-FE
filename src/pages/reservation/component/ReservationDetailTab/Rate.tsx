@@ -34,8 +34,6 @@ function Rate({ reservationDetailId, reservationId }: Props) {
     ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
 
-  console.log('reservationDetailInfo Rate', reservationDetailInfo);
-
   useEffect(() => {
     setRatesState(reservationDetailInfo.charges);
   }, [reservationDetailInfo.charges]);

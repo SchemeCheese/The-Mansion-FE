@@ -1,10 +1,13 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { Col, Tabs } from 'antd';
 import GuestList from 'pages/reservation/component/ReservationDetailTab/GuestList';
 import Rate from 'pages/reservation/component/ReservationDetailTab/Rate';
 import Schedule from 'pages/reservation/component/ReservationDetailTab/Schedule';
 import Transaction from 'pages/reservation/component/ReservationDetailTab/Transaction';
+
+import { getReservationDetail } from 'actions';
 
 import GeneralInfo from './ReservationDetailTab/GeneralInfo';
 
@@ -17,10 +20,24 @@ interface Props {
 
 function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const handleChangeTab = (tab: string) => {
+    console.log('tab', tab);
+
+    if (tab === '3') {
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetail.id,
+        }),
+      );
+    }
+  };
 
   return (
     <Col span={24} style={{ marginTop: 20 }}>
-      <Tabs className="tabs-cart" defaultActiveKey="1">
+      <Tabs className="tabs-cart" defaultActiveKey="1" onChange={handleChangeTab}>
         <TabPane key="1" tab={t('common.General Infos')}>
           <GeneralInfo reservationDetailId={reservationDetail.id} reservationId={reservationId} />
         </TabPane>
@@ -28,7 +45,7 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
           <Rate reservationDetailId={reservationDetail.id} reservationId={reservationId} />
         </TabPane>
         <TabPane key="3" tab={t('reservation.Schedule')}>
-          <Schedule />
+          <Schedule reservationDetailId={reservationDetail.id} reservationId={reservationId} />
         </TabPane>
         <TabPane key="4" tab={t('reservation.Guest List')}>
           <GuestList guests={reservationDetail.guests} />

@@ -22,6 +22,11 @@ export const selectCreateReservation = createSelector(
   createReservation => createReservation,
 );
 
+export const selectGetReservationDetail = createSelector(
+  (state: RootState) => state.getReservationDetail,
+  getReservationDetail => getReservationDetail,
+);
+
 export const selectUpdateReservation = createSelector(
   (state: RootState) => state.updateReservation,
   updateReservation => updateReservation,
@@ -45,6 +50,11 @@ export const selectCancelReservationDetail = createSelector(
 export const selectUpdateGeneralInfo = createSelector(
   (state: RootState) => state.updateGeneralInfo,
   updateGeneralInfo => updateGeneralInfo,
+);
+
+export const selectBookRoom = createSelector(
+  (state: RootState) => state.bookRoom,
+  bookRoom => bookRoom,
 );
 
 export const selectSearchSchedule = createSelector(

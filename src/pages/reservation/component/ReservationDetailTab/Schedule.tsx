@@ -9,27 +9,35 @@ Main functions : Schedule Tab
 /* Demo: https://github.com/fullcalendar/fullcalendar-example-projects/tree/master/react-typescript */
 /* eslint simple-import-sort/imports: 0 */
 /* eslint no-underscore-dangle: 0 */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import FullCalendar, {
   DateSelectArg,
   EventApi,
   EventClickArg,
   EventContentArg,
+  EventChangeArg,
 } from '@fullcalendar/react';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Checkbox, Col, DatePicker, Form, Row, Select } from 'antd';
+import { Checkbox, Col, DatePicker, Form, Row, Select, message } from 'antd';
 import moment from 'moment';
+import useTreeChanges from 'tree-changes-hook';
+import { useAppSelector } from 'modules/hooks';
+import { selectBookRoom, selectGetReservationDetail } from 'selectors';
 
 import PattonButton from 'components/PattonButton';
+import { RootState } from 'types';
 
 import {
   createEventId,
   INITIAL_EVENTS,
 } from 'pages/reservation/component/ReservationDetailTab/event-utils';
+import { bookRoom } from 'actions';
+import { getDaysBetweenDates } from 'helpers';
 
 interface DemoAppState {
   currentEvents: EventApi[];
@@ -38,47 +46,182 @@ interface DemoAppState {
 
 const { Option } = Select;
 
-function Schedule() {
+interface Props {
+  reservationDetailId: string;
+  reservationId: string;
+}
+
+function Schedule({ reservationDetailId, reservationId }: Props) {
   const [state, setState] = useState<DemoAppState>({
     weekendsVisible: true,
     currentEvents: [],
   });
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const fullCalendarRef: any = React.createRef();
+
+  const bookRoomData = useAppSelector(selectBookRoom);
+  const { changed } = useTreeChanges(bookRoomData);
+
+  const reservationDetailData = useAppSelector(selectGetReservationDetail);
+
+  const reservationDetailInfo: any = useSelector<RootState>(
+    ({ getReservationDetail }) => getReservationDetail.data,
+  );
+
+  const { changed: changedEvents } = useTreeChanges(reservationDetailData);
+
+  const isValidSelectRoom = (bookRoomInfoData: any) => {
+    const rateNumber: any = {};
+    const validationNight: any = {};
+
+    reservationDetailInfo.charges.forEach((rItem: any) => {
+      rateNumber[rItem.use_date] = (rateNumber[rItem.use_date] ?? 0) + 1;
+    });
+
+    bookRoomInfoData.forEach((item: any) => {
+      getDaysBetweenDates(
+        moment(item.use_start_date),
+        moment(item.use_end_date).subtract(1, 'days'),
+      ).forEach((date: any) => {
+        validationNight[date] = (validationNight[date] ?? 0) + 1;
+      });
+    });
+
+    let isError = false;
+
+    Object.keys(validationNight).forEach((item: string) => {
+      if (validationNight[item] > rateNumber[item]) {
+        isError = true;
+      }
+    });
+
+    return isError;
+  };
 
   const [bookRoomInfo, setBookRoomInfo] = useState<any>([]);
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
-    const calendarApi = selectInfo.view.calendar;
-
-    calendarApi.unselect(); // clear date selection
-
-    calendarApi.addEvent({
-      id: createEventId(),
-      title: 'Minh NV - Agoda',
-      start: selectInfo.startStr,
-      end: selectInfo.endStr,
-      allDay: selectInfo.allDay,
-      resourceId: selectInfo.resource?._resource.id,
-    });
-
     const bookRoomInfoTemporary = [...bookRoomInfo];
 
     bookRoomInfoTemporary.push({
       reservation_equipment_id: null,
-      room_type: selectInfo.resource?.extendedProps.roomType,
-      room_id: selectInfo.resource?.extendedProps.roomId,
+      room_type: selectInfo.resource?.extendedProps.room_type,
+      room_id: selectInfo.resource?.extendedProps.room_id,
       use_start_date: selectInfo.startStr,
       use_end_date: selectInfo.endStr,
     });
 
-    setBookRoomInfo(bookRoomInfoTemporary);
+    const isError = isValidSelectRoom(bookRoomInfoTemporary);
+
+    const calendarApi = selectInfo.view.calendar;
+
+    if (isError) {
+      message.warn('Selecting room is invalid');
+    } else {
+      calendarApi.addEvent({
+        id: createEventId(),
+        title: 'Minh NV - Agoda',
+        start: selectInfo.startStr,
+        end: selectInfo.endStr,
+        allDay: selectInfo.allDay,
+        resourceId: selectInfo.resource?._resource.id,
+      });
+
+      setBookRoomInfo(bookRoomInfoTemporary);
+    }
+
+    calendarApi.unselect(); // clear date selection
   };
 
-  console.log('Schedule setBookRoomInfo', bookRoomInfo);
+  useEffect(() => {
+    if (changed('status', 'SUCCESS')) {
+      message.success('Booking room successfully!');
+    }
+  }, [changed]);
+
+  useEffect(() => {
+    if (changedEvents('is_finish', true)) {
+      const calendarApi = fullCalendarRef.current.getApi().view.calendar;
+      const stateTemporary: any = [];
+
+      reservationDetailInfo.events.forEach((item: any) => {
+        calendarApi.addEvent({
+          id: createEventId(),
+          title: item.title,
+          start: item.start,
+          end: item.end,
+          allDay: true,
+          resourceId: item.room_id,
+          room_id: item.room_id,
+          room_type: item.room_type,
+          reservation_equipment_id: item.reservation_equipment_id,
+        });
+
+        stateTemporary.push({
+          reservation_equipment_id: item.reservation_equipment_id,
+          room_type: item.room_type,
+          room_id: item.room_id,
+          use_start_date: item.start,
+          use_end_date: item.end,
+        });
+      });
+
+      setBookRoomInfo(stateTemporary);
+    }
+  }, [changedEvents]);
+
+  const updateBookingRoom = () => {
+    dispatch(
+      bookRoom({
+        payload: {
+          rooms: bookRoomInfo,
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        },
+      }),
+    );
+  };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+      const bookRoomInfoTemporary = [...bookRoomInfo];
+
+      const indexElement = bookRoomInfoTemporary.findIndex(function (item) {
+        return (
+          item.reservation_equipment_id === clickInfo.event.extendedProps.reservation_equipment_id
+        );
+      });
+
+      bookRoomInfoTemporary.splice(indexElement, 1);
+
       clickInfo.event.remove();
+      setBookRoomInfo(bookRoomInfoTemporary);
+    }
+  };
+
+  const handleChangeEvent = (event: EventChangeArg) => {
+    const bookRoomInfoTemporary = [...bookRoomInfo];
+
+    const indexElement = bookRoomInfoTemporary.findIndex(function (item) {
+      return item.reservation_equipment_id === event.event.extendedProps.reservation_equipment_id;
+    });
+
+    bookRoomInfoTemporary[indexElement] = {
+      reservation_equipment_id: event.event?.extendedProps.reservation_equipment_id,
+      room_type: event.event?.extendedProps.room_type,
+      room_id: event.event?._def.resourceIds ? parseInt(event.event?._def.resourceIds[0], 10) : '',
+      use_start_date: event.event.startStr,
+      use_end_date: event.event.endStr,
+    };
+
+    const isError = isValidSelectRoom(bookRoomInfoTemporary);
+
+    if (isError) {
+      message.warn('Selecting room is invalid');
+      event.revert();
+    } else {
+      setBookRoomInfo(bookRoomInfoTemporary);
     }
   };
 
@@ -89,244 +232,238 @@ function Schedule() {
     });
   };
 
-  const resources = [
-    { id: 'a', title: '102', occupancy: 'Superior', roomId: '1', roomType: '1' },
-    { id: 'b', title: '103', occupancy: 'Superior', roomId: '2', roomType: '1' },
-    { id: 'c', title: '104', occupancy: 'Superior', roomId: '3', roomType: '1' },
-    { id: 'd', title: '105', occupancy: 'Superior', roomId: '4', roomType: '1' },
-    { id: 'e', title: '106', occupancy: 'Deluxe', roomId: '5', roomType: '1' },
-    { id: 'f', title: '107', occupancy: 'Deluxe', roomId: '6', roomType: '1' },
-    { id: 'g', title: '108', occupancy: 'Deluxe', roomId: '7', roomType: '1' },
-    { id: 'h', title: '109', occupancy: 'Deluxe', roomId: '8', roomType: '1' },
-    { id: 'i', title: '110', occupancy: 'Deluxe', roomId: '9', roomType: '1' },
-    { id: 'j', title: '111', occupancy: 'Deluxe', roomId: '10', roomType: '1' },
-    { id: 'k', title: '112', occupancy: 'Family', roomId: '11', roomType: '1' },
-    { id: 'l', title: '113', occupancy: 'Family', roomId: '12', roomType: '1' },
-    { id: 'm', title: '114', occupancy: 'Family', roomId: '13', roomType: '1' },
-    { id: 'n', title: '115', occupancy: 'Family', roomId: '14', roomType: '1' },
-    { id: 'o', title: '116', occupancy: 'Family', roomId: '15', roomType: '1' },
-  ];
+  // const resources = [
+  //   { id: 'a', title: '102', occupancy: 'Superior', roomId: '1', roomType: '1' },
+  //   { id: 'b', title: '103', occupancy: 'Superior', roomId: '2', roomType: '1' },
+  //   { id: 'c', title: '104', occupancy: 'Superior', roomId: '3', roomType: '1' },
+  //   { id: 'd', title: '105', occupancy: 'Superior', roomId: '4', roomType: '1' },
+  //   { id: 'e', title: '106', occupancy: 'Deluxe', roomId: '5', roomType: '1' },
+  //   { id: 'f', title: '107', occupancy: 'Deluxe', roomId: '6', roomType: '1' },
+  //   { id: 'g', title: '108', occupancy: 'Deluxe', roomId: '7', roomType: '1' },
+  //   { id: 'h', title: '109', occupancy: 'Deluxe', roomId: '8', roomType: '1' },
+  //   { id: 'i', title: '110', occupancy: 'Deluxe', roomId: '9', roomType: '1' },
+  //   { id: 'j', title: '111', occupancy: 'Deluxe', roomId: '10', roomType: '1' },
+  //   { id: 'k', title: '112', occupancy: 'Family', roomId: '11', roomType: '1' },
+  //   { id: 'l', title: '113', occupancy: 'Family', roomId: '12', roomType: '1' },
+  //   { id: 'm', title: '114', occupancy: 'Family', roomId: '13', roomType: '1' },
+  //   { id: 'n', title: '115', occupancy: 'Family', roomId: '14', roomType: '1' },
+  //   { id: 'o', title: '116', occupancy: 'Family', roomId: '15', roomType: '1' },
+  // ];
 
   return (
     <Row style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
-      <Col offset={16} span={8} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
-        <Checkbox style={{ paddingRight: 50 }}>Smoking Room</Checkbox>
-        <PattonButton style={{ float: 'right' }}>{t('common.Update')}</PattonButton>
-      </Col>
-      <Col span={8}>
-        <Form.Item
-          label={t('reservation.Checkin')}
-          name="checkin"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <DatePicker
-            defaultValue={moment('2017-08-08')}
-            style={{
-              height: 32,
-              borderRadius: 4,
-              marginRight: 11,
-              width: '100%',
-            }}
-          />
-        </Form.Item>
+      {reservationDetailData.is_finish === true ? (
+        <>
+          <Col offset={16} span={8} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
+            <Checkbox style={{ paddingRight: 50 }}>Smoking Room</Checkbox>
+            <PattonButton onClick={updateBookingRoom} style={{ float: 'right' }}>
+              {t('common.Update')}
+            </PattonButton>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              label={t('reservation.Checkin')}
+              name="checkin"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <DatePicker
+                defaultValue={moment(reservationDetailData.data.checkin)}
+                disabled
+                style={{
+                  height: 32,
+                  borderRadius: 4,
+                  marginRight: 11,
+                  width: '100%',
+                }}
+              />
+            </Form.Item>
 
-        <Form.Item
-          label={t('reservation.Checkout')}
-          name="checkout"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <DatePicker
-            defaultValue={moment('2017-08-08')}
-            style={{
-              height: 32,
-              borderRadius: 4,
-              marginRight: 11,
-              width: '100%',
-            }}
-          />
-        </Form.Item>
-      </Col>
-      <Col span={8}>
-        <Form.Item
-          label={t('reservation.Room Type.title')}
-          name="room_type"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select allowClear placeholder={t('reservation.Room Type.placeholder')}>
-            <Option value="male">male</Option>
-            <Option value="female">female</Option>
-            <Option value="other">other</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="Floor"
-          name="room_type"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select allowClear placeholder="Select floor">
-            <Option value="male">male</Option>
-            <Option value="female">female</Option>
-            <Option value="other">other</Option>
-          </Select>
-        </Form.Item>
-      </Col>
-      <Col span={8}>
-        <Form.Item
-          label="View"
-          name="room_type"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select allowClear placeholder="Select view">
-            <Option value="male">male</Option>
-            <Option value="female">female</Option>
-            <Option value="other">other</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          label="Direction"
-          name="room_type"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <Select allowClear placeholder="Select direction">
-            <Option value="male">male</Option>
-            <Option value="female">female</Option>
-            <Option value="other">other</Option>
-          </Select>
-        </Form.Item>
-      </Col>
-      <Col span={24}>
-        <FullCalendar
-          dayMaxEvents
-          editable
-          eventClick={handleEventClick}
-          eventContent={renderEventContent}
-          events={`${process.env.REACT_APP_API_HOST}/events`}
-          eventsSet={handleEvents}
-          headerToolbar={{
-            // left: 'today,prev,next',
-            left: '',
-            center: 'title',
-            right: '',
-          }}
-          initialEvents={INITIAL_EVENTS}
-          initialView="timeGridWeekly"
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
-          resourceAreaColumns={[
-            {
-              field: 'title',
-              headerContent: 'Room No',
-            },
-            {
-              field: 'occupancy',
-              headerContent: 'Room Type',
-            },
-          ]}
-          resources={resources}
-          select={handleDateSelect}
-          selectConstraint={{
-            start: moment().format('YYYY-MM-DD'),
-            end: moment().add(2, 'days').format('YYYY-MM-DD'),
-          }} // alternatively, use the `events` setting to fetch from a feed
-          selectMirror
-          selectable
-          titleFormat={{
-            month: 'short',
-            year: 'numeric',
-            day: 'numeric',
-          }}
-          // initialDate={'2022-10-01'}
-          viewClassNames="calendar-table"
-          views={{
-            timeGridMonthly: {
-              type: 'resourceTimelineMonth',
-              duration: { days: 15 },
-              slotDuration: { days: 1 },
-              slotLabelFormat(argument) {
-                return moment(argument.date).format('DD[\n]dd');
-              },
-              slotLaneContent(argument) {
-                const days = [];
+            <Form.Item
+              label={t('reservation.Checkout')}
+              name="checkout"
+              rules={[
+                {
+                  required: true,
+                },
+              ]}
+            >
+              <DatePicker
+                defaultValue={moment(reservationDetailData.data.checkout)}
+                disabled
+                style={{
+                  height: 32,
+                  borderRadius: 4,
+                  marginRight: 11,
+                  width: '100%',
+                }}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label={t('reservation.Room Type.title')} name="room_type">
+              <Select allowClear placeholder={t('reservation.Room Type.placeholder')}>
+                <Option value="1">1</Option>
+                <Option value="2">2</Option>
+                <Option value="3">3</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="Floor" name="floor">
+              <Select allowClear placeholder="Select floor">
+                <Option value="1">1</Option>
+                <Option value="2">2</Option>
+                <Option value="3">3</Option>
+                <Option value="4">4</Option>
+                <Option value="5">5</Option>
+                <Option value="6">6</Option>
+                <Option value="7">7</Option>
+                <Option value="8">8</Option>
+                <Option value="9">9</Option>
+                <Option value="10">10</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item label="View" name="view_type">
+              <Select allowClear placeholder="Select view">
+                <Option value="sea">Sea View</Option>
+                <Option value="mountain">Mountain View</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="Direction" name="direction">
+              <Select allowClear placeholder="Select direction">
+                <Option value="male">North</Option>
+                <Option value="female">East</Option>
+                <Option value="other">West</Option>
+                <Option value="other">South</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col className="schedule-tab" span={24}>
+            <FullCalendar
+              ref={fullCalendarRef}
+              dayMaxEvents
+              editable
+              eventChange={handleChangeEvent}
+              eventClick={handleEventClick}
+              eventContent={renderEventContent}
+              eventDrop={handleChangeEvent}
+              // events={`${process.env.REACT_APP_API_HOST}/events`}
+              eventsSet={handleEvents}
+              headerToolbar={{
+                // left: 'today,prev,next',
+                left: '',
+                center: 'title',
+                right: '',
+              }}
+              initialDate={reservationDetailInfo.checkin}
+              initialEvents={INITIAL_EVENTS}
+              initialView="timeGridWeekly"
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
+              resourceAreaColumns={[
+                {
+                  field: 'title',
+                  headerContent: 'Room No',
+                },
+                {
+                  field: 'occupancy',
+                  headerContent: 'Room Type',
+                },
+              ]}
+              resources={reservationDetailInfo.resources}
+              select={handleDateSelect} // alternatively, use the `events` setting to fetch from a feed
+              selectConstraint={{
+                start: moment(reservationDetailInfo.checkin).format('YYYY-MM-DD'),
+                end: moment(reservationDetailInfo.checkout).format('YYYY-MM-DD'),
+              }}
+              selectMirror
+              selectable
+              titleFormat={{
+                month: 'short',
+                year: 'numeric',
+                day: 'numeric',
+              }}
+              viewClassNames="calendar-table"
+              views={{
+                timeGridMonthly: {
+                  type: 'resourceTimelineMonth',
+                  duration: { days: 15 },
+                  slotDuration: { days: 1 },
+                  slotLabelFormat(argument) {
+                    return moment(argument.date).format('DD[\n]dd');
+                  },
+                  slotLaneContent(argument) {
+                    const days = [];
 
-                for (let index = 0; index < 15; index++) {
-                  days.push(moment(argument.date).format('DD'));
-                }
+                    for (let index = 0; index < reservationDetailInfo.resources.length; index++) {
+                      days.push(moment(argument.date).format('DD'));
+                    }
 
-                return days.join('\n');
-              },
-              slotLaneClassNames: 'slot-fc-day-monthly',
-              buttonText: 'Monthly',
-            },
-            timeGridWeekly: {
-              type: 'resourceTimelineWeek',
-              duration: { days: 7 },
-              slotDuration: { days: 1 },
-              slotLabelFormat(argument) {
-                return moment(argument.date).format('DD[\n]dd');
-              },
-              slotLaneContent(argument) {
-                const days = [];
+                    return days.join('\n');
+                  },
+                  slotLaneClassNames: 'slot-fc-day-monthly',
+                  buttonText: 'Monthly',
+                  validRange: {
+                    start: moment(reservationDetailInfo.checkin).format('YYYY-MM-DD'),
+                    end: moment(reservationDetailInfo.checkout).format('YYYY-MM-DD'),
+                  },
+                },
+                timeGridWeekly: {
+                  type: 'resourceTimelineWeek',
+                  duration: { days: 7 },
+                  slotDuration: { days: 1 },
+                  slotLabelFormat(argument) {
+                    return moment(argument.date).format('DD[\n]dd');
+                  },
+                  slotLaneContent(argument) {
+                    const days = [];
 
-                for (let index = 0; index < 15; index++) {
-                  days.push(moment(argument.date).format('DD'));
-                }
+                    for (let index = 0; index < reservationDetailInfo.resources.length; index++) {
+                      days.push(moment(argument.date).format('DD'));
+                    }
 
-                return days.join('\n');
-              },
-              slotLaneClassNames(hookProps) {
-                const slotDate = hookProps.date;
+                    return days.join('\n');
+                  },
+                  slotLaneClassNames(hookProps) {
+                    const slotDate = hookProps.date;
 
-                if (moment(slotDate) >= moment().add(1, 'days')) {
-                  return 'slot-fc-day-weekly disabled';
-                }
+                    if (moment(slotDate) >= moment(reservationDetailInfo.checkout)) {
+                      return 'slot-fc-day-weekly disabled';
+                    }
 
-                return 'slot-fc-day-weekly';
-              },
-              slotLabelClassNames(hookProps) {
-                const slotDate = hookProps.date;
+                    return 'slot-fc-day-weekly';
+                  },
+                  slotLabelClassNames(hookProps) {
+                    const slotDate = hookProps.date;
 
-                if (moment(slotDate) >= moment().add(1, 'days')) {
-                  return 'weekly disabled';
-                }
+                    if (moment(slotDate) >= moment().add(1, 'days')) {
+                      return 'weekly disabled';
+                    }
 
-                return 'weekly';
-              },
-              // slotLaneClassNames: 'slot-fc-day-weekly',
-              // slotLabelClassNames: 'monthly',
-              buttonText: 'Weekly',
-            },
-          }}
-          weekends // called after events are initialized/added/changed/removed
-          /* you can update a remote database when these fire:
+                    return 'weekly';
+                  },
+                  // slotLaneClassNames: 'slot-fc-day-weekly',
+                  // slotLabelClassNames: 'monthly',
+                  buttonText: 'Weekly',
+                  validRange: {
+                    start: moment(reservationDetailInfo.checkin).format('YYYY-MM-DD'),
+                    end: moment(reservationDetailInfo.checkout).format('YYYY-MM-DD'),
+                  },
+                },
+              }}
+              weekends // called after events are initialized/added/changed/removed
+              /* you can update a remote database when these fire:
             eventAdd={function(){}}
             eventChange={function(){}}
             eventRemove={function(){}}
             */
-        />
-      </Col>
+            />
+          </Col>
+        </>
+      ) : null}
     </Row>
   );
 }

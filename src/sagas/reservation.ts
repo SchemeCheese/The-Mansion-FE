@@ -175,17 +175,23 @@ export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) 
 export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
   let success = '';
 
-  ({ success } = yield call(request, apiEndPoint(ReservationEndpoint.BOOK_ROOM), {
-    method: 'POST',
-    headers: headerWithAuthorization(),
-    body: {
-      ...payload.payload,
-      online_reservation: true,
-      branch_code: 'the_mansion',
-      operator_code: 'the_mansion',
-      facility_code: 'hotel',
+  ({ success } = yield call(
+    request,
+    `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
+      payload.payload.reservation_id
+    }/reservation-detail/${payload.payload.reservation_detail_id}/book-room`,
+    {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        online_reservation: true,
+        branch_code: 'the_mansion',
+        operator_code: 'the_mansion',
+        facility_code: 'hotel',
+      },
     },
-  }));
+  ));
 
   if (success) {
     yield put(bookRoomSuccess());
