@@ -216,6 +216,10 @@ export interface SearchAvailableScheduleState {
   view: string;
 }
 
+export interface ProductTypeState {
+  data: Array<Record<string, any>>;
+}
+
 export interface RootState {
   addReservationDetail: AddReservationDetailState;
   agentInfos: AgentInfosState;
@@ -224,6 +228,7 @@ export interface RootState {
   bookRoom: BookRoomState;
   cancelReservationDetail: CancelReservationDetailState;
   createReservation: CreateReservationState;
+  getProductType: ProductTypeState;
   getReservation: GetReservationState;
   getReservationDetail: ReservationDetailState;
   getReservationNumber: ReservationNumberState;

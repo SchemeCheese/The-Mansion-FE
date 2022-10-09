@@ -3,6 +3,7 @@ import { all, fork } from 'redux-saga/effects';
 import agentInfos from './agentInfos';
 import github from './github';
 import product from './product';
+import productType from './productType';
 import reservation from './reservation';
 import room from './room';
 import schedule from './schedule';
@@ -20,5 +21,6 @@ export default function* root() {
     fork(product),
     fork(agentInfos),
     fork(schedule),
+    fork(productType),
   ]);
 }

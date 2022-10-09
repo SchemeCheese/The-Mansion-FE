@@ -46,3 +46,7 @@ export const ProductEndpoint = {
 export const AgentInfoEndpoint = {
   GET_AGENT: 'api/v1/agent_infos',
 };
+
+export const ProductTypeEndpoint = {
+  GET_LIST: 'api/v1/description-categories',
+};
