@@ -52,6 +52,7 @@ function GuestList({ guests }: Props) {
           paddingBottom: 24,
           paddingRight: 16,
           backgroundColor: 'white',
+          minHeight: 300,
         }}
       >
         <Col onClick={showModal} span={8}>

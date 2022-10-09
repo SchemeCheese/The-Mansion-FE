@@ -7,7 +7,7 @@ import Rate from 'pages/reservation/component/ReservationDetailTab/Rate';
 import Schedule from 'pages/reservation/component/ReservationDetailTab/Schedule';
 import Transaction from 'pages/reservation/component/ReservationDetailTab/Transaction';
 
-import { getReservationDetail } from 'actions';
+import { getReservationDetail, searchAvailableScheduleAction } from 'actions';
 
 import GeneralInfo from './ReservationDetailTab/GeneralInfo';
 
@@ -30,6 +30,18 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
         getReservationDetail({
           reservation_id: reservationId,
           reservation_detail_id: reservationDetail.id,
+        }),
+      );
+
+      dispatch(
+        searchAvailableScheduleAction({
+          direction: '',
+          end_date: '2022-10-08',
+          floor: '',
+          reservation_detail_id: reservationDetail.id,
+          room_type: '',
+          start_date: '2022-10-06',
+          view: '',
         }),
       );
     }

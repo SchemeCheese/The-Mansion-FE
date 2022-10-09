@@ -61,3 +61,8 @@ export const selectSearchSchedule = createSelector(
   (state: RootState) => state.searchSchedule,
   searchSchedule => searchSchedule,
 );
+
+export const selectAvailableSearchSchedule = createSelector(
+  (state: RootState) => state.searchAvailableSchedule,
+  searchAvailableSchedule => searchAvailableSchedule,
+);

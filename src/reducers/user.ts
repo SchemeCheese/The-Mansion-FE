@@ -9,7 +9,7 @@ import { UserState } from 'types';
 export const userState = {
   isAuthenticated: false,
   status: STATUS.IDLE,
-  email: '',
+  username: '',
   name: '',
 };
 
@@ -22,7 +22,7 @@ export default {
       .addCase(loginSuccess, (draft, { payload }) => {
         draft.isAuthenticated = true;
         draft.status = STATUS.READY;
-        draft.email = payload.email;
+        draft.username = payload.username;
         draft.name = payload.name;
       })
       .addCase(getLogginedUserInfo, draft => {

@@ -203,7 +203,7 @@ function Calendar() {
                   headerContent: 'Room No',
                 },
                 {
-                  field: 'occupancy',
+                  field: 'room_type_text',
                   headerContent: 'Room Type',
                 },
               ]}

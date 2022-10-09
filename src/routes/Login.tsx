@@ -15,9 +15,9 @@ function Login() {
   const dispatch = useDispatch();
 
   const onFinish = (values: any) => {
-    const { email, password } = values;
+    const { password, username } = values;
 
-    dispatch(login({ email, password }));
+    dispatch(login({ username, password }));
   };
 
   return (
@@ -65,15 +65,15 @@ function Login() {
       </div>
 
       <Form.Item
-        name="email"
+        name="username"
         rules={[
           {
             required: true,
-            message: 'Please input your email!',
+            message: 'Please input your username!',
           },
         ]}
       >
-        <Input placeholder="Email" prefix={<UserOutlined className="site-form-item-icon" />} />
+        <Input placeholder="Username" prefix={<UserOutlined className="site-form-item-icon" />} />
       </Form.Item>
       <Form.Item
         name="password"
