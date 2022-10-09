@@ -219,8 +219,6 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     ) {
       const calendarApi = fullCalendarRef.current.getApi().view.calendar;
 
-      console.log('111');
-
       searchAvailableEventsData.data.events.forEach((item: any) => {
         calendarApi.addEvent({
           id: createEventId(),
@@ -318,8 +316,11 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       setBookRoomInfo(bookRoomInfoTemporary);
       event.oldEvent.remove();
 
-      // const calendarApi = fullCalendarRef.current.getApi().view.calendar;
       const calendarApi = event.event._context.calendarApi.view.calendar;
+
+      const selectedResource = reservationDetailInfo.resources.find((item: any) => {
+        return item.room_id === roomId;
+      });
 
       calendarApi.addEvent({
         id: createEventId(),
@@ -329,7 +330,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
         allDay: true,
         resourceId: roomId.toString(),
         room_id: roomId,
-        room_type: '',
+        room_type: selectedResource.room_type_id,
         reservation_equipment_id: event.event.extendedProps.reservation_equipment_id,
         key: `${event.event.startStr}-${roomId}`,
       });
@@ -361,8 +362,6 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   //   { id: 'o', title: '116', occupancy: 'Family', roomId: '15', roomType: '1' },
   // ];
   const resources = reservationDetailInfo.resources.filter(function (item: any) {
-    console.log('itttt', item, searchScheduleCondition.room_type);
-
     if (searchScheduleCondition.room_type) {
       return item.room_type_id === parseInt(searchScheduleCondition.room_type, 10);
     }
@@ -429,8 +428,6 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
               <Select
                 allowClear
                 onChange={value => {
-                  console.log('valueeee', value);
-
                   const searchScheduleConditionTemporary = {
                     ...searchScheduleCondition,
                     room_type: value ?? '',
