@@ -27,7 +27,11 @@ import { Checkbox, Col, DatePicker, Form, Row, Select, message } from 'antd';
 import moment from 'moment';
 import useTreeChanges from 'tree-changes-hook';
 import { useAppSelector } from 'modules/hooks';
-import { selectBookRoom, selectGetReservationDetail } from 'selectors';
+import {
+  selectBookRoom,
+  selectGetReservationDetail,
+  selectAvailableSearchSchedule,
+} from 'selectors';
 
 import PattonButton from 'components/PattonButton';
 import { RootState } from 'types';
@@ -64,12 +68,14 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   const { changed } = useTreeChanges(bookRoomData);
 
   const reservationDetailData = useAppSelector(selectGetReservationDetail);
+  const searchAvailableEventsData = useAppSelector(selectAvailableSearchSchedule);
 
   const reservationDetailInfo: any = useSelector<RootState>(
     ({ getReservationDetail }) => getReservationDetail.data,
   );
 
   const { changed: changedEvents } = useTreeChanges(reservationDetailData);
+  const { changed: changedAvailableEvents } = useTreeChanges(searchAvailableEventsData);
 
   const isValidSelectRoom = (bookRoomInfoData: any) => {
     const rateNumber: any = {};
@@ -170,6 +176,14 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       setBookRoomInfo(stateTemporary);
     }
   }, [changedEvents]);
+
+  useEffect(() => {
+    console.log('66');
+
+    if (changedAvailableEvents('is_searching', false)) {
+      console.log('111');
+    }
+  }, [changedAvailableEvents]);
 
   const updateBookingRoom = () => {
     dispatch(

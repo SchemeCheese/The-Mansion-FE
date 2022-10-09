@@ -12,6 +12,7 @@ import getRoomType, { roomTypeState } from './getRoomType';
 import github, { githubState } from './github';
 import product, { productSearchState } from './product';
 import reservation, { reservationSearchState } from './reservation';
+import searchAvailableSchedule, { searchAvailableScheduleState } from './searchAvailableSchedule';
 import searchRoom, { roomSearchState } from './searchRoom';
 import searchSchedule, { searchScheduleState } from './searchSchedule';
 import updateGeneralInfo, { updateGeneralInfoState } from './updateGeneralInfo';
@@ -40,6 +41,7 @@ export const initialState = {
   cancelReservationDetail: cancelReservationDetailState,
   updateGeneralInfo: updateGeneralInfoState,
   searchSchedule: searchScheduleState,
+  searchAvailableSchedule: searchAvailableScheduleState,
 };
 
 export default {
@@ -63,4 +65,5 @@ export default {
   ...cancelReservationDetail,
   ...updateGeneralInfo,
   ...searchSchedule,
+  ...searchAvailableSchedule,
 };

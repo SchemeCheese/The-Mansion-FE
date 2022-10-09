@@ -204,6 +204,18 @@ export interface SearchScheduleState {
   start_date: string;
 }
 
+export interface SearchAvailableScheduleState {
+  data: Array<Record<string, any>>;
+  direction: string;
+  end_date: string;
+  floor: string;
+  is_searching: boolean;
+  reservation_detail_id: string;
+  room_type: string;
+  start_date: string;
+  view: string;
+}
+
 export interface RootState {
   addReservationDetail: AddReservationDetailState;
   agentInfos: AgentInfosState;
@@ -219,6 +231,7 @@ export interface RootState {
   github: GitHubState;
   product: ProductSearchState;
   reservation: ReservationSearchState;
+  searchAvailableSchedule: SearchAvailableScheduleState;
   searchRoom: RoomSearchState;
   searchSchedule: SearchScheduleState;
   updateGeneralInfo: UpdateGeneralInfoState;
