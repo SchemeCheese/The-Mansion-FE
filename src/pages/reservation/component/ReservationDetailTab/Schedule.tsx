@@ -143,7 +143,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
     bookRoomInfoTemporary.push({
       reservation_equipment_id: null,
-      room_type: selectInfo.resource?.extendedProps.room_type,
+      room_type: selectInfo.resource?.extendedProps.room_type_id,
       room_id: selectInfo.resource?.extendedProps.room_id,
       use_start_date: selectInfo.startStr,
       use_end_date: selectInfo.endStr,
