@@ -39,8 +39,6 @@ export function* getSearchAvailableScheduleSaga({
     },
   ));
 
-  console.log('000 data', data);
-
   yield put(searchAvailableScheduleActionSuccess({ data }));
 }
 

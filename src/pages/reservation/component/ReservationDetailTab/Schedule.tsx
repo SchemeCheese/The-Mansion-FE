@@ -68,7 +68,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   const { changed } = useTreeChanges(bookRoomData);
 
   const reservationDetailData = useAppSelector(selectGetReservationDetail);
-  const searchAvailableEventsData = useAppSelector(selectAvailableSearchSchedule);
+  const searchAvailableEventsData: any = useAppSelector(selectAvailableSearchSchedule);
 
   const reservationDetailInfo: any = useSelector<RootState>(
     ({ getReservationDetail }) => getReservationDetail.data,
@@ -80,9 +80,19 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   const isValidSelectRoom = (bookRoomInfoData: any) => {
     const rateNumber: any = {};
     const validationNight: any = {};
+    const availableEvents: any = {};
 
     reservationDetailInfo.charges.forEach((rItem: any) => {
       rateNumber[rItem.use_date] = (rateNumber[rItem.use_date] ?? 0) + 1;
+    });
+
+    searchAvailableEventsData.data.events.forEach((aEItem: any) => {
+      // availableEvents[rItem.use_date] = 1;
+      getDaysBetweenDates(moment(aEItem.start), moment(aEItem.end).subtract(1, 'days')).forEach(
+        (date: any) => {
+          availableEvents[`${date}-${aEItem.room_id}`] = 1;
+        },
+      );
     });
 
     bookRoomInfoData.forEach((item: any) => {
@@ -102,6 +112,17 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       }
     });
 
+    bookRoomInfoData.forEach((item: any) => {
+      getDaysBetweenDates(
+        moment(item.use_start_date),
+        moment(item.use_end_date).subtract(1, 'days'),
+      ).forEach((date: any) => {
+        if (availableEvents[`${date}-${item.room_id}`] === 1) {
+          isError = true;
+        }
+      });
+    });
+
     return isError;
   };
 
@@ -116,6 +137,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       room_id: selectInfo.resource?.extendedProps.room_id,
       use_start_date: selectInfo.startStr,
       use_end_date: selectInfo.endStr,
+      key: `${selectInfo.startStr}-${selectInfo.resource?._resource.id}`,
     });
 
     const isError = isValidSelectRoom(bookRoomInfoTemporary);
@@ -132,6 +154,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
         end: selectInfo.endStr,
         allDay: selectInfo.allDay,
         resourceId: selectInfo.resource?._resource.id,
+        key: `${selectInfo.startStr}-${selectInfo.resource?._resource.id}`,
       });
 
       setBookRoomInfo(bookRoomInfoTemporary);
@@ -162,6 +185,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
           room_id: item.room_id,
           room_type: item.room_type,
           reservation_equipment_id: item.reservation_equipment_id,
+          key: `${item.start}-${item.room_id}`,
         });
 
         stateTemporary.push({
@@ -170,6 +194,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
           room_id: item.room_id,
           use_start_date: item.start,
           use_end_date: item.end,
+          key: `${item.start}-${item.room_id}`,
         });
       });
 
@@ -178,12 +203,26 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   }, [changedEvents]);
 
   useEffect(() => {
-    console.log('66');
+    if (reservationDetailData.is_finish === true) {
+      const calendarApi = fullCalendarRef.current.getApi().view.calendar;
 
-    if (changedAvailableEvents('is_searching', false)) {
-      console.log('111');
+      searchAvailableEventsData.data.events.forEach((item: any) => {
+        calendarApi.addEvent({
+          id: createEventId(),
+          title: '',
+          start: item.start,
+          end: item.end,
+          allDay: true,
+          resourceId: item.room_id,
+          room_id: item.room_id,
+          room_type: item.room_type,
+          reservation_equipment_id: item.reservation_equipment_id,
+          disabled: true,
+          key: `${item.start}-${item.room_id}`,
+        });
+      });
     }
-  }, [changedAvailableEvents]);
+  }, [changedAvailableEvents, reservationDetailData.is_finish]);
 
   const updateBookingRoom = () => {
     dispatch(
@@ -215,18 +254,29 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   };
 
   const handleChangeEvent = (event: EventChangeArg) => {
+    if (event.event.extendedProps.disabled === true) {
+      event.revert();
+
+      return;
+    }
+
     const bookRoomInfoTemporary = [...bookRoomInfo];
 
+    const roomId = event.event?._def.resourceIds
+      ? parseInt(event.event?._def.resourceIds[0], 10)
+      : '';
+
     const indexElement = bookRoomInfoTemporary.findIndex(function (item) {
-      return item.reservation_equipment_id === event.event.extendedProps.reservation_equipment_id;
+      return item.key === event.oldEvent.extendedProps.key;
     });
 
     bookRoomInfoTemporary[indexElement] = {
       reservation_equipment_id: event.event?.extendedProps.reservation_equipment_id,
       room_type: event.event?.extendedProps.room_type,
-      room_id: event.event?._def.resourceIds ? parseInt(event.event?._def.resourceIds[0], 10) : '',
+      room_id: roomId,
       use_start_date: event.event.startStr,
       use_end_date: event.event.endStr,
+      key: `${event.event.startStr}-${roomId}`,
     };
 
     const isError = isValidSelectRoom(bookRoomInfoTemporary);
@@ -236,6 +286,23 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       event.revert();
     } else {
       setBookRoomInfo(bookRoomInfoTemporary);
+      event.oldEvent.remove();
+
+      // const calendarApi = fullCalendarRef.current.getApi().view.calendar;
+      const calendarApi = event.event._context.calendarApi.view.calendar;
+
+      calendarApi.addEvent({
+        id: createEventId(),
+        title: 'MinhNV - Agoda',
+        start: event.event.startStr,
+        end: event.event.endStr,
+        allDay: true,
+        resourceId: roomId.toString(),
+        room_id: roomId,
+        room_type: '',
+        reservation_equipment_id: event.event.extendedProps.reservation_equipment_id,
+        key: `${event.event.startStr}-${roomId}`,
+      });
     }
   };
 
@@ -266,7 +333,8 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
   return (
     <Row style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
-      {reservationDetailData.is_finish === true ? (
+      {reservationDetailData.is_finish === true &&
+      searchAvailableEventsData.is_searching === false ? (
         <>
           <Col offset={16} span={8} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
             <Checkbox style={{ paddingRight: 50 }}>Smoking Room</Checkbox>
@@ -361,10 +429,20 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
               ref={fullCalendarRef}
               dayMaxEvents
               editable
-              eventChange={handleChangeEvent}
+              eventClassNames={event => {
+                if (event.event.extendedProps.disabled) {
+                  event.backgroundColor = '#8c8c8c';
+                  event.borderColor = '#8c8c8c';
+                  event.isSelected = false;
+                  event.isDraggable = false;
+                }
+
+                return '';
+              }}
               eventClick={handleEventClick}
               eventContent={renderEventContent}
               eventDrop={handleChangeEvent}
+              eventResize={handleChangeEvent}
               // events={`${process.env.REACT_APP_API_HOST}/events`}
               eventsSet={handleEvents}
               headerToolbar={{
