@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input, Modal, Row, Select, Spin, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 
-import { searchProduct } from 'actions';
+import { productType, searchProduct } from 'actions';
 
 import { RootState } from 'types';
 
@@ -42,6 +42,7 @@ function AddItem({ setIsModalOpen, visible }: Props) {
 
   useEffect(() => {
     dispatch(searchProduct({ type_product: searchProductType }));
+    dispatch(productType({}));
   }, []);
 
   const onChangeProductType = (value: string) => {
@@ -87,11 +88,6 @@ function AddItem({ setIsModalOpen, visible }: Props) {
       setDataAmount(dataAmountState);
     };
 
-  const productTypes = [
-    { name: 'Type 1', value: 1 },
-    { name: 'Type 2', value: 2 },
-    { name: 'Type 3', value: 3 },
-  ];
   const diskData = ['A', 'A 2', 'A 3'];
 
   const columns: ColumnsType<DataType> = [
@@ -244,6 +240,9 @@ function AddItem({ setIsModalOpen, visible }: Props) {
 
   const isSearching = useSelector<RootState>(({ product }) => product.is_searching);
   const items = useSelector<RootState>(({ product }) => product.data);
+  const listProductTypes: any = useSelector<RootState>(({ getProductType }) => getProductType.data);
+
+  console.log('listProductTypes', listProductTypes);
 
   return (
     <Modal
@@ -265,9 +264,8 @@ function AddItem({ setIsModalOpen, visible }: Props) {
               placeholder="Select Type"
               style={{ borderRadius: 2, width: 223, height: 32 }}
             >
-              {productTypes.map(productType => (
-                <Option key={productType.value}>{productType.name}</Option>
-              ))}
+              {listProductTypes.length > 0 &&
+                listProductTypes.map((type: any) => <Option key={type.id}>{type.name}</Option>)}
             </Select>
           </Form.Item>
         </Form>

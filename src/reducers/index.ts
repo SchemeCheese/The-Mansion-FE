@@ -5,6 +5,7 @@ import app, { appState } from './app';
 import bookRoom, { bookRoomState } from './bookRoom';
 import cancelReservationDetail, { cancelReservationDetailState } from './cancelReservationDetail';
 import createReservation, { createReservationState } from './createReservation';
+import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
@@ -42,6 +43,7 @@ export const initialState = {
   updateGeneralInfo: updateGeneralInfoState,
   searchSchedule: searchScheduleState,
   searchAvailableSchedule: searchAvailableScheduleState,
+  getProductType: getProductTypeState,
 };
 
 export default {
@@ -66,4 +68,5 @@ export default {
   ...updateGeneralInfo,
   ...searchSchedule,
   ...searchAvailableSchedule,
+  ...getProductType,
 };
