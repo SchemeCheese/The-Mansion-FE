@@ -53,15 +53,13 @@ const Heading = styled.h1`
 
 function Home() {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const status = useSelector<RootState>(({ user }) => user.status);
 
   const handleClickLogin = () => {
-    dispatch(login({ email, password }));
-    console.log('Email ', email);
-    console.log('Password ', password);
+    dispatch(login({ username, password }));
   };
 
   return (
@@ -72,9 +70,9 @@ function Home() {
         </Header>
         <Heading>{name}</Heading>
         <div>
-          <label htmlFor="email">
+          <label htmlFor="username">
             Email:
-            <input id="email" onChange={event => setEmail(event.target.value)} type="text" />
+            <input id="username" onChange={event => setUsername(event.target.value)} type="text" />
           </label>
           <label htmlFor="password">
             Password:

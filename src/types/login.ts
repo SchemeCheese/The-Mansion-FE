@@ -1,9 +1,9 @@
 export interface LoginCredentials {
-  email: string;
   password: string;
+  username: string;
 }
 
 export interface LoginSuccess {
-  email: string;
   name: string;
+  username: string;
 }
