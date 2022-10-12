@@ -204,6 +204,14 @@ export interface SearchScheduleState {
   start_date: string;
 }
 
+export interface FetchChannelState {
+  channels: Array<Record<string, any>>;
+  dates: Array<Record<string, any>>;
+  is_searching: boolean;
+  rate_type: string;
+  start_date: string;
+}
+
 export interface SearchAvailableScheduleState {
   data: Array<Record<string, any>>;
   direction: string;
@@ -227,6 +235,7 @@ export interface RootState {
   app: AppState;
   bookRoom: BookRoomState;
   cancelReservationDetail: CancelReservationDetailState;
+  channel: FetchChannelState;
   createReservation: CreateReservationState;
   getProductType: ProductTypeState;
   getReservation: GetReservationState;

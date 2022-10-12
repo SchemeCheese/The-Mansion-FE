@@ -6,7 +6,7 @@ import { selectSearchSchedule } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { searchReservation, searchScheduleAction } from 'actions';
+import { fetchChannelsAction, searchReservation, searchScheduleAction } from 'actions';
 
 import BreadcrumbList from 'components/BreadcrumbList';
 
@@ -116,6 +116,15 @@ function Reservation() {
           end_date: searchScheduleRedux.end_date ?? moment().add(15, 'days').format('YYYY-MM-DD'),
           room_type: searchScheduleRedux.room_type ?? '',
           room_number: searchScheduleRedux.room_number ?? '',
+        }),
+      );
+    }
+
+    if (activeKey === '4') {
+      dispatch(
+        fetchChannelsAction({
+          start_date: '',
+          rate_type: '',
         }),
       );
     }

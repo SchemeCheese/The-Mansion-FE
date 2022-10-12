@@ -8,3 +8,4 @@ export * from './room';
 export * from './agentInfos';
 export * from './schedule';
 export * from './productType';
+export * from './channel';

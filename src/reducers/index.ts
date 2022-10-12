@@ -4,6 +4,7 @@ import alerts, { alertsState } from './alerts';
 import app, { appState } from './app';
 import bookRoom, { bookRoomState } from './bookRoom';
 import cancelReservationDetail, { cancelReservationDetailState } from './cancelReservationDetail';
+import channel, { channelState } from './channel';
 import createReservation, { createReservationState } from './createReservation';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
@@ -44,6 +45,7 @@ export const initialState = {
   searchSchedule: searchScheduleState,
   searchAvailableSchedule: searchAvailableScheduleState,
   getProductType: getProductTypeState,
+  channel: channelState,
 };
 
 export default {
@@ -69,4 +71,5 @@ export default {
   ...searchSchedule,
   ...searchAvailableSchedule,
   ...getProductType,
+  ...channel,
 };
