@@ -1,6 +1,7 @@
 import { all, fork } from 'redux-saga/effects';
 
 import agentInfos from './agentInfos';
+import channel from './channel';
 import github from './github';
 import product from './product';
 import productType from './productType';
@@ -22,5 +23,6 @@ export default function* root() {
     fork(agentInfos),
     fork(schedule),
     fork(productType),
+    fork(channel),
   ]);
 }

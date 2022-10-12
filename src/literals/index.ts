@@ -60,6 +60,8 @@ export const ActionTypes = keyMirror({
   RESERVATION_FETCH_AVAILABLE_SCHEDULE_SUCCESS: undefined,
   PRODUCT_TYPE_GET: undefined,
   PRODUCT_TYPE_GET_FINISH: undefined,
+  CHANNEL_FETCH: undefined,
+  CHANNEL_FETCH_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

@@ -50,3 +50,7 @@ export const AgentInfoEndpoint = {
 export const ProductTypeEndpoint = {
   GET_LIST: 'api/v1/description-categories',
 };
+
+export const ChannelEndpoint = {
+  GET_LIST: 'channel-manager',
+};
