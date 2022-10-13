@@ -1,16 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Row } from 'antd';
 import Table, { ColumnsType } from 'antd/lib/table';
-import PaySelectedModal from 'pages/reservation/modal/TransactionModal/PaySelectedModal';
-import RoomAuditCharge from 'pages/reservation/modal/TransactionModal/RoomAuditCharge';
-import SelectDiskModal from 'pages/reservation/modal/TransactionModal/SelectDiskModal';
-import TransferRoom from 'pages/reservation/modal/TransactionModal/TransferRoom';
-
-import MButton from 'components/MButton';
-import PattonButton from 'components/PattonButton';
-
-import AddItem from '../modal/TransactionModal/AddItem';
+import { formatNumber, randomKey } from 'helpers';
 
 interface DataTypeDiskA {
   amount: number;
@@ -20,14 +11,12 @@ interface DataTypeDiskA {
   unit_price: string;
 }
 
-function DiskA() {
-  const { t } = useTranslation();
+interface Props {
+  items: any;
+}
 
-  const [isModalOpenAddItem, setIsModalOpenAddItem] = useState(false);
-  const [isModalOpenPaySelected, setIsModalOpenPaySelected] = useState(false);
-  const [isModalOpenChangeDisk, setIsModalOpenChangeDisk] = useState(false);
-  const [isModalOpenAditRoomCharge, setIsModalOpenAditRoomCharge] = useState(false);
-  const [isModalOpenTransferRoom, setIsModalOpenTransferRoom] = useState(false);
+function DiskA({ items }: Props) {
+  const { t } = useTranslation();
 
   const columnsDiskA: ColumnsType<DataTypeDiskA> = [
     {
@@ -80,22 +69,16 @@ function DiskA() {
     },
   ];
 
-  const dataDiskA = [
-    {
-      date: '28/07/2020',
-      description: 'PEPSI',
-      unit_price: '20.000',
-      amount: 2,
-      total: '40.000',
-    },
-    {
-      date: '28/07/2020',
-      description: 'Coca Cola',
-      unit_price: '20.000',
-      amount: 2,
-      total: '40.000',
-    },
-  ];
+  const data = items.map((item: any) => {
+    return {
+      key: randomKey(5),
+      date: item.payment_date,
+      description: item.description,
+      unit_price: formatNumber(item.unit_price),
+      amount: item.quantity,
+      total: formatNumber(item.total_amount),
+    };
+  });
 
   const rowSelectionDiskA = {
     onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
@@ -104,72 +87,15 @@ function DiskA() {
   };
 
   return (
-    <>
-      <Table
-        columns={columnsDiskA}
-        dataSource={dataDiskA}
-        pagination={false}
-        rowSelection={{
-          ...rowSelectionDiskA,
-        }}
-        size="small"
-      />
-      <div className="transaction-tab-button-footer">
-        <Row>
-          <Col span={8} style={{ paddingRight: 17 }}>
-            <PattonButton
-              onClick={() => setIsModalOpenAddItem(true)}
-              style={{ width: '100%' }}
-              type="primary"
-            >
-              {t('common.Add Item')}
-            </PattonButton>
-            <AddItem setIsModalOpen={setIsModalOpenAddItem} visible={isModalOpenAddItem} />
-          </Col>
-          <Col span={8} style={{ paddingRight: 17 }}>
-            <MButton onClick={() => setIsModalOpenPaySelected(true)} style={{ width: '100%' }}>
-              {t('paySelected.Pay Selected')}
-            </MButton>
-            <PaySelectedModal
-              setIsModalOpen={setIsModalOpenPaySelected}
-              visible={isModalOpenPaySelected}
-            />
-          </Col>
-          <Col span={8}>
-            <MButton onClick={() => setIsModalOpenAditRoomCharge(true)} style={{ width: '100%' }}>
-              {t('auditRoomCharge.Add Room Charge')}
-            </MButton>
-            <RoomAuditCharge
-              setIsModalOpen={setIsModalOpenAditRoomCharge}
-              visible={isModalOpenAditRoomCharge}
-            />
-          </Col>
-        </Row>
-        <Row style={{ paddingTop: 18 }}>
-          <Col span={8} style={{ paddingRight: 17 }}>
-            <MButton style={{ width: '100%' }}>{t('transaction.Add Disk')}</MButton>
-          </Col>
-          <Col span={8} style={{ paddingRight: 17 }}>
-            <MButton onClick={() => setIsModalOpenChangeDisk(true)} style={{ width: '100%' }}>
-              {t('paySelected.Transfer Disk')}
-            </MButton>
-            <SelectDiskModal
-              setIsModalOpen={setIsModalOpenChangeDisk}
-              visible={isModalOpenChangeDisk}
-            />
-          </Col>
-          <Col span={8}>
-            <MButton onClick={() => setIsModalOpenTransferRoom(true)} style={{ width: '100%' }}>
-              {t('transaction.Transfer Room')}
-            </MButton>
-            <TransferRoom
-              setIsModalOpen={setIsModalOpenTransferRoom}
-              visible={isModalOpenTransferRoom}
-            />
-          </Col>
-        </Row>
-      </div>
-    </>
+    <Table
+      columns={columnsDiskA}
+      dataSource={data}
+      pagination={false}
+      rowSelection={{
+        ...rowSelectionDiskA,
+      }}
+      size="small"
+    />
   );
 }
 

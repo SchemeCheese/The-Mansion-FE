@@ -242,8 +242,6 @@ function AddItem({ setIsModalOpen, visible }: Props) {
   const items = useSelector<RootState>(({ product }) => product.data);
   const listProductTypes: any = useSelector<RootState>(({ getProductType }) => getProductType.data);
 
-  console.log('listProductTypes', listProductTypes);
-
   return (
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}

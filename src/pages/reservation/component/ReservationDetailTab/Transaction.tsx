@@ -4,38 +4,52 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Col, Row } from 'antd';
 import DiskA from 'pages/reservation/detail/DiskA';
-import Paid from 'pages/reservation/detail/Paid';
 import AddDiscount from 'pages/reservation/modal/TransactionModal/AddDiscount';
+import AddItem from 'pages/reservation/modal/TransactionModal/AddItem';
 import Deposit from 'pages/reservation/modal/TransactionModal/Deposit';
 import PayDetailModal from 'pages/reservation/modal/TransactionModal/PayDetailModal';
+import PaySelectedModal from 'pages/reservation/modal/TransactionModal/PaySelectedModal';
+import RoomAuditCharge from 'pages/reservation/modal/TransactionModal/RoomAuditCharge';
+import SelectDiskModal from 'pages/reservation/modal/TransactionModal/SelectDiskModal';
 import SelectedPayMethodModal from 'pages/reservation/modal/TransactionModal/SelectedPayMethodModal';
+import TransferRoom from 'pages/reservation/modal/TransactionModal/TransferRoom';
+import { selectGetReservationDetail } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
 function Transaction() {
   const { t } = useTranslation();
+  const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
+  const { transactions } = reservationDetailInfo.data;
 
-  const tabList = [
-    {
-      key: 'tab1',
-      tab: t('transaction.Disk A'),
-    },
-    {
-      key: 'tab2',
-      tab: t('transaction.Paid'),
-    },
-  ];
-  const [activeTabKey1, setActiveTabKey1] = useState<string>('tab1');
+  const [isModalOpenAddItem, setIsModalOpenAddItem] = useState(false);
+  const [isModalOpenPaySelected, setIsModalOpenPaySelected] = useState(false);
+  const [isModalOpenChangeDisk, setIsModalOpenChangeDisk] = useState(false);
+  const [isModalOpenAditRoomCharge, setIsModalOpenAditRoomCharge] = useState(false);
+  const [isModalOpenTransferRoom, setIsModalOpenTransferRoom] = useState(false);
+
+  const tabList: any = [];
+  const contentList: any = {};
+
+  Object.keys(transactions).forEach((key: any) => {
+    console.log('keyyyyy', key, transactions[key]);
+    const tabKey = `tab${key}`;
+
+    tabList.push({
+      key: tabKey,
+      tab: `Disk ${key}`,
+    });
+
+    contentList[tabKey] = <DiskA items={transactions[key].items} />;
+  });
+  const [activeTabKey1, setActiveTabKey1] = useState<string>('tabA');
   const [isModalOpenPaymentDetail, setIsModalOpenPaymentDetail] = useState(false);
   const [isModalOpenSelectedPaymentMethod, setIsModalOpenSelectedPaymentMethod] = useState(false);
   const [isModalOpenAddDiscount, setIsModalOpenAddDiscount] = useState(false);
   const [isModalOpenDeposit, setIsModalOpenDeposit] = useState(false);
-
-  const contentList: any = {
-    tab1: <DiskA />,
-    tab2: <Paid />,
-  };
 
   const gridStyleLeft: React.CSSProperties = {
     width: '50%',
@@ -73,7 +87,65 @@ function Transaction() {
           style={{ width: '100%' }}
           tabList={tabList}
         >
-          {contentList[activeTabKey1]}
+          <div style={{ minHeight: 380 }}>{contentList[activeTabKey1]}</div>
+          <div>
+            <Row>
+              <Col span={8} style={{ paddingRight: 17 }}>
+                <PattonButton
+                  onClick={() => setIsModalOpenAddItem(true)}
+                  style={{ width: '100%' }}
+                  type="primary"
+                >
+                  {t('common.Add Item')}
+                </PattonButton>
+                <AddItem setIsModalOpen={setIsModalOpenAddItem} visible={isModalOpenAddItem} />
+              </Col>
+              <Col span={8} style={{ paddingRight: 17 }}>
+                <MButton onClick={() => setIsModalOpenPaySelected(true)} style={{ width: '100%' }}>
+                  {t('paySelected.Pay Selected')}
+                </MButton>
+                <PaySelectedModal
+                  setIsModalOpen={setIsModalOpenPaySelected}
+                  visible={isModalOpenPaySelected}
+                />
+              </Col>
+              <Col span={8}>
+                <MButton
+                  onClick={() => setIsModalOpenAditRoomCharge(true)}
+                  style={{ width: '100%' }}
+                >
+                  {t('auditRoomCharge.Add Room Charge')}
+                </MButton>
+                <RoomAuditCharge
+                  setIsModalOpen={setIsModalOpenAditRoomCharge}
+                  visible={isModalOpenAditRoomCharge}
+                />
+              </Col>
+            </Row>
+            <Row style={{ paddingTop: 18 }}>
+              <Col span={8} style={{ paddingRight: 17 }}>
+                <MButton style={{ width: '100%' }}>{t('transaction.Add Disk')}</MButton>
+              </Col>
+              <Col span={8} style={{ paddingRight: 17 }}>
+                <MButton onClick={() => setIsModalOpenChangeDisk(true)} style={{ width: '100%' }}>
+                  {t('paySelected.Transfer Disk')}
+                </MButton>
+                <SelectDiskModal
+                  setIsModalOpen={setIsModalOpenChangeDisk}
+                  visible={isModalOpenChangeDisk}
+                />
+              </Col>
+              <Col span={8}>
+                <MButton onClick={() => setIsModalOpenTransferRoom(true)} style={{ width: '100%' }}>
+                  {t('transaction.Transfer Room')}
+                </MButton>
+                <TransferRoom
+                  setIsModalOpen={setIsModalOpenTransferRoom}
+                  visible={isModalOpenTransferRoom}
+                />
+              </Col>
+            </Row>
+          </div>
         </Card>
       </Col>
       <Col span={8}>
