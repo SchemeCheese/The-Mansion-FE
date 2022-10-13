@@ -69,11 +69,12 @@
   "Select Type": "Select Type",
   "Total amount to pay": "Total amount to pay (VND)",
   "Product Type": "Product Type",
-  "Product" : "Product",
+  "Product": "Product",
   "Disk": "Disk",
   "Updated price": "Updated price (VND)",
   "Action": "Action",
-  "Add Discount": "Add Discount", 
+  "Add Discount": "Add Discount",
   "Discount Type": "Discount Type",
-  "Select Disk": "Select Disk"
+  "Select Disk": "Select Disk",
+  "Notes": "Notes"
 }

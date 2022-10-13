@@ -18,7 +18,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import React, { useState, useEffect } from 'react';
 import FullCalendar, { EventApi, EventContentArg } from '@fullcalendar/react';
-import { Col, DatePicker, Row, Select } from 'antd';
+import { Button, Card, Col, DatePicker, Input, Modal, Row, Select } from 'antd';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
 
@@ -31,6 +31,7 @@ import { searchScheduleAction } from 'actions';
 import { selectSearchSchedule } from 'selectors';
 import { useAppSelector } from 'modules/hooks';
 import useTreeChanges from 'tree-changes-hook';
+import { useTranslation } from 'react-i18next';
 
 interface DemoAppState {
   currentEvents: EventApi[];
@@ -40,6 +41,8 @@ interface DemoAppState {
 const { Option } = Select;
 
 function Calendar() {
+  const { t } = useTranslation();
+
   const dispatch = useDispatch();
   const [state, setState] = useState<DemoAppState>({
     weekendsVisible: true,
@@ -105,6 +108,20 @@ function Calendar() {
       });
     }
   }, [changed]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -269,6 +286,52 @@ function Calendar() {
           ) : null}
         </Col>
       </Row>
+      {/* Calendar note */}
+      <Button onClick={showModal} type="primary">
+        Open Modal
+      </Button>
+      <Modal
+        centered
+        closable={false}
+        footer={[
+          <Button key="back" onClick={handleCancel} style={{ borderRadius: 4 }}>
+            {t('common.Cancel')}
+          </Button>,
+          <Button
+            key="submit"
+            onClick={handleOk}
+            style={{ backgroundColor: '#1D39C4', borderRadius: 4 }}
+            type="primary"
+          >
+            {t('common.Update')}
+          </Button>,
+        ]}
+        onOk={handleOk}
+        title={
+          <Row>
+            <Col className="gutter-row" span={12}>
+              <b>{t('common.Notes')}</b>
+            </Col>
+            <Col className="gutter-row" span={12}>
+              <Button style={{ float: 'right' }}>More Detail</Button>
+            </Col>
+          </Row>
+        }
+        visible={isModalOpen}
+        width={644}
+      >
+        <Card
+          className="card-calendar-notes"
+          style={{ width: '100%' }}
+          title={
+            <span style={{ color: '#1D39C4', fontWeight: 400, fontSize: 13 }}>
+              2944 - Dang Kim Ngan - Facebook{' '}
+            </span>
+          }
+        >
+          <Input.TextArea placeholder="Input notes" rows={8} />
+        </Card>
+      </Modal>
     </>
   );
 }

@@ -153,3 +153,17 @@
   color: #ffffff;
 }
 /* End Pagination CSS */
+
+.card-calendar-notes .ant-card-body {
+  padding: 0px;
+}
+
+.card-calendar-notes .ant-card-head {
+  min-height: 31px;
+  background-color: #dce2ea;
+  padding-left: 12px;
+}
+
+.card-calendar-notes .ant-card-head .ant-card-head-title {
+  padding: 8px 0;
+}
