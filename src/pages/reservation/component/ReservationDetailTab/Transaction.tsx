@@ -1,9 +1,10 @@
 import 'styles/transaction.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Col, Row } from 'antd';
-import DiskA from 'pages/reservation/detail/DiskA';
+import { useDispatch } from 'react-redux';
+import { Button, Card, Col, message, Row } from 'antd';
+import Disk from 'pages/reservation/detail/Disk';
 import AddDiscount from 'pages/reservation/modal/TransactionModal/AddDiscount';
 import AddItem from 'pages/reservation/modal/TransactionModal/AddItem';
 import Deposit from 'pages/reservation/modal/TransactionModal/Deposit';
@@ -13,14 +14,22 @@ import RoomAuditCharge from 'pages/reservation/modal/TransactionModal/RoomAuditC
 import SelectDiskModal from 'pages/reservation/modal/TransactionModal/SelectDiskModal';
 import SelectedPayMethodModal from 'pages/reservation/modal/TransactionModal/SelectedPayMethodModal';
 import TransferRoom from 'pages/reservation/modal/TransactionModal/TransferRoom';
-import { selectGetReservationDetail } from 'selectors';
+import { selectAddItem, selectDeleteItem, selectGetReservationDetail } from 'selectors';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
+
+import { deleteItemAction, getReservationDetail } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
-function Transaction() {
+interface Props {
+  reservationDetailId: string;
+  reservationId: string;
+}
+
+function Transaction({ reservationDetailId, reservationId }: Props) {
   const { t } = useTranslation();
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const { transactions } = reservationDetailInfo.data;
@@ -31,11 +40,40 @@ function Transaction() {
   const [isModalOpenAditRoomCharge, setIsModalOpenAditRoomCharge] = useState(false);
   const [isModalOpenTransferRoom, setIsModalOpenTransferRoom] = useState(false);
 
+  const addItemData = useAppSelector(selectAddItem);
+  const deleteItemData = useAppSelector(selectDeleteItem);
+
+  const { changed: addItemChanged } = useTreeChanges(addItemData);
+  const { changed: deleteItemChanged } = useTreeChanges(deleteItemData);
+
+  const dispatch = useDispatch();
+
   const tabList: any = [];
   const contentList: any = {};
+  const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
+  const rowSelectionDisk = {
+    selectedRowKeys,
+    onChange: (newSelectedRowKeys: React.Key[]) => {
+      setSelectedRowKeys(newSelectedRowKeys);
+    },
+  };
+
+  const handleDeleteItem = (item: any) => {
+    dispatch(
+      deleteItemAction({
+        payload: {
+          sale_detail_ids: [
+            {
+              id: item.sale_detail_id,
+              comment: 'Fake Comment',
+            },
+          ],
+        },
+      }),
+    );
+  };
 
   Object.keys(transactions).forEach((key: any) => {
-    console.log('keyyyyy', key, transactions[key]);
     const tabKey = `tab${key}`;
 
     tabList.push({
@@ -43,7 +81,13 @@ function Transaction() {
       tab: `Disk ${key}`,
     });
 
-    contentList[tabKey] = <DiskA items={transactions[key].items} />;
+    contentList[tabKey] = (
+      <Disk
+        handleDeleteItem={handleDeleteItem}
+        items={transactions[key].items}
+        rowSelectionDisk={rowSelectionDisk}
+      />
+    );
   });
   const [activeTabKey1, setActiveTabKey1] = useState<string>('tabA');
   const [isModalOpenPaymentDetail, setIsModalOpenPaymentDetail] = useState(false);
@@ -66,6 +110,32 @@ function Transaction() {
     paddingRight: 16,
     paddingTop: 15,
   };
+
+  useEffect(() => {
+    if (addItemChanged('status', 'SUCCESS')) {
+      message.success('Add item successfully!');
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
+    }
+  }, [addItemChanged]);
+
+  useEffect(() => {
+    if (deleteItemChanged('status', 'SUCCESS')) {
+      message.success('Delete item successfully!');
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
+    }
+  }, [deleteItemChanged]);
 
   return (
     <Row
@@ -98,10 +168,19 @@ function Transaction() {
                 >
                   {t('common.Add Item')}
                 </PattonButton>
-                <AddItem setIsModalOpen={setIsModalOpenAddItem} visible={isModalOpenAddItem} />
+                <AddItem
+                  reservationDetailId={reservationDetailId}
+                  reservationId={reservationId}
+                  setIsModalOpen={setIsModalOpenAddItem}
+                  visible={isModalOpenAddItem}
+                />
               </Col>
               <Col span={8} style={{ paddingRight: 17 }}>
-                <MButton onClick={() => setIsModalOpenPaySelected(true)} style={{ width: '100%' }}>
+                <MButton
+                  disabled={selectedRowKeys.length === 0}
+                  onClick={() => setIsModalOpenPaySelected(true)}
+                  style={{ width: '100%' }}
+                >
                   {t('paySelected.Pay Selected')}
                 </MButton>
                 <PaySelectedModal
@@ -127,7 +206,11 @@ function Transaction() {
                 <MButton style={{ width: '100%' }}>{t('transaction.Add Disk')}</MButton>
               </Col>
               <Col span={8} style={{ paddingRight: 17 }}>
-                <MButton onClick={() => setIsModalOpenChangeDisk(true)} style={{ width: '100%' }}>
+                <MButton
+                  disabled={selectedRowKeys.length === 0}
+                  onClick={() => setIsModalOpenChangeDisk(true)}
+                  style={{ width: '100%' }}
+                >
                   {t('paySelected.Transfer Disk')}
                 </MButton>
                 <SelectDiskModal
@@ -136,7 +219,11 @@ function Transaction() {
                 />
               </Col>
               <Col span={8}>
-                <MButton onClick={() => setIsModalOpenTransferRoom(true)} style={{ width: '100%' }}>
+                <MButton
+                  disabled={selectedRowKeys.length === 0}
+                  onClick={() => setIsModalOpenTransferRoom(true)}
+                  style={{ width: '100%' }}
+                >
                   {t('transaction.Transfer Room')}
                 </MButton>
                 <TransferRoom

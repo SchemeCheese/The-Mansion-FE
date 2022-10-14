@@ -1,3 +1,4 @@
+import addItem, { addItemState } from './addItem';
 import addReservationDetail, { addReservationDetailState } from './addReservationDetail';
 import agentInfos, { agentInfosState } from './agentInfos';
 import alerts, { alertsState } from './alerts';
@@ -6,6 +7,7 @@ import bookRoom, { bookRoomState } from './bookRoom';
 import cancelReservationDetail, { cancelReservationDetailState } from './cancelReservationDetail';
 import channel, { channelState } from './channel';
 import createReservation, { createReservationState } from './createReservation';
+import deleteItem, { deleteItemState } from './deleteItem';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
@@ -46,6 +48,8 @@ export const initialState = {
   searchAvailableSchedule: searchAvailableScheduleState,
   getProductType: getProductTypeState,
   channel: channelState,
+  addItem: addItemState,
+  deleteItem: deleteItemState,
 };
 
 export default {
@@ -72,4 +76,6 @@ export default {
   ...searchAvailableSchedule,
   ...getProductType,
   ...channel,
+  ...addItem,
+  ...deleteItem,
 };

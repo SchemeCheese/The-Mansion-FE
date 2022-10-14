@@ -8,6 +8,7 @@ import productType from './productType';
 import reservation from './reservation';
 import room from './room';
 import schedule from './schedule';
+import transaction from './transaction';
 import user from './user';
 
 /**
@@ -24,5 +25,6 @@ export default function* root() {
     fork(schedule),
     fork(productType),
     fork(channel),
+    fork(transaction),
   ]);
 }

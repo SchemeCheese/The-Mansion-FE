@@ -134,6 +134,26 @@ export interface BookRoomState {
   status: string;
 }
 
+export interface AddItemPayload {
+  items: Array<Record<string, any>>;
+  reservation_detail_id: string;
+  reservation_id: string;
+}
+
+export interface DeleteItemPayload {
+  sale_detail_ids: Array<Record<string, any>>;
+}
+
+export interface AddItemState {
+  payload: AddItemPayload;
+  status: string;
+}
+
+export interface DeleteItemState {
+  payload: DeleteItemPayload;
+  status: string;
+}
+
 export interface ReservationAddReservationDetailPayload {
   client_info_id: string;
   reservation_id: string;
@@ -229,6 +249,7 @@ export interface ProductTypeState {
 }
 
 export interface RootState {
+  addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
   agentInfos: AgentInfosState;
   alerts: AlertsState;
@@ -237,6 +258,7 @@ export interface RootState {
   cancelReservationDetail: CancelReservationDetailState;
   channel: FetchChannelState;
   createReservation: CreateReservationState;
+  deleteItem: DeleteItemState;
   getProductType: ProductTypeState;
   getReservation: GetReservationState;
   getReservationDetail: ReservationDetailState;
