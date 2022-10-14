@@ -12,11 +12,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input, Modal, Row, Select, Spin, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 
-import { productType, searchProduct } from 'actions';
+import { addItemAction, productType, searchProduct } from 'actions';
 
 import { RootState } from 'types';
 
 interface Props {
+  reservationDetailId: string;
+  reservationId: string;
   setIsModalOpen: (visible: boolean) => void;
   visible: boolean;
 }
@@ -31,7 +33,7 @@ interface DataType {
   update_price: string | number;
 }
 
-function AddItem({ setIsModalOpen, visible }: Props) {
+function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }: Props) {
   const { t } = useTranslation();
   const { Option } = Select;
 
@@ -75,11 +77,11 @@ function AddItem({ setIsModalOpen, visible }: Props) {
         const itTemporary = { ...dataAmountState[indexAmount] };
 
         if (type === 'minus') {
-          if (itTemporary.amount > 0) {
-            itTemporary.amount--;
+          if (itTemporary.quantity > 0) {
+            itTemporary.quantity--;
           }
         } else {
-          itTemporary.amount++;
+          itTemporary.quantity++;
         }
 
         dataAmountState[indexAmount] = itTemporary;
@@ -110,8 +112,8 @@ function AddItem({ setIsModalOpen, visible }: Props) {
     },
     {
       title: t('common.Amount'),
-      dataIndex: 'amount',
-      key: 'amount',
+      dataIndex: 'quantity',
+      key: 'quantity',
       align: 'center',
       render: (value, record) => (
         <span style={{ float: 'right', display: 'inline-flex', lineHeight: '28px' }}>
@@ -222,20 +224,37 @@ function AddItem({ setIsModalOpen, visible }: Props) {
         })
         .map((item: any) => {
           const amountItem = stateAmount.find(element => element.id === item.id);
-          const total = amountItem ? amountItem.amount * item.price : 0;
+          const total = amountItem ? amountItem.quantity * item.price : 0;
 
           return {
             id: item.id,
+            description_id: item.id,
             key: item.id,
             product: item.name,
             unit_price: item.price,
-            amount: amountItem ? amountItem.amount : 0,
+            sales_price: item.price,
+            storage_id: 1,
+            quantity: amountItem ? amountItem.quantity : 0,
             total,
           };
         });
     }
 
     return [];
+  };
+
+  const handleAddItem = () => {
+    dispatch(
+      addItemAction({
+        payload: {
+          items: dataAmount,
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        },
+      }),
+    );
+    setDataAmount([]);
+    setIsModalOpen(false);
   };
 
   const isSearching = useSelector<RootState>(({ product }) => product.is_searching);
@@ -249,7 +268,7 @@ function AddItem({ setIsModalOpen, visible }: Props) {
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       okText={t('common.Save')}
       onCancel={() => setIsModalOpen(false)}
-      onOk={() => setIsModalOpen(false)}
+      onOk={handleAddItem}
       title={<b>{t('transaction.Add Product / Service')}</b>}
       visible={visible}
       width={1000}

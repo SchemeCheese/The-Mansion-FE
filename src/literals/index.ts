@@ -62,6 +62,10 @@ export const ActionTypes = keyMirror({
   PRODUCT_TYPE_GET_FINISH: undefined,
   CHANNEL_FETCH: undefined,
   CHANNEL_FETCH_SUCCESS: undefined,
+  TRANSACTION_ADD_ITEM: undefined,
+  TRANSACTION_ADD_ITEM_SUCCESS: undefined,
+  TRANSACTION_DELETE_ITEM: undefined,
+  TRANSACTION_DELETE_ITEM_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

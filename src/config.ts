@@ -54,3 +54,8 @@ export const ProductTypeEndpoint = {
 export const ChannelEndpoint = {
   GET_LIST: 'channel-manager',
 };
+
+export const TransactionEndpoint = {
+  ADD_ITEM: 'api/v1/sale-info/product/create',
+  DELETE_ITEM: 'api/v1/sale-info/product/delete',
+};

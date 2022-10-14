@@ -63,7 +63,7 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
           <GuestList guests={reservationDetail.guests} />
         </TabPane>
         <TabPane key="5" tab={t('reservation.Transactions')}>
-          <Transaction />
+          <Transaction reservationDetailId={reservationDetail.id} reservationId={reservationId} />
         </TabPane>
       </Tabs>
     </Col>

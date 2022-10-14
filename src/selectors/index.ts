@@ -71,3 +71,13 @@ export const selectChannel = createSelector(
   (state: RootState) => state.channel,
   channel => channel,
 );
+
+export const selectAddItem = createSelector(
+  (state: RootState) => state.addItem,
+  addItem => addItem,
+);
+
+export const selectDeleteItem = createSelector(
+  (state: RootState) => state.deleteItem,
+  deleteItem => deleteItem,
+);
