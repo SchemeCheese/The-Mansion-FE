@@ -196,6 +196,8 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                   {t('auditRoomCharge.Add Room Charge')}
                 </MButton>
                 <RoomAuditCharge
+                  reservationDetailId={reservationDetailId}
+                  reservationId={reservationId}
                   setIsModalOpen={setIsModalOpenAditRoomCharge}
                   visible={isModalOpenAditRoomCharge}
                 />
