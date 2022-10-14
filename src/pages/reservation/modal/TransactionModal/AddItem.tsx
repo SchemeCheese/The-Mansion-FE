@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input, Modal, Row, Select, Spin, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { formatNumber } from 'helpers';
 
 import { addItemAction, productType, searchProduct } from 'actions';
 
@@ -231,11 +232,12 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
             description_id: item.id,
             key: item.id,
             product: item.name,
-            unit_price: item.price,
+            unit_price: formatNumber(item.price),
+            normal_price: item.price,
             sales_price: item.price,
             storage_id: 1,
             quantity: amountItem ? amountItem.quantity : 0,
-            total,
+            total: formatNumber(total),
           };
         });
     }

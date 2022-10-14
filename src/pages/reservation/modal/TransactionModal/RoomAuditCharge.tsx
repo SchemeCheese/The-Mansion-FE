@@ -31,6 +31,7 @@ function RoomAuditCharge({ reservationDetailId, reservationId, setIsModalOpen, v
       rate_name: item.rate_name,
       rate_detail: item.rate_detail,
       unit_price: formatNumber(item.unit_price),
+      normal_price: item.unit_price,
       updated_price: item.actual_amount,
       description_id: item.description_id,
     };
@@ -89,6 +90,7 @@ function RoomAuditCharge({ reservationDetailId, reservationId, setIsModalOpen, v
       return {
         description_id: item.description_id,
         quantity: 1,
+        normal_price: item.normal_price,
         sales_price: item.updated_price,
         storage_id: 1, // Disk A
       };
