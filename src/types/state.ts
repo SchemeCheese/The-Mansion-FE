@@ -149,6 +149,18 @@ export interface AddItemState {
   status: string;
 }
 
+export interface CreatePaymentPayload {
+  payment_methods: Array<Record<string, any>>;
+  reservation_detail_id: string;
+  sales_detail_id: Array<Record<string, any>>;
+  sales_info_id: string;
+}
+
+export interface CreatePaymentState {
+  payload: CreatePaymentPayload;
+  status: string;
+}
+
 export interface DeleteItemState {
   payload: DeleteItemPayload;
   status: string;
@@ -257,6 +269,7 @@ export interface RootState {
   bookRoom: BookRoomState;
   cancelReservationDetail: CancelReservationDetailState;
   channel: FetchChannelState;
+  createPayment: CreatePaymentState;
   createReservation: CreateReservationState;
   deleteItem: DeleteItemState;
   getProductType: ProductTypeState;

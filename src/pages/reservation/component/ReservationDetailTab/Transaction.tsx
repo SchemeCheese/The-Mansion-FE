@@ -51,10 +51,13 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   const tabList: any = [];
   const contentList: any = {};
   const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
   const rowSelectionDisk = {
     selectedRowKeys,
-    onChange: (newSelectedRowKeys: React.Key[]) => {
+    onChange: (newSelectedRowKeys: React.Key[], newSelectedRows: any) => {
       setSelectedRowKeys(newSelectedRowKeys);
+      setSelectedRows(newSelectedRows);
     },
   };
 
@@ -184,7 +187,9 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                   {t('paySelected.Pay Selected')}
                 </MButton>
                 <PaySelectedModal
+                  selectedRows={selectedRows}
                   setIsModalOpen={setIsModalOpenPaySelected}
+                  setIsModalOpenSelectedPaymentMethod={setIsModalOpenSelectedPaymentMethod}
                   visible={isModalOpenPaySelected}
                 />
               </Col>
@@ -390,6 +395,8 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
               {t('common.Payment')}
             </PattonButton>
             <SelectedPayMethodModal
+              reservationDetailId={reservationDetailId}
+              selectedRows={selectedRows}
               setIsModalOpen={setIsModalOpenSelectedPaymentMethod}
               visible={isModalOpenSelectedPaymentMethod}
             />

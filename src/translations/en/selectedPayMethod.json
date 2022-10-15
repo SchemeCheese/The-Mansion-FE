@@ -7,7 +7,7 @@
   },
   "Amount to pay": {
     "title": "Amount to pay",
-    "placeholder": ""
+    "placeholder": "Amount"
   },
   "Currency": {
     "title": "Currency",
@@ -15,7 +15,7 @@
   },
   "Amount in VND": {
     "title": "Amount in VND",
-    "placeholder": ""
+    "placeholder": " Amount (VND)"
   },
   "Credit Card Type": {
     "title": "Credit Card Type",
@@ -23,14 +23,14 @@
   },
   "Credit Card Number": {
     "title": "Credit Card Number",
-    "placeholder": ""
+    "placeholder": "1223 3434 4667 801"
   },
   "Card Holder Name": {
     "title": "Card Holder Name",
-    "placeholder": ""
+    "placeholder": "STEVE MARK"
   },
   "Authorized Person": {
     "title": "Authorized Person",
-    "placeholder": ""
+    "placeholder": "Select Person"
   }
 }

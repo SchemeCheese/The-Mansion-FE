@@ -85,6 +85,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       amount: item.quantity,
       total: formatNumber(item.total_amount),
       sale_detail_id: item.sale_detail_id,
+      storage_id: item.storage_id,
     };
   });
 

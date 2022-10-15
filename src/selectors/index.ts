@@ -81,3 +81,8 @@ export const selectDeleteItem = createSelector(
   (state: RootState) => state.deleteItem,
   deleteItem => deleteItem,
 );
+
+export const selectCreatePayment = createSelector(
+  (state: RootState) => state.createPayment,
+  createPayment => createPayment,
+);

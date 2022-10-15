@@ -10,3 +10,4 @@ export * from './schedule';
 export * from './productType';
 export * from './channel';
 export * from './transaction';
+export * from './payment';

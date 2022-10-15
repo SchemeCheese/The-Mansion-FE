@@ -59,3 +59,7 @@ export const TransactionEndpoint = {
   ADD_ITEM: 'api/v1/sale-info/product/create',
   DELETE_ITEM: 'api/v1/sale-info/product/delete',
 };
+
+export const PaymentEndpoint = {
+  CREATE_PAYMENT: 'api/v1/payments/create',
+};
