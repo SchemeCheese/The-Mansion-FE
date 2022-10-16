@@ -94,6 +94,40 @@ function ReservationForm({
     }
   }, [roomCondition]);
 
+  let sourceOptions = null;
+
+  if (roomCondition.source_type?.toString() === '1') {
+    sourceOptions = agentInfos
+      ?.filter((item: any) => {
+        return item.agent_kind === 2;
+      })
+      .map((agent: any) => (
+        <Option key={agent.id} value={agent.id}>
+          {agent.name}
+        </Option>
+      ));
+  } else if (roomCondition.source_type?.toString() === '5') {
+    sourceOptions = agentInfos
+      ?.filter((item: any) => {
+        return item.agent_kind === 1;
+      })
+      .map((agent: any) => (
+        <Option key={agent.id} value={agent.id}>
+          {agent.name}
+        </Option>
+      ));
+  } else if (roomCondition.source_type?.toString() === '7') {
+    sourceOptions = agentInfos
+      ?.filter((item: any) => {
+        return item.agent_kind === 0;
+      })
+      .map((agent: any) => (
+        <Option key={agent.id} value={agent.id}>
+          {agent.name}
+        </Option>
+      ));
+  }
+
   return (
     <Form
       ref={formRef}
@@ -187,24 +221,7 @@ function ReservationForm({
                     }
                     placeholder={t('reservation.Source.placeholder')}
                   >
-                    {roomCondition.source_type === '2' ? (
-                      agentInfos?.map((agent: any) => (
-                        <Option key={agent.id} value={agent.id}>
-                          {agent.name}
-                        </Option>
-                      ))
-                    ) : (
-                      <>
-                        <Option value="1">Booking.com</Option>
-                        <Option value="2">Agoda</Option>
-                        <Option value="3">Airbnb</Option>
-                        <Option value="4">Ctrip</Option>
-                        <Option value="5">Vntrip</Option>
-                        <Option value="6">Traveloka</Option>
-                        <Option value="7">Expedia</Option>
-                        <Option value="8">Rakuten</Option>
-                      </>
-                    )}
+                    {sourceOptions}
                   </Select>
                 </Form.Item>
               </Col>
