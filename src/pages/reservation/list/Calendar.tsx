@@ -109,18 +109,18 @@ function Calendar() {
     }
   }, [changed]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
+  const [isEventInfoModalOpen, setIsEventInfoModalOpen] = useState(false);
 
   const handleOk = () => {
-    setIsModalOpen(false);
+    setIsEventInfoModalOpen(false);
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setIsEventInfoModalOpen(false);
+  };
+
+  const showEventInfo = () => {
+    setIsEventInfoModalOpen(true);
   };
 
   return (
@@ -129,23 +129,28 @@ function Calendar() {
         <Col span={24}>
           <span> Filter </span>
           <Select
-            onChange={value =>
-              setSearchCondition({
+            allowClear
+            onChange={value => {
+              const searchConditionStateTemporary = {
                 ...searchCondition,
-                room_type: value,
-              })
-            }
+                room_type: value ?? '',
+              };
+
+              setSearchCondition(searchConditionStateTemporary);
+              dispatch(searchScheduleAction(searchConditionStateTemporary));
+            }}
             placeholder="Room Type"
             style={{
               width: 150,
               marginLeft: 15,
             }}
           >
-            <Option value="1">1</Option>
-            <Option value="2">2</Option>
-            <Option value="3">3</Option>
-            <Option value="4">4</Option>
-            <Option value="5">5</Option>
+            <Option value="1">Premium Alex</Option>
+            <Option value="2">Superior Double</Option>
+            <Option value="3">Deluxe with Balcony</Option>
+            <Option value="4">Studio Twin</Option>
+            <Option value="5">Studio Double</Option>
+            <Option value="6">Royal Family</Option>
           </Select>
           <MInput
             onChange={event =>
@@ -204,6 +209,7 @@ function Calendar() {
           {searchScheduleRedux.is_searching === false ? (
             <FullCalendar
               ref={fullCalendarRef}
+              eventClick={showEventInfo}
               eventContent={renderEventContent}
               eventsSet={handleEvents}
               headerToolbar={{
@@ -287,9 +293,6 @@ function Calendar() {
         </Col>
       </Row>
       {/* Calendar note */}
-      <Button onClick={showModal} type="primary">
-        Open Modal
-      </Button>
       <Modal
         centered
         closable={false}
@@ -317,7 +320,7 @@ function Calendar() {
             </Col>
           </Row>
         }
-        visible={isModalOpen}
+        visible={isEventInfoModalOpen}
         width={644}
       >
         <Card

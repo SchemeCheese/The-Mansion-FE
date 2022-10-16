@@ -438,9 +438,12 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                 }}
                 placeholder={t('reservation.Room Type.placeholder')}
               >
-                <Option value="1">1</Option>
-                <Option value="2">2</Option>
-                <Option value="3">3</Option>
+                <Option value="1">Premium Alex</Option>
+                <Option value="2">Superior Double</Option>
+                <Option value="3">Deluxe with Balcony</Option>
+                <Option value="4">Studio Twin</Option>
+                <Option value="5">Studio Double</Option>
+                <Option value="6">Royal Family</Option>
               </Select>
             </Form.Item>
             <Form.Item label="Floor" name="floor">
