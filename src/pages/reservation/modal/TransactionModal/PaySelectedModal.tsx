@@ -4,7 +4,9 @@ import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 
 interface Props {
+  selectedRows: any;
   setIsModalOpen: (visible: boolean) => void;
+  setIsModalOpenSelectedPaymentMethod: (visible: boolean) => void;
   visible: boolean;
 }
 
@@ -16,7 +18,12 @@ interface DataTypePaySelected {
   unit_price: string;
 }
 
-function PaySelectedModal({ setIsModalOpen, visible }: Props) {
+function PaySelectedModal({
+  selectedRows,
+  setIsModalOpen,
+  setIsModalOpenSelectedPaymentMethod,
+  visible,
+}: Props) {
   const { t } = useTranslation();
   const { Option } = Select;
 
@@ -45,31 +52,36 @@ function PaySelectedModal({ setIsModalOpen, visible }: Props) {
     },
   ];
 
-  const data = [
-    {
-      date: '28/07/2020',
-      description: 'PEPSI',
-      unit_price: '20.000',
-      amount: 2,
-      total: '40.000',
-    },
-    {
-      date: '28/07/2020',
-      description: 'Coca Cola',
-      unit_price: '20.000',
-      amount: 2,
-      total: '40.000',
-    },
-  ];
+  // const data = [
+  //   {
+  //     date: '28/07/2020',
+  //     description: 'PEPSI',
+  //     unit_price: '20.000',
+  //     amount: 2,
+  //     total: '40.000',
+  //   },
+  //   {
+  //     date: '28/07/2020',
+  //     description: 'Coca Cola',
+  //     unit_price: '20.000',
+  //     amount: 2,
+  //     total: '40.000',
+  //   },
+  // ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    onChange: (selectedRowKeys: React.Key[], newSelectedRows: any) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', newSelectedRows);
     },
   };
 
   const handleChangePaySelected = (value: string) => {
     console.log(`selected ${value}`);
+  };
+
+  const handleSelectPaymentMethod = () => {
+    setIsModalOpenSelectedPaymentMethod(true);
+    // setIsModalOpen(false)
   };
 
   return (
@@ -79,7 +91,7 @@ function PaySelectedModal({ setIsModalOpen, visible }: Props) {
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       okText={t('paySelected.Select Payment Method')}
       onCancel={() => setIsModalOpen(false)}
-      onOk={() => setIsModalOpen(false)}
+      onOk={handleSelectPaymentMethod}
       title={<b>{t('paySelected.Pay Selected')}</b>}
       visible={visible}
       width={850}
@@ -87,7 +99,7 @@ function PaySelectedModal({ setIsModalOpen, visible }: Props) {
       <Form colon={false} layout="horizontal">
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={selectedRows}
           pagination={false}
           rowSelection={{
             ...rowSelection,

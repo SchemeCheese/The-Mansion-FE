@@ -6,6 +6,7 @@ import app, { appState } from './app';
 import bookRoom, { bookRoomState } from './bookRoom';
 import cancelReservationDetail, { cancelReservationDetailState } from './cancelReservationDetail';
 import channel, { channelState } from './channel';
+import createPayment, { createPaymentState } from './createPayment';
 import createReservation, { createReservationState } from './createReservation';
 import deleteItem, { deleteItemState } from './deleteItem';
 import getProductType, { getProductTypeState } from './getProductType';
@@ -50,6 +51,7 @@ export const initialState = {
   channel: channelState,
   addItem: addItemState,
   deleteItem: deleteItemState,
+  createPayment: createPaymentState,
 };
 
 export default {
@@ -78,4 +80,5 @@ export default {
   ...channel,
   ...addItem,
   ...deleteItem,
+  ...createPayment,
 };

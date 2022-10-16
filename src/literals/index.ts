@@ -66,6 +66,8 @@ export const ActionTypes = keyMirror({
   TRANSACTION_ADD_ITEM_SUCCESS: undefined,
   TRANSACTION_DELETE_ITEM: undefined,
   TRANSACTION_DELETE_ITEM_SUCCESS: undefined,
+  PAYMENT_CREATE: undefined,
+  PAYMENT_CREATE_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

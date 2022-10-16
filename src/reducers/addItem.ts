@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { addItemAction, addItemActionSuccess } from 'actions/transaction';
+import { addItemAction, addItemActionSuccess } from 'actions';
 
 import { AddItemState } from 'types';
 
