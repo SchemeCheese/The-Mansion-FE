@@ -273,8 +273,6 @@ function ReservationDetail() {
   }, [changed]);
 
   useEffect(() => {
-    console.log('reservationDetailRedux', reservationRedux);
-
     setRoomCondition({
       ...roomCondition,
       source_type: reservationRedux.market_segment_id,
@@ -362,7 +360,7 @@ function ReservationDetail() {
               <BreadscrumTitle>{t('common.Status')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <BreadscrumData>Reserved</BreadscrumData>
+              <BreadscrumData>{reservationRedux.status}</BreadscrumData>
             </Col>
           </Row>
           <Row>

@@ -159,7 +159,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     } else {
       calendarApi.addEvent({
         id: createEventId(),
-        title: 'Minh NV - Agoda',
+        title: reservationDetailInfo.eventName,
         start: selectInfo.startStr,
         end: selectInfo.endStr,
         allDay: selectInfo.allDay,

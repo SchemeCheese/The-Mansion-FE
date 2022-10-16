@@ -77,7 +77,7 @@ function ReservationList({ type }: Props) {
           id: item.id,
           key: item.id,
           folio_id: item.reservationNumber,
-          status: 'Waitlist',
+          status: item.status,
           created_date: item.created_at,
           source_ta: item.source,
           checkin: item.checkin,
@@ -119,9 +119,10 @@ function ReservationList({ type }: Props) {
           >
             <circle cx="3" cy="3" fill="black" fillOpacity="0.25" r="3" />
           </svg>
-          {text}
+          {text.charAt(0).toUpperCase() + text.slice(1)}
         </div>
       ),
+      hidden: type === 'waitlist',
     },
     {
       title: 'Created Date',
@@ -198,7 +199,7 @@ function ReservationList({ type }: Props) {
         return <div style={{ textAlign: 'center' }}>{text ?? '-'}</div>;
       },
     },
-  ];
+  ].filter(item => !item.hidden);
 
   return (
     <Row style={{ background: 'white', padding: 16 }}>
