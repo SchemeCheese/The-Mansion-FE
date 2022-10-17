@@ -4,7 +4,7 @@ import { actionPayload } from 'modules/helpers';
 
 import { ActionTypes } from 'literals';
 
-import { AddItem, DeleteItem } from 'types';
+import { AddItem, ChangeDisk, DeleteItem } from 'types';
 
 export const addItemAction = createAction(ActionTypes.TRANSACTION_ADD_ITEM, (payload: AddItem) =>
   actionPayload(payload),
@@ -18,3 +18,10 @@ export const deleteItemAction = createAction(
 );
 
 export const deleteItemActionSuccess = createAction(ActionTypes.TRANSACTION_DELETE_ITEM_SUCCESS);
+
+export const changeDiskAction = createAction(
+  ActionTypes.TRANSACTION_CHANGE_DISK,
+  (payload: ChangeDisk) => actionPayload(payload),
+);
+
+export const changeDiskActionSuccess = createAction(ActionTypes.TRANSACTION_CHANGE_DISK_SUCCESS);

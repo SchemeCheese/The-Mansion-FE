@@ -1,3 +1,5 @@
+import changeDisk, { changeDiskState } from 'reducers/changeDisk';
+
 import addItem, { addItemState } from './addItem';
 import addReservationDetail, { addReservationDetailState } from './addReservationDetail';
 import agentInfos, { agentInfosState } from './agentInfos';
@@ -52,6 +54,7 @@ export const initialState = {
   addItem: addItemState,
   deleteItem: deleteItemState,
   createPayment: createPaymentState,
+  changeDisk: changeDiskState,
 };
 
 export default {
@@ -81,4 +84,5 @@ export default {
   ...addItem,
   ...deleteItem,
   ...createPayment,
+  ...changeDisk,
 };

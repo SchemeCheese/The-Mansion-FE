@@ -119,6 +119,11 @@ export interface UpdateGeneralInfoPayload {
   transport_no_pickup: string | number;
 }
 
+export interface ChangeDiskPayload {
+  sale_detail_ids: Array<Record<string, any>>;
+  storage_id: string | number;
+}
+
 export interface CreateReservationState {
   payload: CreateReservationPayload;
   status: string;
@@ -260,6 +265,11 @@ export interface ProductTypeState {
   data: Array<Record<string, any>>;
 }
 
+export interface ChangeDiskState {
+  payload: ChangeDiskPayload;
+  status: string;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -268,6 +278,7 @@ export interface RootState {
   app: AppState;
   bookRoom: BookRoomState;
   cancelReservationDetail: CancelReservationDetailState;
+  changeDisk: ChangeDiskState;
   channel: FetchChannelState;
   createPayment: CreatePaymentState;
   createReservation: CreateReservationState;

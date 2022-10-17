@@ -8,10 +8,19 @@ interface DeleteItemPayload {
   sale_detail_ids: Array<Record<string, any>>;
 }
 
+interface ChangeDiskPayload {
+  sale_detail_ids: Array<Record<string, any>>;
+  storage_id: string | number;
+}
+
 export interface AddItem {
   payload: AddItemPayload;
 }
 
 export interface DeleteItem {
   payload: DeleteItemPayload;
+}
+
+export interface ChangeDisk {
+  payload: ChangeDiskPayload;
 }

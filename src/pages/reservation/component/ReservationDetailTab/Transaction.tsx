@@ -14,7 +14,12 @@ import RoomAuditCharge from 'pages/reservation/modal/TransactionModal/RoomAuditC
 import SelectDiskModal from 'pages/reservation/modal/TransactionModal/SelectDiskModal';
 import SelectedPayMethodModal from 'pages/reservation/modal/TransactionModal/SelectedPayMethodModal';
 import TransferRoom from 'pages/reservation/modal/TransactionModal/TransferRoom';
-import { selectAddItem, selectDeleteItem, selectGetReservationDetail } from 'selectors';
+import {
+  selectAddItem,
+  selectChangeDisk,
+  selectDeleteItem,
+  selectGetReservationDetail,
+} from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
@@ -42,9 +47,11 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
 
   const addItemData = useAppSelector(selectAddItem);
   const deleteItemData = useAppSelector(selectDeleteItem);
+  const changeDiskData = useAppSelector(selectChangeDisk);
 
   const { changed: addItemChanged } = useTreeChanges(addItemData);
   const { changed: deleteItemChanged } = useTreeChanges(deleteItemData);
+  const { changed: changeDiskChanged } = useTreeChanges(changeDiskData);
 
   const dispatch = useDispatch();
 
@@ -140,6 +147,19 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
     }
   }, [deleteItemChanged]);
 
+  useEffect(() => {
+    if (changeDiskChanged('status', 'SUCCESS')) {
+      message.success('change disk successfully!');
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
+    }
+  }, [changeDiskChanged]);
+
   return (
     <Row
       style={{
@@ -221,6 +241,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                   {t('paySelected.Transfer Disk')}
                 </MButton>
                 <SelectDiskModal
+                  saleDetailIds={selectedRowKeys}
                   setIsModalOpen={setIsModalOpenChangeDisk}
                   visible={isModalOpenChangeDisk}
                 />

@@ -8,6 +8,8 @@ import { ActionTypes } from 'literals';
 import {
   addItemAction,
   addItemActionSuccess,
+  changeDiskAction,
+  changeDiskActionSuccess,
   deleteItemAction,
   deleteItemActionSuccess,
 } from 'actions';
@@ -50,7 +52,24 @@ export function* postDeleteItemSaga({ payload }: ReturnType<typeof deleteItemAct
   }
 }
 
+export function* postChangeDiskSaga({ payload }: ReturnType<typeof changeDiskAction>) {
+  let success = '';
+
+  ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.CHANGE_DISK)}`, {
+    method: 'POST',
+    headers: headerWithAuthorization(),
+    body: {
+      ...payload.payload,
+    },
+  }));
+
+  if (success) {
+    yield put(changeDiskActionSuccess());
+  }
+}
+
 export default function* root() {
   yield all([takeLatest(ActionTypes.TRANSACTION_ADD_ITEM, postAddItemSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_DELETE_ITEM, postDeleteItemSaga)]);
+  yield all([takeLatest(ActionTypes.TRANSACTION_CHANGE_DISK, postChangeDiskSaga)]);
 }
