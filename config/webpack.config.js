@@ -453,7 +453,7 @@ module.exports = webpackEnv => {
               // by webpacks internal loaders.
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
-                name: 'static/[name].[git-hash].[ext]',
+                name: 'static/[contenthash].[git-hash].[ext]',
               },
             },
             // ** STOP ** Are you adding a new loader?
