@@ -180,7 +180,7 @@ function ReservationDetail() {
         roomsTemporary.push({
           key: item.id,
           reservation_detail_id: item.id,
-          status: item.canceled ? 'Cancel' : 'Waitlist',
+          status: item.status,
           name: '-',
           room_type: item.equipment_type_id,
           room_type_text: item.room_type_text,
@@ -191,8 +191,8 @@ function ReservationDetail() {
             .duration(moment(item.departure_date).diff(moment(item.arrival_date)))
             .asDays(),
           adl: item.person_number ?? '-',
-          child: item.children_number || item.children_number === 0 ? '-' : item.children_number,
-          baby: item.infant_number || item.infant_number === 0 ? '-' : item.infant_number,
+          child: item.children_number && item.children_number > 0 ? item.children_number : '-',
+          baby: item.infant_number && item.infant_number > 0 ? item.infant_number : '-',
           rate: item.rate_name,
           subtotal: formatNumber(item.total_price),
           deposit: '-',
