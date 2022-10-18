@@ -1,4 +1,5 @@
 import { request } from '@gilbarbara/helpers';
+import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
@@ -30,245 +31,315 @@ import {
 } from 'actions';
 
 export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchReservation>) {
-  let data = [];
-  let total = 0;
-  let currentPage = 0;
+  try {
+    let data = [];
+    let total = 0;
+    let currentPage = 0;
 
-  const query = new URLSearchParams(Object(payload)).toString();
+    const query = new URLSearchParams(Object(payload)).toString();
 
-  ({
-    current_page: currentPage,
-    data,
-    total,
-  } = yield call(request, `${apiEndPoint(ReservationEndpoint.SEARCH)}?${query}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  }));
-
-  yield put(
-    searchReservationFinish({
+    ({
+      current_page: currentPage,
       data,
       total,
-      current_page: currentPage,
-    }),
-  );
+    } = yield call(request, `${apiEndPoint(ReservationEndpoint.SEARCH)}?${query}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }));
+
+    yield put(
+      searchReservationFinish({
+        data,
+        total,
+        current_page: currentPage,
+      }),
+    );
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
 }
 
 export function* postCreateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
-  let success = '';
+  try {
+    let success = '';
 
-  ({ success } = yield call(request, apiEndPoint(ReservationEndpoint.CREATE), {
-    method: 'POST',
-    headers: headerWithAuthorization(),
-    body: {
-      ...payload.payload,
-      online_reservation: true,
-      branch_code: 'the_mansion',
-      operator_code: 'the_mansion',
-      facility_code: 'hotel',
-    },
-  }));
+    ({ success } = yield call(request, apiEndPoint(ReservationEndpoint.CREATE), {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        online_reservation: true,
+        branch_code: 'the_mansion',
+        operator_code: 'the_mansion',
+        facility_code: 'hotel',
+      },
+    }));
 
-  if (success) {
-    yield put(createReservationSuccess());
+    if (success) {
+      yield put(createReservationSuccess());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
   }
 }
 
 export function* postUpdateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
-  let success = '';
+  try {
+    let success = '';
 
-  ({ success } = yield call(
-    request,
-    apiEndPoint(`${ReservationEndpoint.UPDATE}/${payload.payload.reservation_id}/update`),
-    {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        online_reservation: true,
-        branch_code: 'the_mansion',
-        operator_code: 'the_mansion',
-        facility_code: 'hotel',
+    ({ success } = yield call(
+      request,
+      apiEndPoint(`${ReservationEndpoint.UPDATE}/${payload.payload.reservation_id}/update`),
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          online_reservation: true,
+          branch_code: 'the_mansion',
+          operator_code: 'the_mansion',
+          facility_code: 'hotel',
+        },
       },
-    },
-  ));
+    ));
 
-  if (success) {
-    yield put(updateReservationSuccess());
+    if (success) {
+      yield put(updateReservationSuccess());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
   }
 }
 
 export function* getReservationDetailSaga({ payload }: ReturnType<typeof getReservationDetail>) {
-  let data = [];
+  try {
+    let data = [];
 
-  ({ data } = yield call(
-    request,
-    `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${payload.reservation_id}/reservation-detail/${
-      payload.reservation_detail_id
-    }/show`,
-    {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    },
-  ));
+    ({ data } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${
+        payload.reservation_id
+      }/reservation-detail/${payload.reservation_detail_id}/show`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
 
-  yield put(getReservationDetailFinish({ data }));
+    yield put(getReservationDetailFinish({ data }));
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
 }
 
 export function* getReservationSaga({ payload }: ReturnType<typeof getReservation>) {
-  let data = [];
+  try {
+    let data = [];
 
-  ({ data } = yield call(
-    request,
-    `${apiEndPoint(ReservationEndpoint.DETAIL)}/${payload.reservation_id}`,
-    {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    },
-  ));
+    ({ data } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.DETAIL)}/${payload.reservation_id}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
 
-  yield put(getReservationFinish({ data }));
+    yield put(getReservationFinish({ data }));
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
 }
 
 export function* getReservationNumberSaga({ payload }: ReturnType<typeof getReservationNumber>) {
-  let success = '';
-  let reservationNumber = '';
+  try {
+    let success = '';
+    let reservationNumber = '';
 
-  ({ reservation_number: reservationNumber, success } = yield call(
-    request,
-    apiEndPoint(ReservationEndpoint.GET_RESERVATION_NUMBER),
-    {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: { ...payload },
-    },
-  ));
+    ({ reservation_number: reservationNumber, success } = yield call(
+      request,
+      apiEndPoint(ReservationEndpoint.GET_RESERVATION_NUMBER),
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: { ...payload },
+      },
+    ));
 
-  if (success) {
-    yield put(getReservationNumberFinish({ reservation_number: reservationNumber }));
+    if (success) {
+      yield put(getReservationNumberFinish({ reservation_number: reservationNumber }));
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
   }
 }
 
 export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) {
-  let success = '';
+  try {
+    let success = '';
 
-  ({ success } = yield call(
-    request,
-    `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
-      payload.payload.reservation_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/update-rate`,
-    {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        operator_code: 'the_mansion',
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
+        payload.payload.reservation_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/update-rate`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          operator_code: 'the_mansion',
+        },
       },
-    },
-  ));
+    ));
 
-  if (success) {
-    yield put(updateRateSuccess());
+    if (success) {
+      yield put(updateRateSuccess());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
   }
 }
 
 export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
-  let success = '';
+  try {
+    let success = '';
 
-  ({ success } = yield call(
-    request,
-    `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
-      payload.payload.reservation_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/book-room`,
-    {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        online_reservation: true,
-        branch_code: 'the_mansion',
-        operator_code: 'the_mansion',
-        facility_code: 'hotel',
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
+        payload.payload.reservation_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/book-room`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          online_reservation: true,
+          branch_code: 'the_mansion',
+          operator_code: 'the_mansion',
+          facility_code: 'hotel',
+        },
       },
-    },
-  ));
+    ));
 
-  if (success) {
-    yield put(bookRoomSuccess());
+    if (success) {
+      yield put(bookRoomSuccess());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
   }
 }
 
 export function* postAddReservationDetailSaga({
   payload,
 }: ReturnType<typeof addReservationDetail>) {
-  let success = '';
+  try {
+    let success = '';
 
-  ({ success } = yield call(
-    request,
-    `${apiEndPoint(ReservationEndpoint.ADD_RESERVATION_DETAIL)}/${
-      payload.payload.reservation_id
-    }/add-reservation-detail`,
-    {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        operator_code: 'the_mansion',
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.ADD_RESERVATION_DETAIL)}/${
+        payload.payload.reservation_id
+      }/add-reservation-detail`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          operator_code: 'the_mansion',
+        },
       },
-    },
-  ));
+    ));
 
-  if (success) {
-    yield put(addReservationDetailSuccess());
+    if (success) {
+      yield put(addReservationDetailSuccess());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
   }
 }
 
 export function* postCancelReservationDetailSaga({
   payload,
 }: ReturnType<typeof cancelReservationDetail>) {
-  let success = '';
+  try {
+    let success = '';
 
-  ({ success } = yield call(
-    request,
-    `${apiEndPoint(ReservationEndpoint.CANCEL_RESERVATION_DETAIL)}/${
-      payload.payload.reservation_id
-    }/cancel-reservation-detail`,
-    {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        operator_code: 'the_mansion',
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.CANCEL_RESERVATION_DETAIL)}/${
+        payload.payload.reservation_id
+      }/cancel-reservation-detail`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          operator_code: 'the_mansion',
+        },
       },
-    },
-  ));
+    ));
 
-  if (success) {
-    yield put(cancelReservationDetailSuccess());
-    yield put(updateGeneralInfoSuccess());
+    if (success) {
+      yield put(cancelReservationDetailSuccess());
+      yield put(updateGeneralInfoSuccess());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
   }
 }
 
 export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof updateGeneralInfo>) {
-  let success = '';
+  try {
+    let success = '';
 
-  ({ success } = yield call(
-    request,
-    `${apiEndPoint(ReservationEndpoint.UPDATE_GENERAL_INFO)}/${
-      payload.payload.reservation_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/update`,
-    {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        operator_code: 'the_mansion',
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.UPDATE_GENERAL_INFO)}/${
+        payload.payload.reservation_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/update`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          operator_code: 'the_mansion',
+        },
       },
-    },
-  ));
+    ));
 
-  if (success) {
-    yield put(updateGeneralInfoSuccess());
+    if (success) {
+      yield put(updateGeneralInfoSuccess());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
   }
 }
 

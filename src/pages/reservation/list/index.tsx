@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Col, Tabs } from 'antd';
+import { Tabs } from 'antd';
 import moment from 'moment';
 import { selectSearchSchedule } from 'selectors';
 
@@ -17,50 +17,6 @@ import ReservationList from './ReservationList';
 const { TabPane } = Tabs;
 
 function Reservation() {
-  const dates = [];
-
-  for (let index = 0; index < 10; index++) {
-    const bgColor = index === 2 || index === 1 ? '#FFF2E8' : '#FFFFFF';
-
-    dates.push(
-      <Col
-        flex={1}
-        style={{
-          border: '1px solid #E8E8E8',
-          borderRightStyle: 'none',
-          textAlign: 'center',
-          backgroundColor: bgColor,
-        }}
-      >
-        <p
-          style={{
-            margin: 0,
-            color: 'rgba(0, 0, 0, 0.45)',
-          }}
-        >
-          Fri
-        </p>
-        <p
-          style={{
-            margin: 0,
-            fontWeight: 'bold',
-            fontSize: 18,
-          }}
-        >
-          27
-        </p>
-        <p
-          style={{
-            margin: 0,
-            color: 'rgba(0, 0, 0, 0.45)',
-          }}
-        >
-          NOV
-        </p>
-      </Col>,
-    );
-  }
-
   const dispatch = useDispatch();
 
   const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
@@ -71,7 +27,7 @@ function Reservation() {
       dispatch(
         searchReservation({
           current_page: 1,
-          per_page: 7,
+          per_page: 10,
           booker_info: '',
           folio_number: '',
           agent_name: '',
@@ -92,7 +48,7 @@ function Reservation() {
       dispatch(
         searchReservation({
           current_page: 1,
-          per_page: 7,
+          per_page: 10,
           booker_info: '',
           folio_number: '',
           agent_name: '',

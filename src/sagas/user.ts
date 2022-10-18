@@ -1,4 +1,5 @@
 import { request } from '@gilbarbara/helpers';
+import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, delay, put, takeLatest } from 'redux-saga/effects';
 
@@ -30,23 +31,28 @@ export function* loginSaga({ payload }: ReturnType<typeof login>) {
 }
 
 export function* getLogginedUserInfoSaga() {
-  let username = '';
-  let name = '';
-  const accessToken = localStorage.getItem('access_token');
+  try {
+    let username = '';
+    let name = '';
+    const accessToken = localStorage.getItem('access_token');
 
-  ({ name, username } = yield call(request, apiEndPoint(AuthPath.PROFILE_PATH), {
-    method: 'POST',
-    headers: headerWithAuthorization(),
-  }));
+    ({ name, username } = yield call(request, apiEndPoint(AuthPath.PROFILE_PATH), {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+    }));
 
-  console.log('accessToken', accessToken, username, name);
+    console.log('accessToken', accessToken, username, name);
 
-  yield put(
-    loginSuccess({
-      username,
-      name,
-    }),
-  );
+    yield put(
+      loginSuccess({
+        username,
+        name,
+      }),
+    );
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
 }
 
 export function* logoutSaga() {
