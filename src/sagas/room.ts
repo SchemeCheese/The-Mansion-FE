@@ -1,4 +1,5 @@
 import { request } from '@gilbarbara/helpers';
+import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
@@ -8,39 +9,53 @@ import { ActionTypes } from 'literals';
 import { getRoomTypeFinish, searchRoom, searchRoomFinish } from 'actions';
 
 export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) {
-  let charges = [];
-  let rates = [];
-  let total = 0;
+  try {
+    let charges = [];
+    let rates = [];
+    let total = 0;
 
-  const query = new URLSearchParams(Object(payload)).toString();
+    const query = new URLSearchParams(Object(payload)).toString();
 
-  ({ charges, rates, total } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH)}?${query}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  }));
+    ({ charges, rates, total } = yield call(
+      request,
+      `${apiEndPoint(RoomEndpoint.SEARCH)}?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
 
-  yield put(
-    searchRoomFinish({
-      charges,
-      total,
-      rates,
-    }),
-  );
+    yield put(
+      searchRoomFinish({
+        charges,
+        total,
+        rates,
+      }),
+    );
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
 }
 
 export function* getRoomTypeSaga() {
-  let data = [];
+  try {
+    let data = [];
 
-  ({ data } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH_TYPE)}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  }));
+    ({ data } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH_TYPE)}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }));
 
-  yield put(
-    getRoomTypeFinish({
-      data,
-    }),
-  );
+    yield put(
+      getRoomTypeFinish({
+        data,
+      }),
+    );
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
 }
 
 export default function* root() {

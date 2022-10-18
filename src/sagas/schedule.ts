@@ -1,4 +1,5 @@
 import { request } from '@gilbarbara/helpers';
+import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
@@ -13,33 +14,47 @@ import {
 } from 'actions';
 
 export function* getSearchScheduleSaga({ payload }: ReturnType<typeof searchScheduleAction>) {
-  let data = [];
-  const query = new URLSearchParams(Object(payload)).toString();
+  try {
+    let data = [];
+    const query = new URLSearchParams(Object(payload)).toString();
 
-  ({ data } = yield call(request, `${apiEndPoint(ReservationEndpoint.SEARCH_SCHEDULE)}?${query}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  }));
+    ({ data } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.SEARCH_SCHEDULE)}?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
 
-  yield put(searchScheduleActionSuccess({ data }));
+    yield put(searchScheduleActionSuccess({ data }));
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
 }
 
 export function* getSearchAvailableScheduleSaga({
   payload,
 }: ReturnType<typeof searchAvailableScheduleAction>) {
-  let data = [];
-  const query = new URLSearchParams(Object(payload)).toString();
+  try {
+    let data = [];
+    const query = new URLSearchParams(Object(payload)).toString();
 
-  ({ data } = yield call(
-    request,
-    `${apiEndPoint(ReservationEndpoint.SEARCH_AVAILABLE_SCHEDULE)}?${query}`,
-    {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    },
-  ));
+    ({ data } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.SEARCH_AVAILABLE_SCHEDULE)}?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
 
-  yield put(searchAvailableScheduleActionSuccess({ data }));
+    yield put(searchAvailableScheduleActionSuccess({ data }));
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
 }
 
 export default function* root() {

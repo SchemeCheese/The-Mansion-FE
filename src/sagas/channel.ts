@@ -1,4 +1,5 @@
 import { request } from '@gilbarbara/helpers';
+import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
@@ -8,15 +9,20 @@ import { ActionTypes } from 'literals';
 import { fetchChannelsSuccessAction } from 'actions';
 
 export function* fetchChannelSaga() {
-  let channels = [];
-  let dates = [];
+  try {
+    let channels = [];
+    let dates = [];
 
-  ({ channels, dates } = yield call(request, `${apiEndPoint(ChannelEndpoint.GET_LIST)}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  }));
+    ({ channels, dates } = yield call(request, `${apiEndPoint(ChannelEndpoint.GET_LIST)}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }));
 
-  yield put(fetchChannelsSuccessAction({ dates, channels }));
+    yield put(fetchChannelsSuccessAction({ dates, channels }));
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
 }
 
 export default function* root() {
