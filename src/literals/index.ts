@@ -70,6 +70,9 @@ export const ActionTypes = keyMirror({
   PAYMENT_CREATE_SUCCESS: undefined,
   TRANSACTION_CHANGE_DISK: undefined,
   TRANSACTION_CHANGE_DISK_SUCCESS: undefined,
+  GUEST_CREATE: undefined,
+  GUEST_CREATE_SUCCESS: undefined,
+  GUEST_CREATE_FAILURE: undefined,
 });
 
 export const STATUS: Status = {

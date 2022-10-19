@@ -15,9 +15,10 @@ const { Text, Title } = Typography;
 
 interface Props {
   guests: any;
+  reservationDetailId: string;
 }
 
-function GuestList({ guests }: Props) {
+function GuestList({ guests, reservationDetailId }: Props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { t } = useTranslation();
 
@@ -42,7 +43,11 @@ function GuestList({ guests }: Props) {
 
   return (
     <>
-      <CreateGuestModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} />
+      <CreateGuestModal
+        isModalVisible={isModalVisible}
+        reservationDetailId={reservationDetailId}
+        setIsModalVisible={setIsModalVisible}
+      />
 
       <Row
         className="guest-list"

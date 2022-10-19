@@ -91,3 +91,8 @@ export const selectCreatePayment = createSelector(
   (state: RootState) => state.createPayment,
   createPayment => createPayment,
 );
+
+export const selectCreateGuest = createSelector(
+  (state: RootState) => state.createGuest,
+  createGuest => createGuest,
+);

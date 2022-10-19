@@ -8,6 +8,7 @@ import app, { appState } from './app';
 import bookRoom, { bookRoomState } from './bookRoom';
 import cancelReservationDetail, { cancelReservationDetailState } from './cancelReservationDetail';
 import channel, { channelState } from './channel';
+import createGuest, { createGuestState } from './createGuest';
 import createPayment, { createPaymentState } from './createPayment';
 import createReservation, { createReservationState } from './createReservation';
 import deleteItem, { deleteItemState } from './deleteItem';
@@ -55,6 +56,7 @@ export const initialState = {
   deleteItem: deleteItemState,
   createPayment: createPaymentState,
   changeDisk: changeDiskState,
+  createGuest: createGuestState,
 };
 
 export default {
@@ -85,4 +87,5 @@ export default {
   ...deleteItem,
   ...createPayment,
   ...changeDisk,
+  ...createGuest,
 };

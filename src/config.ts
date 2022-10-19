@@ -64,3 +64,7 @@ export const TransactionEndpoint = {
 export const PaymentEndpoint = {
   CREATE_PAYMENT: 'api/v1/payments/create',
 };
+
+export const GuestEndpoint = {
+  CREATE: 'api/v1/guests/create',
+};
