@@ -9,7 +9,7 @@ const useColumns = () => {
       title: t('common.Status'),
       dataIndex: 'status',
       render: (text: string) => {
-        if (text === 'Cancel') {
+        if (text.toLowerCase() === 'canceled') {
           return <Badge count={text} />;
         }
 

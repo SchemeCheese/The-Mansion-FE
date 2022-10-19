@@ -288,19 +288,20 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       return;
     }
 
-    const bookRoomInfoTemporary = [...bookRoomInfo];
-
     const roomId = event.event?._def.resourceIds
       ? parseInt(event.event?._def.resourceIds[0], 10)
       : '';
-
+    const selectedResource = reservationDetailInfo.resources.find((item: any) => {
+      return item.room_id === roomId;
+    });
+    const bookRoomInfoTemporary = [...bookRoomInfo];
     const indexElement = bookRoomInfoTemporary.findIndex(function (item) {
       return item.key === event.oldEvent.extendedProps.key;
     });
 
     bookRoomInfoTemporary[indexElement] = {
-      reservation_equipment_id: event.event?.extendedProps.reservation_equipment_id,
-      room_type: event.event?.extendedProps.room_type,
+      reservation_equipment_id: event.event?.extendedProps.reservation_equipment_id ?? null,
+      room_type: selectedResource.room_type_id,
       room_id: roomId,
       use_start_date: event.event.startStr,
       use_end_date: event.event.endStr,
@@ -318,13 +319,9 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
       const calendarApi = event.event._context.calendarApi.view.calendar;
 
-      const selectedResource = reservationDetailInfo.resources.find((item: any) => {
-        return item.room_id === roomId;
-      });
-
       calendarApi.addEvent({
         id: createEventId(),
-        title: 'MinhNV - Agoda',
+        title: reservationDetailInfo.eventName,
         start: event.event.startStr,
         end: event.event.endStr,
         allDay: true,

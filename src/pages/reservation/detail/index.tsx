@@ -62,7 +62,7 @@ function ReservationDetail() {
       setSelectedRowKeys(selectedRowKeysTable);
     },
     getCheckboxProps: (record: any) => ({
-      disabled: record.status === 'Cancel',
+      disabled: record.status.toLowerCase() === 'canceled',
       // Column configuration not to be checked
       name: record.name,
     }),

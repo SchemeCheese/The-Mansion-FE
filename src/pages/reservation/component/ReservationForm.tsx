@@ -366,7 +366,7 @@ function ReservationForm({
                   columns={roomingListColumns}
                   dataSource={roomTotalForm}
                   onRow={(record: any) => {
-                    if (record.status !== 'Cancel') {
+                    if (record.status.toLowerCase() !== 'canceled') {
                       return {
                         onClick: () => {
                           if (record.reservation_detail_id) {
@@ -385,7 +385,7 @@ function ReservationForm({
                   }}
                   pagination={false}
                   rowClassName={(record: any) => {
-                    if (record.status === 'Cancel') {
+                    if (record.status.toLowerCase() === 'canceled') {
                       return 'disabled-click';
                     }
 
