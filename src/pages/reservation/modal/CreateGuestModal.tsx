@@ -6,11 +6,30 @@ Updated Date : 30/08/2022
 Main functions : Create Guest Modal
 ************************************ */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
-import { Card, Col, DatePicker, Form, Input, Modal, Row, Select, Upload, UploadFile } from 'antd';
+import {
+  Card,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Upload,
+  UploadFile,
+} from 'antd';
 import moment from 'moment';
+import { selectCreateGuest } from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { createGuest } from 'actions';
 
 const { Option } = Select;
 
@@ -25,10 +44,46 @@ const getBase64 = (file: any) =>
     reader.onerror = error => reject(error);
   });
 
-function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
+interface Props {
+  isModalVisible: boolean;
+  reservationDetailId: string;
+  setIsModalVisible: (value: boolean) => void;
+}
+
+function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisible }: Props) {
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
+
   const handleOk = () => {
-    setIsModalVisible(false);
+    form.submit();
   };
+
+  const onFinish = (values: any) => {
+    setIsModalVisible(false);
+    dispatch(
+      createGuest({
+        payload: {
+          ...values,
+          operator_code: 'the_mansion',
+          reservation_detail_id: reservationDetailId,
+          expiration_date_passport: moment(values.expiration_date_passport).format('YYYY-MM-DD'),
+          expiration_date_visa: moment(values.expiration_date_visa).format('YYYY-MM-DD'),
+          date_of_issue: moment(values.date_of_issue).format('YYYY-MM-DD'),
+          date_of_birth: moment(values.date_of_birth).format('YYYY-MM-DD'),
+        },
+      }),
+    );
+  };
+
+  const createGuestData = useAppSelector(selectCreateGuest);
+
+  const { changed } = useTreeChanges(createGuestData);
+
+  useEffect(() => {
+    if (changed('status', 'SUCCESS')) {
+      message.success('Add guest successfully!');
+    }
+  }, [changed]);
 
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -126,6 +181,7 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
       >
         <Form
           autoComplete="off"
+          form={form}
           initialValues={{
             remember: true,
           }}
@@ -134,16 +190,17 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
           }}
           layout="vertical"
           name="basic"
+          onFinish={onFinish}
           wrapperCol={{
             span: 23,
           }}
         >
           <Row>
             <Col span={9}>
-              <Form.Item label={t('guest.Guest Type')} name="market">
+              <Form.Item label={t('guest.Guest Type')} name="client_kind">
                 <Select defaultValue="personal">
-                  <Option value="personal">Personal</Option>
-                  <Option value="female">female</Option>
+                  <Option value="1">Personal</Option>
+                  <Option value="2">female</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -161,16 +218,16 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Rank.title')} name="rank">
+                    <Form.Item label={t('guest.Rank.title')} name="client_rank">
                       <Select allowClear placeholder={t('guest.Rank.placeholder')}>
-                        <Option value="male">male</Option>
-                        <Option value="female">female</Option>
-                        <Option value="other">other</Option>
+                        <Option value="1">male</Option>
+                        <Option value="2">female</Option>
+                        <Option value="3">other</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Identity / Passport No.title')} name="passport">
+                    <Form.Item label={t('guest.Identity / Passport No.title')} name="passport_no">
                       <Input placeholder={t('guest.Identity / Passport No.placeholder')} />
                     </Form.Item>
                   </Col>
@@ -197,13 +254,13 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('common.Email.title')} name="email">
+                    <Form.Item label={t('common.Email.title')} name="email_address1">
                       <Input placeholder={t('common.Email.placeholder')} />
                     </Form.Item>
                   </Col>
 
                   <Col span={8}>
-                    <Form.Item label={t('common.Mobile Phone.title')} name="mobile_phone">
+                    <Form.Item label={t('common.Mobile Phone.title')} name="telephone_number1">
                       <Input placeholder={t('common.Mobile Phone.placeholder')} />
                     </Form.Item>
                   </Col>
@@ -214,7 +271,7 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
               <Card bordered={false} size="small" title="Other Informations">
                 <Row>
                   <Col span={8}>
-                    <Form.Item label={t('common.Date Of Birth')} name="dob">
+                    <Form.Item label={t('common.Date Of Birth')} name="date_of_birth">
                       <DatePicker
                         defaultValue={moment('2017-08-08')}
                         style={{
@@ -238,14 +295,14 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
                   <Col span={8}>
                     <Form.Item label={t('common.Gender')} name="gender">
                       <Select defaultValue="male">
-                        <Option value="male">Male</Option>
-                        <Option value="female">female</Option>
-                        <Option value="other">other</Option>
+                        <Option value="1">Male</Option>
+                        <Option value="2">female</Option>
+                        <Option value="0">other</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Visa Expire Date')} name="visa_expire_date">
+                    <Form.Item label={t('guest.Visa Expire Date')} name="expiration_date_visa">
                       <DatePicker
                         defaultValue={moment('2017-08-08')}
                         style={{
@@ -258,7 +315,10 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Passport Expire Date')} name="passport_expire_date ">
+                    <Form.Item
+                      label={t('guest.Passport Expire Date')}
+                      name="expiration_date_passport"
+                    >
                       <DatePicker
                         defaultValue={moment('2017-08-08')}
                         style={{
@@ -280,11 +340,11 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Marital Status')} name="marital_status">
+                    <Form.Item label={t('guest.Marital Status')} name="married">
                       <Select defaultValue="married">
-                        <Option value="married">Married</Option>
-                        <Option value="female">female</Option>
-                        <Option value="other">other</Option>
+                        <Option value="1">Married</Option>
+                        <Option value="2">female</Option>
+                        <Option value="3">other</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -292,11 +352,11 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
                   <Col span={16}>
                     <Row>
                       <Col span={12}>
-                        <Form.Item label={t('guest.Smoking')} name="smoking">
+                        <Form.Item label={t('guest.Smoking')} name="is_smoker">
                           <Select defaultValue="no">
-                            <Option value="no">No smoking</Option>
-                            <Option value="female">female</Option>
-                            <Option value="other">other</Option>
+                            <Option value="1">No smoking</Option>
+                            <Option value="2">female</Option>
+                            <Option value="3">other</Option>
                           </Select>
                         </Form.Item>
                       </Col>
@@ -310,14 +370,17 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
                   </Col>
 
                   <Col span={8}>
-                    <Form.Item label={t('guest.Email 2.title')} name="email2">
+                    <Form.Item label={t('guest.Email 2.title')} name="email_address2">
                       <Input placeholder={t('guest.Email 2.placeholder')} />
                     </Form.Item>
                   </Col>
                   <Col span={16}>
                     <Row>
                       <Col span={12}>
-                        <Form.Item label={t('guest.Mobile Number 2.title')} name="mobile_number_2">
+                        <Form.Item
+                          label={t('guest.Mobile Number 2.title')}
+                          name="telephone_number2"
+                        >
                           <Input placeholder={t('guest.Mobile Number 2.placeholder')} />
                         </Form.Item>
                       </Col>
@@ -339,36 +402,30 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('common.Currency')} name="currency">
+                    <Form.Item label={t('common.Currency')} name="currency_conversion_id">
                       <Select defaultValue="usd">
-                        <Option value="usd">USD</Option>
-                        <Option value="female">female</Option>
-                        <Option value="other">other</Option>
+                        <Option value="1">USD</Option>
+                        <Option value="2">female</Option>
+                        <Option value="3">other</Option>
                       </Select>
                     </Form.Item>
                   </Col>
 
                   <Col span={8}>
-                    <Form.Item
-                      label={t('guest.Preferred Room Type 1')}
-                      name="preferred_room_type_1"
-                    >
+                    <Form.Item label={t('guest.Preferred Room Type 1')} name="favorite_equipment1">
                       <Select defaultValue="alex">
-                        <Option value="alex">Alex</Option>
-                        <Option value="female">female</Option>
-                        <Option value="other">other</Option>
+                        <Option value="1">Alex</Option>
+                        <Option value="2">female</Option>
+                        <Option value="3">other</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item
-                      label={t('guest.Preferred Room Type 2')}
-                      name="preferred_room_type_2"
-                    >
+                    <Form.Item label={t('guest.Preferred Room Type 2')} name="favorite_equipment2">
                       <Select defaultValue="alex">
-                        <Option value="alex">Alex</Option>
-                        <Option value="female">female</Option>
-                        <Option value="other">other</Option>
+                        <Option value="1">Alex</Option>
+                        <Option value="2">female</Option>
+                        <Option value="3">other</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -429,7 +486,7 @@ function CreateGuestModal({ isModalVisible, setIsModalVisible }: any) {
                   <Col span={24}>
                     <Form.Item
                       label={t('guest.Address.title')}
-                      name="address"
+                      name="vat_address"
                       style={{ paddingRight: 12 }}
                       wrapperCol={{
                         span: 24,
