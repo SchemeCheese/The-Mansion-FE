@@ -177,7 +177,6 @@ export function* getReservationNumberSaga({ payload }: ReturnType<typeof getRese
 
     if (success) {
       yield put(getReservationNumberFinish({ reservation_number: reservationNumber }));
-      message.error('Something went wrong!');
     }
   } catch (error) {
     console.log('Error', error);

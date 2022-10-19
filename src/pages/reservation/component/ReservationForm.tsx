@@ -102,7 +102,7 @@ function ReservationForm({
         return item.agent_kind === 2;
       })
       .map((agent: any) => (
-        <Option key={agent.id} value={agent.id}>
+        <Option key={agent.id} value={agent.id.toString()}>
           {agent.name}
         </Option>
       ));
@@ -112,7 +112,7 @@ function ReservationForm({
         return item.agent_kind === 1;
       })
       .map((agent: any) => (
-        <Option key={agent.id} value={agent.id}>
+        <Option key={agent.id} value={agent.id.toString()}>
           {agent.name}
         </Option>
       ));
@@ -122,7 +122,7 @@ function ReservationForm({
         return item.agent_kind === 0;
       })
       .map((agent: any) => (
-        <Option key={agent.id} value={agent.id}>
+        <Option key={agent.id} value={agent.id.toString()}>
           {agent.name}
         </Option>
       ));

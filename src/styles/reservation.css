@@ -187,9 +187,9 @@
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
 }
-/* .fc-day-today {
+.fc-day-today {
   background: rgba(29, 57, 196, 0.5);
-} */
+}
 
 /* 
 .fc-timeline-header-row .fc-day-today {
