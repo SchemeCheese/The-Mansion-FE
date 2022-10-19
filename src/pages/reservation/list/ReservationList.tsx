@@ -226,7 +226,9 @@ function ReservationList({ type }: Props) {
       key: 'phone',
     },
     {
-      title: 'Total Room',
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>Total Room</div>;
+      },
       dataIndex: 'total_room',
       key: 'total_room',
       render: (text: string) => (
