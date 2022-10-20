@@ -60,7 +60,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     weekendsVisible: true,
     currentEvents: [],
   });
-  const [searchScheduleCondition, setSearchScheduleCondition] = useState({
+  const [searchScheduleCondition, setSearchScheduleCondition] = useState<any>({
     direction: '',
     end_date: '2022-10-08',
     floor: '',
@@ -68,6 +68,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     room_type: '',
     start_date: '2022-10-06',
     view: '',
+    isSmocking: undefined,
   });
 
   const { t } = useTranslation();
@@ -359,8 +360,22 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   //   { id: 'o', title: '116', occupancy: 'Family', roomId: '15', roomType: '1' },
   // ];
   const resources = reservationDetailInfo.resources.filter(function (item: any) {
-    if (searchScheduleCondition.room_type) {
-      return item.room_type_id === parseInt(searchScheduleCondition.room_type, 10);
+    if (
+      searchScheduleCondition.room_type &&
+      item.room_type_id !== parseInt(searchScheduleCondition.room_type, 10)
+    ) {
+      return false;
+    }
+
+    if (searchScheduleCondition.isSmocking === true && item.is_smoking !== true) {
+      return false;
+    }
+
+    if (
+      searchScheduleCondition.floor &&
+      item.floor !== parseInt(searchScheduleCondition.floor, 10)
+    ) {
+      return false;
     }
 
     return true;
@@ -372,7 +387,18 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       searchAvailableEventsData.is_searching === false ? (
         <>
           <Col offset={16} span={8} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
-            <Checkbox style={{ paddingRight: 50 }}>Smoking Room</Checkbox>
+            <Checkbox
+              checked={searchScheduleCondition.isSmocking === true}
+              onChange={value => {
+                setSearchScheduleCondition({
+                  ...searchScheduleCondition,
+                  isSmocking: value.target.checked === true ? true : undefined,
+                });
+              }}
+              style={{ paddingRight: 50 }}
+            >
+              Smoking Room
+            </Checkbox>
             <PattonButton onClick={updateBookingRoom} style={{ float: 'right' }}>
               {t('common.Update')}
             </PattonButton>
@@ -444,7 +470,19 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
               </Select>
             </Form.Item>
             <Form.Item label="Floor" name="floor">
-              <Select allowClear placeholder="Select floor">
+              <Select
+                allowClear
+                onChange={value => {
+                  const searchScheduleConditionTemporary = {
+                    ...searchScheduleCondition,
+                    floor: value ?? '',
+                  };
+
+                  setSearchScheduleCondition(searchScheduleConditionTemporary);
+                  // dispatch(searchAvailableScheduleAction(searchScheduleConditionTemporary));
+                }}
+                placeholder="Select floor"
+              >
                 <Option value="1">1</Option>
                 <Option value="2">2</Option>
                 <Option value="3">3</Option>

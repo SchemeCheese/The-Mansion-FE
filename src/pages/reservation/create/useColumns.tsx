@@ -9,7 +9,7 @@ const useColumns = () => {
       title: t('common.Status'),
       dataIndex: 'status',
       render: (text: string) => {
-        if (text.toLowerCase() === 'canceled') {
+        if (text?.toLowerCase() === 'canceled') {
           return <Badge count={text} />;
         }
 
@@ -25,8 +25,11 @@ const useColumns = () => {
       dataIndex: 'room_type_text',
     },
     {
-      title: t('reservation.Room No'),
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('reservation.Room No')}</div>;
+      },
       dataIndex: 'room_no',
+      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
     },
     {
       title: t('reservation.C/I'),
@@ -37,20 +40,32 @@ const useColumns = () => {
       dataIndex: 'co',
     },
     {
-      title: t('reservation.Nights'),
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('reservation.Nights')}</div>;
+      },
       dataIndex: 'nights',
+      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
     },
     {
-      title: t('reservation.Adl'),
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('reservation.Adl')}</div>;
+      },
       dataIndex: 'adl',
+      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
     },
     {
-      title: t('reservation.Child.title'),
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('reservation.Child.title')}</div>;
+      },
       dataIndex: 'child',
+      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
     },
     {
-      title: t('reservation.Baby.title'),
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('reservation.Baby.title')}</div>;
+      },
       dataIndex: 'baby',
+      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
     },
     {
       title: t('reservation.Rate'),
@@ -62,8 +77,11 @@ const useColumns = () => {
       render: (text: string) => <div style={{ textAlign: 'right', paddingRight: 20 }}>{text}</div>,
     },
     {
-      title: t('reservation.Deposit'),
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('reservation.Deposit')}</div>;
+      },
       dataIndex: 'deposit',
+      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
     },
   ];
 

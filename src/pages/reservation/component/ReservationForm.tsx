@@ -89,10 +89,8 @@ function ReservationForm({
   );
 
   useEffect(() => {
-    if (roomCondition.source_type === '2') {
-      dispatch(getAgentInfos());
-    }
-  }, [roomCondition]);
+    dispatch(getAgentInfos());
+  }, []);
 
   let sourceOptions = null;
 
@@ -366,7 +364,7 @@ function ReservationForm({
                   columns={roomingListColumns}
                   dataSource={roomTotalForm}
                   onRow={(record: any) => {
-                    if (record.status.toLowerCase() !== 'canceled') {
+                    if (record.status?.toLowerCase() !== 'canceled') {
                       return {
                         onClick: () => {
                           if (record.reservation_detail_id) {
@@ -385,7 +383,7 @@ function ReservationForm({
                   }}
                   pagination={false}
                   rowClassName={(record: any) => {
-                    if (record.status.toLowerCase() === 'canceled') {
+                    if (record.status?.toLowerCase() === 'canceled') {
                       return 'disabled-click';
                     }
 
@@ -393,6 +391,66 @@ function ReservationForm({
                   }}
                   rowSelection={rowSelection}
                   size="small"
+                  summary={pageData => {
+                    let nightTotal = 0;
+                    let adlTotal = 0;
+                    let childTotal = 0;
+                    let babyTotal = 0;
+                    let subTotal = 0;
+
+                    pageData.forEach(
+                      ({ actual_amount: actualAmount, adl, baby, child, nights, status }) => {
+                        if (status?.toLowerCase() !== 'canceled') {
+                          if (baby !== '-') {
+                            babyTotal += parseInt(baby, 10);
+                          }
+
+                          if (child !== '-') {
+                            childTotal += parseInt(child, 10);
+                          }
+
+                          nightTotal += nights;
+                          subTotal += actualAmount;
+                          adlTotal += adl;
+                        }
+                      },
+                    );
+
+                    return (
+                      <Table.Summary.Row
+                        style={{ fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.65)' }}
+                      >
+                        <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
+                        <Table.Summary.Cell index={1} />
+                        <Table.Summary.Cell index={2} />
+                        <Table.Summary.Cell index={2} />
+                        <Table.Summary.Cell index={2} />
+                        <Table.Summary.Cell index={2} />
+                        <Table.Summary.Cell index={2} />
+                        <Table.Summary.Cell index={2}>
+                          <div style={{ textAlign: 'center' }}>{nightTotal}</div>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={2}>
+                          <div style={{ textAlign: 'center' }}>{adlTotal}</div>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={2}>
+                          <div style={{ textAlign: 'center' }}>{childTotal}</div>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={2}>
+                          <div style={{ textAlign: 'center' }}>{babyTotal}</div>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={2} />
+                        <Table.Summary.Cell index={2}>
+                          <div style={{ textAlign: 'right', paddingRight: 20 }}>
+                            {formatNumber(subTotal)}
+                          </div>
+                        </Table.Summary.Cell>
+                        <Table.Summary.Cell index={2}>
+                          <div style={{ textAlign: 'center' }}>-</div>
+                        </Table.Summary.Cell>
+                      </Table.Summary.Row>
+                    );
+                  }}
                 />
               </Col>
               {!_.isEmpty(reservationDetailInfo) && !isCreateForm && (

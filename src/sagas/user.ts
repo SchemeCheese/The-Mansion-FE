@@ -33,20 +33,15 @@ export function* loginSaga({ payload }: ReturnType<typeof login>) {
 export function* getLogginedUserInfoSaga() {
   try {
     let username = '';
-    let name = '';
-    const accessToken = localStorage.getItem('access_token');
 
-    ({ name, username } = yield call(request, apiEndPoint(AuthPath.PROFILE_PATH), {
+    ({ username } = yield call(request, apiEndPoint(AuthPath.PROFILE_PATH), {
       method: 'POST',
       headers: headerWithAuthorization(),
     }));
 
-    console.log('accessToken', accessToken, username, name);
-
     yield put(
       loginSuccess({
         username,
-        name,
       }),
     );
   } catch (error) {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
 import moment from 'moment';
@@ -18,9 +19,10 @@ const { TabPane } = Tabs;
 
 function Reservation() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
-  const breadcrumbData = ['Home', 'List', 'App'];
+  const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
   const handeleActive = (activeKey: string) => {
     if (activeKey === '1') {

@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Input, message, Row, Table } from 'antd';
 import { formatNumber } from 'helpers';
+import moment from 'moment';
 import { selectUpdateRate } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
@@ -41,7 +42,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
   const data = ratesState.map((item: any, index: number) => {
     return {
       key: index,
-      date: item.use_date,
+      date: moment(item.use_date).format('DD/MM/YYYY'),
       room_type: item.room_type_text,
       rate_name: item.rate_name,
       rate_detail: item.rate_detail,
@@ -140,8 +141,6 @@ function Rate({ reservationDetailId, reservationId }: Props) {
   const { changed } = useTreeChanges(updateRateData);
 
   const handleUpdateRate = () => {
-    console.log('Dataaaaaa', ratesState);
-
     dispatch(
       updateRate({
         payload: {
@@ -170,8 +169,6 @@ function Rate({ reservationDetailId, reservationId }: Props) {
       );
     }
   }, [changed]);
-
-  console.log('Rateee render');
 
   return (
     <Row justify="end" style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
