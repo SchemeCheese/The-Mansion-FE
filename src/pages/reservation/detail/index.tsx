@@ -62,7 +62,7 @@ function ReservationDetail() {
       setSelectedRowKeys(selectedRowKeysTable);
     },
     getCheckboxProps: (record: any) => ({
-      disabled: record.status.toLowerCase() === 'canceled',
+      disabled: record.status?.toLowerCase() === 'canceled',
       // Column configuration not to be checked
       name: record.name,
     }),
@@ -82,11 +82,7 @@ function ReservationDetail() {
 
   const { t } = useTranslation();
 
-  const breadcrumbData = [
-    t('common.TMHA'),
-    t('common.Reservation'),
-    t('common.Reservation Detail'),
-  ];
+  const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
@@ -185,8 +181,8 @@ function ReservationDetail() {
           room_type: item.equipment_type_id,
           room_type_text: item.room_type_text,
           room_no: item.room_no ?? '-',
-          ci: item.arrival_date,
-          co: item.departure_date,
+          ci: moment(item.arrival_date).format('DD/MM/YYYY'),
+          co: moment(item.departure_date).format('DD/MM/YYYY'),
           nights: moment
             .duration(moment(item.departure_date).diff(moment(item.arrival_date)))
             .asDays(),
