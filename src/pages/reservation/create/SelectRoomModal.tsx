@@ -304,7 +304,7 @@ function SelectRoomModal({
         adult: '',
         child: '',
         rate_detail: item.rate_detail,
-        unit_price: formatNumber(item.price),
+        unit_price: item.price,
         actual_amount: item.price,
         task: '',
         rate_id: item.equipment_charge_detail_id,

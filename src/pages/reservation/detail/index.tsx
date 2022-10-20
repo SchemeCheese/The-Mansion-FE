@@ -162,6 +162,7 @@ function ReservationDetail() {
       temporary.map(item => {
         return {
           ...item,
+          price: formatNumber(item.price),
           actual_amount: item.price,
         };
       }),
