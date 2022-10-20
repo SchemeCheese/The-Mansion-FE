@@ -23,7 +23,6 @@ export default {
         draft.isAuthenticated = true;
         draft.status = STATUS.READY;
         draft.username = payload.username;
-        draft.name = payload.name;
       })
       .addCase(getLogginedUserInfo, draft => {
         draft.isAuthenticated = false;

@@ -10,7 +10,10 @@ import {
   MenuUnfoldOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, Col, Dropdown, Layout, Menu } from 'antd';
+import { Avatar, Button, Dropdown, Layout, Menu } from 'antd';
+import { selectUser } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 import { logOut } from 'actions';
 
@@ -32,49 +35,7 @@ function MLayout(props: Props) {
     dispatch(logOut());
   };
 
-  const dates = [];
-
-  for (let index = 0; index < 10; index++) {
-    const bgColor = index === 2 || index === 1 ? '#FFF2E8' : '#FFFFFF';
-
-    dates.push(
-      <Col
-        flex={1}
-        style={{
-          border: '1px solid #E8E8E8',
-          borderRightStyle: 'none',
-          textAlign: 'center',
-          backgroundColor: bgColor,
-        }}
-      >
-        <p
-          style={{
-            margin: 0,
-            color: 'rgba(0, 0, 0, 0.45)',
-          }}
-        >
-          Fri
-        </p>
-        <p
-          style={{
-            margin: 0,
-            fontWeight: 'bold',
-            fontSize: 18,
-          }}
-        >
-          27
-        </p>
-        <p
-          style={{
-            margin: 0,
-            color: 'rgba(0, 0, 0, 0.45)',
-          }}
-        >
-          NOV
-        </p>
-      </Col>,
-    );
-  }
+  const user = useAppSelector(selectUser);
 
   const menu = (
     <Menu
@@ -212,7 +173,7 @@ function MLayout(props: Props) {
                 style={{ marginBottom: 5, marginRight: 10 }}
               />
             </Dropdown>
-            <span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>Mr.Minh</span>
+            <span style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}>{user.username}</span>
           </div>
         </Header>
         <Content

@@ -4,6 +4,6 @@ export interface LoginCredentials {
 }
 
 export interface LoginSuccess {
-  name: string;
+  name?: string;
   username: string;
 }

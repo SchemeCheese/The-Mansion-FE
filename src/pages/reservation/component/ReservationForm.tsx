@@ -89,10 +89,8 @@ function ReservationForm({
   );
 
   useEffect(() => {
-    if (roomCondition.source_type === '2') {
-      dispatch(getAgentInfos());
-    }
-  }, [roomCondition]);
+    dispatch(getAgentInfos());
+  }, []);
 
   let sourceOptions = null;
 

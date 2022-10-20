@@ -44,12 +44,16 @@ function Root() {
   const user = useAppSelector(selectUser);
   const { changed } = useTreeChanges(user);
 
-  const { isAuthenticated, name } = user;
+  const { isAuthenticated, username } = user;
 
   useEffect(() => {
     if (changed('isAuthenticated', true)) {
       dispatch(
-        showAlert(`Hello! And welcome ${name}!`, { variant: 'success', icon: 'bell', timeout: 10 }),
+        showAlert(`Hello! And welcome ${username}!`, {
+          variant: 'success',
+          icon: 'bell',
+          timeout: 10,
+        }),
       );
     }
   }, [dispatch, changed]);
@@ -59,12 +63,12 @@ function Root() {
       <ThemeProvider theme={theme}>
         <AppWrapper data-testid="app">
           <Helmet
-            defaultTitle={name}
+            // defaultTitle={username}
             defer={false}
             encodeSpecialCharacters
             htmlAttributes={{ lang: 'pt-br' }}
             titleAttributes={{ itemprop: 'name', lang: 'pt-br' }}
-            titleTemplate={`%s | ${name}`}
+            titleTemplate={`%s | ${username}`}
           >
             <link
               href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap"
