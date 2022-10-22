@@ -24,6 +24,9 @@ import searchAvailableSchedule, { searchAvailableScheduleState } from './searchA
 import searchRoom, { roomSearchState } from './searchRoom';
 import searchSchedule, { searchScheduleState } from './searchSchedule';
 import updateGeneralInfo, { updateGeneralInfoState } from './updateGeneralInfo';
+import updateNoteReservationDetail, {
+  updateNoteReservationDetailState,
+} from './updateNoteReservationDetail';
 import updateRate, { updateRateState } from './updateRate';
 import updateReservation, { updateReservationState } from './updateReservation';
 import user, { userState } from './user';
@@ -57,6 +60,7 @@ export const initialState = {
   createPayment: createPaymentState,
   changeDisk: changeDiskState,
   createGuest: createGuestState,
+  updateNoteReservationDetail: updateNoteReservationDetailState,
 };
 
 export default {
@@ -88,4 +92,5 @@ export default {
   ...createPayment,
   ...changeDisk,
   ...createGuest,
+  ...updateNoteReservationDetail,
 };

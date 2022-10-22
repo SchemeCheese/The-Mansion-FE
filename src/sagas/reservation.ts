@@ -25,6 +25,8 @@ import {
   searchReservationFinish,
   updateGeneralInfo,
   updateGeneralInfoSuccess,
+  updateNoteReservationDetail,
+  updateNoteReservationDetailSuccess,
   updateRate,
   updateRateSuccess,
   updateReservationSuccess,
@@ -342,6 +344,35 @@ export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof update
   }
 }
 
+export function* postUpdateNoteReservationDetailSaga({
+  payload,
+}: ReturnType<typeof updateNoteReservationDetail>) {
+  try {
+    let success = '';
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.UPDATE)}/${
+        payload.payload.reservation_info_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/update-note`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: payload.payload,
+      },
+    ));
+
+    if (success) {
+      yield put(updateNoteReservationDetailSuccess());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
@@ -355,5 +386,6 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_ADD_RESERVATION_DETAIL, postAddReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_CANCEL_RESERVATION_DETAIL, postCancelReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_GENERAL_INFO_UPDATE, postUpdateGeneralInfoSaga),
+    takeLatest(ActionTypes.RESERVATION_DETAIL_UPDATE_NOTE, postUpdateNoteReservationDetailSaga),
   ]);
 }

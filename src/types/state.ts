@@ -284,6 +284,17 @@ export interface CreateGuestState {
   status: string;
 }
 
+export interface ReservationDetailUpdateNotePayload {
+  note: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
+export interface UpdateNoteReservationDetailState {
+  payload: ReservationDetailUpdateNotePayload;
+  status: string;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -310,6 +321,7 @@ export interface RootState {
   searchRoom: RoomSearchState;
   searchSchedule: SearchScheduleState;
   updateGeneralInfo: UpdateGeneralInfoState;
+  updateNoteReservationDetail: UpdateNoteReservationDetailState;
   updateRate: UpdateRateState;
   updateReservation: CreateReservationState;
   user: UserState;

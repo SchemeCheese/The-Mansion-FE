@@ -143,3 +143,13 @@ export interface ReservationUpdateGeneralInfoPayload {
 export interface UpdateGeneralInfo {
   payload: ReservationUpdateGeneralInfoPayload;
 }
+
+export interface UpdateNoteReservationDetailPayload {
+  note: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
+export interface UpdateNoteReservationDetail {
+  payload: UpdateNoteReservationDetailPayload;
+}
