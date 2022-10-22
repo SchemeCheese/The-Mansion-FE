@@ -17,18 +17,19 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import React, { useState, useEffect } from 'react';
-import FullCalendar, { EventApi, EventContentArg } from '@fullcalendar/react';
-import { Button, Card, Col, DatePicker, Input, Modal, Row, Select } from 'antd';
+import FullCalendar, { EventApi, EventClickArg, EventContentArg } from '@fullcalendar/react';
+import { Button, Card, Col, DatePicker, Input, message, Modal, Row, Select } from 'antd';
 import moment from 'moment';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import {
   createEventId,
   INITIAL_EVENTS,
 } from 'pages/reservation/component/ReservationDetailTab/event-utils';
 import MInput from 'components/MInput';
-import { searchScheduleAction } from 'actions';
-import { selectSearchSchedule } from 'selectors';
+import { searchScheduleAction, updateNoteReservationDetail } from 'actions';
+import { selectSearchSchedule, selectUpdateNoteReservationDetail } from 'selectors';
 import { useAppSelector } from 'modules/hooks';
 import useTreeChanges from 'tree-changes-hook';
 import { useTranslation } from 'react-i18next';
@@ -44,6 +45,7 @@ function Calendar() {
   const { t } = useTranslation();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [state, setState] = useState<DemoAppState>({
     weekendsVisible: true,
     currentEvents: [],
@@ -55,13 +57,21 @@ function Calendar() {
     room_number: '',
   });
   const [isShowDatePicker, setIsShowDatePicker] = useState(false);
+  const [infoReservationSelected, setInfoReservationSelected] = useState({
+    reservation_detail_id: '',
+    reservation_info_id: '',
+    title: '',
+    note: '',
+  });
 
   const toggleShowDatePicker = () => {
     setIsShowDatePicker(!isShowDatePicker);
   };
 
   const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
+  const updateNoteReservationDetailData: any = useAppSelector(selectUpdateNoteReservationDetail);
   const { changed } = useTreeChanges(searchScheduleRedux);
+  const { changed: changedNote } = useTreeChanges(updateNoteReservationDetailData);
 
   const fullCalendarRef: any = React.createRef();
 
@@ -104,14 +114,29 @@ function Calendar() {
           end: item.end,
           allDay: true,
           resourceId: item.resourceId,
+          reservationDetailId: item.reservationDetailId,
+          reservationInfoId: item.reservationInfoId,
+          note: item.note,
         });
       });
     }
   }, [changed]);
 
+  useEffect(() => {
+    if (changedNote('status', 'SUCCESS')) {
+      message.success('Update note successfully!');
+      dispatch(searchScheduleAction(searchCondition));
+    }
+  }, [changedNote]);
+
   const [isEventInfoModalOpen, setIsEventInfoModalOpen] = useState(false);
 
   const handleOk = () => {
+    dispatch(
+      updateNoteReservationDetail({
+        payload: infoReservationSelected,
+      }),
+    );
     setIsEventInfoModalOpen(false);
   };
 
@@ -119,8 +144,24 @@ function Calendar() {
     setIsEventInfoModalOpen(false);
   };
 
-  const showEventInfo = () => {
+  const showEventInfo = (clickInfo: EventClickArg) => {
+    const reservation = clickInfo.event.extendedProps;
+
+    setInfoReservationSelected({
+      reservation_detail_id: reservation.reservationDetailId,
+      reservation_info_id: reservation.reservationInfoId,
+      title: clickInfo.event.title,
+      note: reservation.note,
+    });
+
     setIsEventInfoModalOpen(true);
+  };
+
+  const handleChangeNote = (event: any) => {
+    setInfoReservationSelected({
+      ...infoReservationSelected,
+      note: event.target.value,
+    });
   };
 
   return (
@@ -316,7 +357,14 @@ function Calendar() {
               <b>{t('common.Notes')}</b>
             </Col>
             <Col className="gutter-row" span={12}>
-              <Button style={{ float: 'right' }}>More Detail</Button>
+              <Button
+                onClick={() =>
+                  navigate(`/reservation/${infoReservationSelected.reservation_info_id}`)
+                }
+                style={{ float: 'right' }}
+              >
+                More Detail
+              </Button>
             </Col>
           </Row>
         }
@@ -328,11 +376,17 @@ function Calendar() {
           style={{ width: '100%' }}
           title={
             <span style={{ color: '#1D39C4', fontWeight: 400, fontSize: 13 }}>
-              2944 - Dang Kim Ngan - Facebook{' '}
+              {infoReservationSelected.reservation_info_id} - {infoReservationSelected.title}
             </span>
           }
         >
-          <Input.TextArea placeholder="Input notes" rows={8} />
+          <Input.TextArea
+            defaultValue={infoReservationSelected.note}
+            name="note_calendar"
+            onChange={event => handleChangeNote(event)}
+            placeholder="Input notes"
+            rows={8}
+          />
         </Card>
       </Modal>
     </>

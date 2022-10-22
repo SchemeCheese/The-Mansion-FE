@@ -18,6 +18,7 @@ import {
   ReservationSearch,
   ReservationSearchResult,
   UpdateGeneralInfo,
+  UpdateNoteReservationDetail,
   UpdateRate,
 } from 'types';
 
@@ -115,3 +116,12 @@ export const updateGeneralInfo = createAction(
 );
 
 export const updateGeneralInfoSuccess = createAction(ActionTypes.RESERVATION_GENERAL_INFO_SUCCESS);
+
+export const updateNoteReservationDetail = createAction(
+  ActionTypes.RESERVATION_DETAIL_UPDATE_NOTE,
+  (payload: UpdateNoteReservationDetail) => actionPayload(payload),
+);
+
+export const updateNoteReservationDetailSuccess = createAction(
+  ActionTypes.RESERVATION_DETAIL_UPDATE_NOTE_SUCCESS,
+);
