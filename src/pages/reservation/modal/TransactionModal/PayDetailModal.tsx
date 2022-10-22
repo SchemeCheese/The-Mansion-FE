@@ -2,8 +2,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { formatNumber } from 'helpers';
+import moment from 'moment';
 
 interface Props {
+  payment: any;
   setIsModalOpen: (visible: boolean) => void;
   visible: boolean;
 }
@@ -25,7 +28,7 @@ interface DataTypePayment {
   payment_method: string;
 }
 
-function PayDetailModal({ setIsModalOpen, visible }: Props) {
+function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
   const { t } = useTranslation();
   const { Option } = Select;
 
@@ -81,41 +84,26 @@ function PayDetailModal({ setIsModalOpen, visible }: Props) {
     },
   ];
 
-  const dataDescriptions = [
-    {
-      date: '28/07/2020',
-      description: 'PEPSI',
-      unit_price: '20.000',
-      amount: 2,
-      total: '40.000',
-    },
-    {
-      date: '28/07/2020',
-      description: 'Coca Cola',
-      unit_price: '20.000',
-      amount: 2,
-      total: '40.000',
-    },
-  ];
+  const dataDescriptions = payment?.sale_detail.map((item: any) => {
+    return {
+      date: moment(item.date).format('DD/MM/YYYY'),
+      description: item.description,
+      unit_price: formatNumber(item.unit_price),
+      amount: item.quantity,
+      total: formatNumber(item.total),
+    };
+  });
 
-  const dataPayments = [
-    {
-      date: '28/07/2020',
-      payment_method: 'Cash',
-      amount: '10.000',
-      currency: 'JPY',
-      exchange_rate: 210,
-      amount_in_vnd: '2.100.000',
-    },
-    {
-      date: '28/07/2020',
-      payment_method: 'Credit Card',
-      amount: '1.900.000',
-      currency: 'VND',
-      exchange_rate: 1,
-      amount_in_vnd: '4.000.000',
-    },
-  ];
+  const dataPayments = payment?.payment_details.map((item: any) => {
+    return {
+      date: moment(item.date).format('DD/MM/YYYY'),
+      payment_method: item.payment_method,
+      amount: formatNumber(item.amount),
+      currency: item.currency,
+      exchange_rate: item.exchange_rate,
+      amount_in_vnd: formatNumber(item.amount_in_vn),
+    };
+  });
 
   const handleChangePaySelected = (value: string) => {
     console.log(`selected ${value}`);
@@ -125,12 +113,15 @@ function PayDetailModal({ setIsModalOpen, visible }: Props) {
     console.log(`handleClickPayBalance`);
   };
 
+  if (!payment) {
+    return null;
+  }
+
   return (
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
       footer={[
         <Button
-          key="button"
           onClick={handleClickPayBalance}
           style={{
             backgroundColor: '#ff4d4f',
@@ -142,15 +133,10 @@ function PayDetailModal({ setIsModalOpen, visible }: Props) {
         >
           {t('payDetail.Pay Balance')}
         </Button>,
-        <Button
-          key="button"
-          onClick={() => setIsModalOpen(false)}
-          style={{ borderRadius: 4, width: '109px' }}
-        >
+        <Button onClick={() => setIsModalOpen(false)} style={{ borderRadius: 4, width: '109px' }}>
           {t('common.Cancel')}
         </Button>,
         <Button
-          key="submit"
           onClick={() => setIsModalOpen(false)}
           style={{ backgroundColor: '#1D39C4', borderRadius: 4, width: '109px' }}
           type="primary"
@@ -180,7 +166,11 @@ function PayDetailModal({ setIsModalOpen, visible }: Props) {
           <Col span={16} />
           <Col span={6}>
             <Form.Item label={t('common.Discount')}>
-              <Input placeholder="20.000" style={{ width: 120, height: 32, borderRadius: 2 }} />
+              <Input
+                readOnly
+                style={{ width: 120, height: 32, borderRadius: 2 }}
+                value={formatNumber(payment?.discount)}
+              />
             </Form.Item>
           </Col>
           <Col span={2}>
@@ -194,14 +184,16 @@ function PayDetailModal({ setIsModalOpen, visible }: Props) {
           <Col span={16} />
           <Col span={8} style={{ marginBottom: 17 }}>
             <span>{t('common.Total Amount')}</span>
-            <span style={{ fontSize: 16, float: 'right' }}>4.800.000</span>
+            <span style={{ fontSize: 16, float: 'right' }}>{payment.total}</span>
           </Col>
         </Row>
         <Row>
           <Col span={16} />
           <Col span={8}>
             <span>{t('common.Sub Total')}</span>
-            <span style={{ fontSize: 16, float: 'right' }}>4.800.000</span>
+            <span style={{ fontSize: 16, float: 'right' }}>
+              {formatNumber(payment.total_amount - payment.discount)}
+            </span>
           </Col>
         </Row>
         <Row>
@@ -214,14 +206,14 @@ function PayDetailModal({ setIsModalOpen, visible }: Props) {
           <Col span={16} />
           <Col span={8} style={{ marginBottom: 10, marginTop: 15 }}>
             <span style={{ lineHeight: '31px' }}>{t('common.Total')}</span>
-            <span style={{ fontSize: 20, float: 'right' }}>4.000.000</span>
+            <span style={{ fontSize: 20, float: 'right' }}>{payment.paid}</span>
           </Col>
         </Row>
         <Row>
           <Col span={16} />
           <Col span={8}>
             <span style={{ lineHeight: '31px' }}>{t('common.Balance')}</span>
-            <span style={{ fontSize: 20, float: 'right' }}>800.000</span>
+            <span style={{ fontSize: 20, float: 'right' }}>{payment.balance}</span>
           </Col>
         </Row>
       </Form>

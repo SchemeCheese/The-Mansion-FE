@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { formatNumber, randomKey } from 'helpers';
+
+import PayDetailModal from '../modal/TransactionModal/PayDetailModal';
 
 interface DataType {
   balance: string;
@@ -11,8 +14,14 @@ interface DataType {
   total: string;
 }
 
-function Paid() {
+interface Props {
+  items: Array<any>;
+}
+
+function Paid({ items }: Props) {
   const { t } = useTranslation();
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [currentItem, setCurrentItem] = useState();
 
   const columns: ColumnsType<DataType> = [
     {
@@ -48,24 +57,38 @@ function Paid() {
     },
   ];
 
-  const data = [
-    {
-      date: '28/07/2020',
-      payment_method: 'CS, CC',
-      total: '40.000',
-      paid: '40.000',
-      balance: '-',
-    },
-    {
-      date: '28/07/2020',
-      payment_method: 'TF, CC',
-      total: '40.000',
-      paid: '200.000',
-      balance: '200.000',
-    },
-  ];
+  const data = items.map((item: any) => {
+    return {
+      ...item,
+      key: randomKey(5),
+      date: item.date,
+      payment_method: item.payment_method,
+      total: formatNumber(item.total),
+      total_amount: item.total,
+      paid: formatNumber(item.paid),
+      balance: item.balance > 0 ? formatNumber(item.balance) : '-',
+    };
+  });
 
-  return <Table columns={columns} dataSource={data} pagination={false} size="small" />;
+  return (
+    <>
+      <PayDetailModal payment={currentItem} setIsModalOpen={setIsShowModal} visible={isShowModal} />
+      <Table
+        columns={columns}
+        dataSource={data}
+        onRow={record => {
+          return {
+            onClick: () => {
+              setCurrentItem(record);
+              setIsShowModal(true);
+            }, // click row
+          };
+        }}
+        pagination={false}
+        size="small"
+      />
+    </>
+  );
 }
 
 export default Paid;

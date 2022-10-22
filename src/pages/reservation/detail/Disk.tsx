@@ -84,6 +84,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       unit_price: formatNumber(item.unit_price),
       amount: item.quantity,
       total: formatNumber(item.total_amount),
+      total_amount: item.total_amount,
       sale_detail_id: item.sale_detail_id,
       storage_id: item.storage_id,
     };
