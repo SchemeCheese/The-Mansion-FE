@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, Card, Col, message, Row } from 'antd';
 import Disk from 'pages/reservation/detail/Disk';
+import Paid from 'pages/reservation/detail/Paid';
 import AddDiscount from 'pages/reservation/modal/TransactionModal/AddDiscount';
 import AddItem from 'pages/reservation/modal/TransactionModal/AddItem';
 import Deposit from 'pages/reservation/modal/TransactionModal/Deposit';
-import PayDetailModal from 'pages/reservation/modal/TransactionModal/PayDetailModal';
 import PaySelectedModal from 'pages/reservation/modal/TransactionModal/PaySelectedModal';
 import RoomAuditCharge from 'pages/reservation/modal/TransactionModal/RoomAuditCharge';
 import SelectDiskModal from 'pages/reservation/modal/TransactionModal/SelectDiskModal';
@@ -17,10 +17,12 @@ import TransferRoom from 'pages/reservation/modal/TransactionModal/TransferRoom'
 import {
   selectAddItem,
   selectChangeDisk,
+  selectCreatePayment,
   selectDeleteItem,
   selectGetReservationDetail,
 } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
+import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -37,7 +39,7 @@ interface Props {
 function Transaction({ reservationDetailId, reservationId }: Props) {
   const { t } = useTranslation();
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
-  const { transactions } = reservationDetailInfo.data;
+  const { paid, transactions } = reservationDetailInfo.data;
 
   const [isModalOpenAddItem, setIsModalOpenAddItem] = useState(false);
   const [isModalOpenPaySelected, setIsModalOpenPaySelected] = useState(false);
@@ -45,13 +47,17 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   const [isModalOpenAditRoomCharge, setIsModalOpenAditRoomCharge] = useState(false);
   const [isModalOpenTransferRoom, setIsModalOpenTransferRoom] = useState(false);
 
+  const [discountAmount, setDiscountAmount] = useState('');
+
   const addItemData = useAppSelector(selectAddItem);
   const deleteItemData = useAppSelector(selectDeleteItem);
   const changeDiskData = useAppSelector(selectChangeDisk);
+  const createPaymentData = useAppSelector(selectCreatePayment);
 
   const { changed: addItemChanged } = useTreeChanges(addItemData);
   const { changed: deleteItemChanged } = useTreeChanges(deleteItemData);
   const { changed: changeDiskChanged } = useTreeChanges(changeDiskData);
+  const { changed: createPaymentChanged } = useTreeChanges(createPaymentData);
 
   const dispatch = useDispatch();
 
@@ -99,8 +105,17 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
       />
     );
   });
+
+  if (paid.length) {
+    tabList.push({
+      key: 'paid',
+      tab: 'Paid',
+    });
+
+    contentList.paid = <Paid items={paid} />;
+  }
+
   const [activeTabKey1, setActiveTabKey1] = useState<string>('tabA');
-  const [isModalOpenPaymentDetail, setIsModalOpenPaymentDetail] = useState(false);
   const [isModalOpenSelectedPaymentMethod, setIsModalOpenSelectedPaymentMethod] = useState(false);
   const [isModalOpenAddDiscount, setIsModalOpenAddDiscount] = useState(false);
   const [isModalOpenDeposit, setIsModalOpenDeposit] = useState(false);
@@ -120,6 +135,14 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
     paddingRight: 16,
     paddingTop: 15,
   };
+
+  const totalAmount = _.reduce(
+    selectedRows,
+    function (total, item: any) {
+      return parseInt(item.total_amount, 10) + total;
+    },
+    0,
+  );
 
   useEffect(() => {
     if (addItemChanged('status', 'SUCCESS')) {
@@ -149,7 +172,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changeDiskChanged('status', 'SUCCESS')) {
-      message.success('change disk successfully!');
+      message.success('Change disk successfully!');
 
       dispatch(
         getReservationDetail({
@@ -159,6 +182,19 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
       );
     }
   }, [changeDiskChanged]);
+
+  useEffect(() => {
+    if (createPaymentChanged('status', 'SUCCESS')) {
+      message.success('Paid successfully!');
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
+    }
+  }, [createPaymentChanged]);
 
   return (
     <Row
@@ -207,9 +243,12 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                   {t('paySelected.Pay Selected')}
                 </MButton>
                 <PaySelectedModal
+                  discountAmount={discountAmount}
                   selectedRows={selectedRows}
+                  setDiscountAmount={setDiscountAmount}
                   setIsModalOpen={setIsModalOpenPaySelected}
                   setIsModalOpenSelectedPaymentMethod={setIsModalOpenSelectedPaymentMethod}
+                  totalAmount={totalAmount}
                   visible={isModalOpenPaySelected}
                 />
               </Col>
@@ -391,7 +430,6 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
         <Row style={{ paddingTop: 17 }}>
           <Col span={12} style={{ paddingRight: 18 }}>
             <MButton
-              onClick={() => setIsModalOpenPaymentDetail(true)}
               style={{
                 width: '100%',
                 border: '1px solid #1D39C4',
@@ -401,10 +439,6 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
             >
               {t('common.Print Invoice')}
             </MButton>
-            <PayDetailModal
-              setIsModalOpen={setIsModalOpenPaymentDetail}
-              visible={isModalOpenPaymentDetail}
-            />
           </Col>
 
           <Col span={12}>
@@ -416,9 +450,12 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
               {t('common.Payment')}
             </PattonButton>
             <SelectedPayMethodModal
+              discountAmount={discountAmount}
               reservationDetailId={reservationDetailId}
-              selectedRows={selectedRows}
-              setIsModalOpen={setIsModalOpenSelectedPaymentMethod}
+              selectedRowKeys={selectedRowKeys}
+              setIsModalOpenPaySelected={setIsModalOpenPaySelected}
+              setIsModalOpenSelectedPaymentMethod={setIsModalOpenSelectedPaymentMethod}
+              totalAmount={totalAmount}
               visible={isModalOpenSelectedPaymentMethod}
             />
           </Col>

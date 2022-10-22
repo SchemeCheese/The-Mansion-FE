@@ -7,11 +7,12 @@ const { Option } = Select;
 interface Props {
   name: any;
   restField: any;
+  setPaidAmount: any;
 }
 
-function PaymentMethod({ name, restField }: Props) {
+function PaymentMethod({ name, restField, setPaidAmount }: Props) {
   const { t } = useTranslation();
-  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [paymentMethod, setPaymentMethod] = useState('1');
 
   return (
     <>
@@ -29,6 +30,9 @@ function PaymentMethod({ name, restField }: Props) {
           >
             <Input
               id="amount-to-pay"
+              onChange={() => {
+                setPaidAmount();
+              }}
               placeholder={t('selectedPayMethod.Amount to pay.placeholder')}
             />
           </Form.Item>
@@ -36,7 +40,7 @@ function PaymentMethod({ name, restField }: Props) {
         <Col span={6}>
           <Form.Item
             {...restField}
-            initialValue="cash"
+            initialValue="1"
             label={t('selectedPayMethod.Payment Method.title')}
             name={[name, 'payment_method']}
             rules={[{ required: true }]}
@@ -52,7 +56,7 @@ function PaymentMethod({ name, restField }: Props) {
         <Col span={6}>
           <Form.Item
             {...restField}
-            initialValue="vnd"
+            initialValue="2"
             label={t('selectedPayMethod.Currency.title')}
             name={[name, 'currency_conversion_id']}
             rules={[{ required: true }]}

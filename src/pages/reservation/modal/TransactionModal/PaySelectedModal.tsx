@@ -2,11 +2,15 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { formatNumber } from 'helpers';
 
 interface Props {
+  discountAmount: any;
   selectedRows: any;
+  setDiscountAmount: (value: any) => void;
   setIsModalOpen: (visible: boolean) => void;
   setIsModalOpenSelectedPaymentMethod: (visible: boolean) => void;
+  totalAmount: number;
   visible: boolean;
 }
 
@@ -19,9 +23,12 @@ interface DataTypePaySelected {
 }
 
 function PaySelectedModal({
+  discountAmount,
   selectedRows,
+  setDiscountAmount,
   setIsModalOpen,
   setIsModalOpenSelectedPaymentMethod,
+  totalAmount,
   visible,
 }: Props) {
   const { t } = useTranslation();
@@ -52,23 +59,6 @@ function PaySelectedModal({
     },
   ];
 
-  // const data = [
-  //   {
-  //     date: '28/07/2020',
-  //     description: 'PEPSI',
-  //     unit_price: '20.000',
-  //     amount: 2,
-  //     total: '40.000',
-  //   },
-  //   {
-  //     date: '28/07/2020',
-  //     description: 'Coca Cola',
-  //     unit_price: '20.000',
-  //     amount: 2,
-  //     total: '40.000',
-  //   },
-  // ];
-
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], newSelectedRows: any) => {
       console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', newSelectedRows);
@@ -81,7 +71,6 @@ function PaySelectedModal({
 
   const handleSelectPaymentMethod = () => {
     setIsModalOpenSelectedPaymentMethod(true);
-    // setIsModalOpen(false)
   };
 
   return (
@@ -110,7 +99,12 @@ function PaySelectedModal({
           <Col span={16} />
           <Col span={6}>
             <Form.Item label={t('common.Discount')}>
-              <Input placeholder="20.000" style={{ width: 120, height: 32, borderRadius: 2 }} />
+              <Input
+                onChange={event => setDiscountAmount(event.target.value)}
+                placeholder="0"
+                style={{ width: 120, height: 32, borderRadius: 2 }}
+                value={discountAmount}
+              />
             </Form.Item>
           </Col>
           <Col span={2}>
@@ -124,14 +118,18 @@ function PaySelectedModal({
           <Col span={16} />
           <Col span={8} style={{ marginBottom: 17 }}>
             <span>{t('common.Total Amount')}</span>
-            <span style={{ fontSize: 16, float: 'right' }}>4.800.000</span>
+            <span style={{ fontSize: 16, float: 'right' }}>{formatNumber(totalAmount)}</span>
           </Col>
         </Row>
         <Row>
           <Col span={16} />
           <Col span={8}>
             <span>{t('common.Sub Total')}</span>
-            <span style={{ fontSize: 16, float: 'right' }}>4.800.000</span>
+            <span style={{ fontSize: 16, float: 'right' }}>
+              {discountAmount
+                ? formatNumber(totalAmount - parseInt(discountAmount, 10))
+                : formatNumber(totalAmount)}
+            </span>
           </Col>
         </Row>
       </Form>
