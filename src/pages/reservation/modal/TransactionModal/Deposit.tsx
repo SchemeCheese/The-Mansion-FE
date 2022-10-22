@@ -8,9 +8,12 @@ Main functions : Transaction Deposit
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
+
+import { addItemAction } from 'actions';
 
 const { Option } = Select;
 
@@ -20,13 +23,47 @@ interface Props {
 }
 
 function Deposit({ isModalVisible, setModalVisible }: Props) {
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
+
   const handleCancel = () => {
     setModalVisible(false);
     console.log('Handle Cancel');
   };
 
   const handleOk = () => {
-    setModalVisible(false);
+    form
+      .validateFields()
+      .then(values => {
+        form.resetFields();
+
+        console.log('vaaaaaa', values);
+
+        dispatch(
+          addItemAction({
+            payload: {
+              items: [
+                {
+                  description_id: 88,
+                  quantity: 1,
+                  sales_price: values.amount,
+                  normal_price: values.amount,
+                  storage_id: 4,
+                  comment_deposit: values.deposit_comment,
+                  deposit_date: values.deposit_date.format('YYYY-MM_DD'),
+                },
+              ],
+              reservation_id: '3482',
+              reservation_detail_id: '4744',
+            },
+          }),
+        );
+
+        setModalVisible(false);
+      })
+      .catch(error => {
+        console.log('Validate Failed:', error);
+      });
   };
 
   const onChangeCurrency = (value: string) => {
@@ -45,7 +82,7 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
     console.log(`selected ${value}`);
   };
 
-  const transactionType = ['Deposit', 'abc'];
+  const transactionType = ['Deposit'];
 
   const { t } = useTranslation();
 
@@ -62,36 +99,42 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
       width={518}
     >
       <Form
+        form={form}
         initialValues={{
           print_bill: true,
           send_confirmation_email: true,
+          deposit_date: moment(),
         }}
         layout="vertical"
         wrapperCol={{ span: 23 }}
       >
         <Row>
           <Col span={12}>
-            <Form.Item label={t('transaction.Status')} name="">
-              <Input defaultValue="Waitlist" placeholder="Waitlist" />
+            <Form.Item label={t('transaction.Status')}>
+              <Input defaultValue="Waitlist" placeholder="Waitlist" readOnly />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={t('transaction.Guest Name')} name="">
-              <Input defaultValue="Steve Mark" placeholder="Steve Mark" />
+            <Form.Item label={t('transaction.Guest Name')}>
+              <Input defaultValue="Steve Mark" placeholder="Steve Mark" readOnly />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={t('transaction.Current Balance')} name="">
-              <Input defaultValue="40.000" placeholder="40.000" />
+            <Form.Item label={t('transaction.Current Balance')}>
+              <Input defaultValue="40.000" placeholder="40.000" readOnly />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={t('common.Amount')} name="">
-              <Input defaultValue="20.000" placeholder="20.000" />
+            <Form.Item
+              label={t('common.Amount')}
+              name="amount"
+              rules={[{ required: true, message: 'Please input amount!' }]}
+            >
+              <Input placeholder="Amount" />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={t('transaction.Select Currency.title')} name="">
+            <Form.Item label={t('transaction.Select Currency.title')} name="currency">
               <Select
                 defaultValue={selectCurrency[0]}
                 onChange={onChangeCurrency}
@@ -105,16 +148,19 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={t('transaction.Exchanged Amount')} name="">
-              <Input defaultValue="0" placeholder="0" />
+            <Form.Item label={t('transaction.Exchanged Amount')}>
+              <Input defaultValue="0" placeholder="0" readOnly />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={t('reservation.Payment Method.title')} name="">
+            <Form.Item
+              label={t('reservation.Payment Method.title')}
+              name="payment_method"
+              rules={[{ required: true, message: 'Please select payment method' }]}
+            >
               <Select
-                defaultValue={paymentMethod[0]}
                 onChange={onChangePaymentMethod}
-                placeholder={t('transaction.Transaction Type.placeholder')}
+                placeholder="Select payment method"
                 style={{ borderRadius: 2, width: '100%' }}
               >
                 {paymentMethod.map(type => (
@@ -124,9 +170,10 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={t('transaction.Transaction Type.title')} name="">
+            <Form.Item label={t('transaction.Transaction Type.title')}>
               <Select
                 defaultValue={transactionType[0]}
+                disabled
                 onChange={onChangeTransactionType}
                 placeholder={t('transaction.Transaction Type.placeholder')}
                 style={{ borderRadius: 2, width: '100%' }}
@@ -138,9 +185,8 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={t('transaction.Actual Deposit Date')} name="date">
+            <Form.Item label={t('transaction.Actual Deposit Date')} name="deposit_date">
               <DatePicker
-                defaultValue={moment('2017-08-08')}
                 style={{
                   height: 32,
                   borderRadius: 4,
@@ -168,11 +214,15 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
               name="email"
               wrapperCol={{ span: 12 }}
             >
-              <Input defaultValue="steve.mark@gmail.com" placeholder="steve.mark@gmail.com" />
+              <Input placeholder="steve.mark@gmail.com" />
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label={t('transaction.Comment')} name="comment" wrapperCol={{ span: 24 }}>
+            <Form.Item
+              label={t('transaction.Comment')}
+              name="deposit_comment"
+              wrapperCol={{ span: 24 }}
+            >
               <TextArea placeholder={t('transaction.Comment')} rows={5} />
             </Form.Item>
           </Col>

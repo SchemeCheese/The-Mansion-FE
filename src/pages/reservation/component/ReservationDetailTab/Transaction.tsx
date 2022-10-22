@@ -91,17 +91,22 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
 
   Object.keys(transactions).forEach((key: any) => {
     const tabKey = `tab${key}`;
+    let tabName = `Disk ${key}`;
+
+    if (key.toLowerCase() === 'deposit') {
+      tabName = 'Deposit';
+    }
 
     tabList.push({
       key: tabKey,
-      tab: `Disk ${key}`,
+      tab: tabName,
     });
 
     contentList[tabKey] = (
       <Disk
         handleDeleteItem={handleDeleteItem}
         items={transactions[key].items}
-        rowSelectionDisk={rowSelectionDisk}
+        rowSelectionDisk={key.toLowerCase() === 'deposit' ? null : rowSelectionDisk}
       />
     );
   });
