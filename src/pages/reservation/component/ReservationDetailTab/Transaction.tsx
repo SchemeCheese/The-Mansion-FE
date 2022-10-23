@@ -72,6 +72,11 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
       setSelectedRowKeys(newSelectedRowKeys);
       setSelectedRows(newSelectedRows);
     },
+    getCheckboxProps: (record: any) => ({
+      disabled: record.description === 'Discount' || record.description === 'Deposit',
+      // Column configuration not to be checked
+      name: record.name,
+    }),
   };
 
   const handleDeleteItem = (item: any) => {

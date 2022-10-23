@@ -92,9 +92,17 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
 
   return (
     <Table
+      className="disk-table"
       columns={columnsDisk}
       dataSource={data}
       pagination={false}
+      rowClassName={(record: any) => {
+        if (record.description === 'Deposit' || record.description === 'Discount') {
+          return 'disabled-click';
+        }
+
+        return '';
+      }}
       rowSelection={rowSelectionDisk}
       size="small"
     />

@@ -211,11 +211,13 @@
   cursor: pointer;
 }
 
-.rooming-table .disabled-click {
+.rooming-table .disabled-click,
+.disk-table .disabled-click {
   background: #e5e5e5;
   cursor: inherit;
 }
 
-.rooming-table .disabled-click .ant-table-cell-row-hover {
+.rooming-table .disabled-click .ant-table-cell-row-hover,
+.disk-table .disabled-click .ant-table-cell-row-hover {
   background: #e5e5e5 !important;
 }
