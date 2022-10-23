@@ -8,7 +8,8 @@ Main functions : Channel Manager Tab
 
 import 'styles/channel.css';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { RedoOutlined } from '@ant-design/icons';
 import { Col, DatePicker, Input, Row, Select, Space, Table, Tag } from 'antd';
 import { formatNumber } from 'helpers';
@@ -18,19 +19,31 @@ import { selectChannel } from 'selectors';
 import { useAppSelector } from 'modules/hooks';
 import { colors } from 'modules/theme';
 
+import { fetchChannelsAction } from 'actions';
+
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
-const onChange = (date: any, dateString: string) => {
-  console.log(date, dateString);
-};
-
-const { Option } = Select;
+const { OptGroup, Option } = Select;
 const { Search } = Input;
 const emptyPrice = '---';
 
 function ChannelManager() {
-  const onSearch = (value: string) => console.log(value);
+  const dispatch = useDispatch();
+
+  const [channelSearch, setChannelSearch] = useState({
+    room_type: '',
+    channel: '',
+    rate_plan: '',
+  });
+
+  const onChange = (date: any) => {
+    dispatch(
+      fetchChannelsAction({
+        fromDate: date.format('YYYY-MM-DD'),
+      }),
+    );
+  };
 
   const channelData = useAppSelector(selectChannel);
 
@@ -96,7 +109,7 @@ function ChannelManager() {
           </div>
         </Col>
       </Row>
-      <Row style={{ backgroundColor: '#FFFFFF' }}>
+      <Row className="channel" style={{ backgroundColor: '#FFFFFF' }}>
         <Col
           className="pick-date"
           span={9}
@@ -154,6 +167,19 @@ function ChannelManager() {
             </svg>
             <DatePicker
               bordered={false}
+              dateRender={current => {
+                const style: React.CSSProperties = {};
+
+                if (current.day() === 0 || current.day() === 6) {
+                  style.color = 'red';
+                }
+
+                return (
+                  <div className="ant-picker-cell-inner" style={style}>
+                    {current.date()}
+                  </div>
+                );
+              }}
               defaultValue={moment()}
               format="D MMM Y"
               onChange={onChange}
@@ -199,13 +225,33 @@ function ChannelManager() {
       <Row style={{ paddingTop: 20 }}>
         <Col span={24}>
           <Space className="channel-filter" size="middle">
-            <Select allowClear defaultValue="all" size="large">
+            <Select defaultValue="all" size="large">
               <Option value="all">All Rates & Availability</Option>
-              <Option value="female">female</Option>
-              <Option value="other">other</Option>
             </Select>
-            <Select allowClear defaultValue="all" size="large">
-              <Option value="all">
+            <Select
+              defaultValue=""
+              onChange={value => {
+                if (value === '') {
+                  setChannelSearch({
+                    ...channelSearch,
+                    room_type: '',
+                    channel: '',
+                  });
+                } else if (parseInt(value, 10) > 100) {
+                  setChannelSearch({
+                    ...channelSearch,
+                    room_type: value,
+                  });
+                } else {
+                  setChannelSearch({
+                    ...channelSearch,
+                    channel: value,
+                  });
+                }
+              }}
+              size="large"
+            >
+              <Option value="">
                 <svg
                   fill="none"
                   height="10"
@@ -232,15 +278,35 @@ function ChannelManager() {
                 </svg>
                 All Room Types
               </Option>
-              <Option value="female">female</Option>
-              <Option value="other">other</Option>
+              <OptGroup label="Rooms & Rates View">
+                <Option value="3796090">Deluxe Rate 2022</Option>
+                <Option value="3796120">Family Room Rate 2022</Option>
+                <Option value="3796103">Premium Alex Rate 2022</Option>
+                <Option value="3796121">Studio Twin Rate 2022</Option>
+                <Option value="3796123">Studio Double Rate 2022</Option>
+                <Option value="3796119">Superior Rate 2022</Option>
+              </OptGroup>
+              <OptGroup label="Channel View">
+                <Option value="agoda">AGODA</Option>
+                <Option value="airbnb">AIRBNB</Option>
+                <Option value="booking.com">BOOKING.COM</Option>
+              </OptGroup>
             </Select>
-            <Select allowClear defaultValue="all" size="large">
-              <Option value="all">
+            <Select
+              defaultValue="1"
+              onChange={value => {
+                setChannelSearch({
+                  ...channelSearch,
+                  rate_plan: value,
+                });
+              }}
+              size="large"
+            >
+              <Option value="1">
                 <svg
                   fill="none"
                   height="14"
-                  style={{ marginRight: 10, float: 'left', marginTop: 11 }}
+                  style={{ marginRight: 10, marginTop: 5 }}
                   viewBox="0 0 14 14"
                   width="14"
                   xmlns="http://www.w3.org/2000/svg"
@@ -251,15 +317,14 @@ function ChannelManager() {
                     fillOpacity="0.45"
                   />
                 </svg>
-                <span>All Rate Plans</span>
+                <span style={{ paddingTop: 5 }}>All Rate Plans</span>
               </Option>
-              <Option value="female">female</Option>
-              <Option value="other">other</Option>
+              <Option value="2">STANDARD RATE</Option>
+              <Option value="3">WEBSITE TRỰC TIẾP</Option>
             </Select>
             <Search
               allowClear
               className="search-room-rate"
-              onSearch={onSearch}
               placeholder="Search room rate..."
               size="large"
               style={{
@@ -273,397 +338,554 @@ function ChannelManager() {
         </Col>
       </Row>
       <Row style={{ paddingTop: 20 }}>
-        {channelData.channels.map((item: any) => {
-          const columns = [
-            {
-              title: () => (
-                <>
-                  <svg
-                    fill="none"
-                    height="14"
-                    viewBox="0 0 20 14"
-                    width="20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M2.34375 8.16667V1.16667C2.34375 0.522334 1.81908 0 1.17188 0C0.524666 0 0 0.522334 0 1.16667V12.8333C0 13.4777 0.524666 14 1.17188 14C1.81908 14 2.34375 13.4777 2.34375 12.8333V11.6667H17.6562V12.8333C17.6562 13.4777 18.1809 14 18.8281 14C19.4753 14 20 13.4777 20 12.8333V8.16667H2.34375Z"
-                      fill="black"
-                      fillOpacity="0.65"
-                    />
-                    <path
-                      d="M5.27344 3.5C4.30262 3.5 3.51562 4.28349 3.51562 5.25V7H7.03125V5.25C7.03125 4.28349 6.24426 3.5 5.27344 3.5Z"
-                      fill="black"
-                      fillOpacity="0.65"
-                    />
-                    <path
-                      d="M18.2422 3.5H9.96094C8.99012 3.5 8.20312 4.28349 8.20312 5.25V7H20V5.25C20 4.28349 19.213 3.5 18.2422 3.5Z"
-                      fill="black"
-                      fillOpacity="0.65"
-                    />
-                  </svg>
-                  <span style={{ paddingLeft: 15 }}>{item.name}</span>
-                  <svg
-                    fill="none"
-                    height="14"
-                    style={{ float: 'right' }}
-                    viewBox="0 0 8 14"
-                    width="8"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M7.96513 5.4677C7.94174 5.42475 7.90781 5.38903 7.86682 5.36417C7.82582 5.33932 7.77922 5.32622 7.73178 5.32622H4.21808L4.80716 0.643446C4.81348 0.580775 4.79935 0.517713 4.76703 0.464416C4.73471 0.411119 4.6861 0.370686 4.62901 0.349629C4.57193 0.328572 4.50969 0.328115 4.45232 0.348333C4.39495 0.36855 4.3458 0.408265 4.31276 0.461083L0.039731 8.24968C0.0147435 8.29196 0.00104853 8.34042 5.78485e-05 8.39004C-0.000932835 8.43967 0.0108167 8.48867 0.034095 8.53199C0.0573734 8.57532 0.0913382 8.6114 0.132487 8.63652C0.173636 8.66164 0.22048 8.67489 0.268188 8.67489H3.72938L3.26254 13.3647C3.25795 13.4272 3.27358 13.4894 3.30692 13.5416C3.34026 13.5937 3.38941 13.6328 3.44655 13.6525C3.50369 13.6723 3.56553 13.6716 3.62224 13.6505C3.67894 13.6295 3.72725 13.5893 3.75949 13.5364L7.96191 5.74864C7.98628 5.70629 7.99942 5.65798 7.99998 5.60862C8.00055 5.55927 7.98852 5.51064 7.96513 5.4677Z"
-                      fill="#1D39C4"
-                    />
-                  </svg>
-                </>
-              ),
-              dataIndex: 'name',
-              key: 'name',
-              width: '25%',
-              render: (value: any, record: any, index: number) => {
-                if (index === 0) {
-                  return (
-                    <>
-                      <span>Website trực tiếp...</span>
-                      <span
-                        style={{ color: '#1D39C4', fontSize: 12, paddingLeft: 10, paddingRight: 5 }}
-                      >
-                        1 Channel
-                      </span>
-                      <svg
-                        fill="none"
-                        height="8"
-                        viewBox="0 0 5 8"
-                        width="5"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M4.19534 3.52866C4.45569 3.78901 4.45569 4.21112 4.19534 4.47147L1.80482 6.86199C1.38484 7.28197 0.666748 6.98453 0.666748 6.39059L0.666748 1.60954C0.666748 1.01561 1.38484 0.718161 1.80482 1.13814L4.19534 3.52866Z"
-                          fill="#1D39C4"
-                        />
-                      </svg>
+        {channelData.channels
+          .filter((item: any) => {
+            console.log('channelSearch.room_type', channelSearch.room_type);
 
-                      <svg
-                        fill="none"
-                        height="14"
-                        style={{ float: 'right' }}
-                        viewBox="0 0 8 14"
-                        width="8"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M7.96513 5.4677C7.94174 5.42475 7.90781 5.38903 7.86682 5.36417C7.82582 5.33932 7.77922 5.32622 7.73178 5.32622H4.21808L4.80716 0.643446C4.81348 0.580775 4.79935 0.517713 4.76703 0.464416C4.73471 0.411119 4.6861 0.370686 4.62901 0.349629C4.57193 0.328572 4.50969 0.328115 4.45232 0.348333C4.39495 0.36855 4.3458 0.408265 4.31276 0.461083L0.039731 8.24968C0.0147435 8.29196 0.00104853 8.34042 5.78485e-05 8.39004C-0.000932835 8.43967 0.0108167 8.48867 0.034095 8.53199C0.0573734 8.57532 0.0913382 8.6114 0.132487 8.63652C0.173636 8.66164 0.22048 8.67489 0.268188 8.67489H3.72938L3.26254 13.3647C3.25795 13.4272 3.27358 13.4894 3.30692 13.5416C3.34026 13.5937 3.38941 13.6328 3.44655 13.6525C3.50369 13.6723 3.56553 13.6716 3.62224 13.6505C3.67894 13.6295 3.72725 13.5893 3.75949 13.5364L7.96191 5.74864C7.98628 5.70629 7.99942 5.65798 7.99998 5.60862C8.00055 5.55927 7.98852 5.51064 7.96513 5.4677Z"
-                          fill="#1D39C4"
-                        />
-                      </svg>
-                    </>
-                  );
-                }
+            if (channelSearch.room_type === '') {
+              return true;
+            }
 
-                if (index === 1) {
-                  return (
-                    <>
-                      <span style={{ paddingRight: 5 }}>Standard Rates</span>
-                      <span>
-                        <Tag color="#1D39C4" style={{ borderRadius: 17, width: 82 }}>
-                          {record.total_channel} Channel
-                        </Tag>
-                      </span>
-                      <svg
-                        fill="none"
-                        height="14"
-                        style={{ float: 'right' }}
-                        viewBox="0 0 8 14"
-                        width="8"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M7.96513 5.4677C7.94174 5.42475 7.90781 5.38903 7.86682 5.36417C7.82582 5.33932 7.77922 5.32622 7.73178 5.32622H4.21808L4.80716 0.643446C4.81348 0.580775 4.79935 0.517713 4.76703 0.464416C4.73471 0.411119 4.6861 0.370686 4.62901 0.349629C4.57193 0.328572 4.50969 0.328115 4.45232 0.348333C4.39495 0.36855 4.3458 0.408265 4.31276 0.461083L0.039731 8.24968C0.0147435 8.29196 0.00104853 8.34042 5.78485e-05 8.39004C-0.000932835 8.43967 0.0108167 8.48867 0.034095 8.53199C0.0573734 8.57532 0.0913382 8.6114 0.132487 8.63652C0.173636 8.66164 0.22048 8.67489 0.268188 8.67489H3.72938L3.26254 13.3647C3.25795 13.4272 3.27358 13.4894 3.30692 13.5416C3.34026 13.5937 3.38941 13.6328 3.44655 13.6525C3.50369 13.6723 3.56553 13.6716 3.62224 13.6505C3.67894 13.6295 3.72725 13.5893 3.75949 13.5364L7.96191 5.74864C7.98628 5.70629 7.99942 5.65798 7.99998 5.60862C8.00055 5.55927 7.98852 5.51064 7.96513 5.4677Z"
-                          fill="#1D39C4"
-                        />
-                      </svg>
-                    </>
-                  );
-                }
-
-                return (
+            return item.rateId === channelSearch.room_type;
+          })
+          .map((item: any) => {
+            const columns = [
+              {
+                title: () => (
                   <>
-                    <span
-                      style={{
-                        fontWeight: 600,
-                        fontSize: 14,
-                        color: '#1D39C4',
-                        paddingLeft: 25,
-                        paddingRight: 5,
-                      }}
-                    >
-                      {value}
-                    </span>
-                    <span style={{ fontWeight: 400, fontSize: 14, color: '#1D39C4' }}>
-                      Supervisor Double...
-                    </span>
-                    <span style={{ float: 'right' }}>
-                      <svg
-                        fill="none"
-                        height="12"
-                        style={{ marginRight: 20 }}
-                        viewBox="0 0 14 12"
-                        width="14"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M13.3898 9.1823L8.67977 0.913156C7.92302 -0.303577 6.07831 -0.305194 5.32055 0.913156L0.610759 9.1823C-0.162835 10.4256 0.773753 12 2.28998 12H11.7102C13.2251 12 14.1634 10.4269 13.3898 9.1823ZM7.00016 10.5077C6.56948 10.5077 6.21891 10.1729 6.21891 9.76157C6.21891 9.35025 6.56948 9.01543 7.00016 9.01543C7.43084 9.01543 7.78141 9.35025 7.78141 9.76157C7.78141 10.1729 7.43084 10.5077 7.00016 10.5077ZM7.78141 7.52315C7.78141 7.93447 7.43084 8.26929 7.00016 8.26929C6.56948 8.26929 6.21891 7.93447 6.21891 7.52315V3.79244C6.21891 3.38112 6.56948 3.0463 7.00016 3.0463C7.43084 3.0463 7.78141 3.38112 7.78141 3.79244V7.52315Z"
-                          fill="#FAAD14"
-                          fillOpacity="0.85"
-                        />
-                      </svg>
-                      <svg
-                        fill="none"
-                        height="14"
-                        viewBox="0 0 8 14"
-                        width="8"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M7.96513 5.4677C7.94174 5.42475 7.90781 5.38903 7.86682 5.36417C7.82582 5.33932 7.77922 5.32622 7.73178 5.32622H4.21808L4.80716 0.643446C4.81348 0.580775 4.79935 0.517713 4.76703 0.464416C4.73471 0.411119 4.6861 0.370686 4.62901 0.349629C4.57193 0.328572 4.50969 0.328115 4.45232 0.348333C4.39495 0.36855 4.3458 0.408265 4.31276 0.461083L0.039731 8.24968C0.0147435 8.29196 0.00104853 8.34042 5.78485e-05 8.39004C-0.000932835 8.43967 0.0108167 8.48867 0.034095 8.53199C0.0573734 8.57532 0.0913382 8.6114 0.132487 8.63652C0.173636 8.66164 0.22048 8.67489 0.268188 8.67489H3.72938L3.26254 13.3647C3.25795 13.4272 3.27358 13.4894 3.30692 13.5416C3.34026 13.5937 3.38941 13.6328 3.44655 13.6525C3.50369 13.6723 3.56553 13.6716 3.62224 13.6505C3.67894 13.6295 3.72725 13.5893 3.75949 13.5364L7.96191 5.74864C7.98628 5.70629 7.99942 5.65798 7.99998 5.60862C8.00055 5.55927 7.98852 5.51064 7.96513 5.4677Z"
-                          fill="#1D39C4"
-                        />
-                      </svg>
-                    </span>
-                  </>
-                );
-              },
-            },
-            {
-              title: 'AVAIL',
-              dataIndex: 'age',
-              key: 'age',
-              width: '12.5%',
-              render: (value: any, record: object, index: number) => {
-                if (index === 2) {
-                  return (
-                    <div>
-                      <Select defaultValue="lucy" style={{ fontWeight: 600 }}>
-                        <Option value="jack">Jack</Option>
-                        <Option value="lucy">MIN STAY</Option>
-                        <Option disabled value="disabled">
-                          Disabled
-                        </Option>
-                        <Option value="Yiminghe">yiminghe</Option>
-                      </Select>
-                      <svg
-                        fill="none"
-                        height="14"
-                        style={{ marginRight: 7, marginTop: 7, float: 'right' }}
-                        viewBox="0 0 14 14"
-                        width="14"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M8.22051 1.26815C8.82312 0.665539 9.62433 0.333496 10.4764 0.333496C12.2358 0.333496 13.6669 1.76457 13.6669 3.52399C13.6669 4.37604 13.3349 5.17725 12.7323 5.77986L9.94662 8.56552C9.34398 9.16813 8.5428 9.50017 7.69075 9.50017C6.83911 9.50017 6.03793 9.16854 5.43571 8.56673L6.61329 7.38753C7.18947 7.96288 8.19206 7.96246 8.76824 7.38711L11.5538 4.60146C11.8415 4.31338 12.0002 3.93091 12.0002 3.52399C12.0002 2.68374 11.3166 2.00015 10.4764 2.00015C10.0695 2.00015 9.68699 2.15884 9.39891 2.44653L7.85135 3.99409C7.36926 3.80131 6.84486 3.69735 6.30969 3.69735C6.12969 3.69735 5.95347 3.7221 5.77738 3.74684C5.76359 3.74878 5.74981 3.75072 5.73602 3.75264L8.22051 1.26815Z"
-                          fill="black"
-                          fillOpacity="0.45"
-                        />
-                        <path
-                          d="M4.60148 11.5538L6.13443 10.0208C6.62092 10.2248 7.14724 10.3335 7.69065 10.3335C7.84838 10.3335 8.00198 10.3122 8.15558 10.291C8.18084 10.2875 8.2061 10.284 8.23138 10.2806L5.77986 12.7321C5.17722 13.3348 4.37604 13.6668 3.52399 13.6668C1.76457 13.6668 0.333496 12.2358 0.333496 10.4763C0.333496 9.62425 0.665513 8.82307 1.26815 8.22046L4.05383 5.43481C5.25908 4.22958 7.3599 4.22997 8.56474 5.43359L7.38716 6.6128C6.81098 6.03745 5.80839 6.03786 5.23221 6.61321L2.44655 9.39886C2.15887 9.68694 2.00018 10.0694 2.00018 10.4763C2.00018 11.3166 2.68376 12.0002 3.52402 12.0002C3.93091 12.0002 4.31341 11.8415 4.60148 11.5538Z"
-                          fill="black"
-                          fillOpacity="0.45"
-                        />
-                      </svg>
-                    </div>
-                  );
-                }
-
-                return (
-                  <span style={{ color: 'rgba(0, 0, 0, 0.65)', fontSize: 12, fontWeight: 700 }}>
-                    RATES
-                  </span>
-                );
-              },
-            },
-            {
-              title: () => {
-                return item.available_rooms_number[0];
-              },
-              dataIndex: 'data1',
-              key: 'data1',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-            {
-              title: () => {
-                return item.available_rooms_number[1];
-              },
-              dataIndex: 'data2',
-              key: 'data2',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-            {
-              title: () => {
-                return item.available_rooms_number[2];
-              },
-              dataIndex: 'data3',
-              key: 'data3',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-            {
-              title: () => {
-                return item.available_rooms_number[3];
-              },
-              dataIndex: 'data4',
-              key: 'data4',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-            {
-              title: () => {
-                return item.available_rooms_number[4];
-              },
-              dataIndex: 'data5',
-              key: 'data5',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-            {
-              title: () => {
-                return item.available_rooms_number[5];
-              },
-              dataIndex: 'data6',
-              key: 'data6',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-            {
-              title: () => {
-                return item.available_rooms_number[6];
-              },
-              dataIndex: 'data7',
-              key: 'data7',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-            {
-              title: () => {
-                return item.available_rooms_number[7];
-              },
-              dataIndex: 'data8',
-              key: 'data8',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-            {
-              title: () => {
-                return item.available_rooms_number[8];
-              },
-              dataIndex: 'data9',
-              key: 'data9',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-            {
-              title: () => {
-                return (
-                  <span>
                     <svg
                       fill="none"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      width="24"
+                      height="14"
+                      viewBox="0 0 20 14"
+                      width="20"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <circle cx="12" cy="12" fill="#FAAD14" fillOpacity="0.85" r="12" />
+                      <path
+                        d="M2.34375 8.16667V1.16667C2.34375 0.522334 1.81908 0 1.17188 0C0.524666 0 0 0.522334 0 1.16667V12.8333C0 13.4777 0.524666 14 1.17188 14C1.81908 14 2.34375 13.4777 2.34375 12.8333V11.6667H17.6562V12.8333C17.6562 13.4777 18.1809 14 18.8281 14C19.4753 14 20 13.4777 20 12.8333V8.16667H2.34375Z"
+                        fill="black"
+                        fillOpacity="0.65"
+                      />
+                      <path
+                        d="M5.27344 3.5C4.30262 3.5 3.51562 4.28349 3.51562 5.25V7H7.03125V5.25C7.03125 4.28349 6.24426 3.5 5.27344 3.5Z"
+                        fill="black"
+                        fillOpacity="0.65"
+                      />
+                      <path
+                        d="M18.2422 3.5H9.96094C8.99012 3.5 8.20312 4.28349 8.20312 5.25V7H20V5.25C20 4.28349 19.213 3.5 18.2422 3.5Z"
+                        fill="black"
+                        fillOpacity="0.65"
+                      />
                     </svg>
-                    <span style={{ position: 'relative', left: -15, top: -8, color: 'white' }}>
-                      0
-                    </span>
-                  </span>
-                );
-              },
-              dataIndex: 'data10',
-              key: 'data10',
-              align: 'center' as const,
-              className: 'data-channel',
-            },
-          ];
+                    <span style={{ paddingLeft: 15 }}>{item.name}</span>
+                    <svg
+                      fill="none"
+                      height="14"
+                      style={{ float: 'right' }}
+                      viewBox="0 0 8 14"
+                      width="8"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M7.96513 5.4677C7.94174 5.42475 7.90781 5.38903 7.86682 5.36417C7.82582 5.33932 7.77922 5.32622 7.73178 5.32622H4.21808L4.80716 0.643446C4.81348 0.580775 4.79935 0.517713 4.76703 0.464416C4.73471 0.411119 4.6861 0.370686 4.62901 0.349629C4.57193 0.328572 4.50969 0.328115 4.45232 0.348333C4.39495 0.36855 4.3458 0.408265 4.31276 0.461083L0.039731 8.24968C0.0147435 8.29196 0.00104853 8.34042 5.78485e-05 8.39004C-0.000932835 8.43967 0.0108167 8.48867 0.034095 8.53199C0.0573734 8.57532 0.0913382 8.6114 0.132487 8.63652C0.173636 8.66164 0.22048 8.67489 0.268188 8.67489H3.72938L3.26254 13.3647C3.25795 13.4272 3.27358 13.4894 3.30692 13.5416C3.34026 13.5937 3.38941 13.6328 3.44655 13.6525C3.50369 13.6723 3.56553 13.6716 3.62224 13.6505C3.67894 13.6295 3.72725 13.5893 3.75949 13.5364L7.96191 5.74864C7.98628 5.70629 7.99942 5.65798 7.99998 5.60862C8.00055 5.55927 7.98852 5.51064 7.96513 5.4677Z"
+                        fill="#1D39C4"
+                      />
+                    </svg>
+                  </>
+                ),
+                dataIndex: 'name',
+                key: 'name',
+                width: '25%',
+                render: (value: any, record: any, index: number) => {
+                  if (record.is_website_direct_price) {
+                    return (
+                      <>
+                        <span>Website trực tiếp...</span>
+                        <span
+                          style={{
+                            color: '#1D39C4',
+                            fontSize: 12,
+                            paddingLeft: 10,
+                            paddingRight: 5,
+                          }}
+                        >
+                          1 Channel
+                        </span>
+                        <svg
+                          fill="none"
+                          height="8"
+                          viewBox="0 0 5 8"
+                          width="5"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M4.19534 3.52866C4.45569 3.78901 4.45569 4.21112 4.19534 4.47147L1.80482 6.86199C1.38484 7.28197 0.666748 6.98453 0.666748 6.39059L0.666748 1.60954C0.666748 1.01561 1.38484 0.718161 1.80482 1.13814L4.19534 3.52866Z"
+                            fill="#1D39C4"
+                          />
+                        </svg>
 
-          const data: any[] = [];
-
-          for (let index = 0; index < item.standard_rates.length + 2; index++) {
-            if (index === 0) {
-              data.push({
-                key: '1',
-                name: 'John Brown',
-                total_channel: item.total_channel,
-                age: 32,
-                data1: formatNumber(item.website_direct_rate[0], emptyPrice),
-                data2: formatNumber(item.website_direct_rate[1], emptyPrice),
-                data3: formatNumber(item.website_direct_rate[2], emptyPrice),
-                data4: formatNumber(item.website_direct_rate[3], emptyPrice),
-                data5: formatNumber(item.website_direct_rate[4], emptyPrice),
-                data6: formatNumber(item.website_direct_rate[5], emptyPrice),
-                data7: formatNumber(item.website_direct_rate[6], emptyPrice),
-                data8: formatNumber(item.website_direct_rate[7], emptyPrice),
-                data9: formatNumber(item.website_direct_rate[8], emptyPrice),
-                data10: formatNumber(item.website_direct_rate[9], emptyPrice),
-              });
-            } else if (index === 1) {
-              data.push({
-                key: '1',
-                name: 'John Brown',
-                total_channel: item.total_channel,
-                age: 32,
-                data1: formatNumber(item.standard_price[0], emptyPrice),
-                data2: formatNumber(item.standard_price[1], emptyPrice),
-                data3: formatNumber(item.standard_price[2], emptyPrice),
-                data5: formatNumber(item.standard_price[4], emptyPrice),
-                data6: formatNumber(item.standard_price[5], emptyPrice),
-                data4: formatNumber(item.standard_price[3], emptyPrice),
-                data7: formatNumber(item.standard_price[6], emptyPrice),
-                data8: formatNumber(item.standard_price[7], emptyPrice),
-                data9: formatNumber(item.standard_price[8], emptyPrice),
-                data10: formatNumber(item.standard_price[9], emptyPrice),
-              });
-            } else {
-              data.push({
-                key: '1',
-                name: item.standard_rates[index - 2].channel,
-                total_channel: item.total_channel,
-                age: 32,
-                data1: formatNumber(item.standard_rates[index - 2].prices[0], emptyPrice),
-                data2: formatNumber(item.standard_rates[index - 2].prices[1], emptyPrice),
-                data3: formatNumber(item.standard_rates[index - 2].prices[2], emptyPrice),
-                data4: formatNumber(item.standard_rates[index - 2].prices[3], emptyPrice),
-                data5: formatNumber(item.standard_rates[index - 2].prices[4], emptyPrice),
-                data6: formatNumber(item.standard_rates[index - 2].prices[5], emptyPrice),
-                data7: formatNumber(item.standard_rates[index - 2].prices[6], emptyPrice),
-                data8: formatNumber(item.standard_rates[index - 2].prices[7], emptyPrice),
-                data9: formatNumber(item.standard_rates[index - 2].prices[8], emptyPrice),
-                data10: formatNumber(item.standard_rates[index - 2].prices[9], emptyPrice),
-              });
-            }
-          }
-
-          return (
-            <Col span={24} style={{ marginTop: 30 }}>
-              <Table
-                bordered
-                className="channel-table"
-                columns={columns}
-                dataSource={data}
-                pagination={false}
-                rowClassName={(record: object, index: number) => {
-                  if (index > 1) {
-                    return 'green';
+                        <svg
+                          fill="none"
+                          height="14"
+                          style={{ float: 'right' }}
+                          viewBox="0 0 8 14"
+                          width="8"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M7.96513 5.4677C7.94174 5.42475 7.90781 5.38903 7.86682 5.36417C7.82582 5.33932 7.77922 5.32622 7.73178 5.32622H4.21808L4.80716 0.643446C4.81348 0.580775 4.79935 0.517713 4.76703 0.464416C4.73471 0.411119 4.6861 0.370686 4.62901 0.349629C4.57193 0.328572 4.50969 0.328115 4.45232 0.348333C4.39495 0.36855 4.3458 0.408265 4.31276 0.461083L0.039731 8.24968C0.0147435 8.29196 0.00104853 8.34042 5.78485e-05 8.39004C-0.000932835 8.43967 0.0108167 8.48867 0.034095 8.53199C0.0573734 8.57532 0.0913382 8.6114 0.132487 8.63652C0.173636 8.66164 0.22048 8.67489 0.268188 8.67489H3.72938L3.26254 13.3647C3.25795 13.4272 3.27358 13.4894 3.30692 13.5416C3.34026 13.5937 3.38941 13.6328 3.44655 13.6525C3.50369 13.6723 3.56553 13.6716 3.62224 13.6505C3.67894 13.6295 3.72725 13.5893 3.75949 13.5364L7.96191 5.74864C7.98628 5.70629 7.99942 5.65798 7.99998 5.60862C8.00055 5.55927 7.98852 5.51064 7.96513 5.4677Z"
+                            fill="#1D39C4"
+                          />
+                        </svg>
+                      </>
+                    );
                   }
 
-                  return '';
-                }}
-              />
-            </Col>
-          );
-        })}
+                  if (record.is_standard_price) {
+                    return (
+                      <>
+                        <span style={{ paddingRight: 5 }}>Standard Rates</span>
+                        <span>
+                          <Tag color="#1D39C4" style={{ borderRadius: 17, width: 82 }}>
+                            {record.total_channel} Channel
+                          </Tag>
+                        </span>
+                        <svg
+                          fill="none"
+                          height="14"
+                          style={{ float: 'right' }}
+                          viewBox="0 0 8 14"
+                          width="8"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M7.96513 5.4677C7.94174 5.42475 7.90781 5.38903 7.86682 5.36417C7.82582 5.33932 7.77922 5.32622 7.73178 5.32622H4.21808L4.80716 0.643446C4.81348 0.580775 4.79935 0.517713 4.76703 0.464416C4.73471 0.411119 4.6861 0.370686 4.62901 0.349629C4.57193 0.328572 4.50969 0.328115 4.45232 0.348333C4.39495 0.36855 4.3458 0.408265 4.31276 0.461083L0.039731 8.24968C0.0147435 8.29196 0.00104853 8.34042 5.78485e-05 8.39004C-0.000932835 8.43967 0.0108167 8.48867 0.034095 8.53199C0.0573734 8.57532 0.0913382 8.6114 0.132487 8.63652C0.173636 8.66164 0.22048 8.67489 0.268188 8.67489H3.72938L3.26254 13.3647C3.25795 13.4272 3.27358 13.4894 3.30692 13.5416C3.34026 13.5937 3.38941 13.6328 3.44655 13.6525C3.50369 13.6723 3.56553 13.6716 3.62224 13.6505C3.67894 13.6295 3.72725 13.5893 3.75949 13.5364L7.96191 5.74864C7.98628 5.70629 7.99942 5.65798 7.99998 5.60862C8.00055 5.55927 7.98852 5.51064 7.96513 5.4677Z"
+                            fill="#1D39C4"
+                          />
+                        </svg>
+                      </>
+                    );
+                  }
+
+                  return (
+                    <>
+                      <span
+                        style={{
+                          fontWeight: 600,
+                          fontSize: 14,
+                          color: '#1D39C4',
+                          paddingLeft: 25,
+                          paddingRight: 5,
+                        }}
+                      >
+                        {value}
+                      </span>
+                      <span style={{ fontWeight: 400, fontSize: 14, color: '#1D39C4' }}>
+                        Supervisor Double...
+                      </span>
+                      <span style={{ float: 'right' }}>
+                        <svg
+                          fill="none"
+                          height="12"
+                          style={{ marginRight: 20 }}
+                          viewBox="0 0 14 12"
+                          width="14"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M13.3898 9.1823L8.67977 0.913156C7.92302 -0.303577 6.07831 -0.305194 5.32055 0.913156L0.610759 9.1823C-0.162835 10.4256 0.773753 12 2.28998 12H11.7102C13.2251 12 14.1634 10.4269 13.3898 9.1823ZM7.00016 10.5077C6.56948 10.5077 6.21891 10.1729 6.21891 9.76157C6.21891 9.35025 6.56948 9.01543 7.00016 9.01543C7.43084 9.01543 7.78141 9.35025 7.78141 9.76157C7.78141 10.1729 7.43084 10.5077 7.00016 10.5077ZM7.78141 7.52315C7.78141 7.93447 7.43084 8.26929 7.00016 8.26929C6.56948 8.26929 6.21891 7.93447 6.21891 7.52315V3.79244C6.21891 3.38112 6.56948 3.0463 7.00016 3.0463C7.43084 3.0463 7.78141 3.38112 7.78141 3.79244V7.52315Z"
+                            fill="#FAAD14"
+                            fillOpacity="0.85"
+                          />
+                        </svg>
+                        <svg
+                          fill="none"
+                          height="14"
+                          viewBox="0 0 8 14"
+                          width="8"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M7.96513 5.4677C7.94174 5.42475 7.90781 5.38903 7.86682 5.36417C7.82582 5.33932 7.77922 5.32622 7.73178 5.32622H4.21808L4.80716 0.643446C4.81348 0.580775 4.79935 0.517713 4.76703 0.464416C4.73471 0.411119 4.6861 0.370686 4.62901 0.349629C4.57193 0.328572 4.50969 0.328115 4.45232 0.348333C4.39495 0.36855 4.3458 0.408265 4.31276 0.461083L0.039731 8.24968C0.0147435 8.29196 0.00104853 8.34042 5.78485e-05 8.39004C-0.000932835 8.43967 0.0108167 8.48867 0.034095 8.53199C0.0573734 8.57532 0.0913382 8.6114 0.132487 8.63652C0.173636 8.66164 0.22048 8.67489 0.268188 8.67489H3.72938L3.26254 13.3647C3.25795 13.4272 3.27358 13.4894 3.30692 13.5416C3.34026 13.5937 3.38941 13.6328 3.44655 13.6525C3.50369 13.6723 3.56553 13.6716 3.62224 13.6505C3.67894 13.6295 3.72725 13.5893 3.75949 13.5364L7.96191 5.74864C7.98628 5.70629 7.99942 5.65798 7.99998 5.60862C8.00055 5.55927 7.98852 5.51064 7.96513 5.4677Z"
+                            fill="#1D39C4"
+                          />
+                        </svg>
+                      </span>
+                    </>
+                  );
+                },
+              },
+              {
+                title: 'AVAIL',
+                dataIndex: 'age',
+                key: 'age',
+                width: '12.5%',
+                render: (value: any, record: object, index: number) => {
+                  if (index === 2) {
+                    return (
+                      <div>
+                        <Select defaultValue="lucy" style={{ fontWeight: 600 }}>
+                          <Option value="jack">Jack</Option>
+                          <Option value="lucy">MIN STAY</Option>
+                          <Option disabled value="disabled">
+                            Disabled
+                          </Option>
+                          <Option value="Yiminghe">yiminghe</Option>
+                        </Select>
+                        <svg
+                          fill="none"
+                          height="14"
+                          style={{ marginRight: 7, marginTop: 7, float: 'right' }}
+                          viewBox="0 0 14 14"
+                          width="14"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8.22051 1.26815C8.82312 0.665539 9.62433 0.333496 10.4764 0.333496C12.2358 0.333496 13.6669 1.76457 13.6669 3.52399C13.6669 4.37604 13.3349 5.17725 12.7323 5.77986L9.94662 8.56552C9.34398 9.16813 8.5428 9.50017 7.69075 9.50017C6.83911 9.50017 6.03793 9.16854 5.43571 8.56673L6.61329 7.38753C7.18947 7.96288 8.19206 7.96246 8.76824 7.38711L11.5538 4.60146C11.8415 4.31338 12.0002 3.93091 12.0002 3.52399C12.0002 2.68374 11.3166 2.00015 10.4764 2.00015C10.0695 2.00015 9.68699 2.15884 9.39891 2.44653L7.85135 3.99409C7.36926 3.80131 6.84486 3.69735 6.30969 3.69735C6.12969 3.69735 5.95347 3.7221 5.77738 3.74684C5.76359 3.74878 5.74981 3.75072 5.73602 3.75264L8.22051 1.26815Z"
+                            fill="black"
+                            fillOpacity="0.45"
+                          />
+                          <path
+                            d="M4.60148 11.5538L6.13443 10.0208C6.62092 10.2248 7.14724 10.3335 7.69065 10.3335C7.84838 10.3335 8.00198 10.3122 8.15558 10.291C8.18084 10.2875 8.2061 10.284 8.23138 10.2806L5.77986 12.7321C5.17722 13.3348 4.37604 13.6668 3.52399 13.6668C1.76457 13.6668 0.333496 12.2358 0.333496 10.4763C0.333496 9.62425 0.665513 8.82307 1.26815 8.22046L4.05383 5.43481C5.25908 4.22958 7.3599 4.22997 8.56474 5.43359L7.38716 6.6128C6.81098 6.03745 5.80839 6.03786 5.23221 6.61321L2.44655 9.39886C2.15887 9.68694 2.00018 10.0694 2.00018 10.4763C2.00018 11.3166 2.68376 12.0002 3.52402 12.0002C3.93091 12.0002 4.31341 11.8415 4.60148 11.5538Z"
+                            fill="black"
+                            fillOpacity="0.45"
+                          />
+                        </svg>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <span style={{ color: 'rgba(0, 0, 0, 0.65)', fontSize: 12, fontWeight: 700 }}>
+                      RATES
+                    </span>
+                  );
+                },
+              },
+              {
+                title: () => {
+                  return item.available_rooms_number[0];
+                },
+                dataIndex: 'data1',
+                key: 'data1',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[0].day === 'Sun' || channelData.dates[0].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+              {
+                title: () => {
+                  return item.available_rooms_number[1];
+                },
+                dataIndex: 'data2',
+                key: 'data2',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[1].day === 'Sun' || channelData.dates[1].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+              {
+                title: () => {
+                  return item.available_rooms_number[2];
+                },
+                dataIndex: 'data3',
+                key: 'data3',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[2].day === 'Sun' || channelData.dates[2].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+              {
+                title: () => {
+                  return item.available_rooms_number[3];
+                },
+                dataIndex: 'data4',
+                key: 'data4',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[3].day === 'Sun' || channelData.dates[3].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+              {
+                title: () => {
+                  return item.available_rooms_number[4];
+                },
+                dataIndex: 'data5',
+                key: 'data5',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[4].day === 'Sun' || channelData.dates[4].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+              {
+                title: () => {
+                  return item.available_rooms_number[5];
+                },
+                dataIndex: 'data6',
+                key: 'data6',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[5].day === 'Sun' || channelData.dates[5].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+              {
+                title: () => {
+                  return item.available_rooms_number[6];
+                },
+                dataIndex: 'data7',
+                key: 'data7',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[6].day === 'Sun' || channelData.dates[6].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+              {
+                title: () => {
+                  return item.available_rooms_number[7];
+                },
+                dataIndex: 'data8',
+                key: 'data8',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[7].day === 'Sun' || channelData.dates[7].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+              {
+                title: () => {
+                  return item.available_rooms_number[8];
+                },
+                dataIndex: 'data9',
+                key: 'data9',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[8].day === 'Sun' || channelData.dates[8].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+              {
+                title: () => {
+                  return (
+                    <span>
+                      <svg
+                        fill="none"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        width="24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle cx="12" cy="12" fill="#FAAD14" fillOpacity="0.85" r="12" />
+                      </svg>
+                      <span style={{ position: 'relative', left: -15, top: -8, color: 'white' }}>
+                        0
+                      </span>
+                    </span>
+                  );
+                },
+                dataIndex: 'data10',
+                key: 'data10',
+                align: 'center' as const,
+                className: 'data-channel',
+                render: (text: string) => {
+                  return {
+                    props: {
+                      style: {
+                        background:
+                          channelData.dates[9].day === 'Sun' || channelData.dates[9].day === 'Sat'
+                            ? 'rgb(255, 242, 232)'
+                            : '',
+                      },
+                    },
+                    children: <div>{text}</div>,
+                  };
+                },
+              },
+            ];
+
+            const data: any[] = [];
+
+            for (let index = 0; index < item.standard_rates.length + 2; index++) {
+              if (index === 0) {
+                if (channelSearch.rate_plan !== '2') {
+                  data.push({
+                    key: '1',
+                    name: 'John Brown',
+                    is_website_direct_price: 1,
+                    total_channel: item.total_channel,
+                    age: 32,
+                    data1: formatNumber(item.website_direct_rate[0], emptyPrice),
+                    data2: formatNumber(item.website_direct_rate[1], emptyPrice),
+                    data3: formatNumber(item.website_direct_rate[2], emptyPrice),
+                    data4: formatNumber(item.website_direct_rate[3], emptyPrice),
+                    data5: formatNumber(item.website_direct_rate[4], emptyPrice),
+                    data6: formatNumber(item.website_direct_rate[5], emptyPrice),
+                    data7: formatNumber(item.website_direct_rate[6], emptyPrice),
+                    data8: formatNumber(item.website_direct_rate[7], emptyPrice),
+                    data9: formatNumber(item.website_direct_rate[8], emptyPrice),
+                    data10: formatNumber(item.website_direct_rate[9], emptyPrice),
+                  });
+                }
+              } else if (index === 1) {
+                if (channelSearch.rate_plan !== '3') {
+                  data.push({
+                    key: '1',
+                    name: 'John Brown',
+                    is_standard_price: 1,
+                    total_channel: item.total_channel,
+                    age: 32,
+                    data1: formatNumber(item.standard_price[0], emptyPrice),
+                    data2: formatNumber(item.standard_price[1], emptyPrice),
+                    data3: formatNumber(item.standard_price[2], emptyPrice),
+                    data5: formatNumber(item.standard_price[4], emptyPrice),
+                    data6: formatNumber(item.standard_price[5], emptyPrice),
+                    data4: formatNumber(item.standard_price[3], emptyPrice),
+                    data7: formatNumber(item.standard_price[6], emptyPrice),
+                    data8: formatNumber(item.standard_price[7], emptyPrice),
+                    data9: formatNumber(item.standard_price[8], emptyPrice),
+                    data10: formatNumber(item.standard_price[9], emptyPrice),
+                  });
+                }
+              } else if (channelSearch.rate_plan !== '3') {
+                if (
+                  channelSearch.channel === '' ||
+                  channelSearch.channel === item.standard_rates[index - 2].channel.toLowerCase()
+                ) {
+                  data.push({
+                    key: '1',
+                    name: item.standard_rates[index - 2].channel,
+                    is_channel_price: 1,
+                    total_channel: item.total_channel,
+                    age: 32,
+                    data1: formatNumber(item.standard_rates[index - 2].prices[0], emptyPrice),
+                    data2: formatNumber(item.standard_rates[index - 2].prices[1], emptyPrice),
+                    data3: formatNumber(item.standard_rates[index - 2].prices[2], emptyPrice),
+                    data4: formatNumber(item.standard_rates[index - 2].prices[3], emptyPrice),
+                    data5: formatNumber(item.standard_rates[index - 2].prices[4], emptyPrice),
+                    data6: formatNumber(item.standard_rates[index - 2].prices[5], emptyPrice),
+                    data7: formatNumber(item.standard_rates[index - 2].prices[6], emptyPrice),
+                    data8: formatNumber(item.standard_rates[index - 2].prices[7], emptyPrice),
+                    data9: formatNumber(item.standard_rates[index - 2].prices[8], emptyPrice),
+                    data10: formatNumber(item.standard_rates[index - 2].prices[9], emptyPrice),
+                  });
+                }
+              }
+            }
+
+            return (
+              <Col span={24} style={{ marginTop: 30 }}>
+                <Table
+                  bordered
+                  className="channel-table"
+                  columns={columns}
+                  dataSource={data}
+                  pagination={false}
+                  rowClassName={(record: object, index: number) => {
+                    if (index > 1) {
+                      return 'green';
+                    }
+
+                    return '';
+                  }}
+                />
+              </Col>
+            );
+          })}
       </Row>
     </>
   );

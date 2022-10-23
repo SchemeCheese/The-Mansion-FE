@@ -1,6 +1,5 @@
 export interface FetchChannel {
-  rate_type: string;
-  start_date: string;
+  fromDate: string;
 }
 
 export interface FetchChannelResult {

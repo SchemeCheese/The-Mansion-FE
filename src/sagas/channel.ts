@@ -6,17 +6,22 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { ChannelEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { fetchChannelsSuccessAction } from 'actions';
+import { fetchChannelsAction, fetchChannelsSuccessAction } from 'actions';
 
-export function* fetchChannelSaga() {
+export function* fetchChannelSaga({ payload }: ReturnType<typeof fetchChannelsAction>) {
   try {
     let channels = [];
     let dates = [];
+    const query = new URLSearchParams(Object(payload)).toString();
 
-    ({ channels, dates } = yield call(request, `${apiEndPoint(ChannelEndpoint.GET_LIST)}`, {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    }));
+    ({ channels, dates } = yield call(
+      request,
+      `${apiEndPoint(ChannelEndpoint.GET_LIST)}?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
 
     yield put(fetchChannelsSuccessAction({ dates, channels }));
   } catch (error) {
