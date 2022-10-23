@@ -21,11 +21,6 @@
   height: 396px;
 }
 
-.checkout-card-grid {
-  display: flex;
-  height: 38px;
-}
-
 .transaction-tabs .ant-card-body {
   display: flex;
   flex-direction: column;
