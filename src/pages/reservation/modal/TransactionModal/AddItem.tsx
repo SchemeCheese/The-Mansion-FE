@@ -53,10 +53,6 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
     setSearchProductType(value);
   };
 
-  const onChangeDisk = (value: string) => {
-    console.log(`selected ${value}`);
-  };
-
   const handleClickUpdateAmount =
     (item: any, type: string = '') =>
     () => {
@@ -91,8 +87,6 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
       setDataAmount(dataAmountState);
     };
 
-  const diskData = ['A', 'A 2', 'A 3'];
-
   const columns: ColumnsType<DataType> = [
     {
       title: t('common.Product'),
@@ -107,9 +101,36 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
     },
     {
       title: t('common.Updated price'),
-      dataIndex: 'updated_price',
-      key: 'updated_price',
-      render: () => <Input placeholder="0" style={{ width: 96, borderRadius: 4 }} />,
+      dataIndex: 'sales_price',
+      key: 'sales_price',
+      render: (text: string, record: any) => {
+        return (
+          <Input
+            onChange={event => {
+              const dataAmountStateTemporary = [...dataAmount];
+
+              console.log(text);
+
+              const indexAmount = dataAmountStateTemporary.findIndex(
+                element => element.id === record.id,
+              );
+
+              if (indexAmount !== -1) {
+                dataAmountStateTemporary[indexAmount].sales_price = event.target.value;
+              } else {
+                dataAmountStateTemporary.push({
+                  ...record,
+                  sales_price: event.target.value,
+                });
+              }
+
+              setDataAmount(dataAmountStateTemporary);
+            }}
+            placeholder="0"
+            style={{ width: 96, borderRadius: 4 }}
+          />
+        );
+      },
     },
     {
       title: t('common.Amount'),
@@ -168,15 +189,34 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
       title: t('common.Disk'),
       dataIndex: 'disk',
       key: 'disk',
-      render: () => (
+      render: (text: string, record: any) => (
         <Select
-          defaultValue={diskData[0]}
-          onChange={onChangeDisk}
+          defaultValue="1"
+          onChange={value => {
+            const dataAmountStateTemporary = [...dataAmount];
+
+            console.log(text);
+
+            const indexAmount = dataAmountStateTemporary.findIndex(
+              element => element.id === record.id,
+            );
+
+            if (indexAmount !== -1) {
+              dataAmountStateTemporary[indexAmount].storage_id = value;
+            } else {
+              dataAmountStateTemporary.push({
+                ...record,
+                storage_id: value,
+              });
+            }
+
+            setDataAmount(dataAmountStateTemporary);
+          }}
           style={{ borderRadius: 2, width: 223, height: 32 }}
         >
-          {diskData.map(disk => (
-            <Option key={disk}>{disk}</Option>
-          ))}
+          <Option value="1">A</Option>
+          <Option value="2">B</Option>
+          <Option value="3">C</Option>
         </Select>
       ),
     },
