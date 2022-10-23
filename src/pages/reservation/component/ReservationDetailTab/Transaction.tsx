@@ -3,7 +3,7 @@ import 'styles/transaction.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Button, Card, Col, message, Row } from 'antd';
+import { Card, Col, message, Row, Space } from 'antd';
 import Disk from 'pages/reservation/detail/Disk';
 import Paid from 'pages/reservation/detail/Paid';
 import AddDiscount from 'pages/reservation/modal/TransactionModal/AddDiscount';
@@ -91,17 +91,22 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
 
   Object.keys(transactions).forEach((key: any) => {
     const tabKey = `tab${key}`;
+    let tabName = `Disk ${key}`;
+
+    if (key.toLowerCase() === 'deposit') {
+      tabName = 'Deposit';
+    }
 
     tabList.push({
       key: tabKey,
-      tab: `Disk ${key}`,
+      tab: tabName,
     });
 
     contentList[tabKey] = (
       <Disk
         handleDeleteItem={handleDeleteItem}
         items={transactions[key].items}
-        rowSelectionDisk={rowSelectionDisk}
+        rowSelectionDisk={key.toLowerCase() === 'deposit' ? null : rowSelectionDisk}
       />
     );
   });
@@ -121,19 +126,22 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   const [isModalOpenDeposit, setIsModalOpenDeposit] = useState(false);
 
   const gridStyleLeft: React.CSSProperties = {
-    width: '50%',
     textAlign: 'left',
     color: '#1D39C4',
-    paddingLeft: 16,
-    paddingTop: 15,
+    paddingLeft: 20,
+    fontSize: 15,
   };
 
   const gridStyleRight: React.CSSProperties = {
-    width: '50%',
     textAlign: 'right',
+    float: 'right',
     color: '#1D39C4',
-    paddingRight: 16,
-    paddingTop: 15,
+    paddingRight: 20,
+    fontSize: 18,
+  };
+
+  const svgButton: React.CSSProperties = {
+    cursor: 'pointer',
   };
 
   const totalAmount = _.reduce(
@@ -306,21 +314,19 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
         <div className="site-card-border-less-wrapper transaction-checkout">
           <Card bordered={false} style={{ border: '1px solid #1D39C4' }} title="Checkout">
             <div style={{ flexGrow: 1, background: '#F7F9FA', marginTop: 1 }}>
-              <div className="checkout-card-grid">
-                <Card.Grid hoverable={false} style={gridStyleLeft}>
-                  {t('common.Sub total')}
-                </Card.Grid>
-                <Card.Grid hoverable={false} style={gridStyleRight}>
-                  <span style={{ fontSize: 16 }}>12.000.000 </span>
-                </Card.Grid>
-              </div>
-              <div className="checkout-card-grid">
-                <Card.Grid hoverable={false} style={gridStyleLeft}>
-                  {t('common.Deposit')}{' '}
-                  <Button className="btn-checkout-icon" onClick={() => setIsModalOpenDeposit(true)}>
+              <Space direction="vertical" size="small" style={{ display: 'flex', paddingTop: 20 }}>
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>{t('common.Sub total')}</span>
+                  <span style={gridStyleRight}>12.000.000</span>
+                </div>
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>
+                    {t('common.Deposit')}{' '}
                     <svg
                       fill="none"
                       height="14"
+                      onClick={() => setIsModalOpenDeposit(true)}
+                      style={svgButton}
                       viewBox="0 0 14 14"
                       width="14"
                       xmlns="http://www.w3.org/2000/svg"
@@ -330,26 +336,21 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                         fill="#1D39C4"
                       />
                     </svg>
-                  </Button>
-                  <Deposit
-                    isModalVisible={isModalOpenDeposit}
-                    setModalVisible={setIsModalOpenDeposit}
-                  />
-                </Card.Grid>
-                <Card.Grid hoverable={false} style={gridStyleRight}>
-                  <span style={{ fontSize: 16 }}>1.000.000</span>
-                </Card.Grid>
-              </div>
-              <div className="checkout-card-grid">
-                <Card.Grid hoverable={false} style={gridStyleLeft}>
-                  {t('common.Discount')}{' '}
-                  <Button
-                    className="btn-checkout-icon"
-                    onClick={() => setIsModalOpenAddDiscount(true)}
-                  >
+                    <Deposit
+                      isModalVisible={isModalOpenDeposit}
+                      setModalVisible={setIsModalOpenDeposit}
+                    />
+                  </span>
+                  <span style={gridStyleRight}>1.000.000</span>
+                </div>
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>
+                    {t('common.Discount')}{' '}
                     <svg
                       fill="none"
                       height="14"
+                      onClick={() => setIsModalOpenAddDiscount(true)}
+                      style={svgButton}
                       viewBox="0 0 14 14"
                       width="14"
                       xmlns="http://www.w3.org/2000/svg"
@@ -359,31 +360,24 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                         fill="#1D39C4"
                       />
                     </svg>
-                  </Button>
-                  <AddDiscount
-                    setIsModalOpen={setIsModalOpenAddDiscount}
-                    visible={isModalOpenAddDiscount}
-                  />
-                </Card.Grid>
-                <Card.Grid hoverable={false} style={gridStyleRight}>
-                  <span style={{ fontSize: 16 }}>1.000.000</span>
-                </Card.Grid>
-              </div>
-              <div className="checkout-card-grid">
-                <Card.Grid hoverable={false} style={gridStyleLeft}>
-                  VAT
-                </Card.Grid>
-                <Card.Grid hoverable={false} style={gridStyleRight}>
-                  <span style={{ fontSize: 16 }}>1.000.000</span>
-                </Card.Grid>
-              </div>
-              <div className="checkout-card-grid">
-                <Card.Grid hoverable={false} style={gridStyleLeft}>
-                  {t('common.Exchange currency')}{' '}
-                  <Button className="btn-checkout-icon">
+                    <AddDiscount
+                      setIsModalOpen={setIsModalOpenAddDiscount}
+                      visible={isModalOpenAddDiscount}
+                    />
+                  </span>
+                  <span style={gridStyleRight}>1.000.000</span>
+                </div>
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>VAT</span>
+                  <span style={gridStyleRight}>1.000.000</span>
+                </div>
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>
+                    {t('common.Exchange currency')}{' '}
                     <svg
                       fill="none"
                       height="14"
+                      style={svgButton}
                       viewBox="0 0 14 14"
                       width="14"
                       xmlns="http://www.w3.org/2000/svg"
@@ -393,37 +387,23 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                         fill="#1D39C4"
                       />
                     </svg>
-                  </Button>
-                </Card.Grid>
-                <Card.Grid hoverable={false} style={gridStyleRight}>
-                  <span style={{ fontSize: 16 }}>USD</span>
-                </Card.Grid>
-              </div>
+                  </span>
+                  <span style={gridStyleRight}>USD</span>
+                </div>
 
-              <div className="checkout-card-grid">
-                <Card.Grid hoverable={false} style={gridStyleLeft}>
-                  {t('common.Exchange rate')}
-                </Card.Grid>
-                <Card.Grid hoverable={false} style={gridStyleRight}>
-                  <span style={{ fontSize: 16 }}>23.000</span>
-                </Card.Grid>
-              </div>
-              <div className="checkout-card-grid">
-                <Card.Grid hoverable={false} style={gridStyleLeft}>
-                  {t('common.Amount')}
-                </Card.Grid>
-                <Card.Grid hoverable={false} style={gridStyleRight}>
-                  <span style={{ fontSize: 16 }}>450</span>
-                </Card.Grid>
-              </div>
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>{t('common.Exchange rate')}</span>
+                  <span style={gridStyleRight}>23.000</span>
+                </div>
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>{t('common.Amount')}</span>
+                  <span style={gridStyleRight}>450</span>
+                </div>
+              </Space>
             </div>
-            <div style={{ display: 'flex', borderTop: '1px solid #1D39C4', height: 60 }}>
-              <Card.Grid hoverable={false} style={gridStyleLeft}>
-                {t('common.Grand Total')}
-              </Card.Grid>
-              <Card.Grid hoverable={false} style={{ ...gridStyleRight, fontWeight: 900 }}>
-                <span style={{ fontSize: 14 }}>10.000.000</span>
-              </Card.Grid>
+            <div style={{ borderTop: '1px solid #1D39C4', height: 60, paddingTop: '4%' }}>
+              <span style={gridStyleLeft}>{t('common.Grand Total')}</span>
+              <span style={gridStyleRight}>10.000.000</span>
             </div>
           </Card>
         </div>
