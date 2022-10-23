@@ -37,8 +37,6 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
       .then(values => {
         form.resetFields();
 
-        console.log('vaaaaaa', values);
-
         dispatch(
           addItemAction({
             payload: {
