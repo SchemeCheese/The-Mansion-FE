@@ -30,9 +30,6 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
       .validateFields()
       .then(values => {
         form.resetFields();
-
-        console.log('valuesssssss', values);
-
         let discountAmount = 0;
 
         discountAmount =

@@ -82,8 +82,6 @@ function Rate({ reservationDetailId, reservationId }: Props) {
       dataIndex: 'actual_amount',
       key: 'actual_amount',
       render: (text: string, record: any, index: number) => {
-        console.log('Current', record, index, text);
-
         return (
           <Input
             name="actual_amount"
@@ -110,8 +108,6 @@ function Rate({ reservationDetailId, reservationId }: Props) {
       dataIndex: 'task',
       key: 'task',
       render: (text: string, record: any, index: number) => {
-        console.log('Duplicate', record, index, text);
-
         return (
           <button
             onClick={() => {

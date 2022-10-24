@@ -23,8 +23,6 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
   const dispatch = useDispatch();
 
   const handleChangeTab = (tab: string) => {
-    console.log('tab', tab);
-
     if (tab === '3') {
       dispatch(
         getReservationDetail({

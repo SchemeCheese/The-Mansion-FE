@@ -20,8 +20,6 @@ export default {
         draft.is_searching = true;
       })
       .addCase(searchReservationFinish, (draft, { payload }) => {
-        console.log('Finish', payload);
-
         draft.is_searching = false;
         draft.data = payload.data;
         draft.total = payload.total;

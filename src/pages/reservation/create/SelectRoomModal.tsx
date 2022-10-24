@@ -85,8 +85,6 @@ function SelectRoomModal({
       dataIndex: 'rate_name',
       key: 'rate_name',
       render: (text: any, record: any, index: number) => {
-        console.log('record', record);
-
         const option: any = ratesResult?.map((item: any) => {
           return <Option value={item.equipment_charge_detail_id}>{item.rate_name}</Option>;
         });
@@ -143,8 +141,6 @@ function SelectRoomModal({
       dataIndex: 'actual_amount',
       key: 'actual_amount',
       render: (text: string, record: any, index: number) => {
-        console.log('searchRoomResultState', record, index, text);
-
         return (
           <Input
             name="actual_amount"
@@ -171,8 +167,6 @@ function SelectRoomModal({
       dataIndex: 'task',
       key: 'task',
       render: (text: string, record: any, index: number) => {
-        console.log('Duplicate', record, index, text);
-
         return (
           <Button
             onClick={() => {
@@ -350,8 +344,6 @@ function SelectRoomModal({
       dataIndex: 'task',
       key: 'task',
       render: (text: any, record: any, index: number) => {
-        console.log('AAAAA', text, record, index);
-
         return (
           <Button
             onClick={() => {

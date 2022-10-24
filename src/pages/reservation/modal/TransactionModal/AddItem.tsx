@@ -49,7 +49,6 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
   }, []);
 
   const onChangeProductType = (value: string) => {
-    console.log(`selected ${value}`);
     setSearchProductType(value);
   };
 
@@ -108,8 +107,6 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
           <Input
             onChange={event => {
               const dataAmountStateTemporary = [...dataAmount];
-
-              console.log(text);
 
               const indexAmount = dataAmountStateTemporary.findIndex(
                 element => element.id === record.id,
@@ -194,8 +191,6 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
           defaultValue="1"
           onChange={value => {
             const dataAmountStateTemporary = [...dataAmount];
-
-            console.log(text);
 
             const indexAmount = dataAmountStateTemporary.findIndex(
               element => element.id === record.id,

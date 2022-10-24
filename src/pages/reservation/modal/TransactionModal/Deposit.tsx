@@ -28,7 +28,6 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
 
   const handleCancel = () => {
     setModalVisible(false);
-    console.log('Handle Cancel');
   };
 
   const handleOk = () => {

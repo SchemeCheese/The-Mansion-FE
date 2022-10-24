@@ -47,9 +47,6 @@ function MLayout(props: Props) {
             </button>
           ),
           key: '0',
-          onClick: () => {
-            console.log(1000);
-          },
         },
       ]}
     />

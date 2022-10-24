@@ -34,8 +34,6 @@ function ChannelManager() {
 
   const channelData = useAppSelector(selectChannel);
 
-  console.log('Channel Dataaaa', channelData);
-
   const dates = [];
 
   for (let index = 0; index < channelData.dates.length; index++) {
@@ -323,8 +321,6 @@ function ChannelManager() {
               key: 'name',
               width: '25%',
               render: (value: any, record: any, index: number) => {
-                console.log('Text', value, record);
-
                 if (index === 0) {
                   return (
                     <>
@@ -444,8 +440,6 @@ function ChannelManager() {
               key: 'age',
               width: '12.5%',
               render: (value: any, record: object, index: number) => {
-                console.log(value, record);
-
                 if (index === 2) {
                   return (
                     <div>
@@ -660,8 +654,6 @@ function ChannelManager() {
                 dataSource={data}
                 pagination={false}
                 rowClassName={(record: object, index: number) => {
-                  console.log('record', record);
-
                   if (index > 1) {
                     return 'green';
                   }

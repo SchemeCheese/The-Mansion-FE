@@ -25,7 +25,6 @@ function SelectDiskModal({ saleDetailIds, setIsModalOpen, visible }: Props) {
 
   const handleButtonSubmit = () => {
     setIsModalOpen(false);
-    console.log('handleButtonSubmit', saleDetailIds, diskSelected);
     dispatch(
       changeDiskAction({
         payload: {

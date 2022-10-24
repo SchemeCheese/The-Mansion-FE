@@ -48,8 +48,7 @@ function Create() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const rowSelection = {
-    onChange: (newSelectedRowKeys: any, selectedRows: any) => {
-      console.log(`selectedRowKeys: ${newSelectedRowKeys}`, 'selectedRows: ', selectedRows);
+    onChange: (newSelectedRowKeys: any) => {
       setSelectedRowKeys(newSelectedRowKeys);
     },
     getCheckboxProps: (record: any) => ({
@@ -159,8 +158,6 @@ function Create() {
     },
     0,
   );
-
-  console.log('totall Room', roomTotalForm);
 
   return (
     <>

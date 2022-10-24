@@ -27,8 +27,6 @@ function GuestList({ guests, reservationDetailId }: Props) {
   };
 
   const data = guests.map((item: any) => {
-    console.log('Iteeeemm', item);
-
     return {
       key: item.id,
       name: item.name,

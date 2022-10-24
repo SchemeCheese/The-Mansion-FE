@@ -250,8 +250,6 @@ function ReservationDetail() {
         },
       }),
     );
-
-    console.log('EEEE ', e);
   };
 
   const updateReservationData = useAppSelector(selectUpdateReservation);

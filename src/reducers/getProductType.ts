@@ -12,10 +12,9 @@ export default {
   getProductType: createReducer<ProductTypeState>(getProductTypeState, builder => {
     builder
       .addCase(productType, () => {
-        console.log('productType Reduce');
+        console.log('');
       })
       .addCase(productTypeFinish, (draft, { payload }) => {
-        console.log('Finish', payload);
         draft.data = payload.data;
       });
   }),

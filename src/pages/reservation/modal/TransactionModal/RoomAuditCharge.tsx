@@ -80,7 +80,6 @@ function RoomAuditCharge({ reservationDetailId, reservationId, setIsModalOpen, v
 
   const rowSelection = {
     onChange: (selectedRowKeys: React.Key[], newSelectedRows: any) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', newSelectedRows);
       setSelectedRows(newSelectedRows);
     },
   };

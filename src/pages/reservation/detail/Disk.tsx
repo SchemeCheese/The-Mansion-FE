@@ -47,8 +47,6 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       title: '',
       dataIndex: 'delete',
       render: (value, record) => {
-        console.log('valueeee', value);
-
         return (
           <svg
             fill="none"
