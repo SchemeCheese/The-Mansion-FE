@@ -244,9 +244,8 @@ export interface SearchScheduleState {
 export interface FetchChannelState {
   channels: Array<Record<string, any>>;
   dates: Array<Record<string, any>>;
+  fromDate: string;
   is_searching: boolean;
-  rate_type: string;
-  start_date: string;
 }
 
 export interface SearchAvailableScheduleState {

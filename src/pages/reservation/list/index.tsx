@@ -81,8 +81,7 @@ function Reservation() {
     if (activeKey === '4') {
       dispatch(
         fetchChannelsAction({
-          start_date: '',
-          rate_type: '',
+          fromDate: moment().format('YYYY-MM-DD'),
         }),
       );
     }

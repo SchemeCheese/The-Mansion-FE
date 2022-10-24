@@ -52,7 +52,7 @@ export const ProductTypeEndpoint = {
 };
 
 export const ChannelEndpoint = {
-  GET_LIST: 'channel-manager',
+  GET_LIST: 'api/v1/channels',
 };
 
 export const TransactionEndpoint = {

@@ -8,8 +8,7 @@ export const channelState = {
   channels: [],
   dates: [],
   is_searching: false,
-  rate_type: '',
-  start_date: '',
+  fromDate: '',
 };
 
 export default {
@@ -17,8 +16,7 @@ export default {
     builder
       .addCase(fetchChannelsAction, (draft, { payload }) => {
         draft.is_searching = true;
-        draft.start_date = payload.start_date;
-        draft.rate_type = payload.rate_type;
+        draft.fromDate = payload.fromDate;
       })
       .addCase(fetchChannelsSuccessAction, (draft, { payload }) => {
         draft.channels = payload.channels;
