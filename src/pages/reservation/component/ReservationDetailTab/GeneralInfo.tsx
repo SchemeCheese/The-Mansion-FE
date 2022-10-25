@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, Col, DatePicker, Form, message, Row, Select, Spin, TimePicker } from 'antd';
+import { Checkbox, Col, DatePicker, message, Row, Select, Spin, TimePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import { selectUpdateGeneralInfo } from 'selectors';
@@ -86,6 +86,12 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
       message.success('Update general info successfully!');
+
+      dispatch(
+        getReservation({
+          reservation_id: reservationId,
+        }),
+      );
 
       dispatch(
         getReservationDetail({
