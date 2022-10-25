@@ -29,11 +29,12 @@ interface Props {
 function GeneralInfo({ reservationDetailId, reservationId }: Props) {
   const { t } = useTranslation();
   const [generalInfoState, setGeneralInfoState] = useState<any>('');
+  const [isUpdateReservationDetail, setIsUpdateReservationDetail] = useState(false);
   const dispatch = useDispatch();
   const updateGeneralInfoData = useAppSelector(selectUpdateGeneralInfo);
   const { changed } = useTreeChanges(updateGeneralInfoData);
   const reservationDetailInfo: any = useSelector<RootState>(
-    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
+    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary,
   );
   const roomTypes: any = useSelector<RootState>(
     ({ getRoomType: getRoomTypeTemporary }) => getRoomTypeTemporary.data,
@@ -48,42 +49,44 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
   });
 
   useEffect(() => {
+    const { data } = reservationDetailInfo;
     const dataReservationDetailInfo = {
-      checkin_date: reservationDetailInfo.checkin,
-      checkout_date: reservationDetailInfo.checkout,
+      checkin_date: data.checkin,
+      checkout_date: data.checkout,
       reservation_id: reservationId,
       reservation_detail_id: reservationDetailId,
-      room_type: reservationDetailInfo.room_type,
-      adults: reservationDetailInfo.adults ?? 0,
-      child: reservationDetailInfo.child ?? 0,
-      baby: reservationDetailInfo.baby ?? 0,
-      note: reservationDetailInfo.note,
-      checkin_time: reservationDetailInfo.checkin_time,
-      checkout_time: reservationDetailInfo.checkout_time,
-      pickup_time: reservationDetailInfo.pickup_time,
-      dropoff_time: reservationDetailInfo.dropoff_time,
-      transport_no_pickup: reservationDetailInfo.transport_no_pickup,
-      transport_no_dropoff: reservationDetailInfo.transport_no_dropoff,
-      early_check_in: reservationDetailInfo.early_check_in,
-      late_check_out: reservationDetailInfo.late_check_out,
-      honeymoon: reservationDetailInfo.honeymoon,
-      birthday: reservationDetailInfo.birthday,
-      pickup_required: reservationDetailInfo.pickup_required,
-      dropoff_required: reservationDetailInfo.dropoff_required,
+      room_type: data.room_type,
+      adults: data.adults ?? 0,
+      child: data.child ?? 0,
+      baby: data.baby ?? 0,
+      note: data.note,
+      checkin_time: data.checkin_time,
+      checkout_time: data.checkout_time,
+      pickup_time: data.pickup_time,
+      dropoff_time: data.dropoff_time,
+      transport_no_pickup: data.transport_no_pickup,
+      transport_no_dropoff: data.transport_no_dropoff,
+      early_check_in: data.early_check_in,
+      late_check_out: data.late_check_out,
+      honeymoon: data.honeymoon,
+      birthday: data.birthday,
+      pickup_required: data.pickup_required,
+      dropoff_required: data.dropoff_required,
     };
 
     setGeneralInfoState(dataReservationDetailInfo);
+    setIsUpdateReservationDetail(true);
   }, [reservationDetailInfo]);
+  useEffect(() => {
+    if (reservationDetailInfo.is_finish === false) {
+      setIsUpdateReservationDetail(false);
+    }
+  }, [reservationDetailInfo.is_finish]);
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
       message.success('Update general info successfully!');
 
-      dispatch(
-        getReservation({
-          reservation_id: reservationId,
-        }),
-      );
       dispatch(
         getReservationDetail({
           reservation_id: reservationId,
@@ -144,249 +147,321 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
     return <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />;
   }
 
-  return (
+  return reservationDetailInfo.is_finish && isUpdateReservationDetail === true ? (
     <Row style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
       <Col span={24} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
         <span style={{ paddingRight: 15 }}>{t('common.Created Date')}: </span>
         <span>
-          {reservationDetailInfo && moment(reservationDetailInfo.created_date).format('DD/MM/YYYY')}
+          {reservationDetailInfo &&
+            moment(reservationDetailInfo.data.created_date).format('DD/MM/YYYY')}
         </span>
         <PattonButton onClick={() => handleUpdateGeneralInfo()} style={{ float: 'right' }}>
           {t('common.Update')}
         </PattonButton>
       </Col>
       <Col span={8}>
-        <Form.Item label={t('reservation.Room Type.title')} name="room_type">
-          <Select
-            allowClear
-            defaultValue={generalInfoState?.room_type?.toString()}
-            onChange={value => handleChangeSelect(value, 'room_type')}
-            placeholder={t('reservation.Room Type.placeholder')}
-          >
-            {roomTypeOption}
-          </Select>
-        </Form.Item>
-        <Form.Item label={t('reservation.Adults.title')} name="adults">
-          <Select
-            defaultValue={generalInfoState?.adults?.toString()}
-            onChange={value => handleChangeSelect(value, 'adults')}
-          >
-            <Option value="0">0</Option>
-            <Option value="1">1</Option>
-            <Option value="2">2</Option>
-            <Option value="3">3</Option>
-            <Option value="4">4</Option>
-            <Option value="5">5</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label={t('reservation.Child.title')} name="child">
-          <Select
-            defaultValue={generalInfoState?.child?.toString()}
-            onChange={value => handleChangeSelect(value, 'child')}
-          >
-            <Option value="0">0</Option>
-            <Option value="1">1</Option>
-            <Option value="2">2</Option>
-            <Option value="3">3</Option>
-            <Option value="4">4</Option>
-            <Option value="5">5</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label={t('reservation.Baby.title')} name="baby">
-          <Select
-            defaultValue={generalInfoState?.baby?.toString()}
-            onChange={value => handleChangeSelect(value, 'baby')}
-          >
-            <Option value="0">0</Option>
-            <Option value="1">1</Option>
-            <Option value="2">2</Option>
-            <Option value="3">3</Option>
-            <Option value="4">4</Option>
-            <Option value="5">5</Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label={t('reservation.Notes.title')} name="note_general_info">
-          <TextArea
-            defaultValue={generalInfoState.note}
-            onChange={event => handleChangeInput(event, 'note')}
-            placeholder={t('reservation.Notes.placeholder')}
-            rows={5}
-          />
-        </Form.Item>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Room Type.title')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Select
+              allowClear
+              defaultValue={generalInfoState?.room_type?.toString()}
+              onChange={value => handleChangeSelect(value, 'room_type')}
+              placeholder={t('reservation.Room Type.placeholder')}
+              style={{ width: '100%' }}
+            >
+              {roomTypeOption}
+            </Select>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Adults.title')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Select
+              defaultValue={generalInfoState?.adults?.toString()}
+              onChange={value => handleChangeSelect(value, 'adults')}
+              style={{ width: '100%' }}
+            >
+              <Option value="0">0</Option>
+              <Option value="1">1</Option>
+              <Option value="2">2</Option>
+              <Option value="3">3</Option>
+              <Option value="4">4</Option>
+              <Option value="5">5</Option>
+            </Select>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Child.title')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Select
+              defaultValue={generalInfoState?.child?.toString()}
+              onChange={value => handleChangeSelect(value, 'child')}
+              style={{ width: '100%' }}
+            >
+              <Option value="0">0</Option>
+              <Option value="1">1</Option>
+              <Option value="2">2</Option>
+              <Option value="3">3</Option>
+              <Option value="4">4</Option>
+              <Option value="5">5</Option>
+            </Select>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Baby.title')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Select
+              defaultValue={generalInfoState?.baby?.toString()}
+              onChange={value => handleChangeSelect(value, 'baby')}
+              style={{ width: '100%' }}
+            >
+              <Option value="0">0</Option>
+              <Option value="1">1</Option>
+              <Option value="2">2</Option>
+              <Option value="3">3</Option>
+              <Option value="4">4</Option>
+              <Option value="5">5</Option>
+            </Select>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Notes.title')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <TextArea
+              defaultValue={generalInfoState.note}
+              onChange={event => handleChangeInput(event, 'note')}
+              placeholder={t('reservation.Notes.placeholder')}
+              rows={5}
+            />
+          </Col>
+        </Row>
       </Col>
       <Col span={8}>
-        <Form.Item label={t('reservation.Checkin')} name="checkin_date">
-          <DatePicker
-            defaultValue={moment(generalInfoState.checkin_date, formatDate)}
-            onChange={date => handleChangeDateTime(date, 'checkin_date', '')}
-            style={{
-              height: 32,
-              borderRadius: 4,
-              marginRight: 11,
-              width: '100%',
-            }}
-          />
-        </Form.Item>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Checkin')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <DatePicker
+              defaultValue={moment(generalInfoState.checkin_date, formatDate)}
+              onChange={date => handleChangeDateTime(date, 'checkin_date', '')}
+              style={{
+                height: 32,
+                borderRadius: 4,
+                marginRight: 11,
+                width: '100%',
+              }}
+            />
+          </Col>
+        </Row>
 
-        <Form.Item label={t('reservation.Checkin Time')} name="checkin_time">
-          <TimePicker
-            defaultValue={
-              generalInfoState.checkin_time
-                ? moment(generalInfoState.checkin_time, format)
-                : undefined
-            }
-            format={format}
-            onChange={date => handleChangeDateTime(date, 'checkin_time', 'time')}
-            style={{
-              height: 32,
-              borderRadius: 4,
-              marginRight: 11,
-              width: '100%',
-            }}
-          />
-        </Form.Item>
-        <Form.Item name="early_check_in" style={{ marginBottom: 12 }}>
-          <Checkbox
-            checked={checkActiveCheckBox(generalInfoState.early_check_in)}
-            onChange={event => handleChangeCheckBox(event.target, 'early_check_in')}
-          >
-            {t('reservation.Early Checkin')}
-          </Checkbox>
-        </Form.Item>
-        <Form.Item name="honeymoon" style={{ marginBottom: 12 }}>
-          <Checkbox
-            checked={checkActiveCheckBox(generalInfoState.honeymoon)}
-            onChange={event => handleChangeCheckBox(event.target, 'honeymoon')}
-          >
-            {t('reservation.Honeymoon Setup')}
-          </Checkbox>
-        </Form.Item>
-        <Form.Item name="pickup_required" style={{ marginBottom: 12 }}>
-          <Checkbox
-            checked={checkActiveCheckBox(generalInfoState.pickup_required)}
-            onChange={event => handleChangeCheckBox(event.target, 'pickup_required')}
-          >
-            {t('reservation.Pickup Request')}
-          </Checkbox>
-        </Form.Item>
-        <Form.Item
-          label={t('reservation.Pickup Time')}
-          name="pickup_time"
-          style={{ marginTop: 55 }}
-        >
-          <TimePicker
-            defaultValue={
-              generalInfoState.pickup_time
-                ? moment(generalInfoState.pickup_time, format)
-                : undefined
-            }
-            format={format}
-            onChange={date => handleChangeDateTime(date, 'pickup_time', 'time')}
-            style={{
-              height: 32,
-              borderRadius: 4,
-              marginRight: 11,
-              width: '100%',
-            }}
-          />
-        </Form.Item>
-        <Form.Item label={t('reservation.Pickup Transport Code.title')} name="transport_no_pickup">
-          <MInput
-            defaultValue={generalInfoState.transport_no_pickup}
-            onChange={event => handleChangeInput(event, 'transport_no_pickup')}
-            placeholder={t('reservation.Pickup Transport Code.placeholder')}
-          />
-        </Form.Item>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Checkin Time')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <TimePicker
+              defaultValue={
+                generalInfoState.checkin_time
+                  ? moment(generalInfoState.checkin_time, format)
+                  : undefined
+              }
+              format={format}
+              onChange={date => handleChangeDateTime(date, 'checkin_time', 'time')}
+              style={{
+                height: 32,
+                borderRadius: 4,
+                marginRight: 11,
+                width: '100%',
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Checkbox
+              checked={checkActiveCheckBox(generalInfoState.early_check_in)}
+              onChange={event => handleChangeCheckBox(event.target, 'early_check_in')}
+            >
+              {t('reservation.Early Checkin')}
+            </Checkbox>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Checkbox
+              checked={checkActiveCheckBox(generalInfoState.honeymoon)}
+              onChange={event => handleChangeCheckBox(event.target, 'honeymoon')}
+            >
+              {t('reservation.Honeymoon Setup')}
+            </Checkbox>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Checkbox
+              checked={checkActiveCheckBox(generalInfoState.pickup_required)}
+              onChange={event => handleChangeCheckBox(event.target, 'pickup_required')}
+            >
+              {t('reservation.Pickup Request')}
+            </Checkbox>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8, paddingTop: 30 }}>
+            {t('reservation.Pickup Time')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <TimePicker
+              defaultValue={
+                generalInfoState.pickup_time
+                  ? moment(generalInfoState.pickup_time, format)
+                  : undefined
+              }
+              format={format}
+              onChange={date => handleChangeDateTime(date, 'pickup_time', 'time')}
+              style={{
+                height: 32,
+                borderRadius: 4,
+                marginRight: 11,
+                width: '100%',
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Pickup Transport Code.title')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <MInput
+              defaultValue={generalInfoState.transport_no_pickup}
+              onChange={event => handleChangeInput(event, 'transport_no_pickup')}
+              placeholder={t('reservation.Pickup Transport Code.placeholder')}
+            />
+          </Col>
+        </Row>
       </Col>
       <Col span={8}>
-        <Form.Item label={t('reservation.Checkout')} name="checkout_date">
-          <DatePicker
-            defaultValue={moment(generalInfoState.checkout_date ?? '2017-08-08', formatDate)}
-            onChange={date => handleChangeDateTime(date, 'checkout_date', '')}
-            style={{
-              height: 32,
-              borderRadius: 4,
-              marginRight: 11,
-              width: '100%',
-            }}
-          />
-        </Form.Item>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Checkout')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <DatePicker
+              defaultValue={moment(generalInfoState.checkout_date ?? '2017-08-08', formatDate)}
+              onChange={date => handleChangeDateTime(date, 'checkout_date', '')}
+              style={{
+                height: 32,
+                borderRadius: 4,
+                marginRight: 11,
+                width: '100%',
+              }}
+            />
+          </Col>
+        </Row>
 
-        <Form.Item label={t('reservation.Checkout Time')} name="checkout_time">
-          <TimePicker
-            defaultValue={
-              generalInfoState.checkout_time
-                ? moment(generalInfoState.checkout_time, format)
-                : undefined
-            }
-            format={format}
-            onChange={date => handleChangeDateTime(date, 'checkout_time', 'time')}
-            style={{
-              height: 32,
-              borderRadius: 4,
-              marginRight: 11,
-              width: '100%',
-            }}
-          />
-        </Form.Item>
-        <Form.Item name="late_check_out" style={{ marginBottom: 12 }}>
-          <Checkbox
-            checked={checkActiveCheckBox(generalInfoState.late_check_out)}
-            onChange={event => handleChangeCheckBox(event.target, 'late_check_out')}
-          >
-            {t('reservation.Late Checkout')}
-          </Checkbox>
-        </Form.Item>
-        <Form.Item name="birthday" style={{ marginBottom: 12 }}>
-          <Checkbox
-            checked={checkActiveCheckBox(generalInfoState.birthday)}
-            onChange={event => handleChangeCheckBox(event.target, 'birthday')}
-          >
-            {t('reservation.Birthday Setup')}
-          </Checkbox>
-        </Form.Item>
-        <Form.Item name="dropoff_required" style={{ marginBottom: 12 }}>
-          <Checkbox
-            checked={checkActiveCheckBox(generalInfoState.dropoff_required)}
-            onChange={event => handleChangeCheckBox(event.target, 'dropoff_required')}
-          >
-            {t('reservation.Dropoff Request')}
-          </Checkbox>
-        </Form.Item>
-        <Form.Item
-          label={t('reservation.Dropoff Time')}
-          name="dropoff_time"
-          style={{ marginTop: 55 }}
-        >
-          <TimePicker
-            defaultValue={
-              generalInfoState.dropoff_time
-                ? moment(generalInfoState.dropoff_time, format)
-                : undefined
-            }
-            format={format}
-            onChange={date => handleChangeDateTime(date, 'dropoff_time', 'time')}
-            style={{
-              height: 32,
-              borderRadius: 4,
-              marginRight: 11,
-              width: '100%',
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          label={t('reservation.Dropoff Transport Code.title')}
-          name="transport_no_dropoff"
-        >
-          <MInput
-            defaultValue={generalInfoState.transport_no_dropoff}
-            onChange={event => handleChangeInput(event, 'transport_no_dropoff')}
-            placeholder={t('reservation.Dropoff Transport Code.placeholder')}
-          />
-        </Form.Item>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Checkout Time')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <TimePicker
+              defaultValue={
+                generalInfoState.checkout_time
+                  ? moment(generalInfoState.checkout_time, format)
+                  : undefined
+              }
+              format={format}
+              onChange={date => handleChangeDateTime(date, 'checkout_time', 'time')}
+              style={{
+                height: 32,
+                borderRadius: 4,
+                marginRight: 11,
+                width: '100%',
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Checkbox
+              checked={checkActiveCheckBox(generalInfoState.late_check_out)}
+              onChange={event => handleChangeCheckBox(event.target, 'late_check_out')}
+            >
+              {t('reservation.Late Checkout')}
+            </Checkbox>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Checkbox
+              checked={checkActiveCheckBox(generalInfoState.birthday)}
+              onChange={event => handleChangeCheckBox(event.target, 'birthday')}
+            >
+              {t('reservation.Birthday Setup')}
+            </Checkbox>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <Checkbox
+              checked={checkActiveCheckBox(generalInfoState.dropoff_required)}
+              onChange={event => handleChangeCheckBox(event.target, 'dropoff_required')}
+            >
+              {t('reservation.Dropoff Request')}
+            </Checkbox>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8, paddingTop: 30 }}>
+            {t('reservation.Dropoff Time')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <TimePicker
+              defaultValue={
+                generalInfoState.dropoff_time
+                  ? moment(generalInfoState.dropoff_time, format)
+                  : undefined
+              }
+              format={format}
+              onChange={date => handleChangeDateTime(date, 'dropoff_time', 'time')}
+              style={{
+                height: 32,
+                borderRadius: 4,
+                marginRight: 11,
+                width: '100%',
+              }}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24} style={{ paddingBottom: 8 }}>
+            {t('reservation.Dropoff Transport Code.title')}
+          </Col>
+          <Col span={23} style={{ paddingBottom: 24 }}>
+            <MInput
+              defaultValue={generalInfoState.transport_no_dropoff}
+              onChange={event => handleChangeInput(event, 'transport_no_dropoff')}
+              placeholder={t('reservation.Dropoff Transport Code.placeholder')}
+            />
+          </Col>
+        </Row>
       </Col>
     </Row>
-  );
+  ) : null;
 }
 
 export default GeneralInfo;
