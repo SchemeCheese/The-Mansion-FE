@@ -19,6 +19,7 @@ import getReservationNumber, { reservationNumberState } from './getReservationNu
 import getRoomType, { roomTypeState } from './getRoomType';
 import github, { githubState } from './github';
 import product, { productSearchState } from './product';
+import resendEmailReservation, { resendEmailReservationState } from './resendEmailReservation';
 import reservation, { reservationSearchState } from './reservation';
 import searchAvailableSchedule, { searchAvailableScheduleState } from './searchAvailableSchedule';
 import searchRoom, { roomSearchState } from './searchRoom';
@@ -61,6 +62,7 @@ export const initialState = {
   changeDisk: changeDiskState,
   createGuest: createGuestState,
   updateNoteReservationDetail: updateNoteReservationDetailState,
+  resendEmailReservation: resendEmailReservationState,
 };
 
 export default {
@@ -93,4 +95,5 @@ export default {
   ...changeDisk,
   ...createGuest,
   ...updateNoteReservationDetail,
+  ...resendEmailReservation,
 };

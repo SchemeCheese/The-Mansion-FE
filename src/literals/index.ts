@@ -76,6 +76,8 @@ export const ActionTypes = keyMirror({
   RESERVATION_DETAIL_UPDATE_NOTE: undefined,
   RESERVATION_DETAIL_UPDATE_NOTE_SUCCESS: undefined,
   RESERVATION_DETAIL_UPDATE_NOTE_FAILURE: undefined,
+  RESERVATION_RESEND_EMAIL: undefined,
+  RESERVATION_RESEND_EMAIL_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

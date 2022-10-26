@@ -153,3 +153,7 @@ export interface UpdateNoteReservationDetailPayload {
 export interface UpdateNoteReservationDetail {
   payload: UpdateNoteReservationDetailPayload;
 }
+
+export interface ResendEmailReservation {
+  reservation_id: string;
+}

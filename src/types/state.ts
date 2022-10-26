@@ -218,6 +218,11 @@ export interface ReservationTypeState {
   is_finish: boolean;
 }
 
+export interface ResendEmailReservationState {
+  reservation_id: string;
+  status: string;
+}
+
 export interface RoomTypeState {
   data: Record<string, any>;
   is_finish: boolean;
@@ -315,6 +320,7 @@ export interface RootState {
   getRoomType: RoomTypeState;
   github: GitHubState;
   product: ProductSearchState;
+  resendEmailReservation: ResendEmailReservationState;
   reservation: ReservationSearchState;
   searchAvailableSchedule: SearchAvailableScheduleState;
   searchRoom: RoomSearchState;
