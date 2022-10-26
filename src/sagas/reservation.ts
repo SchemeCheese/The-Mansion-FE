@@ -21,6 +21,8 @@ import {
   getReservationFinish,
   getReservationNumber,
   getReservationNumberFinish,
+  resendEmailReservationAction,
+  resendEmailReservationSuccessAction,
   searchReservation,
   searchReservationFinish,
   updateGeneralInfo,
@@ -373,6 +375,34 @@ export function* postUpdateNoteReservationDetailSaga({
   }
 }
 
+export function* getResendEmailReservationSaga({
+  payload,
+}: ReturnType<typeof resendEmailReservationAction>) {
+  try {
+    let success = '';
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.RESEND_EMAIL)}/${
+        payload.reservation_id
+      }/resend-confirmation-email`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    if (success) {
+      yield put(resendEmailReservationSuccessAction());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Something went wrong!');
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
@@ -387,5 +417,6 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_CANCEL_RESERVATION_DETAIL, postCancelReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_GENERAL_INFO_UPDATE, postUpdateGeneralInfoSaga),
     takeLatest(ActionTypes.RESERVATION_DETAIL_UPDATE_NOTE, postUpdateNoteReservationDetailSaga),
+    takeLatest(ActionTypes.RESERVATION_RESEND_EMAIL, getResendEmailReservationSaga),
   ]);
 }

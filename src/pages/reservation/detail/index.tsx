@@ -19,7 +19,7 @@ import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
-import { selectUpdateReservation } from 'selectors';
+import { selectResendEmailReservation, selectUpdateReservation } from 'selectors';
 import styled from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -28,6 +28,7 @@ import { useAppSelector } from 'modules/hooks';
 
 import {
   getReservation,
+  resendEmailReservationAction,
   resetReservation,
   resetReservationDetail,
   searchRoomReset,
@@ -252,8 +253,18 @@ function ReservationDetail() {
     );
   };
 
+  const handleResendConfirmationEmail = () => {
+    dispatch(
+      resendEmailReservationAction({
+        reservation_id: id ?? '',
+      }),
+    );
+  };
+
   const updateReservationData = useAppSelector(selectUpdateReservation);
+  const resendEmailReservationData = useAppSelector(selectResendEmailReservation);
   const { changed } = useTreeChanges(updateReservationData);
+  const { changed: resendEmailChanged } = useTreeChanges(resendEmailReservationData);
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
@@ -266,6 +277,12 @@ function ReservationDetail() {
       );
     }
   }, [changed]);
+
+  useEffect(() => {
+    if (resendEmailChanged('status', 'SUCCESS')) {
+      message.success('Resend email successfully!');
+    }
+  }, [resendEmailChanged]);
 
   useEffect(() => {
     setRoomCondition({
@@ -335,7 +352,12 @@ function ReservationDetail() {
               <Option value="pdf">PDF</Option>
               <Option value="docx">Docx</Option>
             </Select>
-            <MButton>{t('common.Resend Email')}</MButton>
+            <MButton
+              disabled={Boolean(reservationRedux.booker_email)}
+              onClick={handleResendConfirmationEmail}
+            >
+              {t('common.Resend Email')}
+            </MButton>
             <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
           </Space>
         </Col>

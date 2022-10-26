@@ -10,6 +10,7 @@ import {
   CancelReservationDetail,
   GetReservationFinishPayload,
   GetReservationPayload,
+  ResendEmailReservation,
   ReservationCreate,
   ReservationDetail,
   ReservationDetailFinish,
@@ -124,4 +125,13 @@ export const updateNoteReservationDetail = createAction(
 
 export const updateNoteReservationDetailSuccess = createAction(
   ActionTypes.RESERVATION_DETAIL_UPDATE_NOTE_SUCCESS,
+);
+
+export const resendEmailReservationAction = createAction(
+  ActionTypes.RESERVATION_RESEND_EMAIL,
+  (payload: ResendEmailReservation) => actionPayload(payload),
+);
+
+export const resendEmailReservationSuccessAction = createAction(
+  ActionTypes.RESERVATION_RESEND_EMAIL_SUCCESS,
 );

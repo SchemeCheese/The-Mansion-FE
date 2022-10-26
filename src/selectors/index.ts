@@ -101,3 +101,8 @@ export const selectUpdateNoteReservationDetail = createSelector(
   (state: RootState) => state.updateNoteReservationDetail,
   updateNoteReservationDetail => updateNoteReservationDetail,
 );
+
+export const selectResendEmailReservation = createSelector(
+  (state: RootState) => state.resendEmailReservation,
+  resendEmailReservation => resendEmailReservation,
+);
