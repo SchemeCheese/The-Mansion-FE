@@ -24,12 +24,12 @@ import {
   UploadFile,
 } from 'antd';
 import moment from 'moment';
-import { selectCreateGuest } from 'selectors';
+import { selectCreateGuest, selectRemoveGuest, selectUpdateGuest } from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { createGuest } from 'actions';
+import { createGuest, getReservationDetail, updateGuestAction } from 'actions';
 
 const { Option } = Select;
 
@@ -45,12 +45,20 @@ const getBase64 = (file: any) =>
   });
 
 interface Props {
+  currentGuest: any;
   isModalVisible: boolean;
   reservationDetailId: string;
+  reservationId: string;
   setIsModalVisible: (value: boolean) => void;
 }
 
-function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisible }: Props) {
+function CreateGuestModal({
+  currentGuest,
+  isModalVisible,
+  reservationDetailId,
+  reservationId,
+  setIsModalVisible,
+}: Props) {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
 
@@ -60,30 +68,101 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
 
   const onFinish = (values: any) => {
     setIsModalVisible(false);
-    dispatch(
-      createGuest({
-        payload: {
-          ...values,
-          operator_code: 'the_mansion',
-          reservation_detail_id: reservationDetailId,
-          expiration_date_passport: moment(values.expiration_date_passport).format('YYYY-MM-DD'),
-          expiration_date_visa: moment(values.expiration_date_visa).format('YYYY-MM-DD'),
-          date_of_issue: moment(values.date_of_issue).format('YYYY-MM-DD'),
-          date_of_birth: moment(values.date_of_birth).format('YYYY-MM-DD'),
-        },
-      }),
-    );
+
+    if (currentGuest) {
+      dispatch(
+        updateGuestAction({
+          payload: {
+            ...values,
+            guest_id: currentGuest.id,
+            operator_code: 'the_mansion',
+            reservation_detail_id: reservationDetailId,
+            expiration_date_of_passport: values.expiration_date_of_passport
+              ? values.expiration_date_of_passport.format('YYYY-MM-DD')
+              : null,
+            expiration_date_of_visa: values.expiration_date_of_visa
+              ? values.expiration_date_of_visa.format('YYYY-MM-DD')
+              : null,
+            date_of_issue_of_passport: values.date_of_issue_of_passport
+              ? values.date_of_issue_of_passport.format('YYYY-MM-DD')
+              : null,
+            date_of_birth: values.date_of_birth ? values.date_of_birth.format('YYYY-MM-DD') : null,
+          },
+        }),
+      );
+    } else {
+      dispatch(
+        createGuest({
+          payload: {
+            ...values,
+            operator_code: 'the_mansion',
+            reservation_detail_id: reservationDetailId,
+            expiration_date_of_passport: values.expiration_date_of_passport
+              ? values.expiration_date_of_passport.format('YYYY-MM-DD')
+              : null,
+            expiration_date_of_visa: values.expiration_date_of_visa
+              ? values.expiration_date_of_visa.format('YYYY-MM-DD')
+              : null,
+            date_of_issue_of_passport: values.date_of_issue_of_passport
+              ? values.date_of_issue_of_passport.format('YYYY-MM-DD')
+              : null,
+            date_of_birth: values.date_of_birth ? values.date_of_birth.format('YYYY-MM-DD') : null,
+          },
+        }),
+      );
+    }
   };
 
   const createGuestData = useAppSelector(selectCreateGuest);
+  const removeGuestData = useAppSelector(selectRemoveGuest);
+  const updateGuestData = useAppSelector(selectUpdateGuest);
 
   const { changed } = useTreeChanges(createGuestData);
+  const { changed: removeGuestChanged } = useTreeChanges(removeGuestData);
+  const { changed: updateGuestChanged } = useTreeChanges(updateGuestData);
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
       message.success('Add guest successfully!');
+
+      form.resetFields();
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
     }
   }, [changed]);
+
+  useEffect(() => {
+    if (updateGuestChanged('status', 'SUCCESS')) {
+      message.success('Update guest successfully!');
+
+      form.resetFields();
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
+    }
+  }, [updateGuestChanged]);
+
+  useEffect(() => {
+    if (removeGuestChanged('status', 'SUCCESS')) {
+      message.success('Remove guest successfully!');
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
+    }
+  }, [removeGuestChanged]);
 
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
@@ -153,6 +232,50 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
     </div>
   );
 
+  useEffect(() => {
+    form.setFieldsValue({
+      first_name: currentGuest?.first_name,
+      last_name: currentGuest?.last_name,
+      client_kind: currentGuest?.client_kind ? currentGuest?.client_kind.toString() : '1',
+      client_rank: currentGuest?.client_rank?.toString() ?? null,
+      passport_number: currentGuest?.passport_number ?? null,
+      date_of_issue_of_passport: currentGuest?.date_of_issue_of_passport
+        ? moment(currentGuest.date_of_issue_of_passport)
+        : null,
+      email_address1: currentGuest?.email_address1 ?? null,
+      telephone_number1: currentGuest?.telephone_number1 ?? null,
+      date_of_birth: currentGuest?.date_of_birth ? moment(currentGuest.date_of_birth) : null,
+      nationality: currentGuest?.nationality,
+      gender: currentGuest?.gender?.toString() ?? null,
+      expiration_date_of_visa: currentGuest?.expiration_date_of_visa
+        ? moment(currentGuest.expiration_date_of_visa)
+        : null,
+      expiration_date_of_passport: currentGuest?.expiration_date_of_passport
+        ? moment(currentGuest.expiration_date_of_passport)
+        : null,
+      language: currentGuest?.language?.toString() ?? null,
+      married: currentGuest?.married?.toString() ?? null,
+      is_smoker: currentGuest?.is_smoker ? currentGuest?.is_smoker.toString() : null,
+      email_address2: currentGuest?.email_address2 ?? null,
+      telephone_number2: currentGuest?.telephone_number2 ?? null,
+      address1: currentGuest?.address1 ?? null,
+      address2: currentGuest?.address2 ?? null,
+      zip_code: currentGuest?.zip_code ?? null,
+      currency_conversion_id: currentGuest?.currency_conversion_id
+        ? currentGuest?.currency_conversion_id.toString()
+        : null,
+      favorite_equipment1: currentGuest?.favorite_equipment1
+        ? currentGuest?.favorite_equipment1.toString()
+        : null,
+      favorite_equipment2: currentGuest?.favorite_equipment2
+        ? currentGuest?.favorite_equipment2.toString()
+        : null,
+      vat_company: currentGuest?.vat_company ?? null,
+      vat_address: currentGuest?.vat_address ?? null,
+      vat_tax: currentGuest?.vat_tax ?? null,
+    });
+  }, [currentGuest]);
+
   return (
     <>
       <Modal footer={null} onCancel={handleImgCancel} title={previewTitle} visible={previewVisible}>
@@ -182,9 +305,13 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
         <Form
           autoComplete="off"
           form={form}
-          initialValues={{
-            remember: true,
-          }}
+          // initialValues={{
+          //   first_name: currentGuest?.first_name ?? '',
+          //   client_kind: currentGuest?.client_kind ?? '1',
+          //   date_of_birth: undefined,
+          //   expiration_date_of_visa: undefined,
+          //   expiration_date_of_passport: undefined,
+          // }}
           labelCol={{
             span: 24,
           }}
@@ -197,10 +324,19 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
         >
           <Row>
             <Col span={9}>
-              <Form.Item label={t('guest.Guest Type')} name="client_kind">
-                <Select defaultValue="personal">
+              <Form.Item
+                label={t('guest.Guest Type')}
+                name="client_kind"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please select type!',
+                  },
+                ]}
+              >
+                <Select>
                   <Option value="1">Personal</Option>
-                  <Option value="2">female</Option>
+                  <Option value="2">Group</Option>
                 </Select>
               </Form.Item>
             </Col>
@@ -208,33 +344,54 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
               <Card bordered={false} size="small" title={t('common.General Informations')}>
                 <Row>
                   <Col span={8}>
-                    <Form.Item label={t('guest.First Name.title')} name="first_name">
+                    <Form.Item
+                      label={t('guest.First Name.title')}
+                      name="first_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Please input firstname!',
+                        },
+                      ]}
+                    >
                       <Input placeholder={t('guest.First Name.placeholder')} />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Last Name.title')} name="last_name">
+                    <Form.Item
+                      label={t('guest.Last Name.title')}
+                      name="last_name"
+                      rules={[
+                        {
+                          required: true,
+                          message: 'Please input lastname!',
+                        },
+                      ]}
+                    >
                       <Input placeholder={t('guest.Last Name.placeholder')} />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('guest.Rank.title')} name="client_rank">
                       <Select allowClear placeholder={t('guest.Rank.placeholder')}>
-                        <Option value="1">male</Option>
-                        <Option value="2">female</Option>
-                        <Option value="3">other</Option>
+                        <Option value="1">VIP</Option>
+                        <Option value="2">Dominant</Option>
+                        <Option value="4">General</Option>
+                        <Option value="9">Undesirable Guest</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Identity / Passport No.title')} name="passport_no">
+                    <Form.Item
+                      label={t('guest.Identity / Passport No.title')}
+                      name="passport_number"
+                    >
                       <Input placeholder={t('guest.Identity / Passport No.placeholder')} />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Date Of Issue')} name="date_of_issue">
+                    <Form.Item label={t('guest.Date Of Issue')} name="date_of_issue_of_passport">
                       <DatePicker
-                        defaultValue={moment('2017-08-08')}
                         style={{
                           height: 32,
                           borderRadius: 4,
@@ -246,10 +403,9 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('guest.Place Of Issue')} name="place_of_issue">
-                      <Select defaultValue="usa">
+                      <Select placeholder="Select place of isssue">
+                        <Option value="vn">VN</Option>
                         <Option value="usa">USA</Option>
-                        <Option value="female">female</Option>
-                        <Option value="other">other</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -273,7 +429,6 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
                   <Col span={8}>
                     <Form.Item label={t('common.Date Of Birth')} name="date_of_birth">
                       <DatePicker
-                        defaultValue={moment('2017-08-08')}
                         style={{
                           height: 32,
                           borderRadius: 4,
@@ -286,25 +441,22 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
                   <Col span={8}>
                     <Form.Item label={t('common.Nationality.title')} name="nationality">
                       <Select allowClear placeholder={t('common.Nationality.placeholder')}>
-                        <Option value="married">Married</Option>
-                        <Option value="female">female</Option>
-                        <Option value="other">other</Option>
+                        <Option value="vn">VN</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('common.Gender')} name="gender">
-                      <Select defaultValue="male">
+                      <Select placeholder="Select Gender">
                         <Option value="1">Male</Option>
-                        <Option value="2">female</Option>
-                        <Option value="0">other</Option>
+                        <Option value="2">Female</Option>
+                        <Option value="3">Undefined</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Visa Expire Date')} name="expiration_date_visa">
+                    <Form.Item label={t('guest.Visa Expire Date')} name="expiration_date_of_visa">
                       <DatePicker
-                        defaultValue={moment('2017-08-08')}
                         style={{
                           height: 32,
                           borderRadius: 4,
@@ -317,10 +469,9 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
                   <Col span={8}>
                     <Form.Item
                       label={t('guest.Passport Expire Date')}
-                      name="expiration_date_passport"
+                      name="expiration_date_of_passport"
                     >
                       <DatePicker
-                        defaultValue={moment('2017-08-08')}
                         style={{
                           height: 32,
                           borderRadius: 4,
@@ -332,19 +483,18 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('common.Language')} name="language">
-                      <Select defaultValue="english">
-                        <Option value="english">English</Option>
-                        <Option value="female">female</Option>
-                        <Option value="other">other</Option>
+                      <Select placeholder="Select Language">
+                        <Option value="1">Vietnamese</Option>
+                        <Option value="2">English</Option>
+                        <Option value="3">Japanese</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('guest.Marital Status')} name="married">
-                      <Select defaultValue="married">
-                        <Option value="1">Married</Option>
-                        <Option value="2">female</Option>
-                        <Option value="3">other</Option>
+                      <Select placeholder="Select status">
+                        <Option value="1">Not Married</Option>
+                        <Option value="2">Married</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -353,10 +503,9 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
                     <Row>
                       <Col span={12}>
                         <Form.Item label={t('guest.Smoking')} name="is_smoker">
-                          <Select defaultValue="no">
-                            <Option value="1">No smoking</Option>
-                            <Option value="2">female</Option>
-                            <Option value="3">other</Option>
+                          <Select placeholder="Select smoking">
+                            <Option value="1">Smoking</Option>
+                            <Option value="2">No smoking</Option>
                           </Select>
                         </Form.Item>
                       </Col>
@@ -403,29 +552,25 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('common.Currency')} name="currency_conversion_id">
-                      <Select defaultValue="usd">
-                        <Option value="1">USD</Option>
-                        <Option value="2">female</Option>
-                        <Option value="3">other</Option>
+                      <Select placeholder="Select currency">
+                        <Option value="2">VND</Option>
+                        <Option value="3">USD</Option>
+                        <Option value="4">JPY</Option>
                       </Select>
                     </Form.Item>
                   </Col>
 
                   <Col span={8}>
                     <Form.Item label={t('guest.Preferred Room Type 1')} name="favorite_equipment1">
-                      <Select defaultValue="alex">
+                      <Select placeholder="Select prefred room">
                         <Option value="1">Alex</Option>
-                        <Option value="2">female</Option>
-                        <Option value="3">other</Option>
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('guest.Preferred Room Type 2')} name="favorite_equipment2">
-                      <Select defaultValue="alex">
+                      <Select placeholder="Select prefred room">
                         <Option value="1">Alex</Option>
-                        <Option value="2">female</Option>
-                        <Option value="3">other</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -474,12 +619,12 @@ function CreateGuestModal({ isModalVisible, reservationDetailId, setIsModalVisib
               <Card bordered={false} size="small" title={t('common.Invoice Information')}>
                 <Row>
                   <Col span={16}>
-                    <Form.Item label={t('guest.Company Name.title')} name="company_name">
+                    <Form.Item label={t('guest.Company Name.title')} name="vat_company">
                       <Input placeholder={t('guest.Company Name.placeholder')} />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Tax Code.title')} name="tax_code">
+                    <Form.Item label={t('guest.Tax Code.title')} name="vat_tax">
                       <Input placeholder={t('guest.Tax Code.placeholder')} />
                     </Form.Item>
                   </Col>

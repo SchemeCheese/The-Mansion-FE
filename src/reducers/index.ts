@@ -19,12 +19,14 @@ import getReservationNumber, { reservationNumberState } from './getReservationNu
 import getRoomType, { roomTypeState } from './getRoomType';
 import github, { githubState } from './github';
 import product, { productSearchState } from './product';
+import removeGuest, { removeGuestState } from './removeGuest';
 import resendEmailReservation, { resendEmailReservationState } from './resendEmailReservation';
 import reservation, { reservationSearchState } from './reservation';
 import searchAvailableSchedule, { searchAvailableScheduleState } from './searchAvailableSchedule';
 import searchRoom, { roomSearchState } from './searchRoom';
 import searchSchedule, { searchScheduleState } from './searchSchedule';
 import updateGeneralInfo, { updateGeneralInfoState } from './updateGeneralInfo';
+import updateGuest, { updateGuestState } from './updateGuest';
 import updateNoteReservationDetail, {
   updateNoteReservationDetailState,
 } from './updateNoteReservationDetail';
@@ -63,6 +65,8 @@ export const initialState = {
   createGuest: createGuestState,
   updateNoteReservationDetail: updateNoteReservationDetailState,
   resendEmailReservation: resendEmailReservationState,
+  updateGuest: updateGuestState,
+  removeGuest: removeGuestState,
 };
 
 export default {
@@ -96,4 +100,6 @@ export default {
   ...createGuest,
   ...updateNoteReservationDetail,
   ...resendEmailReservation,
+  ...updateGuest,
+  ...removeGuest,
 };

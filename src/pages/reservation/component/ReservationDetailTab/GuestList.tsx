@@ -8,42 +8,62 @@ Main functions : Guest List Tab
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { Card, Col, Radio, Row, Typography } from 'antd';
 import CreateGuestModal from 'pages/reservation/modal/CreateGuestModal';
+
+import { removeGuestAction } from 'actions';
 
 const { Text, Title } = Typography;
 
 interface Props {
   guests: any;
   reservationDetailId: string;
+  reservationId: string;
 }
 
-function GuestList({ guests, reservationDetailId }: Props) {
+function GuestList({ guests, reservationDetailId, reservationId }: Props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [currentGuest, setCurrentGuest] = useState();
+
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const showModal = () => {
     setIsModalVisible(true);
   };
 
+  const showUpdateModal = (item: any) => {
+    setCurrentGuest(item);
+    setIsModalVisible(true);
+  };
+
+  const handleRemoveGuest = (item: any) => {
+    dispatch(
+      removeGuestAction({
+        payload: {
+          reservation_detail_id: reservationDetailId,
+          guest_id: item.id,
+        },
+      }),
+    );
+  };
+
   const data = guests.map((item: any) => {
     return {
+      ...item,
       key: item.id,
-      name: item.name,
-      id: item.id,
       check: false,
-      nationality: item.nationality,
-      place_of_issue: item.place_of_issue,
-      date: item.date,
-      expire: item.expire,
     };
   });
 
   return (
     <>
       <CreateGuestModal
+        currentGuest={currentGuest}
         isModalVisible={isModalVisible}
         reservationDetailId={reservationDetailId}
+        reservationId={reservationId}
         setIsModalVisible={setIsModalVisible}
       />
 
@@ -91,8 +111,12 @@ function GuestList({ guests, reservationDetailId }: Props) {
           <Col span={8}>
             <Card
               actions={[
-                <Text type="secondary">{t('common.Remove')}</Text>,
-                <Text type="secondary">{t('common.Update')}</Text>,
+                <Text onClick={() => handleRemoveGuest(value)} type="secondary">
+                  {t('common.Remove')}
+                </Text>,
+                <Text onClick={() => showUpdateModal(value)} type="secondary">
+                  {t('common.Update')}
+                </Text>,
               ]}
               className="guest-list-card"
               style={{

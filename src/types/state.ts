@@ -274,17 +274,33 @@ export interface ChangeDiskState {
   status: string;
 }
 
-export interface CreateGuestPayload {
+interface CreateGuestPayload {
   date_of_birth: string;
   date_of_issue: string;
   expiration_date_passport: string;
   expiration_date_visa: string;
+  guest_id?: string;
   operator_code: string;
+  reservation_detail_id?: string;
+}
+
+interface RemoveGuestPayload {
+  guest_id: string;
   reservation_detail_id: string;
 }
 
 export interface CreateGuestState {
   payload: CreateGuestPayload;
+  status: string;
+}
+
+export interface UpdateGuestState {
+  payload: CreateGuestPayload;
+  status: string;
+}
+
+export interface RemoveGuestState {
+  payload: RemoveGuestPayload;
   status: string;
 }
 
@@ -320,12 +336,14 @@ export interface RootState {
   getRoomType: RoomTypeState;
   github: GitHubState;
   product: ProductSearchState;
+  removeGuest: RemoveGuestState;
   resendEmailReservation: ResendEmailReservationState;
   reservation: ReservationSearchState;
   searchAvailableSchedule: SearchAvailableScheduleState;
   searchRoom: RoomSearchState;
   searchSchedule: SearchScheduleState;
   updateGeneralInfo: UpdateGeneralInfoState;
+  updateGuest: UpdateGuestState;
   updateNoteReservationDetail: UpdateNoteReservationDetailState;
   updateRate: UpdateRateState;
   updateReservation: CreateReservationState;
