@@ -68,4 +68,6 @@ export const PaymentEndpoint = {
 
 export const GuestEndpoint = {
   CREATE: 'api/v1/guests/create',
+  UPDATE: 'api/v1/guests',
+  REMOVE: 'api/v1/reservation-detail',
 };

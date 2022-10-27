@@ -97,6 +97,16 @@ export const selectCreateGuest = createSelector(
   createGuest => createGuest,
 );
 
+export const selectUpdateGuest = createSelector(
+  (state: RootState) => state.updateGuest,
+  updateGuest => updateGuest,
+);
+
+export const selectRemoveGuest = createSelector(
+  (state: RootState) => state.removeGuest,
+  removeGuest => removeGuest,
+);
+
 export const selectUpdateNoteReservationDetail = createSelector(
   (state: RootState) => state.updateNoteReservationDetail,
   updateNoteReservationDetail => updateNoteReservationDetail,

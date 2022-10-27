@@ -1,28 +1,98 @@
 import { request } from '@gilbarbara/helpers';
+import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
 import { GuestEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { createGuest, createGuestSuccess } from 'actions';
+import {
+  createGuest,
+  createGuestSuccess,
+  removeGuestAction,
+  removeGuestSuccessAction,
+  updateGuestAction,
+  updateGuestSuccessAction,
+} from 'actions';
 
 export function* postCreateGuestSaga({ payload }: ReturnType<typeof createGuest>) {
-  let success = '';
+  try {
+    let success = '';
 
-  ({ success } = yield call(request, apiEndPoint(GuestEndpoint.CREATE), {
-    method: 'POST',
-    headers: headerWithAuthorization(),
-    body: {
-      ...payload.payload,
-    },
-  }));
+    ({ success } = yield call(request, apiEndPoint(GuestEndpoint.CREATE), {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+      },
+    }));
 
-  if (success) {
-    yield put(createGuestSuccess());
+    if (success) {
+      yield put(createGuestSuccess());
+    } else {
+      message.error('Create Guest Failed!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Create Guest Failed!');
+  }
+}
+
+export function* postUpdateGuestSaga({ payload }: ReturnType<typeof updateGuestAction>) {
+  try {
+    let success = '';
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(GuestEndpoint.UPDATE)}/${payload.payload.guest_id}/update`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(updateGuestSuccessAction());
+    } else {
+      message.error('Update Guest Failed!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Update Guest Failed!');
+  }
+}
+
+export function* deleteRemoveGuestSaga({ payload }: ReturnType<typeof removeGuestAction>) {
+  try {
+    let success = '';
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(GuestEndpoint.REMOVE)}/${payload.payload.reservation_detail_id}/guests/${
+        payload.payload.guest_id
+      }/remove`,
+      {
+        method: 'DELETE',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    if (success) {
+      yield put(removeGuestSuccessAction());
+    } else {
+      message.error('Remove Guest Failed!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Remove Guest Failed!');
   }
 }
 
 export default function* root() {
   yield all([takeLatest(ActionTypes.GUEST_CREATE, postCreateGuestSaga)]);
+  yield all([takeLatest(ActionTypes.GUEST_UPDATE, postUpdateGuestSaga)]);
+  yield all([takeLatest(ActionTypes.GUEST_REMOVE, deleteRemoveGuestSaga)]);
 }
