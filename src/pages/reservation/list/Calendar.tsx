@@ -62,6 +62,7 @@ function Calendar() {
     reservation_info_id: '',
     title: '',
     note: '',
+    folio_id: '',
   });
 
   const toggleShowDatePicker = () => {
@@ -117,6 +118,7 @@ function Calendar() {
           reservationDetailId: item.reservationDetailId,
           reservationInfoId: item.reservationInfoId,
           note: item.note,
+          folioId: item.folioId,
         });
       });
     }
@@ -152,6 +154,7 @@ function Calendar() {
       reservation_info_id: reservation.reservationInfoId,
       title: clickInfo.event.title,
       note: reservation.note,
+      folio_id: reservation.folioId,
     });
 
     setIsEventInfoModalOpen(true);
@@ -376,7 +379,7 @@ function Calendar() {
           style={{ width: '100%' }}
           title={
             <span style={{ color: '#1D39C4', fontWeight: 400, fontSize: 13 }}>
-              {infoReservationSelected.reservation_info_id} - {infoReservationSelected.title}
+              {infoReservationSelected.folio_id} - {infoReservationSelected.title}
             </span>
           }
         >

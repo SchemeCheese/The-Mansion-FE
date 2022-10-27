@@ -71,3 +71,7 @@ export const GuestEndpoint = {
   UPDATE: 'api/v1/guests',
   REMOVE: 'api/v1/reservation-detail',
 };
+
+export const FileEndpoint = {
+  UPLOAD: 'api/v1/upload-images',
+};

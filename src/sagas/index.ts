@@ -2,6 +2,7 @@ import { all, fork } from 'redux-saga/effects';
 
 import agentInfos from './agentInfos';
 import channel from './channel';
+import file from './file';
 import github from './github';
 import guest from './guest';
 import payment from './payment';
@@ -30,5 +31,6 @@ export default function* root() {
     fork(transaction),
     fork(payment),
     fork(guest),
+    fork(file),
   ]);
 }

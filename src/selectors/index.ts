@@ -116,3 +116,8 @@ export const selectResendEmailReservation = createSelector(
   (state: RootState) => state.resendEmailReservation,
   resendEmailReservation => resendEmailReservation,
 );
+
+export const selectUploadFile = createSelector(
+  (state: RootState) => state.uploadFile,
+  uploadFile => uploadFile,
+);

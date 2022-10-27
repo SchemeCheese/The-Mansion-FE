@@ -32,6 +32,7 @@ import updateNoteReservationDetail, {
 } from './updateNoteReservationDetail';
 import updateRate, { updateRateState } from './updateRate';
 import updateReservation, { updateReservationState } from './updateReservation';
+import uploadFile, { uploadFileState } from './uploadFile';
 import user, { userState } from './user';
 
 export const initialState = {
@@ -54,6 +55,7 @@ export const initialState = {
   addReservationDetail: addReservationDetailState,
   cancelReservationDetail: cancelReservationDetailState,
   updateGeneralInfo: updateGeneralInfoState,
+  uploadFile: uploadFileState,
   searchSchedule: searchScheduleState,
   searchAvailableSchedule: searchAvailableScheduleState,
   getProductType: getProductTypeState,
@@ -89,6 +91,7 @@ export default {
   ...addReservationDetail,
   ...cancelReservationDetail,
   ...updateGeneralInfo,
+  ...uploadFile,
   ...searchSchedule,
   ...searchAvailableSchedule,
   ...getProductType,
