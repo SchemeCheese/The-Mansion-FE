@@ -132,9 +132,9 @@ function ReservationForm({
       autoComplete="off"
       initialValues={{
         reservation_number: reservationNumber,
-        paid: true,
+        paid: false,
         send_mail: true,
-        no_show: true,
+        no_show: false,
         market_segment_id: reservationInfo?.market_segment_id.toString(),
         path_of_reservation: reservationInfo?.path_of_reservation.toString(),
         external_reservation_number: reservationInfo?.external_reservation_number,
