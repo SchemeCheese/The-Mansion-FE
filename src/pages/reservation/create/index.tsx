@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 import { formatNumber } from 'helpers';
+import moment from 'moment';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -38,8 +39,8 @@ function Create() {
   const [roomTotalForm, setRoomTotalForm] = useState([]);
   /** Room Search Condition In Modal */
   const [roomCondition, setRoomCondition] = useState({
-    checkin: '',
-    checkout: '',
+    checkin: moment().format('YYYY-MM-DD'),
+    checkout: moment().add(1, 'days').format('YYYY-MM-DD'),
     room_type: '',
     source_type: '',
     source_id: '',
@@ -83,8 +84,8 @@ function Create() {
       dispatch(searchRoomReset());
       setRoomCondition({
         ...roomCondition,
-        checkin: '',
-        checkout: '',
+        checkin: moment().format('YYYY-MM-DD'),
+        checkout: moment().add(1, 'days').format('YYYY-MM-DD'),
         room_type: '',
       });
       setQuantity(1);

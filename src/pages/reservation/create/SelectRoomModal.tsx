@@ -10,6 +10,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Col, DatePicker, Input, message, Modal, Row, Select, Table } from 'antd';
+import type { RangePickerProps } from 'antd/es/date-picker';
 import { formatNumber, randomKey } from 'helpers';
 import moment from 'moment';
 import TableSummary from 'pages/reservation/create/TableSummary';
@@ -256,10 +257,17 @@ function SelectRoomModal({
   }, [changed]);
 
   const searchRoomDate = (date: any, key: string) => {
-    const stateTemporary = {
+    let stateTemporary = {
       ...roomCondition,
       [key]: date?.format('YYYY-MM-DD') ?? '',
     };
+
+    if (key === 'checkin') {
+      stateTemporary = {
+        ...stateTemporary,
+        checkout: date?.add(1, 'days').format('YYYY-MM-DD') ?? '',
+      };
+    }
 
     setRoomCondition(stateTemporary);
 
@@ -390,6 +398,16 @@ function SelectRoomModal({
     );
   }
 
+  const disabledDate: RangePickerProps['disabledDate'] = current => {
+    // Can not select days before today and today
+    return current < moment().endOf('day');
+  };
+
+  const disabledCheckoutDate: RangePickerProps['disabledDate'] = current => {
+    // Can not select days before today and today
+    return current < moment(roomCondition.checkin).endOf('day');
+  };
+
   return (
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
@@ -408,6 +426,7 @@ function SelectRoomModal({
           <Col span={6}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>Checkin </span>
             <DatePicker
+              disabledDate={disabledDate}
               onChange={date => searchRoomDate(date, 'checkin')}
               style={{
                 height: 32,
@@ -415,11 +434,13 @@ function SelectRoomModal({
                 marginRight: 11,
                 width: '90%',
               }}
+              value={roomCondition.checkin ? moment(roomCondition.checkin) : null}
             />
           </Col>
           <Col span={6}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}> Checkout</span>
             <DatePicker
+              disabledDate={disabledCheckoutDate}
               onChange={date => searchRoomDate(date, 'checkout')}
               style={{
                 height: 32,
@@ -427,6 +448,7 @@ function SelectRoomModal({
                 marginRight: 11,
                 width: '90%',
               }}
+              value={roomCondition.checkout ? moment(roomCondition.checkout) : null}
             />
           </Col>
           <Col span={6}>
