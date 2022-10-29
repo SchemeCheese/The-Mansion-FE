@@ -51,6 +51,10 @@ export interface ReservationSearchResult {
   total: number;
 }
 
+export interface CreateReservationResult {
+  reservation_info: any;
+}
+
 export interface ReservationCreate {
   payload: ReservationPayload;
 }

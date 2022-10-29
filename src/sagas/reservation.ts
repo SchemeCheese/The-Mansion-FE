@@ -67,21 +67,30 @@ export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchR
 export function* postCreateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
   try {
     let success = '';
+    let reservationCreated = null;
 
-    ({ success } = yield call(request, apiEndPoint(ReservationEndpoint.CREATE), {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        online_reservation: true,
-        branch_code: 'the_mansion',
-        operator_code: 'the_mansion',
-        facility_code: 'hotel',
+    ({ reservation_info: reservationCreated, success } = yield call(
+      request,
+      apiEndPoint(ReservationEndpoint.CREATE),
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          online_reservation: true,
+          branch_code: 'the_mansion',
+          operator_code: 'the_mansion',
+          facility_code: 'hotel',
+        },
       },
-    }));
+    ));
 
     if (success) {
-      yield put(createReservationSuccess());
+      yield put(
+        createReservationSuccess({
+          reservation_info: reservationCreated,
+        }),
+      );
     } else {
       message.error('Something went wrong!');
     }

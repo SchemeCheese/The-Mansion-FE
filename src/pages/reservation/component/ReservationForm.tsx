@@ -35,6 +35,7 @@ interface Props {
   rowSelection: any;
   selectedRowKeys: any;
   setIsCancelBookingModalVisible?: any;
+  setRedirectDetail?: any;
   setRoomCondition: any;
   showModal: any;
 }
@@ -54,6 +55,7 @@ function ReservationForm({
   rowSelection,
   selectedRowKeys,
   setIsCancelBookingModalVisible,
+  setRedirectDetail,
   setRoomCondition,
   showModal,
 }: Props) {
@@ -74,6 +76,10 @@ function ReservationForm({
         deleteSelectedRoom();
       },
     });
+  };
+
+  const handleSubmitAndMoreDetail = () => {
+    setRedirectDetail(true);
   };
 
   const totalPriceReservation = _.reduce(
@@ -515,6 +521,8 @@ function ReservationForm({
         {isCreateForm && (
           <Col span={24} style={{ textAlign: 'center', marginTop: 20, marginBottom: 140 }}>
             <MButton
+              htmlType="submit"
+              onClick={handleSubmitAndMoreDetail}
               style={{
                 color: colors.pattron,
                 borderColor: colors.pattron,

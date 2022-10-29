@@ -8,6 +8,7 @@ import {
   AddReservationDetail,
   BookRoom,
   CancelReservationDetail,
+  CreateReservationResult,
   GetReservationFinishPayload,
   GetReservationPayload,
   ResendEmailReservation,
@@ -38,7 +39,10 @@ export const createReservation = createAction(
   (payload: ReservationCreate) => actionPayload(payload),
 );
 
-export const createReservationSuccess = createAction(ActionTypes.RESERVATION_CREATE_SUCCESS);
+export const createReservationSuccess = createAction(
+  ActionTypes.RESERVATION_CREATE_SUCCESS,
+  (payload: CreateReservationResult) => actionPayload(payload),
+);
 
 export const updateReservation = createAction(
   ActionTypes.RESERVATION_UPDATE,

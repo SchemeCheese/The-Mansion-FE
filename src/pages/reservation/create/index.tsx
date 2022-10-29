@@ -47,6 +47,7 @@ function Create() {
   });
   const [quantity, setQuantity] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [redirectDetail, setRedirectDetail] = useState(false);
 
   const rowSelection = {
     onChange: (newSelectedRowKeys: any) => {
@@ -118,7 +119,11 @@ function Create() {
     if (changed('status', 'SUCCESS')) {
       message.success('Create reservation successfully!');
 
-      navigate('/reservation');
+      if (redirectDetail === true) {
+        navigate(`/reservation/${createReservationData.reservation_created?.id}`);
+      } else {
+        navigate('/reservation');
+      }
     }
   }, [changed]);
 
@@ -195,6 +200,7 @@ function Create() {
           roomingListColumns={roomingListColumns}
           rowSelection={rowSelection}
           selectedRowKeys={selectedRowKeys}
+          setRedirectDetail={setRedirectDetail}
           setRoomCondition={setRoomCondition}
           showModal={showModal}
         />

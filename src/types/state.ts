@@ -126,6 +126,7 @@ export interface ChangeDiskPayload {
 
 export interface CreateReservationState {
   payload: CreateReservationPayload;
+  reservation_created?: any;
   status: string;
 }
 

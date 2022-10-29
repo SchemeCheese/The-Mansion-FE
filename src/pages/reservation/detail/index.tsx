@@ -92,8 +92,8 @@ function ReservationDetail() {
     dispatch(searchRoomReset());
     setRoomCondition({
       ...roomCondition,
-      checkin: '',
-      checkout: '',
+      checkin: moment().format('YYYY-MM-DD'),
+      checkout: moment().add(1, 'days').format('YYYY-MM-DD'),
       room_type: '',
     });
     setQuantity(1);

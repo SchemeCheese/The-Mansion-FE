@@ -24,6 +24,7 @@ export const createReservationState = {
     no_deposit: '',
   },
   status: '',
+  reservation_created: null,
 };
 
 export default {
@@ -33,7 +34,8 @@ export default {
         draft.payload = payload.payload;
         draft.status = 'INIT';
       })
-      .addCase(createReservationSuccess, draft => {
+      .addCase(createReservationSuccess, (draft, { payload }) => {
+        draft.reservation_created = payload.reservation_info;
         draft.status = 'SUCCESS';
       });
   }),
