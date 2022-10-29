@@ -134,6 +134,12 @@ export interface UpdateRateState {
   status: string;
 }
 
+export interface UploadFileState {
+  file: any;
+  status: string;
+  url: string;
+}
+
 export interface BookRoomState {
   payload: BookRoomPayload;
   status: string;
@@ -347,6 +353,7 @@ export interface RootState {
   updateNoteReservationDetail: UpdateNoteReservationDetailState;
   updateRate: UpdateRateState;
   updateReservation: CreateReservationState;
+  uploadFile: UploadFileState;
   user: UserState;
 }
 

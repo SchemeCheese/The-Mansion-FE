@@ -11,3 +11,4 @@ export * from './channel';
 export * from './transaction';
 export * from './payment';
 export * from './guest';
+export * from './file';

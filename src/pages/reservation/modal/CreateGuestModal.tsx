@@ -29,6 +29,8 @@ import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
 
+import { FileEndpoint } from 'config';
+
 import { createGuest, getReservationDetail, updateGuestAction } from 'actions';
 
 const { Option } = Select;
@@ -69,6 +71,20 @@ function CreateGuestModal({
   const onFinish = (values: any) => {
     setIsModalVisible(false);
 
+    const pictures = pictureFileList.map((item: any) => {
+      return {
+        file_id: item.file_id,
+        data: item.xhr ? JSON.parse(item.xhr.responseText).fileName : null,
+      };
+    });
+
+    const faceRecognitionPictures = faceRecognitionFileList.map((item: any) => {
+      return {
+        file_id: item.file_id,
+        data: item.xhr ? JSON.parse(item.xhr.responseText).fileName : null,
+      };
+    });
+
     if (currentGuest) {
       dispatch(
         updateGuestAction({
@@ -87,6 +103,8 @@ function CreateGuestModal({
               ? values.date_of_issue_of_passport.format('YYYY-MM-DD')
               : null,
             date_of_birth: values.date_of_birth ? values.date_of_birth.format('YYYY-MM-DD') : null,
+            pictures,
+            face_recognitions: faceRecognitionPictures,
           },
         }),
       );
@@ -107,6 +125,8 @@ function CreateGuestModal({
               ? values.date_of_issue_of_passport.format('YYYY-MM-DD')
               : null,
             date_of_birth: values.date_of_birth ? values.date_of_birth.format('YYYY-MM-DD') : null,
+            pictures,
+            face_recognitions: faceRecognitionPictures,
           },
         }),
       );
@@ -141,6 +161,8 @@ function CreateGuestModal({
       message.success('Update guest successfully!');
 
       form.resetFields();
+      setPictureFileList([]);
+      setFaceRecognitionFileList([]);
 
       dispatch(
         getReservationDetail({
@@ -164,6 +186,38 @@ function CreateGuestModal({
     }
   }, [removeGuestChanged]);
 
+  useEffect(() => {
+    if (currentGuest?.pictures.length > 0) {
+      const pictureFileListTemporary = currentGuest?.pictures.map((picture: any) => {
+        return {
+          uid: picture.id,
+          name: picture.name,
+          status: 'done',
+          url: picture.url,
+          file_id: picture.id,
+        };
+      });
+
+      const faceRecognitionFileListTemporary = currentGuest?.face_recognitions.map(
+        (picture: any) => {
+          return {
+            uid: picture.id,
+            name: picture.name,
+            status: 'done',
+            url: picture.url,
+            file_id: picture.id,
+          };
+        },
+      );
+
+      setPictureFileList(pictureFileListTemporary);
+      setFaceRecognitionFileList(faceRecognitionFileListTemporary);
+    } else {
+      setPictureFileList([]);
+      setFaceRecognitionFileList([]);
+    }
+  }, [currentGuest]);
+
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
@@ -174,36 +228,13 @@ function CreateGuestModal({
     setIsModalVisible(false);
   };
 
-  const [fileList, setFileList] = useState<UploadFile[]>([
-    {
-      uid: '-3',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-4',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-6',
-      percent: 50,
-      name: 'image.png',
-      status: 'uploading',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-    },
-    {
-      uid: '-5',
-      name: 'image.png',
-      status: 'error',
-    },
-  ]);
+  const [pictureFileList, setPictureFileList] = useState<UploadFile[]>([]);
+
+  const [faceRecognitionFileList, setFaceRecognitionFileList] = useState<UploadFile[]>([]);
 
   const handleImgCancel = () => setPreviewVisible(false);
 
-  const handlePreview = async (file: any) => {
+  const handlePicturePreview = async (file: any) => {
     const currentFile = file;
 
     if (!currentFile.url && !currentFile.preview) {
@@ -217,8 +248,10 @@ function CreateGuestModal({
     );
   };
 
-  const handleChange = ({ fileList: newFileList }: any) => setFileList(newFileList);
-
+  const handlePictureChange = ({ file: currentFile, fileList: newPictureFileList }: any) =>
+    setPictureFileList(newPictureFileList);
+  const handleFaceRecognitionChange = ({ file: currentFile, fileList: newPictureFileList }: any) =>
+    setFaceRecognitionFileList(newPictureFileList);
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -582,13 +615,16 @@ function CreateGuestModal({
                 <Row>
                   <Col span={24}>
                     <Upload
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                      fileList={fileList}
+                      action={`${process.env.REACT_APP_API_HOST}/${FileEndpoint.UPLOAD}`}
+                      fileList={pictureFileList}
+                      headers={{
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      }}
                       listType="picture-card"
-                      onChange={handleChange}
-                      onPreview={handlePreview}
+                      onChange={handlePictureChange}
+                      onPreview={handlePicturePreview}
                     >
-                      {fileList.length >= 8 ? null : uploadButton}
+                      {pictureFileList.length >= 8 ? null : uploadButton}
                     </Upload>
                   </Col>
                   <Col span={8} />
@@ -601,13 +637,16 @@ function CreateGuestModal({
                 <Row>
                   <Col span={24}>
                     <Upload
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                      fileList={fileList}
+                      action={`${process.env.REACT_APP_API_HOST}/${FileEndpoint.UPLOAD}`}
+                      fileList={faceRecognitionFileList}
+                      headers={{
+                        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                      }}
                       listType="picture-card"
-                      onChange={handleChange}
-                      onPreview={handlePreview}
+                      onChange={handleFaceRecognitionChange}
+                      onPreview={handlePicturePreview}
                     >
-                      {fileList.length >= 8 ? null : uploadButton}
+                      {faceRecognitionFileList.length >= 8 ? null : uploadButton}
                     </Upload>
                   </Col>
                   <Col span={8} />
