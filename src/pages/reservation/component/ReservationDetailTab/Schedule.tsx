@@ -342,6 +342,12 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     });
   };
 
+  const durationCheckinCheckout = moment.duration(
+    moment(reservationDetailInfo.checkout).diff(moment(reservationDetailInfo.checkin)),
+  );
+  const checkInCheckOutDiffDays = durationCheckinCheckout.asDays();
+  const scheduleDay = checkInCheckOutDiffDays < 7 ? 7 : checkInCheckOutDiffDays;
+
   // const resources = [
   //   { id: 'a', title: '102', occupancy: 'Superior', roomId: '1', roomType: '1' },
   //   { id: 'b', title: '103', occupancy: 'Superior', roomId: '2', roomType: '1' },
@@ -593,7 +599,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                 },
                 timeGridWeekly: {
                   type: 'resourceTimelineWeek',
-                  duration: { days: 7 },
+                  duration: { days: scheduleDay },
                   slotDuration: { days: 1 },
                   slotLabelFormat(argument) {
                     return moment(argument.date).format('DD[\n]dd');
