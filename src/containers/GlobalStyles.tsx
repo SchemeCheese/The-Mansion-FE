@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: Roboto, sans-serif;
+    font-family: 'SF Pro Display', sans-serif;
     font-size: 16px; /* stylelint-disable unit-disallowed-list */
     margin: 0;
     min-height: 100vh;

@@ -63,7 +63,6 @@ function Root() {
       <ThemeProvider theme={theme}>
         <AppWrapper data-testid="app">
           <Helmet
-            // defaultTitle={username}
             defer={false}
             encodeSpecialCharacters
             htmlAttributes={{ lang: 'pt-br' }}
