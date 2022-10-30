@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
@@ -78,6 +78,8 @@ function ReservationForm({
     });
   };
 
+  const [isSendConfirmationEmail, setIsSendConfirmationEmail] = useState(true);
+
   const handleSubmitAndMoreDetail = () => {
     setRedirectDetail(true);
   };
@@ -153,6 +155,7 @@ function ReservationForm({
         booker_phone_number: reservationInfo?.booker?.telephone_number1,
         booker_rank: reservationInfo?.booker?.client_rank.toString(),
         booker_note: reservationInfo?.note_sale,
+        email_language: '2',
       }}
       labelCol={{
         span: 24,
@@ -502,16 +505,31 @@ function ReservationForm({
                   <Form.Item name="paid" style={{ marginBottom: 12 }} valuePropName="checked">
                     <Checkbox>{t('reservation.Paid')}</Checkbox>
                   </Form.Item>
-                  <Form.Item name="send_mail" style={{ marginBottom: 12 }} valuePropName="checked">
-                    <Checkbox>{t('reservation.Email reservation confirmation')}</Checkbox>
+                  <Form.Item name="no_deposit" valuePropName="checked">
+                    <Checkbox>{t('reservation.Confirm reservation without deposit')}</Checkbox>
                   </Form.Item>
                   <Form.Item name="no_show" style={{ marginBottom: 12 }} valuePropName="checked">
                     <Checkbox>{t('reservation.Hide room rates')}</Checkbox>
                   </Form.Item>
                 </Col>
                 <Col span={8} style={{ marginTop: -6 }}>
-                  <Form.Item name="no_deposit" valuePropName="checked">
-                    <Checkbox>{t('reservation.Confirm reservation without deposit')}</Checkbox>
+                  <Form.Item name="send_mail" style={{ marginBottom: 12 }} valuePropName="checked">
+                    <Checkbox onChange={e => setIsSendConfirmationEmail(e.target.checked)}>
+                      {t('reservation.Email reservation confirmation')}
+                    </Checkbox>
+                  </Form.Item>
+                  <Form.Item
+                    label={t('reservation.Email Language')}
+                    name="email_language"
+                    wrapperCol={{
+                      span: 21,
+                    }}
+                  >
+                    <Select disabled={!isSendConfirmationEmail}>
+                      <Option value="1">Vietnamese</Option>
+                      <Option value="2">English</Option>
+                      <Option value="3">Japanese</Option>
+                    </Select>
                   </Form.Item>
                 </Col>
               </Row>

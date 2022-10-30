@@ -114,5 +114,6 @@
   "Reason for booking cancellation (Optional)": {
     "title": "Reason for booking cancellation (Optional)",
     "placeholder": "Input Reason for booking cancellation"
-  }
+  },
+  "Email Language": "Email Language"
 }

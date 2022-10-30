@@ -159,5 +159,6 @@ export interface UpdateNoteReservationDetail {
 }
 
 export interface ResendEmailReservation {
+  language: string;
   reservation_id: string;
 }

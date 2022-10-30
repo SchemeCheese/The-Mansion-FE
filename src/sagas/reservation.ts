@@ -394,7 +394,7 @@ export function* getResendEmailReservationSaga({
       request,
       `${apiEndPoint(ReservationEndpoint.RESEND_EMAIL)}/${
         payload.reservation_id
-      }/resend-confirmation-email`,
+      }/resend-confirmation-email/${payload.language}`,
       {
         method: 'GET',
         headers: headerWithAuthorization(),
