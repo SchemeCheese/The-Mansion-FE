@@ -123,22 +123,9 @@ function MLayout(props: Props) {
                 </span>
               ),
               label: 'Reservation',
-              children: [
-                {
-                  label: 'Reservation List',
-                  key: 'reservation-list',
-                  onClick: () => {
-                    navigate('/reservation');
-                  },
-                },
-                {
-                  label: 'New Reservation',
-                  key: 'new-reservation',
-                  onClick: () => {
-                    navigate('/reservation/create');
-                  },
-                },
-              ],
+              onClick: () => {
+                navigate('/reservation');
+              },
             },
           ]}
           mode="inline"

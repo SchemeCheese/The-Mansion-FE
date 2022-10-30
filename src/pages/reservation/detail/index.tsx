@@ -2,7 +2,7 @@
 Module Name : Reservation
 Developer Name : MinhNV
 Created Date : 24/08/2022
-Updated Date : 30/08/2022
+Updated Date : 30/10/2022
 Main functions : Reservation Detail Page
 ************************************ */
 
@@ -12,7 +12,8 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Checkbox, Col, message, Row, Select, Skeleton, Space } from 'antd';
+import type { RadioChangeEvent } from 'antd';
+import { Checkbox, Col, message, Modal, Radio, Row, Select, Skeleton, Space } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
@@ -88,12 +89,30 @@ function ReservationDetail() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
 
+  const [isSelectLanguageModalOpen, setIsSelectLanguageModalOpen] = useState(false);
+  const [language, setLanguage] = useState('en');
+
+  const onChange = (e: RadioChangeEvent) => {
+    setLanguage(e.target.value);
+  };
+
+  const handleResendReservationConfirmationEmail = () => {
+    setIsSelectLanguageModalOpen(false);
+
+    dispatch(
+      resendEmailReservationAction({
+        reservation_id: id ?? '',
+        language,
+      }),
+    );
+  };
+
   const showModal = () => {
     dispatch(searchRoomReset());
     setRoomCondition({
       ...roomCondition,
-      checkin: '',
-      checkout: '',
+      checkin: moment().format('YYYY-MM-DD'),
+      checkout: moment().add(1, 'days').format('YYYY-MM-DD'),
       room_type: '',
     });
     setQuantity(1);
@@ -253,14 +272,6 @@ function ReservationDetail() {
     );
   };
 
-  const handleResendConfirmationEmail = () => {
-    dispatch(
-      resendEmailReservationAction({
-        reservation_id: id ?? '',
-      }),
-    );
-  };
-
   const updateReservationData = useAppSelector(selectUpdateReservation);
   const resendEmailReservationData = useAppSelector(selectResendEmailReservation);
   const { changed } = useTreeChanges(updateReservationData);
@@ -318,6 +329,21 @@ function ReservationDetail() {
         setModalVisible={setIsCancelBookingModalVisible}
         setSelectedRowKeys={setSelectedRowKeys}
       />
+      <Modal
+        okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
+        onCancel={() => setIsSelectLanguageModalOpen(false)}
+        onOk={handleResendReservationConfirmationEmail}
+        title="Select Email Language"
+        visible={isSelectLanguageModalOpen}
+      >
+        <Radio.Group onChange={onChange} value={language}>
+          <Space direction="vertical">
+            <Radio value="vn">Vietnamese</Radio>
+            <Radio value="en">English</Radio>
+            <Radio value="jp">Japanese</Radio>
+          </Space>
+        </Radio.Group>
+      </Modal>
       <Row style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}>
         <Col span={8}>
           <svg
@@ -354,7 +380,7 @@ function ReservationDetail() {
             </Select>
             <MButton
               disabled={Boolean(reservationRedux.booker_email)}
-              onClick={handleResendConfirmationEmail}
+              onClick={() => setIsSelectLanguageModalOpen(true)}
             >
               {t('common.Resend Email')}
             </MButton>

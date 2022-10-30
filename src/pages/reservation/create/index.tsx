@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 import { formatNumber } from 'helpers';
+import moment from 'moment';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -38,14 +39,15 @@ function Create() {
   const [roomTotalForm, setRoomTotalForm] = useState([]);
   /** Room Search Condition In Modal */
   const [roomCondition, setRoomCondition] = useState({
-    checkin: '',
-    checkout: '',
+    checkin: moment().format('YYYY-MM-DD'),
+    checkout: moment().add(1, 'days').format('YYYY-MM-DD'),
     room_type: '',
     source_type: '',
     source_id: '',
   });
   const [quantity, setQuantity] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [redirectDetail, setRedirectDetail] = useState(false);
 
   const rowSelection = {
     onChange: (newSelectedRowKeys: any) => {
@@ -83,8 +85,8 @@ function Create() {
       dispatch(searchRoomReset());
       setRoomCondition({
         ...roomCondition,
-        checkin: '',
-        checkout: '',
+        checkin: moment().format('YYYY-MM-DD'),
+        checkout: moment().add(1, 'days').format('YYYY-MM-DD'),
         room_type: '',
       });
       setQuantity(1);
@@ -117,7 +119,11 @@ function Create() {
     if (changed('status', 'SUCCESS')) {
       message.success('Create reservation successfully!');
 
-      navigate('/reservation');
+      if (redirectDetail === true) {
+        navigate(`/reservation/${createReservationData.reservation_created?.id}`);
+      } else {
+        navigate('/reservation');
+      }
     }
   }, [changed]);
 
@@ -194,6 +200,7 @@ function Create() {
           roomingListColumns={roomingListColumns}
           rowSelection={rowSelection}
           selectedRowKeys={selectedRowKeys}
+          setRedirectDetail={setRedirectDetail}
           setRoomCondition={setRoomCondition}
           showModal={showModal}
         />

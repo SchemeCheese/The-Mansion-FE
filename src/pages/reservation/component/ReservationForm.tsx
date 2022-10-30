@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
@@ -35,6 +35,7 @@ interface Props {
   rowSelection: any;
   selectedRowKeys: any;
   setIsCancelBookingModalVisible?: any;
+  setRedirectDetail?: any;
   setRoomCondition: any;
   showModal: any;
 }
@@ -54,6 +55,7 @@ function ReservationForm({
   rowSelection,
   selectedRowKeys,
   setIsCancelBookingModalVisible,
+  setRedirectDetail,
   setRoomCondition,
   showModal,
 }: Props) {
@@ -74,6 +76,12 @@ function ReservationForm({
         deleteSelectedRoom();
       },
     });
+  };
+
+  const [isSendConfirmationEmail, setIsSendConfirmationEmail] = useState(true);
+
+  const handleSubmitAndMoreDetail = () => {
+    setRedirectDetail(true);
   };
 
   const totalPriceReservation = _.reduce(
@@ -132,9 +140,9 @@ function ReservationForm({
       autoComplete="off"
       initialValues={{
         reservation_number: reservationNumber,
-        paid: true,
+        paid: false,
         send_mail: true,
-        no_show: true,
+        no_show: false,
         market_segment_id: reservationInfo?.market_segment_id.toString(),
         path_of_reservation: reservationInfo?.path_of_reservation.toString(),
         external_reservation_number: reservationInfo?.external_reservation_number,
@@ -147,6 +155,7 @@ function ReservationForm({
         booker_phone_number: reservationInfo?.booker?.telephone_number1,
         booker_rank: reservationInfo?.booker?.client_rank.toString(),
         booker_note: reservationInfo?.note_sale,
+        email_language: '2',
       }}
       labelCol={{
         span: 24,
@@ -496,16 +505,31 @@ function ReservationForm({
                   <Form.Item name="paid" style={{ marginBottom: 12 }} valuePropName="checked">
                     <Checkbox>{t('reservation.Paid')}</Checkbox>
                   </Form.Item>
-                  <Form.Item name="send_mail" style={{ marginBottom: 12 }} valuePropName="checked">
-                    <Checkbox>{t('reservation.Email reservation confirmation')}</Checkbox>
+                  <Form.Item name="no_deposit" valuePropName="checked">
+                    <Checkbox>{t('reservation.Confirm reservation without deposit')}</Checkbox>
                   </Form.Item>
                   <Form.Item name="no_show" style={{ marginBottom: 12 }} valuePropName="checked">
                     <Checkbox>{t('reservation.Hide room rates')}</Checkbox>
                   </Form.Item>
                 </Col>
                 <Col span={8} style={{ marginTop: -6 }}>
-                  <Form.Item name="no_deposit" valuePropName="checked">
-                    <Checkbox>{t('reservation.Confirm reservation without deposit')}</Checkbox>
+                  <Form.Item name="send_mail" style={{ marginBottom: 12 }} valuePropName="checked">
+                    <Checkbox onChange={e => setIsSendConfirmationEmail(e.target.checked)}>
+                      {t('reservation.Email reservation confirmation')}
+                    </Checkbox>
+                  </Form.Item>
+                  <Form.Item
+                    label={t('reservation.Email Language')}
+                    name="email_language"
+                    wrapperCol={{
+                      span: 21,
+                    }}
+                  >
+                    <Select disabled={!isSendConfirmationEmail}>
+                      <Option value="1">Vietnamese</Option>
+                      <Option value="2">English</Option>
+                      <Option value="3">Japanese</Option>
+                    </Select>
                   </Form.Item>
                 </Col>
               </Row>
@@ -515,6 +539,8 @@ function ReservationForm({
         {isCreateForm && (
           <Col span={24} style={{ textAlign: 'center', marginTop: 20, marginBottom: 140 }}>
             <MButton
+              htmlType="submit"
+              onClick={handleSubmitAndMoreDetail}
               style={{
                 color: colors.pattron,
                 borderColor: colors.pattron,

@@ -353,6 +353,7 @@ function Calendar() {
             {t('common.Update')}
           </Button>,
         ]}
+        onCancel={handleCancel}
         onOk={handleOk}
         title={
           <Row>
