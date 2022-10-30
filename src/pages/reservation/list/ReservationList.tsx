@@ -11,6 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import { Col, Pagination, Row, Spin, Table, Tag } from 'antd';
+import { selectReservationSearch } from 'selectors';
+import useTreeChanges from 'tree-changes-hook';
+
+import { useAppSelector } from 'modules/hooks';
 
 import { searchReservation } from 'actions';
 
@@ -46,13 +50,23 @@ function ReservationList({ type }: Props) {
   const dispatch = useDispatch();
 
   const isSearching = useSelector<RootState>(({ reservation }) => reservation.is_searching);
-  const items = useSelector<RootState>(({ reservation }) => reservation.data);
+  const items: any = useSelector<RootState>(({ reservation }) => reservation.data);
   const total: any = useSelector<RootState>(({ reservation }) => reservation.total);
   const currentPage: any = useSelector<RootState>(({ reservation }) => reservation.current_page);
+  const searchReservationData = useAppSelector(selectReservationSearch);
+  const { changed: searchReservationChanged } = useTreeChanges(searchReservationData);
 
   useEffect(() => {
     dispatch(searchReservation(searchCondition));
   }, []);
+
+  useEffect(() => {
+    if (searchReservationChanged('is_searching', false)) {
+      if (searchCondition.folio_number && items.length > 0) {
+        navigate(`/reservation/${items[0].id}`);
+      }
+    }
+  }, [searchReservationChanged]);
 
   const onChangeCurrentPage = (page: number, pageSize: number) => {
     setSearchCondition({
