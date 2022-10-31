@@ -1,18 +1,75 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Form, Input, Row, Select } from 'antd';
+import { formatNumber } from 'helpers';
+import { selectGetReservationDetail } from 'selectors';
+import _ from 'underscore';
+
+import { useAppSelector } from 'modules/hooks';
 
 const { Option } = Select;
 
 interface Props {
+  form: any;
   name: any;
   restField: any;
   setPaidAmount: any;
 }
 
-function PaymentMethod({ name, restField, setPaidAmount }: Props) {
+function PaymentMethod({ form, name, restField, setPaidAmount }: Props) {
   const { t } = useTranslation();
   const [paymentMethod, setPaymentMethod] = useState('1');
+  const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
+  const exchangeRates = reservationDetailInfo.data.exchange_rates;
+  const creditcardTypes = reservationDetailInfo.data.creditcard_types;
+  const { employees } = reservationDetailInfo.data;
+
+  const onChangeAmountToPay = (value: any, key: any) => {
+    const fields = form.getFieldsValue();
+
+    const { payment_methods: paymentMethodTemporary } = fields;
+    const currencyId = paymentMethodTemporary[key].currency_conversion_id;
+
+    const rate = _.find(exchangeRates, item => {
+      return item.id === currencyId;
+    });
+
+    Object.assign(paymentMethodTemporary[key], {
+      payment_amount: value,
+      amount_in_vnd: formatNumber(value * rate.exchange_rate),
+    });
+    form.setFieldsValue({ paymentMethodTmp: paymentMethodTemporary });
+
+    setPaidAmount();
+  };
+
+  const onChangeCurrency = (value: any, key: any) => {
+    const fields = form.getFieldsValue();
+    const { payment_methods: paymentMethodTemporary } = fields;
+
+    const rate = _.find(exchangeRates, item => {
+      return item.id === value;
+    });
+
+    Object.assign(paymentMethodTemporary[key], {
+      amount_in_vnd: formatNumber(paymentMethodTemporary[key].payment_amount * rate.exchange_rate),
+    });
+    form.setFieldsValue({ paymentMethodTmp: paymentMethodTemporary });
+
+    setPaidAmount();
+  };
+
+  const getRate = (key: any) => {
+    const fields = form.getFieldsValue();
+    const { payment_methods: paymentMethodTemporary } = fields;
+    const currencyId = paymentMethodTemporary[key]?.currency_conversion_id ?? 2;
+
+    const rate = _.find(exchangeRates, item => {
+      return item.id === currencyId;
+    });
+
+    return rate?.exchange_rate;
+  };
 
   return (
     <>
@@ -30,9 +87,7 @@ function PaymentMethod({ name, restField, setPaidAmount }: Props) {
           >
             <Input
               id="amount-to-pay"
-              onChange={() => {
-                setPaidAmount();
-              }}
+              onChange={e => onChangeAmountToPay(e.target.value, restField.fieldKey)}
               placeholder={t('selectedPayMethod.Amount to pay.placeholder')}
             />
           </Form.Item>
@@ -56,15 +111,15 @@ function PaymentMethod({ name, restField, setPaidAmount }: Props) {
         <Col span={6}>
           <Form.Item
             {...restField}
-            initialValue="2"
+            initialValue={2}
             label={t('selectedPayMethod.Currency.title')}
             name={[name, 'currency_conversion_id']}
             rules={[{ required: true }]}
           >
-            <Select>
-              <Option value="2">VND</Option>
-              <Option value="3">USD</Option>
-              <Option value="4">JPY</Option>
+            <Select onChange={value => onChangeCurrency(value, restField.fieldKey)}>
+              {exchangeRates.map((item: any) => {
+                return <Option value={item.id}>{item.currency_code.toUpperCase()}</Option>;
+              })}
             </Select>
           </Form.Item>
           <span
@@ -75,7 +130,7 @@ function PaymentMethod({ name, restField, setPaidAmount }: Props) {
               lineHeight: '12px',
             }}
           >
-            {t('common.Exchange Rate')} : 210
+            {t('common.Exchange Rate')} : {formatNumber(getRate(restField.fieldKey))}
           </span>
         </Col>
         <Col span={6}>
@@ -95,16 +150,18 @@ function PaymentMethod({ name, restField, setPaidAmount }: Props) {
           </Form.Item>
         </Col>
       </Row>
-      {paymentMethod === 'credit_card' && (
+      {(paymentMethod === '2' || paymentMethod === '4') && (
         <Row>
           <Col span={6} />
           <Col span={6}>
             <Form.Item
               label={t('selectedPayMethod.Credit Card Type.title')}
-              name="credit_card_type"
+              name={[name, 'creditcard_type']}
             >
               <Select placeholder={t('common.Select Type')}>
-                <Option value="type 1">Type 1</Option>
+                {creditcardTypes.map((cardType: any) => {
+                  return <Option value={cardType.id}>{cardType.name}</Option>;
+                })}
               </Select>
             </Form.Item>
           </Col>
@@ -115,7 +172,7 @@ function PaymentMethod({ name, restField, setPaidAmount }: Props) {
                   {t('selectedPayMethod.Credit Card Number.title')}
                 </label>
               }
-              name="credit_card_number"
+              name={[name, 'creditcard_number']}
             >
               <Input
                 id="credit-card-number"
@@ -130,7 +187,7 @@ function PaymentMethod({ name, restField, setPaidAmount }: Props) {
                   {t('selectedPayMethod.Card Holder Name.title')}
                 </label>
               }
-              name="card_holder_name"
+              name={[name, 'creditcard_name']}
             >
               <Input
                 id="card-holder-name"
@@ -140,15 +197,19 @@ function PaymentMethod({ name, restField, setPaidAmount }: Props) {
           </Col>
         </Row>
       )}
-      {paymentMethod === 'transfer' && (
+      {paymentMethod === '3' && (
         <Row>
           <Col span={6} />
           <Col span={6}>
             <Form.Item
               label={t('selectedPayMethod.Authorized Person.title')}
-              name="authorized_person"
+              name={[name, 'transfer_to_user_id']}
             >
-              <Select placeholder={t('common.Select Type')} />
+              <Select placeholder={t('common.Select Type')}>
+                {employees.map((employee: any) => {
+                  return <Option value={employee.id}>{employee.name}</Option>;
+                })}
+              </Select>
             </Form.Item>
           </Col>
           <Col span={6} />
