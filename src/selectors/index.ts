@@ -126,3 +126,8 @@ export const selectUploadFile = createSelector(
   (state: RootState) => state.uploadFile,
   uploadFile => uploadFile,
 );
+
+export const selectGetLanguageCode = createSelector(
+  (state: RootState) => state.getLanguageCode,
+  getLanguageCode => getLanguageCode,
+);
