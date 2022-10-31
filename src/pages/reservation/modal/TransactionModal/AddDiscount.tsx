@@ -1,7 +1,19 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : Xuan
+Created Date : 14/09/2022
+Updated Date : 31/10/2022
+Main functions : Transaction AddDiscount
+************************************ */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Form, Input, Modal, Row, Select } from 'antd';
+import { selectGetReservationDetail } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 import { addItemAction } from 'actions';
 
@@ -16,6 +28,9 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+
+  const { id } = useParams();
+  const getReservationDetailData = useAppSelector(selectGetReservationDetail);
 
   const onChangeDiscountType = (value: string) => {
     console.log(`selected ${value}`);
@@ -49,8 +64,8 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
                   storage_id: values.storage_id,
                 },
               ],
-              reservation_id: '3482',
-              reservation_detail_id: '4744',
+              reservation_id: id ?? '',
+              reservation_detail_id: getReservationDetailData.data.id,
             },
           }),
         );

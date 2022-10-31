@@ -12,3 +12,4 @@ export * from './transaction';
 export * from './payment';
 export * from './guest';
 export * from './file';
+export * from './languageCode';

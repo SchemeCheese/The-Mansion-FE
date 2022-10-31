@@ -4,7 +4,7 @@ import { actionPayload } from 'modules/helpers';
 
 import { ActionTypes } from 'literals';
 
-import { RoomSearch, RoomSearchResult, RoomTypeResult } from 'types';
+import { GetRoomResult, RoomSearch, RoomSearchResult, RoomTypeResult } from 'types';
 
 export const searchRoom = createAction(ActionTypes.ROOM_SEARCH, (payload: RoomSearch) =>
   actionPayload(payload),
@@ -23,3 +23,9 @@ export const getRoomTypeFinish = createAction(
 );
 
 export const searchRoomReset = createAction(ActionTypes.ROOM_SEARCH_RESET);
+
+export const getRoomsAction = createAction(ActionTypes.GET_ROOMS);
+export const getRoomsActionFinish = createAction(
+  ActionTypes.GET_ROOMS_FINISH,
+  (payload: GetRoomResult) => actionPayload(payload),
+);

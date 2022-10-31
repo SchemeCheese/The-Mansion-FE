@@ -5,6 +5,7 @@ import channel from './channel';
 import file from './file';
 import github from './github';
 import guest from './guest';
+import languageCode from './languageCode';
 import payment from './payment';
 import product from './product';
 import productType from './productType';
@@ -32,5 +33,6 @@ export default function* root() {
     fork(payment),
     fork(guest),
     fork(file),
+    fork(languageCode),
   ]);
 }

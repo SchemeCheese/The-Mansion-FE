@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Card, Col, message, Row, Space } from 'antd';
+import { formatNumber } from 'helpers';
 import Disk from 'pages/reservation/detail/Disk';
 import Paid from 'pages/reservation/detail/Paid';
 import AddDiscount from 'pages/reservation/modal/TransactionModal/AddDiscount';
@@ -39,7 +40,7 @@ interface Props {
 function Transaction({ reservationDetailId, reservationId }: Props) {
   const { t } = useTranslation();
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
-  const { paid, transactions } = reservationDetailInfo.data;
+  const { amount_info: amountInfo, paid, transactions } = reservationDetailInfo.data;
 
   const [isModalOpenAddItem, setIsModalOpenAddItem] = useState(false);
   const [isModalOpenPaySelected, setIsModalOpenPaySelected] = useState(false);
@@ -322,7 +323,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
               <Space direction="vertical" size="small" style={{ display: 'flex', paddingTop: 20 }}>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>{t('common.Sub total')}</span>
-                  <span style={gridStyleRight}>12.000.000</span>
+                  <span style={gridStyleRight}>{formatNumber(amountInfo?.sub_total)}</span>
                 </div>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>
@@ -346,7 +347,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                       setModalVisible={setIsModalOpenDeposit}
                     />
                   </span>
-                  <span style={gridStyleRight}>1.000.000</span>
+                  <span style={gridStyleRight}>{formatNumber(amountInfo?.deposit)}</span>
                 </div>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>
@@ -370,11 +371,15 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                       visible={isModalOpenAddDiscount}
                     />
                   </span>
-                  <span style={gridStyleRight}>1.000.000</span>
+                  <span style={gridStyleRight}>{formatNumber(amountInfo?.discount)}</span>
                 </div>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>VAT</span>
-                  <span style={gridStyleRight}>1.000.000</span>
+                  <span style={gridStyleRight}>{formatNumber(amountInfo?.vat)}</span>
+                </div>
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>Paid</span>
+                  <span style={gridStyleRight}>{formatNumber(amountInfo?.paid)}</span>
                 </div>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>
@@ -402,13 +407,15 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                 </div>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>{t('common.Amount')}</span>
-                  <span style={gridStyleRight}>450</span>
+                  <span style={gridStyleRight}>
+                    {formatNumber(parseInt(amountInfo?.grand_total, 10) / 23000)}
+                  </span>
                 </div>
               </Space>
             </div>
             <div style={{ borderTop: '1px solid #1D39C4', height: 60, paddingTop: '4%' }}>
               <span style={gridStyleLeft}>{t('common.Grand Total')}</span>
-              <span style={gridStyleRight}>10.000.000</span>
+              <span style={gridStyleRight}>{formatNumber(amountInfo?.grand_total)}</span>
             </div>
           </Card>
         </div>

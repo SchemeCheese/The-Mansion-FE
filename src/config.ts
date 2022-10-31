@@ -38,6 +38,7 @@ export const ReservationEndpoint = {
 export const RoomEndpoint = {
   SEARCH: 'api/v1/check-room-info',
   SEARCH_TYPE: 'api/v1/room-types',
+  GET_ROOM: 'api/v1/rooms',
 };
 
 export const ProductEndpoint = {
@@ -74,4 +75,8 @@ export const GuestEndpoint = {
 
 export const FileEndpoint = {
   UPLOAD: 'api/v1/upload-images',
+};
+
+export const LanguageCodeEndpoint = {
+  GET_ALL: 'api/v1/language-codes',
 };

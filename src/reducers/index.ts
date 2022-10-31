@@ -12,10 +12,12 @@ import createGuest, { createGuestState } from './createGuest';
 import createPayment, { createPaymentState } from './createPayment';
 import createReservation, { createReservationState } from './createReservation';
 import deleteItem, { deleteItemState } from './deleteItem';
+import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
+import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
 import github, { githubState } from './github';
 import product, { productSearchState } from './product';
@@ -69,6 +71,8 @@ export const initialState = {
   resendEmailReservation: resendEmailReservationState,
   updateGuest: updateGuestState,
   removeGuest: removeGuestState,
+  getLanguageCode: getLanguageCodeState,
+  getRooms: getRoomsState,
 };
 
 export default {
@@ -105,4 +109,6 @@ export default {
   ...resendEmailReservation,
   ...updateGuest,
   ...removeGuest,
+  ...getLanguageCode,
+  ...getRooms,
 };

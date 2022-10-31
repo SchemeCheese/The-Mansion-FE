@@ -246,6 +246,16 @@ export interface AgentInfosState {
   total: number;
 }
 
+export interface GetRoomState {
+  is_searching: boolean;
+  items: Array<Record<string, any>>;
+}
+
+export interface LanguageCodeState {
+  is_searching: boolean;
+  items: Array<Record<string, any>>;
+}
+
 export interface SearchScheduleState {
   data: Array<Record<string, any>>;
   end_date: string;
@@ -336,11 +346,13 @@ export interface RootState {
   createPayment: CreatePaymentState;
   createReservation: CreateReservationState;
   deleteItem: DeleteItemState;
+  getLanguageCode: LanguageCodeState;
   getProductType: ProductTypeState;
   getReservation: GetReservationState;
   getReservationDetail: ReservationDetailState;
   getReservationNumber: ReservationNumberState;
   getRoomType: RoomTypeState;
+  getRooms: GetRoomState;
   github: GitHubState;
   product: ProductSearchState;
   removeGuest: RemoveGuestState;
