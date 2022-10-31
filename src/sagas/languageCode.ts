@@ -3,7 +3,7 @@ import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
-import { AgentInfoEndpoint } from 'config';
+import { LanguageCodeEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import { getLanguageCodeActionFinish } from 'actions';
@@ -12,7 +12,7 @@ export function* getLanguageCodesSaga() {
   try {
     let items = [];
 
-    ({ items } = yield call(request, `${apiEndPoint(AgentInfoEndpoint.GET_AGENT)}`, {
+    ({ items } = yield call(request, `${apiEndPoint(LanguageCodeEndpoint.GET_ALL)}/vi`, {
       method: 'GET',
       headers: headerWithAuthorization(),
     }));

@@ -246,6 +246,11 @@ export interface AgentInfosState {
   total: number;
 }
 
+export interface GetRoomState {
+  is_searching: boolean;
+  items: Array<Record<string, any>>;
+}
+
 export interface LanguageCodeState {
   is_searching: boolean;
   items: Array<Record<string, any>>;
@@ -347,6 +352,7 @@ export interface RootState {
   getReservationDetail: ReservationDetailState;
   getReservationNumber: ReservationNumberState;
   getRoomType: RoomTypeState;
+  getRooms: GetRoomState;
   github: GitHubState;
   product: ProductSearchState;
   removeGuest: RemoveGuestState;

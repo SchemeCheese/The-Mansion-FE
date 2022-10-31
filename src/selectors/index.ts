@@ -131,3 +131,8 @@ export const selectGetLanguageCode = createSelector(
   (state: RootState) => state.getLanguageCode,
   getLanguageCode => getLanguageCode,
 );
+
+export const selectGetRooms = createSelector(
+  (state: RootState) => state.getRooms,
+  getRooms => getRooms,
+);

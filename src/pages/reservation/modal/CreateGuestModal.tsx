@@ -24,14 +24,26 @@ import {
   UploadFile,
 } from 'antd';
 import moment from 'moment';
-import { selectCreateGuest, selectRemoveGuest, selectUpdateGuest } from 'selectors';
+import {
+  selectCreateGuest,
+  selectGetLanguageCode,
+  selectGetRooms,
+  selectRemoveGuest,
+  selectUpdateGuest,
+} from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { FileEndpoint } from 'config';
 
-import { createGuest, getReservationDetail, updateGuestAction } from 'actions';
+import {
+  createGuest,
+  getLanguageCodeAction,
+  getReservationDetail,
+  getRoomsAction,
+  updateGuestAction,
+} from 'actions';
 
 const { Option } = Select;
 
@@ -136,6 +148,8 @@ function CreateGuestModal({
   const createGuestData = useAppSelector(selectCreateGuest);
   const removeGuestData = useAppSelector(selectRemoveGuest);
   const updateGuestData = useAppSelector(selectUpdateGuest);
+  const getRoomsData = useAppSelector(selectGetRooms);
+  const languageCodeData = useAppSelector(selectGetLanguageCode);
 
   const { changed } = useTreeChanges(createGuestData);
   const { changed: removeGuestChanged } = useTreeChanges(removeGuestData);
@@ -286,7 +300,7 @@ function CreateGuestModal({
       expiration_date_of_passport: currentGuest?.expiration_date_of_passport
         ? moment(currentGuest.expiration_date_of_passport)
         : null,
-      language: currentGuest?.language?.toString() ?? null,
+      language: currentGuest?.language ?? null,
       married: currentGuest?.married?.toString() ?? null,
       is_smoker: currentGuest?.is_smoker ? currentGuest?.is_smoker.toString() : null,
       email_address2: currentGuest?.email_address2 ?? null,
@@ -298,16 +312,21 @@ function CreateGuestModal({
         ? currentGuest?.currency_conversion_id.toString()
         : null,
       favorite_equipment1: currentGuest?.favorite_equipment1
-        ? currentGuest?.favorite_equipment1.toString()
+        ? currentGuest?.favorite_equipment1
         : null,
       favorite_equipment2: currentGuest?.favorite_equipment2
-        ? currentGuest?.favorite_equipment2.toString()
+        ? currentGuest?.favorite_equipment2
         : null,
       vat_company: currentGuest?.vat_company ?? null,
       vat_address: currentGuest?.vat_address ?? null,
       vat_tax: currentGuest?.vat_tax ?? null,
     });
   }, [currentGuest]);
+
+  useEffect(() => {
+    dispatch(getLanguageCodeAction());
+    dispatch(getRoomsAction());
+  }, []);
 
   return (
     <>
@@ -436,10 +455,7 @@ function CreateGuestModal({
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('guest.Place Of Issue')} name="place_of_issue">
-                      <Select placeholder="Select place of isssue">
-                        <Option value="vn">VN</Option>
-                        <Option value="usa">USA</Option>
-                      </Select>
+                      <Input placeholder={t('guest.Place Of Issue')} />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -517,9 +533,9 @@ function CreateGuestModal({
                   <Col span={8}>
                     <Form.Item label={t('common.Language')} name="language">
                       <Select placeholder="Select Language">
-                        <Option value="1">Vietnamese</Option>
-                        <Option value="2">English</Option>
-                        <Option value="3">Japanese</Option>
+                        {languageCodeData.items?.map((item: any) => {
+                          return <Option value={item.id}>{item.name}</Option>;
+                        })}
                       </Select>
                     </Form.Item>
                   </Col>
@@ -596,14 +612,18 @@ function CreateGuestModal({
                   <Col span={8}>
                     <Form.Item label={t('guest.Preferred Room Type 1')} name="favorite_equipment1">
                       <Select placeholder="Select prefred room">
-                        <Option value="1">Alex</Option>
+                        {getRoomsData.items?.map((item: any) => {
+                          return <Option value={item.id}>{item.name}</Option>;
+                        })}
                       </Select>
                     </Form.Item>
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('guest.Preferred Room Type 2')} name="favorite_equipment2">
                       <Select placeholder="Select prefred room">
-                        <Option value="1">Alex</Option>
+                        {getRoomsData.items?.map((item: any) => {
+                          return <Option value={item.id}>{item.name}</Option>;
+                        })}
                       </Select>
                     </Form.Item>
                   </Col>

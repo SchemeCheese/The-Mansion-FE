@@ -15,3 +15,7 @@ export interface RoomSearchResult {
 export interface RoomTypeResult {
   data: Array<Record<string, any>>;
 }
+
+export interface GetRoomResult {
+  items: Array<Record<string, any>>;
+}

@@ -17,6 +17,7 @@ import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
+import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
 import github, { githubState } from './github';
 import product, { productSearchState } from './product';
@@ -71,6 +72,7 @@ export const initialState = {
   updateGuest: updateGuestState,
   removeGuest: removeGuestState,
   getLanguageCode: getLanguageCodeState,
+  getRooms: getRoomsState,
 };
 
 export default {
@@ -108,4 +110,5 @@ export default {
   ...updateGuest,
   ...removeGuest,
   ...getLanguageCode,
+  ...getRooms,
 };

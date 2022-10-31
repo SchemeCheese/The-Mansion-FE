@@ -6,7 +6,7 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { RoomEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { getRoomTypeFinish, searchRoom, searchRoomFinish } from 'actions';
+import { getRoomsActionFinish, getRoomTypeFinish, searchRoom, searchRoomFinish } from 'actions';
 
 export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) {
   try {
@@ -58,9 +58,37 @@ export function* getRoomTypeSaga() {
   }
 }
 
+export function* getRoomsSaga() {
+  try {
+    let items = [];
+    const payload = {
+      operator_code: 'the_mansion',
+      branch_code: 'the_mansion',
+      facility_code: 'hotel',
+    };
+
+    const query = new URLSearchParams(Object(payload)).toString();
+
+    ({ items } = yield call(request, `${apiEndPoint(RoomEndpoint.GET_ROOM)}?${query}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }));
+
+    yield put(
+      getRoomsActionFinish({
+        items,
+      }),
+    );
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Cannot get rooms!');
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.ROOM_SEARCH, getSearchRoomnSaga),
     takeLatest(ActionTypes.ROOM_TYPE_GET, getRoomTypeSaga),
+    takeLatest(ActionTypes.GET_ROOMS, getRoomsSaga),
   ]);
 }

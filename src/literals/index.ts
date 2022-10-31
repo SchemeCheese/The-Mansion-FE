@@ -86,6 +86,8 @@ export const ActionTypes = keyMirror({
   FILE_UPLOAD_SUCCESS: undefined,
   GET_LANGUAGE_CODE: undefined,
   GET_LANGUAGE_CODE_FINISH: undefined,
+  GET_ROOMS: undefined,
+  GET_ROOMS_FINISH: undefined,
 });
 
 export const STATUS: Status = {
