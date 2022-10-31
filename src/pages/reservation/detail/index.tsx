@@ -338,7 +338,7 @@ function ReservationDetail() {
       >
         <Radio.Group onChange={onChange} value={language}>
           <Space direction="vertical">
-            <Radio value="vn">Vietnamese</Radio>
+            <Radio value="vi">Vietnamese</Radio>
             <Radio value="en">English</Radio>
             <Radio value="jp">Japanese</Radio>
           </Space>
