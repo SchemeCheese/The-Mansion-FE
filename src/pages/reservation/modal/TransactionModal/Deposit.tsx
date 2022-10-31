@@ -115,12 +115,12 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
         <Row>
           <Col span={12}>
             <Form.Item label={t('transaction.Status')}>
-              <Input defaultValue="Waitlist" placeholder="Waitlist" readOnly />
+              <Input defaultValue={getReservationDetailData.data.status} readOnly />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label={t('transaction.Guest Name')}>
-              <Input defaultValue="Steve Mark" placeholder="Steve Mark" readOnly />
+              <Input defaultValue={getReservationDetailData.data.guest_name} readOnly />
             </Form.Item>
           </Col>
           <Col span={12}>
