@@ -2,16 +2,20 @@
 Module Name : Reservation
 Developer Name : Xuan
 Created Date : 14/09/2022
-Updated Date : 14/09/2022
+Updated Date : 31/10/2022
 Main functions : Transaction Deposit
 ************************************ */
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
+import { selectGetReservationDetail } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 import { addItemAction } from 'actions';
 
@@ -25,6 +29,9 @@ interface Props {
 function Deposit({ isModalVisible, setModalVisible }: Props) {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const getReservationDetailData = useAppSelector(selectGetReservationDetail);
 
   const handleCancel = () => {
     setModalVisible(false);
@@ -50,8 +57,8 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
                   deposit_date: values.deposit_date.format('YYYY-MM_DD'),
                 },
               ],
-              reservation_id: '3482',
-              reservation_detail_id: '4744',
+              reservation_id: id ?? '',
+              reservation_detail_id: getReservationDetailData.data.id,
             },
           }),
         );
