@@ -13,8 +13,14 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
     let charges = [];
     let rates = [];
     let total = 0;
+    const payloadWithBranch = {
+      ...payload,
+      operator_code: 'the_mansion',
+      branch_code: 'the_mansion',
+      facility_code: 'hotel',
+    };
 
-    const query = new URLSearchParams(Object(payload)).toString();
+    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
 
     ({ charges, rates, total } = yield call(
       request,
@@ -34,15 +40,21 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
     );
   } catch (error) {
     console.log('Error', error);
-    message.error('Something went wrong!');
+    message.error('Cannot get room info!');
   }
 }
 
 export function* getRoomTypeSaga() {
   try {
     let data = [];
+    const payload = {
+      operator_code: 'the_mansion',
+      branch_code: 'the_mansion',
+      facility_code: 'hotel',
+    };
+    const query = new URLSearchParams(Object(payload)).toString();
 
-    ({ data } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH_TYPE)}`, {
+    ({ data } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH_TYPE)}?${query}`, {
       method: 'GET',
       headers: headerWithAuthorization(),
     }));
