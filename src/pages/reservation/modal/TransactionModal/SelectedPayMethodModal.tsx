@@ -37,6 +37,7 @@ function SelectedPayMethodModal({
   const [paidAmount, setPaidAmount] = useState(0);
 
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
+  const exchangeRates = reservationDetailInfo.data.exchange_rates;
 
   const handleSubmitPayment = () => {
     form
@@ -44,9 +45,13 @@ function SelectedPayMethodModal({
       .then(values => {
         form.resetFields();
         const paymentMethods = values.payment_methods.map((item: any) => {
+          const rate = _.find(exchangeRates, r => {
+            return r.id === item.currency_conversion_id;
+          });
+
           return {
             ...item,
-            payment_exchange_rate: 1, // TODO: Fix later
+            payment_exchange_rate: rate.exchange_rate,
           };
         });
 
@@ -75,7 +80,11 @@ function SelectedPayMethodModal({
     const paidAmountSum = _.reduce(
       formValues.payment_methods,
       function (memo: any, number_: any) {
-        return memo + parseInt(number_.payment_amount, 10);
+        const rate = _.find(exchangeRates, r => {
+          return r.id === number_.currency_conversion_id;
+        });
+
+        return memo + parseInt(number_.payment_amount, 10) * rate.exchange_rate;
       },
       0,
     );
@@ -98,9 +107,6 @@ function SelectedPayMethodModal({
       <Form
         autoComplete="off"
         form={form}
-        initialValues={{
-          remember: true,
-        }}
         labelCol={{
           span: 24,
         }}
@@ -146,6 +152,7 @@ function SelectedPayMethodModal({
                   {fields.map(({ key, name, ...restField }) => (
                     <React.Fragment key={key}>
                       <PaymentMethod
+                        form={form}
                         name={name}
                         restField={restField}
                         setPaidAmount={computePaidAmount}

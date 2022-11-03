@@ -100,7 +100,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
       payment_method: item.payment_method,
       amount: formatNumber(item.amount),
       currency: item.currency,
-      exchange_rate: item.exchange_rate,
+      exchange_rate: formatNumber(item.exchange_rate),
       amount_in_vnd: formatNumber(item.amount_in_vn),
     };
   });
