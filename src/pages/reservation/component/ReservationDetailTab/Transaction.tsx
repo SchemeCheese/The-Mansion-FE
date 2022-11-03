@@ -66,12 +66,16 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   const contentList: any = {};
   const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
   const [selectedRows, setSelectedRows] = useState<any>([]);
+  const [paySelectedRowKeys, setPaySelectedRowKeys] = useState<any>([]);
+  const [paySelectedRows, setPaySelectedRows] = useState<any>([]);
 
   const rowSelectionDisk = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[], newSelectedRows: any) => {
       setSelectedRowKeys(newSelectedRowKeys);
       setSelectedRows(newSelectedRows);
+      setPaySelectedRowKeys(newSelectedRowKeys);
+      setPaySelectedRows(newSelectedRows);
     },
     getCheckboxProps: (record: any) => ({
       disabled: record.description === 'Discount' || record.description === 'Deposit',
@@ -151,7 +155,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   };
 
   const totalAmount = _.reduce(
-    selectedRows,
+    paySelectedRows,
     function (total, item: any) {
       return parseInt(item.total_amount, 10) + total;
     },
@@ -264,10 +268,13 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                 </MButton>
                 <PaySelectedModal
                   discountAmount={discountAmount}
+                  paySelectedRowKeys={paySelectedRowKeys}
                   selectedRows={selectedRows}
                   setDiscountAmount={setDiscountAmount}
                   setIsModalOpen={setIsModalOpenPaySelected}
                   setIsModalOpenSelectedPaymentMethod={setIsModalOpenSelectedPaymentMethod}
+                  setPaySelectedRowKeys={setPaySelectedRowKeys}
+                  setPaySelectedRows={setPaySelectedRows}
                   totalAmount={totalAmount}
                   visible={isModalOpenPaySelected}
                 />
@@ -450,8 +457,8 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
             </PattonButton>
             <SelectedPayMethodModal
               discountAmount={discountAmount}
+              paySelectedRowKeys={paySelectedRowKeys}
               reservationDetailId={reservationDetailId}
-              selectedRowKeys={selectedRowKeys}
               setIsModalOpenPaySelected={setIsModalOpenPaySelected}
               setIsModalOpenSelectedPaymentMethod={setIsModalOpenSelectedPaymentMethod}
               totalAmount={totalAmount}

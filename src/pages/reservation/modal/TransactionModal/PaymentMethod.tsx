@@ -10,13 +10,13 @@ import { useAppSelector } from 'modules/hooks';
 const { Option } = Select;
 
 interface Props {
+  computePaidAmount: any;
   form: any;
   name: any;
   restField: any;
-  setPaidAmount: any;
 }
 
-function PaymentMethod({ form, name, restField, setPaidAmount }: Props) {
+function PaymentMethod({ computePaidAmount, form, name, restField }: Props) {
   const { t } = useTranslation();
   const [paymentMethod, setPaymentMethod] = useState('1');
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
@@ -40,7 +40,7 @@ function PaymentMethod({ form, name, restField, setPaidAmount }: Props) {
     });
     form.setFieldsValue({ paymentMethodTmp: paymentMethodTemporary });
 
-    setPaidAmount();
+    computePaidAmount();
   };
 
   const onChangeCurrency = (value: any, key: any) => {
@@ -56,12 +56,17 @@ function PaymentMethod({ form, name, restField, setPaidAmount }: Props) {
     });
     form.setFieldsValue({ paymentMethodTmp: paymentMethodTemporary });
 
-    setPaidAmount();
+    computePaidAmount();
   };
 
   const getRate = (key: any) => {
     const fields = form.getFieldsValue();
     const { payment_methods: paymentMethodTemporary } = fields;
+
+    if (!paymentMethodTemporary) {
+      return 1;
+    }
+
     const currencyId = paymentMethodTemporary[key]?.currency_conversion_id ?? 2;
 
     const rate = _.find(exchangeRates, item => {
@@ -77,6 +82,7 @@ function PaymentMethod({ form, name, restField, setPaidAmount }: Props) {
         <Col span={6}>
           <Form.Item
             {...restField}
+            initialValue="0"
             label={
               <label htmlFor="amount-to-pay" style={{ fontWeight: 'bold' }}>
                 {t('selectedPayMethod.Amount to pay.title')}
@@ -136,6 +142,7 @@ function PaymentMethod({ form, name, restField, setPaidAmount }: Props) {
         <Col span={6}>
           <Form.Item
             {...restField}
+            initialValue="0"
             label={
               <label htmlFor="amount-in-vnd-2" style={{ fontWeight: 'bold' }}>
                 {t('selectedPayMethod.Amount in VND.title')}

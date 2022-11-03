@@ -6,10 +6,13 @@ import { formatNumber } from 'helpers';
 
 interface Props {
   discountAmount: any;
+  paySelectedRowKeys: any;
   selectedRows: any;
   setDiscountAmount: (value: any) => void;
   setIsModalOpen: (visible: boolean) => void;
   setIsModalOpenSelectedPaymentMethod: (visible: boolean) => void;
+  setPaySelectedRowKeys: (valye: any) => void;
+  setPaySelectedRows: (value: any) => void;
   totalAmount: number;
   visible: boolean;
 }
@@ -24,10 +27,13 @@ interface DataTypePaySelected {
 
 function PaySelectedModal({
   discountAmount,
+  paySelectedRowKeys,
   selectedRows,
   setDiscountAmount,
   setIsModalOpen,
   setIsModalOpenSelectedPaymentMethod,
+  setPaySelectedRowKeys,
+  setPaySelectedRows,
   totalAmount,
   visible,
 }: Props) {
@@ -60,8 +66,11 @@ function PaySelectedModal({
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys: React.Key[], newSelectedRows: any) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', newSelectedRows);
+    selectedRowKeys: paySelectedRowKeys,
+    onChange: (newSelectedRowKeys: React.Key[], newSelectedRows: any) => {
+      console.log(`selectedRowKeys: ${newSelectedRowKeys}`, 'selectedRows: ', newSelectedRows);
+      setPaySelectedRowKeys(newSelectedRowKeys);
+      setPaySelectedRows(newSelectedRows);
     },
   };
 
