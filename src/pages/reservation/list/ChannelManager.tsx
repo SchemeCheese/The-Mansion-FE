@@ -11,10 +11,11 @@ import 'styles/channel.css';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { ArrowDownOutlined, ArrowUpOutlined, RedoOutlined } from '@ant-design/icons';
-import { Col, DatePicker, Input, Row, Select, Space, Table, Tag } from 'antd';
+import { Col, DatePicker, Input, message, Row, Select, Space, Table, Tag } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
-import { selectChannel } from 'selectors';
+import { selectChannel, selectUpdateRoomAvailable } from 'selectors';
+import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
@@ -24,6 +25,8 @@ import { fetchChannelsAction } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
+
+import QuickBulkUpdateModal from './QuickBulkUpdateModal';
 
 const { OptGroup, Option } = Select;
 const { Search } = Input;
@@ -61,6 +64,12 @@ function ChannelManager() {
     rate_plan: '',
   });
   const [isShowMore, setIsShowMore] = useState<any>();
+  const [isShowQuickUpdateModal, setIsShowQuickUpdateModal] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState({
+    room_number: 0,
+    room_id: '',
+    from_date: '',
+  });
 
   const onChange = (date: any) => {
     dispatch(
@@ -71,6 +80,20 @@ function ChannelManager() {
   };
 
   const channelData = useAppSelector(selectChannel);
+  const selectUpdateRoomAvailableData = useAppSelector(selectUpdateRoomAvailable);
+  const { changed: updateRoomAvailableChanged } = useTreeChanges(selectUpdateRoomAvailableData);
+
+  useEffect(() => {
+    if (updateRoomAvailableChanged('status', 'SUCCESS')) {
+      message.success('Update room available successfully!');
+
+      dispatch(
+        fetchChannelsAction({
+          fromDate: channelData.dates[0].format,
+        }),
+      );
+    }
+  }, [updateRoomAvailableChanged]);
 
   useEffect(() => {
     const channelIsShowMore = channelData.channels.map((item: any) => {
@@ -141,6 +164,11 @@ function ChannelManager() {
 
   return (
     <>
+      <QuickBulkUpdateModal
+        isShowQuickUpdateModal={isShowQuickUpdateModal}
+        setIsShowQuickUpdateModal={setIsShowQuickUpdateModal}
+        updateInfo={updateInfo}
+      />
       <Row style={{ paddingBottom: 20 }}>
         <Col offset={16} span={8}>
           <div style={{ float: 'right' }}>
@@ -614,6 +642,19 @@ function ChannelManager() {
                 key: 'data1',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: (column: any) => {
+                  return {
+                    onClick: () => {
+                      console.log('onClick', column, channelData.dates);
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[0],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[0].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -640,6 +681,20 @@ function ChannelManager() {
                 key: 'data2',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      console.log('channelData.dates[1].format', channelData.dates[1].format);
+
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[1],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[1].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -666,6 +721,18 @@ function ChannelManager() {
                 key: 'data3',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[2],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[2].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -692,6 +759,18 @@ function ChannelManager() {
                 key: 'data4',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[3],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[3].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -718,6 +797,18 @@ function ChannelManager() {
                 key: 'data5',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[4],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[4].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -744,6 +835,18 @@ function ChannelManager() {
                 key: 'data6',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[5],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[5].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -770,6 +873,18 @@ function ChannelManager() {
                 key: 'data7',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[6],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[6].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -796,6 +911,18 @@ function ChannelManager() {
                 key: 'data8',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[7],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[7].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -822,6 +949,18 @@ function ChannelManager() {
                 key: 'data9',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[8],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[8].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -848,6 +987,18 @@ function ChannelManager() {
                 key: 'data10',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[9],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[9].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {

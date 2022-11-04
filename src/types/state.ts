@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 import { Variants } from 'styled-minimal/lib/types';
 import { ValueOf } from 'type-fest';
 
+import { UpdateRoomAvailable } from './channel';
 import { AlertPosition, Icons, Status } from './common';
 
 export interface AlertData {
@@ -127,6 +128,19 @@ export interface ChangeDiskPayload {
 export interface CreateReservationState {
   payload: CreateReservationPayload;
   reservation_created?: any;
+  status: string;
+}
+
+interface UpdateRoomAvailablePayload {
+  enabled_day: Array<string>;
+  end_date: string;
+  room_id: string;
+  room_number: number;
+  start_date: string;
+}
+
+export interface UpdateRoomAvailableState {
+  payload: UpdateRoomAvailablePayload;
   status: string;
 }
 
@@ -366,6 +380,7 @@ export interface RootState {
   updateNoteReservationDetail: UpdateNoteReservationDetailState;
   updateRate: UpdateRateState;
   updateReservation: CreateReservationState;
+  updateRoomAvailable: UpdateRoomAvailableState;
   uploadFile: UploadFileState;
   user: UserState;
 }

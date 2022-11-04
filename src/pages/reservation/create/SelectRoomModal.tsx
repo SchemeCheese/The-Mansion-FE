@@ -404,7 +404,6 @@ function SelectRoomModal({
   };
 
   const disabledCheckoutDate: RangePickerProps['disabledDate'] = current => {
-    // Can not select days before today and today
     return current < moment(roomCondition.checkin).endOf('day');
   };
 

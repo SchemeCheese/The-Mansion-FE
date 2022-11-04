@@ -136,3 +136,8 @@ export const selectGetRooms = createSelector(
   (state: RootState) => state.getRooms,
   getRooms => getRooms,
 );
+
+export const selectUpdateRoomAvailable = createSelector(
+  (state: RootState) => state.updateRoomAvailable,
+  updateRoomAvailable => updateRoomAvailable,
+);
