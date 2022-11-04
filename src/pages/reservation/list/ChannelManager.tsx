@@ -8,13 +8,14 @@ Main functions : Channel Manager Tab
 
 import 'styles/channel.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { RedoOutlined } from '@ant-design/icons';
+import { ArrowDownOutlined, ArrowUpOutlined, RedoOutlined } from '@ant-design/icons';
 import { Col, DatePicker, Input, Row, Select, Space, Table, Tag } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import { selectChannel } from 'selectors';
+import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 import { colors } from 'modules/theme';
@@ -28,6 +29,29 @@ const { OptGroup, Option } = Select;
 const { Search } = Input;
 const emptyPrice = '---';
 
+function NoRoomAvailable() {
+  return (
+    <span
+      style={{
+        position: 'absolute',
+        top: '25%',
+        right: '25%',
+      }}
+    >
+      <svg
+        fill="none"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="12" cy="12" fill="#FAAD14" fillOpacity="0.85" r="12" />
+      </svg>
+      <span style={{ position: 'relative', left: -15, top: -8, color: 'white' }}>0</span>
+    </span>
+  );
+}
+
 function ChannelManager() {
   const dispatch = useDispatch();
 
@@ -36,6 +60,7 @@ function ChannelManager() {
     channel: '',
     rate_plan: '',
   });
+  const [isShowMore, setIsShowMore] = useState<any>();
 
   const onChange = (date: any) => {
     dispatch(
@@ -46,6 +71,24 @@ function ChannelManager() {
   };
 
   const channelData = useAppSelector(selectChannel);
+
+  useEffect(() => {
+    const channelIsShowMore = channelData.channels.map((item: any) => {
+      if (item.standard_rates.length > 4) {
+        return {
+          rateId: item.rateId,
+          is_show_more: 1,
+        };
+      }
+
+      return {
+        rateId: item.rateId,
+        is_show_more: 0,
+      };
+    });
+
+    setIsShowMore(channelIsShowMore);
+  }, [channelData]);
 
   const dates = [];
 
@@ -340,8 +383,6 @@ function ChannelManager() {
       <Row style={{ paddingTop: 20 }}>
         {channelData.channels
           .filter((item: any) => {
-            console.log('channelSearch.room_type', channelSearch.room_type);
-
             if (channelSearch.room_type === '') {
               return true;
             }
@@ -480,7 +521,7 @@ function ChannelManager() {
                         {value}
                       </span>
                       <span style={{ fontWeight: 400, fontSize: 14, color: '#1D39C4' }}>
-                        Supervisor Double...
+                        {item.name}
                       </span>
                       <span style={{ float: 'right' }}>
                         <svg
@@ -563,7 +604,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[0];
+                  if (item.available_rooms_number[0]) {
+                    return item.available_rooms_number[0];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data1',
                 key: 'data1',
@@ -585,7 +630,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[1];
+                  if (item.available_rooms_number[1]) {
+                    return item.available_rooms_number[1];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data2',
                 key: 'data2',
@@ -607,7 +656,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[2];
+                  if (item.available_rooms_number[2]) {
+                    return item.available_rooms_number[2];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data3',
                 key: 'data3',
@@ -629,7 +682,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[3];
+                  if (item.available_rooms_number[3]) {
+                    return item.available_rooms_number[3];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data4',
                 key: 'data4',
@@ -651,7 +708,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[4];
+                  if (item.available_rooms_number[4]) {
+                    return item.available_rooms_number[4];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data5',
                 key: 'data5',
@@ -673,7 +734,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[5];
+                  if (item.available_rooms_number[5]) {
+                    return item.available_rooms_number[5];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data6',
                 key: 'data6',
@@ -695,7 +760,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[6];
+                  if (item.available_rooms_number[6]) {
+                    return item.available_rooms_number[6];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data7',
                 key: 'data7',
@@ -717,7 +786,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[7];
+                  if (item.available_rooms_number[7]) {
+                    return item.available_rooms_number[7];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data8',
                 key: 'data8',
@@ -739,7 +812,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[8];
+                  if (item.available_rooms_number[8]) {
+                    return item.available_rooms_number[8];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data9',
                 key: 'data9',
@@ -761,22 +838,11 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return (
-                    <span>
-                      <svg
-                        fill="none"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle cx="12" cy="12" fill="#FAAD14" fillOpacity="0.85" r="12" />
-                      </svg>
-                      <span style={{ position: 'relative', left: -15, top: -8, color: 'white' }}>
-                        0
-                      </span>
-                    </span>
-                  );
+                  if (item.available_rooms_number[9]) {
+                    return item.available_rooms_number[9];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data10',
                 key: 'data10',
@@ -800,7 +866,15 @@ function ChannelManager() {
 
             const data: any[] = [];
 
-            for (let index = 0; index < item.standard_rates.length + 2; index++) {
+            const rate = _.find(isShowMore, (rateTemporary: any) => {
+              return rateTemporary.rateId === item.rateId;
+            });
+
+            const channelLength =
+              rate && rate.is_show_more === 1 ? 7 : item.standard_rates.length + 2;
+
+            // for (let index = 0; index < item.standard_rates.length + 2; index++) {
+            for (let index = 0; index < channelLength; index++) {
               if (index === 0) {
                 if (channelSearch.rate_plan !== '2') {
                   data.push({
@@ -883,6 +957,35 @@ function ChannelManager() {
                     return '';
                   }}
                 />
+                {item.standard_rates.length > 5 && (
+                  <div style={{ textAlign: 'center', paddingTop: 12 }}>
+                    <MButton
+                      onClick={() => {
+                        const rateIndex = isShowMore.findIndex((rateTmpp: any) => {
+                          return rateTmpp.rateId === item.rateId;
+                        });
+                        const isShowMoreTemporary = [...isShowMore];
+
+                        isShowMoreTemporary[rateIndex].is_show_more =
+                          isShowMoreTemporary[rateIndex].is_show_more === 1 ? 0 : 1;
+
+                        setIsShowMore(isShowMoreTemporary);
+                      }}
+                    >
+                      {_.find(isShowMore, (rateTemporary: any) => {
+                        return rateTemporary.rateId === item.rateId;
+                      })?.is_show_more ? (
+                        <>
+                          All Channel <ArrowDownOutlined />{' '}
+                        </>
+                      ) : (
+                        <>
+                          See Less <ArrowUpOutlined />{' '}
+                        </>
+                      )}
+                    </MButton>
+                  </div>
+                )}
               </Col>
             );
           })}
