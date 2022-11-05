@@ -34,6 +34,7 @@ import updateNoteReservationDetail, {
 } from './updateNoteReservationDetail';
 import updateRate, { updateRateState } from './updateRate';
 import updateReservation, { updateReservationState } from './updateReservation';
+import updateRoomAvailable, { updateRoomAvailableState } from './updateRoomAvailable';
 import uploadFile, { uploadFileState } from './uploadFile';
 import user, { userState } from './user';
 
@@ -70,6 +71,7 @@ export const initialState = {
   updateNoteReservationDetail: updateNoteReservationDetailState,
   resendEmailReservation: resendEmailReservationState,
   updateGuest: updateGuestState,
+  updateRoomAvailable: updateRoomAvailableState,
   removeGuest: removeGuestState,
   getLanguageCode: getLanguageCodeState,
   getRooms: getRoomsState,
@@ -111,4 +113,5 @@ export default {
   ...removeGuest,
   ...getLanguageCode,
   ...getRooms,
+  ...updateRoomAvailable,
 };

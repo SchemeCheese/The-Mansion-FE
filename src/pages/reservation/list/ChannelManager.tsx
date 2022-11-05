@@ -8,13 +8,15 @@ Main functions : Channel Manager Tab
 
 import 'styles/channel.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { RedoOutlined } from '@ant-design/icons';
-import { Col, DatePicker, Input, Row, Select, Space, Table, Tag } from 'antd';
+import { ArrowDownOutlined, ArrowUpOutlined, RedoOutlined } from '@ant-design/icons';
+import { Col, DatePicker, Input, message, Row, Select, Space, Table, Tag } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
-import { selectChannel } from 'selectors';
+import { selectChannel, selectUpdateRoomAvailable } from 'selectors';
+import useTreeChanges from 'tree-changes-hook';
+import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 import { colors } from 'modules/theme';
@@ -24,9 +26,34 @@ import { fetchChannelsAction } from 'actions';
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
+import QuickBulkUpdateModal from './QuickBulkUpdateModal';
+
 const { OptGroup, Option } = Select;
 const { Search } = Input;
 const emptyPrice = '---';
+
+function NoRoomAvailable() {
+  return (
+    <span
+      style={{
+        position: 'absolute',
+        top: '25%',
+        right: '25%',
+      }}
+    >
+      <svg
+        fill="none"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle cx="12" cy="12" fill="#FAAD14" fillOpacity="0.85" r="12" />
+      </svg>
+      <span style={{ position: 'relative', left: -15, top: -8, color: 'white' }}>0</span>
+    </span>
+  );
+}
 
 function ChannelManager() {
   const dispatch = useDispatch();
@@ -35,6 +62,13 @@ function ChannelManager() {
     room_type: '',
     channel: '',
     rate_plan: '',
+  });
+  const [isShowMore, setIsShowMore] = useState<any>();
+  const [isShowQuickUpdateModal, setIsShowQuickUpdateModal] = useState(false);
+  const [updateInfo, setUpdateInfo] = useState({
+    room_number: 0,
+    room_id: '',
+    from_date: '',
   });
 
   const onChange = (date: any) => {
@@ -46,6 +80,38 @@ function ChannelManager() {
   };
 
   const channelData = useAppSelector(selectChannel);
+  const selectUpdateRoomAvailableData = useAppSelector(selectUpdateRoomAvailable);
+  const { changed: updateRoomAvailableChanged } = useTreeChanges(selectUpdateRoomAvailableData);
+
+  useEffect(() => {
+    if (updateRoomAvailableChanged('status', 'SUCCESS')) {
+      message.success('Update room available successfully!');
+
+      dispatch(
+        fetchChannelsAction({
+          fromDate: channelData.dates[0].format,
+        }),
+      );
+    }
+  }, [updateRoomAvailableChanged]);
+
+  useEffect(() => {
+    const channelIsShowMore = channelData.channels.map((item: any) => {
+      if (item.standard_rates.length > 4) {
+        return {
+          rateId: item.rateId,
+          is_show_more: 1,
+        };
+      }
+
+      return {
+        rateId: item.rateId,
+        is_show_more: 0,
+      };
+    });
+
+    setIsShowMore(channelIsShowMore);
+  }, [channelData]);
 
   const dates = [];
 
@@ -98,6 +164,11 @@ function ChannelManager() {
 
   return (
     <>
+      <QuickBulkUpdateModal
+        isShowQuickUpdateModal={isShowQuickUpdateModal}
+        setIsShowQuickUpdateModal={setIsShowQuickUpdateModal}
+        updateInfo={updateInfo}
+      />
       <Row style={{ paddingBottom: 20 }}>
         <Col offset={16} span={8}>
           <div style={{ float: 'right' }}>
@@ -340,8 +411,6 @@ function ChannelManager() {
       <Row style={{ paddingTop: 20 }}>
         {channelData.channels
           .filter((item: any) => {
-            console.log('channelSearch.room_type', channelSearch.room_type);
-
             if (channelSearch.room_type === '') {
               return true;
             }
@@ -480,7 +549,7 @@ function ChannelManager() {
                         {value}
                       </span>
                       <span style={{ fontWeight: 400, fontSize: 14, color: '#1D39C4' }}>
-                        Supervisor Double...
+                        {item.name}
                       </span>
                       <span style={{ float: 'right' }}>
                         <svg
@@ -563,12 +632,29 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[0];
+                  if (item.available_rooms_number[0]) {
+                    return item.available_rooms_number[0];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data1',
                 key: 'data1',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: (column: any) => {
+                  return {
+                    onClick: () => {
+                      console.log('onClick', column, channelData.dates);
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[0],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[0].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -585,12 +671,30 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[1];
+                  if (item.available_rooms_number[1]) {
+                    return item.available_rooms_number[1];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data2',
                 key: 'data2',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      console.log('channelData.dates[1].format', channelData.dates[1].format);
+
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[1],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[1].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -607,12 +711,28 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[2];
+                  if (item.available_rooms_number[2]) {
+                    return item.available_rooms_number[2];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data3',
                 key: 'data3',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[2],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[2].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -629,12 +749,28 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[3];
+                  if (item.available_rooms_number[3]) {
+                    return item.available_rooms_number[3];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data4',
                 key: 'data4',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[3],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[3].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -651,12 +787,28 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[4];
+                  if (item.available_rooms_number[4]) {
+                    return item.available_rooms_number[4];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data5',
                 key: 'data5',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[4],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[4].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -673,12 +825,28 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[5];
+                  if (item.available_rooms_number[5]) {
+                    return item.available_rooms_number[5];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data6',
                 key: 'data6',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[5],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[5].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -695,12 +863,28 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[6];
+                  if (item.available_rooms_number[6]) {
+                    return item.available_rooms_number[6];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data7',
                 key: 'data7',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[6],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[6].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -717,12 +901,28 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[7];
+                  if (item.available_rooms_number[7]) {
+                    return item.available_rooms_number[7];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data8',
                 key: 'data8',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[7],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[7].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -739,12 +939,28 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return item.available_rooms_number[8];
+                  if (item.available_rooms_number[8]) {
+                    return item.available_rooms_number[8];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data9',
                 key: 'data9',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[8],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[8].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -761,27 +977,28 @@ function ChannelManager() {
               },
               {
                 title: () => {
-                  return (
-                    <span>
-                      <svg
-                        fill="none"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        width="24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <circle cx="12" cy="12" fill="#FAAD14" fillOpacity="0.85" r="12" />
-                      </svg>
-                      <span style={{ position: 'relative', left: -15, top: -8, color: 'white' }}>
-                        0
-                      </span>
-                    </span>
-                  );
+                  if (item.available_rooms_number[9]) {
+                    return item.available_rooms_number[9];
+                  }
+
+                  return <NoRoomAvailable />;
                 },
                 dataIndex: 'data10',
                 key: 'data10',
                 align: 'center' as const,
                 className: 'data-channel',
+                onHeaderCell: () => {
+                  return {
+                    onClick: () => {
+                      setUpdateInfo({
+                        room_number: item.available_rooms_number[9],
+                        room_id: item.roomId,
+                        from_date: channelData.dates[9].format,
+                      });
+                      setIsShowQuickUpdateModal(true);
+                    },
+                  };
+                },
                 render: (text: string) => {
                   return {
                     props: {
@@ -800,7 +1017,15 @@ function ChannelManager() {
 
             const data: any[] = [];
 
-            for (let index = 0; index < item.standard_rates.length + 2; index++) {
+            const rate = _.find(isShowMore, (rateTemporary: any) => {
+              return rateTemporary.rateId === item.rateId;
+            });
+
+            const channelLength =
+              rate && rate.is_show_more === 1 ? 7 : item.standard_rates.length + 2;
+
+            // for (let index = 0; index < item.standard_rates.length + 2; index++) {
+            for (let index = 0; index < channelLength; index++) {
               if (index === 0) {
                 if (channelSearch.rate_plan !== '2') {
                   data.push({
@@ -883,6 +1108,35 @@ function ChannelManager() {
                     return '';
                   }}
                 />
+                {item.standard_rates.length > 5 && (
+                  <div style={{ textAlign: 'center', paddingTop: 12 }}>
+                    <MButton
+                      onClick={() => {
+                        const rateIndex = isShowMore.findIndex((rateTmpp: any) => {
+                          return rateTmpp.rateId === item.rateId;
+                        });
+                        const isShowMoreTemporary = [...isShowMore];
+
+                        isShowMoreTemporary[rateIndex].is_show_more =
+                          isShowMoreTemporary[rateIndex].is_show_more === 1 ? 0 : 1;
+
+                        setIsShowMore(isShowMoreTemporary);
+                      }}
+                    >
+                      {_.find(isShowMore, (rateTemporary: any) => {
+                        return rateTemporary.rateId === item.rateId;
+                      })?.is_show_more ? (
+                        <>
+                          All Channel <ArrowDownOutlined />{' '}
+                        </>
+                      ) : (
+                        <>
+                          See Less <ArrowUpOutlined />{' '}
+                        </>
+                      )}
+                    </MButton>
+                  </div>
+                )}
               </Col>
             );
           })}

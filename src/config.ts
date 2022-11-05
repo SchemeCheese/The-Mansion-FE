@@ -55,6 +55,7 @@ export const ProductTypeEndpoint = {
 
 export const ChannelEndpoint = {
   GET_LIST: 'api/v1/channels',
+  SET_ROOM_DATE: 'api/v1/update-available-room',
 };
 
 export const TransactionEndpoint = {
