@@ -6,13 +6,22 @@ Updated Date : 30/08/2022
 Main functions : Guest List Tab
 ************************************ */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, Radio, Row, Typography } from 'antd';
+import { Card, Col, message, Radio, Row, Typography } from 'antd';
 import CreateGuestModal from 'pages/reservation/modal/CreateGuestModal';
+import { selectSetMainGuest } from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
 
-import { removeGuestAction } from 'actions';
+import { useAppSelector } from 'modules/hooks';
+
+import {
+  getReservation,
+  getReservationDetail,
+  removeGuestAction,
+  setMainGuestAction,
+} from 'actions';
 
 const { Text, Title } = Typography;
 
@@ -26,10 +35,14 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [currentGuest, setCurrentGuest] = useState();
 
+  const setMainGuestData = useAppSelector(selectSetMainGuest);
+  const { changed } = useTreeChanges(setMainGuestData);
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const showModal = () => {
+    setCurrentGuest(undefined);
     setIsModalVisible(true);
   };
 
@@ -48,6 +61,25 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
       }),
     );
   };
+
+  useEffect(() => {
+    if (changed('status', 'SUCCESS')) {
+      message.success('Set main guest successfully!');
+
+      dispatch(
+        getReservation({
+          reservation_id: reservationId,
+        }),
+      );
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
+    }
+  }, [changed]);
 
   const data = guests.map((item: any) => {
     return {
@@ -130,7 +162,19 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
                   <Title level={5}>{value.name}</Title>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
-                  <Radio checked={value.check} style={{ left: 15, fontSize: 13 }} value={1}>
+                  <Radio
+                    checked={value.is_main_guest}
+                    onClick={() => {
+                      dispatch(
+                        setMainGuestAction({
+                          reservation_detail_id: reservationDetailId,
+                          guest_id: value.id,
+                        }),
+                      );
+                    }}
+                    style={{ left: 15, fontSize: 13 }}
+                    value={1}
+                  >
                     {t('guest.Main Guest')}
                   </Radio>
                 </Col>

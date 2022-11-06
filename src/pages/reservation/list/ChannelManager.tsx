@@ -1069,7 +1069,7 @@ function ChannelManager() {
               } else if (channelSearch.rate_plan !== '3') {
                 if (
                   channelSearch.channel === '' ||
-                  channelSearch.channel === item.standard_rates[index - 2].channel.toLowerCase()
+                  channelSearch.channel === item.standard_rates[index - 2]?.channel?.toLowerCase()
                 ) {
                   data.push({
                     key: '1',

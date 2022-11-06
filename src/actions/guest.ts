@@ -4,7 +4,7 @@ import { actionPayload } from 'modules/helpers';
 
 import { ActionTypes } from 'literals';
 
-import { GuestCreate, GuestRemove, GuestUpdate } from 'types';
+import { GuestCreate, GuestRemove, GuestUpdate, SetMainGuest } from 'types';
 
 export const createGuest = createAction(ActionTypes.GUEST_CREATE, (payload: GuestCreate) =>
   actionPayload(payload),
@@ -23,3 +23,10 @@ export const removeGuestAction = createAction(ActionTypes.GUEST_REMOVE, (payload
 );
 
 export const removeGuestSuccessAction = createAction(ActionTypes.GUEST_REMOVE_SUCCESS);
+
+export const setMainGuestAction = createAction(
+  ActionTypes.SET_MAIN_GUEST,
+  (payload: SetMainGuest) => actionPayload(payload),
+);
+
+export const setMainGuestSuccessAction = createAction(ActionTypes.SET_MAIN_GUEST_SUCCESS);

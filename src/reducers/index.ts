@@ -30,6 +30,7 @@ import reservation, { reservationSearchState } from './reservation';
 import searchAvailableSchedule, { searchAvailableScheduleState } from './searchAvailableSchedule';
 import searchRoom, { roomSearchState } from './searchRoom';
 import searchSchedule, { searchScheduleState } from './searchSchedule';
+import setMainGuest, { setMainGuestState } from './setMainGuest';
 import updateGeneralInfo, { updateGeneralInfoState } from './updateGeneralInfo';
 import updateGuest, { updateGuestState } from './updateGuest';
 import updateNoteReservationDetail, {
@@ -79,6 +80,7 @@ export const initialState = {
   getLanguageCode: getLanguageCodeState,
   getRooms: getRoomsState,
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
+  setMainGuest: setMainGuestState,
 };
 
 export default {
@@ -119,4 +121,5 @@ export default {
   ...getRooms,
   ...updateRoomAvailable,
   ...downloadPDFReservationDetail,
+  ...setMainGuest,
 };

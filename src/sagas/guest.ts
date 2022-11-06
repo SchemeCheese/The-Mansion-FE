@@ -11,6 +11,8 @@ import {
   createGuestSuccess,
   removeGuestAction,
   removeGuestSuccessAction,
+  setMainGuestAction,
+  setMainGuestSuccessAction,
   updateGuestAction,
   updateGuestSuccessAction,
 } from 'actions';
@@ -91,8 +93,35 @@ export function* deleteRemoveGuestSaga({ payload }: ReturnType<typeof removeGues
   }
 }
 
+export function* getSetMainGuestSaga({ payload }: ReturnType<typeof setMainGuestAction>) {
+  try {
+    let success = '';
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(GuestEndpoint.REMOVE)}/${payload.reservation_detail_id}/guests/${
+        payload.guest_id
+      }/set-main-guest`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    if (success) {
+      yield put(setMainGuestSuccessAction());
+    } else {
+      message.error('Set Main Guest Failed!');
+    }
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Set Main Guest Failed!');
+  }
+}
+
 export default function* root() {
   yield all([takeLatest(ActionTypes.GUEST_CREATE, postCreateGuestSaga)]);
   yield all([takeLatest(ActionTypes.GUEST_UPDATE, postUpdateGuestSaga)]);
   yield all([takeLatest(ActionTypes.GUEST_REMOVE, deleteRemoveGuestSaga)]);
+  yield all([takeLatest(ActionTypes.SET_MAIN_GUEST, getSetMainGuestSaga)]);
 }

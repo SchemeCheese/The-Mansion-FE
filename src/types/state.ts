@@ -276,6 +276,12 @@ export interface SearchScheduleState {
   start_date: string;
 }
 
+export interface SetMainGuestState {
+  guest_id: string;
+  reservation_detail_id: string;
+  status: string;
+}
+
 export interface FetchChannelState {
   channels: Array<Record<string, any>>;
   dates: Array<Record<string, any>>;
@@ -386,6 +392,7 @@ export interface RootState {
   searchAvailableSchedule: SearchAvailableScheduleState;
   searchRoom: RoomSearchState;
   searchSchedule: SearchScheduleState;
+  setMainGuest: SetMainGuestState;
   updateGeneralInfo: UpdateGeneralInfoState;
   updateGuest: UpdateGuestState;
   updateNoteReservationDetail: UpdateNoteReservationDetailState;
