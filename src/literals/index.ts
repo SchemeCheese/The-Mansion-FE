@@ -90,6 +90,9 @@ export const ActionTypes = keyMirror({
   GET_ROOMS_FINISH: undefined,
   UPDATE_ROOM_AVAILABLE_NUMBER: undefined,
   UPDATE_ROOM_AVAILABLE_NUMBER_SUCCESS: undefined,
+  RESERVATION_DETAIL_DOWNLOAD_PDF: undefined,
+  RESERVATION_DETAIL_DOWNLOAD_PDF_SUCCESS: undefined,
+  RESERVATION_DETAIL_DOWNLOAD_PDF_FAILURE: undefined,
 });
 
 export const STATUS: Status = {

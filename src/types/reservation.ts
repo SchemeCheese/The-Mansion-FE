@@ -162,3 +162,13 @@ export interface ResendEmailReservation {
   language: string;
   reservation_id: string;
 }
+
+export interface DownloadPDFReservationDetailPayload {
+  file_name: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
+export interface DownloadPDFReservationDetail {
+  payload: DownloadPDFReservationDetailPayload;
+}
