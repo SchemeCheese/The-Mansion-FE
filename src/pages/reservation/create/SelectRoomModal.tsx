@@ -62,9 +62,6 @@ function SelectRoomModal({
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const ratesResult: any = useSelector<RootState>(
-    ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.rates,
-  );
   const quantityResult: any = useSelector<RootState>(
     ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.total,
   );
@@ -86,15 +83,15 @@ function SelectRoomModal({
       dataIndex: 'rate_name',
       key: 'rate_name',
       render: (text: any, record: any, index: number) => {
-        const option: any = ratesResult?.map((item: any) => {
+        const option: any = searchRoomResultState[index].rates?.map((item: any) => {
           return <Option value={item.equipment_charge_detail_id}>{item.rate_name}</Option>;
         });
 
         return (
           <Select
-            defaultValue={text}
+            defaultValue={record.rate_id}
             onChange={value => {
-              const selectedRate = _.findWhere(ratesResult, {
+              const selectedRate = _.findWhere(searchRoomResultState[index].rates, {
                 equipment_charge_detail_id: value,
               });
 
