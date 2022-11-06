@@ -42,6 +42,7 @@ import { FileEndpoint } from 'config';
 import {
   createGuest,
   getLanguageCodeAction,
+  getReservation,
   getReservationDetail,
   getRoomsAction,
   updateGuestAction,
@@ -204,6 +205,12 @@ function CreateGuestModal({
   useEffect(() => {
     if (removeGuestChanged('status', 'SUCCESS')) {
       message.success('Remove guest successfully!');
+
+      dispatch(
+        getReservation({
+          reservation_id: reservationId,
+        }),
+      );
 
       dispatch(
         getReservationDetail({

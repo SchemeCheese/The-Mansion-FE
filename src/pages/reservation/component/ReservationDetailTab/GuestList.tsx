@@ -9,7 +9,8 @@ Main functions : Guest List Tab
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, message, Radio, Row, Typography } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Card, Col, message, Modal, Radio, Row, Typography } from 'antd';
 import CreateGuestModal from 'pages/reservation/modal/CreateGuestModal';
 import { selectSetMainGuest } from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
@@ -51,15 +52,23 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
     setIsModalVisible(true);
   };
 
-  const handleRemoveGuest = (item: any) => {
-    dispatch(
-      removeGuestAction({
-        payload: {
-          reservation_detail_id: reservationDetailId,
-          guest_id: item.id,
-        },
-      }),
-    );
+  const confirmRemoveGuest = (item: any) => {
+    Modal.confirm({
+      title: 'Delete Confirm',
+      icon: <ExclamationCircleOutlined />,
+      content: 'Do you want to delete this guest?',
+
+      onOk() {
+        dispatch(
+          removeGuestAction({
+            payload: {
+              reservation_detail_id: reservationDetailId,
+              guest_id: item.id,
+            },
+          }),
+        );
+      },
+    });
   };
 
   useEffect(() => {
@@ -143,7 +152,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
           <Col span={8}>
             <Card
               actions={[
-                <Text onClick={() => handleRemoveGuest(value)} type="secondary">
+                <Text onClick={() => confirmRemoveGuest(value)} type="secondary">
                   {t('common.Remove')}
                 </Text>,
                 <Text onClick={() => showUpdateModal(value)} type="secondary">

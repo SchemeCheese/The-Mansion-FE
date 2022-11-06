@@ -12,8 +12,10 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import { formatNumber } from 'helpers';
 import moment from 'moment';
 import { selectGetReservationDetail } from 'selectors';
+import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -22,16 +24,18 @@ import { addItemAction } from 'actions';
 const { Option } = Select;
 
 interface Props {
+  grandTotal: number;
   isModalVisible: boolean;
   setModalVisible: (value: boolean) => void;
 }
 
-function Deposit({ isModalVisible, setModalVisible }: Props) {
+function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const { id } = useParams();
 
   const getReservationDetailData = useAppSelector(selectGetReservationDetail);
+  const exchangeRates = getReservationDetailData?.data?.exchange_rates;
 
   const handleCancel = () => {
     setModalVisible(false);
@@ -43,6 +47,10 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
       .then(values => {
         form.resetFields();
 
+        const rate = _.find(exchangeRates, item => {
+          return item.id === values.currency;
+        });
+
         dispatch(
           addItemAction({
             payload: {
@@ -50,8 +58,8 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
                 {
                   description_id: 88,
                   quantity: 1,
-                  sales_price: values.amount,
-                  normal_price: values.amount,
+                  sales_price: values.amount * rate.exchange_rate,
+                  normal_price: values.amount * rate.exchange_rate,
                   storage_id: 4,
                   comment_deposit: values.deposit_comment,
                   deposit_date: values.deposit_date.format('YYYY-MM_DD'),
@@ -71,20 +79,17 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
   };
 
   const onChangeCurrency = (value: string) => {
-    console.log(`selected ${value}`);
-  };
+    const rate = _.find(exchangeRates, item => {
+      return item.id === value;
+    });
+    const formValue = form.getFieldsValue();
 
-  const selectCurrency = ['VND', 'JPY'];
-
-  const onChangePaymentMethod = (value: string) => {
-    console.log(`selected ${value}`);
+    form.setFieldsValue({
+      exchanged_amount: formatNumber(formValue.amount * rate.exchange_rate),
+    });
   };
 
   const paymentMethod = ['Cash', 'Credit Card'];
-
-  const onChangeTransactionType = (value: string) => {
-    console.log(`selected ${value}`);
-  };
 
   const transactionType = ['Deposit'];
 
@@ -108,6 +113,7 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
           print_bill: true,
           send_confirmation_email: true,
           deposit_date: moment(),
+          currency: 2,
         }}
         layout="vertical"
         wrapperCol={{ span: 23 }}
@@ -125,7 +131,7 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
           </Col>
           <Col span={12}>
             <Form.Item label={t('transaction.Current Balance')}>
-              <Input defaultValue="40.000" placeholder="40.000" readOnly />
+              <Input readOnly value={formatNumber(grandTotal)} />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -134,25 +140,41 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
               name="amount"
               rules={[{ required: true, message: 'Please input amount!' }]}
             >
-              <Input placeholder="Amount" />
+              <Input
+                onChange={e => {
+                  const formValue = form.getFieldsValue();
+
+                  const rate = _.find(exchangeRates, item => {
+                    return item.id === formValue.currency;
+                  });
+
+                  form.setFieldsValue({
+                    exchanged_amount: formatNumber(
+                      parseInt(e.target.value, 10) * rate.exchange_rate,
+                    ),
+                  });
+                }}
+                placeholder="Amount"
+              />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label={t('transaction.Select Currency.title')} name="currency">
               <Select
-                defaultValue={selectCurrency[0]}
                 onChange={onChangeCurrency}
                 placeholder="Select Currency"
                 style={{ borderRadius: 2, width: '100%' }}
               >
-                {selectCurrency.map(type => (
-                  <Option key={type}>{type}</Option>
+                {exchangeRates?.map((rate: any) => (
+                  <Option key={rate.id} value={rate.id}>
+                    {rate.currency_code}
+                  </Option>
                 ))}
               </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label={t('transaction.Exchanged Amount')}>
+            <Form.Item label={t('transaction.Exchanged Amount')} name="exchanged_amount">
               <Input defaultValue="0" placeholder="0" readOnly />
             </Form.Item>
           </Col>
@@ -163,7 +185,6 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
               rules={[{ required: true, message: 'Please select payment method' }]}
             >
               <Select
-                onChange={onChangePaymentMethod}
                 placeholder="Select payment method"
                 style={{ borderRadius: 2, width: '100%' }}
               >
@@ -178,7 +199,6 @@ function Deposit({ isModalVisible, setModalVisible }: Props) {
               <Select
                 defaultValue={transactionType[0]}
                 disabled
-                onChange={onChangeTransactionType}
                 placeholder={t('transaction.Transaction Type.placeholder')}
                 style={{ borderRadius: 2, width: '100%' }}
               >

@@ -27,7 +27,7 @@ import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { deleteItemAction, getReservationDetail } from 'actions';
+import { deleteItemAction, getReservation, getReservationDetail } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -161,6 +161,12 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   useEffect(() => {
     if (addItemChanged('status', 'SUCCESS')) {
       message.success('Add item successfully!');
+
+      dispatch(
+        getReservation({
+          reservation_id: reservationId,
+        }),
+      );
 
       dispatch(
         getReservationDetail({
@@ -343,6 +349,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                       />
                     </svg>
                     <Deposit
+                      grandTotal={amountInfo?.grand_total}
                       isModalVisible={isModalOpenDeposit}
                       setModalVisible={setIsModalOpenDeposit}
                     />

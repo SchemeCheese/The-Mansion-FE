@@ -460,7 +460,9 @@ function ReservationForm({
                         </Table.Summary.Cell>
                         <Table.Summary.Cell index={2}>
                           <div style={{ textAlign: 'right', paddingRight: 20 }}>
-                            {formatNumber(reservationRedux.price.deposit)}
+                            {reservationRedux.price
+                              ? formatNumber(reservationRedux.price.deposit)
+                              : 0}
                           </div>
                         </Table.Summary.Cell>
                       </Table.Summary.Row>

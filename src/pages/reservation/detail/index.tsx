@@ -21,7 +21,7 @@ import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import {
-  selectDownloadPDFReservationDetail,
+  // selectDownloadPDFReservationDetail,
   selectResendEmailReservation,
   selectUpdateReservation,
 } from 'selectors';
@@ -289,12 +289,12 @@ function ReservationDetail() {
 
   const updateReservationData = useAppSelector(selectUpdateReservation);
   const resendEmailReservationData = useAppSelector(selectResendEmailReservation);
-  const downloadPDFReservationDetailData = useAppSelector(selectDownloadPDFReservationDetail);
+  // const downloadPDFReservationDetailData = useAppSelector(selectDownloadPDFReservationDetail);
   const { changed } = useTreeChanges(updateReservationData);
   const { changed: resendEmailChanged } = useTreeChanges(resendEmailReservationData);
-  const { changed: downloadPDFReservationDetailChanged } = useTreeChanges(
-    downloadPDFReservationDetailData,
-  );
+  // const { changed: downloadPDFReservationDetailChanged } = useTreeChanges(
+  //   downloadPDFReservationDetailData,
+  // );
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
@@ -322,11 +322,11 @@ function ReservationDetail() {
     });
   }, [reservationRedux]);
 
-  useEffect(() => {
-    if (downloadPDFReservationDetailChanged('status', 'SUCCESS')) {
-      message.success('Download file pdf successfully!');
-    }
-  }, [downloadPDFReservationDetailChanged]);
+  // useEffect(() => {
+  //   if (downloadPDFReservationDetailChanged('status', 'SUCCESS')) {
+  //     message.success('Download file pdf successfully!');
+  //   }
+  // }, [downloadPDFReservationDetailChanged]);
 
   return (
     <>
