@@ -62,6 +62,7 @@ const BreadscrumData = styled.p`
 
 function ReservationDetail() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
 
   const rowSelection = {
     selectedRowKeys,
@@ -116,6 +117,7 @@ function ReservationDetail() {
       resendEmailReservationAction({
         reservation_id: id ?? '',
         language,
+        is_hide_room_rate: isHidenRoomRate,
       }),
     );
   };
@@ -439,7 +441,9 @@ function ReservationDetail() {
           </Row>
         </Col>
         <Col span={6}>
-          <Checkbox>{t('reservation.Hide room rates in confirmation')}</Checkbox>
+          <Checkbox onChange={e => setIsHideRoomRate(e.target.checked)}>
+            {t('reservation.Hide room rates in confirmation')}
+          </Checkbox>
         </Col>
         <Col span={8} style={{ paddingRight: 20 }}>
           <Row>

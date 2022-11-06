@@ -159,6 +159,7 @@ export interface UpdateNoteReservationDetail {
 }
 
 export interface ResendEmailReservation {
+  is_hide_room_rate: boolean;
   language: string;
   reservation_id: string;
 }
