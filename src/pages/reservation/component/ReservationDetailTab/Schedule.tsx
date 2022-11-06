@@ -60,21 +60,6 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     weekendsVisible: true,
     currentEvents: [],
   });
-  const [searchScheduleCondition, setSearchScheduleCondition] = useState<any>({
-    direction: '',
-    end_date: '2022-10-08',
-    floor: '',
-    reservation_detail_id: reservationDetailId,
-    room_type: '',
-    start_date: '2022-10-06',
-    view: '',
-    isSmocking: undefined,
-  });
-
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const fullCalendarRef: any = React.createRef();
-
   const bookRoomData = useAppSelector(selectBookRoom);
   const { changed } = useTreeChanges(bookRoomData);
 
@@ -84,6 +69,21 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   const reservationDetailInfo: any = useSelector<RootState>(
     ({ getReservationDetail }) => getReservationDetail.data,
   );
+
+  const [searchScheduleCondition, setSearchScheduleCondition] = useState<any>({
+    direction: '',
+    end_date: reservationDetailInfo.checkout,
+    floor: '',
+    reservation_detail_id: reservationDetailId,
+    room_type: '',
+    start_date: reservationDetailInfo.checkin,
+    view: '',
+    isSmocking: undefined,
+  });
+
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const fullCalendarRef: any = React.createRef();
 
   const { changed: changedEvents } = useTreeChanges(reservationDetailData);
   // const { changed: changedAvailableEvents } = useTreeChanges(searchAvailableEventsData);
