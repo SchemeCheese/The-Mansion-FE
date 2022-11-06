@@ -140,7 +140,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
                   <Text style={{ fontSize: 12 }}>{t('common.ID')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
-                  <Text style={{ fontSize: 12 }}>{value.id}</Text>
+                  <Text style={{ fontSize: 12 }}>{value.passport_number}</Text>
                 </Col>
               </Row>
               <Row style={{ marginBottom: 12 }}>
@@ -148,7 +148,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
                   <Text style={{ fontSize: 12 }}>{t('common.Nationality.title')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
-                  <Text style={{ fontSize: 12 }}>{value.nationality}</Text>
+                  <Text style={{ fontSize: 12 }}>{value.nationality_text}</Text>
                 </Col>
               </Row>
               <Row style={{ marginBottom: 12 }}>
@@ -156,7 +156,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
                   <Text style={{ fontSize: 12 }}>{t('guest.Place Of Issue')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
-                  <Text style={{ fontSize: 12 }}>{value.place_of_issue}</Text>
+                  <Text style={{ fontSize: 12 }}>{value.place_of_id}</Text>
                 </Col>
               </Row>
               <Row style={{ marginBottom: 12 }}>
@@ -164,7 +164,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
                   <Text style={{ fontSize: 12 }}>{t('guest.Date Of Issue')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
-                  <Text style={{ fontSize: 12 }}>{value.date}</Text>
+                  <Text style={{ fontSize: 12 }}>{value.date_of_issue_of_passport}</Text>
                 </Col>
               </Row>
               <Row>
@@ -172,7 +172,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
                   <Text style={{ fontSize: 12 }}>{t('guest.Visa Expire Date')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
-                  <Text style={{ fontSize: 12 }}>{value.expire}</Text>
+                  <Text style={{ fontSize: 12 }}>{value.expiration_date_of_visa}</Text>
                 </Col>
               </Row>
             </Card>

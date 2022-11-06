@@ -514,7 +514,11 @@ function ReservationForm({
                   <Form.Item name="no_deposit" valuePropName="checked">
                     <Checkbox>{t('reservation.Confirm reservation without deposit')}</Checkbox>
                   </Form.Item>
-                  <Form.Item name="no_show" style={{ marginBottom: 12 }} valuePropName="checked">
+                  <Form.Item
+                    name="hide_room_rate"
+                    style={{ marginBottom: 12 }}
+                    valuePropName="checked"
+                  >
                     <Checkbox>{t('reservation.Hide room rates')}</Checkbox>
                   </Form.Item>
                 </Col>

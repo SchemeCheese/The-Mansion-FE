@@ -23,10 +23,12 @@ import {
   Upload,
   UploadFile,
 } from 'antd';
+import type { RangePickerProps } from 'antd/es/date-picker';
 import moment from 'moment';
 import {
   selectCreateGuest,
   selectGetLanguageCode,
+  selectGetReservationDetail,
   selectGetRooms,
   selectRemoveGuest,
   selectUpdateGuest,
@@ -75,9 +77,21 @@ function CreateGuestModal({
 }: Props) {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
+  const { countries } = reservationDetailInfo.data;
 
   const handleOk = () => {
     form.submit();
+  };
+
+  const disabledPastDate: RangePickerProps['disabledDate'] = current => {
+    // Can not select days before today and today
+    return current <= moment().endOf('day');
+  };
+
+  const disabledFutureDate: RangePickerProps['disabledDate'] = current => {
+    // Can not select days before today and today
+    return current >= moment().endOf('day');
   };
 
   const onFinish = (values: any) => {
@@ -289,6 +303,7 @@ function CreateGuestModal({
       date_of_issue_of_passport: currentGuest?.date_of_issue_of_passport
         ? moment(currentGuest.date_of_issue_of_passport)
         : null,
+      place_of_id: currentGuest?.place_of_id,
       email_address1: currentGuest?.email_address1 ?? null,
       telephone_number1: currentGuest?.telephone_number1 ?? null,
       date_of_birth: currentGuest?.date_of_birth ? moment(currentGuest.date_of_birth) : null,
@@ -444,6 +459,7 @@ function CreateGuestModal({
                   <Col span={8}>
                     <Form.Item label={t('guest.Date Of Issue')} name="date_of_issue_of_passport">
                       <DatePicker
+                        disabledDate={disabledFutureDate}
                         style={{
                           height: 32,
                           borderRadius: 4,
@@ -454,7 +470,7 @@ function CreateGuestModal({
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item label={t('guest.Place Of Issue')} name="place_of_issue">
+                    <Form.Item label={t('guest.Place Of Issue')} name="place_of_id">
                       <Input placeholder={t('guest.Place Of Issue')} />
                     </Form.Item>
                   </Col>
@@ -478,6 +494,7 @@ function CreateGuestModal({
                   <Col span={8}>
                     <Form.Item label={t('common.Date Of Birth')} name="date_of_birth">
                       <DatePicker
+                        disabledDate={disabledFutureDate}
                         style={{
                           height: 32,
                           borderRadius: 4,
@@ -490,7 +507,9 @@ function CreateGuestModal({
                   <Col span={8}>
                     <Form.Item label={t('common.Nationality.title')} name="nationality">
                       <Select allowClear placeholder={t('common.Nationality.placeholder')}>
-                        <Option value="vn">VN</Option>
+                        {countries?.map((country: any) => (
+                          <Option value={country.id.toString()}>{country.name}</Option>
+                        ))}
                       </Select>
                     </Form.Item>
                   </Col>
@@ -506,6 +525,7 @@ function CreateGuestModal({
                   <Col span={8}>
                     <Form.Item label={t('guest.Visa Expire Date')} name="expiration_date_of_visa">
                       <DatePicker
+                        disabledDate={disabledPastDate}
                         style={{
                           height: 32,
                           borderRadius: 4,
@@ -521,6 +541,7 @@ function CreateGuestModal({
                       name="expiration_date_of_passport"
                     >
                       <DatePicker
+                        disabledDate={disabledPastDate}
                         style={{
                           height: 32,
                           borderRadius: 4,

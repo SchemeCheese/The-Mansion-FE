@@ -213,7 +213,7 @@ function ReservationDetail() {
           key: item.id,
           reservation_detail_id: item.id,
           status: item.status,
-          name: '-',
+          name: item.main_guest_name ? item.main_guest_name : '-',
           room_type: item.equipment_type_id,
           room_type_text: item.room_type_text,
           room_no: item.room_no ?? '-',
