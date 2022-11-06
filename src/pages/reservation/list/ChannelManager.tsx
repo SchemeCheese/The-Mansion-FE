@@ -296,8 +296,8 @@ function ChannelManager() {
       <Row style={{ paddingTop: 20 }}>
         <Col span={24}>
           <Space className="channel-filter" size="middle">
-            <Select defaultValue="all" size="large">
-              <Option value="all">All Rates & Availability</Option>
+            <Select defaultValue="" size="large">
+              <Option value="">All Rates & Availability</Option>
             </Select>
             <Select
               defaultValue=""
@@ -312,15 +312,18 @@ function ChannelManager() {
                   setChannelSearch({
                     ...channelSearch,
                     room_type: value,
+                    channel: '',
                   });
                 } else {
                   setChannelSearch({
                     ...channelSearch,
                     channel: value,
+                    room_type: '',
                   });
                 }
               }}
               size="large"
+              value={channelSearch.room_type ? channelSearch.room_type : channelSearch.channel}
             >
               <Option value="">
                 <svg
@@ -372,8 +375,9 @@ function ChannelManager() {
                 });
               }}
               size="large"
+              value={channelSearch.rate_plan}
             >
-              <Option value="1">
+              <Option value="">
                 <svg
                   fill="none"
                   height="14"
@@ -402,7 +406,17 @@ function ChannelManager() {
                 width: 250,
               }}
             />
-            <p style={{ paddingTop: 10, fontSize: 13, color: '#1890FF', cursor: 'pointer' }}>
+            <p
+              aria-hidden="true"
+              onClick={() =>
+                setChannelSearch({
+                  room_type: '',
+                  channel: '',
+                  rate_plan: '',
+                })
+              }
+              style={{ paddingTop: 10, fontSize: 13, color: '#1890FF', cursor: 'pointer' }}
+            >
               Clear all filters
             </p>
           </Space>
@@ -645,7 +659,6 @@ function ChannelManager() {
                 onHeaderCell: (column: any) => {
                   return {
                     onClick: () => {
-                      console.log('onClick', column, channelData.dates);
                       setUpdateInfo({
                         room_number: item.available_rooms_number[0],
                         room_id: item.roomId,
@@ -684,8 +697,6 @@ function ChannelManager() {
                 onHeaderCell: () => {
                   return {
                     onClick: () => {
-                      console.log('channelData.dates[1].format', channelData.dates[1].format);
-
                       setUpdateInfo({
                         room_number: item.available_rooms_number[1],
                         room_id: item.roomId,
