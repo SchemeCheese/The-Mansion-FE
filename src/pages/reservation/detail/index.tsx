@@ -20,7 +20,11 @@ import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
-import { selectResendEmailReservation, selectUpdateReservation } from 'selectors';
+import {
+  selectDownloadPDFReservationDetail,
+  selectResendEmailReservation,
+  selectUpdateReservation,
+} from 'selectors';
 import styled from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -28,6 +32,7 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import {
+  downloadPDFReservationDetail,
   getReservation,
   resendEmailReservationAction,
   resetReservation,
@@ -79,7 +84,15 @@ function ReservationDetail() {
   };
 
   const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
+    dispatch(
+      downloadPDFReservationDetail({
+        payload: {
+          reservation_detail_id: 2,
+          reservation_info_id: id ?? '',
+          file_name: `the_mansion_hotel_25_10_2022_checkin_${id ?? ''}.pdf`,
+        },
+      }),
+    );
   };
 
   const { t } = useTranslation();
@@ -274,8 +287,12 @@ function ReservationDetail() {
 
   const updateReservationData = useAppSelector(selectUpdateReservation);
   const resendEmailReservationData = useAppSelector(selectResendEmailReservation);
+  const downloadPDFReservationDetailData = useAppSelector(selectDownloadPDFReservationDetail);
   const { changed } = useTreeChanges(updateReservationData);
   const { changed: resendEmailChanged } = useTreeChanges(resendEmailReservationData);
+  const { changed: downloadPDFReservationDetailChanged } = useTreeChanges(
+    downloadPDFReservationDetailData,
+  );
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
@@ -302,6 +319,12 @@ function ReservationDetail() {
       source_id: reservationRedux.path_of_reservation,
     });
   }, [reservationRedux]);
+
+  useEffect(() => {
+    if (downloadPDFReservationDetailChanged('status', 'SUCCESS')) {
+      message.success('Download file pdf successfully!');
+    }
+  }, [downloadPDFReservationDetailChanged]);
 
   return (
     <>

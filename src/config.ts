@@ -33,6 +33,7 @@ export const ReservationEndpoint = {
   SEARCH_SCHEDULE: 'api/v1/events',
   SEARCH_AVAILABLE_SCHEDULE: 'api/v1/get-available-events',
   RESEND_EMAIL: 'api/v1/reservations',
+  DOWNLOAD_PDF: 'api/v1/reservations',
 };
 
 export const RoomEndpoint = {

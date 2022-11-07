@@ -141,3 +141,8 @@ export const selectUpdateRoomAvailable = createSelector(
   (state: RootState) => state.updateRoomAvailable,
   updateRoomAvailable => updateRoomAvailable,
 );
+
+export const selectDownloadPDFReservationDetail = createSelector(
+  (state: RootState) => state.downloadPDFReservationDetail,
+  downloadPDFReservationDetail => downloadPDFReservationDetail,
+);

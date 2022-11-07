@@ -9,6 +9,7 @@ import {
   BookRoom,
   CancelReservationDetail,
   CreateReservationResult,
+  DownloadPDFReservationDetail,
   GetReservationFinishPayload,
   GetReservationPayload,
   ResendEmailReservation,
@@ -138,4 +139,13 @@ export const resendEmailReservationAction = createAction(
 
 export const resendEmailReservationSuccessAction = createAction(
   ActionTypes.RESERVATION_RESEND_EMAIL_SUCCESS,
+);
+
+export const downloadPDFReservationDetail = createAction(
+  ActionTypes.RESERVATION_DETAIL_DOWNLOAD_PDF,
+  (payload: DownloadPDFReservationDetail) => actionPayload(payload),
+);
+
+export const downloadPDFReservationDetailSuccess = createAction(
+  ActionTypes.RESERVATION_DETAIL_DOWNLOAD_PDF_SUCCESS,
 );
