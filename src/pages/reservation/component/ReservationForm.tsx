@@ -66,6 +66,10 @@ function ReservationForm({
     ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
 
+  const reservationRedux: any = useSelector<RootState>(
+    ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
+  );
+
   const confirm = () => {
     Modal.confirm({
       title: 'Delete Confirm',
@@ -455,7 +459,9 @@ function ReservationForm({
                           </div>
                         </Table.Summary.Cell>
                         <Table.Summary.Cell index={2}>
-                          <div style={{ textAlign: 'center' }}>-</div>
+                          <div style={{ textAlign: 'right', paddingRight: 20 }}>
+                            {formatNumber(reservationRedux.price.deposit)}
+                          </div>
                         </Table.Summary.Cell>
                       </Table.Summary.Row>
                     );

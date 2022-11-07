@@ -81,7 +81,7 @@ const useColumns = () => {
         return <div style={{ textAlign: 'center' }}>{t('reservation.Deposit')}</div>;
       },
       dataIndex: 'deposit',
-      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
+      render: (text: string) => <div style={{ textAlign: 'right', paddingRight: 20 }}>{text}</div>,
     },
   ];
 

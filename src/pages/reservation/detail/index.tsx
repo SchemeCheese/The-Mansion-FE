@@ -225,7 +225,7 @@ function ReservationDetail() {
           baby: item.infant_number && item.infant_number > 0 ? item.infant_number : '-',
           rate: item.rate_name,
           subtotal: formatNumber(item.total_price),
-          deposit: '-',
+          deposit: item.deposit_amount === 0 ? '-' : formatNumber(item.deposit_amount),
           actual_amount: item.total_price,
         });
       });
