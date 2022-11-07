@@ -97,7 +97,7 @@ function Reservation() {
         className="reservation-tabs"
         defaultActiveKey="1"
         onChange={activeKey => handeleActive(activeKey)}
-        style={{ minHeight: '90%' }}
+        style={{ minHeight: '95%' }}
       >
         <TabPane key="1" className="content" tab="Waitlist">
           <ReservationList type="waitlist" />
