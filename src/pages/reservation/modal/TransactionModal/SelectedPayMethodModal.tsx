@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, Col, Form, Modal, Row } from 'antd';
@@ -14,8 +14,8 @@ import PaymentMethod from './PaymentMethod';
 
 interface Props {
   discountAmount: string;
+  paySelectedRowKeys: any;
   reservationDetailId: string;
-  selectedRowKeys: any;
   setIsModalOpenPaySelected: (visible: boolean) => void;
   setIsModalOpenSelectedPaymentMethod: (visible: boolean) => void;
   totalAmount: any;
@@ -24,26 +24,46 @@ interface Props {
 
 function SelectedPayMethodModal({
   discountAmount,
+  paySelectedRowKeys,
   reservationDetailId,
-  selectedRowKeys,
   setIsModalOpenPaySelected,
   setIsModalOpenSelectedPaymentMethod,
   totalAmount,
   visible,
 }: Props) {
+  const totalAmountAfterDiscount = discountAmount
+    ? totalAmount - parseInt(discountAmount, 10)
+    : totalAmount;
+
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const [paidAmount, setPaidAmount] = useState(0);
+  const [paidAmount, setPaidAmount] = useState(totalAmountAfterDiscount);
 
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const exchangeRates = reservationDetailInfo.data.exchange_rates;
+
+  useEffect(() => {
+    setPaidAmount(totalAmountAfterDiscount);
+
+    form.setFieldsValue({
+      payment_methods: [
+        {
+          amount_in_vnd: formatNumber(totalAmountAfterDiscount),
+          currency_conversion_id: 2,
+          payment_amount: totalAmountAfterDiscount,
+          payment_method: '1',
+        },
+      ],
+    });
+  }, [totalAmountAfterDiscount]);
 
   const handleSubmitPayment = () => {
     form
       .validateFields()
       .then(values => {
         form.resetFields();
+
         const paymentMethods = values.payment_methods.map((item: any) => {
           const rate = _.find(exchangeRates, r => {
             return r.id === item.currency_conversion_id;
@@ -60,7 +80,7 @@ function SelectedPayMethodModal({
             payload: {
               reservation_detail_id: reservationDetailId,
               sales_info_id: reservationDetailInfo.data.sales_info_id,
-              sales_detail_id: selectedRowKeys,
+              sales_detail_id: paySelectedRowKeys,
               payment_methods: paymentMethods,
               discount_amount: discountAmount ? parseInt(discountAmount, 10) : 0,
             },
@@ -84,7 +104,11 @@ function SelectedPayMethodModal({
           return r.id === number_.currency_conversion_id;
         });
 
-        return memo + parseInt(number_.payment_amount, 10) * rate.exchange_rate;
+        if (number_.payment_amount) {
+          return memo + parseInt(number_.payment_amount, 10) * rate.exchange_rate;
+        }
+
+        return memo;
       },
       0,
     );
@@ -120,9 +144,7 @@ function SelectedPayMethodModal({
           <Col span={8} style={{ marginBottom: 10 }}>
             <span style={{ lineHeight: '31px' }}>{t('common.Total Amount')}</span>
             <span style={{ fontSize: 20, float: 'right' }}>
-              {discountAmount
-                ? formatNumber(totalAmount - parseInt(discountAmount, 10))
-                : formatNumber(totalAmount)}
+              {formatNumber(totalAmountAfterDiscount)}
             </span>
           </Col>
           <Col span={7} />
@@ -152,10 +174,10 @@ function SelectedPayMethodModal({
                   {fields.map(({ key, name, ...restField }) => (
                     <React.Fragment key={key}>
                       <PaymentMethod
+                        computePaidAmount={computePaidAmount}
                         form={form}
                         name={name}
                         restField={restField}
-                        setPaidAmount={computePaidAmount}
                       />
                     </React.Fragment>
                   ))}
