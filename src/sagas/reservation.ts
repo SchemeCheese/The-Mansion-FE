@@ -398,8 +398,11 @@ export function* getResendEmailReservationSaga({
         payload.reservation_id
       }/resend-confirmation-email/${payload.language}`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: headerWithAuthorization(),
+        body: {
+          is_hide_room_rate: payload.is_hide_room_rate,
+        },
       },
     ));
 

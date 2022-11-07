@@ -73,6 +73,7 @@ export const GuestEndpoint = {
   CREATE: 'api/v1/guests/create',
   UPDATE: 'api/v1/guests',
   REMOVE: 'api/v1/reservation-detail',
+  SET_MAIN_GUEST: 'api/v1/reservation-detail',
 };
 
 export const FileEndpoint = {

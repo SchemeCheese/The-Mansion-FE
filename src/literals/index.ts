@@ -93,6 +93,8 @@ export const ActionTypes = keyMirror({
   RESERVATION_DETAIL_DOWNLOAD_PDF: undefined,
   RESERVATION_DETAIL_DOWNLOAD_PDF_SUCCESS: undefined,
   RESERVATION_DETAIL_DOWNLOAD_PDF_FAILURE: undefined,
+  SET_MAIN_GUEST: undefined,
+  SET_MAIN_GUEST_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

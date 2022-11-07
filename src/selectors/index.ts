@@ -146,3 +146,8 @@ export const selectDownloadPDFReservationDetail = createSelector(
   (state: RootState) => state.downloadPDFReservationDetail,
   downloadPDFReservationDetail => downloadPDFReservationDetail,
 );
+
+export const selectSetMainGuest = createSelector(
+  (state: RootState) => state.setMainGuest,
+  setMainGuest => setMainGuest,
+);

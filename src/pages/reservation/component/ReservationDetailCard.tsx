@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Col, Tabs } from 'antd';
 import GuestList from 'pages/reservation/component/ReservationDetailTab/GuestList';
 import Rate from 'pages/reservation/component/ReservationDetailTab/Rate';
@@ -8,6 +8,8 @@ import Schedule from 'pages/reservation/component/ReservationDetailTab/Schedule'
 import Transaction from 'pages/reservation/component/ReservationDetailTab/Transaction';
 
 import { getReservationDetail, searchAvailableScheduleAction } from 'actions';
+
+import { RootState } from 'types';
 
 import GeneralInfo from './ReservationDetailTab/GeneralInfo';
 
@@ -21,6 +23,9 @@ interface Props {
 function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const reservationDetailInfo: any = useSelector<RootState>(
+    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
+  );
 
   const handleChangeTab = (tab: string) => {
     if (tab === '3') {
@@ -34,11 +39,11 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
       dispatch(
         searchAvailableScheduleAction({
           direction: '',
-          end_date: '2022-10-08',
+          end_date: reservationDetailInfo.checkout,
           floor: '',
           reservation_detail_id: reservationDetail.id,
           room_type: '',
-          start_date: '2022-10-06',
+          start_date: reservationDetailInfo.checkin,
           view: '',
         }),
       );

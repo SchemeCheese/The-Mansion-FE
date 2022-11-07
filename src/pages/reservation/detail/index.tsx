@@ -21,7 +21,7 @@ import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import {
-  selectDownloadPDFReservationDetail,
+  // selectDownloadPDFReservationDetail,
   selectResendEmailReservation,
   selectUpdateReservation,
 } from 'selectors';
@@ -62,6 +62,7 @@ const BreadscrumData = styled.p`
 
 function ReservationDetail() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
 
   const rowSelection = {
     selectedRowKeys,
@@ -116,6 +117,7 @@ function ReservationDetail() {
       resendEmailReservationAction({
         reservation_id: id ?? '',
         language,
+        is_hide_room_rate: isHidenRoomRate,
       }),
     );
   };
@@ -211,7 +213,7 @@ function ReservationDetail() {
           key: item.id,
           reservation_detail_id: item.id,
           status: item.status,
-          name: '-',
+          name: item.main_guest_name ? item.main_guest_name : '-',
           room_type: item.equipment_type_id,
           room_type_text: item.room_type_text,
           room_no: item.room_no ?? '-',
@@ -287,12 +289,12 @@ function ReservationDetail() {
 
   const updateReservationData = useAppSelector(selectUpdateReservation);
   const resendEmailReservationData = useAppSelector(selectResendEmailReservation);
-  const downloadPDFReservationDetailData = useAppSelector(selectDownloadPDFReservationDetail);
+  // const downloadPDFReservationDetailData = useAppSelector(selectDownloadPDFReservationDetail);
   const { changed } = useTreeChanges(updateReservationData);
   const { changed: resendEmailChanged } = useTreeChanges(resendEmailReservationData);
-  const { changed: downloadPDFReservationDetailChanged } = useTreeChanges(
-    downloadPDFReservationDetailData,
-  );
+  // const { changed: downloadPDFReservationDetailChanged } = useTreeChanges(
+  //   downloadPDFReservationDetailData,
+  // );
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
@@ -320,11 +322,11 @@ function ReservationDetail() {
     });
   }, [reservationRedux]);
 
-  useEffect(() => {
-    if (downloadPDFReservationDetailChanged('status', 'SUCCESS')) {
-      message.success('Download file pdf successfully!');
-    }
-  }, [downloadPDFReservationDetailChanged]);
+  // useEffect(() => {
+  //   if (downloadPDFReservationDetailChanged('status', 'SUCCESS')) {
+  //     message.success('Download file pdf successfully!');
+  //   }
+  // }, [downloadPDFReservationDetailChanged]);
 
   return (
     <>
@@ -439,7 +441,9 @@ function ReservationDetail() {
           </Row>
         </Col>
         <Col span={6}>
-          <Checkbox>{t('reservation.Hide room rates in confirmation')}</Checkbox>
+          <Checkbox onChange={e => setIsHideRoomRate(e.target.checked)}>
+            {t('reservation.Hide room rates in confirmation')}
+          </Checkbox>
         </Col>
         <Col span={8} style={{ paddingRight: 20 }}>
           <Row>

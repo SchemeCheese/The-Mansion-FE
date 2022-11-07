@@ -460,7 +460,9 @@ function ReservationForm({
                         </Table.Summary.Cell>
                         <Table.Summary.Cell index={2}>
                           <div style={{ textAlign: 'right', paddingRight: 20 }}>
-                            {formatNumber(reservationRedux.price.deposit)}
+                            {reservationRedux.price
+                              ? formatNumber(reservationRedux.price.deposit)
+                              : 0}
                           </div>
                         </Table.Summary.Cell>
                       </Table.Summary.Row>
@@ -514,7 +516,11 @@ function ReservationForm({
                   <Form.Item name="no_deposit" valuePropName="checked">
                     <Checkbox>{t('reservation.Confirm reservation without deposit')}</Checkbox>
                   </Form.Item>
-                  <Form.Item name="no_show" style={{ marginBottom: 12 }} valuePropName="checked">
+                  <Form.Item
+                    name="hide_room_rate"
+                    style={{ marginBottom: 12 }}
+                    valuePropName="checked"
+                  >
                     <Checkbox>{t('reservation.Hide room rates')}</Checkbox>
                   </Form.Item>
                 </Col>

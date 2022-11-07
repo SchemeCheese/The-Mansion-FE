@@ -24,3 +24,8 @@ export interface GuestUpdate {
 export interface GuestRemove {
   payload: RemoveGuestPayload;
 }
+
+export interface SetMainGuest {
+  guest_id: string;
+  reservation_detail_id: string;
+}
