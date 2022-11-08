@@ -40,7 +40,12 @@ import {
   createEventId,
   INITIAL_EVENTS,
 } from 'pages/reservation/component/ReservationDetailTab/event-utils';
-import { bookRoom, searchAvailableScheduleAction } from 'actions';
+import {
+  bookRoom,
+  getReservation,
+  getReservationDetail,
+  searchAvailableScheduleAction,
+} from 'actions';
 import { getDaysBetweenDates } from 'helpers';
 
 interface DemoAppState {
@@ -67,7 +72,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   const searchAvailableEventsData: any = useAppSelector(selectAvailableSearchSchedule);
 
   const reservationDetailInfo: any = useSelector<RootState>(
-    ({ getReservationDetail }) => getReservationDetail.data,
+    ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
 
   const [searchScheduleCondition, setSearchScheduleCondition] = useState<any>({
@@ -177,6 +182,19 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
       message.success('Booking room successfully!');
+
+      dispatch(
+        getReservation({
+          reservation_id: reservationId,
+        }),
+      );
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
     }
   }, [changed]);
 
@@ -214,6 +232,31 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   }, [changedEvents]);
 
   useEffect(() => {
+    dispatch(
+      searchAvailableScheduleAction({
+        direction: '',
+        end_date: reservationDetailInfo.checkout,
+        floor: '',
+        reservation_detail_id: reservationDetailId,
+        room_type: '',
+        start_date: reservationDetailInfo.checkin,
+        view: '',
+      }),
+    );
+  }, [reservationDetailInfo]);
+
+  useEffect(() => {
+    // Remove all current events
+    // if (fullCalendarRef.current) {
+    //   const calendarApi = fullCalendarRef.current.getApi().view.calendar;
+    //   const events = calendarApi.getEvents();
+
+    //   for (let i = 0; i < events.length; i++) {
+    //     console.log('eventttt', events[i]);
+    //     events[i].remove()
+    //   }
+    // }
+
     if (
       reservationDetailData.is_finish === true &&
       searchAvailableEventsData.is_searching === false
