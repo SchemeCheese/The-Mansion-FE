@@ -160,6 +160,13 @@ function CreateGuestModal({
     }
   };
 
+  const resetForm = () => {
+    form.resetFields();
+    form.setFieldsValue({
+      client_kind: '1',
+    });
+  };
+
   const createGuestData = useAppSelector(selectCreateGuest);
   const removeGuestData = useAppSelector(selectRemoveGuest);
   const updateGuestData = useAppSelector(selectUpdateGuest);
@@ -174,7 +181,7 @@ function CreateGuestModal({
     if (changed('status', 'SUCCESS')) {
       message.success('Add guest successfully!');
 
-      form.resetFields();
+      resetForm();
 
       dispatch(
         getReservationDetail({
@@ -186,10 +193,15 @@ function CreateGuestModal({
   }, [changed]);
 
   useEffect(() => {
+    resetForm();
+  }, [reservationDetailId]);
+
+  useEffect(() => {
     if (updateGuestChanged('status', 'SUCCESS')) {
       message.success('Update guest successfully!');
 
-      form.resetFields();
+      resetForm();
+
       setPictureFileList([]);
       setFaceRecognitionFileList([]);
 
