@@ -362,6 +362,17 @@ export interface ReservationDetailDownloadPDFPayload {
   reservation_info_id: string | number;
 }
 
+export interface DownloadDocxReservationDetailState {
+  payload: ReservationDetailDownloadDocxPayload;
+  status: string;
+}
+
+export interface ReservationDetailDownloadDocxPayload {
+  file_name: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -376,6 +387,7 @@ export interface RootState {
   createPayment: CreatePaymentState;
   createReservation: CreateReservationState;
   deleteItem: DeleteItemState;
+  downloadDocxReservationDetail: DownloadDocxReservationDetailState;
   downloadPDFReservationDetail: DownloadPDFReservationDetailState;
   getLanguageCode: LanguageCodeState;
   getProductType: ProductTypeState;

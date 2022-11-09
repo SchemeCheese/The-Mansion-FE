@@ -21,6 +21,7 @@ import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import {
+  selectGetReservationDetail,
   // selectDownloadPDFReservationDetail,
   selectResendEmailReservation,
   selectUpdateReservation,
@@ -32,6 +33,7 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import {
+  downloadDocxReservationDetail,
   downloadPDFReservationDetail,
   getReservation,
   resendEmailReservationAction,
@@ -85,15 +87,29 @@ function ReservationDetail() {
   };
 
   const handleChange = (value: string) => {
-    dispatch(
-      downloadPDFReservationDetail({
-        payload: {
-          reservation_detail_id: 2,
-          reservation_info_id: id ?? '',
-          file_name: `the_mansion_hotel_25_10_2022_checkin_${id ?? ''}.pdf`,
-        },
-      }),
-    );
+    const formattedDateNow = moment(new Date()).format('DD_MM_YYYY');
+
+    if (value === 'pdf') {
+      dispatch(
+        downloadPDFReservationDetail({
+          payload: {
+            reservation_detail_id: 2,
+            reservation_info_id: id ?? '',
+            file_name: `the_mansion_hotel_${formattedDateNow}_checkin_${id ?? ''}.${value}`,
+          },
+        }),
+      );
+    } else if (value === 'docx') {
+      dispatch(
+        downloadDocxReservationDetail({
+          payload: {
+            reservation_detail_id: 2,
+            reservation_info_id: id ?? '',
+            file_name: `the_mansion_hotel_${formattedDateNow}_checkin_${id ?? ''}.${value}`,
+          },
+        }),
+      );
+    }
   };
 
   const { t } = useTranslation();

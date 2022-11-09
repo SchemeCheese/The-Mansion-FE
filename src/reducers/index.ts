@@ -1,4 +1,7 @@
 import changeDisk, { changeDiskState } from 'reducers/changeDisk';
+import downloadDocxReservationDetail, {
+  downloadDocxReservationDetailState,
+} from 'reducers/downloadDocxReservationDetail';
 import downloadPDFReservationDetail, {
   downloadPDFReservationDetailState,
 } from 'reducers/downloadPDFReservationDetail';
@@ -81,6 +84,7 @@ export const initialState = {
   getRooms: getRoomsState,
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
   setMainGuest: setMainGuestState,
+  downloadDocxReservationDetail: downloadDocxReservationDetailState,
 };
 
 export default {
@@ -122,4 +126,5 @@ export default {
   ...updateRoomAvailable,
   ...downloadPDFReservationDetail,
   ...setMainGuest,
+  ...downloadDocxReservationDetail,
 };
