@@ -258,7 +258,9 @@ export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
     }
   } catch (error) {
     console.log('Error', error);
-    message.error('Something went wrong!');
+    message.error(
+      'Booking room is not success! The room you selected may have already been booked. Please F5 to get the latest data',
+    );
   }
 }
 
