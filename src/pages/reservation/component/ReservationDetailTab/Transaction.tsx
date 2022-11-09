@@ -330,8 +330,15 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
         </Card>
       </Col>
       <Col span={8}>
-        <div className="site-card-border-less-wrapper transaction-checkout">
-          <Card bordered={false} style={{ border: '1px solid #1D39C4' }} title="Checkout">
+        <div
+          className="site-card-border-less-wrapper transaction-checkout"
+          style={{ height: '90%' }}
+        >
+          <Card
+            bordered={false}
+            style={{ border: '1px solid #1D39C4', height: '100%' }}
+            title="Checkout"
+          >
             <div style={{ flexGrow: 1, background: '#F7F9FA', marginTop: 1 }}>
               <Space direction="vertical" size="small" style={{ display: 'flex', paddingTop: 20 }}>
                 <div className="checkout-card-grid">
@@ -427,13 +434,17 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                 </div>
               </Space>
             </div>
-            <div style={{ borderTop: '1px solid #1D39C4', height: 60, paddingTop: '4%' }}>
-              <span style={gridStyleLeft}>{t('common.Grand Total')}</span>
-              <span style={gridStyleRight}>{formatNumber(amountInfo?.grand_total)}</span>
+            <div style={{ borderTop: '1px solid #1D39C4' }}>
+              <span style={{ ...gridStyleLeft, position: 'relative', top: '40%' }}>
+                {t('common.Grand Total')}
+              </span>
+              <span style={{ ...gridStyleRight, position: 'relative', top: '40%' }}>
+                {formatNumber(amountInfo?.grand_total)}
+              </span>
             </div>
           </Card>
         </div>
-        <Row style={{ paddingTop: 17 }}>
+        <Row style={{ paddingTop: transactions?.length === 0 ? 18 : 22 }}>
           <Col span={12} style={{ paddingRight: 18 }}>
             <MButton
               style={{
