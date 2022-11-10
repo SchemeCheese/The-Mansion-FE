@@ -20,7 +20,7 @@ interface Props {
 function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
   const { t } = useTranslation();
 
-  const columnsDisk: ColumnsType<DataTypeDiskA> = [
+  const columnsDisk: any[] = [
     {
       title: t('common.Date'),
       dataIndex: 'date',
@@ -39,6 +39,11 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       dataIndex: 'amount',
     },
     {
+      title: t('common.Payment Method'),
+      dataIndex: 'payment_method',
+      hidden: rowSelectionDisk !== null,
+    },
+    {
       title: t('common.Total'),
       dataIndex: 'total',
       align: 'right',
@@ -46,7 +51,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
     {
       title: '',
       dataIndex: 'delete',
-      render: (value, record) => {
+      render: (value: any, record: any) => {
         return (
           <svg
             fill="none"
@@ -72,7 +77,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
         );
       },
     },
-  ];
+  ].filter(item => !item.hidden);
 
   const data = items.map((item: any) => {
     return {
@@ -85,6 +90,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       total_amount: item.total_amount,
       sale_detail_id: item.sale_detail_id,
       storage_id: item.storage_id,
+      payment_method: item.payment_method,
     };
   });
 
