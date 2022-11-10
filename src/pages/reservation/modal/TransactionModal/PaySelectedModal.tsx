@@ -73,8 +73,6 @@ function PaySelectedModal({
     },
   };
 
-  console.log('selectedRows', selectedRows);
-
   const handleChangePaySelected = (value: string) => {
     console.log(`selected ${value}`);
   };

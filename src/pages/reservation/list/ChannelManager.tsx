@@ -353,17 +353,18 @@ function ChannelManager() {
                 All Room Types
               </Option>
               <OptGroup label="Rooms & Rates View">
-                <Option value="3796090">Deluxe Rate 2022</Option>
-                <Option value="3796120">Family Room Rate 2022</Option>
-                <Option value="3796103">Premium Alex Rate 2022</Option>
-                <Option value="3796121">Studio Twin Rate 2022</Option>
-                <Option value="3796123">Studio Double Rate 2022</Option>
-                <Option value="3796119">Superior Rate 2022</Option>
+                {channelData.rates.map((item: any) => (
+                  <Option key={item.rateId} value={item.rateId}>
+                    {item.name}
+                  </Option>
+                ))}
               </OptGroup>
               <OptGroup label="Channel View">
-                <Option value="agoda">AGODA</Option>
-                <Option value="airbnb">AIRBNB</Option>
-                <Option value="booking.com">BOOKING.COM</Option>
+                {channelData.websites.map((item: any) => (
+                  <Option key={item.id} value={item.id}>
+                    {item.name}
+                  </Option>
+                ))}
               </OptGroup>
             </Select>
             <Select
@@ -603,16 +604,19 @@ function ChannelManager() {
                 key: 'age',
                 width: '12.5%',
                 render: (value: any, record: object, index: number) => {
-                  if (index === 2) {
+                  if (index >= 2) {
                     return (
                       <div>
-                        <Select defaultValue="lucy" style={{ fontWeight: 600 }}>
-                          <Option value="jack">Jack</Option>
-                          <Option value="lucy">MIN STAY</Option>
-                          <Option disabled value="disabled">
-                            Disabled
-                          </Option>
-                          <Option value="Yiminghe">yiminghe</Option>
+                        <Select
+                          defaultValue="min-stay"
+                          style={{ fontWeight: 600, minWidth: '84%' }}
+                        >
+                          <Option value="rate">RATES</Option>
+                          <Option value="cta">CTA</Option>
+                          <Option value="ctd">CTD</Option>
+
+                          <Option value="min-stay">MIN STAY</Option>
+                          <Option value="max-stay">MAX STAY</Option>
                         </Select>
                         <svg
                           fill="none"

@@ -17,9 +17,11 @@ export function* fetchChannelSaga({ payload }: ReturnType<typeof fetchChannelsAc
   try {
     let channels = [];
     let dates = [];
+    let websites = [];
+    let rates = [];
     const query = new URLSearchParams(Object(payload)).toString();
 
-    ({ channels, dates } = yield call(
+    ({ channels, dates, rates, websites } = yield call(
       request,
       `${apiEndPoint(ChannelEndpoint.GET_LIST)}?${query}`,
       {
@@ -28,7 +30,7 @@ export function* fetchChannelSaga({ payload }: ReturnType<typeof fetchChannelsAc
       },
     ));
 
-    yield put(fetchChannelsSuccessAction({ dates, channels }));
+    yield put(fetchChannelsSuccessAction({ dates, channels, websites, rates }));
   } catch (error) {
     console.log('Error', error);
     message.error('Something went wrong!');
