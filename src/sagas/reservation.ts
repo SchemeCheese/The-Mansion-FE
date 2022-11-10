@@ -15,6 +15,8 @@ import {
   cancelReservationDetailSuccess,
   createReservation,
   createReservationSuccess,
+  downloadDocxReservationDetail,
+  downloadDocxReservationDetailSuccess,
   downloadPDFReservationDetail,
   downloadPDFReservationDetailSuccess,
   getReservation,
@@ -447,6 +449,34 @@ export function* getDownloadPDFReservationDetailSaga({
   }
 }
 
+export function* getDownloadDocxReservationDetailSaga({
+  payload,
+}: ReturnType<typeof downloadDocxReservationDetail>) {
+  try {
+    const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_DOCX)}/${
+      payload.payload.reservation_info_id
+    }/reservation-detail/${payload.payload.reservation_detail_id}/downloadDocx`;
+
+    fetch(urlApi, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }).then(response => {
+      response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+
+        a.href = url;
+        a.download = payload.payload.file_name;
+        a.click();
+      });
+    });
+    yield put(downloadDocxReservationDetailSuccess());
+  } catch (error) {
+    console.log('Error', error);
+    message.error('Cannot download file!');
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
@@ -463,5 +493,6 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_DETAIL_UPDATE_NOTE, postUpdateNoteReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_RESEND_EMAIL, getResendEmailReservationSaga),
     takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_PDF, getDownloadPDFReservationDetailSaga),
+    takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_DOCX, getDownloadDocxReservationDetailSaga),
   ]);
 }

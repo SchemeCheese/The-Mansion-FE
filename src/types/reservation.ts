@@ -173,3 +173,13 @@ export interface DownloadPDFReservationDetailPayload {
 export interface DownloadPDFReservationDetail {
   payload: DownloadPDFReservationDetailPayload;
 }
+
+export interface DownloadDocxReservationDetailPayload {
+  file_name: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
+export interface DownloadDocxReservationDetail {
+  payload: DownloadDocxReservationDetailPayload;
+}

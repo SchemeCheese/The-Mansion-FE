@@ -9,6 +9,7 @@ import {
   BookRoom,
   CancelReservationDetail,
   CreateReservationResult,
+  DownloadDocxReservationDetail,
   DownloadPDFReservationDetail,
   GetReservationFinishPayload,
   GetReservationPayload,
@@ -148,4 +149,13 @@ export const downloadPDFReservationDetail = createAction(
 
 export const downloadPDFReservationDetailSuccess = createAction(
   ActionTypes.RESERVATION_DETAIL_DOWNLOAD_PDF_SUCCESS,
+);
+
+export const downloadDocxReservationDetail = createAction(
+  ActionTypes.RESERVATION_DETAIL_DOWNLOAD_DOCX,
+  (payload: DownloadDocxReservationDetail) => actionPayload(payload),
+);
+
+export const downloadDocxReservationDetailSuccess = createAction(
+  ActionTypes.RESERVATION_DETAIL_DOWNLOAD_DOCX_SUCCESS,
 );
