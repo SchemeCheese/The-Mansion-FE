@@ -6,7 +6,13 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { RoomEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { getRoomsActionFinish, getRoomTypeFinish, searchRoom, searchRoomFinish } from 'actions';
+import {
+  getRoomsActionFinish,
+  getRoomTypeFinish,
+  logOut,
+  searchRoom,
+  searchRoomFinish,
+} from 'actions';
 
 export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) {
   try {
@@ -38,9 +44,16 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
         rates,
       }),
     );
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Cannot get room info!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot get room info!');
+    }
   }
 }
 
@@ -64,9 +77,16 @@ export function* getRoomTypeSaga() {
         data,
       }),
     );
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot get room type!');
+    }
   }
 }
 
@@ -91,9 +111,16 @@ export function* getRoomsSaga() {
         items,
       }),
     );
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Cannot get rooms!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot get rooms!');
+    }
   }
 }
 

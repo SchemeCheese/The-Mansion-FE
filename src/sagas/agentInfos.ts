@@ -6,7 +6,7 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { AgentInfoEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { getAgentInfosFinish } from 'actions';
+import { getAgentInfosFinish, logOut } from 'actions';
 
 export function* getAgentInfosSaga() {
   try {
@@ -19,9 +19,16 @@ export function* getAgentInfosSaga() {
     }));
 
     yield put(getAgentInfosFinish({ data, total }));
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Can not get agent info!');
+    }
   }
 }
 

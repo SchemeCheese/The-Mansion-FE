@@ -6,7 +6,7 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { LanguageCodeEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { getLanguageCodeActionFinish } from 'actions';
+import { getLanguageCodeActionFinish, logOut } from 'actions';
 
 export function* getLanguageCodesSaga() {
   try {
@@ -18,9 +18,16 @@ export function* getLanguageCodesSaga() {
     }));
 
     yield put(getLanguageCodeActionFinish({ items }));
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Cannot get language code!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot get language code!');
+    }
   }
 }
 

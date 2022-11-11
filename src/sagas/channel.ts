@@ -9,6 +9,7 @@ import { ActionTypes } from 'literals';
 import {
   fetchChannelsAction,
   fetchChannelsSuccessAction,
+  logOut,
   updateRoomAvailableAction,
   updateRoomAvailableSuccessAction,
 } from 'actions';
@@ -31,9 +32,16 @@ export function* fetchChannelSaga({ payload }: ReturnType<typeof fetchChannelsAc
     ));
 
     yield put(fetchChannelsSuccessAction({ dates, channels, websites, rates }));
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Can not fetch channel info!');
+    }
   }
 }
 
@@ -54,9 +62,16 @@ export function* postUpdateRoomAvailableSaga({
     } else {
       message.error('Can not update room available!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Can not update room available!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Can not update room available!');
+    }
   }
 }
 
