@@ -309,19 +309,21 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      const bookRoomInfoTemporary = [...bookRoomInfo];
+    if (clickInfo.event.extendedProps.disabled !== true) {
+      if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+        const bookRoomInfoTemporary = [...bookRoomInfo];
 
-      const indexElement = bookRoomInfoTemporary.findIndex(function (item) {
-        return (
-          item.reservation_equipment_id === clickInfo.event.extendedProps.reservation_equipment_id
-        );
-      });
+        const indexElement = bookRoomInfoTemporary.findIndex(function (item) {
+          return (
+            item.reservation_equipment_id === clickInfo.event.extendedProps.reservation_equipment_id
+          );
+        });
 
-      bookRoomInfoTemporary.splice(indexElement, 1);
+        bookRoomInfoTemporary.splice(indexElement, 1);
 
-      clickInfo.event.remove();
-      setBookRoomInfo(bookRoomInfoTemporary);
+        clickInfo.event.remove();
+        setBookRoomInfo(bookRoomInfoTemporary);
+      }
     }
   };
 
