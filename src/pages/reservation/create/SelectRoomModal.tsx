@@ -89,7 +89,7 @@ function SelectRoomModal({
 
         return (
           <Select
-            defaultValue={record.rate_id}
+            // defaultValue={record.rate_id}
             onChange={value => {
               const selectedRate = _.findWhere(searchRoomResultState[index].rates, {
                 equipment_charge_detail_id: value,
@@ -102,12 +102,14 @@ function SelectRoomModal({
                 ...selectedRoom,
                 price: formatNumber(selectedRate.price),
                 actual_amount: selectedRate.price,
+                current_rate_id: value,
               };
 
               setSearchRoomResultState(stateTemporary);
             }}
             placeholder="Select rate"
             style={{ width: '100%' }}
+            value={searchRoomResultState[index].current_rate_id ?? record.rate_id}
           >
             {option}
           </Select>
