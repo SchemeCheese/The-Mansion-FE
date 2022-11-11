@@ -167,3 +167,8 @@
 .card-calendar-notes .ant-card-head .ant-card-head-title {
   padding: 8px 0;
 }
+
+/* Hide FullCalendar License */
+.fc-license-message {
+  display: none;
+}
