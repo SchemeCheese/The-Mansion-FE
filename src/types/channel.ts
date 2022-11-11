@@ -5,6 +5,8 @@ export interface FetchChannel {
 export interface FetchChannelResult {
   channels: Array<Record<string, any>>;
   dates: Array<Record<string, any>>;
+  rates: Array<Record<string, any>>;
+  websites: Array<Record<string, any>>;
 }
 
 interface UpdateRoomAvailablePayload {

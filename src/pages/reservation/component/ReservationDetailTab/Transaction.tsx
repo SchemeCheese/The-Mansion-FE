@@ -99,8 +99,41 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
     );
   };
 
+  const handlePayment = () => {
+    const { items } = transactions[activeTabKey];
+    const newSelectedRows: any = [];
+    const newSelectedRowKeys: any = [];
+
+    items.forEach((item: any) => {
+      if (
+        item.description.toLowerCase() !== 'discount' &&
+        item.description.toLowerCase() !== 'deposit'
+      ) {
+        newSelectedRows.push({
+          amount: item.quantity,
+          date: item.date,
+          description: item.description,
+          key: item.sale_detail_id,
+          sale_detail_id: item.sale_detail_id,
+          storage_id: item.storage_id,
+          total: formatNumber(item.total_amount),
+          total_amount: item.total_amount,
+          unit_price: item.unit_price,
+        });
+        newSelectedRowKeys.push(item.sale_detail_id);
+      }
+    });
+
+    setSelectedRowKeys(newSelectedRowKeys);
+    setSelectedRows(newSelectedRows);
+    setPaySelectedRowKeys(newSelectedRowKeys);
+    setPaySelectedRows(newSelectedRows);
+
+    setIsModalOpenPaySelected(true);
+  };
+
   Object.keys(transactions).forEach((key: any) => {
-    const tabKey = `tab${key}`;
+    const tabKey = `${key}`;
     let tabName = `Disk ${key}`;
 
     if (key.toLowerCase() === 'deposit') {
@@ -130,7 +163,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
     contentList.paid = <Paid items={paid} />;
   }
 
-  const [activeTabKey1, setActiveTabKey1] = useState<string>('tabA');
+  const [activeTabKey, setActiveTabKey] = useState<string>(Object.keys(transactions)[0]);
   const [isModalOpenSelectedPaymentMethod, setIsModalOpenSelectedPaymentMethod] = useState(false);
   const [isModalOpenAddDiscount, setIsModalOpenAddDiscount] = useState(false);
   const [isModalOpenDeposit, setIsModalOpenDeposit] = useState(false);
@@ -232,15 +265,15 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
     >
       <Col span={16} style={{ paddingRight: 16 }}>
         <Card
-          activeTabKey={activeTabKey1}
+          activeTabKey={activeTabKey}
           className="transaction-tabs"
           onTabChange={key => {
-            setActiveTabKey1(key);
+            setActiveTabKey(key);
           }}
           style={{ width: '100%' }}
           tabList={tabList}
         >
-          <div style={{ minHeight: 380 }}>{contentList[activeTabKey1]}</div>
+          <div style={{ minHeight: 380 }}>{contentList[activeTabKey]}</div>
           <div>
             <Row>
               <Col span={8} style={{ paddingRight: 17 }}>
@@ -459,11 +492,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
           </Col>
 
           <Col span={12}>
-            <PattonButton
-              onClick={() => setIsModalOpenSelectedPaymentMethod(true)}
-              style={{ width: '100%' }}
-              type="primary"
-            >
+            <PattonButton onClick={handlePayment} style={{ width: '100%' }} type="primary">
               {t('common.Payment')}
             </PattonButton>
             <SelectedPayMethodModal

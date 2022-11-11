@@ -287,6 +287,8 @@ export interface FetchChannelState {
   dates: Array<Record<string, any>>;
   fromDate: string;
   is_searching: boolean;
+  rates: Array<Record<string, any>>;
+  websites: Array<Record<string, any>>;
 }
 
 export interface SearchAvailableScheduleState {

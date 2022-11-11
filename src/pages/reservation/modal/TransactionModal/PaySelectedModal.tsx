@@ -68,7 +68,6 @@ function PaySelectedModal({
   const rowSelection = {
     selectedRowKeys: paySelectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[], newSelectedRows: any) => {
-      console.log(`selectedRowKeys: ${newSelectedRowKeys}`, 'selectedRows: ', newSelectedRows);
       setPaySelectedRowKeys(newSelectedRowKeys);
       setPaySelectedRows(newSelectedRows);
     },

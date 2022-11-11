@@ -63,6 +63,9 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
                   storage_id: 4,
                   comment_deposit: values.deposit_comment,
                   deposit_date: values.deposit_date.format('YYYY-MM_DD'),
+                  exchanged_amount: values.exchanged_amount,
+                  payment_method: values.payment_method,
+                  currency_conversion_id: values.currency,
                 },
               ],
               reservation_id: id ?? '',
@@ -88,8 +91,6 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
       exchanged_amount: formatNumber(formValue.amount * rate.exchange_rate),
     });
   };
-
-  const paymentMethod = ['Cash', 'Credit Card'];
 
   const transactionType = ['Deposit'];
 
@@ -188,9 +189,9 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
                 placeholder="Select payment method"
                 style={{ borderRadius: 2, width: '100%' }}
               >
-                {paymentMethod.map(type => (
-                  <Option key={type}>{type}</Option>
-                ))}
+                <Option value="1">Cash</Option>
+                <Option value="2">Credit Card</Option>
+                <Option value="3">Bank Transfer</Option>
               </Select>
             </Form.Item>
           </Col>
