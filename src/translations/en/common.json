@@ -41,6 +41,10 @@
     "title": "Zip Code",
     "placeholder": "Zip Code"
   },
+  "Face ID": {
+    "title": "Face ID",
+    "placeholder": "2301"
+  },
   "Currency": "Currency",
   "Date": "Date",
   "Description": "Description",

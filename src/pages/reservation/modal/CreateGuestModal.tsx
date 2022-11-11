@@ -354,6 +354,7 @@ function CreateGuestModal({
       vat_company: currentGuest?.vat_company ?? null,
       vat_address: currentGuest?.vat_address ?? null,
       vat_tax: currentGuest?.vat_tax ?? null,
+      face_id: currentGuest?.face_id ?? null,
     });
   }, [currentGuest]);
 
@@ -498,10 +499,14 @@ function CreateGuestModal({
                       <Input placeholder={t('common.Email.placeholder')} />
                     </Form.Item>
                   </Col>
-
                   <Col span={8}>
                     <Form.Item label={t('common.Mobile Phone.title')} name="telephone_number1">
                       <Input placeholder={t('common.Mobile Phone.placeholder')} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item label={t('common.Face ID.title')} name="face_id">
+                      <Input placeholder={t('common.Face ID.placeholder')} />
                     </Form.Item>
                   </Col>
                 </Row>
