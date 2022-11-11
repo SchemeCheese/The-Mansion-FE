@@ -7,6 +7,7 @@ import { ReservationEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import {
+  logOut,
   searchAvailableScheduleAction,
   searchAvailableScheduleActionSuccess,
   searchScheduleAction,
@@ -28,9 +29,16 @@ export function* getSearchScheduleSaga({ payload }: ReturnType<typeof searchSche
     ));
 
     yield put(searchScheduleActionSuccess({ data }));
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -51,9 +59,16 @@ export function* getSearchAvailableScheduleSaga({
     ));
 
     yield put(searchAvailableScheduleActionSuccess({ data }));
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 

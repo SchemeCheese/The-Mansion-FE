@@ -6,7 +6,7 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { ProductTypeEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { productTypeFinish } from 'actions';
+import { logOut, productTypeFinish } from 'actions';
 
 export function* getProductTypeSaga() {
   try {
@@ -18,9 +18,16 @@ export function* getProductTypeSaga() {
     });
 
     yield put(productTypeFinish({ data }));
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Can not get product type!');
+    }
   }
 }
 

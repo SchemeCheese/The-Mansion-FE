@@ -13,6 +13,7 @@ import {
   changeDiskActionSuccess,
   deleteItemAction,
   deleteItemActionSuccess,
+  logOut,
 } from 'actions';
 
 export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) {
@@ -35,9 +36,16 @@ export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) 
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -61,9 +69,16 @@ export function* postDeleteItemSaga({ payload }: ReturnType<typeof deleteItemAct
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -84,9 +99,16 @@ export function* postChangeDiskSaga({ payload }: ReturnType<typeof changeDiskAct
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 

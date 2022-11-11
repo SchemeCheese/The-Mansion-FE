@@ -6,7 +6,7 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { PaymentEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { createPaymentAction, createPaymentSuccess } from 'actions';
+import { createPaymentAction, createPaymentSuccess, logOut } from 'actions';
 
 export function* postCreatePaymentSaga({ payload }: ReturnType<typeof createPaymentAction>) {
   try {
@@ -26,11 +26,18 @@ export function* postCreatePaymentSaga({ payload }: ReturnType<typeof createPaym
     if (success) {
       yield put(createPaymentSuccess());
     } else {
-      message.error('Something went wrong!');
+      message.error('Can not create payment!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Can not create payment!');
+    }
   }
 }
 

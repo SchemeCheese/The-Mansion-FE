@@ -9,6 +9,7 @@ import { ActionTypes } from 'literals';
 import {
   createGuest,
   createGuestSuccess,
+  logOut,
   removeGuestAction,
   removeGuestSuccessAction,
   setMainGuestAction,
@@ -34,9 +35,16 @@ export function* postCreateGuestSaga({ payload }: ReturnType<typeof createGuest>
     } else {
       message.error('Create Guest Failed!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Create Guest Failed!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Create Guest Failed!');
+    }
   }
 }
 
@@ -61,9 +69,16 @@ export function* postUpdateGuestSaga({ payload }: ReturnType<typeof updateGuestA
     } else {
       message.error('Update Guest Failed!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Update Guest Failed!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Update Guest Failed!');
+    }
   }
 }
 
@@ -87,9 +102,16 @@ export function* deleteRemoveGuestSaga({ payload }: ReturnType<typeof removeGues
     } else {
       message.error('Remove Guest Failed!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Remove Guest Failed!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Remove Guest Failed!');
+    }
   }
 }
 
@@ -113,9 +135,16 @@ export function* getSetMainGuestSaga({ payload }: ReturnType<typeof setMainGuest
     } else {
       message.error('Set Main Guest Failed!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Set Main Guest Failed!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Set Main Guest Failed!');
+    }
   }
 }
 

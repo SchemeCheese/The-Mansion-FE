@@ -25,6 +25,7 @@ import {
   getReservationFinish,
   getReservationNumber,
   getReservationNumberFinish,
+  logOut,
   resendEmailReservationAction,
   resendEmailReservationSuccessAction,
   searchReservation,
@@ -62,9 +63,16 @@ export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchR
         current_page: currentPage,
       }),
     );
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -98,9 +106,16 @@ export function* postCreateReservationSaga({ payload }: ReturnType<typeof create
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -129,9 +144,16 @@ export function* postUpdateReservationSaga({ payload }: ReturnType<typeof create
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -151,9 +173,16 @@ export function* getReservationDetailSaga({ payload }: ReturnType<typeof getRese
     ));
 
     yield put(getReservationDetailFinish({ data }));
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -171,9 +200,16 @@ export function* getReservationSaga({ payload }: ReturnType<typeof getReservatio
     ));
 
     yield put(getReservationFinish({ data }));
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -195,9 +231,16 @@ export function* getReservationNumberSaga({ payload }: ReturnType<typeof getRese
     if (success) {
       yield put(getReservationNumberFinish({ reservation_number: reservationNumber }));
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -225,9 +268,16 @@ export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) 
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -258,11 +308,18 @@ export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error(
-      'Booking room is not success! The room you selected may have already been booked. Please F5 to get the latest data',
-    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error(
+        'Booking room is not success! The room you selected may have already been booked. Please F5 to get the latest data',
+      );
+    }
   }
 }
 
@@ -292,9 +349,16 @@ export function* postAddReservationDetailSaga({
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -325,9 +389,16 @@ export function* postCancelReservationDetailSaga({
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -355,9 +426,16 @@ export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof update
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -384,9 +462,16 @@ export function* postUpdateNoteReservationDetailSaga({
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -415,9 +500,16 @@ export function* getResendEmailReservationSaga({
     } else {
       message.error('Something went wrong!');
     }
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Something went wrong!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
   }
 }
 
@@ -443,9 +535,16 @@ export function* getDownloadPDFReservationDetailSaga({
       });
     });
     yield put(downloadPDFReservationDetailSuccess());
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Cannot download file!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot download file!');
+    }
   }
 }
 
@@ -471,9 +570,16 @@ export function* getDownloadDocxReservationDetailSaga({
       });
     });
     yield put(downloadDocxReservationDetailSuccess());
-  } catch (error) {
-    console.log('Error', error);
-    message.error('Cannot download file!');
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot download file!');
+    }
   }
 }
 
