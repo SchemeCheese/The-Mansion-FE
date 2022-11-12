@@ -24,3 +24,13 @@ export interface DeleteItem {
 export interface ChangeDisk {
   payload: ChangeDiskPayload;
 }
+
+export interface DownloadPDFInvoiceTransactionPayload {
+  file_name: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
+export interface DownloadPDFInvoiceTransaction {
+  payload: DownloadPDFInvoiceTransactionPayload;
+}

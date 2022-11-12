@@ -13,6 +13,8 @@ import {
   changeDiskActionSuccess,
   deleteItemAction,
   deleteItemActionSuccess,
+  downloadPDFInvoiceTransaction,
+  downloadPDFInvoiceTransactionSuccess,
   logOut,
 } from 'actions';
 
@@ -112,8 +114,46 @@ export function* postChangeDiskSaga({ payload }: ReturnType<typeof changeDiskAct
   }
 }
 
+export function* getDownloadPDFInvoiceTransactionSaga({
+  payload,
+}: ReturnType<typeof downloadPDFInvoiceTransaction>) {
+  try {
+    const urlApi = `${apiEndPoint(TransactionEndpoint.DOWNLOAD_INVOICE_PDF)}/${
+      payload.payload.reservation_info_id
+    }/reservation-detail/${payload.payload.reservation_detail_id}/downloadInvoicePDF`;
+
+    fetch(urlApi, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }).then(response => {
+      response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+
+        a.href = url;
+        a.download = payload.payload.file_name;
+        a.click();
+      });
+    });
+    yield put(downloadPDFInvoiceTransactionSuccess());
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot download file!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([takeLatest(ActionTypes.TRANSACTION_ADD_ITEM, postAddItemSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_DELETE_ITEM, postDeleteItemSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_CHANGE_DISK, postChangeDiskSaga)]);
+  yield all([
+    takeLatest(ActionTypes.TRANSACTION_INVOICE_DOWNLOAD_PDF, getDownloadPDFInvoiceTransactionSaga),
+  ]);
 }
