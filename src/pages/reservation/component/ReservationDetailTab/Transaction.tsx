@@ -27,7 +27,12 @@ import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { deleteItemAction, getReservation, getReservationDetail } from 'actions';
+import {
+  deleteItemAction,
+  downloadPDFInvoiceTransaction,
+  getReservation,
+  getReservationDetail,
+} from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -130,6 +135,18 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
     setPaySelectedRows(newSelectedRows);
 
     setIsModalOpenPaySelected(true);
+  };
+
+  const handleInvoiceDownloadPdf = () => {
+    dispatch(
+      downloadPDFInvoiceTransaction({
+        payload: {
+          reservation_detail_id: reservationDetailId ?? '',
+          reservation_info_id: reservationId ?? '',
+          file_name: `the_mansion_hotel_${reservationId}_${reservationDetailId}.pdf`,
+        },
+      }),
+    );
   };
 
   Object.keys(transactions).forEach((key: any) => {
@@ -480,6 +497,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
         <Row style={{ paddingTop: transactions?.length === 0 ? 18 : 22 }}>
           <Col span={12} style={{ paddingRight: 18 }}>
             <MButton
+              onClick={handleInvoiceDownloadPdf}
               style={{
                 width: '100%',
                 border: '1px solid #1D39C4',

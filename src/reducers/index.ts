@@ -18,6 +18,9 @@ import createGuest, { createGuestState } from './createGuest';
 import createPayment, { createPaymentState } from './createPayment';
 import createReservation, { createReservationState } from './createReservation';
 import deleteItem, { deleteItemState } from './deleteItem';
+import downloadPDFInvoiceTransaction, {
+  downloadPDFInvoiceTransactionState,
+} from './downloadPDFInvoiceTransaction';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
@@ -85,6 +88,7 @@ export const initialState = {
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
   setMainGuest: setMainGuestState,
   downloadDocxReservationDetail: downloadDocxReservationDetailState,
+  downloadPDFInvoiceTransaction: downloadPDFInvoiceTransactionState,
 };
 
 export default {
@@ -127,4 +131,5 @@ export default {
   ...downloadPDFReservationDetail,
   ...setMainGuest,
   ...downloadDocxReservationDetail,
+  ...downloadPDFInvoiceTransaction,
 };
