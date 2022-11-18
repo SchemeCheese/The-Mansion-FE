@@ -407,6 +407,7 @@ export interface RootState {
   downloadDocxReservationDetail: DownloadDocxReservationDetailState;
   downloadPDFInvoiceTransaction: DownloadPDFInvoiceTransactionState;
   downloadPDFReservationDetail: DownloadPDFReservationDetailState;
+  getBranchHeader: BranchHeaderState;
   getLanguageCode: LanguageCodeState;
   getProductType: ProductTypeState;
   getReservation: GetReservationState;
@@ -414,7 +415,6 @@ export interface RootState {
   getReservationNumber: ReservationNumberState;
   getRoomType: RoomTypeState;
   getRooms: GetRoomState;
-  getbranchHeader: BranchHeaderState;
   github: GitHubState;
   product: ProductSearchState;
   removeGuest: RemoveGuestState;
