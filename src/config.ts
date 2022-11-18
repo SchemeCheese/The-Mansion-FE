@@ -85,3 +85,7 @@ export const FileEndpoint = {
 export const LanguageCodeEndpoint = {
   GET_ALL: 'api/v1/language-codes',
 };
+
+export const GetBranchOfEmployeeEndpoint = {
+  GET: 'api/v1/employee-branch',
+};

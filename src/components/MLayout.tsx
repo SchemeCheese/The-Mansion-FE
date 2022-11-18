@@ -2,7 +2,7 @@ import 'antd/dist/antd.min.css';
 import './layout.css';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   BellOutlined,
@@ -15,9 +15,11 @@ import { selectUser } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { logOut } from 'actions';
+import { branchHeader, logOut } from 'actions';
 
 import Footer from 'components/Footer';
+
+import { RootState } from 'types/state';
 
 const { Content, Header, Sider } = Layout;
 
@@ -57,8 +59,10 @@ function MLayout(props: Props) {
 
   useEffect(() => {
     isFirstLoad.current = true;
+    dispatch(branchHeader({}));
   }, []);
 
+  // const branchHeaderName: any = useSelector<RootState>(({ branchHeader }) => branchHeader.data);
   return (
     <Layout>
       <Sider collapsed={collapsed} collapsible trigger={null}>
@@ -147,7 +151,7 @@ function MLayout(props: Props) {
             onClick: () => setCollapsed(!collapsed),
           })}
           <div style={{ float: 'right', paddingRight: '15px' }}>
-            <Button style={{ marginRight: 28, fontSize: 12 }}>Switch Branch</Button>
+            <Button style={{ marginRight: 28, fontSize: 12 }} />
             <span style={{ marginRight: 28, fontSize: 12 }}>System Date 19/05/2021</span>
             <SearchOutlined style={{ marginRight: 28 }} />
             <BellOutlined style={{ marginRight: 28 }} />

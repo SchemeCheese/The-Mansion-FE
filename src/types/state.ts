@@ -386,6 +386,10 @@ export interface TransactionDownloadPDFInvoicePayload {
   reservation_info_id: string | number;
 }
 
+export interface BranchHeaderState {
+  data: Array<Record<string, any>>;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -410,6 +414,7 @@ export interface RootState {
   getReservationNumber: ReservationNumberState;
   getRoomType: RoomTypeState;
   getRooms: GetRoomState;
+  getbranchHeader: BranchHeaderState;
   github: GitHubState;
   product: ProductSearchState;
   removeGuest: RemoveGuestState;

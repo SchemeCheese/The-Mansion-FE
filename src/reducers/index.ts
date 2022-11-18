@@ -21,6 +21,7 @@ import deleteItem, { deleteItemState } from './deleteItem';
 import downloadPDFInvoiceTransaction, {
   downloadPDFInvoiceTransactionState,
 } from './downloadPDFInvoiceTransaction';
+import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
@@ -89,6 +90,7 @@ export const initialState = {
   setMainGuest: setMainGuestState,
   downloadDocxReservationDetail: downloadDocxReservationDetailState,
   downloadPDFInvoiceTransaction: downloadPDFInvoiceTransactionState,
+  getBranchHeader: getBranchHeaderState,
 };
 
 export default {
@@ -132,4 +134,5 @@ export default {
   ...setMainGuest,
   ...downloadDocxReservationDetail,
   ...downloadPDFInvoiceTransaction,
+  ...getBranchHeader,
 };

@@ -101,6 +101,8 @@ export const ActionTypes = keyMirror({
   TRANSACTION_INVOICE_DOWNLOAD_PDF: undefined,
   TRANSACTION_INVOICE_DOWNLOAD_PDF_SUCCESS: undefined,
   TRANSACTION_INVOICE_DOWNLOAD_PDF_FAILURE: undefined,
+  BRANCH_HEADER_GET: undefined,
+  BRANCH_HEADER_GET_FINISH: undefined,
 });
 
 export const STATUS: Status = {
