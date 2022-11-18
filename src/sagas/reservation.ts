@@ -44,8 +44,14 @@ export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchR
     let data = [];
     let total = 0;
     let currentPage = 0;
+    const payloadWithBranch = {
+      ...payload,
+      operator_code: 'the_mansion',
+      branch_code: 'the_mansion',
+      facility_code: 'hotel',
+    };
 
-    const query = new URLSearchParams(Object(payload)).toString();
+    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
 
     ({
       current_page: currentPage,
@@ -160,12 +166,19 @@ export function* postUpdateReservationSaga({ payload }: ReturnType<typeof create
 export function* getReservationDetailSaga({ payload }: ReturnType<typeof getReservationDetail>) {
   try {
     let data = [];
+    const payloadBranch = {
+      operator_code: 'the_mansion',
+      branch_code: 'the_mansion',
+      facility_code: 'hotel',
+    };
+
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
     ({ data } = yield call(
       request,
       `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${
         payload.reservation_id
-      }/reservation-detail/${payload.reservation_detail_id}/show`,
+      }/reservation-detail/${payload.reservation_detail_id}/show?${query}`,
       {
         method: 'GET',
         headers: headerWithAuthorization(),
