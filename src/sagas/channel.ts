@@ -20,7 +20,13 @@ export function* fetchChannelSaga({ payload }: ReturnType<typeof fetchChannelsAc
     let dates = [];
     let websites = [];
     let rates = [];
-    const query = new URLSearchParams(Object(payload)).toString();
+    const payloadWithBranch = {
+      ...payload,
+      operator_code: 'the_mansion',
+      branch_code: 'the_mansion',
+      facility_code: 'hotel',
+    };
+    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
 
     ({ channels, dates, rates, websites } = yield call(
       request,

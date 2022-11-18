@@ -15,7 +15,6 @@ export default {
         console.log('branch in header Reduce');
       })
       .addCase(branchHeaderFinish, (draft, { payload }) => {
-        console.log('Finish', payload);
         draft.data = payload.data;
       });
   }),

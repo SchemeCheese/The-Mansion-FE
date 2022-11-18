@@ -17,7 +17,14 @@ import {
 export function* getSearchScheduleSaga({ payload }: ReturnType<typeof searchScheduleAction>) {
   try {
     let data = [];
-    const query = new URLSearchParams(Object(payload)).toString();
+    const payloadWithBranch = {
+      ...payload,
+      operator_code: 'the_mansion',
+      branch_code: 'the_mansion',
+      facility_code: 'hotel',
+    };
+
+    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
 
     ({ data } = yield call(
       request,
@@ -47,7 +54,14 @@ export function* getSearchAvailableScheduleSaga({
 }: ReturnType<typeof searchAvailableScheduleAction>) {
   try {
     let data = [];
-    const query = new URLSearchParams(Object(payload)).toString();
+    const payloadWithBranch = {
+      ...payload,
+      operator_code: 'the_mansion',
+      branch_code: 'the_mansion',
+      facility_code: 'hotel',
+    };
+
+    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
 
     ({ data } = yield call(
       request,
