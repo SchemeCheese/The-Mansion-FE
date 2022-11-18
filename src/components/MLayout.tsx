@@ -11,15 +11,13 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 import { Avatar, Button, Dropdown, Layout, Menu } from 'antd';
-import { selectUser } from 'selectors';
+import { selectBranchHeader, selectUser } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { branchHeader, logOut } from 'actions';
 
 import Footer from 'components/Footer';
-
-import { RootState } from 'types/state';
 
 const { Content, Header, Sider } = Layout;
 
@@ -62,7 +60,8 @@ function MLayout(props: Props) {
     dispatch(branchHeader({}));
   }, []);
 
-  // const branchHeaderName: any = useSelector<RootState>(({ branchHeader }) => branchHeader.data);
+  const branchHeaderName: any = useAppSelector(selectBranchHeader);
+
   return (
     <Layout>
       <Sider collapsed={collapsed} collapsible trigger={null}>
@@ -151,7 +150,9 @@ function MLayout(props: Props) {
             onClick: () => setCollapsed(!collapsed),
           })}
           <div style={{ float: 'right', paddingRight: '15px' }}>
-            <Button style={{ marginRight: 28, fontSize: 12 }} />
+            <Button style={{ marginRight: 28, fontSize: 12 }}>
+              {branchHeaderName.data.branch?.name}
+            </Button>
             <span style={{ marginRight: 28, fontSize: 12 }}>System Date 19/05/2021</span>
             <SearchOutlined style={{ marginRight: 28 }} />
             <BellOutlined style={{ marginRight: 28 }} />

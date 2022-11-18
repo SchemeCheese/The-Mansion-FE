@@ -151,3 +151,8 @@ export const selectSetMainGuest = createSelector(
   (state: RootState) => state.setMainGuest,
   setMainGuest => setMainGuest,
 );
+
+export const selectBranchHeader = createSelector(
+  (state: RootState) => state.getBranchHeader,
+  getBranchHeader => getBranchHeader,
+);
