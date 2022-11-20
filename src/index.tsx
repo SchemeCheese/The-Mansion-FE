@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { configStore } from 'store';
 
@@ -28,7 +29,9 @@ ReactDOM.render(
     <PersistGate loading={<Loader block size={100} />} persistor={persistor}>
       <ErrorBoundary FallbackComponent={ErrorHandler}>
         <HelmetProvider>
-          <Root />
+          <BrowserRouter>
+            <Root />
+          </BrowserRouter>
         </HelmetProvider>
       </ErrorBoundary>
       <GlobalStyles />

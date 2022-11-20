@@ -17,16 +17,20 @@ import { useAppSelector } from 'modules/hooks';
 
 import { branchHeader, logOut } from 'actions';
 
+import BreadcrumbList from 'components/BreadcrumbList';
 import Footer from 'components/Footer';
+
+import MButton from './MButton';
 
 const { Content, Header, Sider } = Layout;
 
 interface Props {
+  breadCrumb?: any;
   children: React.ReactElement;
 }
 
 function MLayout(props: Props) {
-  const { children } = props;
+  const { breadCrumb, children } = props;
   const [collapsed, setCollapsed] = useState(false);
 
   const dispatch = useDispatch();
@@ -61,6 +65,18 @@ function MLayout(props: Props) {
   }, []);
 
   const branchHeaderName: any = useAppSelector(selectBranchHeader);
+
+  console.log('aaaa', breadCrumb);
+
+  // const breadCrumbElement = breadCrumb?.map((item: any, key: number) => {
+  //   if (key !== breadCrumb.length - 1) {
+  //     return  <>
+  //     <span className="ant-breadcrumb-link" style={{paddingRight: 8}}>{item}</span>/
+  //     </>
+  //   } else {
+  //     return <span className="ant-breadcrumb-link" style={{paddingLeft: 8}}>{item}</span>
+  //   }
+  // })
 
   return (
     <Layout>
@@ -149,10 +165,12 @@ function MLayout(props: Props) {
             className: 'trigger',
             onClick: () => setCollapsed(!collapsed),
           })}
+          <span style={{ fontSize: 13 }}>{breadCrumb}</span>
+
           <div style={{ float: 'right', paddingRight: '15px' }}>
-            <Button style={{ marginRight: 28, fontSize: 12 }}>
+            <MButton style={{ marginRight: 28, fontSize: 12 }}>
               {branchHeaderName.data.branch?.name}
-            </Button>
+            </MButton>
             <span style={{ marginRight: 28, fontSize: 12 }}>System Date 19/05/2021</span>
             <SearchOutlined style={{ marginRight: 28 }} />
             <BellOutlined style={{ marginRight: 28 }} />
@@ -169,6 +187,7 @@ function MLayout(props: Props) {
           className="site-layout-background"
           style={{
             minHeight: 280,
+            paddingTop: 20,
           }}
         >
           {children}

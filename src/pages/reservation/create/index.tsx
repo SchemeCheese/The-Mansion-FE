@@ -76,7 +76,7 @@ function Create() {
     ({ getReservationNumber: getReservationNumberTemporary }) =>
       getReservationNumberTemporary.reservation_number,
   );
-  const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
+  // const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -167,7 +167,7 @@ function Create() {
 
   return (
     <>
-      <BreadcrumbList data={breadcrumbData} />
+      {/* <BreadcrumbList data={breadcrumbData} /> */}
       <p className="title">{t('reservation.Create New Reservation')}</p>
       <p style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.45)', paddingLeft: 24 }}>
         {t('reservation.Create New Reservation Note')}

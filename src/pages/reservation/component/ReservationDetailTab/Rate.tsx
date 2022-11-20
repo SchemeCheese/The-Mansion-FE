@@ -8,7 +8,7 @@ Main functions : Rate Tab
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Input, message, Row, Table } from 'antd';
+import { Col, message, Row, Table } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import { selectUpdateRate } from 'selectors';
@@ -19,6 +19,7 @@ import { colors } from 'modules/theme';
 
 import { getReservation, getReservationDetail, updateRate } from 'actions';
 
+import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
 
 import { RootState } from 'types';
@@ -83,7 +84,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
       key: 'actual_amount',
       render: (text: string, record: any, index: number) => {
         return (
-          <Input
+          <MInput
             name="actual_amount"
             onChange={event => {
               const stateTemporary: any = [...ratesState];

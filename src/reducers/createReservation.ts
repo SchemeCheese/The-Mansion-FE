@@ -8,7 +8,7 @@ export const createReservationState = {
   payload: {
     reservation_number: '',
     market_segment_id: '',
-    path_of_reservation: '',
+    agent_info_id: '',
     note: '',
     booker_type: '',
     booker_firstname: '',

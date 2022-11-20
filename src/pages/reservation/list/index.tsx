@@ -22,7 +22,7 @@ function Reservation() {
   const { t } = useTranslation();
 
   const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
-  const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
+  // const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
   const handeleActive = (activeKey: string) => {
     if (activeKey === '1') {
@@ -89,7 +89,7 @@ function Reservation() {
 
   return (
     <>
-      <BreadcrumbList data={breadcrumbData} />
+      {/* <BreadcrumbList data={breadcrumbData} /> */}
 
       <p className="title">Reservation List</p>
 

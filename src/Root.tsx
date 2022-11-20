@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
 import Reservation from 'pages/reservation/list';
@@ -41,8 +42,10 @@ const Main = styled.main<Pick<UserState, 'isAuthenticated'>>`
 
 function Root() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const user = useAppSelector(selectUser);
   const { changed } = useTreeChanges(user);
+  const navigate = useNavigate();
 
   const { isAuthenticated, username } = user;
 
@@ -58,81 +61,110 @@ function Root() {
     }
   }, [dispatch, changed]);
 
+  const reservationBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/reservation');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('common.Reservation')}
+      </span>
+    </>
+  );
+
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <AppWrapper data-testid="app">
-          <Helmet
-            defer={false}
-            encodeSpecialCharacters
-            htmlAttributes={{ lang: 'pt-br' }}
-            titleAttributes={{ itemprop: 'name', lang: 'pt-br' }}
-            titleTemplate={`%s | ${username}`}
-          >
-            <link
-              href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-              rel="stylesheet"
+    <ThemeProvider theme={theme}>
+      <AppWrapper data-testid="app">
+        <Helmet
+          defer={false}
+          encodeSpecialCharacters
+          htmlAttributes={{ lang: 'pt-br' }}
+          titleAttributes={{ itemprop: 'name', lang: 'pt-br' }}
+          titleTemplate={`%s | ${username}`}
+        >
+          <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+            rel="stylesheet"
+          />
+        </Helmet>
+        {/* {isAuthenticated && <Header />} */}
+        <Main isAuthenticated={isAuthenticated}>
+          <Routes>
+            <Route
+              element={
+                <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
+                  <Login />
+                </PublicRoute>
+              }
+              path="/"
             />
-          </Helmet>
-          {/* {isAuthenticated && <Header />} */}
-          <Main isAuthenticated={isAuthenticated}>
-            <Routes>
-              <Route
-                element={
-                  <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
-                    <Login />
-                  </PublicRoute>
-                }
-                path="/"
-              />
-              <Route
-                element={
-                  <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
-                    <Login />
-                  </PublicRoute>
-                }
-                path="/login"
-              />
-              <Route
-                element={
-                  <PrivateRoute isAuthenticated={isAuthenticated} to="/">
-                    <Private />
-                  </PrivateRoute>
-                }
-                path="/private"
-              />
-              <Route
-                element={
-                  <PrivateRoute isAuthenticated={isAuthenticated} to="/">
-                    <Reservation />
-                  </PrivateRoute>
-                }
-                path="/reservation"
-              />
-              <Route
-                element={
-                  <PrivateRoute isAuthenticated={isAuthenticated} to="/">
-                    <ReservationDetail />
-                  </PrivateRoute>
-                }
-                path="/reservation/:id"
-              />
-              <Route
-                element={
-                  <PrivateRoute isAuthenticated={isAuthenticated} to="/">
-                    <Create />
-                  </PrivateRoute>
-                }
-                path="/reservation/create"
-              />
-              <Route element={<NotFound />} path="*" />
-            </Routes>
-          </Main>
-          {/* <Footer /> */}
-          <SystemAlerts />
-        </AppWrapper>
-      </ThemeProvider>
-    </BrowserRouter>
+            <Route
+              element={
+                <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
+                  <Login />
+                </PublicRoute>
+              }
+              path="/login"
+            />
+            <Route
+              element={
+                <PrivateRoute isAuthenticated={isAuthenticated} to="/">
+                  <Private />
+                </PrivateRoute>
+              }
+              path="/private"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <Reservation />
+                </PrivateRoute>
+              }
+              path="/reservation"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <ReservationDetail />
+                </PrivateRoute>
+              }
+              path="/reservation/:id"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <Create />
+                </PrivateRoute>
+              }
+              path="/reservation/create"
+            />
+            <Route element={<NotFound />} path="*" />
+          </Routes>
+        </Main>
+        {/* <Footer /> */}
+        <SystemAlerts />
+      </AppWrapper>
+    </ThemeProvider>
   );
 }
 

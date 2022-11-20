@@ -65,6 +65,7 @@ export interface RoomSearchState {
 }
 
 export interface CreateReservationPayload {
+  agent_info_id: string;
   booker_email: string;
   booker_email_2?: string;
   booker_firstname: string;
@@ -77,7 +78,6 @@ export interface CreateReservationPayload {
   no_show?: string;
   note?: string;
   paid?: string;
-  path_of_reservation: string;
   payment_method?: string;
   reservation_number: string;
   send_mail?: string;
