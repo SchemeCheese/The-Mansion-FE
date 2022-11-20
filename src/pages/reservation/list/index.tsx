@@ -25,7 +25,7 @@ function Reservation() {
   // const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
   const handeleActive = (activeKey: string) => {
-    if (activeKey === '1') {
+    if (activeKey === '2') {
       dispatch(
         searchReservation({
           current_page: 1,
@@ -46,7 +46,7 @@ function Reservation() {
       );
     }
 
-    if (activeKey === '2') {
+    if (activeKey === '1') {
       dispatch(
         searchReservation({
           current_page: 1,
@@ -99,11 +99,11 @@ function Reservation() {
         onChange={activeKey => handeleActive(activeKey)}
         style={{ minHeight: '95%' }}
       >
-        <TabPane key="1" className="content" tab="Waitlist">
-          <ReservationList type="waitlist" />
-        </TabPane>
-        <TabPane key="2" className="content" tab="Reserved">
+        <TabPane key="1" className="content" tab="Reserved">
           <ReservationList type="reserved" />
+        </TabPane>
+        <TabPane key="2" className="content" tab="Waitlist">
+          <ReservationList type="waitlist" />
         </TabPane>
         <TabPane key="3" className="content" tab="Calendar">
           <Calendar />
