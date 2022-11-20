@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Input, Row, Select } from 'antd';
 import moment from 'moment';
@@ -8,7 +8,7 @@ import { searchReservation } from 'actions';
 
 import MInput from 'components/MInput';
 
-import { ReservationSearch } from 'types';
+import { ReservationSearch, RootState } from 'types';
 
 interface Props {
   searchCondition: any;
@@ -65,6 +65,44 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
     setSearchCondition(stateTemporary);
     dispatch(searchReservation(stateTemporary));
   };
+
+  const agentInfos: any = useSelector<RootState>(
+    ({ agentInfos: agentInfosData }) => agentInfosData.data,
+  );
+
+  let sourceOptions = null;
+
+  if (searchCondition.market?.toString() === '1') {
+    sourceOptions = agentInfos
+      ?.filter((item: any) => {
+        return item.agent_kind === 2;
+      })
+      .map((agent: any) => (
+        <Option key={agent.id} value={agent.id.toString()}>
+          {agent.name}
+        </Option>
+      ));
+  } else if (searchCondition.market?.toString() === '5') {
+    sourceOptions = agentInfos
+      ?.filter((item: any) => {
+        return item.agent_kind === 1;
+      })
+      .map((agent: any) => (
+        <Option key={agent.id} value={agent.id.toString()}>
+          {agent.name}
+        </Option>
+      ));
+  } else if (searchCondition.market?.toString() === '7') {
+    sourceOptions = agentInfos
+      ?.filter((item: any) => {
+        return item.agent_kind === 0;
+      })
+      .map((agent: any) => (
+        <Option key={agent.id} value={agent.id.toString()}>
+          {agent.name}
+        </Option>
+      ));
+  }
 
   return (
     <Input.Group>
@@ -129,6 +167,9 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
           >
             <Option value="1">OTA</Option>
             <Option value="2">CDT</Option>
+            <Option value="4">CORPORATE</Option>
+            <Option value="5">WHOLESALE</Option>
+            <Option value="7">FIT</Option>
           </Select>
         </Col>
         <Col span={3}>
@@ -138,13 +179,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
             placeholder="Source"
             style={{ width: '100%', fontSize: 12 }}
           >
-            <Option value="1">Agent</Option>
-            <Option value="2">Website</Option>
-            <Option value="4">Telephone</Option>
-            <Option value="8">Fax</Option>
-            <Option value="16">Email</Option>
-            <Option value="32">Walkin</Option>
-            <Option value="28">Direct</Option>
+            {sourceOptions}
           </Select>
         </Col>
         <Col span={3} style={{ textAlign: 'center' }}>
