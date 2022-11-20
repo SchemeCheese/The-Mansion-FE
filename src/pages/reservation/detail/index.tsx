@@ -293,7 +293,7 @@ function ReservationDetail() {
           booker_rank: formValues.booker_rank,
           booker_type: formValues.booker_type,
           market_segment_id: formValues.market_segment_id,
-          path_of_reservation: formValues.path_of_reservation,
+          agent_info_id: formValues.agent_info_id,
           // payment_method: '1',
           reservation_number: formValues.reservation_number,
           rooms: [],
@@ -334,7 +334,7 @@ function ReservationDetail() {
     setRoomCondition({
       ...roomCondition,
       source_type: reservationRedux.market_segment_id,
-      source_id: reservationRedux.path_of_reservation,
+      source_id: reservationRedux.agent_info_id,
     });
   }, [reservationRedux]);
 

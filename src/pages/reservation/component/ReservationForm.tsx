@@ -148,7 +148,7 @@ function ReservationForm({
         send_mail: true,
         no_show: false,
         market_segment_id: reservationInfo?.market_segment_id.toString(),
-        path_of_reservation: reservationInfo?.path_of_reservation.toString(),
+        agent_info_id: reservationInfo?.agent_info_id.toString(),
         external_reservation_number: reservationInfo?.external_reservation_number,
         note: reservationInfo?.note,
         booker_type: reservationInfo?.booker?.client_kind?.toString(),
@@ -214,7 +214,7 @@ function ReservationForm({
                 </Form.Item>
                 <Form.Item
                   label={t('reservation.Source.title')}
-                  name="path_of_reservation"
+                  name="agent_info_id"
                   rules={[
                     {
                       required: true,

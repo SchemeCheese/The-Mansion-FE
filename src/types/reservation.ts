@@ -16,6 +16,7 @@ export interface ReservationSearch {
 }
 
 export interface ReservationPayload {
+  agent_info_id: string;
   booker_email: string;
   booker_email_2?: string;
   booker_firstname: string;
@@ -29,7 +30,6 @@ export interface ReservationPayload {
   no_show?: string;
   note?: string;
   paid?: string;
-  path_of_reservation: string;
   payment_method?: string;
   reservation_id?: number | string;
   reservation_number: string;
