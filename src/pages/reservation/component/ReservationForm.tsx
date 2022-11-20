@@ -396,11 +396,20 @@ function ReservationForm({
                   }}
                   pagination={false}
                   rowClassName={(record: any) => {
+                    let nameClassRow = '';
+
                     if (record.status?.toLowerCase() === 'canceled') {
-                      return 'disabled-click';
+                      nameClassRow = 'disabled-click';
                     }
 
-                    return '';
+                    if (
+                      !_.isEmpty(reservationDetailInfo) &&
+                      reservationDetailInfo.id === record.reservation_detail_id
+                    ) {
+                      nameClassRow += ' ant-table-row-selected';
+                    }
+
+                    return nameClassRow;
                   }}
                   rowSelection={rowSelection}
                   size="small"
