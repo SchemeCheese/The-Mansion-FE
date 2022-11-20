@@ -136,7 +136,11 @@ function Root() {
             />
             <Route
               element={
-                <PrivateRoute isAuthenticated={isAuthenticated} to="/">
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
                   <ReservationDetail />
                 </PrivateRoute>
               }
@@ -144,7 +148,11 @@ function Root() {
             />
             <Route
               element={
-                <PrivateRoute isAuthenticated={isAuthenticated} to="/">
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
                   <Create />
                 </PrivateRoute>
               }

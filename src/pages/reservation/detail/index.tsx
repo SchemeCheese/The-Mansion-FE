@@ -21,7 +21,7 @@ import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import {
-  selectGetReservationDetail,
+  // selectGetReservationDetail,
   // selectDownloadPDFReservationDetail,
   selectResendEmailReservation,
   selectUpdateReservation,
@@ -114,7 +114,7 @@ function ReservationDetail() {
 
   const { t } = useTranslation();
 
-  const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
+  // const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
@@ -346,7 +346,7 @@ function ReservationDetail() {
 
   return (
     <>
-      <BreadcrumbList data={breadcrumbData} />
+      {/* <BreadcrumbList data={breadcrumbData} /> */}
       <SelectRoomModal
         isModalVisible={isModalVisible}
         quantity={quantity}
