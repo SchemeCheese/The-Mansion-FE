@@ -153,9 +153,11 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
             placeholder="Status"
             style={{ width: '100%', fontSize: 12 }}
           >
-            <Option value="0">Before Checkin</Option>
-            <Option value="1">Inhouse</Option>
-            <Option value="2">After Checkout</Option>
+            <Option value="reserved">Reserved</Option>
+            <Option value="inhouse">Inhouse</Option>
+            <Option value="no_show">No Show</Option>
+            <Option value="canceled">Canceled</Option>
+            <Option value="checked_out">Checked Out</Option>
           </Select>
         </Col>
         <Col span={3}>
