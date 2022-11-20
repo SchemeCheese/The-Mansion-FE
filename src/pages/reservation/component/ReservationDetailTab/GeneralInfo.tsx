@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Checkbox, Col, DatePicker, message, Row, Select, Spin, TimePicker } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Checkbox, Col, DatePicker, message, Modal, Row, Select, Spin, TimePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import { selectUpdateGeneralInfo } from 'selectors';
@@ -102,16 +103,44 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
     }
   }, [changed]);
 
+  const confirmUpdateCICO = () => {
+    Modal.confirm({
+      title: 'Update CICO Time Confirm',
+      icon: <ExclamationCircleOutlined />,
+      content:
+        'Seems like you updated the CI/CO time. It affects rates and schedule, do you want to continue?',
+
+      onOk() {
+        dispatch(
+          updateGeneralInfo({
+            payload: {
+              reservation_id: reservationId,
+              reservation_detail_id: reservationDetailId,
+              ...generalInfoState,
+            },
+          }),
+        );
+      },
+    });
+  };
+
   const handleUpdateGeneralInfo = () => {
-    dispatch(
-      updateGeneralInfo({
-        payload: {
-          reservation_id: reservationId,
-          reservation_detail_id: reservationDetailId,
-          ...generalInfoState,
-        },
-      }),
-    );
+    if (
+      generalInfoState.checkin_date !== reservationDetailInfo.data.checkin ||
+      generalInfoState.checkout_date !== reservationDetailInfo.data.checkout
+    ) {
+      confirmUpdateCICO();
+    } else {
+      dispatch(
+        updateGeneralInfo({
+          payload: {
+            reservation_id: reservationId,
+            reservation_detail_id: reservationDetailId,
+            ...generalInfoState,
+          },
+        }),
+      );
+    }
   };
 
   const checkActiveCheckBox = (value: any) => {
