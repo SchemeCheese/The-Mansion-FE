@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Input, Row, Select } from 'antd';
 import moment from 'moment';
 
-import { searchReservation } from 'actions';
+import { getAgentInfos, searchReservation } from 'actions';
 
 import MInput from 'components/MInput';
 
@@ -103,6 +103,10 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
         </Option>
       ));
   }
+
+  useEffect(() => {
+    dispatch(getAgentInfos());
+  }, []);
 
   return (
     <Input.Group>
