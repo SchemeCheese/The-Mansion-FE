@@ -444,7 +444,7 @@ function SelectRoomModal({
                 height: 32,
                 borderRadius: 4,
                 marginRight: 11,
-                width: '90%',
+                width: '93%',
               }}
               value={roomCondition.checkin ? moment(roomCondition.checkin) : null}
             />
@@ -458,7 +458,7 @@ function SelectRoomModal({
                 height: 32,
                 borderRadius: 4,
                 marginRight: 11,
-                width: '90%',
+                width: '93%',
               }}
               value={roomCondition.checkout ? moment(roomCondition.checkout) : null}
             />
