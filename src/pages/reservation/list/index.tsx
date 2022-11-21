@@ -9,8 +9,7 @@ import { useAppSelector } from 'modules/hooks';
 
 import { fetchChannelsAction, searchReservation, searchScheduleAction } from 'actions';
 
-import BreadcrumbList from 'components/BreadcrumbList';
-
+// import BreadcrumbList from 'components/BreadcrumbList';
 import Calendar from './Calendar';
 import ChannelManager from './ChannelManager';
 import ReservationList from './ReservationList';
@@ -29,7 +28,9 @@ function Reservation() {
       dispatch(
         searchReservation({
           current_page: 1,
-          per_page: 10,
+          per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
+            ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
+            : 10,
           booker_info: '',
           folio_number: '',
           agent_name: '',
@@ -50,7 +51,9 @@ function Reservation() {
       dispatch(
         searchReservation({
           current_page: 1,
-          per_page: 10,
+          per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
+            ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
+            : 10,
           booker_info: '',
           folio_number: '',
           agent_name: '',
@@ -97,7 +100,7 @@ function Reservation() {
         className="reservation-tabs"
         defaultActiveKey="1"
         onChange={activeKey => handeleActive(activeKey)}
-        style={{ minHeight: '95%' }}
+        style={{ minHeight: '100%' }}
       >
         <TabPane key="1" className="content" tab="Reserved">
           <ReservationList type="reserved" />
