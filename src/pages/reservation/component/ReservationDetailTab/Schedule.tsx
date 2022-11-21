@@ -80,7 +80,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     end_date: reservationDetailInfo.checkout,
     floor: '',
     reservation_detail_id: reservationDetailId,
-    room_type: '',
+    room_type: reservationDetailInfo.room_type,
     start_date: reservationDetailInfo.checkin,
     view: '',
     isSmocking: undefined,
@@ -88,6 +88,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
   const fullCalendarRef: any = React.createRef();
 
   const { changed: changedEvents } = useTreeChanges(reservationDetailData);
@@ -266,11 +267,12 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       searchAvailableEventsData.data.events.forEach((item: any) => {
         calendarApi.addEvent({
           id: createEventId(),
-          title: '',
+          title: item.title,
           start: item.start,
           end: item.end,
           allDay: true,
           resourceId: item.room_id,
+          reservationId: item.reservationId,
           room_id: item.room_id,
           room_type: item.room_type,
           reservation_equipment_id: item.reservation_equipment_id,
@@ -324,6 +326,8 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
         clickInfo.event.remove();
         setBookRoomInfo(bookRoomInfoTemporary);
       }
+    } else {
+      window.open(`/reservation/${clickInfo.event.extendedProps.reservationId}`, '_blank');
     }
   };
 
@@ -501,6 +505,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
             <Form.Item label={t('reservation.Room Type.title')} name="room_type">
               <Select
                 allowClear
+                defaultValue={searchScheduleCondition.room_type.toString()}
                 onChange={value => {
                   const searchScheduleConditionTemporary = {
                     ...searchScheduleCondition,

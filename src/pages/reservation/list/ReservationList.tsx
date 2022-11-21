@@ -31,7 +31,9 @@ interface Props {
 function ReservationList({ type }: Props) {
   const [searchCondition, setSearchCondition] = useState({
     current_page: 1,
-    per_page: 10,
+    per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
+      ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
+      : 10,
     booker_info: '',
     folio_number: '',
     agent_name: '',
@@ -42,7 +44,7 @@ function ReservationList({ type }: Props) {
     checkin_to: '',
     checkout_from: '',
     checkout_to: '',
-    inhouse: '',
+    inhouse_date: '',
     type,
   });
 
