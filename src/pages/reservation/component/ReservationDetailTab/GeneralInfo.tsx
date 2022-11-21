@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Checkbox, Col, DatePicker, message, Modal, Row, Select, Spin, TimePicker } from 'antd';
+import type { RangePickerProps } from 'antd/es/date-picker';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import { selectUpdateGeneralInfo } from 'selectors';
@@ -40,6 +41,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
   const roomTypes: any = useSelector<RootState>(
     ({ getRoomType: getRoomTypeTemporary }) => getRoomTypeTemporary.data,
   );
+  const { data } = reservationDetailInfo;
 
   const roomTypeOption = _.keys(roomTypes).map((key: any) => {
     return (
@@ -49,8 +51,15 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
     );
   });
 
+  const disabledCheckinDate: RangePickerProps['disabledDate'] = current => {
+    return current > moment(generalInfoState.checkout_date).endOf('day');
+  };
+
+  const disabledCheckoutDate: RangePickerProps['disabledDate'] = current => {
+    return current < moment(generalInfoState.checkin_date).endOf('day');
+  };
+
   useEffect(() => {
-    const { data } = reservationDetailInfo;
     const dataReservationDetailInfo = {
       checkin_date: data.checkin,
       checkout_date: data.checkout,
@@ -290,6 +299,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
           <Col span={23} style={{ paddingBottom: 24 }}>
             <DatePicker
               defaultValue={moment(generalInfoState.checkin_date, formatDate)}
+              disabledDate={disabledCheckinDate}
               onChange={date => handleChangeDateTime(date, 'checkin_date', '')}
               style={{
                 height: 32,
@@ -395,7 +405,8 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
           </Col>
           <Col span={23} style={{ paddingBottom: 24 }}>
             <DatePicker
-              defaultValue={moment(generalInfoState.checkout_date ?? '2017-08-08', formatDate)}
+              defaultValue={moment(generalInfoState.checkout_date ?? undefined, formatDate)}
+              disabledDate={disabledCheckoutDate}
               onChange={date => handleChangeDateTime(date, 'checkout_date', '')}
               style={{
                 height: 32,
