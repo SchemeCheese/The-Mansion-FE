@@ -3,7 +3,7 @@ import 'styles/transaction.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, message, Row, Space } from 'antd';
+import { Card, Col, Input, message, Modal, Row, Space } from 'antd';
 import { formatNumber } from 'helpers';
 import Disk from 'pages/reservation/detail/Disk';
 import Paid from 'pages/reservation/detail/Paid';
@@ -42,6 +42,8 @@ interface Props {
   reservationId: string;
 }
 
+const { TextArea } = Input;
+
 function Transaction({ reservationDetailId, reservationId }: Props) {
   const { t } = useTranslation();
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
@@ -52,6 +54,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   const [isModalOpenChangeDisk, setIsModalOpenChangeDisk] = useState(false);
   const [isModalOpenAditRoomCharge, setIsModalOpenAditRoomCharge] = useState(false);
   const [isModalOpenTransferRoom, setIsModalOpenTransferRoom] = useState(false);
+  const [deleteSaleDetailId, setDeleteSaleDetailId] = useState(0);
 
   const [discountAmount, setDiscountAmount] = useState('');
 
@@ -90,18 +93,20 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   };
 
   const handleDeleteItem = (item: any) => {
-    dispatch(
-      deleteItemAction({
-        payload: {
-          sale_detail_ids: [
-            {
-              id: item.sale_detail_id,
-              comment: 'Fake Comment',
-            },
-          ],
-        },
-      }),
-    );
+    showDeleteItemModal();
+    setDeleteSaleDetailId(item.sale_detail_id);
+    // dispatch(
+    //   deleteItemAction({
+    //     payload: {
+    //       sale_detail_ids: [
+    //         {
+    //           id: item.sale_detail_id,
+    //           comment: 'Fake Comment',
+    //         },
+    //       ],
+    //     },
+    //   }),
+    // );
   };
 
   const handlePayment = () => {
@@ -270,6 +275,35 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
     }
   }, [createPaymentChanged]);
 
+  const [isDeleteItemModalOpen, setIsDeleteItemModalOpen] = useState(false);
+  const [deleteReason, setDeleteReason] = useState('');
+
+  const showDeleteItemModal = () => {
+    setIsDeleteItemModalOpen(true);
+  };
+
+  const handleDeleteItemOk = () => {
+    dispatch(
+      deleteItemAction({
+        payload: {
+          sale_detail_ids: [
+            {
+              id: deleteSaleDetailId,
+              comment: deleteReason,
+            },
+          ],
+        },
+      }),
+    );
+    setDeleteReason('');
+    setIsDeleteItemModalOpen(false);
+  };
+
+  const handleDeleteItemCancel = () => {
+    setDeleteReason('');
+    setIsDeleteItemModalOpen(false);
+  };
+
   return (
     <Row
       style={{
@@ -280,6 +314,21 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
         paddingLeft: 15,
       }}
     >
+      <Modal
+        onCancel={handleDeleteItemCancel}
+        onOk={handleDeleteItemOk}
+        title="The reason for deletion"
+        visible={isDeleteItemModalOpen}
+      >
+        <div style={{ marginTop: -15, paddingBottom: 10 }}>
+          Reason <span style={{ color: 'red' }}>*</span>
+        </div>
+        <TextArea
+          onChange={event => setDeleteReason(event.target.value)}
+          rows={4}
+          value={deleteReason}
+        />
+      </Modal>
       <Col span={16} style={{ paddingRight: 16 }}>
         <Card
           activeTabKey={activeTabKey}
