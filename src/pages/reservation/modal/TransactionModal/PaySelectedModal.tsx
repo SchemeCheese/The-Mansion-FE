@@ -1,8 +1,19 @@
-import React from 'react';
+/** ***********************************
+Module Name : Reservation
+Developer Name : Xuan
+Created Date : 14/09/2022
+Updated Date : 21/11/2022
+Main functions : Transaction AddDiscount
+************************************ */
+
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
+import { selectGetReservationDetail } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 interface Props {
   discountAmount: any;
@@ -39,6 +50,7 @@ function PaySelectedModal({
 }: Props) {
   const { t } = useTranslation();
   const { Option } = Select;
+  const reservationDetailData = useAppSelector(selectGetReservationDetail);
 
   const columns: ColumnsType<DataTypePaySelected> = [
     {
@@ -81,6 +93,14 @@ function PaySelectedModal({
     setIsModalOpenSelectedPaymentMethod(true);
   };
 
+  useEffect(() => {
+    if (reservationDetailData.data.amount_info.discount_percent) {
+      setDiscountAmount(
+        (totalAmount * reservationDetailData.data.amount_info.discount_percent) / 100,
+      );
+    }
+  }, [totalAmount]);
+
   return (
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
@@ -106,7 +126,14 @@ function PaySelectedModal({
         <Row style={{ paddingTop: 30 }}>
           <Col span={16} />
           <Col span={6}>
-            <Form.Item label={t('common.Discount')}>
+            <Form.Item
+              label={
+                t('common.Discount') +
+                (reservationDetailData.data.amount_info.discount_percent
+                  ? ` (${reservationDetailData.data.amount_info.discount_percent}%)`
+                  : '')
+              }
+            >
               <Input
                 onChange={event => setDiscountAmount(event.target.value)}
                 placeholder="0"
