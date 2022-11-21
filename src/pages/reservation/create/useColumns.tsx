@@ -2,15 +2,25 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Badge, Button } from 'antd';
 
-const useColumns = () => {
+const useColumns = (callback?: any) => {
   const { t } = useTranslation();
   const roomingListColumns = [
     {
       title: t('common.Status'),
       dataIndex: 'status',
-      render: (text: string) => {
+      render: (text: string, record: any) => {
         if (text?.toLowerCase() === 'canceled') {
-          return <Badge count={text} />;
+          return (
+            <span
+              aria-hidden="true"
+              onClick={() => {
+                callback?.setCancelCurrentItem(record);
+                callback?.setIsCancelBookingModalVisible(true);
+              }}
+            >
+              <Badge count={text} />
+            </span>
+          );
         }
 
         return <span>{text}</span>;

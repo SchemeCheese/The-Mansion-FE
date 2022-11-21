@@ -2,7 +2,7 @@ import 'antd/dist/antd.min.css';
 import './layout.css';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   BellOutlined,
@@ -10,14 +10,13 @@ import {
   MenuUnfoldOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
-import { Avatar, Button, Dropdown, Layout, Menu } from 'antd';
+import { Avatar, Dropdown, Layout, Menu } from 'antd';
 import { selectBranchHeader, selectUser } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { branchHeader, logOut } from 'actions';
 
-import BreadcrumbList from 'components/BreadcrumbList';
 import Footer from 'components/Footer';
 
 import MButton from './MButton';
@@ -65,18 +64,6 @@ function MLayout(props: Props) {
   }, []);
 
   const branchHeaderName: any = useAppSelector(selectBranchHeader);
-
-  console.log('aaaa', breadCrumb);
-
-  // const breadCrumbElement = breadCrumb?.map((item: any, key: number) => {
-  //   if (key !== breadCrumb.length - 1) {
-  //     return  <>
-  //     <span className="ant-breadcrumb-link" style={{paddingRight: 8}}>{item}</span>/
-  //     </>
-  //   } else {
-  //     return <span className="ant-breadcrumb-link" style={{paddingLeft: 8}}>{item}</span>
-  //   }
-  // })
 
   return (
     <Layout>
