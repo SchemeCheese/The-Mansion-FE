@@ -80,7 +80,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     end_date: reservationDetailInfo.checkout,
     floor: '',
     reservation_detail_id: reservationDetailId,
-    room_type: '',
+    room_type: reservationDetailInfo.room_type,
     start_date: reservationDetailInfo.checkin,
     view: '',
     isSmocking: undefined,
@@ -501,6 +501,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
             <Form.Item label={t('reservation.Room Type.title')} name="room_type">
               <Select
                 allowClear
+                defaultValue={searchScheduleCondition.room_type.toString()}
                 onChange={value => {
                   const searchScheduleConditionTemporary = {
                     ...searchScheduleCondition,
