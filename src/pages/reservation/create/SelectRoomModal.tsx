@@ -421,7 +421,21 @@ function SelectRoomModal({
     >
       <Card bordered={false} size="small" title="Search room">
         <Row>
-          <Col span={6}>
+          <Col span={5}>
+            <span style={{ paddingBottom: 5, display: 'inherit' }}>Rate Type</span>
+            <Select
+              allowClear
+              onChange={value => searchRoomSelect(value, 'rate_type')}
+              placeholder="Select rate type"
+              style={{ width: '93%' }}
+            >
+              <Option value="1">Hotel stay fee</Option>
+              <Option value="2">SPA usage fee</Option>
+              <Option value="3">Hotel day-use fee</Option>
+              <Option value="4">Serviced Apartment usage fee</Option>
+            </Select>
+          </Col>
+          <Col span={5}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>Checkin </span>
             <DatePicker
               disabledDate={disabledDate}
@@ -435,7 +449,7 @@ function SelectRoomModal({
               value={roomCondition.checkin ? moment(roomCondition.checkin) : null}
             />
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}> Checkout</span>
             <DatePicker
               disabledDate={disabledCheckoutDate}
@@ -449,7 +463,7 @@ function SelectRoomModal({
               value={roomCondition.checkout ? moment(roomCondition.checkout) : null}
             />
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>Room Type</span>
             <Select
               allowClear
@@ -460,7 +474,7 @@ function SelectRoomModal({
               {roomTypeOption}
             </Select>
           </Col>
-          <Col span={6}>
+          <Col span={4}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>Quantity</span>
             <Select
               defaultValue="1"
