@@ -44,7 +44,7 @@ function ReservationList({ type }: Props) {
     checkin_to: '',
     checkout_from: '',
     checkout_to: '',
-    inhouse: '',
+    inhouse_date: '',
     type,
   });
 

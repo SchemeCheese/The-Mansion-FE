@@ -236,7 +236,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
           <Col span={8}>
             <span style={{ paddingRight: 11 }}>I/H</span>
             <DatePicker
-              onChange={date => searchDate(date, 'inhouse')}
+              onChange={date => searchDate(date, 'inhouse_date')}
               style={{
                 height: 32,
                 borderRadius: 4,
