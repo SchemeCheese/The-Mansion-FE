@@ -233,12 +233,23 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   }, [changedEvents]);
 
   useEffect(() => {
+    setSearchScheduleCondition({
+      direction: '',
+      end_date: reservationDetailInfo.checkout,
+      floor: '',
+      reservation_detail_id: reservationDetailInfo.id,
+      room_type: reservationDetailInfo.room_type,
+      start_date: reservationDetailInfo.checkin,
+      view: '',
+      isSmocking: undefined,
+    });
+
     dispatch(
       searchAvailableScheduleAction({
         direction: '',
         end_date: reservationDetailInfo.checkout,
         floor: '',
-        reservation_detail_id: reservationDetailId,
+        reservation_detail_id: reservationDetailInfo.id,
         room_type: '',
         start_date: reservationDetailInfo.checkin,
         view: '',

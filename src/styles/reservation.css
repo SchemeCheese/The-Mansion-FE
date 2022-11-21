@@ -175,10 +175,15 @@
   }
 }
 
-.fc-timeline-slots .disabled,
+.fc-timeline-slots .disabled > div,
 .fc-timeline-header .disabled {
   background-color: #f5f5f5;
   color: #00000040;
+}
+
+.fc .fc-cell-shaded,
+.fc .fc-day-disabled {
+  background-color: unset;
 }
 
 .fc-event-main i {
