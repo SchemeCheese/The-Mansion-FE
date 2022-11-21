@@ -2,7 +2,7 @@
 Module Name : Reservation
 Developer Name : Xuan
 Created Date : 14/09/2022
-Updated Date : 31/10/2022
+Updated Date : 21/11/2022
 Main functions : Transaction AddDiscount
 ************************************ */
 
@@ -45,12 +45,6 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
       .validateFields()
       .then(values => {
         form.resetFields();
-        let discountAmount = 0;
-
-        discountAmount =
-          values.discount_type === '1'
-            ? (values / 100) * values.discount_amount
-            : values.discount_amount;
 
         dispatch(
           addItemAction({
@@ -59,8 +53,9 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
                 {
                   description_id: 89,
                   quantity: 1,
-                  sales_price: discountAmount,
-                  normal_price: discountAmount,
+                  sales_price: values.discount_amount,
+                  normal_price: values.discount_amount,
+                  price_type: values.price_type,
                   storage_id: values.storage_id,
                 },
               ],
@@ -93,14 +88,14 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
         autoComplete="off"
         form={form}
         initialValues={{
-          discount_type: '2',
+          price_type: 'total',
         }}
         layout="vertical"
       >
         <Row>
           <Form.Item
             label={t('common.Discount Type')}
-            name="discount_type"
+            name="price_type"
             rules={[{ required: true, message: 'Please select type!' }]}
           >
             <Select
@@ -108,8 +103,8 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
               placeholder="Select Type"
               style={{ borderRadius: 2, width: 311, height: 32 }}
             >
-              <Option value="1">Percent</Option>
-              <Option value="2">Amount</Option>
+              <Option value="percent">Percent</Option>
+              <Option value="total">Amount</Option>
             </Select>
           </Form.Item>
         </Row>
