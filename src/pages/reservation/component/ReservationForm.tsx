@@ -150,7 +150,7 @@ function ReservationForm({
         send_mail: true,
         no_show: false,
         market_segment_id: reservationInfo?.market_segment_id.toString(),
-        agent_info_id: reservationInfo?.agent_info_id.toString(),
+        agent_info_id: reservationInfo?.agent_info_id?.toString(),
         external_reservation_number: reservationInfo?.external_reservation_number,
         note: reservationInfo?.note,
         booker_type: reservationInfo?.booker?.client_kind?.toString(),
