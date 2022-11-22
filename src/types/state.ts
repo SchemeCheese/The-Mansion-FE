@@ -124,6 +124,13 @@ export interface ChangeDiskPayload {
   storage_id: string | number;
 }
 
+export interface ChangeRoomPayload {
+  reservation_detail_id: string | number;
+  reservation_id: string | number;
+  sale_detail_ids: Array<Record<string, any>>;
+  storage_id: string | number;
+}
+
 export interface CreateReservationState {
   payload: CreateReservationPayload;
   reservation_created?: any;
@@ -233,6 +240,12 @@ export interface GetReservationState {
   reservation_id: string;
 }
 
+export interface GetReservationByFolioState {
+  data: Record<string, any>;
+  folio: string;
+  is_finish: boolean;
+}
+
 export interface ReservationTypeState {
   data: Record<string, any>;
   is_finish: boolean;
@@ -309,6 +322,11 @@ export interface ProductTypeState {
 
 export interface ChangeDiskState {
   payload: ChangeDiskPayload;
+  status: string;
+}
+
+export interface ChangeRoomState {
+  payload: ChangeRoomPayload;
   status: string;
 }
 
@@ -399,6 +417,7 @@ export interface RootState {
   bookRoom: BookRoomState;
   cancelReservationDetail: CancelReservationDetailState;
   changeDisk: ChangeDiskState;
+  changeRoom: ChangeRoomState;
   channel: FetchChannelState;
   createGuest: CreateGuestState;
   createPayment: CreatePaymentState;
@@ -411,6 +430,7 @@ export interface RootState {
   getLanguageCode: LanguageCodeState;
   getProductType: ProductTypeState;
   getReservation: GetReservationState;
+  getReservationByFolio: GetReservationByFolioState;
   getReservationDetail: ReservationDetailState;
   getReservationNumber: ReservationNumberState;
   getRoomType: RoomTypeState;

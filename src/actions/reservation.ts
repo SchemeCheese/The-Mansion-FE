@@ -11,6 +11,8 @@ import {
   CreateReservationResult,
   DownloadDocxReservationDetail,
   DownloadPDFReservationDetail,
+  GetReservationByFolioFinishPayload,
+  GetReservationByFolioPayload,
   GetReservationFinishPayload,
   GetReservationPayload,
   ResendEmailReservation,
@@ -159,3 +161,15 @@ export const downloadDocxReservationDetail = createAction(
 export const downloadDocxReservationDetailSuccess = createAction(
   ActionTypes.RESERVATION_DETAIL_DOWNLOAD_DOCX_SUCCESS,
 );
+
+export const getReservationByFolio = createAction(
+  ActionTypes.RESERVATION_GET_BY_FOLIO,
+  (payload: GetReservationByFolioPayload) => actionPayload(payload),
+);
+
+export const getReservationByFolioFinish = createAction(
+  ActionTypes.RESERVATION_GET_BY_FOLIO_FINISH,
+  (payload: GetReservationByFolioFinishPayload) => actionPayload(payload),
+);
+
+export const resetReservationByFolio = createAction(ActionTypes.RESERVATION_GET_BY_FOLIO_RESET);

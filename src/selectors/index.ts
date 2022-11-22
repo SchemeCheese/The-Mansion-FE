@@ -156,3 +156,13 @@ export const selectBranchHeader = createSelector(
   (state: RootState) => state.getBranchHeader,
   getBranchHeader => getBranchHeader,
 );
+
+export const selectReservationByFolio = createSelector(
+  (state: RootState) => state.getReservationByFolio,
+  getReservationByFolio => getReservationByFolio,
+);
+
+export const selectChangeRoom = createSelector(
+  (state: RootState) => state.changeRoom,
+  changeRoom => changeRoom,
+);

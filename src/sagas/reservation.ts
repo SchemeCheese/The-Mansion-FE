@@ -20,6 +20,8 @@ import {
   downloadPDFReservationDetail,
   downloadPDFReservationDetailSuccess,
   getReservation,
+  getReservationByFolio,
+  getReservationByFolioFinish,
   getReservationDetail,
   getReservationDetailFinish,
   getReservationFinish,
@@ -222,6 +224,33 @@ export function* getReservationSaga({ payload }: ReturnType<typeof getReservatio
       yield put(logOut());
     } else {
       message.error('Something went wrong!');
+    }
+  }
+}
+
+export function* getReservationFolioSaga({ payload }: ReturnType<typeof getReservationByFolio>) {
+  try {
+    let data = [];
+
+    ({ data } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.GET_BY_FOLIO)}/${payload.folio}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    yield put(getReservationByFolioFinish({ data }));
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.warning('No reservation found!');
     }
   }
 }
@@ -613,5 +642,6 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_RESEND_EMAIL, getResendEmailReservationSaga),
     takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_PDF, getDownloadPDFReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_DOCX, getDownloadDocxReservationDetailSaga),
+    takeLatest(ActionTypes.RESERVATION_GET_BY_FOLIO, getReservationFolioSaga),
   ]);
 }

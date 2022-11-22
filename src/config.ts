@@ -23,6 +23,7 @@ export const ReservationEndpoint = {
   CREATE: 'api/v1/reservations/create',
   UPDATE: 'api/v1/reservations',
   DETAIL: 'api/v1/reservations',
+  GET_BY_FOLIO: 'api/v1/reservations/folio',
   GET_DETAIL: 'api/v1/reservations',
   GET_RESERVATION_NUMBER: 'api/v1/reservation-numbers/create',
   UPDATE_RATE: 'api/v1/reservations',
@@ -64,6 +65,7 @@ export const TransactionEndpoint = {
   ADD_ITEM: 'api/v1/sale-info/product/create',
   DELETE_ITEM: 'api/v1/sale-info/product/delete',
   CHANGE_DISK: 'api/v1/change-disk',
+  CHANGE_ROOM: 'api/v1/change-room',
   DOWNLOAD_INVOICE_PDF: 'api/v1/reservations',
 };
 

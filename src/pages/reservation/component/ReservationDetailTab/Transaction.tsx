@@ -18,6 +18,7 @@ import TransferRoom from 'pages/reservation/modal/TransactionModal/TransferRoom'
 import {
   selectAddItem,
   selectChangeDisk,
+  selectChangeRoom,
   selectCreatePayment,
   selectDeleteItem,
   selectGetReservationDetail,
@@ -61,11 +62,13 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   const addItemData = useAppSelector(selectAddItem);
   const deleteItemData = useAppSelector(selectDeleteItem);
   const changeDiskData = useAppSelector(selectChangeDisk);
+  const changeRoomData = useAppSelector(selectChangeRoom);
   const createPaymentData = useAppSelector(selectCreatePayment);
 
   const { changed: addItemChanged } = useTreeChanges(addItemData);
   const { changed: deleteItemChanged } = useTreeChanges(deleteItemData);
   const { changed: changeDiskChanged } = useTreeChanges(changeDiskData);
+  const { changed: changeRoomChanged } = useTreeChanges(changeRoomData);
   const { changed: createPaymentChanged } = useTreeChanges(createPaymentData);
 
   const dispatch = useDispatch();
@@ -263,6 +266,19 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   }, [changeDiskChanged]);
 
   useEffect(() => {
+    if (changeRoomChanged('status', 'SUCCESS')) {
+      message.success('Transfer room successfully!');
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
+        }),
+      );
+    }
+  }, [changeRoomChanged]);
+
+  useEffect(() => {
     if (createPaymentChanged('status', 'SUCCESS')) {
       message.success('Paid successfully!');
 
@@ -420,6 +436,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                   {t('transaction.Transfer Room')}
                 </MButton>
                 <TransferRoom
+                  selectedSaleRowKeys={selectedRowKeys}
                   setIsModalOpen={setIsModalOpenTransferRoom}
                   visible={isModalOpenTransferRoom}
                 />
