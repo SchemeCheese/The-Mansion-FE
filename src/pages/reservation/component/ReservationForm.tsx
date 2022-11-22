@@ -34,6 +34,7 @@ interface Props {
   roomingListColumns: any;
   rowSelection: any;
   selectedRowKeys: any;
+  setCancelCurrentItem?: any;
   setIsCancelBookingModalVisible?: any;
   setRedirectDetail?: any;
   setRoomCondition: any;
@@ -54,6 +55,7 @@ function ReservationForm({
   roomTotalForm,
   rowSelection,
   selectedRowKeys,
+  setCancelCurrentItem,
   setIsCancelBookingModalVisible,
   setRedirectDetail,
   setRoomCondition,
@@ -359,7 +361,10 @@ function ReservationForm({
                 ) : (
                   <MButton
                     disabled={selectedRowKeys.length === 0}
-                    onClick={() => setIsCancelBookingModalVisible(true)}
+                    onClick={() => {
+                      setCancelCurrentItem(null);
+                      setIsCancelBookingModalVisible(true);
+                    }}
                     style={{ marginLeft: 15 }}
                   >
                     {t('common.Delete Selected')}

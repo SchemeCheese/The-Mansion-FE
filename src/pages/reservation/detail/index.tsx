@@ -20,12 +20,7 @@ import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
-import {
-  // selectGetReservationDetail,
-  // selectDownloadPDFReservationDetail,
-  selectResendEmailReservation,
-  selectUpdateReservation,
-} from 'selectors';
+import { selectResendEmailReservation, selectUpdateReservation } from 'selectors';
 import styled from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -43,7 +38,6 @@ import {
   updateReservation,
 } from 'actions';
 
-import BreadcrumbList from 'components/BreadcrumbList';
 import MButton from 'components/MButton';
 import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
@@ -114,13 +108,11 @@ function ReservationDetail() {
 
   const { t } = useTranslation();
 
-  // const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCancelBookingModalVisible, setIsCancelBookingModalVisible] = useState(false);
-
   const [isSelectLanguageModalOpen, setIsSelectLanguageModalOpen] = useState(false);
   const [language, setLanguage] = useState('en');
+  const [cancelCurrentItem, setCancelCurrentItem] = useState(null);
 
   const onChange = (e: RadioChangeEvent) => {
     setLanguage(e.target.value);
@@ -225,7 +217,7 @@ function ReservationDetail() {
       const roomsTemporary: any = [];
 
       reservationRedux.rooms.forEach((item: any) => {
-        roomsTemporary.push({
+        const itemTemporary = {
           key: item.id,
           reservation_detail_id: item.id,
           status: item.status,
@@ -245,13 +237,30 @@ function ReservationDetail() {
           subtotal: formatNumber(item.total_price),
           deposit: item.deposit_amount === 0 ? '-' : formatNumber(item.deposit_amount),
           actual_amount: item.total_price,
-        });
+        };
+
+        if (item.canceled) {
+          roomsTemporary.push({
+            ...itemTemporary,
+            cancelInfo: {
+              opinion_content: item.opinion_content,
+              receptionist: item.receptionist,
+              cancel_type: item.cancel_type,
+            },
+          });
+        } else {
+          roomsTemporary.push(itemTemporary);
+        }
       });
 
       setRoomTotalForm(roomsTemporary);
     }
   }, [reservationRedux]);
-  const { roomingListColumns } = useColumns();
+
+  const { roomingListColumns } = useColumns({
+    setIsCancelBookingModalVisible,
+    setCancelCurrentItem,
+  });
 
   /** State */
   /** Search room Table In Modal */
@@ -346,7 +355,6 @@ function ReservationDetail() {
 
   return (
     <>
-      {/* <BreadcrumbList data={breadcrumbData} /> */}
       <SelectRoomModal
         isModalVisible={isModalVisible}
         quantity={quantity}
@@ -364,6 +372,7 @@ function ReservationDetail() {
         totalAmount={totalAmount}
       />
       <CancelBookingModal
+        cancelCurrentItem={cancelCurrentItem}
         isModalVisible={isCancelBookingModalVisible}
         reservation={reservationRedux}
         selectedRowKeys={selectedRowKeys}
@@ -514,6 +523,7 @@ function ReservationDetail() {
           roomingListColumns={roomingListColumns}
           rowSelection={rowSelection}
           selectedRowKeys={selectedRowKeys}
+          setCancelCurrentItem={setCancelCurrentItem}
           setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
           setRoomCondition={setRoomCondition}
           showModal={showModal}

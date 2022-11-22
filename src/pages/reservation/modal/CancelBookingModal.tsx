@@ -21,6 +21,7 @@ import { cancelReservationDetail, getReservation } from 'actions';
 const { Option } = Select;
 
 interface Props {
+  cancelCurrentItem?: any;
   isModalVisible: boolean;
   reservation: any;
   selectedRowKeys: any;
@@ -29,6 +30,7 @@ interface Props {
 }
 
 function CancelBookingModal({
+  cancelCurrentItem,
   isModalVisible,
   reservation,
   selectedRowKeys,
@@ -89,9 +91,23 @@ function CancelBookingModal({
     });
   }, [isModalVisible]);
 
+  useEffect(() => {
+    if (cancelCurrentItem) {
+      form.setFieldsValue({
+        cancel_type: cancelCurrentItem.cancelInfo.cancel_type.toString(),
+        cancel_reason: cancelCurrentItem.cancelInfo.opinion_content,
+      });
+    }
+  }, [cancelCurrentItem]);
+
   return (
     <Modal
-      okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
+      okButtonProps={{
+        style: {
+          backgroundColor: '#1D39C4',
+          display: cancelCurrentItem !== null ? 'none' : 'initial',
+        },
+      }}
       okText="Save"
       onCancel={handleCancel}
       onOk={handleOk}
@@ -133,7 +149,8 @@ function CancelBookingModal({
               }}
             >
               <span>
-                {t('reservation.Receptionist')}: {userData.name}
+                {t('reservation.Receptionist')}:{' '}
+                {cancelCurrentItem ? cancelCurrentItem.cancelInfo.receptionist : userData.username}
               </span>
             </div>
           </Col>
@@ -150,7 +167,9 @@ function CancelBookingModal({
               }}
               valuePropName="checked"
             >
-              <Checkbox>{t('reservation.Send confirmation email')}</Checkbox>
+              <Checkbox disabled={cancelCurrentItem !== null}>
+                {t('reservation.Send confirmation email')}
+              </Checkbox>
             </Form.Item>
           </Col>
           <Col span={8}>
@@ -164,7 +183,11 @@ function CancelBookingModal({
                 },
               ]}
             >
-              <Select allowClear placeholder={t('reservation.Type.placeholder')}>
+              <Select
+                allowClear
+                disabled={cancelCurrentItem !== null}
+                placeholder={t('reservation.Type.placeholder')}
+              >
                 <Option value="1">Request by guest </Option>
                 <Option value="2">No-show </Option>
                 <Option value="3">Invalid credit card </Option>
@@ -184,6 +207,7 @@ function CancelBookingModal({
                 placeholder={t(
                   'reservation.Reason for booking cancellation (Optional).placeholder',
                 )}
+                readOnly={cancelCurrentItem !== null}
                 rows={5}
               />
             </Form.Item>
