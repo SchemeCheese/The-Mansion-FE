@@ -274,6 +274,7 @@ function ReservationDetail() {
     room_type: '',
     source_type: '',
     source_id: '',
+    charge_kind: '1',
   });
   const [quantity, setQuantity] = useState(1);
   const [searchRoomResultState, setSearchRoomResultState] = useState<any>([]);
