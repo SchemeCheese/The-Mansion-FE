@@ -13,6 +13,13 @@ interface ChangeDiskPayload {
   storage_id: string | number;
 }
 
+interface ChangeRoomPayload {
+  reservation_detail_id: string | number;
+  reservation_id: string | number;
+  sale_detail_ids: Array<Record<string, any>>;
+  storage_id: string | number;
+}
+
 export interface AddItem {
   payload: AddItemPayload;
 }
@@ -23,6 +30,10 @@ export interface DeleteItem {
 
 export interface ChangeDisk {
   payload: ChangeDiskPayload;
+}
+
+export interface ChangeRoom {
+  payload: ChangeRoomPayload;
 }
 
 export interface DownloadPDFInvoiceTransactionPayload {

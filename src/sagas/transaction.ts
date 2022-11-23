@@ -11,6 +11,8 @@ import {
   addItemActionSuccess,
   changeDiskAction,
   changeDiskActionSuccess,
+  changeRoomAction,
+  changeRoomActionSuccess,
   deleteItemAction,
   deleteItemActionSuccess,
   downloadPDFInvoiceTransaction,
@@ -99,7 +101,7 @@ export function* postChangeDiskSaga({ payload }: ReturnType<typeof changeDiskAct
     if (success) {
       yield put(changeDiskActionSuccess());
     } else {
-      message.error('Something went wrong!');
+      message.error('Transfer disk failed!');
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
@@ -109,7 +111,40 @@ export function* postChangeDiskSaga({ payload }: ReturnType<typeof changeDiskAct
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Something went wrong!');
+      message.error('Transfer disk failed!');
+    }
+  }
+}
+
+export function* postChangeRoomSaga({ payload }: ReturnType<typeof changeRoomAction>) {
+  try {
+    let success = '';
+
+    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.CHANGE_ROOM)}`, {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        operator_code: 'the_mansion',
+        branch_code: 'the_mansion',
+        facility_code: 'hotel',
+      },
+    }));
+
+    if (success) {
+      yield put(changeRoomActionSuccess());
+    } else {
+      message.error('Transfer room failed!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Transfer room failed!');
     }
   }
 }
@@ -153,6 +188,7 @@ export default function* root() {
   yield all([takeLatest(ActionTypes.TRANSACTION_ADD_ITEM, postAddItemSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_DELETE_ITEM, postDeleteItemSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_CHANGE_DISK, postChangeDiskSaga)]);
+  yield all([takeLatest(ActionTypes.TRANSACTION_CHANGE_ROOM, postChangeRoomSaga)]);
   yield all([
     takeLatest(ActionTypes.TRANSACTION_INVOICE_DOWNLOAD_PDF, getDownloadPDFInvoiceTransactionSaga),
   ]);

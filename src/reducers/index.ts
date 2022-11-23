@@ -1,11 +1,3 @@
-import changeDisk, { changeDiskState } from 'reducers/changeDisk';
-import downloadDocxReservationDetail, {
-  downloadDocxReservationDetailState,
-} from 'reducers/downloadDocxReservationDetail';
-import downloadPDFReservationDetail, {
-  downloadPDFReservationDetailState,
-} from 'reducers/downloadPDFReservationDetail';
-
 import addItem, { addItemState } from './addItem';
 import addReservationDetail, { addReservationDetailState } from './addReservationDetail';
 import agentInfos, { agentInfosState } from './agentInfos';
@@ -13,18 +5,27 @@ import alerts, { alertsState } from './alerts';
 import app, { appState } from './app';
 import bookRoom, { bookRoomState } from './bookRoom';
 import cancelReservationDetail, { cancelReservationDetailState } from './cancelReservationDetail';
+import changeDisk, { changeDiskState } from './changeDisk';
+import changeRoom, { changeRoomState } from './changeRoom';
 import channel, { channelState } from './channel';
 import createGuest, { createGuestState } from './createGuest';
 import createPayment, { createPaymentState } from './createPayment';
 import createReservation, { createReservationState } from './createReservation';
 import deleteItem, { deleteItemState } from './deleteItem';
+import downloadDocxReservationDetail, {
+  downloadDocxReservationDetailState,
+} from './downloadDocxReservationDetail';
 import downloadPDFInvoiceTransaction, {
   downloadPDFInvoiceTransactionState,
 } from './downloadPDFInvoiceTransaction';
+import downloadPDFReservationDetail, {
+  downloadPDFReservationDetailState,
+} from './downloadPDFReservationDetail';
 import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
+import getReservationByFolio, { getReservationByFolioState } from './getReservationByFolio';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
 import getRooms, { getRoomsState } from './getRooms';
@@ -63,6 +64,7 @@ export const initialState = {
   getReservationNumber: reservationNumberState,
   getRoomType: roomTypeState,
   getReservation: getReservationState,
+  getReservationByFolio: getReservationByFolioState,
   agentInfos: agentInfosState,
   bookRoom: bookRoomState,
   updateRate: updateRateState,
@@ -78,6 +80,7 @@ export const initialState = {
   deleteItem: deleteItemState,
   createPayment: createPaymentState,
   changeDisk: changeDiskState,
+  changeRoom: changeRoomState,
   createGuest: createGuestState,
   updateNoteReservationDetail: updateNoteReservationDetailState,
   resendEmailReservation: resendEmailReservationState,
@@ -122,6 +125,7 @@ export default {
   ...deleteItem,
   ...createPayment,
   ...changeDisk,
+  ...changeRoom,
   ...createGuest,
   ...updateNoteReservationDetail,
   ...resendEmailReservation,
@@ -135,4 +139,5 @@ export default {
   ...downloadDocxReservationDetail,
   ...downloadPDFInvoiceTransaction,
   ...getBranchHeader,
+  ...getReservationByFolio,
 };

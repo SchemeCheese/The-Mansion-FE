@@ -45,6 +45,14 @@ export interface GetReservationFinishPayload {
   data: Array<Record<string, any>>;
 }
 
+export interface GetReservationByFolioPayload {
+  folio: string;
+}
+
+export interface GetReservationByFolioFinishPayload {
+  data: Array<Record<string, any>>;
+}
+
 export interface ReservationSearchResult {
   current_page: number;
   data: Array<Record<string, any>>;

@@ -103,6 +103,11 @@ export const ActionTypes = keyMirror({
   TRANSACTION_INVOICE_DOWNLOAD_PDF_FAILURE: undefined,
   BRANCH_HEADER_GET: undefined,
   BRANCH_HEADER_GET_FINISH: undefined,
+  RESERVATION_GET_BY_FOLIO: undefined,
+  RESERVATION_GET_BY_FOLIO_FINISH: undefined,
+  RESERVATION_GET_BY_FOLIO_RESET: undefined,
+  TRANSACTION_CHANGE_ROOM: undefined,
+  TRANSACTION_CHANGE_ROOM_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

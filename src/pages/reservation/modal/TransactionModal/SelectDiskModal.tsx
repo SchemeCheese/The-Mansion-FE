@@ -20,7 +20,6 @@ function SelectDiskModal({ saleDetailIds, setIsModalOpen, visible }: Props) {
 
   const handleChange = (value: string) => {
     setDiskSelected(value);
-    console.log(`selected ${value}`, saleDetailIds);
   };
 
   const handleButtonSubmit = () => {
