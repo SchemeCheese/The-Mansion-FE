@@ -6,9 +6,10 @@ Updated Date : 23/11/2022
 Main functions : Reservation Detail Card
 ************************************ */
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import { Col, Tabs } from 'antd';
 import GuestList from 'pages/reservation/component/ReservationDetailTab/GuestList';
 import Rate from 'pages/reservation/component/ReservationDetailTab/Rate';
@@ -58,29 +59,50 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
     }
   };
 
+  const params = useLocation();
+  const searchParam = new URLSearchParams(params.search);
+  const tabParam = searchParam.get('tab');
+  const reservationDetailCardRef: any = useRef(null);
+
+  useEffect(() => {
+    if (tabParam) {
+      // Problem: scrollIntoView not working with behavior: "smooth"
+      // So we will fix by https://stackoverflow.com/a/59783696
+      // newRef.current?.scrollIntoView();
+      const element = reservationDetailCardRef.current.getBoundingClientRect().top + window.scrollY;
+
+      window.scroll({
+        top: element,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
   return (
     <Col span={24} style={{ marginTop: 20 }}>
-      <Tabs className="tabs-cart" defaultActiveKey="1" onChange={handleChangeTab}>
-        <TabPane key="1" tab={t('common.General Infos')}>
-          <GeneralInfo reservationDetailId={reservationDetail.id} reservationId={reservationId} />
-        </TabPane>
-        <TabPane key="2" tab={t('reservation.Rates')}>
-          <Rate reservationDetailId={reservationDetail.id} reservationId={reservationId} />
-        </TabPane>
-        <TabPane key="3" tab={t('reservation.Schedule')}>
-          <Schedule reservationDetailId={reservationDetail.id} reservationId={reservationId} />
-        </TabPane>
-        <TabPane key="4" tab={t('reservation.Guest List')}>
-          <GuestList
-            guests={reservationDetail.guests}
-            reservationDetailId={reservationDetail.id}
-            reservationId={reservationId}
-          />
-        </TabPane>
-        <TabPane key="5" tab={t('reservation.Transactions')}>
-          <Transaction reservationDetailId={reservationDetail.id} reservationId={reservationId} />
-        </TabPane>
-      </Tabs>
+      <div ref={reservationDetailCardRef}>
+        <Tabs className="tabs-cart" defaultActiveKey={tabParam ?? '1'} onChange={handleChangeTab}>
+          <TabPane key="1" tab={t('common.General Infos')}>
+            <GeneralInfo reservationDetailId={reservationDetail.id} reservationId={reservationId} />
+          </TabPane>
+          <TabPane key="2" tab={t('reservation.Rates')}>
+            <Rate reservationDetailId={reservationDetail.id} reservationId={reservationId} />
+          </TabPane>
+          <TabPane key="3" tab={t('reservation.Schedule')}>
+            <Schedule reservationDetailId={reservationDetail.id} reservationId={reservationId} />
+          </TabPane>
+          <TabPane key="4" tab={t('reservation.Guest List')}>
+            <GuestList
+              guests={reservationDetail.guests}
+              reservationDetailId={reservationDetail.id}
+              reservationId={reservationId}
+            />
+          </TabPane>
+          <TabPane key="5" tab={t('reservation.Transactions')}>
+            <Transaction reservationDetailId={reservationDetail.id} reservationId={reservationId} />
+          </TabPane>
+        </Tabs>
+      </div>
     </Col>
   );
 }

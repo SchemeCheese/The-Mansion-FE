@@ -11,7 +11,7 @@ import 'styles/reservation.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import type { RadioChangeEvent } from 'antd';
 import { Checkbox, Col, message, Modal, Radio, Row, Select, Skeleton, Space } from 'antd';
 import { formatNumber } from 'helpers';
@@ -31,6 +31,7 @@ import {
   downloadDocxReservationDetail,
   downloadPDFReservationDetail,
   getReservation,
+  getReservationDetail,
   resendEmailReservationAction,
   resetReservation,
   resetReservationDetail,
@@ -118,6 +119,10 @@ function ReservationDetail() {
     setLanguage(e.target.value);
   };
 
+  const params = useLocation();
+  const searchParam = new URLSearchParams(params.search);
+  const reservationIdParam = searchParam.get('reservation_detail_id');
+
   const handleResendReservationConfirmationEmail = () => {
     setIsSelectLanguageModalOpen(false);
 
@@ -191,6 +196,15 @@ function ReservationDetail() {
         reservation_id: id ?? '',
       }),
     );
+
+    if (reservationIdParam && id) {
+      dispatch(
+        getReservationDetail({
+          reservation_id: id,
+          reservation_detail_id: reservationIdParam,
+        }),
+      );
+    }
 
     return function cleanup() {
       dispatch(resetReservationDetail());
