@@ -283,7 +283,8 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
           end: item.end,
           allDay: true,
           resourceId: item.room_id,
-          reservationId: item.reservationId,
+          reservationId: item.reservation_id,
+          reservationDetailId: item.reservation_detail_id,
           room_id: item.room_id,
           room_type: item.room_type,
           reservation_equipment_id: item.reservation_equipment_id,
@@ -338,7 +339,10 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
         setBookRoomInfo(bookRoomInfoTemporary);
       }
     } else {
-      window.open(`/reservation/${clickInfo.event.extendedProps.reservationId}`, '_blank');
+      window.open(
+        `/reservation/${clickInfo.event.extendedProps.reservationId}?reservation_detail_id=${clickInfo.event.extendedProps.reservationDetailId}&tab=3`,
+        '_blank',
+      );
     }
   };
 
