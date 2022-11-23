@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 15/09/2022
+Updated Date : 15/09/2022
+Main functions : Event Utils
+************************************ */
+
 import { EventInput } from '@fullcalendar/react';
 
 let eventGuid = 0;

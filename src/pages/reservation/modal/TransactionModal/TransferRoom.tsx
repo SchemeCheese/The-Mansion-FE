@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 15/09/2022
+Updated Date : 23/11/2022
+Main functions : Transfer Room Modal
+************************************ */
+
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -5,7 +13,7 @@ import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import useColumns from 'pages/reservation/create/useColumns';
-import { selectReservationByFolio } from 'selectors';
+import { selectGetReservationDetail, selectReservationByFolio } from 'selectors';
 import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
@@ -19,10 +27,11 @@ const { Option } = Select;
 interface Props {
   selectedSaleRowKeys: any;
   setIsModalOpen: (visible: boolean) => void;
+  totalAmount: number;
   visible: boolean;
 }
 
-function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, visible }: Props) {
+function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visible }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -32,6 +41,7 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, visible }: Props) {
     React.Key[]
   >([]);
   const [storageId, setStorageId] = useState('1');
+  const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
 
   const onChangeSelectDisk = (value: string) => {
     setStorageId(value);
@@ -93,9 +103,10 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, visible }: Props) {
         }
       });
 
+      setFolio(reservationRedux.reservation_number);
       setRoomTotalForm(roomsTemporary);
     }
-  }, [reservationRedux]);
+  }, [reservationRedux, reservationDetailInfo]);
 
   useEffect(() => {
     dispatch(resetReservationByFolio());
@@ -181,7 +192,7 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, visible }: Props) {
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4 } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
-      okText={t('common.Save')}
+      okText={t('common.Transfer')}
       onCancel={() => setIsModalOpen(false)}
       onOk={handleTransferRoom}
       title={<b>{t('transaction.Transfer to Folio ID')}</b>}
@@ -224,10 +235,10 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, visible }: Props) {
               <Input.Group>
                 <Row gutter={12}>
                   <Col span={8}>
-                    <Input defaultValue="40.000" />
+                    <Input readOnly value={formatNumber(totalAmount)} />
                   </Col>
                   <Col span={4}>
-                    <Input defaultValue="VND" />
+                    <Input defaultValue="VND" readOnly />
                   </Col>
                 </Row>
               </Input.Group>

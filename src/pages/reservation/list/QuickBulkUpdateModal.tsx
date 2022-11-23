@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 15/09/2022
+Updated Date : 23/11/2022
+Main functions : Quick Bulk Update Modal
+************************************ */
+
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Checkbox, Col, DatePicker, Form, Input, Modal, Row } from 'antd';

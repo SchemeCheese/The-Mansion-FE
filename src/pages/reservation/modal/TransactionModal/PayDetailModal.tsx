@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 15/09/2022
+Updated Date : 23/11/2022
+Main functions : Payment Detail Modal
+************************************ */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Form, Input, Modal, Row, Select, Table } from 'antd';
