@@ -290,7 +290,12 @@ function SelectRoomModal({
 
     setRoomCondition(stateTemporary);
 
-    if (stateTemporary.checkin && stateTemporary.checkout && stateTemporary.room_type) {
+    if (
+      stateTemporary.checkin &&
+      stateTemporary.checkout &&
+      stateTemporary.room_type &&
+      stateTemporary.charge_kind
+    ) {
       dispatch(searchRoom(stateTemporary));
     }
   };
@@ -424,15 +429,16 @@ function SelectRoomModal({
           <Col span={5}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>Rate Type</span>
             <Select
-              allowClear
-              onChange={value => searchRoomSelect(value, 'rate_type')}
+              onChange={value => searchRoomSelect(value, 'charge_kind')}
               placeholder="Select rate type"
               style={{ width: '93%' }}
+              value={roomCondition.charge_kind}
             >
-              <Option value="1">Hotel stay fee</Option>
-              <Option value="2">SPA usage fee</Option>
-              <Option value="3">Hotel day-use fee</Option>
-              <Option value="4">Serviced Apartment usage fee</Option>
+              <Option value="1">Once</Option>
+              <Option value="2">Time</Option>
+              <Option value="3">Extend Time</Option>
+              <Option value="4">Extend Rate</Option>
+              <Option value="5">Monthly</Option>
             </Select>
           </Col>
           <Col span={5}>
