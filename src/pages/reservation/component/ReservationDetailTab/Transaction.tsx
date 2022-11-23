@@ -33,6 +33,7 @@ import {
   downloadPDFInvoiceTransaction,
   getReservation,
   getReservationDetail,
+  resetReservationByFolio,
 } from 'actions';
 
 import MButton from 'components/MButton';
@@ -80,6 +81,11 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   const [paySelectedRowKeys, setPaySelectedRowKeys] = useState<any>([]);
   const [paySelectedRows, setPaySelectedRows] = useState<any>([]);
 
+  const resetSelectedSelect = () => {
+    setSelectedRowKeys([]);
+    setSelectedRows([]);
+  };
+
   const rowSelectionDisk = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[], newSelectedRows: any) => {
@@ -98,18 +104,6 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   const handleDeleteItem = (item: any) => {
     showDeleteItemModal();
     setDeleteSaleDetailId(item.sale_detail_id);
-    // dispatch(
-    //   deleteItemAction({
-    //     payload: {
-    //       sale_detail_ids: [
-    //         {
-    //           id: item.sale_detail_id,
-    //           comment: 'Fake Comment',
-    //         },
-    //       ],
-    //     },
-    //   }),
-    // );
   };
 
   const handlePayment = () => {
@@ -253,8 +247,18 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   }, [deleteItemChanged]);
 
   useEffect(() => {
+    setActiveTabKey(Object.keys(transactions)[0]);
+  }, [transactions]);
+
+  useEffect(() => {
+    resetSelectedSelect();
+  }, [reservationDetailInfo]);
+
+  useEffect(() => {
     if (changeDiskChanged('status', 'SUCCESS')) {
       message.success('Change disk successfully!');
+
+      resetSelectedSelect();
 
       dispatch(
         getReservationDetail({
@@ -269,6 +273,8 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
     if (changeRoomChanged('status', 'SUCCESS')) {
       message.success('Transfer room successfully!');
 
+      resetSelectedSelect();
+
       dispatch(
         getReservationDetail({
           reservation_id: reservationId,
@@ -281,6 +287,8 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   useEffect(() => {
     if (createPaymentChanged('status', 'SUCCESS')) {
       message.success('Paid successfully!');
+
+      resetSelectedSelect();
 
       dispatch(
         getReservationDetail({
@@ -438,6 +446,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                 <TransferRoom
                   selectedSaleRowKeys={selectedRowKeys}
                   setIsModalOpen={setIsModalOpenTransferRoom}
+                  totalAmount={totalAmount}
                   visible={isModalOpenTransferRoom}
                 />
               </Col>
