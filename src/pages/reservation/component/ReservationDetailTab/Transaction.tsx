@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 15/09/2022
+Updated Date : 23/11/2022
+Main functions : Transaction Tab
+************************************ */
+
 import 'styles/transaction.css';
 
 import React, { useEffect, useState } from 'react';

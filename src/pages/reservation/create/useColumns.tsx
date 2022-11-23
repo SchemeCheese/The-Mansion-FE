@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 15/09/2022
+Updated Date : 23/11/2022
+Main functions : useColumns hook
+************************************ */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Badge, Button } from 'antd';

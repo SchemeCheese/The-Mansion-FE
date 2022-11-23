@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 15/09/2022
+Updated Date : 23/11/2022
+Main functions : Room Audit Charge Modal
+************************************ */
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';

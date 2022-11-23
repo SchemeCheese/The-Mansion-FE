@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : MinhNV
+Created Date : 15/09/2022
+Updated Date : 23/11/2022
+Main functions : Reservation Detail Card
+************************************ */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
