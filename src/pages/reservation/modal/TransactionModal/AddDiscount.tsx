@@ -103,8 +103,8 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
               placeholder="Select Type"
               style={{ borderRadius: 2, width: 311, height: 32 }}
             >
-              <Option value="percent">Percent</Option>
-              <Option value="total">Amount</Option>
+              <Option value="percent">{t('common.Percent')}</Option>
+              <Option value="total">{t('common.Amount')}</Option>
             </Select>
           </Form.Item>
         </Row>
@@ -125,7 +125,7 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
           >
             <Select
               onChange={onChangeSelectDisk}
-              placeholder="Select Disk"
+              placeholder={t('common.Select Disk')}
               style={{ borderRadius: 2, width: 311, height: 32 }}
             >
               <Option value="1">A</Option>

@@ -94,7 +94,7 @@ function Create() {
       setRoomSelected([]);
       setIsModalVisible(true);
     } else {
-      message.warning('Please select market and source!');
+      message.warning(t('message.Please select market and source!'));
     }
   };
 
@@ -118,7 +118,7 @@ function Create() {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Create reservation successfully!');
+      message.success(t('message.Create reservation successfully!'));
 
       if (redirectDetail === true) {
         navigate(`/reservation/${createReservationData.reservation_created?.id}`);

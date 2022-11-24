@@ -81,6 +81,15 @@
     "title": "Room Type",
     "placeholder": "Select room type"
   },
+  "Rate Type": {
+    "title": "Rate Type",
+    "placeholder": "Select rate type",
+    "Once": "Once",
+    "Time": "Time",
+    "Extend Time": "Extend Time",
+    "Extend Rate": "Extend Rate",
+    "Monthly": "Monthly"
+  },
   "Adults": {
     "title": "Adults",
     "placeholder": "Select adults"
@@ -109,11 +118,52 @@
     "title": "Payment Method",
     "placeholder": "Select payment method"
   },
+  "Floor": {
+    "title": "Floor",
+    "placeholder": "Select floor"
+  },
+  "View": {
+    "title": "View",
+    "placeholder": "Select view",
+    "Sea View": "Sea View",
+    "Mountain View": "Mountain View"
+  },
+  "Direction": {
+    "title": "Direction",
+    "placeholder": "Select direction",
+    "North": "North",
+    "East": "East",
+    "West": "West",
+    "South": "South"
+  },
   "Receptionist": "Receptionist",
   "Send confirmation email": "Send confirmation email",
   "Reason for booking cancellation (Optional)": {
     "title": "Reason for booking cancellation (Optional)",
     "placeholder": "Input Reason for booking cancellation"
   },
-  "Email Language": "Email Language"
+  "Email Language": "Email Language",
+  "Waitlist": "Waitlist",
+  "Total Amount for each room (VND)": "Total Amount for each room (VND)",
+  "Input notes": "Input notes",
+  "Bulk Update": "Bulk Update",
+  "All Rates & Availability": "All Rates & Availability",
+  "All Room Types": "All Room Types",
+  "All Rate Plans": "All Rate Plans",
+  "Clear all filters": "Clear all filters",
+  "All Channel": "All Channel",
+  "See Less": "See Less",
+  "Reserved": "Reserved",
+  "Calendar": "Calendar",
+  "Reservation List": "Reservation List",
+  "Channel Manager": "Channel Manager",
+  "Quick Bulk Update": "Quick Bulk Update",
+  "Set Availability to": "Set Availability to",
+  "Cancel Booking": "Cancel Booking",
+  "Request by guest": "Request by guest",
+  "No-show": "No-show",
+  "Invalid credit card": "Invalid credit card",
+  "No deposit/pre-payment received": "No deposit/pre-payment received",
+  "Overbooking": "Overbooking",
+  "Double booking": "Double booking"
 }

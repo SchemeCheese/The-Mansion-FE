@@ -167,7 +167,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     const calendarApi = selectInfo.view.calendar;
 
     if (isError) {
-      message.warn('Selecting room is invalid');
+      message.warn(t('message.Selecting room is invalid'));
     } else {
       calendarApi.addEvent({
         id: createEventId(),
@@ -187,7 +187,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Booking room successfully!');
+      message.success(t('common.Booking room successfully!'));
 
       dispatch(
         getReservation({
@@ -329,7 +329,11 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     if (clickInfo.event.extendedProps.disabled !== true) {
-      if (window.confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+      if (
+        window.confirm(
+          `${t('common.Are you sure you want to delete the event')} '${clickInfo.event.title}'`,
+        )
+      ) {
         const bookRoomInfoTemporary = [...bookRoomInfo];
 
         const indexElement = bookRoomInfoTemporary.findIndex(function (item) {
@@ -381,7 +385,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     const isError = isValidSelectRoom(bookRoomInfoTemporary);
 
     if (isError) {
-      message.warn('Selecting room is invalid');
+      message.warn(t('message.Selecting room is invalid'));
       event.revert();
     } else {
       setBookRoomInfo(bookRoomInfoTemporary);
@@ -545,7 +549,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                 <Option value="6">Royal Family</Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Floor" name="floor">
+            <Form.Item label={t('reservation.Floor.title')} name="floor">
               <Select
                 allowClear
                 onChange={value => {
@@ -557,7 +561,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                   setSearchScheduleCondition(searchScheduleConditionTemporary);
                   // dispatch(searchAvailableScheduleAction(searchScheduleConditionTemporary));
                 }}
-                placeholder="Select floor"
+                placeholder={t('reservation.Floor.placeholder')}
               >
                 <Option value="1">1</Option>
                 <Option value="2">2</Option>
@@ -573,18 +577,18 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label="View" name="view_type">
-              <Select allowClear placeholder="Select view">
-                <Option value="sea">Sea View</Option>
-                <Option value="mountain">Mountain View</Option>
+            <Form.Item label={t('reservation.View.title')} name="view_type">
+              <Select allowClear placeholder={t('reservation.View.placeholder')}>
+                <Option value="sea">{t('reservation.View.Sea View')}</Option>
+                <Option value="mountain">{t('reservation.View.Mountain View')}</Option>
               </Select>
             </Form.Item>
-            <Form.Item label="Direction" name="direction">
-              <Select allowClear placeholder="Select direction">
-                <Option value="male">North</Option>
-                <Option value="female">East</Option>
-                <Option value="other">West</Option>
-                <Option value="other">South</Option>
+            <Form.Item label={t('reservation.Direction.title')} name="direction">
+              <Select allowClear placeholder={t('reservation.Direction.placeholder')}>
+                <Option value="male">{t('reservation.Direction.North')}</Option>
+                <Option value="female">{t('reservation.Direction.East')}</Option>
+                <Option value="other">{t('reservation.Direction.West')}</Option>
+                <Option value="other">{t('reservation.Direction.South')}</Option>
               </Select>
             </Form.Item>
           </Col>
@@ -622,11 +626,11 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
               resourceAreaColumns={[
                 {
                   field: 'title',
-                  headerContent: 'Room No',
+                  headerContent: t('reservation.Room No'),
                 },
                 {
                   field: 'room_type_text',
-                  headerContent: 'Room Type',
+                  headerContent: t('reservation.Room Type.Title'),
                 },
               ]}
               resources={resources}
@@ -661,7 +665,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                     return days.join('\n');
                   },
                   slotLaneClassNames: 'slot-fc-day-monthly',
-                  buttonText: 'Monthly',
+                  buttonText: t('common.Monthly'),
                   validRange: {
                     start: moment(reservationDetailInfo.checkin).format('YYYY-MM-DD'),
                     end: moment(reservationDetailInfo.checkout).format('YYYY-MM-DD'),
@@ -703,7 +707,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                   },
                   // slotLaneClassNames: 'slot-fc-day-weekly',
                   // slotLabelClassNames: 'monthly',
-                  buttonText: 'Weekly',
+                  buttonText: t('common.Weekly'),
                   validRange: {
                     start: moment(reservationDetailInfo.checkin).format('YYYY-MM-DD'),
                     end: moment(reservationDetailInfo.checkout).format('YYYY-MM-DD'),

@@ -403,9 +403,9 @@ function ReservationDetail() {
       >
         <Radio.Group onChange={onChange} value={language}>
           <Space direction="vertical">
-            <Radio value="vi">Vietnamese</Radio>
-            <Radio value="en">English</Radio>
-            <Radio value="jp">Japanese</Radio>
+            <Radio value="vi">{t('common.Vietnamese')}</Radio>
+            <Radio value="en">{t('common.English')}</Radio>
+            <Radio value="jp">{t('common.Japanese')}</Radio>
           </Space>
         </Radio.Group>
       </Modal>

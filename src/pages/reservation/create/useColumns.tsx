@@ -103,52 +103,52 @@ const useColumns = (callback?: any) => {
     },
   ];
 
-  const selectedRoomsResultColumns = [
-    {
-      title: 'Checkin',
-      dataIndex: 'checkin',
-      key: 'checkin',
-    },
-    {
-      title: 'Checkout',
-      dataIndex: 'checkout',
-      key: 'checkout',
-    },
-    {
-      title: 'Room Type',
-      dataIndex: 'room_type',
-      key: 'room_type',
-    },
-    {
-      title: 'Rate Name',
-      dataIndex: 'rate_name',
-      key: 'rate_name',
-    },
-    {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      key: 'quantity',
-    },
-    {
-      title: 'Subtotal',
-      dataIndex: 'subtotal',
-      key: 'subtotal',
-    },
-    {
-      title: 'Task',
-      dataIndex: 'task',
-      key: 'task',
-      render: () => (
-        <Button style={{ color: '#F5222D', paddingLeft: 0 }} type="link">
-          {t('common.Delete')}
-        </Button>
-      ),
-    },
-  ];
+  // const selectedRoomsResultColumns = [
+  //   {
+  //     title: 'Checkin',
+  //     dataIndex: 'checkin',
+  //     key: 'checkin',
+  //   },
+  //   {
+  //     title: 'Checkout',
+  //     dataIndex: 'checkout',
+  //     key: 'checkout',
+  //   },
+  //   {
+  //     title: 'Room Type',
+  //     dataIndex: 'room_type',
+  //     key: 'room_type',
+  //   },
+  //   {
+  //     title: 'Rate Name',
+  //     dataIndex: 'rate_name',
+  //     key: 'rate_name',
+  //   },
+  //   {
+  //     title: 'Quantity',
+  //     dataIndex: 'quantity',
+  //     key: 'quantity',
+  //   },
+  //   {
+  //     title: 'Subtotal',
+  //     dataIndex: 'subtotal',
+  //     key: 'subtotal',
+  //   },
+  //   {
+  //     title: 'Task',
+  //     dataIndex: 'task',
+  //     key: 'task',
+  //     render: () => (
+  //       <Button style={{ color: '#F5222D', paddingLeft: 0 }} type="link">
+  //         {t('common.Delete')}
+  //       </Button>
+  //     ),
+  //   },
+  // ];
 
   return {
     roomingListColumns,
-    selectedRoomsResultColumns,
+    // selectedRoomsResultColumns,
   };
 };
 

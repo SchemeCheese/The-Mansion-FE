@@ -7,6 +7,7 @@ Main functions : Reservation List Page
 ************************************ */
 
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
@@ -48,6 +49,7 @@ function ReservationList({ type }: Props) {
     type,
   });
 
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -190,12 +192,12 @@ function ReservationList({ type }: Props) {
 
   const columnsWaitlist = [
     {
-      title: 'Folio ID',
+      title: t('reservation.Folio ID'),
       dataIndex: 'folio_id',
       key: 'folio_id',
     },
     {
-      title: 'Status',
+      title: t('common.Status'),
       dataIndex: 'status',
       key: 'status',
       render: (text: string) => (
@@ -207,43 +209,43 @@ function ReservationList({ type }: Props) {
       hidden: type === 'waitlist',
     },
     {
-      title: 'Created Date',
+      title: t('common.Created Date'),
       dataIndex: 'created_date',
       key: 'created_date',
     },
     {
-      title: 'Source TA',
+      title: t('common.Source TA'),
       dataIndex: 'source_ta',
       key: 'source_ta',
     },
     {
-      title: 'Checkin',
+      title: t('reservation.Checkin'),
       dataIndex: 'checkin',
       key: 'checkin',
     },
     {
-      title: 'Checkout',
+      title: t('reservation.Checkout'),
       dataIndex: 'checkout',
       key: 'checkout',
     },
     {
-      title: 'Booker Name',
+      title: t('common.Booker Name'),
       dataIndex: 'booker_name',
       key: 'booker_name',
     },
     {
-      title: 'Email',
+      title: t('common.Email.title'),
       dataIndex: 'email',
       key: 'email',
     },
     {
-      title: 'Phone',
+      title: t('common.Phone'),
       dataIndex: 'phone',
       key: 'phone',
     },
     {
       title: () => {
-        return <div style={{ textAlign: 'center' }}>Total Room</div>;
+        return <div style={{ textAlign: 'center' }}>{t('common.Total Room')}</div>;
       },
       dataIndex: 'total_room',
       key: 'total_room',
@@ -253,7 +255,7 @@ function ReservationList({ type }: Props) {
     },
     {
       title: () => {
-        return <div style={{ textAlign: 'center' }}>Alert</div>;
+        return <div style={{ textAlign: 'center' }}>{t('common.Alert')}</div>;
       },
       dataIndex: 'alert',
       key: 'alert',
@@ -296,7 +298,7 @@ function ReservationList({ type }: Props) {
       <Col span={24} style={{ paddingTop: 16 }}>
         <PattonButton onClick={() => navigate(`/reservation/create`)}>
           {' '}
-          <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> New
+          <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> {t('common.New')}
         </PattonButton>
       </Col>
       <Col span={24} style={{ paddingTop: 16 }}>
