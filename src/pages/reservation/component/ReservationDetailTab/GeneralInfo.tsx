@@ -123,6 +123,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
   const confirmUpdateCICO = () => {
     Modal.confirm({
       title: 'Update CICO Time Confirm',
+      okButtonProps: { style: { backgroundColor: '#1D39C4' } },
       icon: <ExclamationCircleOutlined />,
       content:
         'Seems like you updated the CI/CO time. It affects rates and schedule, do you want to continue?',

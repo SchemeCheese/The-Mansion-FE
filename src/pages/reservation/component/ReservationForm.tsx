@@ -85,7 +85,7 @@ function ReservationForm({
       title: 'Delete Confirm',
       icon: <ExclamationCircleOutlined />,
       content: 'Do you Want to delete these items?',
-
+      okButtonProps: { style: { backgroundColor: '#1D39C4' } },
       onOk() {
         deleteSelectedRoom();
       },

@@ -57,7 +57,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
       title: 'Delete Confirm',
       icon: <ExclamationCircleOutlined />,
       content: 'Do you want to delete this guest?',
-
+      okButtonProps: { style: { backgroundColor: '#1D39C4' } },
       onOk() {
         dispatch(
           removeGuestAction({

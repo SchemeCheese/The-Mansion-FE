@@ -347,6 +347,11 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
       }}
     >
       <Modal
+        okButtonProps={{
+          style: { backgroundColor: '#1D39C4' },
+          disabled: deleteReason.trim() === '',
+        }}
+        okText="Delete"
         onCancel={handleDeleteItemCancel}
         onOk={handleDeleteItemOk}
         title="The reason for deletion"
