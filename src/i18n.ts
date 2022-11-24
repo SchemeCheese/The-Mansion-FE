@@ -2,6 +2,7 @@ import { initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import auditRoomChargeEn from 'translations/en/auditRoomCharge.json';
 import commonEn from 'translations/en/common.json';
+import frontDeskEn from 'translations/en/frontDesk.json';
 import guestEn from 'translations/en/guest.json';
 import messageEn from 'translations/en/message.json';
 import nightAuditEn from 'translations/en/nightAudit.json';
@@ -12,6 +13,7 @@ import selectedPayMethodEn from 'translations/en/selectedPayMethod.json';
 import transactionEn from 'translations/en/transaction.json';
 import auditRoomChargeJa from 'translations/ja/auditRoomCharge.json';
 import commonJa from 'translations/ja/common.json';
+import frontDeskJa from 'translations/ja/frontDesk.json';
 import guestJa from 'translations/ja/guest.json';
 import messageJa from 'translations/ja/message.json';
 import nightAuditJa from 'translations/ja/nightAudit.json';
@@ -22,6 +24,7 @@ import selectedPayMethodJA from 'translations/ja/selectedPayMethod.json';
 import transactionJa from 'translations/ja/transaction.json';
 import auditRoomChargeVi from 'translations/vi/auditRoomCharge.json';
 import commonVi from 'translations/vi/common.json';
+import frontDeskVi from 'translations/vi/frontDesk.json';
 import guestVi from 'translations/vi/guest.json';
 import messageVi from 'translations/vi/message.json';
 import nightAuditVi from 'translations/vi/nightAudit.json';
@@ -47,6 +50,7 @@ i18n.use(initReactI18next).init({
         transaction: transactionEn,
         payDetail: payDetailEn,
         selectedPayMethod: selectedPayMethodEn,
+        frontDesk: frontDeskEn,
       },
     },
     ja: {
@@ -62,6 +66,7 @@ i18n.use(initReactI18next).init({
         transaction: transactionJa,
         payDetail: payDetailJA,
         selectedPayMethod: selectedPayMethodJA,
+        frontDesk: frontDeskJa,
       },
     },
     vi: {
@@ -77,6 +82,7 @@ i18n.use(initReactI18next).init({
         transaction: transactionVi,
         payDetail: payDetailVi,
         selectedPayMethod: selectedPayMethodVi,
+        frontDesk: frontDeskVi,
       },
     },
   },

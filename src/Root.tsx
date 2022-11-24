@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import NightAudit from 'pages/night_audit';
+import FrontDesk from 'pages/front-desk/list';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
 import Reservation from 'pages/reservation/list';
@@ -77,6 +78,25 @@ function Root() {
         style={{ paddingLeft: 8, cursor: 'pointer' }}
       >
         {t('common.Reservation')}
+      </span>
+    </>
+  );
+
+  const fronDeskBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/front-desk');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('frontDesk.Front Desk')}
       </span>
     </>
   );
@@ -159,7 +179,8 @@ function Root() {
               }
               path="/reservation/create"
             />
-            <Route
+
+<Route
               element={
                 <PrivateRoute
                   breadCrumb={reservationBreadCrum}
@@ -169,7 +190,20 @@ function Root() {
                   <NightAudit />
                 </PrivateRoute>
               }
-              path="/night-audit"
+              path="night-audit"
+            />
+
+<Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <FrontDesk />
+                </PrivateRoute>
+              }
+              path="/front-desk"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>
