@@ -630,7 +630,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                 },
                 {
                   field: 'room_type_text',
-                  headerContent: t('reservation.Room Type.Title'),
+                  headerContent: t('reservation.Room Type.title'),
                 },
               ]}
               resources={resources}

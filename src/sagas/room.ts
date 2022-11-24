@@ -37,6 +37,10 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
       },
     ));
 
+    if (total === 0) {
+      message.warning('No more rooms available!');
+    }
+
     yield put(
       searchRoomFinish({
         charges,
