@@ -82,9 +82,9 @@ function ReservationForm({
 
   const confirm = () => {
     Modal.confirm({
-      title: 'Delete Confirm',
+      title: t('common.Delete Confirm'),
       icon: <ExclamationCircleOutlined />,
-      content: 'Do you Want to delete these items?',
+      content: t('message.Do you Want to delete these items?'),
       okButtonProps: { style: { backgroundColor: '#1D39C4' } },
       onOk() {
         deleteSelectedRoom();
@@ -560,9 +560,9 @@ function ReservationForm({
                     }}
                   >
                     <Select disabled={!isSendConfirmationEmail}>
-                      <Option value="1">Vietnamese</Option>
-                      <Option value="2">English</Option>
-                      <Option value="3">Japanese</Option>
+                      <Option value="1">{t('common.Vietnamese')}</Option>
+                      <Option value="2">{t('common.English')}</Option>
+                      <Option value="3">{t('common.Japanese')}</Option>
                     </Select>
                   </Form.Item>
                 </Col>

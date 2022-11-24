@@ -9,6 +9,7 @@ Main functions : Channel Manager Tab
 import 'styles/channel.css';
 
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { ArrowDownOutlined, ArrowUpOutlined, RedoOutlined } from '@ant-design/icons';
 import { Col, DatePicker, Input, message, Row, Select, Space, Table, Tag } from 'antd';
@@ -57,6 +58,7 @@ function NoRoomAvailable() {
 
 function ChannelManager() {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const [channelSearch, setChannelSearch] = useState({
     room_type: '',
@@ -85,7 +87,7 @@ function ChannelManager() {
 
   useEffect(() => {
     if (updateRoomAvailableChanged('status', 'SUCCESS')) {
-      message.success('Update room available successfully!');
+      message.success(t('message.Update room available successfully!'));
 
       dispatch(
         fetchChannelsAction({
@@ -172,11 +174,11 @@ function ChannelManager() {
       <Row style={{ paddingBottom: 20 }}>
         <Col offset={16} span={8}>
           <div style={{ float: 'right' }}>
-            <PattonButton>Bulk Update</PattonButton>
+            <PattonButton>{t('reservation.Bulk Update')}</PattonButton>
             <MButton icon={<RedoOutlined />} style={{ marginLeft: 10 }}>
-              Search
+              {t('common.Search')}
             </MButton>
-            <PattonButton style={{ marginLeft: 10 }}>Save</PattonButton>
+            <PattonButton style={{ marginLeft: 10 }}>{t('common.Save')}</PattonButton>
           </div>
         </Col>
       </Row>
@@ -297,7 +299,7 @@ function ChannelManager() {
         <Col span={24}>
           <Space className="channel-filter" size="middle">
             <Select defaultValue="" size="large">
-              <Option value="">All Rates & Availability</Option>
+              <Option value="">{t('reservation.All Rates & Availability')}</Option>
             </Select>
             <Select
               defaultValue=""
@@ -350,7 +352,7 @@ function ChannelManager() {
                     fillOpacity="0.45"
                   />
                 </svg>
-                All Room Types
+                {t('reservation.All Room Types')}
               </Option>
               <OptGroup label="Rooms & Rates View">
                 {channelData.rates.map((item: any) => (
@@ -393,7 +395,7 @@ function ChannelManager() {
                     fillOpacity="0.45"
                   />
                 </svg>
-                <span style={{ paddingTop: 5 }}>All Rate Plans</span>
+                <span style={{ paddingTop: 5 }}>{t('reservation.All Rate Plans')}</span>
               </Option>
               <Option value="2">STANDARD RATE</Option>
               <Option value="3">WEBSITE TRỰC TIẾP</Option>
@@ -418,7 +420,7 @@ function ChannelManager() {
               }
               style={{ paddingTop: 10, fontSize: 13, color: '#1890FF', cursor: 'pointer' }}
             >
-              Clear all filters
+              {t('reservation.Clear all filters')}
             </p>
           </Space>
         </Col>
@@ -1142,11 +1144,11 @@ function ChannelManager() {
                         return rateTemporary.rateId === item.rateId;
                       })?.is_show_more ? (
                         <>
-                          All Channel <ArrowDownOutlined />{' '}
+                          {t('reservation.All Channel')} <ArrowDownOutlined />{' '}
                         </>
                       ) : (
                         <>
-                          See Less <ArrowUpOutlined />{' '}
+                          {t('reservation.See Less')} <ArrowUpOutlined />{' '}
                         </>
                       )}
                     </MButton>

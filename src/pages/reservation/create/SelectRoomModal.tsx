@@ -74,12 +74,12 @@ function SelectRoomModal({
 
   const searchRoomColumns = [
     {
-      title: 'Date',
+      title: t('common.Date'),
       dataIndex: 'use_date',
       key: 'use_date',
     },
     {
-      title: 'Rate Name',
+      title: t('common.Rate Name'),
       dataIndex: 'rate_name',
       key: 'rate_name',
       render: (text: any, record: any, index: number) => {
@@ -117,27 +117,27 @@ function SelectRoomModal({
       },
     },
     {
-      title: 'Adl',
+      title: t('reservation.Adl'),
       dataIndex: 'adult',
       key: 'adult',
     },
     {
-      title: 'Child',
+      title: t('reservation.Child.title'),
       dataIndex: 'child',
       key: 'child',
     },
     {
-      title: 'Rate detail',
+      title: t('common.Rate Detail'),
       dataIndex: 'rate_detail',
       key: 'rate_detail',
     },
     {
-      title: 'Unit price',
+      title: t('common.Unit Price'),
       dataIndex: 'unit_price',
       key: 'unit_price',
     },
     {
-      title: 'Updated price',
+      title: t('common.Update Price'),
       dataIndex: 'actual_amount',
       key: 'actual_amount',
       render: (text: string, record: any, index: number) => {
@@ -163,7 +163,7 @@ function SelectRoomModal({
       },
     },
     {
-      title: 'Task',
+      title: t('common.Task'),
       dataIndex: 'task',
       key: 'task',
       render: (text: string, record: any, index: number) => {
@@ -204,7 +204,7 @@ function SelectRoomModal({
 
       dataRoomTotalForm.push({
         key: uniqueKey,
-        status: 'Waitlist',
+        status: t('reservation.Waitlist'),
         name: '-',
         room_type_text: item.room_type_text,
         room_no: '-',
@@ -245,7 +245,7 @@ function SelectRoomModal({
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Add reservation booking successfully!');
+      message.success(t('message.Add reservation booking successfully!'));
 
       dispatch(
         getReservation({
@@ -322,37 +322,37 @@ function SelectRoomModal({
 
   const selectedRoomsResultColumns = [
     {
-      title: 'Checkin',
+      title: t('reservation.Checkin'),
       dataIndex: 'checkin_date',
       key: 'checkin_date',
     },
     {
-      title: 'Checkout',
+      title: t('reservation.Checkout'),
       dataIndex: 'checkout_date',
       key: 'checkout_date',
     },
     {
-      title: 'Room Type',
+      title: t('common.Room Type'),
       dataIndex: 'room_type_text',
       key: 'room_type',
     },
     {
-      title: 'Rate Name',
+      title: t('common.Rate Name'),
       dataIndex: 'rate_name',
       key: 'rate_name',
     },
     {
-      title: 'Quantity',
+      title: t('common.Quantity'),
       dataIndex: 'quantity',
       key: 'quantity',
     },
     {
-      title: 'Subtotal',
+      title: t('common.Subtotal'),
       dataIndex: 'subtotal',
       key: 'subtotal',
     },
     {
-      title: 'Task',
+      title: t('common.Task'),
       dataIndex: 'task',
       key: 'task',
       render: (text: any, record: any, index: number) => {
@@ -416,33 +416,35 @@ function SelectRoomModal({
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
       destroyOnClose
       okButtonProps={{ style: { backgroundColor: '#1D39C4' }, disabled: roomSelected.length === 0 }}
-      okText="Save"
+      okText={t('common.Save')}
       onCancel={handleCancel}
       onOk={handleOk}
       style={{ top: 80, borderRadius: 4 }}
-      title={<b>Select room and rate</b>}
+      title={<b>{t('message.Select room and rate')}</b>}
       visible={isModalVisible}
       width={1000}
     >
-      <Card bordered={false} size="small" title="Search room">
+      <Card bordered={false} size="small" title={t('message.Search room')}>
         <Row>
           <Col span={5}>
-            <span style={{ paddingBottom: 5, display: 'inherit' }}>Rate Type</span>
+            <span style={{ paddingBottom: 5, display: 'inherit' }}>
+              {t('reservation.Rate Type.title')}
+            </span>
             <Select
               onChange={value => searchRoomSelect(value, 'charge_kind')}
-              placeholder="Select rate type"
+              placeholder={t('reservation.Rate Type.placeholder')}
               style={{ width: '93%' }}
               value={roomCondition.charge_kind}
             >
-              <Option value="1">Once</Option>
-              <Option value="2">Time</Option>
-              <Option value="3">Extend Time</Option>
-              <Option value="4">Extend Rate</Option>
-              <Option value="5">Monthly</Option>
+              <Option value="1">{t('reservation.Rate Type.Once')}</Option>
+              <Option value="2">{t('reservation.Rate Type.Time')}</Option>
+              <Option value="3">{t('reservation.Rate Type.Extend Time')}</Option>
+              <Option value="4">{t('reservation.Rate Type.Extend Rate')}</Option>
+              <Option value="5">{t('reservation.Rate Type.Monthly')}</Option>
             </Select>
           </Col>
           <Col span={5}>
-            <span style={{ paddingBottom: 5, display: 'inherit' }}>Checkin </span>
+            <span style={{ paddingBottom: 5, display: 'inherit' }}>{t('reservation.Checkin')}</span>
             <DatePicker
               disabledDate={disabledDate}
               onChange={date => searchRoomDate(date, 'checkin')}
@@ -456,7 +458,10 @@ function SelectRoomModal({
             />
           </Col>
           <Col span={5}>
-            <span style={{ paddingBottom: 5, display: 'inherit' }}> Checkout</span>
+            <span style={{ paddingBottom: 5, display: 'inherit' }}>
+              {' '}
+              {t('reservation.Checkout')}
+            </span>
             <DatePicker
               disabledDate={disabledCheckoutDate}
               onChange={date => searchRoomDate(date, 'checkout')}
@@ -470,7 +475,7 @@ function SelectRoomModal({
             />
           </Col>
           <Col span={5}>
-            <span style={{ paddingBottom: 5, display: 'inherit' }}>Room Type</span>
+            <span style={{ paddingBottom: 5, display: 'inherit' }}>{t('common.Room Type')}</span>
             <Select
               allowClear
               onChange={value => searchRoomSelect(value, 'room_type')}
@@ -481,7 +486,7 @@ function SelectRoomModal({
             </Select>
           </Col>
           <Col span={4}>
-            <span style={{ paddingBottom: 5, display: 'inherit' }}>Quantity</span>
+            <span style={{ paddingBottom: 5, display: 'inherit' }}>{t('common.Quantity')}</span>
             <Select
               defaultValue="1"
               disabled={quantityResult === 0}
@@ -518,7 +523,12 @@ function SelectRoomModal({
           </Col>
         </Row>
       </Card>
-      <Card bordered={false} size="small" style={{ marginTop: 16 }} title="Selected Rooms Result">
+      <Card
+        bordered={false}
+        size="small"
+        style={{ marginTop: 16 }}
+        title={t('message.Selected Rooms Result')}
+      >
         <Row>
           <Col span={24}>
             <Table

@@ -72,7 +72,7 @@ function CancelBookingModal({
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Cancel reservation successfully!');
+      message.success(t('message.Cancel reservation successfully!'));
 
       setSelectedRowKeys([]);
 
@@ -108,11 +108,11 @@ function CancelBookingModal({
           display: cancelCurrentItem !== null ? 'none' : 'initial',
         },
       }}
-      okText="Save"
+      okText={t('common.Save')}
       onCancel={handleCancel}
       onOk={handleOk}
       style={{ top: 80, borderRadius: 4 }}
-      title={<b>Cancel Booking</b>}
+      title={<b>{t('reservation.Cancel Booking')}</b>}
       visible={isModalVisible}
       width={850}
     >
@@ -188,12 +188,12 @@ function CancelBookingModal({
                 disabled={cancelCurrentItem !== null}
                 placeholder={t('reservation.Type.placeholder')}
               >
-                <Option value="1">Request by guest </Option>
-                <Option value="2">No-show </Option>
-                <Option value="3">Invalid credit card </Option>
-                <Option value="4">No deposit/pre-payment received </Option>
-                <Option value="5">Overbooking</Option>
-                <Option value="6">Double booking</Option>
+                <Option value="1">{t('reservation.Request by guest')}</Option>
+                <Option value="2">{t('reservation.No-show')}</Option>
+                <Option value="3">{t('reservation.Invalid credit card')}</Option>
+                <Option value="4">{t('reservation.No deposit/pre-payment received')}</Option>
+                <Option value="5">{t('reservation.Overbooking')}</Option>
+                <Option value="6">{t('reservation.Double booking')}</Option>
               </Select>
             </Form.Item>
           </Col>

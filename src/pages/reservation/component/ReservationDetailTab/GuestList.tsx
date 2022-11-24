@@ -54,9 +54,9 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
 
   const confirmRemoveGuest = (item: any) => {
     Modal.confirm({
-      title: 'Delete Confirm',
+      title: t('common.Delete Confirm'),
       icon: <ExclamationCircleOutlined />,
-      content: 'Do you want to delete this guest?',
+      content: t('message.Do you want to delete this guest?'),
       okButtonProps: { style: { backgroundColor: '#1D39C4' } },
       onOk() {
         dispatch(
@@ -73,7 +73,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Set main guest successfully!');
+      message.success(t('message.Set main guest successfully!'));
 
       dispatch(
         getReservation({

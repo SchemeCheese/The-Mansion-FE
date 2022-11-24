@@ -7,6 +7,7 @@ Main functions : Rate Tab
 ************************************ */
 
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, message, Row, Table } from 'antd';
 import { formatNumber } from 'helpers';
@@ -30,6 +31,8 @@ interface Props {
 }
 
 function Rate({ reservationDetailId, reservationId }: Props) {
+  const { t } = useTranslation();
+
   const [ratesState, setRatesState] = useState<any>([]);
   const dispatch = useDispatch();
   const reservationDetailInfo: any = useSelector<RootState>(
@@ -54,32 +57,32 @@ function Rate({ reservationDetailId, reservationId }: Props) {
 
   const columns = [
     {
-      title: 'Date',
+      title: t('common.Date'),
       dataIndex: 'date',
       key: 'date',
     },
     {
-      title: 'Room Type',
+      title: t('common.Room Type'),
       dataIndex: 'room_type',
       key: 'room_type',
     },
     {
-      title: 'Rate Name',
+      title: t('common.Rate Name'),
       dataIndex: 'rate_name',
       key: 'rate_name',
     },
     {
-      title: 'Rate Detail',
+      title: t('common.Rate Detail'),
       dataIndex: 'rate_detail',
       key: 'rate_detail',
     },
     {
-      title: 'Unit Price',
+      title: t('common.Unit Price'),
       dataIndex: 'unit_price',
       key: 'unit_price',
     },
     {
-      title: 'Update Price',
+      title: t('common.Update Price'),
       dataIndex: 'actual_amount',
       key: 'actual_amount',
       render: (text: string, record: any, index: number) => {
@@ -105,7 +108,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
       },
     },
     {
-      title: 'Task',
+      title: t('common.Task'),
       dataIndex: 'task',
       key: 'task',
       render: (text: string, record: any, index: number) => {
@@ -127,7 +130,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
             style={{ color: colors.pattron }}
             type="button"
           >
-            Duplicate
+            {t('common.Duplicate')}
           </button>
         );
       },
@@ -151,7 +154,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Update rate successfully!');
+      message.success(t('message.Update rate successfully!'));
 
       dispatch(
         getReservation({
@@ -174,7 +177,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
           onClick={() => handleUpdateRate()}
           style={{ float: 'right', marginRight: 20 }}
         >
-          Update
+          {t('common.Update')}
         </PattonButton>
       </Col>
       <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>

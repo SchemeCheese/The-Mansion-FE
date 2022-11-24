@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Input, Row, Select } from 'antd';
+import { t } from 'i18next';
 import moment from 'moment';
 
 import { getAgentInfos, searchReservation } from 'actions';
@@ -154,7 +155,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
               })
             }
             onKeyUp={event => searchInput(event)}
-            placeholder="Travel Agent"
+            placeholder={t('common.Travel Agent')}
             style={{ height: 32, fontSize: 12 }}
           />
         </Col>
@@ -176,7 +177,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
           <Select
             allowClear
             onChange={value => searchSelect(value, 'market')}
-            placeholder="Market"
+            placeholder={t('common.Market')}
             style={{ width: '100%', fontSize: 12 }}
           >
             <Option value="1">OTA</Option>
@@ -190,7 +191,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
           <Select
             allowClear
             onChange={value => searchSelect(value, 'source')}
-            placeholder="Source"
+            placeholder={t('common.Source')}
             style={{ width: '100%', fontSize: 12 }}
           >
             {sourceOptions}
@@ -198,7 +199,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
         </Col>
         <Col span={3} style={{ textAlign: 'center' }}>
           <Button onClick={() => handleChange()} style={{ color: '#1D39C4' }} type="text">
-            <span style={{ paddingRight: 6 }}>Show more</span>
+            <span style={{ paddingRight: 6 }}>{t('common.Show more')}</span>
             {showMore ? <UpOutlined /> : <DownOutlined />}
           </Button>
         </Col>

@@ -126,7 +126,7 @@ function Calendar() {
 
   useEffect(() => {
     if (changedNote('status', 'SUCCESS')) {
-      message.success('Update note successfully!');
+      message.success(t('message.Update note successfully!'));
       dispatch(searchScheduleAction(searchCondition));
     }
   }, [changedNote]);
@@ -171,7 +171,7 @@ function Calendar() {
     <>
       <Row style={{ background: 'white', padding: 16 }}>
         <Col span={24}>
-          <span> Filter </span>
+          <span> {t('common.Filter')} </span>
           <Select
             allowClear
             onChange={value => {
@@ -183,7 +183,7 @@ function Calendar() {
               setSearchCondition(searchConditionStateTemporary);
               dispatch(searchScheduleAction(searchConditionStateTemporary));
             }}
-            placeholder="Room Type"
+            placeholder={t('common.Room Type')}
             style={{
               width: 150,
               marginLeft: 15,
@@ -208,14 +208,14 @@ function Calendar() {
                 dispatch(searchScheduleAction(searchCondition));
               }
             }}
-            placeholder="Room Number"
+            placeholder={t('common.Room Number')}
             style={{
               width: 150,
               marginLeft: 15,
             }}
           />
           <div style={{ float: 'right', paddingTop: 5 }}>
-            <span style={{ marginRight: 165 }}>Display</span>
+            <span style={{ marginRight: 165 }}>{t('common.Display')}</span>
           </div>
         </Col>
       </Row>
@@ -267,11 +267,11 @@ function Calendar() {
               resourceAreaColumns={[
                 {
                   field: 'title',
-                  headerContent: 'Room No',
+                  headerContent: t('reservation.Room No'),
                 },
                 {
                   field: 'room_type_text',
-                  headerContent: 'Room Type',
+                  headerContent: t('common.Room Type'),
                 },
               ]}
               // resources={`${process.env.REACT_APP_API_HOST}/resources`}
@@ -304,7 +304,7 @@ function Calendar() {
                     return days.join('\n');
                   },
                   slotLaneClassNames: 'slot-fc-day-monthly',
-                  buttonText: 'Monthly',
+                  buttonText: t('common.Monthly'),
                 },
                 timeGridWeekly: {
                   type: 'resourceTimelineWeek',
@@ -328,7 +328,7 @@ function Calendar() {
                   },
                   slotLaneClassNames: 'slot-fc-day-weekly',
                   slotLabelClassNames: 'monthly',
-                  buttonText: 'Weekly',
+                  buttonText: t('common.Weekly'),
                 },
               }}
               weekends
@@ -367,7 +367,7 @@ function Calendar() {
                 }
                 style={{ float: 'right' }}
               >
-                More Detail
+                {t('common.More Detail')}
               </Button>
             </Col>
           </Row>
@@ -388,7 +388,7 @@ function Calendar() {
             defaultValue={infoReservationSelected.note}
             name="note_calendar"
             onChange={event => handleChangeNote(event)}
-            placeholder="Input notes"
+            placeholder={t('reservation.Input notes')}
             rows={8}
           />
         </Card>

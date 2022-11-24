@@ -103,7 +103,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Update general info successfully!');
+      message.success(t('message.Update general info successfully!'));
 
       dispatch(
         getReservation({
@@ -122,11 +122,10 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
 
   const confirmUpdateCICO = () => {
     Modal.confirm({
-      title: 'Update CICO Time Confirm',
+      title: t('message.Update CICO Time Confirm'),
       okButtonProps: { style: { backgroundColor: '#1D39C4' } },
       icon: <ExclamationCircleOutlined />,
-      content:
-        'Seems like you updated the CI/CO time. It affects rates and schedule, do you want to continue?',
+      content: t('message.Update CICO Note'),
 
       onOk() {
         dispatch(

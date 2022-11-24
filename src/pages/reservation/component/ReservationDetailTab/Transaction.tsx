@@ -164,7 +164,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
     let tabName = `Disk ${key}`;
 
     if (key.toLowerCase() === 'deposit') {
-      tabName = 'Deposit';
+      tabName = t('common.Deposit');
     }
 
     tabList.push({
@@ -224,7 +224,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (addItemChanged('status', 'SUCCESS')) {
-      message.success('Add item successfully!');
+      message.success(t('message.Add item successfully!'));
 
       dispatch(
         getReservation({
@@ -243,7 +243,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (deleteItemChanged('status', 'SUCCESS')) {
-      message.success('Delete item successfully!');
+      message.success(t('message.Delete item successfully!'));
 
       dispatch(
         getReservationDetail({
@@ -264,7 +264,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changeDiskChanged('status', 'SUCCESS')) {
-      message.success('Change disk successfully!');
+      message.success(t('message.Change disk successfully!'));
 
       resetSelectedSelect();
 
@@ -279,7 +279,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changeRoomChanged('status', 'SUCCESS')) {
-      message.success('Transfer room successfully!');
+      message.success(t('message.Transfer room successfully!'));
 
       resetSelectedSelect();
 
@@ -294,7 +294,7 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (createPaymentChanged('status', 'SUCCESS')) {
-      message.success('Paid successfully!');
+      message.success(t('message.Paid successfully!'));
 
       resetSelectedSelect();
 
@@ -351,10 +351,10 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
           style: { backgroundColor: '#1D39C4' },
           disabled: deleteReason.trim() === '',
         }}
-        okText="Delete"
+        okText={t('common.Delete')}
         onCancel={handleDeleteItemCancel}
         onOk={handleDeleteItemOk}
-        title="The reason for deletion"
+        title={t('common.The reason for deletion')}
         visible={isDeleteItemModalOpen}
       >
         <div style={{ marginTop: -15, paddingBottom: 10 }}>
@@ -533,11 +533,11 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.discount)}</span>
                 </div>
                 <div className="checkout-card-grid">
-                  <span style={gridStyleLeft}>VAT</span>
+                  <span style={gridStyleLeft}>{t('common.VAT')}</span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.vat)}</span>
                 </div>
                 <div className="checkout-card-grid">
-                  <span style={gridStyleLeft}>Paid</span>
+                  <span style={gridStyleLeft}>{t('common.Paid')}</span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.paid)}</span>
                 </div>
                 <div className="checkout-card-grid">

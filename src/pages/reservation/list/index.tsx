@@ -102,7 +102,7 @@ function Reservation() {
     <>
       {/* <BreadcrumbList data={breadcrumbData} /> */}
 
-      <p className="title">Reservation List</p>
+      <p className="title">{t('reservation.Reservation List')}</p>
 
       <Tabs
         className="reservation-tabs"
@@ -110,16 +110,16 @@ function Reservation() {
         onChange={activeKey => handeleActive(activeKey)}
         style={{ minHeight: '100%' }}
       >
-        <TabPane key="1" className="content" tab="Reserved">
+        <TabPane key="1" className="content" tab={t('reservation.Reserved')}>
           <ReservationList type="reserved" />
         </TabPane>
-        <TabPane key="2" className="content" tab="Waitlist">
+        <TabPane key="2" className="content" tab={t('reservation.Waitlist')}>
           <ReservationList type="waitlist" />
         </TabPane>
-        <TabPane key="3" className="content" tab="Calendar">
+        <TabPane key="3" className="content" tab={t('reservation.Calendar')}>
           <Calendar />
         </TabPane>
-        <TabPane key="4" className="content" tab="Channel Manager">
+        <TabPane key="4" className="content" tab={t('reservation.Channel Manager')}>
           <ChannelManager />
         </TabPane>
       </Tabs>

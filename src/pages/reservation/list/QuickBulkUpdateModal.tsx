@@ -7,6 +7,7 @@ Main functions : Quick Bulk Update Modal
 ************************************ */
 
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Checkbox, Col, DatePicker, Form, Input, Modal, Row } from 'antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
@@ -27,6 +28,7 @@ function QuickBulkUpdateModal({
 }: Props) {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const handleOK = () => {
     form.validateFields().then(values => {
@@ -82,7 +84,7 @@ function QuickBulkUpdateModal({
               fillOpacity="0.45"
             />
           </svg>
-          <span style={{ paddingLeft: 10 }}>Quick Bulk Update</span>
+          <span style={{ paddingLeft: 10 }}>{t('reservation.Quick Bulk Update')}</span>
         </>
       }
       visible={isShowQuickUpdateModal}
@@ -105,7 +107,7 @@ function QuickBulkUpdateModal({
         <Row>
           <Col span={24}>
             <Form.Item
-              label="Set Availability to"
+              label={t('reservation.Set Availability to')}
               name="room_number"
               rules={[{ required: true, message: 'Please input number!' }]}
             >
@@ -118,17 +120,17 @@ function QuickBulkUpdateModal({
               name="start_date"
               rules={[{ required: true, message: 'Please input from date!' }]}
             >
-              <DatePicker disabled placeholder="From Date" style={{ width: '90%' }} />
+              <DatePicker disabled placeholder={t('common.From Date')} style={{ width: '90%' }} />
             </Form.Item>
           </Col>
           <Col span={5}>
             <Form.Item
               name="end_date"
-              rules={[{ required: true, message: 'Please input to date !' }]}
+              rules={[{ required: true, message: 'Please input to date!' }]}
             >
               <DatePicker
                 disabledDate={disabledEndDate}
-                placeholder="To Date"
+                placeholder={t('common.To Date')}
                 style={{ width: '90%' }}
               />
             </Form.Item>
@@ -137,25 +139,25 @@ function QuickBulkUpdateModal({
             <Form.Item name="enabled_day">
               <Checkbox.Group>
                 <Checkbox style={{ lineHeight: '32px' }} value="1">
-                  Mon
+                  {t('common.Mon')}
                 </Checkbox>
                 <Checkbox style={{ lineHeight: '32px' }} value="2">
-                  Tue
+                  {t('common.Tue')}
                 </Checkbox>
                 <Checkbox style={{ lineHeight: '32px' }} value="3">
-                  Web
+                  {t('common.Web')}
                 </Checkbox>
                 <Checkbox style={{ lineHeight: '32px' }} value="4">
-                  Thu
+                  {t('common.Thu')}
                 </Checkbox>
                 <Checkbox style={{ lineHeight: '32px' }} value="5">
-                  Fri
+                  {t('common.Fri')}
                 </Checkbox>
                 <Checkbox style={{ lineHeight: '32px' }} value="6">
-                  Sat
+                  {t('common.Sat')}
                 </Checkbox>
                 <Checkbox style={{ lineHeight: '32px' }} value="0">
-                  Sun
+                  {t('common.Sun')}
                 </Checkbox>
               </Checkbox.Group>
             </Form.Item>

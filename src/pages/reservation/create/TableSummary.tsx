@@ -7,6 +7,7 @@ Main functions : Table Summary Componnent
 ************************************ */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import PlusOutlined from '@ant-design/icons/lib/icons/PlusOutlined';
 import { Table } from 'antd';
 import { formatNumber } from 'helpers';
@@ -31,6 +32,8 @@ function TableSummary({
   setRoomSelected,
   totalAmount,
 }: Props) {
+  const { t } = useTranslation();
+
   const handleClick = () => {
     const dataSelectedRoomsResult: any = [...roomSelected];
     const groupRooms: any = _.groupBy(searchRoomResultState, 'rate_name');
@@ -67,7 +70,7 @@ function TableSummary({
     <Table.Summary fixed>
       <Table.Summary.Row>
         <Table.Summary.Cell colSpan={2} index={0}>
-          Total Amount for each room (VND)
+          {t('reservation.Total Amount for each room (VND)')}
         </Table.Summary.Cell>
         <Table.Summary.Cell colSpan={5} index={1}>
           <span style={{ fontSize: 16 }}>{formatNumber(totalAmount)}</span>
@@ -80,7 +83,7 @@ function TableSummary({
           >
             {' '}
             <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} />{' '}
-            <span style={{ marginLeft: -5 }}>Add</span>
+            <span style={{ marginLeft: -5 }}>{t('common.Add')}</span>
           </PattonButton>
         </Table.Summary.Cell>
       </Table.Summary.Row>
