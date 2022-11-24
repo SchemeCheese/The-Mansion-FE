@@ -12,6 +12,7 @@ Main functions : Schedule Tab
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import FullCalendar, {
   DateSelectArg,
   EventApi,
@@ -75,12 +76,16 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
 
+  const params = useLocation();
+  const searchParam = new URLSearchParams(params.search);
+  const roomTypeParam = searchParam.get('room_type');
+
   const [searchScheduleCondition, setSearchScheduleCondition] = useState<any>({
     direction: '',
     end_date: reservationDetailInfo.checkout,
     floor: '',
     reservation_detail_id: reservationDetailId,
-    room_type: reservationDetailInfo.room_type,
+    room_type: roomTypeParam || reservationDetailInfo.room_type,
     start_date: reservationDetailInfo.checkin,
     view: '',
     isSmocking: undefined,
@@ -238,7 +243,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       end_date: reservationDetailInfo.checkout,
       floor: '',
       reservation_detail_id: reservationDetailInfo.id,
-      room_type: reservationDetailInfo.room_type,
+      room_type: roomTypeParam || reservationDetailInfo.room_type,
       start_date: reservationDetailInfo.checkin,
       view: '',
       isSmocking: undefined,
@@ -340,7 +345,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       }
     } else {
       window.open(
-        `/reservation/${clickInfo.event.extendedProps.reservationId}?reservation_detail_id=${clickInfo.event.extendedProps.reservationDetailId}&tab=3`,
+        `/reservation/${clickInfo.event.extendedProps.reservationId}?reservation_detail_id=${clickInfo.event.extendedProps.reservationDetailId}&tab=3&room_type=${clickInfo.event.extendedProps.room_type}`,
         '_blank',
       );
     }
