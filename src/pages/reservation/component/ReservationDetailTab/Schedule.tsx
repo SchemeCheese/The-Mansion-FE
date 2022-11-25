@@ -331,7 +331,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     if (clickInfo.event.extendedProps.disabled !== true) {
       if (
         window.confirm(
-          `${t('common.Are you sure you want to delete the event')} '${clickInfo.event.title}'`,
+          `${t('message.Are you sure you want to delete the event')} '${clickInfo.event.title}'`,
         )
       ) {
         const bookRoomInfoTemporary = [...bookRoomInfo];
