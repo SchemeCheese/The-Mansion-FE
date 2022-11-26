@@ -257,7 +257,7 @@ function Calendar() {
               eventContent={renderEventContent}
               eventsSet={handleEvents}
               headerToolbar={{
-                left: '',
+                left: 'prev,next',
                 right: 'timeGridWeekly,timeGridMonthly',
               }}
               initialDate={searchCondition.start_date}
@@ -285,7 +285,7 @@ function Calendar() {
               views={{
                 timeGridMonthly: {
                   type: 'resourceTimelineMonth',
-                  duration: { days: 15 },
+                  duration: { month: 1 },
                   slotDuration: { days: 1 },
                   slotLabelFormat(argument) {
                     return moment(argument.date).format('DD[\n]dd');

@@ -207,7 +207,7 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
 
             setDataAmount(dataAmountStateTemporary);
           }}
-          style={{ borderRadius: 2, width: 223, height: 32 }}
+          style={{ borderRadius: 2, width: 100, height: 32 }}
         >
           <Option value="1">A</Option>
           <Option value="2">B</Option>
@@ -306,6 +306,7 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
       okText={t('common.Save')}
       onCancel={() => setIsModalOpen(false)}
       onOk={handleAddItem}
+      style={{ top: 20 }}
       title={<b>{t('transaction.Add Product / Service')}</b>}
       visible={visible}
       width={1000}
@@ -326,7 +327,12 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
       </Row>
       <Row>
         {!isSearching ? (
-          <Table columns={columns} dataSource={convertData(items)} pagination={false} />
+          <Table
+            columns={columns}
+            dataSource={convertData(items)}
+            pagination={false}
+            scroll={{ y: 330 }}
+          />
         ) : (
           <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />
         )}
