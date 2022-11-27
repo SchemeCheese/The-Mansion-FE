@@ -6,7 +6,7 @@ Updated Date : 23/11/2022
 Main functions : Reservation List
 ************************************ */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
@@ -29,6 +29,8 @@ function Reservation() {
   const { t } = useTranslation();
 
   const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
+  const [fromDate, setFromDate] = useState<string>(moment().format('YYYY-MM-DD'));
+
   // const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
 
   const handeleActive = (activeKey: string) => {
@@ -92,7 +94,7 @@ function Reservation() {
     if (activeKey === '4') {
       dispatch(
         fetchChannelsAction({
-          fromDate: moment().format('YYYY-MM-DD'),
+          fromDate,
         }),
       );
     }
@@ -120,7 +122,7 @@ function Reservation() {
           <Calendar />
         </TabPane>
         <TabPane key="4" className="content" tab={t('reservation.Channel Manager')}>
-          <ChannelManager />
+          <ChannelManager fromDate={fromDate} setFromDate={setFromDate} />
         </TabPane>
       </Tabs>
     </>
