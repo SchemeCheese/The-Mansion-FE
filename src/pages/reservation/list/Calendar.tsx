@@ -51,8 +51,9 @@ function Calendar() {
     currentEvents: [],
   });
   const [searchCondition, setSearchCondition] = useState({
-    start_date: moment().format('YYYY-MM-DD'),
-    end_date: moment().add(15, 'days').format('YYYY-MM-DD'),
+    start_week_date: moment().format('YYYY-MM-DD'),
+    start_date: moment().startOf('month').format('YYYY-MM-DD'),
+    end_date: moment().add(1, 'weeks').format('YYYY-MM-DD'),
     room_type: '',
     room_number: '',
   });
@@ -83,12 +84,26 @@ function Calendar() {
     });
   };
 
+  /* eslint prefer-const: "warn" */
   const handleChangePickDate = (date: any) => {
-    const temporaryState = {
-      ...searchCondition,
-      start_date: date.format('YYYY-MM-DD'),
-      end_date: date.add(15, 'days').format('YYYY-MM-DD'),
-    };
+    const startDate = date;
+    const endDate = date.clone().add(1, 'weeks');
+    let temporaryState: any;
+
+    temporaryState =
+      startDate.format('MM') !== endDate.format('MM')
+        ? {
+            ...searchCondition,
+            start_week_date: date.format('YYYY-MM-DD'),
+            start_date: date.clone().startOf('month').format('YYYY-MM-DD'),
+            end_date: date.clone().add(1, 'weeks').format('YYYY-MM-DD'),
+          }
+        : {
+            ...searchCondition,
+            start_week_date: date.format('YYYY-MM-DD'),
+            start_date: date.clone().startOf('month').format('YYYY-MM-DD'),
+            end_date: date.clone().endOf('month').format('YYYY-MM-DD'),
+          };
 
     setSearchCondition(temporaryState);
     setIsShowDatePicker(false);
@@ -221,6 +236,22 @@ function Calendar() {
       </Row>
       <Row style={{ background: 'white', padding: 16, marginTop: 20 }}>
         <Col className="schedule-calendar" span={24} style={{ textAlign: 'center' }}>
+          <svg
+            fill="none"
+            height="14"
+            onClick={() =>
+              handleChangePickDate(moment(searchCondition.start_week_date).subtract(1, 'weeks'))
+            }
+            style={{ marginRight: 25, cursor: 'pointer' }}
+            viewBox="0 0 8 14"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7.31581 -2.99071e-08C7.16558 -3.64738e-08 7.01378 0.0583849 6.88703 0.175155L0.255074 6.39497C0.0938919 6.5464 -6.37836e-07 6.77447 -6.48444e-07 7.01713C-6.58971e-07 7.25797 0.0938919 7.48786 0.255074 7.63747L6.85886 13.8244C7.15306 14.0999 7.5834 14.0452 7.8197 13.7022C8.05599 13.3592 8.00905 12.8574 7.71485 12.5819L1.77457 7.01531L7.74458 1.41766C8.03878 1.14215 8.08573 0.640409 7.84943 0.297399C7.71329 0.102174 7.51611 -2.11515e-08 7.31581 -2.99071e-08Z"
+              fill="#1D39C4"
+            />
+          </svg>
           <b
             aria-hidden="true"
             className="title-date"
@@ -228,7 +259,7 @@ function Calendar() {
             role="button"
             tabIndex={0}
           >
-            {moment(searchCondition.start_date).format('MMMM Y')}
+            {moment(searchCondition.start_week_date).format('MMMM Y')}
           </b>
           <DatePicker
             allowClear={false}
@@ -250,6 +281,22 @@ function Calendar() {
             onChange={date => handleChangePickDate(date)}
             open={isShowDatePicker}
           />
+          <svg
+            fill="none"
+            height="14"
+            onClick={() =>
+              handleChangePickDate(moment(searchCondition.start_week_date).add(1, 'weeks'))
+            }
+            style={{ marginLeft: 25, cursor: 'pointer' }}
+            viewBox="0 0 8 14"
+            width="8"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.684193 -2.99071e-08C0.834422 -3.64738e-08 0.986215 0.0583849 1.11297 0.175155L7.74493 6.39497C7.90611 6.5464 8 6.77447 8 7.01713C8 7.25797 7.90611 7.48786 7.74493 7.63747L1.14114 13.8244C0.846941 14.0999 0.4166 14.0452 0.180303 13.7022C-0.0559934 13.3592 -0.00904711 12.8574 0.28515 12.5819L6.22543 7.01531L0.255417 1.41766C-0.0387803 1.14215 -0.0857267 0.640409 0.15057 0.297399C0.286714 0.102174 0.483889 -2.11515e-08 0.684193 -2.99071e-08Z"
+              fill="#1D39C4"
+            />
+          </svg>
           {searchScheduleRedux.is_searching === false ? (
             <FullCalendar
               ref={fullCalendarRef}
@@ -257,10 +304,10 @@ function Calendar() {
               eventContent={renderEventContent}
               eventsSet={handleEvents}
               headerToolbar={{
-                left: 'prev,next',
+                left: '',
                 right: 'timeGridWeekly,timeGridMonthly',
               }}
-              initialDate={searchCondition.start_date}
+              initialDate={searchCondition.start_week_date}
               initialEvents={INITIAL_EVENTS}
               initialView="timeGridWeekly"
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}

@@ -73,7 +73,11 @@ function ChannelManager() {
     from_date: '',
   });
 
-  const onChange = (date: any) => {
+  const [fromDate, setFromDate] = useState<string>(moment().format('YYYY-MM-DD'));
+
+  const onChangeDate = (date: any) => {
+    setFromDate(date.format('YYYY-MM-DD'));
+
     dispatch(
       fetchChannelsAction({
         fromDate: date.format('YYYY-MM-DD'),
@@ -199,6 +203,10 @@ function ChannelManager() {
             <svg
               fill="none"
               height="18"
+              onClick={() => {
+                onChangeDate(moment());
+              }}
+              style={{ cursor: 'pointer' }}
               viewBox="0 0 20 18"
               width="20"
               xmlns="http://www.w3.org/2000/svg"
@@ -212,6 +220,10 @@ function ChannelManager() {
             <svg
               fill="none"
               height="14"
+              onClick={() => {
+                onChangeDate(moment(fromDate).clone().subtract(1, 'months'));
+              }}
+              style={{ cursor: 'pointer' }}
               viewBox="0 0 14 14"
               width="14"
               xmlns="http://www.w3.org/2000/svg"
@@ -229,6 +241,10 @@ function ChannelManager() {
             <svg
               fill="none"
               height="14"
+              onClick={() => {
+                onChangeDate(moment(fromDate).clone().subtract(1, 'days'));
+              }}
+              style={{ cursor: 'pointer' }}
               viewBox="0 0 8 14"
               width="8"
               xmlns="http://www.w3.org/2000/svg"
@@ -253,16 +269,19 @@ function ChannelManager() {
                   </div>
                 );
               }}
-              defaultValue={moment()}
               format="D MMM Y"
-              onChange={onChange}
+              onChange={onChangeDate}
               style={{ paddingBottom: 8 }}
               suffixIcon={null}
+              value={moment(fromDate)}
             />
             <svg
               fill="none"
               height="14"
-              style={{ marginLeft: -34 }}
+              onClick={() => {
+                onChangeDate(moment(fromDate).clone().add(1, 'days'));
+              }}
+              style={{ marginLeft: -34, cursor: 'pointer' }}
               viewBox="0 0 8 14"
               width="8"
               xmlns="http://www.w3.org/2000/svg"
@@ -275,7 +294,10 @@ function ChannelManager() {
             <svg
               fill="none"
               height="14"
-              style={{ marginLeft: -14 }}
+              onClick={() => {
+                onChangeDate(moment(fromDate).clone().add(1, 'months'));
+              }}
+              style={{ marginLeft: -14, cursor: 'pointer' }}
               viewBox="0 0 14 14"
               width="14"
               xmlns="http://www.w3.org/2000/svg"
