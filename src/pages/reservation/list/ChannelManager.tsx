@@ -81,7 +81,7 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
     room_type: '',
     channel: '',
     rate_plan: '',
-    rate_name: '',
+    // rate_name: '',
   });
   const [isShowMore, setIsShowMore] = useState<any>();
   const [isShowQuickUpdateModal, setIsShowQuickUpdateModal] = useState(false);
@@ -211,7 +211,7 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
         setIsShowQuickUpdateModal={setIsShowQuickUpdateModal}
         updateInfo={updateInfo}
       />
-      <Row style={{ paddingBottom: 20 }}>
+      {/* <Row style={{ paddingBottom: 20 }}>
         <Col offset={16} span={8}>
           <div style={{ float: 'right' }}>
             <PattonButton>{t('reservation.Bulk Update')}</PattonButton>
@@ -221,7 +221,7 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
             <PattonButton style={{ marginLeft: 10 }}>{t('common.Save')}</PattonButton>
           </div>
         </Col>
-      </Row>
+      </Row> */}
       <Row className="channel" style={{ backgroundColor: '#FFFFFF' }}>
         <Col
           className="pick-date"
@@ -356,9 +356,9 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
       <Row style={{ paddingTop: 20 }}>
         <Col span={24}>
           <Space className="channel-filter" size="middle">
-            <Select defaultValue="" size="large">
+            {/* <Select defaultValue="" size="large">
               <Option value="">{t('reservation.All Rates & Availability')}</Option>
-            </Select>
+            </Select> */}
             <Select
               defaultValue=""
               onChange={value => {
@@ -383,6 +383,7 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
                 }
               }}
               size="large"
+              style={{ minWidth: 250 }}
               value={channelSearch.room_type ? channelSearch.room_type : channelSearch.channel}
             >
               <Option value="">
@@ -436,6 +437,7 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
                 });
               }}
               size="large"
+              style={{ minWidth: 250 }}
               value={channelSearch.rate_plan}
             >
               <Option value="">
@@ -458,7 +460,7 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
               <Option value="2">STANDARD RATE</Option>
               <Option value="3">WEBSITE TRỰC TIẾP</Option>
             </Select>
-            <Search
+            {/* <Search
               allowClear
               className="search-room-rate"
               onChange={event => {
@@ -476,7 +478,7 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
                 width: 250,
               }}
               value={searchValue}
-            />
+            /> */}
             <p
               aria-hidden="true"
               onClick={() => {
@@ -484,7 +486,7 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
                   room_type: '',
                   channel: '',
                   rate_plan: '',
-                  rate_name: '',
+                  // rate_name: '',
                 });
                 setSearchValue('');
               }}
@@ -506,29 +508,11 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
         <Row style={{ paddingTop: 20 }}>
           {channelData.channels
             .filter((item: any) => {
-              if (channelSearch.room_type === '' && channelSearch.rate_name.trim() === '') {
+              if (channelSearch.room_type === '') {
                 return true;
               }
 
-              let isValidName = true;
-              let isValidRate = true;
-
-              const rateNameSearch = channelSearch.rate_name.trim();
-
-              if (
-                rateNameSearch &&
-                !item.name.toLowerCase().includes(rateNameSearch.toLowerCase())
-              ) {
-                isValidName = false;
-              }
-
-              if (channelSearch.room_type && item.rateId !== channelSearch.room_type) {
-                isValidRate = false;
-              }
-
-              console.log('isValidName ', isValidName, isValidRate);
-
-              return isValidRate && isValidName;
+              return item.rateId === channelSearch.room_type;
             })
             .map((item: any) => {
               const columns = [
