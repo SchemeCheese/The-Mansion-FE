@@ -364,7 +364,7 @@ function ReservationForm({
                     onClick={confirm}
                     style={{ marginLeft: 15 }}
                   >
-                    {t('common.Delete Selected')}
+                    {t('common.Cancel Selected')}
                   </MButton>
                 ) : (
                   <MButton
@@ -375,7 +375,7 @@ function ReservationForm({
                     }}
                     style={{ marginLeft: 15 }}
                   >
-                    {t('common.Delete Selected')}
+                    {t('common.Cancel Selected')}
                   </MButton>
                 )}
                 {!isCreateForm && (
