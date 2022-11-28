@@ -4,13 +4,8 @@ import './layout.css';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  BellOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SearchOutlined,
-} from '@ant-design/icons';
-import { Avatar, Dropdown, Layout, Menu } from 'antd';
+import { BellOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { Avatar, Dropdown, Layout, Menu, Tooltip } from 'antd';
 import { selectBranchHeader, selectUser } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
@@ -154,12 +149,14 @@ function MLayout(props: Props) {
           })}
           <span style={{ fontSize: 13 }}>{breadCrumb}</span>
 
+          <MButton style={{ marginLeft: '36%', fontSize: 12 }}>
+            {branchHeaderName.data.branch?.name}
+          </MButton>
+
           <div style={{ float: 'right', paddingRight: '15px' }}>
-            <MButton style={{ marginRight: 28, fontSize: 12 }}>
-              {branchHeaderName.data.branch?.name}
-            </MButton>
-            <span style={{ marginRight: 28, fontSize: 12 }}>System Date 19/05/2021</span>
-            <SearchOutlined style={{ marginRight: 28 }} />
+            <Tooltip placement="top" title="System Date">
+              <span style={{ marginRight: 28, fontSize: 12, cursor: 'pointer' }}>19/05/2021</span>
+            </Tooltip>
             <BellOutlined style={{ marginRight: 28 }} />
             <Dropdown overlay={menu} placement="bottom" trigger={['click']}>
               <Avatar

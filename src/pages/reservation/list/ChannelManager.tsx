@@ -499,8 +499,8 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
       </Row>
 
       {channelData.is_searching ? (
-        <Row style={{ marginTop: 20, background: 'white' }}>
-          <div style={{ minHeight: 300, textAlign: 'center', width: '100%' }}>
+        <Row style={{ marginTop: 20 }}>
+          <div style={{ textAlign: 'center', width: '100%' }}>
             <Spin style={{ paddingTop: 150 }} />
           </div>
         </Row>
