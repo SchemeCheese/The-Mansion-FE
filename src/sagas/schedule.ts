@@ -17,8 +17,12 @@ import {
 export function* getSearchScheduleSaga({ payload }: ReturnType<typeof searchScheduleAction>) {
   try {
     let data = [];
+
     const payloadWithBranch = {
-      ...payload,
+      start_date: payload.start_date,
+      end_date: payload.end_date,
+      room_number: payload.room_number,
+      room_type: payload.room_type,
       operator_code: 'the_mansion',
       branch_code: 'the_mansion',
       facility_code: 'hotel',
