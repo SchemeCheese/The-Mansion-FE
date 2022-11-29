@@ -383,7 +383,7 @@ function CreateGuestModal({
         onCancel={handleCancel}
         onOk={handleOk}
         style={{
-          top: 20,
+          top: 40,
         }}
         title="Create New Guest"
         visible={isModalVisible}
@@ -409,7 +409,7 @@ function CreateGuestModal({
             span: 23,
           }}
         >
-          <Row>
+          <Row style={{ maxHeight: '70vh', overflow: 'auto' }}>
             <Col span={9}>
               <Form.Item
                 label={t('guest.Guest Type')}

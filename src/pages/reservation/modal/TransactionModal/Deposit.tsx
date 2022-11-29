@@ -117,6 +117,7 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
           currency: 2,
         }}
         layout="vertical"
+        style={{ maxHeight: '70vh', overflow: 'auto' }}
         wrapperCol={{ span: 23 }}
       >
         <Row>

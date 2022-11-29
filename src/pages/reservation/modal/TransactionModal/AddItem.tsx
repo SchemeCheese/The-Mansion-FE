@@ -306,7 +306,7 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
       okText={t('common.Save')}
       onCancel={() => setIsModalOpen(false)}
       onOk={handleAddItem}
-      style={{ top: 20 }}
+      style={{ top: 50 }}
       title={<b>{t('transaction.Add Product / Service')}</b>}
       visible={visible}
       width={1000}
@@ -331,7 +331,7 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
             columns={columns}
             dataSource={convertData(items)}
             pagination={false}
-            scroll={{ y: 330 }}
+            scroll={{ y: 420 }}
           />
         ) : (
           <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />
