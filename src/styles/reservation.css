@@ -226,3 +226,6 @@
 .disk-table .disabled-click .ant-table-cell-row-hover {
   background: #e5e5e5 !important;
 }
+.pointer {
+  cursor: pointer;
+}

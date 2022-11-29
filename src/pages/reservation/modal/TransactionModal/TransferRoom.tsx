@@ -20,6 +20,9 @@ import { useAppSelector } from 'modules/hooks';
 
 import { changeRoomAction, getReservationByFolio, resetReservationByFolio } from 'actions';
 
+import MButton from 'components/MButton';
+import PattonButton from 'components/PattonButton';
+
 import { RootState } from 'types';
 
 const { Option } = Select;
@@ -56,6 +59,7 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visibl
   const { roomingListColumns } = useColumns();
 
   const rowSelection = {
+    selectedRowKeys: selectedReservationDetailRowKeys,
     onChange: (selectedRowKeys: React.Key[]) => {
       setsSlectedReservationDetailRowKeys(selectedRowKeys);
     },
@@ -177,14 +181,12 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visibl
     );
   };
 
-  const handleSearchReservationByFolio = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      dispatch(
-        getReservationByFolio({
-          folio,
-        }),
-      );
-    }
+  const handleSearchReservationByFolio = () => {
+    dispatch(
+      getReservationByFolio({
+        folio,
+      }),
+    );
   };
 
   return (
@@ -210,7 +212,6 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visibl
             >
               <Input
                 onChange={event => setFolio(event.target.value)}
-                onKeyUp={handleSearchReservationByFolio}
                 placeholder="Input Folio ID"
                 value={folio}
               />
@@ -240,6 +241,11 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visibl
                   <Col span={4}>
                     <Input defaultValue="VND" readOnly />
                   </Col>
+                  <Col span={4}>
+                    <PattonButton onClick={event => handleSearchReservationByFolio()}>
+                      {t('common.Search')}
+                    </PattonButton>
+                  </Col>
                 </Row>
               </Input.Group>
             </Form.Item>
@@ -249,7 +255,15 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visibl
       <Table
         columns={roomingListColumns}
         dataSource={roomTotalForm}
+        onRow={record => {
+          return {
+            onClick: () => {
+              setsSlectedReservationDetailRowKeys([record.key]);
+            },
+          };
+        }}
         pagination={false}
+        rowClassName="pointer"
         rowSelection={{
           type: 'radio',
           ...rowSelection,
