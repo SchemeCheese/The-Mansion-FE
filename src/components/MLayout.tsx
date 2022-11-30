@@ -139,8 +139,9 @@ function MLayout(props: Props) {
         <Header
           className="site-layout-background"
           style={{
-            height: 48,
+            height: 50,
             lineHeight: '48px',
+            borderBottom: '1px solid #f5f5f5',
           }}
         >
           {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
@@ -149,7 +150,7 @@ function MLayout(props: Props) {
           })}
           <span style={{ fontSize: 13 }}>{breadCrumb}</span>
 
-          <MButton style={{ marginLeft: '36%', fontSize: 12 }}>
+          <MButton style={{ marginLeft: '31%', fontSize: 12 }}>
             {branchHeaderName.data.branch?.name}
           </MButton>
 

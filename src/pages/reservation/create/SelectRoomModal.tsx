@@ -9,11 +9,11 @@ Main functions : Select Room Modal Componnent
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Col, DatePicker, Input, message, Modal, Row, Select, Table } from 'antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import { formatNumber, randomKey } from 'helpers';
 import moment from 'moment';
-import TableSummary from 'pages/reservation/create/TableSummary';
 import { selectAddReservationDetail } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -21,6 +21,8 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import { addReservationDetail, getReservation, getRoomType, searchRoom } from 'actions';
+
+import PattonButton from 'components/PattonButton';
 
 import { RootState } from 'types';
 
@@ -411,6 +413,38 @@ function SelectRoomModal({
     return current < moment(roomCondition.checkin).endOf('day');
   };
 
+  const handleAddRoom = () => {
+    const dataSelectedRoomsResult: any = [...roomSelected];
+    const groupRooms: any = _.groupBy(searchRoomResultState, 'rate_name');
+
+    _.values(groupRooms).forEach((element: any) => {
+      const reservationDetail = _.sortBy(element, 'date');
+
+      const sum = _.reduce(
+        element,
+        function (memo: any, number_: any) {
+          return memo + parseInt(number_.actual_amount, 10);
+        },
+        0,
+      );
+
+      dataSelectedRoomsResult.push({
+        checkin_date: roomCondition.checkin,
+        checkout_date: roomCondition.checkout,
+        room_type: roomCondition.room_type,
+        room_type_text: _.first(reservationDetail).room_type,
+        rate_name: _.first(reservationDetail).rate_name,
+        quantity,
+        subtotal: formatNumber(sum * quantity),
+        task: '',
+        actual_amount: sum,
+        charges: searchRoomResultState,
+      });
+    });
+
+    setRoomSelected(dataSelectedRoomsResult);
+  };
+
   return (
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
@@ -419,7 +453,7 @@ function SelectRoomModal({
       okText={t('common.Save')}
       onCancel={handleCancel}
       onOk={handleOk}
-      style={{ top: 80, borderRadius: 4 }}
+      style={{ top: 60, borderRadius: 4 }}
       title={<b>{t('message.Select room and rate')}</b>}
       visible={isModalVisible}
       width={1000}
@@ -438,8 +472,6 @@ function SelectRoomModal({
             >
               <Option value="1">{t('reservation.Rate Type.Once')}</Option>
               <Option value="2">{t('reservation.Rate Type.Time')}</Option>
-              <Option value="3">{t('reservation.Rate Type.Extend Time')}</Option>
-              <Option value="4">{t('reservation.Rate Type.Extend Rate')}</Option>
               <Option value="5">{t('reservation.Rate Type.Monthly')}</Option>
             </Select>
           </Col>
@@ -503,20 +535,32 @@ function SelectRoomModal({
               columns={searchRoomColumns}
               dataSource={convertDataSearchRoom(searchRoomResultState)}
               pagination={false}
+              scroll={{ y: 210 }}
               size="small"
               style={{ border: 0 }}
               summary={() => {
                 return (
-                  <TableSummary
-                    quantity={quantity}
-                    roomCondition={roomCondition}
-                    // roomTotalForm={roomTotalForm}
-                    roomSelected={roomSelected}
-                    searchRoomResultState={searchRoomResultState}
-                    // setRoomTotalForm={setRoomTotalForm}
-                    setRoomSelected={setRoomSelected}
-                    totalAmount={totalAmount}
-                  />
+                  <Table.Summary fixed>
+                    <Table.Summary.Row>
+                      <Table.Summary.Cell colSpan={2} index={0}>
+                        {t('reservation.Total Amount for each room (VND)')}
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell colSpan={5} index={1}>
+                        <span style={{ fontSize: 16 }}>{formatNumber(totalAmount)}</span>
+                      </Table.Summary.Cell>
+                      <Table.Summary.Cell index={3}>
+                        <PattonButton
+                          disabled={totalAmount === 0}
+                          onClick={handleAddRoom}
+                          style={{ float: 'right' }}
+                        >
+                          {' '}
+                          <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} />{' '}
+                          <span style={{ marginLeft: -5 }}>{t('common.Add')}</span>
+                        </PattonButton>
+                      </Table.Summary.Cell>
+                    </Table.Summary.Row>
+                  </Table.Summary>
                 );
               }}
             />
@@ -535,6 +579,7 @@ function SelectRoomModal({
               columns={selectedRoomsResultColumns}
               dataSource={roomSelected}
               pagination={false}
+              scroll={{ y: 120 }}
               size="small"
               style={{ border: 0 }}
             />

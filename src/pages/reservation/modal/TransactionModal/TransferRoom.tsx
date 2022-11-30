@@ -20,7 +20,6 @@ import { useAppSelector } from 'modules/hooks';
 
 import { changeRoomAction, getReservationByFolio, resetReservationByFolio } from 'actions';
 
-import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
 import { RootState } from 'types';
