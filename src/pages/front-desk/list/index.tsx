@@ -11,6 +11,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
 
+import { searchReservation } from 'actions';
+
+import ReservationList from './ReservationList';
 import WalkIn from './WalkIn';
 
 const { TabPane } = Tabs;
@@ -20,7 +23,74 @@ function FrontDesk() {
   const { t } = useTranslation();
 
   const handeleActive = (activeKey: string) => {
-    console.log('Handle Active');
+    if (activeKey === '2') {
+      dispatch(
+        searchReservation({
+          current_page: 1,
+          per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
+            ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
+            : 10,
+          booker_info: '',
+          folio_number: '',
+          agent_name: '',
+          status: '',
+          market: '',
+          source: '',
+          checkin_from: '',
+          checkin_to: '',
+          checkout_from: '',
+          checkout_to: '',
+          inhouse: '',
+          type: 'checkin_today',
+        }),
+      );
+    }
+
+    if (activeKey === '3') {
+      dispatch(
+        searchReservation({
+          current_page: 1,
+          per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
+            ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
+            : 10,
+          booker_info: '',
+          folio_number: '',
+          agent_name: '',
+          status: '',
+          market: '',
+          source: '',
+          checkin_from: '',
+          checkin_to: '',
+          checkout_from: '',
+          checkout_to: '',
+          inhouse: '',
+          type: 'inhouse_today',
+        }),
+      );
+    }
+
+    if (activeKey === '4') {
+      dispatch(
+        searchReservation({
+          current_page: 1,
+          per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
+            ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
+            : 10,
+          booker_info: '',
+          folio_number: '',
+          agent_name: '',
+          status: '',
+          market: '',
+          source: '',
+          checkin_from: '',
+          checkin_to: '',
+          checkout_from: '',
+          checkout_to: '',
+          inhouse: '',
+          type: 'checkout_today',
+        }),
+      );
+    }
   };
 
   return (
@@ -37,13 +107,13 @@ function FrontDesk() {
           <WalkIn />
         </TabPane>
         <TabPane key="2" className="content" tab={t('frontDesk.CheckIn Today')}>
-          <p>OK</p>
+          <ReservationList type="checkin_today" />
         </TabPane>
         <TabPane key="3" className="content" tab={t('frontDesk.In House')}>
-          <p>OK</p>
+          <ReservationList type="inhouse_today" />
         </TabPane>
         <TabPane key="4" className="content" tab={t('frontDesk.Checkout Today')}>
-          <p>OK</p>
+          <ReservationList type="checkout_today" />
         </TabPane>
       </Tabs>
     </>

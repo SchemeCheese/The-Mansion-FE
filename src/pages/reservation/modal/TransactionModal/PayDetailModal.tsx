@@ -191,7 +191,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
         <Row>
           <Col span={16} />
           <Col span={8} style={{ marginBottom: 17 }}>
-            <span>{t('common.Total Amount')}</span>
+            <span>{t('common.Total Amount (VND)')}</span>
             <span style={{ fontSize: 16, float: 'right' }}>{payment.total}</span>
           </Col>
         </Row>

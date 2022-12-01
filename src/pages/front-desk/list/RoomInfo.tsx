@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Front Desk
+Developer Name : MinhNV
+Created Date : 01/12/2022
+Updated Date : 02/12/2022
+Main functions : RoomInfo Card
+************************************ */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, Col, Row } from 'antd';
@@ -19,7 +27,7 @@ function RoomInfo({ status }: Props) {
               <svg
                 fill="none"
                 height="24"
-                style={{ position: 'absolute', left: '37%' }}
+                style={{ position: 'absolute', left: '39%' }}
                 viewBox="0 0 24 24"
                 width="24"
                 xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +45,7 @@ function RoomInfo({ status }: Props) {
               <svg
                 fill="none"
                 height="20"
-                style={{ position: 'absolute', left: '37%' }}
+                style={{ position: 'absolute', left: '39%' }}
                 viewBox="0 0 20 20"
                 width="20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -50,9 +58,7 @@ function RoomInfo({ status }: Props) {
                 />
               </svg>
             )}
-            <span style={{ color: '#1D39C4', fontSize: 14, paddingLeft: 20 }}>
-              {t('frontDesk.Check In')}
-            </span>
+            <span style={{ color: '#1D39C4', fontSize: 14 }}>{t('frontDesk.Check In')}</span>
           </>,
         ]}
         style={{ paddingLeft: 8, paddingRight: 8 }}

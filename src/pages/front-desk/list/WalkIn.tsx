@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Checkbox, Col, message, Modal, Pagination, Row, Select } from 'antd';
+import { Checkbox, Col, Pagination, Row, Select } from 'antd';
 
 import MInput from 'components/MInput';
 

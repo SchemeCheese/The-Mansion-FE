@@ -69,7 +69,8 @@
   "Balance": "Balance (VND)",
   "Payment Method": "Payment Method",
   "Paid (VND)": "Paid (VND)",
-  "Total Amount": "Total Amount (VND)",
+  "Total Amount": "Total Amount",
+  "Total Amount (VND)": "Total Amount (VND)",
   "Sub Total": "Sub Total (VND)",
   "Exchange Rate": "Exchange Rate",
   "Amount in VND": "Amount in VND",
@@ -134,5 +135,6 @@
   "Total Guest": "Total Guest",
   "Booking Number": "Booking Number",
   "Remain": "Remain",
-  "Rate": "Rate"
+  "Rate": "Rate",
+  "Guest": "Guest"
 }
