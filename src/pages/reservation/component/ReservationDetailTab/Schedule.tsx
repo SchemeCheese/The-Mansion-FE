@@ -166,6 +166,46 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
     })
     .filter(onlyUnique);
 
+  const views = reservationDetailInfo.resources
+    .filter(function (item: any) {
+      if (!item.view) {
+        return false;
+      }
+
+      if (
+        searchScheduleCondition.room_type &&
+        item.room_type_id !== parseInt(searchScheduleCondition.room_type, 10)
+      ) {
+        return false;
+      }
+
+      return true;
+    })
+    .map((item: any) => {
+      return item.view;
+    })
+    .filter(onlyUnique);
+
+  const directions = reservationDetailInfo.resources
+    .filter(function (item: any) {
+      if (!item.direction) {
+        return false;
+      }
+
+      if (
+        searchScheduleCondition.room_type &&
+        item.room_type_id !== parseInt(searchScheduleCondition.room_type, 10)
+      ) {
+        return false;
+      }
+
+      return true;
+    })
+    .map((item: any) => {
+      return item.direction;
+    })
+    .filter(onlyUnique);
+
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     const bookRoomInfoTemporary = [...bookRoomInfo];
 
@@ -473,6 +513,17 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
       return false;
     }
 
+    if (searchScheduleCondition.view && item.view !== parseInt(searchScheduleCondition.view, 10)) {
+      return false;
+    }
+
+    if (
+      searchScheduleCondition.direction &&
+      item.direction !== parseInt(searchScheduleCondition.direction, 10)
+    ) {
+      return false;
+    }
+
     return true;
   });
 
@@ -574,7 +625,6 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                   };
 
                   setSearchScheduleCondition(searchScheduleConditionTemporary);
-                  // dispatch(searchAvailableScheduleAction(searchScheduleConditionTemporary));
                 }}
                 placeholder={t('reservation.Floor.placeholder')}
               >
@@ -590,17 +640,44 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
           </Col>
           <Col span={8}>
             <Form.Item label={t('reservation.View.title')}>
-              <Select allowClear placeholder={t('reservation.View.placeholder')}>
-                <Option value="sea">{t('reservation.View.Sea View')}</Option>
-                <Option value="mountain">{t('reservation.View.Mountain View')}</Option>
+              <Select
+                allowClear
+                disabled={views.length === 0}
+                onChange={value => {
+                  const searchScheduleConditionTemporary = {
+                    ...searchScheduleCondition,
+                    view: value === '' ? undefined : value,
+                  };
+
+                  setSearchScheduleCondition(searchScheduleConditionTemporary);
+                }}
+                placeholder={t('reservation.View.placeholder')}
+              >
+                {views.includes(1) && <Option value="1">{t('reservation.View.Sea View')}</Option>}
+                {views.includes(2) && (
+                  <Option value="1">{t('reservation.View.Mountain View')}</Option>
+                )}
               </Select>
             </Form.Item>
             <Form.Item label={t('reservation.Direction.title')}>
-              <Select allowClear placeholder={t('reservation.Direction.placeholder')}>
-                <Option value="male">{t('reservation.Direction.North')}</Option>
-                <Option value="female">{t('reservation.Direction.East')}</Option>
-                <Option value="other">{t('reservation.Direction.West')}</Option>
-                <Option value="other">{t('reservation.Direction.South')}</Option>
+              <Select
+                allowClear
+                disabled={directions.length === 0}
+                onChange={value => {
+                  const searchScheduleConditionTemporary = {
+                    ...searchScheduleCondition,
+                    direction: value === '' ? undefined : value,
+                  };
+
+                  setSearchScheduleCondition(searchScheduleConditionTemporary);
+                  // dispatch(searchAvailableScheduleAction(searchScheduleConditionTemporary));
+                }}
+                placeholder={t('reservation.Direction.placeholder')}
+              >
+                {views.includes(1) && <Option value="1">{t('reservation.Direction.North')}</Option>}
+                {views.includes(2) && <Option value="2">{t('reservation.Direction.East')}</Option>}
+                {views.includes(3) && <Option value="3">{t('reservation.Direction.West')}</Option>}
+                {views.includes(4) && <Option value="4">{t('reservation.Direction.South')}</Option>}
               </Select>
             </Form.Item>
           </Col>
