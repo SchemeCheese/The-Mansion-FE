@@ -2,7 +2,7 @@
 Module Name : Reservation
 Developer Name : MinhNV
 Created Date : 03/09/2022
-Updated Date : 18/09/2022
+Updated Date : 04/12/2022
 Main functions : Schedule Tab
 ************************************ */
 
@@ -47,7 +47,7 @@ import {
   getReservationDetail,
   searchAvailableScheduleAction,
 } from 'actions';
-import { getDaysBetweenDates } from 'helpers';
+import { getDaysBetweenDates, onlyUnique } from 'helpers';
 
 interface DemoAppState {
   currentEvents: EventApi[];
@@ -149,6 +149,22 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   };
 
   const [bookRoomInfo, setBookRoomInfo] = useState<any>([]);
+
+  const floors = reservationDetailInfo.resources
+    .filter(function (item: any) {
+      if (
+        searchScheduleCondition.room_type &&
+        item.room_type_id !== parseInt(searchScheduleCondition.room_type, 10)
+      ) {
+        return false;
+      }
+
+      return true;
+    })
+    .map((item: any) => {
+      return item.floor;
+    })
+    .filter(onlyUnique);
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
     const bookRoomInfoTemporary = [...bookRoomInfo];
@@ -485,7 +501,6 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
           <Col span={8}>
             <Form.Item
               label={t('reservation.Checkin')}
-              name="checkin"
               rules={[
                 {
                   required: true,
@@ -506,7 +521,6 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
             <Form.Item
               label={t('reservation.Checkout')}
-              name="checkout"
               rules={[
                 {
                   required: true,
@@ -526,14 +540,15 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label={t('reservation.Room Type.title')} name="room_type">
+            <Form.Item label={t('reservation.Room Type.title')}>
               <Select
                 allowClear
-                defaultValue={searchScheduleCondition.room_type.toString()}
+                defaultValue={searchScheduleCondition.room_type?.toString()}
                 onChange={value => {
                   const searchScheduleConditionTemporary = {
                     ...searchScheduleCondition,
-                    room_type: value ?? '',
+                    room_type: value === '' ? undefined : value,
+                    floor: undefined,
                   };
 
                   setSearchScheduleCondition(searchScheduleConditionTemporary);
@@ -549,13 +564,13 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                 <Option value="6">Royal Family</Option>
               </Select>
             </Form.Item>
-            <Form.Item label={t('reservation.Floor.title')} name="floor">
+            <Form.Item label={t('reservation.Floor.title')}>
               <Select
                 allowClear
                 onChange={value => {
                   const searchScheduleConditionTemporary = {
                     ...searchScheduleCondition,
-                    floor: value ?? '',
+                    floor: value === '' ? undefined : value,
                   };
 
                   setSearchScheduleCondition(searchScheduleConditionTemporary);
@@ -563,27 +578,24 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                 }}
                 placeholder={t('reservation.Floor.placeholder')}
               >
-                <Option value="1">1</Option>
-                <Option value="2">2</Option>
-                <Option value="3">3</Option>
-                <Option value="4">4</Option>
-                <Option value="5">5</Option>
-                <Option value="6">6</Option>
-                <Option value="7">7</Option>
-                <Option value="8">8</Option>
-                <Option value="9">9</Option>
-                <Option value="10">10</Option>
+                {floors.map((item: number) => {
+                  return (
+                    <Option key={item} value={item.toString()}>
+                      {item}
+                    </Option>
+                  );
+                })}
               </Select>
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item label={t('reservation.View.title')} name="view_type">
+            <Form.Item label={t('reservation.View.title')}>
               <Select allowClear placeholder={t('reservation.View.placeholder')}>
                 <Option value="sea">{t('reservation.View.Sea View')}</Option>
                 <Option value="mountain">{t('reservation.View.Mountain View')}</Option>
               </Select>
             </Form.Item>
-            <Form.Item label={t('reservation.Direction.title')} name="direction">
+            <Form.Item label={t('reservation.Direction.title')}>
               <Select allowClear placeholder={t('reservation.Direction.placeholder')}>
                 <Option value="male">{t('reservation.Direction.North')}</Option>
                 <Option value="female">{t('reservation.Direction.East')}</Option>

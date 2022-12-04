@@ -43,3 +43,7 @@ export const getDaysBetweenDates = function (startDate: any, endDate: any) {
 
   return dates;
 };
+
+export const onlyUnique = function (value: any, index: number, self: any) {
+  return self.indexOf(value) === index;
+};

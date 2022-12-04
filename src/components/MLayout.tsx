@@ -85,10 +85,12 @@ function MLayout(props: Props) {
                 position: 'relative',
                 top: -4,
                 paddingLeft: 10,
+                fontFamily: 'Avenir,"Helvetica Neue",Arial,Helvetica,sans-serif',
+                fontWeight: 600,
               }}
             >
               {' '}
-              The Mansions{' '}
+              SClound PMS{' '}
             </span>
           )}
         </div>
