@@ -9,6 +9,12 @@ const MInfoButton: React.FunctionComponent<ButtonProps> = styled(Button)`
   border-color: ${colors.pattron};
   border-radius: 4px;
   color: ${colors.pattron};
+
+  &:hover,
+  &:focus {
+    border-color: ${colors.pattron};
+    color: ${colors.pattron};
+  }
 `;
 
 export default MInfoButton;

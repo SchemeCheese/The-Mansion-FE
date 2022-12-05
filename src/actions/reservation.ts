@@ -8,6 +8,8 @@ import {
   AddReservationDetail,
   BookRoom,
   CancelReservationDetail,
+  CopyReservationFinishPayload,
+  CopyReservationPayload,
   CreateReservationResult,
   DownloadDocxReservationDetail,
   DownloadPDFReservationDetail,
@@ -173,3 +175,13 @@ export const getReservationByFolioFinish = createAction(
 );
 
 export const resetReservationByFolio = createAction(ActionTypes.RESERVATION_GET_BY_FOLIO_RESET);
+
+export const copyReservationAction = createAction(
+  ActionTypes.COPY_RESERVATION,
+  (payload: CopyReservationPayload) => actionPayload(payload),
+);
+
+export const copyReservationActionSuccess = createAction(
+  ActionTypes.COPY_RESERVATION_SUCCESS,
+  (payload: CopyReservationFinishPayload) => actionPayload(payload),
+);

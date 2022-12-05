@@ -36,6 +36,7 @@ export const ReservationEndpoint = {
   RESEND_EMAIL: 'api/v1/reservations',
   DOWNLOAD_PDF: 'api/v1/reservations',
   DOWNLOAD_DOCX: 'api/v1/reservations',
+  COPY_RESERVATION: 'api/v1/reservations',
 };
 
 export const RoomEndpoint = {
