@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { Checkbox, Col, Pagination, Row, Select } from 'antd';
+import { selectGetWalkinRooms } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { getWalkinRoomsAction } from 'actions';
 
 import MInput from 'components/MInput';
 
@@ -10,11 +16,34 @@ const { Option } = Select;
 
 function WalkIn() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const roomsList: any = useAppSelector(selectGetWalkinRooms);
+
+  const [roomFilter, setRoomFilter] = useState({
+    room_number: '',
+    room_type: '',
+    is_smocking: '',
+  });
+
+  useEffect(() => {
+    dispatch(getWalkinRoomsAction(roomFilter));
+  }, []);
 
   return (
-    <Row style={{ background: 'white', padding: 8 }}>
+    <Row style={{ background: 'white', padding: 8, paddingBottom: 20 }}>
       <Col span={24} style={{ paddingLeft: 8, paddingTop: 10 }}>
         <MInput
+          onChange={event => {
+            setRoomFilter({
+              ...roomFilter,
+              room_number: event.target.value,
+            });
+          }}
+          onKeyUp={event => {
+            if (event.code === 'Enter') {
+              dispatch(getWalkinRoomsAction(roomFilter));
+            }
+          }}
           placeholder={t('common.Room Number')}
           style={{
             width: 200,
@@ -22,6 +51,15 @@ function WalkIn() {
         />
         <Select
           allowClear
+          onChange={value => {
+            const newState = {
+              ...roomFilter,
+              room_type: value === undefined ? '' : value,
+            };
+
+            setRoomFilter(newState);
+            dispatch(getWalkinRoomsAction(newState));
+          }}
           placeholder={t('common.Room Type')}
           style={{
             width: 200,
@@ -36,6 +74,15 @@ function WalkIn() {
           <Option value="6">Royal Family</Option>
         </Select>
         <Checkbox
+          onChange={event => {
+            const newState = {
+              ...roomFilter,
+              is_smocking: event.target.checked === true ? '1' : '',
+            };
+
+            setRoomFilter(newState);
+            dispatch(getWalkinRoomsAction(newState));
+          }}
           style={{
             marginLeft: 35,
           }}
@@ -43,15 +90,12 @@ function WalkIn() {
           Smocking Room
         </Checkbox>
       </Col>
-      <RoomInfo />
-      <RoomInfo />
-      <RoomInfo />
-      <RoomInfo />
-      <RoomInfo />
-      <RoomInfo />
-      <Col span={24} style={{ paddingTop: 20 }}>
+      {roomsList.items.map((item: any) => {
+        return <RoomInfo item={item} />;
+      })}
+      {/* <Col span={24} style={{ paddingTop: 20 }}>
         <Pagination defaultCurrent={1} style={{ float: 'right', paddingRight: 8 }} total={50} />
-      </Col>
+      </Col> */}
     </Row>
   );
 }

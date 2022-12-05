@@ -9,6 +9,8 @@ import { ActionTypes } from 'literals';
 import {
   getRoomsActionFinish,
   getRoomTypeFinish,
+  getWalkinRoomsAction,
+  getWalkinRoomsActionFinish,
   logOut,
   searchRoom,
   searchRoomFinish,
@@ -133,10 +135,46 @@ export function* getRoomsSaga() {
   }
 }
 
+export function* getWalkinRoomsSaga({ payload }: ReturnType<typeof getWalkinRoomsAction>) {
+  try {
+    let items = [];
+    const newPayload = {
+      ...payload,
+      operator_code: 'the_mansion',
+      branch_code: 'the_mansion',
+      facility_code: 'hotel',
+    };
+
+    const query = new URLSearchParams(Object(newPayload)).toString();
+
+    ({ items } = yield call(request, `${apiEndPoint(RoomEndpoint.GET_ROOM)}?${query}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }));
+
+    yield put(
+      getWalkinRoomsActionFinish({
+        items,
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot get rooms!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.ROOM_SEARCH, getSearchRoomnSaga),
     takeLatest(ActionTypes.ROOM_TYPE_GET, getRoomTypeSaga),
     takeLatest(ActionTypes.GET_ROOMS, getRoomsSaga),
+    takeLatest(ActionTypes.GET_WALKIN_ROOMS, getWalkinRoomsSaga),
   ]);
 }

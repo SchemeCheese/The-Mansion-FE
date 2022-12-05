@@ -34,6 +34,7 @@ import getReservationDetail, { reservationDetailState } from './getReservationDe
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
 import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
+import getWalkinRooms, { getWalkinRoomsState } from './getWalkinRooms';
 import github, { githubState } from './github';
 import product, { productSearchState } from './product';
 import readNotification, { readNotificationState } from './readNotification';
@@ -59,6 +60,7 @@ export const initialState = {
   alerts: alertsState,
   app: appState,
   github: githubState,
+  getWalkinRooms: getWalkinRoomsState,
   user: userState,
   reservation: reservationSearchState,
   createReservation: createReservationState,
@@ -116,6 +118,7 @@ export default {
   ...updateReservation,
   ...searchRoom,
   ...getReservationDetail,
+  ...getWalkinRooms,
   ...product,
   ...getReservationNumber,
   ...getRoomType,

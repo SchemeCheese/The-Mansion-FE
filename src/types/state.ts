@@ -287,6 +287,14 @@ export interface GetRoomState {
   items: Array<Record<string, any>>;
 }
 
+export interface GetWalkinRoomState {
+  is_searching: boolean;
+  is_smocking: string;
+  items: Array<Record<string, any>>;
+  room_number: string;
+  room_type: string;
+}
+
 export interface LanguageCodeState {
   is_searching: boolean;
   items: Array<Record<string, any>>;
@@ -464,6 +472,7 @@ export interface RootState {
   getReservationNumber: ReservationNumberState;
   getRoomType: RoomTypeState;
   getRooms: GetRoomState;
+  getWalkinRooms: GetWalkinRoomState;
   github: GitHubState;
   notifications: NotificationsState;
   product: ProductSearchState;

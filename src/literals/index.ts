@@ -88,6 +88,8 @@ export const ActionTypes = keyMirror({
   GET_LANGUAGE_CODE_FINISH: undefined,
   GET_ROOMS: undefined,
   GET_ROOMS_FINISH: undefined,
+  GET_WALKIN_ROOMS: undefined,
+  GET_WALKIN_ROOMS_FINISH: undefined,
   UPDATE_ROOM_AVAILABLE_NUMBER: undefined,
   UPDATE_ROOM_AVAILABLE_NUMBER_SUCCESS: undefined,
   RESERVATION_DETAIL_DOWNLOAD_PDF: undefined,
