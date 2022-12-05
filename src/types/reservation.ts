@@ -191,3 +191,11 @@ export interface DownloadDocxReservationDetailPayload {
 export interface DownloadDocxReservationDetail {
   payload: DownloadDocxReservationDetailPayload;
 }
+
+export interface CopyReservationPayload {
+  reservation_id: string;
+}
+
+export interface CopyReservationFinishPayload {
+  new_reservation_id: string;
+}

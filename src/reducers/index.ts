@@ -8,6 +8,7 @@ import cancelReservationDetail, { cancelReservationDetailState } from './cancelR
 import changeDisk, { changeDiskState } from './changeDisk';
 import changeRoom, { changeRoomState } from './changeRoom';
 import channel, { channelState } from './channel';
+import copyReservation, { copyReservationState } from './copyReservation';
 import createGuest, { createGuestState } from './createGuest';
 import createPayment, { createPaymentState } from './createPayment';
 import createReservation, { createReservationState } from './createReservation';
@@ -57,6 +58,7 @@ export const initialState = {
   user: userState,
   reservation: reservationSearchState,
   createReservation: createReservationState,
+  copyReservation: copyReservationState,
   updateReservation: updateReservationState,
   searchRoom: roomSearchState,
   getReservationDetail: reservationDetailState,
@@ -103,6 +105,7 @@ export default {
   ...user,
   ...reservation,
   ...createReservation,
+  ...copyReservation,
   ...updateReservation,
   ...searchRoom,
   ...getReservationDetail,

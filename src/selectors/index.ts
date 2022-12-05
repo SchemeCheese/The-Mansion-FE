@@ -166,3 +166,8 @@ export const selectChangeRoom = createSelector(
   (state: RootState) => state.changeRoom,
   changeRoom => changeRoom,
 );
+
+export const selectCopyReservation = createSelector(
+  (state: RootState) => state.copyReservation,
+  copyReservation => copyReservation,
+);
