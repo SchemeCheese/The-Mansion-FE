@@ -83,6 +83,7 @@
   "Product": "Product",
   "Disk": "Disk",
   "Updated price": "Updated price (VND)",
+  "Updated Price": "Updated Price",
   "Action": "Action",
   "Add Discount": "Add Discount",
   "Discount Type": "Discount Type",
@@ -135,6 +136,17 @@
   "Total Guest": "Total Guest",
   "Booking Number": "Booking Number",
   "Remain": "Remain",
+  "Guest": "Guest",
+  "Booker Information": "Booker Information",
+  "Adult": "Adult",
+  "Child": "Child",
+  "Checkin Date": "Checkin Date",
+  "Checkin Time": "Checkin Time",
+  "Checkout Date": "Checkout Date",
+  "Checkout Time": "Checkout Time",
   "Rate": "Rate",
-  "Guest": "Guest"
+  "Content": "Content",
+  "Smocking Room": "Smocking Room",
+  "Smoking": "Smoking",
+  "No Smoking": "No Smoking"
 }

@@ -11,10 +11,12 @@ import { useTranslation } from 'react-i18next';
 import { Card, Col, Row } from 'antd';
 
 interface Props {
+  isModalVisible: boolean;
   item: any;
+  setIsModalVisible: (value: boolean) => void;
 }
 
-function RoomInfo({ item }: Props) {
+function RoomInfo({ isModalVisible, item, setIsModalVisible }: Props) {
   const { t } = useTranslation();
 
   return (
@@ -45,7 +47,8 @@ function RoomInfo({ item }: Props) {
               <svg
                 fill="none"
                 height="20"
-                style={{ position: 'absolute', left: '37%' }}
+                onClick={() => setIsModalVisible(true)}
+                style={{ position: 'relative', top: 4, marginRight: -10 }}
                 viewBox="0 0 20 20"
                 width="20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +61,11 @@ function RoomInfo({ item }: Props) {
                 />
               </svg>
             )}
-            <span style={{ color: '#1D39C4', fontSize: 14, paddingLeft: 20 }}>
+            <span
+              aria-hidden="true"
+              onClick={() => setIsModalVisible(true)}
+              style={{ color: '#1D39C4', fontSize: 14, paddingLeft: 20 }}
+            >
               {t('frontDesk.Check In')}
             </span>
           </>,

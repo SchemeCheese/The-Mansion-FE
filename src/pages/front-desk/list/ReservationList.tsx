@@ -344,12 +344,6 @@ function ReservationList({ type }: Props) {
         />
       </Col>
       <Col span={24} style={{ paddingTop: 16 }}>
-        <PattonButton onClick={() => navigate(`/reservation/create`)}>
-          {' '}
-          <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> {t('common.New')}
-        </PattonButton>
-      </Col>
-      <Col span={24} style={{ paddingTop: 16 }}>
         {!isSearching ? (
           <>
             <Table
