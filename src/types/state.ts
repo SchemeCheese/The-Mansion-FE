@@ -288,11 +288,13 @@ export interface GetRoomState {
 }
 
 export interface GetWalkinRoomState {
+  current_page: number;
   is_searching: boolean;
   is_smocking: string;
   items: Array<Record<string, any>>;
   room_number: string;
   room_type: string;
+  total: number;
 }
 
 export interface LanguageCodeState {

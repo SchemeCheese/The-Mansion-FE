@@ -11,13 +11,68 @@ import { useTranslation } from 'react-i18next';
 import { Card, Col, Row } from 'antd';
 
 interface Props {
-  isModalVisible: boolean;
   item: any;
   setIsModalVisible: (value: boolean) => void;
 }
 
-function RoomInfo({ isModalVisible, item, setIsModalVisible }: Props) {
+const roomStatusMapping = {
+  '1': (
+    <svg
+      fill="none"
+      height="20"
+      style={{ position: 'absolute', top: 4 }}
+      viewBox="0 0 20 20"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clipRule="evenodd"
+        d="M10 0C4.57143 0 0 4.57143 0 10C0 15.4286 4.57143 20 10 20C15.4286 20 20 15.4286 20 10C20 4.57143 15.4286 0 10 0ZM5.20437 10.7938C4.93237 10.5043 4.93181 10.0356 5.2031 9.74529C5.47594 9.45334 5.9201 9.45251 6.19391 9.74343L8.33618 12.0196L13.8027 6.21801C14.0754 5.92864 14.5167 5.92715 14.7911 6.21466C15.0684 6.50524 15.0698 6.98021 14.7943 7.27269L8.54158 13.9098C8.42815 14.0302 8.24434 14.0301 8.13108 13.9095L5.20437 10.7938Z"
+        fill="#52C41A"
+        fillRule="evenodd"
+      />
+    </svg>
+  ),
+  '2': (
+    <svg
+      fill="none"
+      height="20"
+      style={{ position: 'absolute', top: 4 }}
+      viewBox="0 0 20 20"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clipRule="evenodd"
+        d="M0 10C0 4.57143 4.57143 0 10 0C15.5228 0 20 4.47715 20 10C20 15.4286 15.4286 20 10 20C4.57143 20 0 15.4286 0 10ZM10 3C6.13401 3 3 6.13401 3 10C3 13.866 6.13401 17 10 17C13.866 17 17 13.866 17 10H10V3Z"
+        fill="#9254DE"
+        fillRule="evenodd"
+      />
+    </svg>
+  ),
+  '3': (
+    <svg
+      fill="none"
+      height="20"
+      style={{ position: 'absolute', top: 4 }}
+      viewBox="0 0 20 20"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        clipRule="evenodd"
+        d="M0 10C0 4.57143 4.57143 0 10 0C15.4286 0 20 4.57143 20 10C20 15.4286 15.4286 20 10 20C4.57143 20 0 15.4286 0 10ZM9 5C9 4.44772 9.44771 4 10 4C10.5523 4 11 4.44772 11 5V11C11 11.5523 10.5523 12 10 12C9.44771 12 9 11.5523 9 11V5ZM9 15C9 14.4477 9.44771 14 10 14C10.5523 14 11 14.4477 11 15C11 15.5523 10.5523 16 10 16C9.44771 16 9 15.5523 9 15Z"
+        fill="#FAAD14"
+        fillOpacity="0.85"
+        fillRule="evenodd"
+      />
+    </svg>
+  ),
+};
+
+function RoomInfo({ item, setIsModalVisible }: Props) {
   const { t } = useTranslation();
+  const isReadyItem = item.status?.toString() === '1';
 
   return (
     <Col span={8} style={{ paddingTop: 25, paddingLeft: 8, paddingRight: 8 }}>
@@ -25,7 +80,7 @@ function RoomInfo({ isModalVisible, item, setIsModalVisible }: Props) {
         actions={[
           <>
             {' '}
-            {item.status ? (
+            {!isReadyItem ? (
               <svg
                 fill="none"
                 height="24"
@@ -61,13 +116,22 @@ function RoomInfo({ isModalVisible, item, setIsModalVisible }: Props) {
                 />
               </svg>
             )}
-            <span
-              aria-hidden="true"
-              onClick={() => setIsModalVisible(true)}
-              style={{ color: '#1D39C4', fontSize: 14, paddingLeft: 20 }}
-            >
-              {t('frontDesk.Check In')}
-            </span>
+            {isReadyItem ? (
+              <span
+                aria-hidden="true"
+                onClick={() => setIsModalVisible(true)}
+                style={{ color: '#1D39C4', fontSize: 14, paddingLeft: 20 }}
+              >
+                {t('frontDesk.Check In')}
+              </span>
+            ) : (
+              <span
+                aria-hidden="true"
+                style={{ color: 'rgba(0, 0, 0, 0.45)', fontSize: 14, paddingLeft: 20 }}
+              >
+                {t('frontDesk.Check In')}
+              </span>
+            )}
           </>,
         ]}
         style={{ paddingLeft: 8, paddingRight: 8 }}
@@ -100,22 +164,9 @@ function RoomInfo({ isModalVisible, item, setIsModalVisible }: Props) {
           <Col span={12}>
             <div style={{ float: 'right', paddingTop: 4 }}>
               <span style={{ paddingRight: 10 }}>{t('frontDesk.Dirty')}</span>
-              <svg
-                fill="none"
-                height="20"
-                style={{ position: 'absolute', top: 4 }}
-                viewBox="0 0 20 20"
-                width="20"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  clipRule="evenodd"
-                  d="M0 10C0 4.57143 4.57143 0 10 0C15.4286 0 20 4.57143 20 10C20 15.4286 15.4286 20 10 20C4.57143 20 0 15.4286 0 10ZM9 5C9 4.44772 9.44771 4 10 4C10.5523 4 11 4.44772 11 5V11C11 11.5523 10.5523 12 10 12C9.44771 12 9 11.5523 9 11V5ZM9 15C9 14.4477 9.44771 14 10 14C10.5523 14 11 14.4477 11 15C11 15.5523 10.5523 16 10 16C9.44771 16 9 15.5523 9 15Z"
-                  fill="#FAAD14"
-                  fillOpacity="0.85"
-                  fillRule="evenodd"
-                />
-              </svg>
+              {item.state.toString() === '1' && roomStatusMapping['1']}
+              {item.state.toString() === '2' && roomStatusMapping['2']}
+              {item.state.toString() === '3' && roomStatusMapping['3']}
             </div>
           </Col>
           <Col span={12} style={{ paddingTop: 20 }}>

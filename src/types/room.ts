@@ -18,9 +18,11 @@ export interface RoomTypeResult {
 
 export interface GetRoomResult {
   items: Array<Record<string, any>>;
+  total: number;
 }
 
 export interface SearchWalkinRoomFilter {
+  current_page: number;
   is_smocking: string;
   room_number: string;
   room_type: string;

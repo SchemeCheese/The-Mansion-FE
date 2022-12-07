@@ -104,6 +104,7 @@ export function* getRoomsSaga() {
     let items = [];
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
+    let total = 0;
     const payload = {
       operator_code,
       branch_code,
@@ -112,7 +113,7 @@ export function* getRoomsSaga() {
 
     const query = new URLSearchParams(Object(payload)).toString();
 
-    ({ items } = yield call(request, `${apiEndPoint(RoomEndpoint.GET_ROOM)}?${query}`, {
+    ({ items, total } = yield call(request, `${apiEndPoint(RoomEndpoint.GET_ROOM)}?${query}`, {
       method: 'GET',
       headers: headerWithAuthorization(),
     }));
@@ -120,6 +121,7 @@ export function* getRoomsSaga() {
     yield put(
       getRoomsActionFinish({
         items,
+        total,
       }),
     );
   } catch (error: any) {
@@ -138,16 +140,18 @@ export function* getRoomsSaga() {
 export function* getWalkinRoomsSaga({ payload }: ReturnType<typeof getWalkinRoomsAction>) {
   try {
     let items = [];
+    let total = 0;
     const newPayload = {
       ...payload,
       operator_code: 'the_mansion',
       branch_code: 'the_mansion',
       facility_code: 'hotel',
+      per_page: 9,
     };
 
     const query = new URLSearchParams(Object(newPayload)).toString();
 
-    ({ items } = yield call(request, `${apiEndPoint(RoomEndpoint.GET_ROOM)}?${query}`, {
+    ({ items, total } = yield call(request, `${apiEndPoint(RoomEndpoint.GET_ROOM)}?${query}`, {
       method: 'GET',
       headers: headerWithAuthorization(),
     }));
@@ -155,6 +159,7 @@ export function* getWalkinRoomsSaga({ payload }: ReturnType<typeof getWalkinRoom
     yield put(
       getWalkinRoomsActionFinish({
         items,
+        total,
       }),
     );
   } catch (error: any) {

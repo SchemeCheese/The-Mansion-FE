@@ -25,9 +25,20 @@ function WalkIn() {
     room_number: '',
     room_type: '',
     is_smocking: '',
+    current_page: 1,
   });
 
   const [isCheckinModalVisible, setIsCheckinModalVisible] = useState(false);
+
+  const onChangeCurrentPage = (page: number) => {
+    const newState = {
+      ...roomFilter,
+      current_page: page,
+    };
+
+    setRoomFilter(newState);
+    dispatch(getWalkinRoomsAction(newState));
+  };
 
   useEffect(() => {
     dispatch(getWalkinRoomsAction(roomFilter));
@@ -102,16 +113,16 @@ function WalkIn() {
           </Checkbox>
         </Col>
         {roomsList.items.map((item: any) => {
-          return (
-            <RoomInfo
-              isModalVisible={isCheckinModalVisible}
-              item={item}
-              setIsModalVisible={setIsCheckinModalVisible}
-            />
-          );
+          return <RoomInfo item={item} setIsModalVisible={setIsCheckinModalVisible} />;
         })}
         <Col span={24} style={{ paddingTop: 20 }}>
-          <Pagination defaultCurrent={1} style={{ float: 'right', paddingRight: 8 }} total={50} />
+          <Pagination
+            current={roomFilter.current_page}
+            onChange={onChangeCurrentPage}
+            pageSize={9}
+            style={{ float: 'right', paddingRight: 8 }}
+            total={roomsList.total}
+          />
         </Col>
       </Row>
     </>

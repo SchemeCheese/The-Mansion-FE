@@ -10,6 +10,8 @@ export const getWalkinRoomsState = {
   is_smocking: '',
   is_searching: false,
   items: [],
+  current_page: 1,
+  total: 0,
 };
 
 export default {
@@ -19,11 +21,13 @@ export default {
         draft.room_number = payload.room_number;
         draft.room_type = payload.room_type;
         draft.is_smocking = payload.is_smocking;
+        draft.current_page = payload.current_page;
 
         draft.is_searching = true;
       })
       .addCase(getWalkinRoomsActionFinish, (draft, { payload }) => {
         draft.is_searching = false;
+        draft.total = payload.total;
         draft.items = payload.items;
       });
   }),
