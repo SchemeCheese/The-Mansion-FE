@@ -196,3 +196,8 @@ export const selectGetWalkinRooms = createSelector(
   (state: RootState) => state.getWalkinRooms,
   getWalkinRooms => getWalkinRooms,
 );
+
+export const selectReservationRoomsState = createSelector(
+  (state: RootState) => state.reservationRooms,
+  reservationRooms => reservationRooms,
+);

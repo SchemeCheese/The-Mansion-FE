@@ -119,6 +119,8 @@ export const ActionTypes = keyMirror({
   GET_NOTIFICATION_FINISH: undefined,
   READ_NOTIFICATION: undefined,
   READ_NOTIFICATION_FINISH: undefined,
+  GET_RESERVATION_ROOMS: undefined,
+  GET_RESERVATION_ROOMS_FINISH: undefined,
 });
 
 export const STATUS: Status = {

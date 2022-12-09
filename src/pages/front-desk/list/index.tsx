@@ -11,9 +11,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
 
-import { searchReservation } from 'actions';
+import { getReservationRoomsAction, searchReservation } from 'actions';
 
 import ReservationList from './ReservationList';
+import ReservationRoomList from './ReservationRoomList';
 import WalkIn from './WalkIn';
 
 const { TabPane } = Tabs;
@@ -48,22 +49,23 @@ function FrontDesk() {
 
     if (activeKey === '3') {
       dispatch(
-        searchReservation({
-          current_page: 1,
-          per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
-            ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
-            : 10,
-          booker_info: '',
-          folio_number: '',
-          agent_name: '',
-          status: '',
-          market: '',
-          source: '',
-          checkin_from: '',
-          checkin_to: '',
-          checkout_from: '',
-          checkout_to: '',
-          inhouse: '',
+        getReservationRoomsAction({
+          checkout_today: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
+          inhouse_today: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
           type: 'inhouse_today',
         }),
       );
@@ -71,22 +73,23 @@ function FrontDesk() {
 
     if (activeKey === '4') {
       dispatch(
-        searchReservation({
-          current_page: 1,
-          per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
-            ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
-            : 10,
-          booker_info: '',
-          folio_number: '',
-          agent_name: '',
-          status: '',
-          market: '',
-          source: '',
-          checkin_from: '',
-          checkin_to: '',
-          checkout_from: '',
-          checkout_to: '',
-          inhouse: '',
+        getReservationRoomsAction({
+          checkout_today: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
+          inhouse_today: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
           type: 'checkout_today',
         }),
       );
@@ -110,10 +113,10 @@ function FrontDesk() {
           <ReservationList type="checkin_today" />
         </TabPane>
         <TabPane key="3" className="content" tab={t('frontDesk.In House')}>
-          <ReservationList type="inhouse_today" />
+          <ReservationRoomList type="inhouse_today" />
         </TabPane>
         <TabPane key="4" className="content" tab={t('frontDesk.Checkout Today')}>
-          <ReservationList type="checkout_today" />
+          <ReservationRoomList type="checkout_today" />
         </TabPane>
       </Tabs>
     </>

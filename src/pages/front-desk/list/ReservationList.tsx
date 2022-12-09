@@ -10,7 +10,6 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { PlusOutlined } from '@ant-design/icons';
 import { Col, Pagination, Row, Spin, Table, Tag } from 'antd';
 import { formatNumber } from 'helpers';
 import { selectReservationSearch } from 'selectors';
@@ -19,8 +18,6 @@ import useTreeChanges from 'tree-changes-hook';
 import { useAppSelector } from 'modules/hooks';
 
 import { searchReservation } from 'actions';
-
-import PattonButton from 'components/PattonButton';
 
 import { RootState } from 'types';
 
@@ -60,10 +57,6 @@ function ReservationList({ type }: Props) {
   const currentPage: any = useSelector<RootState>(({ reservation }) => reservation.current_page);
   const searchReservationData = useAppSelector(selectReservationSearch);
   const { changed: searchReservationChanged } = useTreeChanges(searchReservationData);
-
-  useEffect(() => {
-    dispatch(searchReservation(searchCondition));
-  }, []);
 
   useEffect(() => {
     if (searchReservationChanged('is_searching', false)) {

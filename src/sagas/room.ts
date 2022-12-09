@@ -7,6 +7,8 @@ import { RoomEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import {
+  getReservationRoomsAction,
+  getReservationRoomsActionFinish,
   getRoomsActionFinish,
   getRoomTypeFinish,
   getWalkinRoomsAction,
@@ -175,11 +177,68 @@ export function* getWalkinRoomsSaga({ payload }: ReturnType<typeof getWalkinRoom
   }
 }
 
+export function* getReservationRoomSaga({ payload }: ReturnType<typeof getReservationRoomsAction>) {
+  try {
+    let items = [];
+    let total = 0;
+
+    const newPayload =
+      payload.type === 'checkout_today'
+        ? {
+            ...payload.checkout_today,
+            type: 'checkout_today',
+            operator_code: 'the_mansion',
+            branch_code: 'the_mansion',
+            facility_code: 'hotel',
+            per_page: 10,
+          }
+        : {
+            ...payload.inhouse_today,
+            type: 'inhouse_today',
+            operator_code: 'the_mansion',
+            branch_code: 'the_mansion',
+            facility_code: 'hotel',
+            per_page: 10,
+          };
+
+    const query = new URLSearchParams(Object(newPayload)).toString();
+
+    ({ items, total } = yield call(
+      request,
+      `${apiEndPoint(RoomEndpoint.GET_RESERVATION_ROOM)}?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    yield put(
+      getReservationRoomsActionFinish({
+        data: {
+          items,
+          total,
+        },
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot get rooms!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.ROOM_SEARCH, getSearchRoomnSaga),
     takeLatest(ActionTypes.ROOM_TYPE_GET, getRoomTypeSaga),
     takeLatest(ActionTypes.GET_ROOMS, getRoomsSaga),
     takeLatest(ActionTypes.GET_WALKIN_ROOMS, getWalkinRoomsSaga),
+    takeLatest(ActionTypes.GET_RESERVATION_ROOMS, getReservationRoomSaga),
   ]);
 }

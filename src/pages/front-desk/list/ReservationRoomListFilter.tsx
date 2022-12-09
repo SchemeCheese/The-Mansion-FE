@@ -1,39 +1,63 @@
 /** ***********************************
 Module Name : Front Desk
 Developer Name : MinhNV
-Created Date : 01/12/2022
-Updated Date : 02/12/2022
-Main functions : Reservation List Filter
+Created Date : 10/12/2022
+Updated Date : 11/12/2022
+Main functions : Reservation Room List Filter
 ************************************ */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Input, Row, Select } from 'antd';
 import { t } from 'i18next';
+import { selectReservationRoomsState } from 'selectors';
 
-import { getAgentInfos, searchReservation } from 'actions';
+import { useAppSelector } from 'modules/hooks';
+
+import { getAgentInfos, getReservationRoomsAction } from 'actions';
 
 import MInput from 'components/MInput';
 
-import { ReservationSearch, RootState } from 'types';
+import { RootState } from 'types';
 
 interface Props {
   searchCondition: any;
   setSearchCondition: (data: any) => void;
+  type: string;
 }
 
 const { Option } = Select;
 
-function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
+function ReservationRoomListFilter({ searchCondition, setSearchCondition, type }: Props) {
   const dispatch = useDispatch();
+  const [showMore, setShowMore] = useState(false);
+  const reservationRoomsData: any = useAppSelector(selectReservationRoomsState);
 
-  const fetchSearchReservation = (data: ReservationSearch) => {
-    dispatch(searchReservation(data));
+  const fetchSearchReservationRooms = (data: any) => {
+    if (type === 'inhouse_today') {
+      dispatch(
+        getReservationRoomsAction({
+          checkout_today: reservationRoomsData.checkout_today,
+          inhouse_today: data,
+          type: 'inhouse_today',
+        }),
+      );
+    }
+
+    if (type === 'checkout_today') {
+      dispatch(
+        getReservationRoomsAction({
+          inhouse_today: reservationRoomsData.inhouse_today,
+          checkout_today: data,
+          type: 'checkout_today',
+        }),
+      );
+    }
   };
 
   const searchInput = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
-      fetchSearchReservation({
+      fetchSearchReservationRooms({
         ...searchCondition,
         current_page: 1,
       });
@@ -54,7 +78,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
     };
 
     setSearchCondition(stateTemporary);
-    fetchSearchReservation(stateTemporary);
+    fetchSearchReservationRooms(stateTemporary);
   };
 
   const agentInfos: any = useSelector<RootState>(
@@ -79,7 +103,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
             onChange={e =>
               setSearchCondition({
                 ...searchCondition,
-                folio_number: e.target.value,
+                room_no: e.target.value,
               })
             }
             onKeyUp={event => searchInput(event)}
@@ -107,17 +131,15 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
             placeholder="Status"
             style={{ width: '100%', fontSize: 12 }}
           >
-            <Option value="reserved">Reserved</Option>
             <Option value="inhouse">Inhouse</Option>
             <Option value="no_show">No Show</Option>
             <Option value="canceled">Canceled</Option>
-            <Option value="checked_out">Checked Out</Option>
           </Select>
         </Col>
         <Col span={6}>
           <Select
             allowClear
-            onChange={value => searchSelect(value, 'source')}
+            onChange={value => searchSelect(value, 'source_id')}
             placeholder={t('common.Source')}
             style={{ width: '100%', fontSize: 12 }}
           >
@@ -129,4 +151,4 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
   );
 }
 
-export default ReservationListFilter;
+export default ReservationRoomListFilter;

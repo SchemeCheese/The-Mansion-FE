@@ -6,6 +6,8 @@ import { ActionTypes } from 'literals';
 
 import {
   GetRoomResult,
+  ReservationRoomFilter,
+  ReservationRoomResult,
   RoomSearch,
   RoomSearchResult,
   RoomTypeResult,
@@ -44,4 +46,14 @@ export const getWalkinRoomsAction = createAction(
 export const getWalkinRoomsActionFinish = createAction(
   ActionTypes.GET_WALKIN_ROOMS_FINISH,
   (payload: GetRoomResult) => actionPayload(payload),
+);
+
+export const getReservationRoomsAction = createAction(
+  ActionTypes.GET_RESERVATION_ROOMS,
+  (payload: ReservationRoomFilter) => actionPayload(payload),
+);
+
+export const getReservationRoomsActionFinish = createAction(
+  ActionTypes.GET_RESERVATION_ROOMS_FINISH,
+  (payload: ReservationRoomResult) => actionPayload(payload),
 );

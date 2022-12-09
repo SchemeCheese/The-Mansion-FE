@@ -42,6 +42,7 @@ export const RoomEndpoint = {
   SEARCH: 'api/v1/check-room-info',
   SEARCH_TYPE: 'api/v1/room-types',
   GET_ROOM: 'api/v1/rooms',
+  GET_RESERVATION_ROOM: 'api/v1/get-reservation-rooms',
 };
 
 export const ProductEndpoint = {

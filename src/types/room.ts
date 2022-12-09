@@ -27,3 +27,22 @@ export interface SearchWalkinRoomFilter {
   room_number: string;
   room_type: string;
 }
+
+interface ReservationRoomItemFilter {
+  booker_info: string;
+  current_page: number;
+  per_page: number;
+  room_no: string;
+  source_id: string;
+  status: string;
+}
+
+export interface ReservationRoomFilter {
+  checkout_today: ReservationRoomItemFilter;
+  inhouse_today: ReservationRoomItemFilter;
+  type: string;
+}
+
+export interface ReservationRoomResult {
+  data: any;
+}

@@ -444,6 +444,23 @@ export interface BranchInfoState {
   operator_code: string;
 }
 
+interface ReservationRoomItemFilter {
+  booker_info: string;
+  current_page: number;
+  per_page: number;
+  room_no: string;
+  source_id: string;
+  status: string;
+}
+
+export interface ReservationRoomState {
+  checkout_today: ReservationRoomItemFilter;
+  data: any;
+  inhouse_today: ReservationRoomItemFilter;
+  is_searching: boolean;
+  type: string;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -481,6 +498,7 @@ export interface RootState {
   removeGuest: RemoveGuestState;
   resendEmailReservation: ResendEmailReservationState;
   reservation: ReservationSearchState;
+  reservationRooms: ReservationRoomState;
   searchAvailableSchedule: SearchAvailableScheduleState;
   searchRoom: RoomSearchState;
   searchSchedule: SearchScheduleState;
