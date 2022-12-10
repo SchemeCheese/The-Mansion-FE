@@ -14,6 +14,7 @@ import { Card, Checkbox, Col, Form, Modal, Row, Select, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
 import ReservationDetailCard from 'pages/reservation/component/ReservationDetailCard';
+import CheckinModal from 'pages/reservation/create/Checkin';
 import _ from 'underscore';
 
 import { colors } from 'modules/theme';
@@ -147,6 +148,12 @@ function ReservationForm({
         </Option>
       ));
   }
+
+  const [isModalCheckinOpen, setIsModalCheckinOpen] = useState(false);
+
+  const showModalCheckin = () => {
+    setIsModalCheckinOpen(true);
+  };
 
   return (
     <Form
@@ -386,6 +393,13 @@ function ReservationForm({
                     {t('common.Print Registration Card')}
                   </MButton>
                 )}
+                <PattonButton onClick={showModalCheckin} style={{ marginLeft: 15 }} type="primary">
+                  {t('common.Checkin')}
+                </PattonButton>
+                <CheckinModal
+                  openModalCheckin={isModalCheckinOpen}
+                  setIsModalCheckinOpen={setIsModalCheckinOpen}
+                />
               </Col>
               <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
                 <Table
