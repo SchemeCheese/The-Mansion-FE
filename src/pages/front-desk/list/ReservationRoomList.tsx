@@ -168,6 +168,7 @@ function ReservationRoomList({ type }: Props) {
           paid: item.total_paid,
           remain: item.total_remain,
           notes: item.note,
+          reservation_id: item.reservation_id,
         };
       });
     }
@@ -196,7 +197,7 @@ function ReservationRoomList({ type }: Props) {
               dataSource={tableData}
               onRow={(record: any) => {
                 return {
-                  onClick: () => navigate(`/reservation/${record.id}`),
+                  onClick: () => navigate(`/reservation/${record.reservation_id}`),
                 };
               }}
               pagination={false}
