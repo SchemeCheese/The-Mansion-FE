@@ -2,6 +2,7 @@ import { all, fork } from 'redux-saga/effects';
 
 import agentInfos from './agentInfos';
 import branchHeader from './branchHeader';
+import branchs from './branchs';
 import channel from './channel';
 import file from './file';
 import github from './github';
@@ -36,5 +37,6 @@ export default function* root() {
     fork(file),
     fork(languageCode),
     fork(branchHeader),
+    fork(branchs),
   ]);
 }

@@ -166,3 +166,13 @@ export const selectChangeRoom = createSelector(
   (state: RootState) => state.changeRoom,
   changeRoom => changeRoom,
 );
+
+export const selectGetBranchs = createSelector(
+  (state: RootState) => state.getBranchs,
+  getBranchs => getBranchs,
+);
+
+export const selectFacilitesByBranch = createSelector(
+  (state: RootState) => state.getBranchFacilites,
+  getBranchFacilites => getBranchFacilites,
+);

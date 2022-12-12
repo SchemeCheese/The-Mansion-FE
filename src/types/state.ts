@@ -408,6 +408,22 @@ export interface BranchHeaderState {
   data: Array<Record<string, any>>;
 }
 
+export interface GetBranchsState {
+  data: Array<Record<string, any>>;
+}
+
+export interface GetBranchFacilitiesState {
+  branchFacilitySelected: string;
+  branch_id: string;
+  data: Array<Record<string, any>>;
+}
+
+export interface BranchInfoState {
+  branch_code: string;
+  facility_code: string;
+  operator_code: string;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -415,6 +431,7 @@ export interface RootState {
   alerts: AlertsState;
   app: AppState;
   bookRoom: BookRoomState;
+  branchInfo: BranchInfoState;
   cancelReservationDetail: CancelReservationDetailState;
   changeDisk: ChangeDiskState;
   changeRoom: ChangeRoomState;
@@ -426,7 +443,9 @@ export interface RootState {
   downloadDocxReservationDetail: DownloadDocxReservationDetailState;
   downloadPDFInvoiceTransaction: DownloadPDFInvoiceTransactionState;
   downloadPDFReservationDetail: DownloadPDFReservationDetailState;
+  getBranchFacilites: GetBranchFacilitiesState;
   getBranchHeader: BranchHeaderState;
+  getBranchs: GetBranchsState;
   getLanguageCode: LanguageCodeState;
   getProductType: ProductTypeState;
   getReservation: GetReservationState;

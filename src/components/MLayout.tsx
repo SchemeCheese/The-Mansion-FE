@@ -2,21 +2,25 @@ import 'antd/dist/antd.min.css';
 import './layout.css';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BellOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { Avatar, Dropdown, Layout, Menu, Tooltip } from 'antd';
-import { selectBranchHeader, selectUser } from 'selectors';
+import { Avatar, Dropdown, Form, Layout, Menu, Modal, Select, Tooltip } from 'antd';
+import { selectFacilitesByBranch, selectGetBranchs, selectUser } from 'selectors';
+import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { branchHeader, logOut } from 'actions';
+import { branchFacilites, branchs, branchSelected, logOut } from 'actions';
 
 import Footer from 'components/Footer';
 
 import MButton from './MButton';
 
 const { Content, Header, Sider } = Layout;
+
+const { Option } = Select;
 
 interface Props {
   breadCrumb?: any;
@@ -53,12 +57,130 @@ function MLayout(props: Props) {
   const navigate = useNavigate();
   const isFirstLoad = useRef(false);
 
-  useEffect(() => {
-    isFirstLoad.current = true;
-    dispatch(branchHeader({}));
-  }, []);
+  const allBranchs: any = useAppSelector(selectGetBranchs);
 
-  const branchHeaderName: any = useAppSelector(selectBranchHeader);
+  const { t } = useTranslation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const [currentBranchId, setCurrentBranchId] = useState<string>(
+    window.localStorage.getItem('branch_id') ?? '1',
+  );
+  const [currentBranchName, setCurrentBranchName] = useState<string>('');
+  const [currentFacility, setCurrentFacility] = useState({
+    id: window.localStorage.getItem('facility_id') ?? '',
+    operator_code: '',
+    branch_code: '',
+    facility_code: '',
+    name: '',
+  });
+
+  const changeBranch = (value: string) => {
+    setCurrentBranchId(value);
+    setCurrentFacility({
+      id: '',
+      operator_code: '',
+      branch_code: '',
+      facility_code: '',
+      name: '',
+    });
+    form.setFieldsValue({
+      outlet: undefined,
+    });
+    dispatch(branchFacilites({ branchId: value }));
+  };
+
+  const selectFacility = (value: string) => {
+    const facilitySelected = _.find(branchFacilities.data.facilities, (item: any) => {
+      return item.id.toString() === value;
+    });
+
+    setCurrentFacility(facilitySelected);
+  };
+
+  const [form] = Form.useForm();
+
+  const handleSubmitChangeFacility = () => {
+    form.validateFields().then(() => {
+      setIsModalOpen(false);
+
+      dispatch(
+        branchSelected({
+          operator_code: currentFacility?.operator_code,
+          branch_code: currentFacility?.branch_code,
+          facility_code: currentFacility?.facility_code,
+        }),
+      );
+      setCurrentBranchName(currentFacility?.name);
+
+      window.localStorage.setItem('branch_id', currentBranchId);
+      window.localStorage.setItem('facility_id', currentFacility.id);
+
+      window.location.href = '/reservation';
+    });
+  };
+
+  const branchFacilities: any = useAppSelector(selectFacilitesByBranch);
+
+  useEffect(() => {
+    dispatch(branchs({}));
+    dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '1' }));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (
+      allBranchs.data.length > 0 &&
+      branchFacilities.data.facilities.length > 0 &&
+      isFirstLoad.current === false
+    ) {
+      isFirstLoad.current = true;
+
+      const facilityLocal = window.localStorage.getItem('facility_id');
+      const branchLocal = window.localStorage.getItem('branch_id');
+
+      if (facilityLocal && branchLocal) {
+        const facilitySelected = _.find(branchFacilities.data.facilities, (item: any) => {
+          return item.id.toString() === facilityLocal;
+        });
+
+        const branchInfoSelected = _.find(allBranchs.data, (item: any) => {
+          return item.id.toString() === branchLocal;
+        });
+
+        setCurrentBranchName(facilitySelected.name);
+        setCurrentBranchId(branchInfoSelected.id.toString());
+        setCurrentFacility({
+          id: facilitySelected.id,
+          operator_code: facilitySelected.operator_code,
+          branch_code: facilitySelected.branch_code,
+          facility_code: facilitySelected.facility_code,
+          name: facilitySelected.name,
+        });
+      } else {
+        const facilitySelected = branchFacilities.data.facilities[0];
+
+        setCurrentBranchName(facilitySelected.name);
+        setCurrentBranchId(branchFacilities.branch_id.toString());
+        setCurrentFacility({
+          id: facilitySelected.id,
+          operator_code: facilitySelected.operator_code,
+          branch_code: facilitySelected.branch_code,
+          facility_code: facilitySelected.facility_code,
+          name: facilitySelected.name,
+        });
+
+        window.localStorage.setItem('branch_id', branchFacilities.branch_id);
+        window.localStorage.setItem('facility_id', facilitySelected.id);
+      }
+    }
+  }, [allBranchs, branchFacilities]);
 
   return (
     <Layout>
@@ -152,9 +274,65 @@ function MLayout(props: Props) {
           })}
           <span style={{ fontSize: 13 }}>{breadCrumb}</span>
 
-          <MButton style={{ marginLeft: '31%', fontSize: 12 }}>
-            {branchHeaderName.data.branch?.name}
+          <MButton onClick={showModal} style={{ marginLeft: '31%', fontSize: 12 }}>
+            {currentBranchName}
           </MButton>
+          <Modal
+            bodyStyle={{ backgroundColor: '#F0F2F5' }}
+            okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
+            okText={t('common.Save')}
+            onCancel={handleCancel}
+            onOk={handleSubmitChangeFacility}
+            title={<b>Switch Branchs</b>}
+            visible={isModalOpen}
+          >
+            <p style={{ paddingBottom: 0 }}>Please select your branch & outlet</p>
+            <Form
+              form={form}
+              initialValues={{
+                branch: currentBranchId,
+                outlet: currentFacility.id?.toString(),
+              }}
+              layout="vertical"
+            >
+              <Form.Item
+                label={<span>Select branch</span>}
+                name="branch"
+                rules={[{ required: true }]}
+              >
+                <Select
+                  allowClear
+                  onChange={changeBranch}
+                  style={{ marginTop: -10 }}
+                  value={currentBranchId === '' ? undefined : currentBranchId}
+                >
+                  {allBranchs.data.length > 0 &&
+                    allBranchs.data.map((branch: any) => (
+                      <Option key={branch.id}>{branch.name}</Option>
+                    ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label={<span>Select Outlet</span>}
+                name="outlet"
+                rules={[{ required: true }]}
+              >
+                <Select
+                  allowClear
+                  onChange={selectFacility}
+                  placeholder="Select Outlet"
+                  value={currentFacility.id ? currentFacility.id.toString() : undefined}
+                >
+                  {branchFacilities.data.facilities?.length > 0 &&
+                    branchFacilities.data.facilities.map((facility: any) => (
+                      <Option key={facility.id} value={facility.id.toString()}>
+                        {facility.name}
+                      </Option>
+                    ))}
+                </Select>
+              </Form.Item>
+            </Form>
+          </Modal>
 
           <div style={{ float: 'right', paddingRight: '15px' }}>
             <Tooltip placement="top" title="System Date">

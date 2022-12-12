@@ -108,6 +108,11 @@ export const ActionTypes = keyMirror({
   RESERVATION_GET_BY_FOLIO_RESET: undefined,
   TRANSACTION_CHANGE_ROOM: undefined,
   TRANSACTION_CHANGE_ROOM_SUCCESS: undefined,
+  GET_BRANCH: undefined,
+  GET_BRANCH_FINISH: undefined,
+  GET_BRANCH_FACILITY: undefined,
+  GET_BRANCH_FACILITY_FINISH: undefined,
+  BRANCH_SELECTED: undefined,
 });
 
 export const STATUS: Status = {
