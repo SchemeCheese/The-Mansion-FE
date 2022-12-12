@@ -408,12 +408,6 @@ export interface BranchHeaderState {
   data: Array<Record<string, any>>;
 }
 
-export interface CopyReservationState {
-  new_reservation_id: string;
-  reservation_id: string;
-  status: string;
-}
-
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -425,7 +419,6 @@ export interface RootState {
   changeDisk: ChangeDiskState;
   changeRoom: ChangeRoomState;
   channel: FetchChannelState;
-  copyReservation: CopyReservationState;
   createGuest: CreateGuestState;
   createPayment: CreatePaymentState;
   createReservation: CreateReservationState;

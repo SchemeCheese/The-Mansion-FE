@@ -108,8 +108,6 @@ export const ActionTypes = keyMirror({
   RESERVATION_GET_BY_FOLIO_RESET: undefined,
   TRANSACTION_CHANGE_ROOM: undefined,
   TRANSACTION_CHANGE_ROOM_SUCCESS: undefined,
-  COPY_RESERVATION: undefined,
-  COPY_RESERVATION_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

@@ -11,7 +11,7 @@ import 'styles/reservation.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import type { RadioChangeEvent } from 'antd';
 import { Checkbox, Col, message, Modal, Radio, Row, Select, Skeleton, Space } from 'antd';
 import { formatNumber } from 'helpers';
@@ -20,11 +20,7 @@ import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
-import {
-  selectCopyReservation,
-  selectResendEmailReservation,
-  selectUpdateReservation,
-} from 'selectors';
+import { selectResendEmailReservation, selectUpdateReservation } from 'selectors';
 import styled from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -32,7 +28,6 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import {
-  copyReservationAction,
   downloadDocxReservationDetail,
   downloadPDFReservationDetail,
   getReservation,
@@ -63,8 +58,6 @@ const BreadscrumData = styled.p`
 `;
 
 function ReservationDetail() {
-  const navigate = useNavigate();
-
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
 
@@ -336,12 +329,9 @@ function ReservationDetail() {
 
   const updateReservationData = useAppSelector(selectUpdateReservation);
   const resendEmailReservationData = useAppSelector(selectResendEmailReservation);
-  const selectCopyReservationData = useAppSelector(selectCopyReservation);
   // const downloadPDFReservationDetailData = useAppSelector(selectDownloadPDFReservationDetail);
   const { changed } = useTreeChanges(updateReservationData);
   const { changed: resendEmailChanged } = useTreeChanges(resendEmailReservationData);
-  const { changed: copyReservationActionChanged } = useTreeChanges(selectCopyReservationData);
-
   // const { changed: downloadPDFReservationDetailChanged } = useTreeChanges(
   //   downloadPDFReservationDetailData,
   // );
@@ -363,20 +353,6 @@ function ReservationDetail() {
       message.success('Resend email successfully!');
     }
   }, [resendEmailChanged]);
-
-  useEffect(() => {
-    if (copyReservationActionChanged('status', 'SUCCESS')) {
-      message.success('Copy reservation successfully!');
-
-      navigate(`/reservation/${selectCopyReservationData.new_reservation_id}`);
-
-      dispatch(
-        getReservation({
-          reservation_id: selectCopyReservationData.new_reservation_id,
-        }),
-      );
-    }
-  }, [copyReservationActionChanged]);
 
   useEffect(() => {
     setRoomCondition({
@@ -454,17 +430,7 @@ function ReservationDetail() {
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
-            <MInfoButton
-              onClick={() => {
-                dispatch(
-                  copyReservationAction({
-                    reservation_id: id ?? '',
-                  }),
-                );
-              }}
-            >
-              {t('reservation.Copy to new reservation')}
-            </MInfoButton>
+            <MInfoButton>{t('reservation.Copy to new reservation')}</MInfoButton>
             <Select
               className="download-select"
               onChange={handleChange}

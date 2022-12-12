@@ -13,8 +13,6 @@ import {
   bookRoomSuccess,
   cancelReservationDetail,
   cancelReservationDetailSuccess,
-  copyReservationAction,
-  copyReservationActionSuccess,
   createReservation,
   createReservationSuccess,
   downloadDocxReservationDetail,
@@ -627,44 +625,6 @@ export function* getDownloadDocxReservationDetailSaga({
   }
 }
 
-export function* postCopyReservationSaga({ payload }: ReturnType<typeof copyReservationAction>) {
-  try {
-    let success = '';
-    let newReservationId = '';
-
-    ({ new_reservation_id: newReservationId, success } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.COPY_RESERVATION)}/${
-        payload.reservation_id
-      }/copy-reservation`,
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-      },
-    ));
-
-    if (success) {
-      yield put(
-        copyReservationActionSuccess({
-          new_reservation_id: newReservationId,
-        }),
-      );
-    } else {
-      message.error('Something went wrong! Cannot copy reservation');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong! Cannot copy reservation');
-    }
-  }
-}
-
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
@@ -683,6 +643,5 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_PDF, getDownloadPDFReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_DOCX, getDownloadDocxReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_GET_BY_FOLIO, getReservationFolioSaga),
-    takeLatest(ActionTypes.COPY_RESERVATION, postCopyReservationSaga),
   ]);
 }
