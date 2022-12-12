@@ -11,7 +11,7 @@ import 'styles/reservation.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { RadioChangeEvent } from 'antd';
 import { Checkbox, Col, message, Modal, Radio, Row, Select, Skeleton, Space } from 'antd';
 import { formatNumber } from 'helpers';
@@ -58,6 +58,8 @@ const BreadscrumData = styled.p`
 `;
 
 function ReservationDetail() {
+  const navigate = useNavigate();
+
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
 
@@ -430,7 +432,17 @@ function ReservationDetail() {
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
-            <MInfoButton>{t('reservation.Copy to new reservation')}</MInfoButton>
+            <MInfoButton
+              onClick={() =>
+                navigate('/reservation/create', {
+                  state: {
+                    reservationInfo: reservationRedux,
+                  },
+                })
+              }
+            >
+              {t('reservation.Copy to new reservation')}
+            </MInfoButton>
             <Select
               className="download-select"
               onChange={handleChange}

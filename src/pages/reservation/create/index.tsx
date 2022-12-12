@@ -9,7 +9,7 @@ Main functions : Create Reservation Page
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -23,8 +23,6 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import { createReservation, getReservationNumber, searchRoomReset } from 'actions';
-
-import BreadcrumbList from 'components/BreadcrumbList';
 
 import { RootState } from 'types';
 
@@ -116,6 +114,8 @@ function Create() {
   const { changed } = useTreeChanges(createReservationData);
   const { roomingListColumns } = useColumns();
 
+  const params: any = useLocation();
+
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
       message.success(t('message.Create reservation successfully!'));
@@ -166,6 +166,24 @@ function Create() {
     0,
   );
 
+  let reservationInfo = null;
+
+  if (params.state && params.state?.reservationInfo) {
+    const reservationInfoState = params.state?.reservationInfo;
+
+    reservationInfo = {
+      booker: {
+        client_kind: reservationInfoState?.booker?.client_kind?.toString(),
+        first_name: reservationInfoState?.booker?.first_name,
+        last_name: reservationInfoState?.booker?.last_name,
+        email_address1: reservationInfoState?.booker?.email_address1,
+        email_address2: reservationInfoState?.booker?.email_address2,
+        telephone_number1: reservationInfoState?.booker?.telephone_number1,
+        client_rank: reservationInfoState?.booker?.client_rank.toString(),
+      },
+    };
+  }
+
   return (
     <>
       {/* <BreadcrumbList data={breadcrumbData} /> */}
@@ -195,6 +213,7 @@ function Create() {
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           reservationId=""
+          reservationInfo={reservationInfo}
           reservationNumber={reservationNumberResult}
           roomCondition={roomCondition}
           roomTotalForm={roomTotalForm}
