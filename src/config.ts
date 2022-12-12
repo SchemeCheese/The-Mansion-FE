@@ -91,3 +91,11 @@ export const LanguageCodeEndpoint = {
 export const GetBranchOfEmployeeEndpoint = {
   GET: 'api/v1/employee-branch',
 };
+
+export const GetAllBranchsEndpoint = {
+  GET: 'api/v1/branchs',
+};
+
+export const GetFacilitiesByBranch = {
+  GET: 'api/v1/branch-facility',
+};

@@ -4,6 +4,7 @@ import agentInfos, { agentInfosState } from './agentInfos';
 import alerts, { alertsState } from './alerts';
 import app, { appState } from './app';
 import bookRoom, { bookRoomState } from './bookRoom';
+import branchInfo, { branchInfoState } from './branchInfo';
 import cancelReservationDetail, { cancelReservationDetailState } from './cancelReservationDetail';
 import changeDisk, { changeDiskState } from './changeDisk';
 import changeRoom, { changeRoomState } from './changeRoom';
@@ -21,7 +22,9 @@ import downloadPDFInvoiceTransaction, {
 import downloadPDFReservationDetail, {
   downloadPDFReservationDetailState,
 } from './downloadPDFReservationDetail';
+import getBranchFacilites, { getBranchFacilitesState } from './getBranchFacilites';
 import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
+import getBranchs, { getBranchsState } from './getBranchs';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
@@ -94,6 +97,9 @@ export const initialState = {
   downloadDocxReservationDetail: downloadDocxReservationDetailState,
   downloadPDFInvoiceTransaction: downloadPDFInvoiceTransactionState,
   getBranchHeader: getBranchHeaderState,
+  getBranchs: getBranchsState,
+  getBranchFacilities: getBranchFacilitesState,
+  branchInfo: branchInfoState,
 };
 
 export default {
@@ -140,4 +146,7 @@ export default {
   ...downloadPDFInvoiceTransaction,
   ...getBranchHeader,
   ...getReservationByFolio,
+  ...getBranchs,
+  ...getBranchFacilites,
+  ...branchInfo,
 };
