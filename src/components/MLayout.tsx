@@ -136,8 +136,8 @@ function MLayout(props: Props) {
 
   useEffect(() => {
     if (
-      allBranchs.data.length > 0 &&
-      branchFacilities.data.facilities.length > 0 &&
+      allBranchs.data?.length > 0 &&
+      branchFacilities.data.facilities?.length > 0 &&
       isFirstLoad.current === false
     ) {
       isFirstLoad.current = true;
