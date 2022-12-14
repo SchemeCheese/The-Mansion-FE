@@ -29,10 +29,15 @@ import {
 } from 'pages/reservation/component/ReservationDetailTab/event-utils';
 import MInput from 'components/MInput';
 import { searchScheduleAction, updateNoteReservationDetail } from 'actions';
-import { selectSearchSchedule, selectUpdateNoteReservationDetail } from 'selectors';
+import {
+  selectRoomTypes,
+  selectSearchSchedule,
+  selectUpdateNoteReservationDetail,
+} from 'selectors';
 import { useAppSelector } from 'modules/hooks';
 import useTreeChanges from 'tree-changes-hook';
 import { useTranslation } from 'react-i18next';
+import _ from 'underscore';
 
 interface DemoAppState {
   currentEvents: EventApi[];
@@ -72,6 +77,7 @@ function Calendar() {
 
   const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
   const updateNoteReservationDetailData: any = useAppSelector(selectUpdateNoteReservationDetail);
+  const { data: roomTypesData } = useAppSelector(selectRoomTypes);
   const { changed } = useTreeChanges(searchScheduleRedux);
   const { changed: changedNote } = useTreeChanges(updateNoteReservationDetailData);
 
@@ -204,12 +210,13 @@ function Calendar() {
               marginLeft: 15,
             }}
           >
-            <Option value="1">Premium Alex</Option>
-            <Option value="2">Superior Double</Option>
-            <Option value="3">Deluxe with Balcony</Option>
-            <Option value="4">Studio Twin</Option>
-            <Option value="5">Studio Double</Option>
-            <Option value="6">Royal Family</Option>
+            {_.keys(roomTypesData).map((key: any) => {
+              return (
+                <Option key={key} value={key}>
+                  {roomTypesData[key]}
+                </Option>
+              );
+            })}
           </Select>
           <MInput
             onChange={event =>

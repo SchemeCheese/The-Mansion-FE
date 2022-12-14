@@ -181,3 +181,8 @@ export const selectBranchInfo = createSelector(
   (state: RootState) => state.branchInfo,
   branchInfo => branchInfo,
 );
+
+export const selectRoomTypes = createSelector(
+  (state: RootState) => state.getRoomType,
+  getRoomType => getRoomType,
+);

@@ -32,6 +32,7 @@ import {
   selectBookRoom,
   selectGetReservationDetail,
   selectAvailableSearchSchedule,
+  selectRoomTypes,
 } from 'selectors';
 
 import PattonButton from 'components/PattonButton';
@@ -48,6 +49,7 @@ import {
   searchAvailableScheduleAction,
 } from 'actions';
 import { getDaysBetweenDates, onlyUnique } from 'helpers';
+import _ from 'underscore';
 
 interface DemoAppState {
   currentEvents: EventApi[];
@@ -75,6 +77,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
   const reservationDetailInfo: any = useSelector<RootState>(
     ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
+  const { data: roomTypesData } = useAppSelector(selectRoomTypes);
 
   const params = useLocation();
   const searchParam = new URLSearchParams(params.search);
@@ -603,21 +606,22 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                   };
 
                   setSearchScheduleCondition(searchScheduleConditionTemporary);
-                  dispatch(searchAvailableScheduleAction(searchScheduleConditionTemporary));
                 }}
                 placeholder={t('reservation.Room Type.placeholder')}
               >
-                <Option value="1">Premium Alex</Option>
-                <Option value="2">Superior Double</Option>
-                <Option value="3">Deluxe with Balcony</Option>
-                <Option value="4">Studio Twin</Option>
-                <Option value="5">Studio Double</Option>
-                <Option value="6">Royal Family</Option>
+                {_.keys(roomTypesData).map((key: any) => {
+                  return (
+                    <Option key={key} value={key}>
+                      {roomTypesData[key]}
+                    </Option>
+                  );
+                })}
               </Select>
             </Form.Item>
             <Form.Item label={t('reservation.Floor.title')}>
               <Select
                 allowClear
+                disabled={floors.length === 0}
                 onChange={value => {
                   const searchScheduleConditionTemporary = {
                     ...searchScheduleCondition,
@@ -670,7 +674,6 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
                   };
 
                   setSearchScheduleCondition(searchScheduleConditionTemporary);
-                  // dispatch(searchAvailableScheduleAction(searchScheduleConditionTemporary));
                 }}
                 placeholder={t('reservation.Direction.placeholder')}
               >
