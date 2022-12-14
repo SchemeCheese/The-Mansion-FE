@@ -61,7 +61,6 @@ function MLayout(props: Props) {
 
   const allBranchs: any = useAppSelector(selectGetBranchs);
 
-  const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
