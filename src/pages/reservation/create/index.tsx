@@ -16,7 +16,7 @@ import moment from 'moment';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
-import { selectCreateReservation } from 'selectors';
+import { selectBranchInfo, selectCreateReservation } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
 
@@ -29,6 +29,7 @@ import { RootState } from 'types';
 function Create() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const branchInfo = useAppSelector(selectBranchInfo);
 
   /** State */
   /** Search room Table In Modal */
@@ -129,13 +130,7 @@ function Create() {
   }, [changed]);
 
   useEffect(() => {
-    dispatch(
-      getReservationNumber({
-        operator_code: 'the_mansion',
-        branch_code: 'the_mansion',
-        facility_code: 'hotel',
-      }),
-    );
+    dispatch(getReservationNumber(branchInfo));
   }, []);
 
   const onFinishFailed = (errorInfo: any) => {

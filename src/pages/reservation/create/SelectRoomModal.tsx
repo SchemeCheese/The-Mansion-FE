@@ -535,9 +535,7 @@ function SelectRoomModal({
               columns={searchRoomColumns}
               dataSource={convertDataSearchRoom(searchRoomResultState)}
               pagination={false}
-              scroll={{ y: 210 }}
               size="small"
-              style={{ border: 0 }}
               summary={() => {
                 return (
                   <Table.Summary fixed>

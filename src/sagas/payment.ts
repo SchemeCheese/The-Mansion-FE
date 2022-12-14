@@ -1,7 +1,7 @@
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { PaymentEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -11,15 +11,16 @@ import { createPaymentAction, createPaymentSuccess, logOut } from 'actions';
 export function* postCreatePaymentSaga({ payload }: ReturnType<typeof createPaymentAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(request, `${apiEndPoint(PaymentEndpoint.CREATE_PAYMENT)}`, {
       method: 'POST',
       headers: headerWithAuthorization(),
       body: {
         ...payload.payload,
-        branch_code: 'the_mansion',
-        operator_code: 'the_mansion',
-        facility_code: 'hotel',
+        branch_code,
+        operator_code,
+        facility_code,
       },
     }));
 

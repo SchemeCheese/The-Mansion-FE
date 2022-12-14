@@ -26,6 +26,7 @@ import {
 import type { RangePickerProps } from 'antd/es/date-picker';
 import moment from 'moment';
 import {
+  selectBranchInfo,
   selectCreateGuest,
   selectGetLanguageCode,
   selectGetReservationDetail,
@@ -80,6 +81,7 @@ function CreateGuestModal({
   const dispatch = useDispatch();
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const { countries } = reservationDetailInfo.data;
+  const branchInfo = useAppSelector(selectBranchInfo);
 
   const handleOk = () => {
     form.submit();
@@ -118,7 +120,7 @@ function CreateGuestModal({
           payload: {
             ...values,
             guest_id: currentGuest.id,
-            operator_code: 'the_mansion',
+            operator_code: branchInfo.operator_code,
             reservation_detail_id: reservationDetailId,
             expiration_date_of_passport: values.expiration_date_of_passport
               ? values.expiration_date_of_passport.format('YYYY-MM-DD')
@@ -140,7 +142,7 @@ function CreateGuestModal({
         createGuest({
           payload: {
             ...values,
-            operator_code: 'the_mansion',
+            operator_code: branchInfo.operator_code,
             reservation_detail_id: reservationDetailId,
             expiration_date_of_passport: values.expiration_date_of_passport
               ? values.expiration_date_of_passport.format('YYYY-MM-DD')

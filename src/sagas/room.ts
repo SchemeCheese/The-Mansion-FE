@@ -1,7 +1,7 @@
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { RoomEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -19,11 +19,12 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
     let charges = [];
     let rates = [];
     let total = 0;
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
     const payloadWithBranch = {
       ...payload,
-      operator_code: 'the_mansion',
-      branch_code: 'the_mansion',
-      facility_code: 'hotel',
+      operator_code,
+      branch_code,
+      facility_code,
     };
 
     const query = new URLSearchParams(Object(payloadWithBranch)).toString();
@@ -64,10 +65,12 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
 export function* getRoomTypeSaga() {
   try {
     let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
     const payload = {
-      operator_code: 'the_mansion',
-      branch_code: 'the_mansion',
-      facility_code: 'hotel',
+      operator_code,
+      branch_code,
+      facility_code,
     };
     const query = new URLSearchParams(Object(payload)).toString();
 
@@ -97,10 +100,12 @@ export function* getRoomTypeSaga() {
 export function* getRoomsSaga() {
   try {
     let items = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
     const payload = {
-      operator_code: 'the_mansion',
-      branch_code: 'the_mansion',
-      facility_code: 'hotel',
+      operator_code,
+      branch_code,
+      facility_code,
     };
 
     const query = new URLSearchParams(Object(payload)).toString();

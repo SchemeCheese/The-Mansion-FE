@@ -1,7 +1,7 @@
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { ReservationEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -17,15 +17,16 @@ import {
 export function* getSearchScheduleSaga({ payload }: ReturnType<typeof searchScheduleAction>) {
   try {
     let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     const payloadWithBranch = {
       start_date: payload.start_date,
       end_date: payload.end_date,
       room_number: payload.room_number,
       room_type: payload.room_type,
-      operator_code: 'the_mansion',
-      branch_code: 'the_mansion',
-      facility_code: 'hotel',
+      operator_code,
+      branch_code,
+      facility_code,
     };
 
     const query = new URLSearchParams(Object(payloadWithBranch)).toString();
@@ -58,11 +59,13 @@ export function* getSearchAvailableScheduleSaga({
 }: ReturnType<typeof searchAvailableScheduleAction>) {
   try {
     let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
     const payloadWithBranch = {
       ...payload,
-      operator_code: 'the_mansion',
-      branch_code: 'the_mansion',
-      facility_code: 'hotel',
+      operator_code,
+      branch_code,
+      facility_code,
     };
 
     const query = new URLSearchParams(Object(payloadWithBranch)).toString();
