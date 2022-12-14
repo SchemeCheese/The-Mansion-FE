@@ -58,6 +58,7 @@
   "rules": {
     "react/no-unescaped-entities": "off",
     "react/state-in-constructor": "off",
-    "react/no-unstable-nested-components": "warn" 
+    "react/no-unstable-nested-components": "warn" ,
+    "camelcase": "warn"
   }
 }

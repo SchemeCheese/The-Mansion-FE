@@ -1,7 +1,7 @@
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { ChannelEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -20,11 +20,13 @@ export function* fetchChannelSaga({ payload }: ReturnType<typeof fetchChannelsAc
     let dates = [];
     let websites = [];
     let rates = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
     const payloadWithBranch = {
       ...payload,
-      operator_code: 'the_mansion',
-      branch_code: 'the_mansion',
-      facility_code: 'hotel',
+      operator_code,
+      branch_code,
+      facility_code,
     };
     const query = new URLSearchParams(Object(payloadWithBranch)).toString();
 

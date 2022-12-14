@@ -1,7 +1,7 @@
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { ReservationEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -46,11 +46,14 @@ export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchR
     let data = [];
     let total = 0;
     let currentPage = 0;
+
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
     const payloadWithBranch = {
       ...payload,
-      operator_code: 'the_mansion',
-      branch_code: 'the_mansion',
-      facility_code: 'hotel',
+      operator_code,
+      branch_code,
+      facility_code,
     };
 
     const query = new URLSearchParams(Object(payloadWithBranch)).toString();
@@ -89,6 +92,8 @@ export function* postCreateReservationSaga({ payload }: ReturnType<typeof create
     let success = '';
     let reservationCreated = null;
 
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
     ({ reservation_info: reservationCreated, success } = yield call(
       request,
       apiEndPoint(ReservationEndpoint.CREATE),
@@ -98,9 +103,9 @@ export function* postCreateReservationSaga({ payload }: ReturnType<typeof create
         body: {
           ...payload.payload,
           online_reservation: true,
-          branch_code: 'the_mansion',
-          operator_code: 'the_mansion',
-          facility_code: 'hotel',
+          branch_code,
+          operator_code,
+          facility_code,
         },
       },
     ));
@@ -130,6 +135,7 @@ export function* postCreateReservationSaga({ payload }: ReturnType<typeof create
 export function* postUpdateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(
       request,
@@ -140,9 +146,9 @@ export function* postUpdateReservationSaga({ payload }: ReturnType<typeof create
         body: {
           ...payload.payload,
           online_reservation: true,
-          branch_code: 'the_mansion',
-          operator_code: 'the_mansion',
-          facility_code: 'hotel',
+          branch_code,
+          operator_code,
+          facility_code,
         },
       },
     ));
@@ -168,10 +174,12 @@ export function* postUpdateReservationSaga({ payload }: ReturnType<typeof create
 export function* getReservationDetailSaga({ payload }: ReturnType<typeof getReservationDetail>) {
   try {
     let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
     const payloadBranch = {
-      operator_code: 'the_mansion',
-      branch_code: 'the_mansion',
-      facility_code: 'hotel',
+      operator_code,
+      branch_code,
+      facility_code,
     };
 
     const query = new URLSearchParams(Object(payloadBranch)).toString();
@@ -289,6 +297,7 @@ export function* getReservationNumberSaga({ payload }: ReturnType<typeof getRese
 export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) {
   try {
     let success = '';
+    const { operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(
       request,
@@ -300,7 +309,7 @@ export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) 
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
-          operator_code: 'the_mansion',
+          operator_code,
         },
       },
     ));
@@ -326,6 +335,7 @@ export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) 
 export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(
       request,
@@ -338,9 +348,9 @@ export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
         body: {
           ...payload.payload,
           online_reservation: true,
-          branch_code: 'the_mansion',
-          operator_code: 'the_mansion',
-          facility_code: 'hotel',
+          branch_code,
+          operator_code,
+          facility_code,
         },
       },
     ));
@@ -370,6 +380,7 @@ export function* postAddReservationDetailSaga({
 }: ReturnType<typeof addReservationDetail>) {
   try {
     let success = '';
+    const { operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(
       request,
@@ -381,7 +392,7 @@ export function* postAddReservationDetailSaga({
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
-          operator_code: 'the_mansion',
+          operator_code,
         },
       },
     ));
@@ -409,6 +420,7 @@ export function* postCancelReservationDetailSaga({
 }: ReturnType<typeof cancelReservationDetail>) {
   try {
     let success = '';
+    const { operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(
       request,
@@ -420,7 +432,7 @@ export function* postCancelReservationDetailSaga({
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
-          operator_code: 'the_mansion',
+          operator_code,
         },
       },
     ));
@@ -447,6 +459,7 @@ export function* postCancelReservationDetailSaga({
 export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof updateGeneralInfo>) {
   try {
     let success = '';
+    const { operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(
       request,
@@ -458,7 +471,7 @@ export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof update
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
-          operator_code: 'the_mansion',
+          operator_code,
         },
       },
     ));

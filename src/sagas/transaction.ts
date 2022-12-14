@@ -1,7 +1,7 @@
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { TransactionEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -23,15 +23,16 @@ import {
 export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.ADD_ITEM)}`, {
       method: 'POST',
       headers: headerWithAuthorization(),
       body: {
         ...payload.payload,
-        branch_code: 'the_mansion',
-        operator_code: 'the_mansion',
-        facility_code: 'hotel',
+        branch_code,
+        operator_code,
+        facility_code,
       },
     }));
 
@@ -56,15 +57,16 @@ export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) 
 export function* postDeleteItemSaga({ payload }: ReturnType<typeof deleteItemAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.DELETE_ITEM)}`, {
       method: 'POST',
       headers: headerWithAuthorization(),
       body: {
         ...payload.payload,
-        branch_code: 'the_mansion',
-        operator_code: 'the_mansion',
-        facility_code: 'hotel',
+        branch_code,
+        operator_code,
+        facility_code,
       },
     }));
 
@@ -119,15 +121,16 @@ export function* postChangeDiskSaga({ payload }: ReturnType<typeof changeDiskAct
 export function* postChangeRoomSaga({ payload }: ReturnType<typeof changeRoomAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.CHANGE_ROOM)}`, {
       method: 'POST',
       headers: headerWithAuthorization(),
       body: {
         ...payload.payload,
-        operator_code: 'the_mansion',
-        branch_code: 'the_mansion',
-        facility_code: 'hotel',
+        operator_code,
+        branch_code,
+        facility_code,
       },
     }));
 

@@ -176,3 +176,8 @@ export const selectFacilitesByBranch = createSelector(
   (state: RootState) => state.getBranchFacilites,
   getBranchFacilites => getBranchFacilites,
 );
+
+export const selectBranchInfo = createSelector(
+  (state: RootState) => state.branchInfo,
+  branchInfo => branchInfo,
+);

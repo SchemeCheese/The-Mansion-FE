@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
 import moment from 'moment';
-import { selectSearchSchedule } from 'selectors';
+import { selectBranchInfo, selectSearchSchedule } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -29,9 +29,8 @@ function Reservation() {
   const { t } = useTranslation();
 
   const searchScheduleRedux: any = useAppSelector(selectSearchSchedule);
-  const [fromDate, setFromDate] = useState<string>(moment().format('YYYY-MM-DD'));
 
-  // const breadcrumbData = [t('common.TMHA'), t('common.Reservation')];
+  const [fromDate, setFromDate] = useState<string>(moment().format('YYYY-MM-DD'));
 
   const handeleActive = (activeKey: string) => {
     if (activeKey === '2') {

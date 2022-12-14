@@ -123,7 +123,7 @@ function MLayout(props: Props) {
       window.localStorage.setItem('branch_id', currentBranchId);
       window.localStorage.setItem('facility_id', currentFacility.id);
 
-      window.location.href = '/reservation';
+      window.location.reload();
     });
   };
 
@@ -178,6 +178,14 @@ function MLayout(props: Props) {
 
         window.localStorage.setItem('branch_id', branchFacilities.branch_id);
         window.localStorage.setItem('facility_id', facilitySelected.id);
+
+        dispatch(
+          branchSelected({
+            operator_code: facilitySelected.operator_code,
+            branch_code: facilitySelected.branch_code,
+            facility_code: facilitySelected.facility_code,
+          }),
+        );
       }
     }
   }, [allBranchs, branchFacilities]);
