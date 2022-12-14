@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Checkbox, Col, Pagination, Row, Select } from 'antd';
-import { selectGetWalkinRooms } from 'selectors';
+import { selectGetWalkinRooms, selectRoomTypes } from 'selectors';
+import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -20,6 +21,7 @@ function WalkIn() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const roomsList: any = useAppSelector(selectGetWalkinRooms);
+  const { data: roomTypesData } = useAppSelector(selectRoomTypes);
 
   const [roomFilter, setRoomFilter] = useState({
     room_number: '',
@@ -29,6 +31,7 @@ function WalkIn() {
   });
 
   const [isCheckinModalVisible, setIsCheckinModalVisible] = useState(false);
+  const [currentRoom, setCurrentRoom] = useState(null);
 
   const onChangeCurrentPage = (page: number) => {
     const newState = {
@@ -48,8 +51,7 @@ function WalkIn() {
     <>
       <WalkinCheckinModal
         isModalVisible={isCheckinModalVisible}
-        reservationDetailId="2"
-        reservationId="1"
+        room={currentRoom}
         setIsModalVisible={setIsCheckinModalVisible}
       />
       <Row style={{ background: 'white', padding: 8, paddingBottom: 20 }}>
@@ -88,12 +90,13 @@ function WalkIn() {
               marginLeft: 15,
             }}
           >
-            <Option value="1">Premium Alex</Option>
-            <Option value="2">Superior Double</Option>
-            <Option value="3">Deluxe with Balcony</Option>
-            <Option value="4">Studio Twin</Option>
-            <Option value="5">Studio Double</Option>
-            <Option value="6">Royal Family</Option>
+            {_.keys(roomTypesData).map((key: any) => {
+              return (
+                <Option key={key} value={key}>
+                  {roomTypesData[key]}
+                </Option>
+              );
+            })}
           </Select>
           <Checkbox
             onChange={event => {
@@ -113,7 +116,13 @@ function WalkIn() {
           </Checkbox>
         </Col>
         {roomsList.items.map((item: any) => {
-          return <RoomInfo item={item} setIsModalVisible={setIsCheckinModalVisible} />;
+          return (
+            <RoomInfo
+              item={item}
+              setCurrentRoom={setCurrentRoom}
+              setIsModalVisible={setIsCheckinModalVisible}
+            />
+          );
         })}
         <Col span={24} style={{ paddingTop: 20 }}>
           <Pagination

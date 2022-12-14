@@ -8,16 +8,21 @@ Main functions : RoomInfo Card
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { Card, Col, Row } from 'antd';
+
+import { searchRoomReset } from 'actions';
 
 interface Props {
   item: any;
+  setCurrentRoom: (value: any) => void;
   setIsModalVisible: (value: boolean) => void;
 }
 
-function RoomInfo({ item, setIsModalVisible }: Props) {
+function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
   const { t } = useTranslation();
   const isReadyItem = item.state?.toString() === '1';
+  const dispatch = useDispatch();
 
   const roomStatusMapping = {
     '1': (
@@ -83,7 +88,11 @@ function RoomInfo({ item, setIsModalVisible }: Props) {
     ),
   };
 
-  console.log('isReadyItem ', isReadyItem, item);
+  const showWalkinCheckinModal = () => {
+    dispatch(searchRoomReset());
+    setIsModalVisible(true);
+    setCurrentRoom(item);
+  };
 
   return (
     <Col span={8} style={{ paddingTop: 25, paddingLeft: 8, paddingRight: 8 }}>
@@ -113,7 +122,7 @@ function RoomInfo({ item, setIsModalVisible }: Props) {
               <svg
                 fill="none"
                 height="20"
-                onClick={() => setIsModalVisible(true)}
+                onClick={showWalkinCheckinModal}
                 style={{ position: 'relative', top: 4, marginRight: -10 }}
                 viewBox="0 0 20 20"
                 width="20"
@@ -130,7 +139,7 @@ function RoomInfo({ item, setIsModalVisible }: Props) {
             {isReadyItem ? (
               <span
                 aria-hidden="true"
-                onClick={() => setIsModalVisible(true)}
+                onClick={showWalkinCheckinModal}
                 style={{ color: '#1D39C4', fontSize: 14, paddingLeft: 20 }}
               >
                 {t('frontDesk.Check In')}

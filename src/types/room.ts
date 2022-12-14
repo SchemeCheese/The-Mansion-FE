@@ -1,4 +1,5 @@
 export interface RoomSearch {
+  charge_kind: string;
   checkin: string;
   checkout: string;
   room_type: string;
