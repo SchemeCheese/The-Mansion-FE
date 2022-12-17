@@ -26,6 +26,7 @@ import getBranchFacilites, { getBranchFacilitesState } from './getBranchFacilite
 import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getBranchs, { getBranchsState } from './getBranchs';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
+import notifications, { notificationsState } from './getNotification';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
 import getReservationByFolio, { getReservationByFolioState } from './getReservationByFolio';
@@ -35,6 +36,7 @@ import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
 import github, { githubState } from './github';
 import product, { productSearchState } from './product';
+import readNotification, { readNotificationState } from './readNotification';
 import removeGuest, { removeGuestState } from './removeGuest';
 import resendEmailReservation, { resendEmailReservationState } from './resendEmailReservation';
 import reservation, { reservationSearchState } from './reservation';
@@ -90,6 +92,7 @@ export const initialState = {
   updateGuest: updateGuestState,
   updateRoomAvailable: updateRoomAvailableState,
   removeGuest: removeGuestState,
+  readNotificationState,
   getLanguageCode: getLanguageCodeState,
   getRooms: getRoomsState,
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
@@ -100,6 +103,7 @@ export const initialState = {
   getBranchs: getBranchsState,
   getBranchFacilities: getBranchFacilitesState,
   branchInfo: branchInfoState,
+  notifications: notificationsState,
 };
 
 export default {
@@ -137,6 +141,7 @@ export default {
   ...resendEmailReservation,
   ...updateGuest,
   ...removeGuest,
+  ...readNotification,
   ...getLanguageCode,
   ...getRooms,
   ...updateRoomAvailable,
@@ -149,4 +154,5 @@ export default {
   ...getBranchs,
   ...getBranchFacilites,
   ...branchInfo,
+  ...notifications,
 };

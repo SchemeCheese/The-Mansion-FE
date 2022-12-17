@@ -108,6 +108,7 @@ function ReservationList({ type }: Props) {
           isEarlyCheckin: item.isEarlyCheckin,
           isLateCheckout: item.isLateCheckout,
           isPickup: item.isPickup,
+          isNew: item.isNew,
         };
       });
     }
@@ -314,6 +315,13 @@ function ReservationList({ type }: Props) {
                 };
               }}
               pagination={false}
+              rowClassName={(record: any) => {
+                if (record.isNew) {
+                  return 'new-reservation';
+                }
+
+                return '';
+              }}
               size="small"
               style={{ overflowX: 'hidden', overflowY: 'auto', minHeight: 450 }}
             />

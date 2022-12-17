@@ -272,6 +272,16 @@ export interface AgentInfosState {
   total: number;
 }
 
+export interface NotificationsState {
+  data: Array<Record<string, any>>;
+  is_finish: boolean;
+}
+
+export interface ReadNotificationState {
+  id: string;
+  is_finish: boolean;
+}
+
 export interface GetRoomState {
   is_searching: boolean;
   items: Array<Record<string, any>>;
@@ -455,6 +465,7 @@ export interface RootState {
   getRoomType: RoomTypeState;
   getRooms: GetRoomState;
   github: GitHubState;
+  notifications: NotificationsState;
   product: ProductSearchState;
   removeGuest: RemoveGuestState;
   resendEmailReservation: ResendEmailReservationState;

@@ -186,3 +186,8 @@ export const selectRoomTypes = createSelector(
   (state: RootState) => state.getRoomType,
   getRoomType => getRoomType,
 );
+
+export const selectNotifications = createSelector(
+  (state: RootState) => state.notifications,
+  notifications => notifications,
+);

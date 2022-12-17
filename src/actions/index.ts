@@ -16,3 +16,4 @@ export * from './file';
 export * from './languageCode';
 export * from './branchHeader';
 export * from './getBranchs';
+export * from './notification';
