@@ -113,6 +113,10 @@ export const ActionTypes = keyMirror({
   GET_BRANCH_FACILITY: undefined,
   GET_BRANCH_FACILITY_FINISH: undefined,
   BRANCH_SELECTED: undefined,
+  GET_NOTIFICATION: undefined,
+  GET_NOTIFICATION_FINISH: undefined,
+  READ_NOTIFICATION: undefined,
+  READ_NOTIFICATION_FINISH: undefined,
 });
 
 export const STATUS: Status = {

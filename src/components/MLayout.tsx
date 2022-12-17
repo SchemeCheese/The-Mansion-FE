@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { BellOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Form, Layout, Menu, Modal, Select, Tooltip } from 'antd';
 import { selectFacilitesByBranch, selectGetBranchs, selectUser } from 'selectors';
 import _ from 'underscore';
@@ -17,6 +17,7 @@ import { branchFacilites, branchs, branchSelected, logOut } from 'actions';
 import Footer from 'components/Footer';
 
 import MButton from './MButton';
+import Notification from './Notification';
 
 const { Content, Header, Sider } = Layout;
 
@@ -346,7 +347,9 @@ function MLayout(props: Props) {
             <Tooltip placement="top" title="System Date">
               <span style={{ marginRight: 28, fontSize: 12, cursor: 'pointer' }}>19/05/2021</span>
             </Tooltip>
-            <BellOutlined style={{ marginRight: 28 }} />
+
+            <Notification />
+
             <Dropdown overlay={menu} placement="bottom" trigger={['click']}>
               <Avatar
                 src="https://joeschmoe.io/api/v1/random"
