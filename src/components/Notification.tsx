@@ -16,8 +16,6 @@ function Notification() {
 
   const notifications: any = useAppSelector(selectNotifications);
   const unReadTotal = notifications.data.reduce((accumulator: number, currentValue: any) => {
-    console.log('nnnn', currentValue);
-
     if (currentValue.is_read === false) {
       return accumulator + 1;
     }
