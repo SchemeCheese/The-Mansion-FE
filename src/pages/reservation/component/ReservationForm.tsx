@@ -190,7 +190,10 @@ function ReservationForm({
                 <Form.Item label={t('reservation.Folio ID')} name="reservation_number">
                   <MInput disabled />
                 </Form.Item>
-                <Form.Item label={t('reservation.OTA Booking ID.title')}>
+                <Form.Item
+                  label={t('reservation.OTA Booking ID.title')}
+                  name="external_reservation_number"
+                >
                   <MInput placeholder={t('reservation.OTA Booking ID.placeholder')} />
                 </Form.Item>
               </Col>

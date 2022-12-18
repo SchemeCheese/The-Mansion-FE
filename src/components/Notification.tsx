@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BellOutlined } from '@ant-design/icons';
-import { Badge, Dropdown, Menu, Tabs } from 'antd';
+import { Badge, Dropdown, Menu, Tabs, Tooltip } from 'antd';
+import moment from 'moment';
 import { selectNotifications } from 'selectors';
 import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { getNotifcationsAction, readNotifcationsAction } from 'actions/notification';
+import { getNotifcationsAction, getReservation, readNotifcationsAction } from 'actions';
 
 function Notification() {
   const dispatch = useDispatch();
@@ -31,6 +32,11 @@ function Notification() {
     dispatch(
       readNotifcationsAction({
         id: notification.id,
+      }),
+    );
+    dispatch(
+      getReservation({
+        reservation_id: notification.reservation_id,
       }),
     );
     navigate(`/reservation/${notification.reservation_id}`);
@@ -63,15 +69,25 @@ function Notification() {
                 '0 6px 16px 0 rgb(0 0 0 / 8%), 0 3px 6px -4px rgb(0 0 0 / 12%), 0 9px 28px 8px rgb(0 0 0 / 5%)',
             }}
           >
-            <Tabs.TabPane key="1" style={{ height: '100%' }} tab="Reservation">
-              <Menu style={{ height: '100%', boxShadow: 'none', marginTop: 5 }}>
+            <Tabs.TabPane
+              key="1"
+              style={{ height: '100%' }}
+              tab={`Reservation ${unReadTotal > 0 ? `(${unReadTotal})` : ''} `}
+            >
+              <Menu
+                style={{ height: '100%', boxShadow: 'none', marginTop: 5, overflowY: 'scroll' }}
+              >
                 {notifications.data.map((item: any) => (
                   <Menu.Item style={{ background: item.is_read ? '' : '#e4f6f3' }}>
                     <p
                       aria-hidden="true"
                       dangerouslySetInnerHTML={{ __html: generateNotificationContent(item) }}
                       onClick={() => readBookingNotification(item)}
+                      style={{ marginBottom: '0.5rem' }}
                     />
+                    <Tooltip title={item.created_at}>
+                      <span style={{ fontSize: 12 }}>{moment(item.created_at).fromNow()}</span>
+                    </Tooltip>
                   </Menu.Item>
                 ))}
               </Menu>
