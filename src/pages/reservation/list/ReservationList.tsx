@@ -17,7 +17,7 @@ import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { searchReservation } from 'actions';
+import { readNotifcationsAction, searchReservation } from 'actions';
 
 import PattonButton from 'components/PattonButton';
 
@@ -92,23 +92,13 @@ function ReservationList({ type }: Props) {
     if (data) {
       return data.map((item: any) => {
         return {
-          id: item.id,
+          ...item,
           key: item.id,
           folio_id: item.reservationNumber,
-          status: item.status,
-          created_date: item.created_at,
           source_ta: item.source,
-          checkin: item.checkin,
-          checkout: item.checkout,
           booker_name: item.booker.name,
-          email: item.booker.email,
           phone: item.booker.phone_number,
           total_room: item.room_total,
-          isDropOff: item.isDropOff,
-          isEarlyCheckin: item.isEarlyCheckin,
-          isLateCheckout: item.isLateCheckout,
-          isPickup: item.isPickup,
-          isNew: item.isNew,
         };
       });
     }
@@ -211,8 +201,8 @@ function ReservationList({ type }: Props) {
     },
     {
       title: t('common.Created Date'),
-      dataIndex: 'created_date',
-      key: 'created_date',
+      dataIndex: 'created_at',
+      key: 'created_at',
     },
     {
       title: t('common.Source TA'),
@@ -311,7 +301,17 @@ function ReservationList({ type }: Props) {
               dataSource={convertData(items)}
               onRow={(record: any) => {
                 return {
-                  onClick: () => navigate(`/reservation/${record.id}`),
+                  onClick: () => {
+                    if (record.isNew) {
+                      dispatch(
+                        readNotifcationsAction({
+                          id: record.newNotificationId,
+                        }),
+                      );
+                    }
+
+                    navigate(`/reservation/${record.id}`);
+                  },
                 };
               }}
               pagination={false}
