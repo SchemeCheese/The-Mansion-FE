@@ -2,8 +2,11 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import NightAudit from 'pages/night_audit';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import ReservationCheckinTodayDetail from 'pages/front-desk/detail/checkin_today';
+import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_today';
+import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
 import FrontDesk from 'pages/front-desk/list';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
@@ -204,6 +207,42 @@ function Root() {
                 </PrivateRoute>
               }
               path="/front-desk"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <ReservationCheckinTodayDetail />
+                </PrivateRoute>
+              }
+              path="/front-desk/checkin-today/:id"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <ReservationInhouseTodayDetail />
+                </PrivateRoute>
+              }
+              path="/front-desk/inhouse-today/:id/detail/:reservationDetailId"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <ReservationCheckoutTodayDetail />
+                </PrivateRoute>
+              }
+              path="/front-desk/checkout-today/:id/detail/:reservationDetailId"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>

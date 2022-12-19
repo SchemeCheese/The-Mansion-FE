@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, Pagination, Row, Spin, Table, Tag } from 'antd';
+import { Col, Pagination, Row, Spin, Table } from 'antd';
 import { formatNumber } from 'helpers';
 import { selectReservationRoomsState } from 'selectors';
 
@@ -155,20 +155,12 @@ function ReservationRoomList({ type }: Props) {
     if (data) {
       return data.map((item: any) => {
         return {
-          id: item.id,
+          ...item,
           key: item.id,
-          room_no: item.room_no,
-          folio_id: item.folio_id,
-          checkin: item.checkin,
-          checkout: item.checkout,
-          booker_name: item.booker_name,
           phone: item.booker_phone,
-          total_guest: item.total_guest,
-          total_amount: item.total_amount,
           paid: item.total_paid,
           remain: item.total_remain,
           notes: item.note,
-          reservation_id: item.reservation_id,
         };
       });
     }
@@ -197,7 +189,13 @@ function ReservationRoomList({ type }: Props) {
               dataSource={tableData}
               onRow={(record: any) => {
                 return {
-                  onClick: () => navigate(`/reservation/${record.reservation_id}`),
+                  onClick: () => {
+                    navigate(
+                      `/front-desk/${type.replace('_', '-')}/${record.reservation_id}/detail/${
+                        record.reservation_detail_id
+                      }`,
+                    );
+                  },
                 };
               }}
               pagination={false}

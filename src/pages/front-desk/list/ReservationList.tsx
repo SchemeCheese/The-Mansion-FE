@@ -345,7 +345,7 @@ function ReservationList({ type }: Props) {
               dataSource={convertData(items)}
               onRow={(record: any) => {
                 return {
-                  onClick: () => navigate(`/reservation/${record.id}`),
+                  onClick: () => navigate(`/front-desk/checkin-today/${record.id}`),
                 };
               }}
               pagination={false}

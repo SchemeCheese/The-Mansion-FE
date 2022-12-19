@@ -48,13 +48,14 @@ import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
 interface Props {
+  noPadding?: boolean;
   reservationDetailId: string;
   reservationId: string;
 }
 
 const { TextArea } = Input;
 
-function Transaction({ reservationDetailId, reservationId }: Props) {
+function Transaction({ noPadding, reservationDetailId, reservationId }: Props) {
   const { t } = useTranslation();
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const { amount_info: amountInfo, paid, transactions } = reservationDetailInfo.data;
@@ -339,11 +340,11 @@ function Transaction({ reservationDetailId, reservationId }: Props) {
   return (
     <Row
       style={{
-        paddingTop: 16,
-        background: '#F0F2F5',
-        paddingBottom: 25,
-        paddingRight: 15,
-        paddingLeft: 15,
+        paddingTop: noPadding ? 10 : 16,
+        background: noPadding ? '' : '#F0F2F5',
+        paddingBottom: noPadding ? 10 : 25,
+        paddingRight: noPadding ? 6 : 15,
+        paddingLeft: noPadding ? 6 : 15,
       }}
     >
       <Modal

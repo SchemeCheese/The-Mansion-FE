@@ -1,4 +1,4 @@
-import 'src/styles/reservation.css';
+import 'styles/reservation.css';
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
