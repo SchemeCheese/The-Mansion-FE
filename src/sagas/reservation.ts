@@ -574,7 +574,7 @@ export function* getDownloadPDFReservationDetailSaga({
   try {
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_PDF)}/${
       payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/downloadPdf`;
+    }/reservation-detail/${payload.payload.language}/downloadPdf`;
 
     fetch(urlApi, {
       method: 'GET',
@@ -609,7 +609,7 @@ export function* getDownloadDocxReservationDetailSaga({
   try {
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_DOCX)}/${
       payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/downloadDocx`;
+    }/reservation-detail/${payload.payload.language}/downloadDocx`;
 
     fetch(urlApi, {
       method: 'GET',

@@ -398,7 +398,7 @@ export interface DownloadPDFReservationDetailState {
 
 export interface ReservationDetailDownloadPDFPayload {
   file_name: string;
-  reservation_detail_id: string | number;
+  language: string;
   reservation_info_id: string | number;
 }
 
@@ -409,7 +409,7 @@ export interface DownloadDocxReservationDetailState {
 
 export interface ReservationDetailDownloadDocxPayload {
   file_name: string;
-  reservation_detail_id: string | number;
+  language: string;
   reservation_info_id: string | number;
 }
 
