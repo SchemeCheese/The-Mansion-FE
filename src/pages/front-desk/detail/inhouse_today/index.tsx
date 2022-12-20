@@ -90,7 +90,7 @@ function ReservationInhouseTodayDetail() {
       dispatch(
         downloadPDFReservationDetail({
           payload: {
-            reservation_detail_id: 2,
+            language: 'en',
             reservation_info_id: id ?? '',
             file_name: `the_mansion_hotel_${formattedDateNow}_checkin_${id ?? ''}.${value}`,
           },
@@ -100,7 +100,7 @@ function ReservationInhouseTodayDetail() {
       dispatch(
         downloadDocxReservationDetail({
           payload: {
-            reservation_detail_id: 2,
+            language: 'en',
             reservation_info_id: id ?? '',
             file_name: `the_mansion_hotel_${formattedDateNow}_checkin_${id ?? ''}.${value}`,
           },

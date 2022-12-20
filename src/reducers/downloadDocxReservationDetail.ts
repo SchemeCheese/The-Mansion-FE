@@ -6,7 +6,7 @@ import { DownloadDocxReservationDetailState } from 'types';
 
 export const downloadDocxReservationDetailState = {
   payload: {
-    reservation_detail_id: '',
+    language: '',
     reservation_info_id: '',
     file_name: '',
   },
