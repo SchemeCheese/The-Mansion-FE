@@ -29,11 +29,14 @@ function Notification() {
   }, []);
 
   const readBookingNotification = async (notification: any) => {
-    dispatch(
-      readNotifcationsAction({
-        id: notification.id,
-      }),
-    );
+    if (!notification.is_read) {
+      dispatch(
+        readNotifcationsAction({
+          id: notification.id,
+        }),
+      );
+    }
+
     dispatch(
       getReservation({
         reservation_id: notification.reservation_id,
@@ -45,6 +48,10 @@ function Notification() {
   const generateNotificationContent = (item: any) => {
     if (item.type === 'reservation' && item.detail_type === 'new') {
       return `<span style="color:red;">[Beds24]</span> New booking with folio <strong>${item.folio}</strong> from <strong>${item.additional_info.agent}</strong>`;
+    }
+
+    if (item.type === 'reservation' && item.detail_type === 'cancel') {
+      return `<span style="color:red;">[Beds24]</span> The booking with folio <strong>${item.folio}</strong> has been canceled`;
     }
 
     return '';
