@@ -618,6 +618,7 @@ function ReservationForm({
                   noPadding
                   reservationDetailId={reservationDetailId ?? ''}
                   reservationId={reservationId}
+                  type={type}
                 />
               </Card>
             )}

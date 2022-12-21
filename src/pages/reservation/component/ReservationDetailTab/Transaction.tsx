@@ -51,11 +51,12 @@ interface Props {
   noPadding?: boolean;
   reservationDetailId: string;
   reservationId: string;
+  type?: string;
 }
 
 const { TextArea } = Input;
 
-function Transaction({ noPadding, reservationDetailId, reservationId }: Props) {
+function Transaction({ noPadding, reservationDetailId, reservationId, type }: Props) {
   const { t } = useTranslation();
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const { amount_info: amountInfo, paid, transactions } = reservationDetailInfo.data;
@@ -377,94 +378,200 @@ function Transaction({ noPadding, reservationDetailId, reservationId }: Props) {
           style={{ width: '100%' }}
           tabList={tabList}
         >
-          <div style={{ minHeight: 380 }}>{contentList[activeTabKey]}</div>
+          <div style={{ minHeight: type && type === 'checkout_today' ? 450 : 380 }}>
+            {contentList[activeTabKey]}
+          </div>
           <div>
-            <Row>
-              <Col span={8} style={{ paddingRight: 17 }}>
-                <PattonButton
-                  onClick={() => setIsModalOpenAddItem(true)}
-                  style={{ width: '100%' }}
-                  type="primary"
-                >
-                  {t('common.Add Item')}
-                </PattonButton>
-                <AddItem
-                  reservationDetailId={reservationDetailId}
-                  reservationId={reservationId}
-                  setIsModalOpen={setIsModalOpenAddItem}
-                  visible={isModalOpenAddItem}
-                />
-              </Col>
-              <Col span={8} style={{ paddingRight: 17 }}>
-                <MButton
-                  disabled={selectedRowKeys.length === 0}
-                  onClick={() => setIsModalOpenPaySelected(true)}
-                  style={{ width: '100%' }}
-                >
-                  {t('paySelected.Pay Selected')}
-                </MButton>
-                <PaySelectedModal
-                  discountAmount={discountAmount}
-                  paySelectedRowKeys={paySelectedRowKeys}
-                  selectedRows={selectedRows}
-                  setDiscountAmount={setDiscountAmount}
-                  setIsModalOpen={setIsModalOpenPaySelected}
-                  setIsModalOpenSelectedPaymentMethod={setIsModalOpenSelectedPaymentMethod}
-                  setPaySelectedRowKeys={setPaySelectedRowKeys}
-                  setPaySelectedRows={setPaySelectedRows}
-                  totalAmount={totalAmount}
-                  visible={isModalOpenPaySelected}
-                />
-              </Col>
-              <Col span={8}>
-                <MButton
-                  onClick={() => setIsModalOpenAditRoomCharge(true)}
-                  style={{ width: '100%' }}
-                >
-                  {t('auditRoomCharge.Add Room Charge')}
-                </MButton>
-                <RoomAuditCharge
-                  reservationDetailId={reservationDetailId}
-                  reservationId={reservationId}
-                  setIsModalOpen={setIsModalOpenAditRoomCharge}
-                  visible={isModalOpenAditRoomCharge}
-                />
-              </Col>
-            </Row>
-            <Row style={{ paddingTop: 18 }}>
-              <Col span={8} style={{ paddingRight: 17 }}>
-                <MButton style={{ width: '100%' }}>{t('transaction.Add Disk')}</MButton>
-              </Col>
-              <Col span={8} style={{ paddingRight: 17 }}>
-                <MButton
-                  disabled={selectedRowKeys.length === 0}
-                  onClick={() => setIsModalOpenChangeDisk(true)}
-                  style={{ width: '100%' }}
-                >
-                  {t('paySelected.Transfer Disk')}
-                </MButton>
-                <SelectDiskModal
-                  saleDetailIds={selectedRowKeys}
-                  setIsModalOpen={setIsModalOpenChangeDisk}
-                  visible={isModalOpenChangeDisk}
-                />
-              </Col>
-              <Col span={8}>
-                <MButton
-                  disabled={selectedRowKeys.length === 0}
-                  onClick={() => setIsModalOpenTransferRoom(true)}
-                  style={{ width: '100%' }}
-                >
-                  {t('transaction.Transfer Room')}
-                </MButton>
-                <TransferRoom
-                  selectedSaleRowKeys={selectedRowKeys}
-                  setIsModalOpen={setIsModalOpenTransferRoom}
-                  totalAmount={totalAmount}
-                  visible={isModalOpenTransferRoom}
-                />
-              </Col>
-            </Row>
+            {type && type === 'checkout_today' ? (
+              <Row>
+                <Col span={4} style={{ paddingRight: 17 }}>
+                  <PattonButton
+                    onClick={() => setIsModalOpenAddItem(true)}
+                    style={{ width: '100%' }}
+                    type="primary"
+                  >
+                    {t('common.Add Item')}
+                  </PattonButton>
+                  <AddItem
+                    reservationDetailId={reservationDetailId}
+                    reservationId={reservationId}
+                    setIsModalOpen={setIsModalOpenAddItem}
+                    visible={isModalOpenAddItem}
+                  />
+                </Col>
+                <Col span={20} style={{ paddingLeft: 10 }}>
+                  <Row>
+                    <Col span={4} style={{ paddingLeft: 10 }}>
+                      <MButton
+                        disabled={selectedRowKeys.length === 0}
+                        onClick={() => setIsModalOpenPaySelected(true)}
+                        style={{ width: '100%' }}
+                      >
+                        {t('paySelected.Pay Selected')}
+                      </MButton>
+                      <PaySelectedModal
+                        discountAmount={discountAmount}
+                        paySelectedRowKeys={paySelectedRowKeys}
+                        selectedRows={selectedRows}
+                        setDiscountAmount={setDiscountAmount}
+                        setIsModalOpen={setIsModalOpenPaySelected}
+                        setIsModalOpenSelectedPaymentMethod={setIsModalOpenSelectedPaymentMethod}
+                        setPaySelectedRowKeys={setPaySelectedRowKeys}
+                        setPaySelectedRows={setPaySelectedRows}
+                        totalAmount={totalAmount}
+                        visible={isModalOpenPaySelected}
+                      />
+                    </Col>
+                    <Col span={4} style={{ paddingLeft: 10 }}>
+                      <MButton
+                        disabled={selectedRowKeys.length === 0}
+                        onClick={() => setIsModalOpenChangeDisk(true)}
+                        style={{ width: '100%' }}
+                      >
+                        {t('paySelected.Transfer Disk')}
+                      </MButton>
+                      <SelectDiskModal
+                        saleDetailIds={selectedRowKeys}
+                        setIsModalOpen={setIsModalOpenChangeDisk}
+                        visible={isModalOpenChangeDisk}
+                      />
+                    </Col>
+                    <Col span={4} style={{ paddingLeft: 10 }}>
+                      <MButton style={{ width: '100%' }}>{t('common.Overtime')}</MButton>
+                    </Col>
+                    <Col span={4} style={{ paddingLeft: 10 }}>
+                      <MButton
+                        onClick={() => setIsModalOpenAddDiscount(true)}
+                        style={{ width: '100%' }}
+                      >
+                        {t('common.Discount')}
+                      </MButton>
+                      <AddDiscount
+                        setIsModalOpen={setIsModalOpenAddDiscount}
+                        visible={isModalOpenAddDiscount}
+                      />
+                    </Col>
+                    <Col span={4} style={{ paddingLeft: 10 }}>
+                      <MButton
+                        onClick={() => setIsModalOpenDeposit(true)}
+                        style={{ width: '100%' }}
+                      >
+                        {t('common.Deposit')}
+                      </MButton>
+                      <Deposit
+                        grandTotal={amountInfo?.grand_total}
+                        isModalVisible={isModalOpenDeposit}
+                        setModalVisible={setIsModalOpenDeposit}
+                      />
+                    </Col>
+                    <Col span={4} style={{ paddingLeft: 10 }}>
+                      <MButton
+                        disabled={selectedRowKeys.length === 0}
+                        onClick={() => setIsModalOpenTransferRoom(true)}
+                        style={{ width: '100%' }}
+                      >
+                        {t('transaction.Transfer Room')}
+                      </MButton>
+                      <TransferRoom
+                        selectedSaleRowKeys={selectedRowKeys}
+                        setIsModalOpen={setIsModalOpenTransferRoom}
+                        totalAmount={totalAmount}
+                        visible={isModalOpenTransferRoom}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>
+            ) : (
+              <>
+                <Row>
+                  <Col span={8} style={{ paddingRight: 17 }}>
+                    <PattonButton
+                      onClick={() => setIsModalOpenAddItem(true)}
+                      style={{ width: '100%' }}
+                      type="primary"
+                    >
+                      {t('common.Add Item')}
+                    </PattonButton>
+                    <AddItem
+                      reservationDetailId={reservationDetailId}
+                      reservationId={reservationId}
+                      setIsModalOpen={setIsModalOpenAddItem}
+                      visible={isModalOpenAddItem}
+                    />
+                  </Col>
+                  <Col span={8} style={{ paddingRight: 17 }}>
+                    <MButton
+                      disabled={selectedRowKeys.length === 0}
+                      onClick={() => setIsModalOpenPaySelected(true)}
+                      style={{ width: '100%' }}
+                    >
+                      {t('paySelected.Pay Selected')}
+                    </MButton>
+                    <PaySelectedModal
+                      discountAmount={discountAmount}
+                      paySelectedRowKeys={paySelectedRowKeys}
+                      selectedRows={selectedRows}
+                      setDiscountAmount={setDiscountAmount}
+                      setIsModalOpen={setIsModalOpenPaySelected}
+                      setIsModalOpenSelectedPaymentMethod={setIsModalOpenSelectedPaymentMethod}
+                      setPaySelectedRowKeys={setPaySelectedRowKeys}
+                      setPaySelectedRows={setPaySelectedRows}
+                      totalAmount={totalAmount}
+                      visible={isModalOpenPaySelected}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <MButton
+                      onClick={() => setIsModalOpenAditRoomCharge(true)}
+                      style={{ width: '100%' }}
+                    >
+                      {t('auditRoomCharge.Add Room Charge')}
+                    </MButton>
+                    <RoomAuditCharge
+                      reservationDetailId={reservationDetailId}
+                      reservationId={reservationId}
+                      setIsModalOpen={setIsModalOpenAditRoomCharge}
+                      visible={isModalOpenAditRoomCharge}
+                    />
+                  </Col>
+                </Row>
+                <Row style={{ paddingTop: 18 }}>
+                  <Col span={8} style={{ paddingRight: 17 }}>
+                    <MButton style={{ width: '100%' }}>{t('transaction.Add Disk')}</MButton>
+                  </Col>
+                  <Col span={8} style={{ paddingRight: 17 }}>
+                    <MButton
+                      disabled={selectedRowKeys.length === 0}
+                      onClick={() => setIsModalOpenChangeDisk(true)}
+                      style={{ width: '100%' }}
+                    >
+                      {t('paySelected.Transfer Disk')}
+                    </MButton>
+                    <SelectDiskModal
+                      saleDetailIds={selectedRowKeys}
+                      setIsModalOpen={setIsModalOpenChangeDisk}
+                      visible={isModalOpenChangeDisk}
+                    />
+                  </Col>
+                  <Col span={8}>
+                    <MButton
+                      disabled={selectedRowKeys.length === 0}
+                      onClick={() => setIsModalOpenTransferRoom(true)}
+                      style={{ width: '100%' }}
+                    >
+                      {t('transaction.Transfer Room')}
+                    </MButton>
+                    <TransferRoom
+                      selectedSaleRowKeys={selectedRowKeys}
+                      setIsModalOpen={setIsModalOpenTransferRoom}
+                      totalAmount={totalAmount}
+                      visible={isModalOpenTransferRoom}
+                    />
+                  </Col>
+                </Row>
+              </>
+            )}
           </div>
         </Card>
       </Col>
