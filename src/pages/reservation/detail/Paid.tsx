@@ -11,8 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber, randomKey } from 'helpers';
-
-import PayDetailModal from '../modal/TransactionModal/PayDetailModal';
+import PayDetailModal from 'pages/reservation/modal/TransactionModal/PayDetailModal';
 
 interface DataType {
   balance: string;

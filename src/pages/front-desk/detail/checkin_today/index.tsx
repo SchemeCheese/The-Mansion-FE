@@ -11,11 +11,12 @@ Main functions : Reservation Detail Page
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import type { RadioChangeEvent } from 'antd';
-import { Checkbox, Col, message, Modal, Radio, Row, Select, Skeleton, Space } from 'antd';
+import { Checkbox, Col, message, Modal, Radio, Row, Skeleton, Space } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
+import DownloadFile from 'pages/reservation/component/DownloadFile';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -28,8 +29,6 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import {
-  downloadDocxReservationDetail,
-  downloadPDFReservationDetail,
   getReservation,
   getReservationDetail,
   resendEmailReservationAction,
@@ -40,12 +39,9 @@ import {
 } from 'actions';
 
 import MButton from 'components/MButton';
-import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
 
 import { RootState } from 'types';
-
-const { Option } = Select;
 
 const BreadscrumTitle = styled.p`
   color: rgba(0 0 0 85%);
@@ -58,8 +54,6 @@ const BreadscrumData = styled.p`
 `;
 
 function ReservationCheckinTodayDetail() {
-  const navigate = useNavigate();
-
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
 
@@ -81,32 +75,6 @@ function ReservationCheckinTodayDetail() {
 
   const onFinishFailed = (errorInfo: any) => {
     console.log('Failed:', errorInfo);
-  };
-
-  const handleChange = (value: string) => {
-    const formattedDateNow = moment(new Date()).format('DD_MM_YYYY');
-
-    if (value === 'pdf') {
-      dispatch(
-        downloadPDFReservationDetail({
-          payload: {
-            language: 'en',
-            reservation_info_id: id ?? '',
-            file_name: `the_mansion_hotel_${formattedDateNow}_checkin_${id ?? ''}.${value}`,
-          },
-        }),
-      );
-    } else if (value === 'docx') {
-      dispatch(
-        downloadDocxReservationDetail({
-          payload: {
-            language: 'en',
-            reservation_info_id: id ?? '',
-            file_name: `the_mansion_hotel_${formattedDateNow}_checkin_${id ?? ''}.${value}`,
-          },
-        }),
-      );
-    }
   };
 
   const { t } = useTranslation();
@@ -149,35 +117,6 @@ function ReservationCheckinTodayDetail() {
     setRoomSelected([]);
     setIsModalVisible(true);
   };
-
-  const dataSearchRoom = [];
-
-  for (let index = 0; index < 3; index++) {
-    dataSearchRoom.push({
-      created_date: '',
-      rate_name: '',
-      adult: '',
-      child: '',
-      rate_detail: '',
-      unit_price: '',
-      updated_price: '',
-      task: '',
-    });
-  }
-
-  const dataSelectedRoomsResult = [];
-
-  for (let index = 0; index < 3; index++) {
-    dataSelectedRoomsResult.push({
-      checkin: '',
-      checkout: '',
-      room_type: '',
-      rate_name: '',
-      quantity: '',
-      subtotal: '',
-      task: '',
-    });
-  }
 
   const dispatch = useDispatch();
   const reservationRedux: any = useSelector<RootState>(
@@ -432,18 +371,7 @@ function ReservationCheckinTodayDetail() {
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
-            <Select
-              className="download-select"
-              onChange={handleChange}
-              placeholder="Download"
-              style={{
-                width: 120,
-                textAlign: 'left',
-              }}
-            >
-              <Option value="pdf">PDF</Option>
-              <Option value="docx">Docx</Option>
-            </Select>
+            <DownloadFile />
             <MButton
               disabled={Boolean(reservationRedux.booker_email)}
               onClick={() => setIsSelectLanguageModalOpen(true)}
