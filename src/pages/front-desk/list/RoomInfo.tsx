@@ -24,6 +24,18 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
   const isReadyItem = item.state?.toString() === '1';
   const dispatch = useDispatch();
 
+  const viewMapping = {
+    '1': t('common.Ocean View'),
+    '2': t('common.Mountain View'),
+  };
+
+  const directionMapping = {
+    '1': t('common.Northwing'),
+    '2': t('common.Eastwing'),
+    '3': t('common.Westwing'),
+    '4': t('common.Southwing'),
+  };
+
   const roomStatusMapping = {
     '1': (
       <>
@@ -209,10 +221,16 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
                 fillRule="evenodd"
               />
             </svg>
-            <span style={{ paddingLeft: 6 }}> {t('frontDesk.City View')}</span>
+            <span style={{ paddingLeft: 6 }}>
+              {item.view === null && t('common.Not yet setting')}
+              {item.view && item.view.toString() === '1' && viewMapping['1']}
+              {item.view && item.view.toString() === '2' && viewMapping['2']}
+            </span>
           </Col>
           <Col span={12} style={{ paddingTop: 20 }}>
-            <span style={{ float: 'right', color: 'rgba(0, 0, 0, 0.45)' }}>Room Type</span>
+            <span style={{ float: 'right', color: 'rgba(0, 0, 0, 0.45)' }}>
+              {t('common.Room Type')}
+            </span>
           </Col>
 
           <Col span={12} style={{ paddingTop: 19 }}>
@@ -238,7 +256,13 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
                 />
               </svg>
 
-              <span style={{ paddingLeft: 6 }}> {t('frontDesk.Northwing')}</span>
+              <span style={{ paddingLeft: 8 }}>
+                {item.direction === null && t('common.Not yet setting')}
+                {item.direction && item.direction.toString() === '1' && directionMapping['1']}
+                {item.direction && item.direction.toString() === '2' && directionMapping['2']}
+                {item.direction && item.direction.toString() === '3' && directionMapping['3']}
+                {item.direction && item.direction.toString() === '4' && directionMapping['4']}
+              </span>
             </div>
 
             <div style={{ paddingTop: 20, paddingBottom: 5 }}>

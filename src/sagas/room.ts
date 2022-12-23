@@ -143,11 +143,12 @@ export function* getWalkinRoomsSaga({ payload }: ReturnType<typeof getWalkinRoom
   try {
     let items = [];
     let total = 0;
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
     const newPayload = {
       ...payload,
-      operator_code: 'the_mansion',
-      branch_code: 'the_mansion',
-      facility_code: 'hotel',
+      operator_code,
+      branch_code,
+      facility_code,
       per_page: 9,
     };
 
@@ -181,23 +182,24 @@ export function* getReservationRoomSaga({ payload }: ReturnType<typeof getReserv
   try {
     let items = [];
     let total = 0;
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     const newPayload =
       payload.type === 'checkout_today'
         ? {
             ...payload.checkout_today,
             type: 'checkout_today',
-            operator_code: 'the_mansion',
-            branch_code: 'the_mansion',
-            facility_code: 'hotel',
+            operator_code,
+            branch_code,
+            facility_code,
             per_page: 10,
           }
         : {
             ...payload.inhouse_today,
             type: 'inhouse_today',
-            operator_code: 'the_mansion',
-            branch_code: 'the_mansion',
-            facility_code: 'hotel',
+            operator_code,
+            branch_code,
+            facility_code,
             per_page: 10,
           };
 

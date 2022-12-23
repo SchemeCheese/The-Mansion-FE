@@ -7,7 +7,7 @@ import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { getWalkinRoomsAction } from 'actions';
+import { getRoomType, getWalkinRoomsAction } from 'actions';
 
 import MInput from 'components/MInput';
 
@@ -44,6 +44,7 @@ function WalkIn() {
   };
 
   useEffect(() => {
+    dispatch(getRoomType());
     dispatch(getWalkinRoomsAction(roomFilter));
   }, []);
 
