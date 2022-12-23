@@ -74,12 +74,12 @@ function DownloadFile() {
         okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
         onCancel={() => setIsSelectDownloadModalOpen(false)}
         onOk={handleDownloadReservationConfirmation}
-        title="Download File"
+        title={t('common.Download File')}
         visible={isSelectDownloadModalOpen}
       >
         <Row>
           <Col span={12}>
-            <p style={{ fontWeight: 'bold' }}>Select format file:</p>
+            <p style={{ fontWeight: 'bold' }}>{t('common.Select format file')}:</p>
           </Col>
           <Col span={12}>
             <Radio.Group onChange={onChangeDownloadFileFormat} value={formatFileDownload}>
@@ -92,7 +92,7 @@ function DownloadFile() {
         </Row>
         <Row style={{ marginTop: 30 }}>
           <Col span={12}>
-            <p style={{ fontWeight: 'bold' }}>Select language:</p>
+            <p style={{ fontWeight: 'bold' }}>{t('common.Select language')}:</p>
           </Col>
           <Col span={12}>
             <Radio.Group onChange={onChange} value={language}>
@@ -105,7 +105,7 @@ function DownloadFile() {
           </Col>
         </Row>
       </Modal>
-      <MButton onClick={() => setIsSelectDownloadModalOpen(true)}>Download</MButton>
+      <MButton onClick={() => setIsSelectDownloadModalOpen(true)}>{t('common.Download')}</MButton>
     </>
   );
 }
