@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Form, Layout, Menu, Modal, Select, Tooltip } from 'antd';
+import moment from 'moment';
 import { selectFacilitesByBranch, selectGetBranchs, selectUser } from 'selectors';
 import _ from 'underscore';
 
@@ -75,6 +76,8 @@ function MLayout(props: Props) {
     window.localStorage.getItem('branch_id') ?? '1',
   );
   const [currentBranchName, setCurrentBranchName] = useState<string>('');
+  const [businessDate, setBusinessDate] = useState<string>('');
+
   const [currentFacility, setCurrentFacility] = useState({
     id: window.localStorage.getItem('facility_id') ?? '',
     operator_code: '',
@@ -120,6 +123,7 @@ function MLayout(props: Props) {
         }),
       );
       setCurrentBranchName(currentFacility?.name);
+      setBusinessDate(branchFacilities.data.business_date);
 
       window.localStorage.setItem('branch_id', currentBranchId);
       window.localStorage.setItem('facility_id', currentFacility.id);
@@ -156,6 +160,7 @@ function MLayout(props: Props) {
         });
 
         setCurrentBranchName(facilitySelected.name);
+        setBusinessDate(branchFacilities.data.business_date);
         setCurrentBranchId(branchInfoSelected.id.toString());
         setCurrentFacility({
           id: facilitySelected.id,
@@ -168,6 +173,7 @@ function MLayout(props: Props) {
         const facilitySelected = branchFacilities.data.facilities[0];
 
         setCurrentBranchName(facilitySelected.name);
+        setBusinessDate(branchFacilities.data.business_date);
         setCurrentBranchId(branchFacilities.branch_id.toString());
         setCurrentFacility({
           id: facilitySelected.id,
@@ -371,7 +377,9 @@ function MLayout(props: Props) {
 
           <div style={{ float: 'right', paddingRight: '15px' }}>
             <Tooltip placement="top" title="System Date">
-              <span style={{ marginRight: 28, fontSize: 12, cursor: 'pointer' }}>19/05/2021</span>
+              <span style={{ marginRight: 28, fontSize: 12, cursor: 'pointer' }}>
+                {businessDate ? moment(businessDate).format('DD/MM/YYYY') : ''}
+              </span>
             </Tooltip>
 
             <Notification />
