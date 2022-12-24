@@ -461,6 +461,18 @@ export interface ReservationRoomState {
   type: string;
 }
 
+export interface PrintRegistrationCardPDFReservationDetailState {
+  payload: ReservationDetailPrintRegistrationCardPDFPayload;
+  status: string;
+}
+
+export interface ReservationDetailPrintRegistrationCardPDFPayload {
+  file_name: string;
+  language: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -494,6 +506,7 @@ export interface RootState {
   getWalkinRooms: GetWalkinRoomState;
   github: GitHubState;
   notifications: NotificationsState;
+  printRegistrationCardPDFReservationDetail: PrintRegistrationCardPDFReservationDetailState;
   product: ProductSearchState;
   removeGuest: RemoveGuestState;
   resendEmailReservation: ResendEmailReservationState;

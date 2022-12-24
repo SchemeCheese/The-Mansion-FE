@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import NightAudit from 'pages/night_audit';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import ReservationCheckinTodayDetail from 'pages/front-desk/detail/checkin_today';
 import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_today';
 import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
 import FrontDesk from 'pages/front-desk/list';
+import NightAudit from 'pages/night_audit';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
 import Reservation from 'pages/reservation/list';
@@ -183,7 +183,7 @@ function Root() {
               path="/reservation/create"
             />
 
-<Route
+            <Route
               element={
                 <PrivateRoute
                   breadCrumb={reservationBreadCrum}
@@ -196,7 +196,7 @@ function Root() {
               path="night-audit"
             />
 
-<Route
+            <Route
               element={
                 <PrivateRoute
                   breadCrumb={reservationBreadCrum}

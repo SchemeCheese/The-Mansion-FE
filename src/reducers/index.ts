@@ -36,6 +36,9 @@ import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
 import getWalkinRooms, { getWalkinRoomsState } from './getWalkinRooms';
 import github, { githubState } from './github';
+import printRegistrationCardPDFReservationDetail, {
+  printRegistrationCardPDFReservationDetailState,
+} from './printRegistrationCardPDFReservationDetail';
 import product, { productSearchState } from './product';
 import readNotification, { readNotificationState } from './readNotification';
 import removeGuest, { removeGuestState } from './removeGuest';
@@ -108,6 +111,7 @@ export const initialState = {
   getBranchFacilities: getBranchFacilitesState,
   branchInfo: branchInfoState,
   notifications: notificationsState,
+  printRegistrationCardPDFReservationDetail: printRegistrationCardPDFReservationDetailState,
 };
 
 export default {
@@ -161,4 +165,5 @@ export default {
   ...getBranchFacilites,
   ...branchInfo,
   ...notifications,
+  ...printRegistrationCardPDFReservationDetail,
 };

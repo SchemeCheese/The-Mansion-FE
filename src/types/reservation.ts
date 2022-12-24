@@ -191,3 +191,14 @@ export interface DownloadDocxReservationDetailPayload {
 export interface DownloadDocxReservationDetail {
   payload: DownloadDocxReservationDetailPayload;
 }
+
+export interface PrintRegistrationCardPDFReservationDetailPayload {
+  file_name: string;
+  language: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
+export interface PrintRegistrationCardPDFReservationDetail {
+  payload: PrintRegistrationCardPDFReservationDetailPayload;
+}

@@ -11,16 +11,33 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Card, Checkbox, Col, Form, Modal, Row, Select, Table } from 'antd';
+import {
+  Card,
+  Checkbox,
+  Col,
+  Form,
+  Modal,
+  Radio,
+  RadioChangeEvent,
+  Row,
+  Select,
+  Space,
+  Table,
+} from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
+import moment from 'moment';
 import ReservationDetailCard from 'pages/reservation/component/ReservationDetailCard';
 import CheckinModal from 'pages/reservation/create/Checkin';
 import _ from 'underscore';
 
 import { colors } from 'modules/theme';
 
-import { getAgentInfos, getReservationDetail } from 'actions';
+import {
+  getAgentInfos,
+  getReservationDetail,
+  printRegistrationCardPDFReservationDetail,
+} from 'actions';
 
 import MButton from 'components/MButton';
 import MInput from 'components/MInput';
@@ -157,9 +174,30 @@ function ReservationForm({
   }
 
   const [isModalCheckinOpen, setIsModalCheckinOpen] = useState(false);
+  const [isModalPrintRegistrationCardOpen, setIsPrintRegistrationCardOpen] = useState(false);
+  const [language, setLanguage] = useState('en');
 
   const showModalCheckin = () => {
     setIsModalCheckinOpen(true);
+  };
+
+  const onChangeLanguage = (e: RadioChangeEvent) => {
+    setLanguage(e.target.value);
+  };
+
+  const handlePrintRegistrationCard = () => {
+    const formattedDateNow = moment(new Date()).format('DD_MM_YYYY');
+
+    dispatch(
+      printRegistrationCardPDFReservationDetail({
+        payload: {
+          language,
+          reservation_info_id: reservationId ?? '',
+          reservation_detail_id: reservationDetailId ?? '',
+          file_name: `the_mansion_${formattedDateNow}_detail_${reservationId ?? ''}.'pdf'`,
+        },
+      }),
+    );
   };
 
   return (
@@ -170,6 +208,21 @@ function ReservationForm({
           setIsModalCheckinOpen={setIsModalCheckinOpen}
         />
       )}
+      <Modal
+        okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
+        onCancel={() => setIsPrintRegistrationCardOpen(false)}
+        onOk={handlePrintRegistrationCard}
+        title={t('common.Select language')}
+        visible={isModalPrintRegistrationCardOpen}
+      >
+        <Radio.Group onChange={onChangeLanguage} value={language}>
+          <Space direction="vertical">
+            <Radio value="vi">{t('common.Vietnamese')}</Radio>
+            <Radio value="en">{t('common.English')}</Radio>
+            <Radio value="jp">{t('common.Japanese')}</Radio>
+          </Space>
+        </Radio.Group>
+      </Modal>
       <Form
         ref={formRef}
         autoComplete="off"
@@ -404,7 +457,13 @@ function ReservationForm({
                       </MButton>
                     )}
                     {!isCreateForm && (
-                      <MButton style={{ marginLeft: 15 }}>
+                      <MButton
+                        disabled={selectedRowKeys.length !== 1}
+                        onClick={() => {
+                          setIsPrintRegistrationCardOpen(true);
+                        }}
+                        style={{ marginLeft: 15 }}
+                      >
                         {t('common.Print Registration Card')}
                       </MButton>
                     )}

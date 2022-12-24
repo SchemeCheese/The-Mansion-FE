@@ -15,6 +15,7 @@ import {
   GetReservationByFolioPayload,
   GetReservationFinishPayload,
   GetReservationPayload,
+  PrintRegistrationCardPDFReservationDetail,
   ResendEmailReservation,
   ReservationCreate,
   ReservationDetail,
@@ -173,3 +174,12 @@ export const getReservationByFolioFinish = createAction(
 );
 
 export const resetReservationByFolio = createAction(ActionTypes.RESERVATION_GET_BY_FOLIO_RESET);
+
+export const printRegistrationCardPDFReservationDetail = createAction(
+  ActionTypes.RESERVATION_DETAIL_PRINT_REGISTRATION_CARD_PDF,
+  (payload: PrintRegistrationCardPDFReservationDetail) => actionPayload(payload),
+);
+
+export const printRegistrationCardPDFReservationDetailSuccess = createAction(
+  ActionTypes.RESERVATION_DETAIL_PRINT_REGISTRATION_CARD_PDF_SUCCESS,
+);
