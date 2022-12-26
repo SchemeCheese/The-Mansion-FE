@@ -44,6 +44,9 @@ function Create() {
     source_type: '',
     source_id: '',
     charge_kind: '1',
+    checkin_time: moment(),
+    checkout_time: moment().add(1, 'hours'),
+    months: '',
   });
   const [quantity, setQuantity] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -87,7 +90,11 @@ function Create() {
         ...roomCondition,
         checkin: moment().format('YYYY-MM-DD'),
         checkout: moment().add(1, 'days').format('YYYY-MM-DD'),
+        checkin_time: moment(),
+        checkout_time: moment().add(1, 'hours'),
         room_type: '',
+        charge_kind: '1',
+        months: '',
       });
       setQuantity(1);
       setRoomSelected([]);
