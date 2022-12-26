@@ -257,7 +257,7 @@
 
 .new-reservation,
 .ant-table-tbody > tr.new-reservation:hover > td {
-  background: linear-gradient(to left, rgb(87, 202, 179) 4px, rgb(228, 246, 243) 4px);
+  font-weight: bold;
 }
 
 .ant-table-tbody > tr.new-reservation:hover > td {
