@@ -10,7 +10,19 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, DatePicker, Input, message, Modal, Row, Select, Table } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Table,
+  TimePicker,
+} from 'antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import { formatNumber, randomKey } from 'helpers';
 import moment from 'moment';
@@ -27,6 +39,8 @@ import PattonButton from 'components/PattonButton';
 import { RootState } from 'types';
 
 const { Option } = Select;
+
+const timeFormat = 'HH:mm';
 
 interface Props {
   isModalVisible: boolean;
@@ -219,7 +233,9 @@ function SelectRoomModal({
         checkout_date: item.checkout_date,
         actual_amount: item.actual_amount,
         charges: item.charges,
-        nights: moment.duration(moment(item.checkout).diff(moment(item.checkin))).asDays(),
+        nights: moment
+          .duration(moment(item.checkout_date).diff(moment(item.checkin_date)))
+          .asDays(),
         adl: 2,
         child: '-',
         baby: '-',
@@ -279,13 +295,26 @@ function SelectRoomModal({
 
   const searchRoomSelect = (value: string, key: string) => {
     let valueTemporary = value;
+    let roomConditionTemporary = { ...roomCondition };
+
+    roomConditionTemporary =
+      (key === 'charge_kind' && value === '2') ||
+      (key !== 'charge_kind' && roomCondition.charge_kind !== '1')
+        ? {
+            ...roomConditionTemporary,
+            checkout: roomConditionTemporary.checkin,
+          }
+        : {
+            ...roomConditionTemporary,
+            checkout: moment(roomConditionTemporary.checkin).add(1, 'days').format('YYYY-MM-DD'),
+          };
 
     if (value === undefined) {
       valueTemporary = '';
     }
 
     const stateTemporary = {
-      ...roomCondition,
+      ...roomConditionTemporary,
       [key]: valueTemporary,
       current_page: 1,
     };
@@ -344,6 +373,18 @@ function SelectRoomModal({
       key: 'rate_name',
     },
     {
+      title: t('common.Hours'),
+      dataIndex: 'hours',
+      key: 'hours',
+      hidden: roomCondition.charge_kind !== '2',
+    },
+    {
+      title: t('common.Months'),
+      dataIndex: 'months',
+      key: 'months',
+      hidden: roomCondition.charge_kind !== '5',
+    },
+    {
       title: t('common.Quantity'),
       dataIndex: 'quantity',
       key: 'quantity',
@@ -380,7 +421,7 @@ function SelectRoomModal({
         );
       },
     },
-  ];
+  ].filter(item => !item.hidden);
 
   useEffect(() => {
     dispatch(getRoomType());
@@ -410,7 +451,7 @@ function SelectRoomModal({
   };
 
   const disabledCheckoutDate: RangePickerProps['disabledDate'] = current => {
-    return current < moment(roomCondition.checkin).endOf('day');
+    return current <= moment(roomCondition.checkin).endOf('day');
   };
 
   const handleAddRoom = () => {
@@ -428,6 +469,30 @@ function SelectRoomModal({
         0,
       );
 
+      let hoursTime = 1;
+      let monthsTime = 1;
+
+      if (roomCondition.charge_kind === '2') {
+        const checkinTime = moment(
+          `${roomCondition.checkin} ${roomCondition.checkin_time.format(timeFormat)}`,
+        );
+        const checkoutTime = moment(
+          `${roomCondition.checkout} ${roomCondition.checkout_time.format(timeFormat)}`,
+        );
+
+        hoursTime = Math.ceil(moment.duration(checkoutTime.diff(checkinTime)).asHours());
+
+        if (hoursTime <= 0) {
+          message.warn(t('message.The checkin time or checkout time is invalid'));
+
+          return;
+        }
+      }
+
+      if (roomCondition.charge_kind === '5') {
+        monthsTime = roomCondition.months;
+      }
+
       dataSelectedRoomsResult.push({
         checkin_date: roomCondition.checkin,
         checkout_date: roomCondition.checkout,
@@ -435,7 +500,9 @@ function SelectRoomModal({
         room_type_text: _.first(reservationDetail).room_type,
         rate_name: _.first(reservationDetail).rate_name,
         quantity,
-        subtotal: formatNumber(sum * quantity),
+        subtotal: formatNumber(sum * quantity * monthsTime * hoursTime),
+        hours: hoursTime,
+        months: monthsTime,
         task: '',
         actual_amount: sum,
         charges: searchRoomResultState,
@@ -471,8 +538,8 @@ function SelectRoomModal({
               value={roomCondition.charge_kind}
             >
               <Option value="1">{t('reservation.Rate Type.Once')}</Option>
-              <Option value="2">{t('reservation.Rate Type.Time')}</Option>
-              <Option value="5">{t('reservation.Rate Type.Monthly')}</Option>
+              <Option value="2">{t('reservation.Rate Type.By Hours')}</Option>
+              <Option value="5">{t('reservation.Rate Type.By Months')}</Option>
             </Select>
           </Col>
           <Col span={5}>
@@ -489,6 +556,53 @@ function SelectRoomModal({
               value={roomCondition.checkin ? moment(roomCondition.checkin) : null}
             />
           </Col>
+          {roomCondition.charge_kind.toString() === '5' && (
+            <Col span={5}>
+              <span style={{ paddingBottom: 5, display: 'inherit' }}>{t('common.Months')}</span>
+              <Select
+                defaultValue="1"
+                disabled={quantityResult === 0}
+                onChange={value =>
+                  setRoomCondition({
+                    ...roomCondition,
+                    months: value,
+                  })
+                }
+                style={{ width: '93%' }}
+              >
+                <Option value="1">1</Option>
+                <Option value="2">2</Option>
+                <Option value="3">3</Option>
+                <Option value="4">4</Option>
+                <Option value="5">5</Option>
+              </Select>
+            </Col>
+          )}
+          {roomCondition.charge_kind.toString() === '2' && (
+            <Col span={5}>
+              <span style={{ paddingBottom: 5, display: 'inherit' }}>
+                {t('reservation.Checkin Time')}
+              </span>
+              <TimePicker
+                allowClear={false}
+                format={timeFormat}
+                onChange={time =>
+                  setRoomCondition({
+                    ...roomCondition,
+                    checkin_time: time,
+                    checkout_time: time?.clone().add(1, 'hours'),
+                  })
+                }
+                style={{
+                  height: 32,
+                  borderRadius: 4,
+                  marginRight: 11,
+                  width: '93%',
+                }}
+                value={roomCondition.checkin_time}
+              />
+            </Col>
+          )}
           <Col span={5}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>
               {' '}
@@ -506,7 +620,34 @@ function SelectRoomModal({
               value={roomCondition.checkout ? moment(roomCondition.checkout) : null}
             />
           </Col>
-          <Col span={5}>
+          {roomCondition.charge_kind.toString() === '2' && (
+            <Col span={4}>
+              <span style={{ paddingBottom: 5, display: 'inherit' }}>
+                {t('reservation.Checkout Time')}
+              </span>
+              <TimePicker
+                allowClear={false}
+                format={timeFormat}
+                onChange={time =>
+                  setRoomCondition({
+                    ...roomCondition,
+                    checkout_time: time,
+                  })
+                }
+                style={{
+                  height: 32,
+                  borderRadius: 4,
+                  marginRight: 11,
+                  width: '93%',
+                }}
+                value={roomCondition.checkout_time}
+              />
+            </Col>
+          )}
+          <Col
+            span={5}
+            style={{ marginTop: roomCondition.charge_kind.toString() === '1' ? 0 : 12 }}
+          >
             <span style={{ paddingBottom: 5, display: 'inherit' }}>{t('common.Room Type')}</span>
             <Select
               allowClear
@@ -517,7 +658,10 @@ function SelectRoomModal({
               {roomTypeOption}
             </Select>
           </Col>
-          <Col span={4}>
+          <Col
+            span={4}
+            style={{ marginTop: roomCondition.charge_kind.toString() === '1' ? 0 : 12 }}
+          >
             <span style={{ paddingBottom: 5, display: 'inherit' }}>{t('common.Quantity')}</span>
             <Select
               defaultValue="1"

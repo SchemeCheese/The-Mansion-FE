@@ -85,10 +85,10 @@
     "title": "Rate Type",
     "placeholder": "Select rate type",
     "Once": "Once",
-    "Time": "Time",
+    "By Hours": "By Hours",
     "Extend Time": "Extend Time",
     "Extend Rate": "Extend Rate",
-    "Monthly": "Monthly"
+    "By Months": "By Months"
   },
   "Adults": {
     "title": "Adults",
