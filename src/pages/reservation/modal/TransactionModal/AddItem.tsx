@@ -86,6 +86,8 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
       setDataAmount(dataAmountState);
     };
 
+  const [valueCurrentRecord, setValueCurrentRecord] = useState('');
+  const [currentRecord, setCurrentRecord] = useState<any>('');
   const columns: ColumnsType<DataType> = [
     {
       title: t('common.Product'),
@@ -122,9 +124,12 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
               }
 
               setDataAmount(dataAmountStateTemporary);
+              setValueCurrentRecord(event.target.value);
+              setCurrentRecord(record.id);
             }}
             placeholder="0"
             style={{ width: 96, borderRadius: 4 }}
+            value={record.id === currentRecord ? valueCurrentRecord : record.sales_price}
           />
         );
       },
@@ -260,7 +265,7 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
         })
         .map((item: any) => {
           const amountItem = stateAmount.find(element => element.id === item.id);
-          const total = amountItem ? amountItem.quantity * item.price : 0;
+          const total = amountItem ? amountItem.quantity * amountItem.sales_price : 0;
 
           return {
             id: item.id,
