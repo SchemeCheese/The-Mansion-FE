@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom';
+import NightAudit from 'pages/night_audit';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
 import Reservation from 'pages/reservation/list';
@@ -157,6 +158,18 @@ function Root() {
                 </PrivateRoute>
               }
               path="/reservation/create"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <NightAudit />
+                </PrivateRoute>
+              }
+              path="/night-audit"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>
