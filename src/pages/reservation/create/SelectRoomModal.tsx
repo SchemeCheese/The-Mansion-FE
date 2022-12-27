@@ -445,13 +445,13 @@ function SelectRoomModal({
     );
   }
 
-  const disabledDate: RangePickerProps['disabledDate'] = current => {
-    // Can not select days before today and today
-    return current < moment().endOf('day');
+  const disabledChekinDate: RangePickerProps['disabledDate'] = current => {
+    // Can not select days before today
+    return current < moment().subtract(1, 'day').endOf('day');
   };
 
   const disabledCheckoutDate: RangePickerProps['disabledDate'] = current => {
-    return current <= moment(roomCondition.checkin).endOf('day');
+    return current < moment(roomCondition.checkin).subtract(1, 'day').endOf('day');
   };
 
   const handleAddRoom = () => {
@@ -545,7 +545,7 @@ function SelectRoomModal({
           <Col span={5}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>{t('reservation.Checkin')}</span>
             <DatePicker
-              disabledDate={disabledDate}
+              disabledDate={disabledChekinDate}
               onChange={date => searchRoomDate(date, 'checkin')}
               style={{
                 height: 32,
