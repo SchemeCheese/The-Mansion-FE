@@ -100,7 +100,11 @@ function SelectRoomModal({
       key: 'rate_name',
       render: (text: any, record: any, index: number) => {
         const option: any = searchRoomResultState[index].rates?.map((item: any) => {
-          return <Option value={item.equipment_charge_detail_id}>{item.rate_name}</Option>;
+          return (
+            <Option key={item.equipment_charge_detail_id} value={item.equipment_charge_detail_id}>
+              {item.rate_name}
+            </Option>
+          );
         });
 
         return (
@@ -336,6 +340,7 @@ function SelectRoomModal({
 
     charges.forEach((item: any) => {
       result.push({
+        key: randomKey(5),
         use_date: item.use_date,
         rate_name: item.rate_name,
         adult: '',
@@ -494,6 +499,7 @@ function SelectRoomModal({
       }
 
       dataSelectedRoomsResult.push({
+        key: randomKey(5),
         checkin_date: roomCondition.checkin,
         checkout_date: roomCondition.checkout,
         room_type: roomCondition.room_type,

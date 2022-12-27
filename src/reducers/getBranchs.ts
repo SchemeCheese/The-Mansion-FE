@@ -11,8 +11,8 @@ export const getBranchsState = {
 export default {
   getBranchs: createReducer<GetBranchsState>(getBranchsState, builder => {
     builder
-      .addCase(branchs, () => {
-        console.log('branch');
+      .addCase(branchs, draft => {
+        draft.data = [];
       })
       .addCase(branchsFinish, (draft, { payload }) => {
         draft.data = payload.data;

@@ -85,7 +85,7 @@ function Notification() {
                 style={{ height: '100%', boxShadow: 'none', marginTop: 5, overflowY: 'scroll' }}
               >
                 {notifications.data.map((item: any) => (
-                  <Menu.Item style={{ background: item.is_read ? '' : '#e4f6f3' }}>
+                  <Menu.Item key={item.id} style={{ background: item.is_read ? '' : '#e4f6f3' }}>
                     <p
                       aria-hidden="true"
                       dangerouslySetInnerHTML={{ __html: generateNotificationContent(item) }}

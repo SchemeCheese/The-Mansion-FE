@@ -11,8 +11,8 @@ export const getBranchHeaderState = {
 export default {
   getBranchHeader: createReducer<BranchHeaderState>(getBranchHeaderState, builder => {
     builder
-      .addCase(branchHeader, () => {
-        console.log('branch in header Reduce');
+      .addCase(branchHeader, draft => {
+        draft.data = [];
       })
       .addCase(branchHeaderFinish, (draft, { payload }) => {
         draft.data = payload.data;
