@@ -378,7 +378,9 @@ function MLayout(props: Props) {
           <div style={{ float: 'right', paddingRight: '15px' }}>
             <Tooltip placement="top" title="System Date">
               <span style={{ marginRight: 28, fontSize: 12, cursor: 'pointer' }}>
-                {businessDate ? moment(businessDate).format('DD/MM/YYYY') : ''}
+                {businessDate
+                  ? moment(businessDate).format('DD/MM/YYYY')
+                  : t('common.Not yet setting')}
               </span>
             </Tooltip>
 

@@ -94,7 +94,7 @@ function PaySelectedModal({
   };
 
   useEffect(() => {
-    if (reservationDetailData.data.amount_info.discount_percent) {
+    if (reservationDetailData.data.amount_info?.discount_percent) {
       setDiscountAmount(
         (totalAmount * reservationDetailData.data.amount_info.discount_percent) / 100,
       );
@@ -129,8 +129,8 @@ function PaySelectedModal({
             <Form.Item
               label={
                 t('common.Discount') +
-                (reservationDetailData.data.amount_info.discount_percent
-                  ? ` (${reservationDetailData.data.amount_info.discount_percent}%)`
+                (reservationDetailData.data.amount_info?.discount_percent
+                  ? ` (${reservationDetailData.data.amount_info?.discount_percent}%)`
                   : '')
               }
             >

@@ -161,29 +161,31 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
     );
   };
 
-  Object.keys(transactions).forEach((key: any) => {
-    const tabKey = `${key}`;
-    let tabName = `Disk ${key}`;
+  if (transactions) {
+    Object.keys(transactions).forEach((key: any) => {
+      const tabKey = `${key}`;
+      let tabName = `Disk ${key}`;
 
-    if (key.toLowerCase() === 'deposit') {
-      tabName = t('common.Deposit');
-    }
+      if (key.toLowerCase() === 'deposit') {
+        tabName = t('common.Deposit');
+      }
 
-    tabList.push({
-      key: tabKey,
-      tab: tabName,
+      tabList.push({
+        key: tabKey,
+        tab: tabName,
+      });
+
+      contentList[tabKey] = (
+        <Disk
+          handleDeleteItem={handleDeleteItem}
+          items={transactions[key].items}
+          rowSelectionDisk={key.toLowerCase() === 'deposit' ? null : rowSelectionDisk}
+        />
+      );
     });
+  }
 
-    contentList[tabKey] = (
-      <Disk
-        handleDeleteItem={handleDeleteItem}
-        items={transactions[key].items}
-        rowSelectionDisk={key.toLowerCase() === 'deposit' ? null : rowSelectionDisk}
-      />
-    );
-  });
-
-  if (paid.length) {
+  if (paid?.length) {
     tabList.push({
       key: 'paid',
       tab: 'Paid',
@@ -192,7 +194,9 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
     contentList.paid = <Paid items={paid} />;
   }
 
-  const [activeTabKey, setActiveTabKey] = useState<string>(Object.keys(transactions)[0]);
+  const [activeTabKey, setActiveTabKey] = useState<string>(
+    transactions ? Object.keys(transactions)[0] : '',
+  );
   const [isModalOpenSelectedPaymentMethod, setIsModalOpenSelectedPaymentMethod] = useState(false);
   const [isModalOpenAddDiscount, setIsModalOpenAddDiscount] = useState(false);
   const [isModalOpenDeposit, setIsModalOpenDeposit] = useState(false);
@@ -257,7 +261,9 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   }, [deleteItemChanged]);
 
   useEffect(() => {
-    setActiveTabKey(Object.keys(transactions)[0]);
+    if (transactions) {
+      setActiveTabKey(Object.keys(transactions)[0]);
+    }
   }, [transactions]);
 
   useEffect(() => {
