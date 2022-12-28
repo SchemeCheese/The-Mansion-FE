@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
 import moment from 'moment';
-import { selectBranchInfo, selectSearchSchedule } from 'selectors';
+import { selectSearchSchedule } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
