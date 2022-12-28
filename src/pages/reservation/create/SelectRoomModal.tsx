@@ -292,7 +292,12 @@ function SelectRoomModal({
 
     setRoomCondition(stateTemporary);
 
-    if (stateTemporary.checkin && stateTemporary.checkout && stateTemporary.room_type) {
+    if (
+      stateTemporary.checkin &&
+      stateTemporary.checkout &&
+      stateTemporary.room_type &&
+      stateTemporary.charge_kind
+    ) {
       dispatch(searchRoom(stateTemporary));
     }
   };

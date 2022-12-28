@@ -7,8 +7,12 @@ import { RoomEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import {
+  getReservationRoomsAction,
+  getReservationRoomsActionFinish,
   getRoomsActionFinish,
   getRoomTypeFinish,
+  getWalkinRoomsAction,
+  getWalkinRoomsActionFinish,
   logOut,
   searchRoom,
   searchRoomFinish,
@@ -102,6 +106,7 @@ export function* getRoomsSaga() {
     let items = [];
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
+    let total = 0;
     const payload = {
       operator_code,
       branch_code,
@@ -110,7 +115,7 @@ export function* getRoomsSaga() {
 
     const query = new URLSearchParams(Object(payload)).toString();
 
-    ({ items } = yield call(request, `${apiEndPoint(RoomEndpoint.GET_ROOM)}?${query}`, {
+    ({ items, total } = yield call(request, `${apiEndPoint(RoomEndpoint.GET_ROOM)}?${query}`, {
       method: 'GET',
       headers: headerWithAuthorization(),
     }));
@@ -118,6 +123,103 @@ export function* getRoomsSaga() {
     yield put(
       getRoomsActionFinish({
         items,
+        total,
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot get rooms!');
+    }
+  }
+}
+
+export function* getWalkinRoomsSaga({ payload }: ReturnType<typeof getWalkinRoomsAction>) {
+  try {
+    let items = [];
+    let total = 0;
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const newPayload = {
+      ...payload,
+      operator_code,
+      branch_code,
+      facility_code,
+      per_page: 9,
+    };
+
+    const query = new URLSearchParams(Object(newPayload)).toString();
+
+    ({ items, total } = yield call(request, `${apiEndPoint(RoomEndpoint.GET_ROOM)}?${query}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }));
+
+    yield put(
+      getWalkinRoomsActionFinish({
+        items,
+        total,
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot get rooms!');
+    }
+  }
+}
+
+export function* getReservationRoomSaga({ payload }: ReturnType<typeof getReservationRoomsAction>) {
+  try {
+    let items = [];
+    let total = 0;
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const newPayload =
+      payload.type === 'checkout_today'
+        ? {
+            ...payload.checkout_today,
+            type: 'checkout_today',
+            operator_code,
+            branch_code,
+            facility_code,
+            per_page: 10,
+          }
+        : {
+            ...payload.inhouse_today,
+            type: 'inhouse_today',
+            operator_code,
+            branch_code,
+            facility_code,
+            per_page: 10,
+          };
+
+    const query = new URLSearchParams(Object(newPayload)).toString();
+
+    ({ items, total } = yield call(
+      request,
+      `${apiEndPoint(RoomEndpoint.GET_RESERVATION_ROOM)}?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    yield put(
+      getReservationRoomsActionFinish({
+        data: {
+          items,
+          total,
+        },
       }),
     );
   } catch (error: any) {
@@ -138,5 +240,7 @@ export default function* root() {
     takeLatest(ActionTypes.ROOM_SEARCH, getSearchRoomnSaga),
     takeLatest(ActionTypes.ROOM_TYPE_GET, getRoomTypeSaga),
     takeLatest(ActionTypes.GET_ROOMS, getRoomsSaga),
+    takeLatest(ActionTypes.GET_WALKIN_ROOMS, getWalkinRoomsSaga),
+    takeLatest(ActionTypes.GET_RESERVATION_ROOMS, getReservationRoomSaga),
   ]);
 }

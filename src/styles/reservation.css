@@ -268,3 +268,14 @@
   right: 25px;
   top: 1.5rem;
 }
+
+.checkin {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  padding-top: 24px;
+}
+.checkin .ant-upload-select-picture-card {
+  width: 255px !important;
+  height: 255px !important;
+}

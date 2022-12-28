@@ -165,5 +165,9 @@
   "Invalid credit card": "Invalid credit card",
   "No deposit/pre-payment received": "No deposit/pre-payment received",
   "Overbooking": "Overbooking",
-  "Double booking": "Double booking"
+  "Double booking": "Double booking",
+  "Deposit Method": "Deposit Method",
+  "Deposit Amount": "Deposit Amount",
+  "Early Checkin Fee": "Early Checkin Fee",
+  "Room Deposit": "Room Deposit"
 }

@@ -34,12 +34,17 @@ import getReservationDetail, { reservationDetailState } from './getReservationDe
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
 import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
+import getWalkinRooms, { getWalkinRoomsState } from './getWalkinRooms';
 import github, { githubState } from './github';
+import printRegistrationCardPDFReservationDetail, {
+  printRegistrationCardPDFReservationDetailState,
+} from './printRegistrationCardPDFReservationDetail';
 import product, { productSearchState } from './product';
 import readNotification, { readNotificationState } from './readNotification';
 import removeGuest, { removeGuestState } from './removeGuest';
 import resendEmailReservation, { resendEmailReservationState } from './resendEmailReservation';
 import reservation, { reservationSearchState } from './reservation';
+import reservationRooms, { reservationRoomState } from './reservationRooms';
 import searchAvailableSchedule, { searchAvailableScheduleState } from './searchAvailableSchedule';
 import searchRoom, { roomSearchState } from './searchRoom';
 import searchSchedule, { searchScheduleState } from './searchSchedule';
@@ -59,6 +64,7 @@ export const initialState = {
   alerts: alertsState,
   app: appState,
   github: githubState,
+  getWalkinRooms: getWalkinRoomsState,
   user: userState,
   reservation: reservationSearchState,
   createReservation: createReservationState,
@@ -93,6 +99,7 @@ export const initialState = {
   updateRoomAvailable: updateRoomAvailableState,
   removeGuest: removeGuestState,
   readNotificationState,
+  reservationRooms: reservationRoomState,
   getLanguageCode: getLanguageCodeState,
   getRooms: getRoomsState,
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
@@ -104,6 +111,7 @@ export const initialState = {
   getBranchFacilities: getBranchFacilitesState,
   branchInfo: branchInfoState,
   notifications: notificationsState,
+  printRegistrationCardPDFReservationDetail: printRegistrationCardPDFReservationDetailState,
 };
 
 export default {
@@ -116,6 +124,7 @@ export default {
   ...updateReservation,
   ...searchRoom,
   ...getReservationDetail,
+  ...getWalkinRooms,
   ...product,
   ...getReservationNumber,
   ...getRoomType,
@@ -142,6 +151,7 @@ export default {
   ...updateGuest,
   ...removeGuest,
   ...readNotification,
+  ...reservationRooms,
   ...getLanguageCode,
   ...getRooms,
   ...updateRoomAvailable,
@@ -155,4 +165,5 @@ export default {
   ...getBranchFacilites,
   ...branchInfo,
   ...notifications,
+  ...printRegistrationCardPDFReservationDetail,
 };

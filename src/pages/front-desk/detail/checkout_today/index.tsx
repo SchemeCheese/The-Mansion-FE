@@ -2,20 +2,21 @@
 Module Name : Reservation
 Developer Name : MinhNV
 Created Date : 24/08/2022
-Updated Date : 22/12/2022
+Updated Date : 30/10/2022
 Main functions : Reservation Detail Page
 ************************************ */
 
-import 'styles/reservation.css';
+// import 'styles/reservation.css';
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import type { RadioChangeEvent } from 'antd';
-import { Checkbox, Col, message, Modal, Radio, Row, Select, Skeleton, Space } from 'antd';
+import { Checkbox, Col, message, Modal, Radio, Row, Skeleton, Space } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
+import DownloadFile from 'pages/reservation/component/DownloadFile';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -38,12 +39,9 @@ import {
 } from 'actions';
 
 import MButton from 'components/MButton';
-import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
 
 import { RootState } from 'types';
-
-import DownloadFile from '../component/DownloadFile';
 
 const BreadscrumTitle = styled.p`
   color: rgba(0 0 0 85%);
@@ -55,9 +53,7 @@ const BreadscrumData = styled.p`
   font-size: 14px;
 `;
 
-function ReservationDetail() {
-  const navigate = useNavigate();
-
+function ReservationCheckoutTodayDetail() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
 
@@ -93,10 +89,6 @@ function ReservationDetail() {
     setLanguage(e.target.value);
   };
 
-  const params = useLocation();
-  const searchParam = new URLSearchParams(params.search);
-  const reservationIdParam = searchParam.get('reservation_detail_id');
-
   const handleResendReservationConfirmationEmail = () => {
     setIsSelectLanguageModalOpen(false);
 
@@ -122,35 +114,6 @@ function ReservationDetail() {
     setIsModalVisible(true);
   };
 
-  const dataSearchRoom = [];
-
-  for (let index = 0; index < 3; index++) {
-    dataSearchRoom.push({
-      created_date: '',
-      rate_name: '',
-      adult: '',
-      child: '',
-      rate_detail: '',
-      unit_price: '',
-      updated_price: '',
-      task: '',
-    });
-  }
-
-  const dataSelectedRoomsResult = [];
-
-  for (let index = 0; index < 3; index++) {
-    dataSelectedRoomsResult.push({
-      checkin: '',
-      checkout: '',
-      room_type: '',
-      rate_name: '',
-      quantity: '',
-      subtotal: '',
-      task: '',
-    });
-  }
-
   const dispatch = useDispatch();
   const reservationRedux: any = useSelector<RootState>(
     ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
@@ -159,7 +122,8 @@ function ReservationDetail() {
   const searchRoomsResult: any = useSelector<RootState>(
     ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.charges,
   );
-  const { id } = useParams();
+
+  const { id, reservationDetailId } = useParams();
 
   useEffect(() => {
     dispatch(resetReservationDetail());
@@ -171,11 +135,11 @@ function ReservationDetail() {
       }),
     );
 
-    if (reservationIdParam && id) {
+    if (reservationDetailId && id) {
       dispatch(
         getReservationDetail({
           reservation_id: id,
-          reservation_detail_id: reservationIdParam,
+          reservation_detail_id: reservationDetailId,
         }),
       );
     }
@@ -263,9 +227,6 @@ function ReservationDetail() {
     source_type: '',
     source_id: '',
     charge_kind: '1',
-    checkin_time: moment(),
-    checkout_time: moment().add(1, 'hours'),
-    months: '',
   });
   const [quantity, setQuantity] = useState(1);
   const [searchRoomResultState, setSearchRoomResultState] = useState<any>([]);
@@ -407,17 +368,6 @@ function ReservationDetail() {
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
-            <MInfoButton
-              onClick={() =>
-                navigate('/reservation/create', {
-                  state: {
-                    reservationInfo: reservationRedux,
-                  },
-                })
-              }
-            >
-              {t('reservation.Copy to new reservation')}
-            </MInfoButton>
             <DownloadFile />
             <MButton
               disabled={Boolean(reservationRedux.booker_email)}
@@ -518,10 +468,11 @@ function ReservationDetail() {
           setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
           setRoomCondition={setRoomCondition}
           showModal={showModal}
+          type="checkout_today"
         />
       )}
     </>
   );
 }
 
-export default ReservationDetail;
+export default ReservationCheckoutTodayDetail;

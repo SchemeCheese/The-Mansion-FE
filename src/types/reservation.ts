@@ -174,7 +174,7 @@ export interface ResendEmailReservation {
 
 export interface DownloadPDFReservationDetailPayload {
   file_name: string;
-  reservation_detail_id: string | number;
+  language: string;
   reservation_info_id: string | number;
 }
 
@@ -184,10 +184,21 @@ export interface DownloadPDFReservationDetail {
 
 export interface DownloadDocxReservationDetailPayload {
   file_name: string;
-  reservation_detail_id: string | number;
+  language: string;
   reservation_info_id: string | number;
 }
 
 export interface DownloadDocxReservationDetail {
   payload: DownloadDocxReservationDetailPayload;
+}
+
+export interface PrintRegistrationCardPDFReservationDetailPayload {
+  file_name: string;
+  language: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
+export interface PrintRegistrationCardPDFReservationDetail {
+  payload: PrintRegistrationCardPDFReservationDetailPayload;
 }

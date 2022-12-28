@@ -191,3 +191,13 @@ export const selectNotifications = createSelector(
   (state: RootState) => state.notifications,
   notifications => notifications,
 );
+
+export const selectGetWalkinRooms = createSelector(
+  (state: RootState) => state.getWalkinRooms,
+  getWalkinRooms => getWalkinRooms,
+);
+
+export const selectReservationRoomsState = createSelector(
+  (state: RootState) => state.reservationRooms,
+  reservationRooms => reservationRooms,
+);

@@ -36,12 +36,14 @@ export const ReservationEndpoint = {
   RESEND_EMAIL: 'api/v1/reservations',
   DOWNLOAD_PDF: 'api/v1/reservations',
   DOWNLOAD_DOCX: 'api/v1/reservations',
+  PRINT_REGISTRATION_CARD_PDF: 'api/v1/reservations',
 };
 
 export const RoomEndpoint = {
   SEARCH: 'api/v1/check-room-info',
   SEARCH_TYPE: 'api/v1/room-types',
   GET_ROOM: 'api/v1/rooms',
+  GET_RESERVATION_ROOM: 'api/v1/get-reservation-rooms',
 };
 
 export const ProductEndpoint = {

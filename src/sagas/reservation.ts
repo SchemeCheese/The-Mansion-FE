@@ -28,6 +28,8 @@ import {
   getReservationNumber,
   getReservationNumberFinish,
   logOut,
+  printRegistrationCardPDFReservationDetail,
+  printRegistrationCardPDFReservationDetailSuccess,
   resendEmailReservationAction,
   resendEmailReservationSuccessAction,
   searchReservation,
@@ -574,7 +576,7 @@ export function* getDownloadPDFReservationDetailSaga({
   try {
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_PDF)}/${
       payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/downloadPdf`;
+    }/reservation-detail/${payload.payload.language}/downloadPdf`;
 
     fetch(urlApi, {
       method: 'GET',
@@ -609,7 +611,7 @@ export function* getDownloadDocxReservationDetailSaga({
   try {
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_DOCX)}/${
       payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/downloadDocx`;
+    }/reservation-detail/${payload.payload.language}/downloadDocx`;
 
     fetch(urlApi, {
       method: 'GET',
@@ -625,6 +627,41 @@ export function* getDownloadDocxReservationDetailSaga({
       });
     });
     yield put(downloadDocxReservationDetailSuccess());
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot download file!');
+    }
+  }
+}
+
+export function* getPrintRegistrationCardPDFReservationDetailSaga({
+  payload,
+}: ReturnType<typeof printRegistrationCardPDFReservationDetail>) {
+  try {
+    const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_REGISTRATION_CARD_PDF)}/${
+      payload.payload.reservation_info_id
+    }/reservation-detail/${payload.payload.reservation_detail_id}/${
+      payload.payload.language
+    }/downloadRegistrationCardPDF`;
+
+    fetch(urlApi, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }).then(response => {
+      response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob);
+
+        window.open(url)?.print();
+      });
+    });
+
+    yield put(printRegistrationCardPDFReservationDetailSuccess());
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
       console.log('Error', error);
@@ -656,5 +693,9 @@ export default function* root() {
     takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_PDF, getDownloadPDFReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_DOCX, getDownloadDocxReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_GET_BY_FOLIO, getReservationFolioSaga),
+    takeLatest(
+      ActionTypes.RESERVATION_DETAIL_PRINT_REGISTRATION_CARD_PDF,
+      getPrintRegistrationCardPDFReservationDetailSaga,
+    ),
   ]);
 }

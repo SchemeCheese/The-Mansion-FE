@@ -6,7 +6,7 @@ import { DownloadPDFReservationDetailState } from 'types';
 
 export const downloadPDFReservationDetailState = {
   payload: {
-    reservation_detail_id: '',
+    language: '',
     reservation_info_id: '',
     file_name: '',
   },

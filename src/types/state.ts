@@ -287,6 +287,16 @@ export interface GetRoomState {
   items: Array<Record<string, any>>;
 }
 
+export interface GetWalkinRoomState {
+  current_page: number;
+  is_searching: boolean;
+  is_smocking: string;
+  items: Array<Record<string, any>>;
+  room_number: string;
+  room_type: string;
+  total: number;
+}
+
 export interface LanguageCodeState {
   is_searching: boolean;
   items: Array<Record<string, any>>;
@@ -388,7 +398,7 @@ export interface DownloadPDFReservationDetailState {
 
 export interface ReservationDetailDownloadPDFPayload {
   file_name: string;
-  reservation_detail_id: string | number;
+  language: string;
   reservation_info_id: string | number;
 }
 
@@ -399,7 +409,7 @@ export interface DownloadDocxReservationDetailState {
 
 export interface ReservationDetailDownloadDocxPayload {
   file_name: string;
-  reservation_detail_id: string | number;
+  language: string;
   reservation_info_id: string | number;
 }
 
@@ -434,6 +444,35 @@ export interface BranchInfoState {
   operator_code: string;
 }
 
+interface ReservationRoomItemFilter {
+  booker_info: string;
+  current_page: number;
+  per_page: number;
+  room_no: string;
+  source_id: string;
+  status: string;
+}
+
+export interface ReservationRoomState {
+  checkout_today: ReservationRoomItemFilter;
+  data: any;
+  inhouse_today: ReservationRoomItemFilter;
+  is_searching: boolean;
+  type: string;
+}
+
+export interface PrintRegistrationCardPDFReservationDetailState {
+  payload: ReservationDetailPrintRegistrationCardPDFPayload;
+  status: string;
+}
+
+export interface ReservationDetailPrintRegistrationCardPDFPayload {
+  file_name: string;
+  language: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -464,12 +503,15 @@ export interface RootState {
   getReservationNumber: ReservationNumberState;
   getRoomType: RoomTypeState;
   getRooms: GetRoomState;
+  getWalkinRooms: GetWalkinRoomState;
   github: GitHubState;
   notifications: NotificationsState;
+  printRegistrationCardPDFReservationDetail: PrintRegistrationCardPDFReservationDetailState;
   product: ProductSearchState;
   removeGuest: RemoveGuestState;
   resendEmailReservation: ResendEmailReservationState;
   reservation: ReservationSearchState;
+  reservationRooms: ReservationRoomState;
   searchAvailableSchedule: SearchAvailableScheduleState;
   searchRoom: RoomSearchState;
   searchSchedule: SearchScheduleState;

@@ -1,0 +1,224 @@
+/** ***********************************
+Module Name : Front Desk
+Developer Name : MinhNV
+Created Date : 10/12/2022
+Updated Date : 11/12/2022
+Main functions : Reservation Room List Page
+************************************ */
+
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Col, Pagination, Row, Spin, Table } from 'antd';
+import { formatNumber } from 'helpers';
+import { selectReservationRoomsState } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { searchReservation } from 'actions';
+
+import { RootState } from 'types';
+
+import ReservationRoomListFilter from './ReservationRoomListFilter';
+
+interface Props {
+  type: string;
+}
+
+function ReservationRoomList({ type }: Props) {
+  const [searchCondition, setSearchCondition] = useState({
+    current_page: 1,
+    per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
+      ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
+      : 10,
+    booker_info: '',
+    room_no: '',
+    source_id: '',
+    status: '',
+    type,
+  });
+
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const isSearching = useSelector<RootState>(
+    ({ reservationRooms }) => reservationRooms.is_searching,
+  );
+  const reservationRoomsData: any = useAppSelector(selectReservationRoomsState);
+  const total = reservationRoomsData.data[type]?.total;
+  const currentPage = reservationRoomsData[type].current_page;
+
+  const onChangeCurrentPage = (page: number, pageSize: number) => {
+    setSearchCondition({
+      ...searchCondition,
+      current_page: page,
+      per_page: pageSize,
+    });
+
+    dispatch(
+      searchReservation({
+        ...searchCondition,
+        current_page: page,
+        per_page: pageSize,
+      }),
+    );
+  };
+
+  const columnsReservationRooms = [
+    {
+      title: t('common.Room No'),
+      dataIndex: 'room_no',
+      key: 'room_no',
+    },
+    {
+      title: t('reservation.Folio ID'),
+      dataIndex: 'folio_id',
+      key: 'folio_id',
+    },
+    {
+      title: t('common.Booker Name'),
+      dataIndex: 'booker_name',
+      key: 'booker_name',
+    },
+    {
+      title: t('common.Phone'),
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: t('reservation.Checkin'),
+      dataIndex: 'checkin',
+      key: 'checkin',
+    },
+    {
+      title: t('reservation.Checkout'),
+      dataIndex: 'checkout',
+      key: 'checkout',
+    },
+    {
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('common.Guest')}</div>;
+      },
+      dataIndex: 'total_guest',
+      key: 'total_guest',
+      render: (text: string) => (
+        <div style={{ textAlign: 'center', color: 'rgba(0, 0, 0, 0.65)' }}>{text}</div>
+      ),
+    },
+    {
+      title: t('common.Total Amount'),
+      dataIndex: 'total_amount',
+      key: 'total_amount',
+      render: (text: number) => (
+        <div style={{ textAlign: 'right', paddingRight: 20, color: 'rgba(0, 0, 0, 0.65)' }}>
+          {formatNumber(text)}
+        </div>
+      ),
+      hidden: type !== 'inhouse_today' && type !== 'checkout_today',
+    },
+    {
+      title: t('common.Paid'),
+      dataIndex: 'paid',
+      key: 'paid',
+      render: (text: number) => (
+        <div style={{ textAlign: 'right', paddingRight: 20, color: 'rgba(0, 0, 0, 0.65)' }}>
+          {formatNumber(text)}
+        </div>
+      ),
+      hidden: type !== 'inhouse_today' && type !== 'checkout_today',
+    },
+    {
+      title: t('common.Remain'),
+      dataIndex: 'remain',
+      key: 'remain',
+      render: (text: number) => (
+        <div style={{ textAlign: 'right', paddingRight: 20, color: 'rgba(0, 0, 0, 0.65)' }}>
+          {formatNumber(text)}
+        </div>
+      ),
+      hidden: type !== 'inhouse_today' && type !== 'checkout_today',
+    },
+    {
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('common.Notes')}</div>;
+      },
+      dataIndex: 'notes',
+      key: 'notes',
+    },
+  ].filter(item => !item.hidden);
+
+  const checkoutTodayRooms = useAppSelector(selectReservationRoomsState);
+
+  const convertReservationRoomsData = (data: any) => {
+    if (data) {
+      return data.map((item: any) => {
+        return {
+          ...item,
+          key: item.id,
+          phone: item.booker_phone,
+          paid: item.total_paid,
+          remain: item.total_remain,
+          notes: item.note,
+        };
+      });
+    }
+
+    return [];
+  };
+
+  const tableColumns = columnsReservationRooms;
+  const tableData = convertReservationRoomsData(checkoutTodayRooms.data[type]?.items);
+
+  return (
+    <Row style={{ background: 'white', padding: 16 }}>
+      <Col span={24}>
+        <ReservationRoomListFilter
+          searchCondition={searchCondition}
+          setSearchCondition={setSearchCondition}
+          type={type}
+        />
+      </Col>
+      <Col span={24} style={{ paddingTop: 16 }}>
+        {!isSearching ? (
+          <>
+            <Table
+              className="reservation-list"
+              columns={tableColumns}
+              dataSource={tableData}
+              onRow={(record: any) => {
+                return {
+                  onClick: () => {
+                    navigate(
+                      `/front-desk/${type.replace('_', '-')}/${record.reservation_id}/detail/${
+                        record.reservation_detail_id
+                      }`,
+                    );
+                  },
+                };
+              }}
+              pagination={false}
+              size="small"
+              style={{ overflowX: 'hidden', overflowY: 'auto', minHeight: 450 }}
+            />
+            {total > 0 && (
+              <Pagination
+                current={currentPage}
+                onChange={onChangeCurrentPage}
+                pageSize={10}
+                showSizeChanger={false}
+                style={{ float: 'right', marginTop: 15 }}
+                total={total}
+              />
+            )}
+          </>
+        ) : (
+          <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />
+        )}
+      </Col>
+    </Row>
+  );
+}
+
+export default ReservationRoomList;

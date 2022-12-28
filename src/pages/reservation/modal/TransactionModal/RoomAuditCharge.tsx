@@ -141,7 +141,7 @@ function RoomAuditCharge({ reservationDetailId, reservationId, setIsModalOpen, v
         <Row style={{ paddingTop: 30 }}>
           <Col span={16} />
           <Col span={8}>
-            <span>{t('common.Total Amount')}</span>
+            <span>{t('common.Total Amount (VND)')}</span>
             <span style={{ fontSize: 16, float: 'right' }}>{formatNumber(totalAmount)}</span>
           </Col>
         </Row>
