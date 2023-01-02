@@ -345,7 +345,6 @@ function SelectRoomModal({
 
     charges.forEach((item: any) => {
       result.push({
-        key: randomKey(5),
         use_date: item.use_date,
         rate_name: item.rate_name,
         adult: '',
@@ -504,7 +503,6 @@ function SelectRoomModal({
       }
 
       dataSelectedRoomsResult.push({
-        key: randomKey(5),
         checkin_date: roomCondition.checkin,
         checkout_date: roomCondition.checkout,
         room_type: roomCondition.room_type,

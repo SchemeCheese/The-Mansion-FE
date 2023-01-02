@@ -284,21 +284,9 @@ function ReservationDetail() {
     dispatch(
       updateReservation({
         payload: {
+          ...formValues,
           reservation_id: id,
-          booker_email: formValues.booker_email,
-          booker_email_2: formValues.booker_email_2,
-          booker_firstname: formValues.booker_firstname,
-          booker_lastname: formValues.booker_lastname,
-          booker_note: formValues.booker_note,
-          booker_phone_number: formValues.booker_phone_number,
-          booker_rank: formValues.booker_rank,
-          booker_type: formValues.booker_type,
-          market_segment_id: formValues.market_segment_id,
-          agent_info_id: formValues.agent_info_id,
-          // payment_method: '1',
-          reservation_number: formValues.reservation_number,
           rooms: [],
-          note: formValues.note,
         },
       }),
     );
