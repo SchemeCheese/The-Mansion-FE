@@ -236,7 +236,7 @@ function CreateGuestModal({
   }, [removeGuestChanged]);
 
   useEffect(() => {
-    if (currentGuest?.pictures.length > 0) {
+    if (currentGuest?.pictures.length > 0 || currentGuest?.face_recognitions.length) {
       const pictureFileListTemporary = currentGuest?.pictures.map((picture: any) => {
         return {
           uid: picture.id,
@@ -713,7 +713,7 @@ function CreateGuestModal({
                       onChange={handleFaceRecognitionChange}
                       onPreview={handlePicturePreview}
                     >
-                      {faceRecognitionFileList.length >= 8 ? null : uploadButton}
+                      {faceRecognitionFileList.length === 1 ? null : uploadButton}
                     </Upload>
                   </Col>
                   <Col span={8} />
