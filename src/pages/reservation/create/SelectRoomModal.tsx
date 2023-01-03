@@ -697,7 +697,9 @@ function SelectRoomModal({
                         {t('reservation.Total Amount for each room (VND)')}
                       </Table.Summary.Cell>
                       <Table.Summary.Cell colSpan={5} index={1}>
-                        <span style={{ fontSize: 16 }}>{formatNumber(totalAmount)}</span>
+                        <span style={{ fontSize: 16 }}>
+                          {totalAmount ? formatNumber(totalAmount) : 0}
+                        </span>
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={3}>
                         <PattonButton
