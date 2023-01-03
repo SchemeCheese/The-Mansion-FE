@@ -28,6 +28,8 @@ import {
   getReservationNumber,
   getReservationNumberFinish,
   logOut,
+  printDepositPDFReservationDetail,
+  printDepositPDFReservationDetailSuccess,
   printRegistrationCardPDFReservationDetail,
   printRegistrationCardPDFReservationDetailSuccess,
   resendEmailReservationAction,
@@ -675,6 +677,41 @@ export function* getPrintRegistrationCardPDFReservationDetailSaga({
   }
 }
 
+export function* getPrintDepositPDFReservationDetailSaga({
+  payload,
+}: ReturnType<typeof printDepositPDFReservationDetail>) {
+  try {
+    const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_DEPOSIT_PDF)}/${
+      payload.payload.reservation_info_id
+    }/reservation-detail/${payload.payload.reservation_detail_id}/${
+      payload.payload.language
+    }/download-deposit-pdf?payment_method=${payload.payload.payment_method}`;
+
+    fetch(urlApi, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }).then(response => {
+      response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob);
+
+        window.open(url)?.print();
+      });
+    });
+
+    yield put(printDepositPDFReservationDetailSuccess());
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot download file!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
@@ -696,6 +733,10 @@ export default function* root() {
     takeLatest(
       ActionTypes.RESERVATION_DETAIL_PRINT_REGISTRATION_CARD_PDF,
       getPrintRegistrationCardPDFReservationDetailSaga,
+    ),
+    takeLatest(
+      ActionTypes.RESERVATION_DETAIL_PRINT_DEPOSIT_PDF,
+      getPrintDepositPDFReservationDetailSaga,
     ),
   ]);
 }

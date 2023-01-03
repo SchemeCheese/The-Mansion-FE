@@ -6,20 +6,33 @@ Updated Date : 31/10/2022
 Main functions : Transaction Deposit
 ************************************ */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Checkbox, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
+import {
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Modal,
+  Radio,
+  Row,
+  Select,
+  Space,
+} from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
-import { selectGetReservationDetail } from 'selectors';
+import { selectAddItem, selectGetReservationDetail } from 'selectors';
+import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { addItemAction } from 'actions';
+import { addItemAction, printDepositPDFReservationDetail } from 'actions';
 
 const { Option } = Select;
 
@@ -33,6 +46,9 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const { id } = useParams();
+
+  const [paymentMethod, setPaymentMethod] = useState('');
+  const [isPrintBill, setIsPrintBill] = useState(false);
 
   const getReservationDetailData = useAppSelector(selectGetReservationDetail);
   const exchangeRates = getReservationDetailData?.data?.exchange_rates;
@@ -51,6 +67,9 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
           return item.id === values.currency;
         });
 
+        onChangePaymentMethod(values.payment_method);
+        setIsPrintBill(values.print_bill);
+
         dispatch(
           addItemAction({
             payload: {
@@ -66,6 +85,9 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
                   exchanged_amount: values.exchanged_amount,
                   payment_method: values.payment_method,
                   currency_conversion_id: values.currency,
+                  receive_email: values.email ?? '',
+                  send_confirmation_email: values.send_confirmation_email ?? false,
+                  language: values.language ?? false,
                 },
               ],
               reservation_id: id ?? '',
@@ -92,9 +114,45 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
     });
   };
 
+  const onChangePaymentMethod = (value: any) => {
+    let namePayment = '';
+
+    if (value.toString() === '1') {
+      namePayment = 'Cash';
+    } else if (value.toString() === '2') {
+      namePayment = 'Credit Card';
+    } else if (value.toString() === '3') {
+      namePayment = 'Bank Transfer';
+    }
+
+    setPaymentMethod(namePayment);
+  };
+
   const transactionType = ['Deposit'];
 
   const { t } = useTranslation();
+  const addItemData = useAppSelector(selectAddItem);
+  const { changed: addItemChanged } = useTreeChanges(addItemData);
+
+  useEffect(() => {
+    if (addItemChanged('status', 'SUCCESS') && isPrintBill) {
+      const formattedDateNow = moment(new Date()).format('DD_MM_YYYY');
+      const formValue = form.getFieldsValue();
+      const reservationId = id ?? '';
+
+      dispatch(
+        printDepositPDFReservationDetail({
+          payload: {
+            language: formValue.language,
+            reservation_info_id: reservationId,
+            reservation_detail_id: getReservationDetailData.data.id ?? '',
+            file_name: `the_mansion_${formattedDateNow}_detail_${reservationId}.'pdf'`,
+            payment_method: paymentMethod,
+          },
+        }),
+      );
+    }
+  }, [addItemChanged]);
 
   return (
     <Modal
@@ -115,6 +173,7 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
           send_confirmation_email: true,
           deposit_date: moment(),
           currency: 2,
+          language: 'en',
         }}
         layout="vertical"
         style={{ maxHeight: '70vh', overflow: 'auto' }}
@@ -232,6 +291,17 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
           <Col span={24}>
             <Form.Item name="send_confirmation_email" valuePropName="checked">
               <Checkbox>{t('reservation.Send confirmation email')}</Checkbox>
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item label={t('common.Language')} name="language">
+              <Radio.Group>
+                <Space direction="vertical">
+                  <Radio value="vi">{t('common.Vietnamese')}</Radio>
+                  <Radio value="en">{t('common.English')}</Radio>
+                  <Radio value="jp">{t('common.Japanese')}</Radio>
+                </Space>
+              </Radio.Group>
             </Form.Item>
           </Col>
           <Col span={24}>
