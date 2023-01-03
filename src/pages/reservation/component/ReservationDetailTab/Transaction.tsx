@@ -378,7 +378,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           style={{ width: '100%' }}
           tabList={tabList}
         >
-          <div style={{ minHeight: type && type === 'checkout_today' ? 450 : 380 }}>
+          <div style={{ minHeight: type && type === 'checkout_today' ? 430 : 380 }}>
             {contentList[activeTabKey]}
           </div>
           <div>
