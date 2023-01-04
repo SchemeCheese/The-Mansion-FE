@@ -195,9 +195,10 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
           </Col>
           <Col span={12}>
             <div style={{ float: 'right', paddingTop: 4 }}>
-              {item.state.toString() === '1' && roomStatusMapping['1']}
-              {item.state.toString() === '2' && roomStatusMapping['2']}
-              {item.state.toString() === '3' && roomStatusMapping['3']}
+              {item.state === null && t('common.Not yet setting')}
+              {item.state && item.state.toString() === '1' && roomStatusMapping['1']}
+              {item.state && item.state.toString() === '2' && roomStatusMapping['2']}
+              {item.state && item.state.toString() === '3' && roomStatusMapping['3']}
             </div>
           </Col>
           <Col span={12} style={{ paddingTop: 20 }}>
