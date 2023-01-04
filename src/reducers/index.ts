@@ -1,3 +1,7 @@
+import printDepositPDFReservationDetail, {
+  printDepositPDFReservationDetailState,
+} from 'reducers/printDepositPDFReservationDetail';
+
 import addItem, { addItemState } from './addItem';
 import addReservationDetail, { addReservationDetailState } from './addReservationDetail';
 import agentInfos, { agentInfosState } from './agentInfos';
@@ -112,6 +116,7 @@ export const initialState = {
   branchInfo: branchInfoState,
   notifications: notificationsState,
   printRegistrationCardPDFReservationDetail: printRegistrationCardPDFReservationDetailState,
+  printDepositPDFReservationDetail: printDepositPDFReservationDetailState,
 };
 
 export default {
@@ -166,4 +171,5 @@ export default {
   ...branchInfo,
   ...notifications,
   ...printRegistrationCardPDFReservationDetail,
+  ...printDepositPDFReservationDetail,
 };

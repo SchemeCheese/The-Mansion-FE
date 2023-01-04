@@ -202,3 +202,15 @@ export interface PrintRegistrationCardPDFReservationDetailPayload {
 export interface PrintRegistrationCardPDFReservationDetail {
   payload: PrintRegistrationCardPDFReservationDetailPayload;
 }
+
+export interface PrintDepositPDFReservationDetailPayload {
+  file_name: string;
+  language: string;
+  payment_method: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+}
+
+export interface PrintDepositPDFReservationDetail {
+  payload: PrintDepositPDFReservationDetailPayload;
+}
