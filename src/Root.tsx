@@ -20,12 +20,9 @@ import theme from 'modules/theme';
 
 import { showAlert } from 'actions';
 
-// import Footer from 'components/Footer';
-// import Header from 'components/Header';
 import PrivateRoute from 'components/PrivateRoute';
 import PublicRoute from 'components/PublicRoute';
 import SystemAlerts from 'containers/SystemAlerts';
-// import Home from 'routes/Home';
 import Login from 'routes/Login';
 import NotFound from 'routes/NotFound';
 import Private from 'routes/Private';
@@ -104,25 +101,6 @@ function Root() {
     </>
   );
 
-  const fronDeskBreadCrum = (
-    <>
-      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
-      </span>
-      /
-      <span
-        aria-hidden="true"
-        className="ant-breadcrumb-link"
-        onClick={() => {
-          navigate('/front-desk');
-        }}
-        style={{ paddingLeft: 8, cursor: 'pointer' }}
-      >
-        {t('frontDesk.Front Desk')}
-      </span>
-    </>
-  );
-
   return (
     <ThemeProvider theme={theme}>
       <AppWrapper data-testid="app">
@@ -138,7 +116,6 @@ function Root() {
             rel="stylesheet"
           />
         </Helmet>
-        {/* {isAuthenticated && <Header />} */}
         <Main isAuthenticated={isAuthenticated}>
           <Routes>
             <Route
@@ -266,7 +243,6 @@ function Root() {
             <Route element={<NotFound />} path="*" />
           </Routes>
         </Main>
-        {/* <Footer /> */}
         <SystemAlerts />
       </AppWrapper>
     </ThemeProvider>
