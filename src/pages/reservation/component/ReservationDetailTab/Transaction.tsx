@@ -393,7 +393,12 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 <Col span={4} style={{ paddingRight: 17 }}>
                   <PattonButton
                     onClick={() => setIsModalOpenAddItem(true)}
-                    style={{ width: '100%' }}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      wordBreak: 'inherit',
+                      whiteSpace: 'break-spaces',
+                    }}
                     type="primary"
                   >
                     {t('common.Add Item')}
@@ -411,7 +416,12 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       <MButton
                         disabled={selectedRowKeys.length === 0}
                         onClick={() => setIsModalOpenPaySelected(true)}
-                        style={{ width: '100%' }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          wordBreak: 'inherit',
+                          whiteSpace: 'break-spaces',
+                        }}
                       >
                         {t('paySelected.Pay Selected')}
                       </MButton>
@@ -432,7 +442,12 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       <MButton
                         disabled={selectedRowKeys.length === 0}
                         onClick={() => setIsModalOpenChangeDisk(true)}
-                        style={{ width: '100%' }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          wordBreak: 'inherit',
+                          whiteSpace: 'break-spaces',
+                        }}
                       >
                         {t('paySelected.Transfer Disk')}
                       </MButton>
@@ -443,12 +458,26 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       />
                     </Col>
                     <Col span={4} style={{ paddingLeft: 10 }}>
-                      <MButton style={{ width: '100%' }}>{t('common.Overtime')}</MButton>
+                      <MButton
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          wordBreak: 'inherit',
+                          whiteSpace: 'break-spaces',
+                        }}
+                      >
+                        {t('common.Overtime')}
+                      </MButton>
                     </Col>
                     <Col span={4} style={{ paddingLeft: 10 }}>
                       <MButton
                         onClick={() => setIsModalOpenAddDiscount(true)}
-                        style={{ width: '100%' }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          wordBreak: 'inherit',
+                          whiteSpace: 'break-spaces',
+                        }}
                       >
                         {t('common.Discount')}
                       </MButton>
@@ -460,7 +489,12 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                     <Col span={4} style={{ paddingLeft: 10 }}>
                       <MButton
                         onClick={() => setIsModalOpenDeposit(true)}
-                        style={{ width: '100%' }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          wordBreak: 'inherit',
+                          whiteSpace: 'break-spaces',
+                        }}
                       >
                         {t('common.Deposit')}
                       </MButton>
@@ -474,7 +508,12 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       <MButton
                         disabled={selectedRowKeys.length === 0}
                         onClick={() => setIsModalOpenTransferRoom(true)}
-                        style={{ width: '100%' }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          wordBreak: 'inherit',
+                          whiteSpace: 'break-spaces',
+                        }}
                       >
                         {t('transaction.Transfer Room')}
                       </MButton>

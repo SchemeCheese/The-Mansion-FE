@@ -24,7 +24,7 @@
 .transaction-tabs .ant-card-body {
   display: flex;
   flex-direction: column;
-  height: 500px;
+  min-height: 500px;
 }
 
 .transaction-tabs .ant-table-wrapper {
