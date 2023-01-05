@@ -158,7 +158,9 @@ export function* getDownloadPDFInvoiceTransactionSaga({
   try {
     const urlApi = `${apiEndPoint(TransactionEndpoint.DOWNLOAD_INVOICE_PDF)}/${
       payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/downloadInvoicePDF`;
+    }/reservation-detail/${payload.payload.reservation_detail_id}/${
+      payload.payload.language
+    }/downloadInvoicePDF`;
 
     fetch(urlApi, {
       method: 'GET',
@@ -166,11 +168,19 @@ export function* getDownloadPDFInvoiceTransactionSaga({
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const iframe = document.createElement('iframe'); // load content in an iframe to print later
 
-        a.href = url;
-        a.download = payload.payload.file_name;
-        a.click();
+        document.body.appendChild(iframe);
+
+        iframe.style.display = 'none';
+        iframe.src = url;
+
+        iframe.onload = function () {
+          setTimeout(function () {
+            iframe.focus();
+            iframe.contentWindow?.print();
+          }, 1);
+        };
       });
     });
     yield put(downloadPDFInvoiceTransactionSuccess());

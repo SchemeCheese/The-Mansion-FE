@@ -11,7 +11,7 @@ import 'styles/transaction.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, Input, message, Modal, Row, Space } from 'antd';
+import { Card, Col, Input, message, Modal, Radio, RadioChangeEvent, Row, Space } from 'antd';
 import { formatNumber } from 'helpers';
 import Disk from 'pages/reservation/detail/Disk';
 import Paid from 'pages/reservation/detail/Paid';
@@ -156,9 +156,11 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           reservation_detail_id: reservationDetailId ?? '',
           reservation_info_id: reservationId ?? '',
           file_name: `the_mansion_hotel_${reservationId}_${reservationDetailId}.pdf`,
+          language,
         },
       }),
     );
+    setIsSelectDownloadInvoiceModalOpen(false);
   };
 
   if (transactions) {
@@ -200,6 +202,8 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const [isModalOpenSelectedPaymentMethod, setIsModalOpenSelectedPaymentMethod] = useState(false);
   const [isModalOpenAddDiscount, setIsModalOpenAddDiscount] = useState(false);
   const [isModalOpenDeposit, setIsModalOpenDeposit] = useState(false);
+  const [language, setLanguage] = useState('en');
+  const [isSelectDownloadInvoiceModalOpen, setIsSelectDownloadInvoiceModalOpen] = useState(false);
 
   const gridStyleLeft: React.CSSProperties = {
     textAlign: 'left',
@@ -342,6 +346,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const handleDeleteItemCancel = () => {
     setDeleteReason('');
     setIsDeleteItemModalOpen(false);
+  };
+
+  const onChangeLanguage = (e: RadioChangeEvent) => {
+    setLanguage(e.target.value);
   };
 
   return (
@@ -738,7 +746,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
         <Row style={{ paddingTop: transactions?.length === 0 ? 18 : 22 }}>
           <Col span={12} style={{ paddingRight: 18 }}>
             <MButton
-              onClick={handleInvoiceDownloadPdf}
+              onClick={() => setIsSelectDownloadInvoiceModalOpen(true)}
               style={{
                 width: '100%',
                 border: '1px solid #1D39C4',
@@ -748,6 +756,25 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
             >
               {t('common.Print Invoice')}
             </MButton>
+            <Modal
+              okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
+              onCancel={() => setIsSelectDownloadInvoiceModalOpen(false)}
+              onOk={handleInvoiceDownloadPdf}
+              title={t('common.Download File')}
+              visible={isSelectDownloadInvoiceModalOpen}
+            >
+              <Row>
+                <Col span={12}>
+                  <Radio.Group onChange={onChangeLanguage} value={language}>
+                    <Space direction="vertical">
+                      <Radio value="vi">{t('common.Vietnamese')}</Radio>
+                      <Radio value="en">{t('common.English')}</Radio>
+                      <Radio value="jp">{t('common.Japanese')}</Radio>
+                    </Space>
+                  </Radio.Group>
+                </Col>
+              </Row>
+            </Modal>
           </Col>
 
           <Col span={12}>

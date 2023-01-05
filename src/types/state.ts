@@ -420,6 +420,7 @@ export interface DownloadPDFInvoiceTransactionState {
 
 export interface TransactionDownloadPDFInvoicePayload {
   file_name: string;
+  language: string;
   reservation_detail_id: string | number;
   reservation_info_id: string | number;
 }

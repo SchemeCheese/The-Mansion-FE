@@ -9,6 +9,7 @@ export const downloadPDFInvoiceTransactionState = {
     reservation_detail_id: '',
     reservation_info_id: '',
     file_name: '',
+    language: '',
   },
   status: '',
 };
