@@ -4,7 +4,7 @@ import { actionPayload } from 'modules/helpers';
 
 import { ActionTypes } from 'literals';
 
-import { NotificationGetResult, ReadNotification } from 'types/notifications';
+import { NotificationGetResult, ReadNotification } from 'types';
 
 export const getNotifcationsAction = createAction(ActionTypes.GET_NOTIFICATION);
 

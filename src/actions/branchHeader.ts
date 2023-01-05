@@ -4,8 +4,7 @@ import { actionPayload } from 'modules/helpers';
 
 import { ActionTypes } from 'literals';
 
-import {} from 'types';
-import { BranchHeaderResult } from 'types/branchHeader';
+import { BranchHeaderResult } from 'types';
 
 export const branchHeader = createAction(ActionTypes.BRANCH_HEADER_GET, (payload: any) =>
   actionPayload(payload),

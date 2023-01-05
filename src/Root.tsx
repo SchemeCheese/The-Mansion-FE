@@ -85,6 +85,25 @@ function Root() {
     </>
   );
 
+  const frontDeskBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/front-desk');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('frontDesk.Front Desk')}
+      </span>
+    </>
+  );
+
   const fronDeskBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
@@ -199,7 +218,7 @@ function Root() {
             <Route
               element={
                 <PrivateRoute
-                  breadCrumb={reservationBreadCrum}
+                  breadCrumb={frontDeskBreadCrum}
                   isAuthenticated={isAuthenticated}
                   to="/"
                 >
@@ -211,7 +230,7 @@ function Root() {
             <Route
               element={
                 <PrivateRoute
-                  breadCrumb={reservationBreadCrum}
+                  breadCrumb={frontDeskBreadCrum}
                   isAuthenticated={isAuthenticated}
                   to="/"
                 >
@@ -223,7 +242,7 @@ function Root() {
             <Route
               element={
                 <PrivateRoute
-                  breadCrumb={reservationBreadCrum}
+                  breadCrumb={frontDeskBreadCrum}
                   isAuthenticated={isAuthenticated}
                   to="/"
                 >
@@ -235,7 +254,7 @@ function Root() {
             <Route
               element={
                 <PrivateRoute
-                  breadCrumb={reservationBreadCrum}
+                  breadCrumb={frontDeskBreadCrum}
                   isAuthenticated={isAuthenticated}
                   to="/"
                 >
