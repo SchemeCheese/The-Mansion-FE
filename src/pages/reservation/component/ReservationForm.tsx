@@ -103,8 +103,6 @@ function ReservationForm({
     ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
   );
 
-  const { reservationDetailId } = useParams();
-
   const confirm = () => {
     Modal.confirm({
       title: t('common.Delete Confirm'),
@@ -193,7 +191,7 @@ function ReservationForm({
         payload: {
           language,
           reservation_info_id: reservationId ?? '',
-          reservation_detail_id: reservationDetailId ?? '',
+          reservation_detail_id: reservationDetailInfo.id ?? selectedRowKeys[0],
           file_name: `the_mansion_${formattedDateNow}_detail_${reservationId ?? ''}.'pdf'`,
         },
       }),
@@ -675,7 +673,7 @@ function ReservationForm({
               >
                 <Transaction
                   noPadding
-                  reservationDetailId={reservationDetailId ?? ''}
+                  reservationDetailId={reservationDetailInfo.id}
                   reservationId={reservationId}
                   type={type}
                 />
