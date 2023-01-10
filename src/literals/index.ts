@@ -127,6 +127,8 @@ export const ActionTypes = keyMirror({
   RESERVATION_DETAIL_PRINT_DEPOSIT_PDF: undefined,
   RESERVATION_DETAIL_PRINT_DEPOSIT_PDF_SUCCESS: undefined,
   RESERVATION_DETAIL_PRINT_DEPOSIT_PDF_FAILURE: undefined,
+  DASHBOARD_GET_FUEL_INFO: undefined,
+  DASHBOARD_GET_FUEL_INFO_FINISH: undefined,
 });
 
 export const STATUS: Status = {

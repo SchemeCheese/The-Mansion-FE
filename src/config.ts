@@ -107,3 +107,12 @@ export const GetAllBranchsEndpoint = {
 export const GetFacilitiesByBranch = {
   GET: 'api/v1/branch-facility',
 };
+
+export const IOTEndpoint = {
+  dashboard: {
+    fuel: {
+      water: 'api/water',
+      electric: 'api/electric',
+    },
+  },
+};

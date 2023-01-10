@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
+import Dashboard from 'pages/dashboard';
 import ReservationCheckinTodayDetail from 'pages/front-desk/detail/checkin_today';
 import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_today';
 import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
@@ -239,6 +240,18 @@ function Root() {
                 </PrivateRoute>
               }
               path="/front-desk/checkout-today/:id/detail/:reservationDetailId"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={frontDeskBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <Dashboard />
+                </PrivateRoute>
+              }
+              path="/dashboard"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>

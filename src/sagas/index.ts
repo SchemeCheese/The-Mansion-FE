@@ -5,6 +5,7 @@ import branchHeader from './branchHeader';
 import branchs from './branchs';
 import channel from './channel';
 import file from './file';
+import fuel from './fuel';
 import github from './github';
 import guest from './guest';
 import languageCode from './languageCode';
@@ -40,5 +41,6 @@ export default function* root() {
     fork(branchHeader),
     fork(branchs),
     fork(notifications),
+    fork(fuel),
   ]);
 }
