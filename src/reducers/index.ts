@@ -26,6 +26,7 @@ import downloadPDFInvoiceTransaction, {
 import downloadPDFReservationDetail, {
   downloadPDFReservationDetailState,
 } from './downloadPDFReservationDetail';
+import fuel, { fuelState } from './fuel';
 import getBranchFacilites, { getBranchFacilitesState } from './getBranchFacilites';
 import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getBranchs, { getBranchsState } from './getBranchs';
@@ -117,6 +118,7 @@ export const initialState = {
   notifications: notificationsState,
   printRegistrationCardPDFReservationDetail: printRegistrationCardPDFReservationDetailState,
   printDepositPDFReservationDetail: printDepositPDFReservationDetailState,
+  fuel: fuelState,
 };
 
 export default {
@@ -172,4 +174,5 @@ export default {
   ...notifications,
   ...printRegistrationCardPDFReservationDetail,
   ...printDepositPDFReservationDetail,
+  ...fuel,
 };

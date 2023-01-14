@@ -201,3 +201,8 @@ export const selectReservationRoomsState = createSelector(
   (state: RootState) => state.reservationRooms,
   reservationRooms => reservationRooms,
 );
+
+export const selectFuelState = createSelector(
+  (state: RootState) => state.fuel,
+  fuel => fuel,
+);

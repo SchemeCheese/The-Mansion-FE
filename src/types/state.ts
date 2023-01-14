@@ -487,6 +487,17 @@ export interface ReservationDetailPrintDepositPDFPayload {
   reservation_info_id: string | number;
 }
 
+interface FuelPayload {
+  type: string;
+}
+
+export interface FuelState {
+  electric: any;
+  payload: FuelPayload;
+  status: string;
+  water: any;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -506,6 +517,7 @@ export interface RootState {
   downloadDocxReservationDetail: DownloadDocxReservationDetailState;
   downloadPDFInvoiceTransaction: DownloadPDFInvoiceTransactionState;
   downloadPDFReservationDetail: DownloadPDFReservationDetailState;
+  fuel: FuelState;
   getBranchFacilites: GetBranchFacilitiesState;
   getBranchHeader: BranchHeaderState;
   getBranchs: GetBranchsState;
