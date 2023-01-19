@@ -54,6 +54,10 @@ function Notification() {
       return `<span style="color:red;">[Beds24]</span> The booking with folio <strong>${item.folio}</strong> has been canceled`;
     }
 
+    if (item.type === 'reservation' && item.detail_type === 'modify') {
+      return `<span style="color:red;">[Beds24]</span> The booking with folio <strong>${item.folio}</strong> has been modified`;
+    }
+
     return '';
   };
 
