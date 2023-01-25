@@ -8,9 +8,10 @@ Main functions : Night Audit Index
 
 import 'styles/night_audit.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Col, Form, Input, Modal, Row, Select, Switch, Table } from 'antd';
+import { useDispatch } from 'react-redux';
+import { Button, Card, Col, Form, Modal, Row, Select, Switch, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { ColumnsType } from 'antd/lib/table';
 
@@ -161,6 +162,10 @@ function NightAudit() {
       address: `London, Park Lane no. ${index}`,
     });
   }
+
+  useEffect(() => {
+    // const dispatch = useDispatch();
+  }, []);
 
   return (
     <>

@@ -49,7 +49,10 @@ import readNotification, { readNotificationState } from './readNotification';
 import removeGuest, { removeGuestState } from './removeGuest';
 import resendEmailReservation, { resendEmailReservationState } from './resendEmailReservation';
 import reservation, { reservationSearchState } from './reservation';
-import reservationRooms, { reservationRoomState } from './reservationRooms';
+import reservationRoomCheckoutToday, {
+  reservationRoomCheckoutTodayState,
+} from './reservationRoomCheckoutToday';
+import reservationRoomInhouse, { reservationRoomInhouseState } from './reservationRoomInhouse';
 import searchAvailableSchedule, { searchAvailableScheduleState } from './searchAvailableSchedule';
 import searchRoom, { roomSearchState } from './searchRoom';
 import searchSchedule, { searchScheduleState } from './searchSchedule';
@@ -103,8 +106,9 @@ export const initialState = {
   updateGuest: updateGuestState,
   updateRoomAvailable: updateRoomAvailableState,
   removeGuest: removeGuestState,
-  readNotificationState,
-  reservationRooms: reservationRoomState,
+  readNotification: readNotificationState,
+  reservationRoomInhouse: reservationRoomInhouseState,
+  reservationRoomCheckoutToday: reservationRoomCheckoutTodayState,
   getLanguageCode: getLanguageCodeState,
   getRooms: getRoomsState,
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
@@ -158,7 +162,8 @@ export default {
   ...updateGuest,
   ...removeGuest,
   ...readNotification,
-  ...reservationRooms,
+  ...reservationRoomInhouse,
+  ...reservationRoomCheckoutToday,
   ...getLanguageCode,
   ...getRooms,
   ...updateRoomAvailable,

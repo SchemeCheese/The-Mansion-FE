@@ -48,12 +48,22 @@ export const getWalkinRoomsActionFinish = createAction(
   (payload: GetRoomResult) => actionPayload(payload),
 );
 
-export const getReservationRoomsAction = createAction(
-  ActionTypes.GET_RESERVATION_ROOMS,
+export const getReservationRoomInhouseAction = createAction(
+  ActionTypes.GET_RESERVATION_ROOM_INHOUSE,
   (payload: ReservationRoomFilter) => actionPayload(payload),
 );
 
-export const getReservationRoomsActionFinish = createAction(
-  ActionTypes.GET_RESERVATION_ROOMS_FINISH,
+export const getReservationRoomInhouseActionFinish = createAction(
+  ActionTypes.GET_RESERVATION_ROOM_INHOUSE_FINISH,
+  (payload: ReservationRoomResult) => actionPayload(payload),
+);
+
+export const getReservationRoomCheckoutTodayAction = createAction(
+  ActionTypes.GET_RESERVATION_ROOM_CHECKOUT_TODAY,
+  (payload: ReservationRoomFilter) => actionPayload(payload),
+);
+
+export const getReservationRoomCheckoutTodayActionFinish = createAction(
+  ActionTypes.GET_RESERVATION_ROOM_CHECKOUT_TODAY_FINISH,
   (payload: ReservationRoomResult) => actionPayload(payload),
 );

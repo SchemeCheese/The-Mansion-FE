@@ -197,9 +197,14 @@ export const selectGetWalkinRooms = createSelector(
   getWalkinRooms => getWalkinRooms,
 );
 
-export const selectReservationRoomsState = createSelector(
-  (state: RootState) => state.reservationRooms,
-  reservationRooms => reservationRooms,
+export const selectReservationRoomInhouseState = createSelector(
+  (state: RootState) => state.reservationRoomInhouse,
+  reservationRoomInhouse => reservationRoomInhouse,
+);
+
+export const selectReservationRoomCheckoutTodayState = createSelector(
+  (state: RootState) => state.reservationRoomCheckoutToday,
+  reservationRoomCheckoutToday => reservationRoomCheckoutToday,
 );
 
 export const selectFuelState = createSelector(

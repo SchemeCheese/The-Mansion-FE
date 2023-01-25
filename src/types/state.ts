@@ -454,12 +454,11 @@ interface ReservationRoomItemFilter {
   status: string;
 }
 
-export interface ReservationRoomState {
-  checkout_today: ReservationRoomItemFilter;
+export interface ReservationRoomInhouseState {
   data: any;
-  inhouse_today: ReservationRoomItemFilter;
+  filter: ReservationRoomItemFilter;
   is_searching: boolean;
-  type: string;
+  total: number;
 }
 
 export interface PrintRegistrationCardPDFReservationDetailState {
@@ -538,7 +537,8 @@ export interface RootState {
   removeGuest: RemoveGuestState;
   resendEmailReservation: ResendEmailReservationState;
   reservation: ReservationSearchState;
-  reservationRooms: ReservationRoomState;
+  reservationRoomCheckoutToday: ReservationRoomInhouseState;
+  reservationRoomInhouse: ReservationRoomInhouseState;
   searchAvailableSchedule: SearchAvailableScheduleState;
   searchRoom: RoomSearchState;
   searchSchedule: SearchScheduleState;
