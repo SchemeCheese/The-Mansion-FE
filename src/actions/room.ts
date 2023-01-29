@@ -67,3 +67,13 @@ export const getReservationRoomCheckoutTodayActionFinish = createAction(
   ActionTypes.GET_RESERVATION_ROOM_CHECKOUT_TODAY_FINISH,
   (payload: ReservationRoomResult) => actionPayload(payload),
 );
+
+export const getReservationRoomCheckinTodayAction = createAction(
+  ActionTypes.GET_RESERVATION_ROOM_CHECKIN_TODAY,
+  (payload: ReservationRoomFilter) => actionPayload(payload),
+);
+
+export const getReservationRoomCheckinTodayActionFinish = createAction(
+  ActionTypes.GET_RESERVATION_ROOM_CHECKIN_TODAY_FINISH,
+  (payload: ReservationRoomResult) => actionPayload(payload),
+);

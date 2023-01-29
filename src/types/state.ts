@@ -537,6 +537,7 @@ export interface RootState {
   removeGuest: RemoveGuestState;
   resendEmailReservation: ResendEmailReservationState;
   reservation: ReservationSearchState;
+  reservationRoomCheckinToday: ReservationRoomInhouseState;
   reservationRoomCheckoutToday: ReservationRoomInhouseState;
   reservationRoomInhouse: ReservationRoomInhouseState;
   searchAvailableSchedule: SearchAvailableScheduleState;

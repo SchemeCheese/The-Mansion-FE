@@ -49,6 +49,9 @@ import readNotification, { readNotificationState } from './readNotification';
 import removeGuest, { removeGuestState } from './removeGuest';
 import resendEmailReservation, { resendEmailReservationState } from './resendEmailReservation';
 import reservation, { reservationSearchState } from './reservation';
+import reservationRoomCheckinToday, {
+  reservationRoomCheckinTodayState,
+} from './reservationRoomCheckinToday';
 import reservationRoomCheckoutToday, {
   reservationRoomCheckoutTodayState,
 } from './reservationRoomCheckoutToday';
@@ -109,6 +112,7 @@ export const initialState = {
   readNotification: readNotificationState,
   reservationRoomInhouse: reservationRoomInhouseState,
   reservationRoomCheckoutToday: reservationRoomCheckoutTodayState,
+  reservationRoomCheckinToday: reservationRoomCheckinTodayState,
   getLanguageCode: getLanguageCodeState,
   getRooms: getRoomsState,
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
@@ -163,6 +167,7 @@ export default {
   ...removeGuest,
   ...readNotification,
   ...reservationRoomInhouse,
+  ...reservationRoomCheckinToday,
   ...reservationRoomCheckoutToday,
   ...getLanguageCode,
   ...getRooms,

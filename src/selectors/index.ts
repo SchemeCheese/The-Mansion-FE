@@ -207,6 +207,11 @@ export const selectReservationRoomCheckoutTodayState = createSelector(
   reservationRoomCheckoutToday => reservationRoomCheckoutToday,
 );
 
+export const selectReservationRoomCheckinTodayState = createSelector(
+  (state: RootState) => state.reservationRoomCheckinToday,
+  reservationRoomCheckinToday => reservationRoomCheckinToday,
+);
+
 export const selectFuelState = createSelector(
   (state: RootState) => state.fuel,
   fuel => fuel,
