@@ -217,7 +217,12 @@ export const selectFuelState = createSelector(
   fuel => fuel,
 );
 
-export const noShowState = createSelector(
+export const selectNoShowState = createSelector(
   (state: RootState) => state.noshow,
   noshow => noshow,
+);
+
+export const selectNightAuditState = createSelector(
+  (state: RootState) => state.nightAudit,
+  nightAudit => nightAudit,
 );

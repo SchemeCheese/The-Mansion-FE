@@ -256,6 +256,11 @@ export interface NoShowState {
   reservation_detail_id: number;
 }
 
+export interface NightAuditState {
+  facility_id: number;
+  is_finish: boolean;
+}
+
 export interface ResendEmailReservationState {
   reservation_id: string;
   status: string;
@@ -535,6 +540,7 @@ export interface RootState {
   getRooms: GetRoomState;
   getWalkinRooms: GetWalkinRoomState;
   github: GitHubState;
+  nightAudit: NightAuditState;
   noshow: NoShowState;
   notifications: NotificationsState;
   printDepositPDFReservationDetail: PrintDepositPDFReservationDetailState;

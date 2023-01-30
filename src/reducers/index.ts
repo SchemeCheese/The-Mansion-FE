@@ -41,6 +41,7 @@ import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
 import getWalkinRooms, { getWalkinRoomsState } from './getWalkinRooms';
 import github, { githubState } from './github';
+import nightAudit, { nightAuditState } from './nightAudit';
 import noshow, { noshowState } from './noshow';
 import printRegistrationCardPDFReservationDetail, {
   printRegistrationCardPDFReservationDetailState,
@@ -126,6 +127,7 @@ export const initialState = {
   branchInfo: branchInfoState,
   notifications: notificationsState,
   noshow: noshowState,
+  nightAudit: nightAuditState,
   printRegistrationCardPDFReservationDetail: printRegistrationCardPDFReservationDetailState,
   printDepositPDFReservationDetail: printDepositPDFReservationDetailState,
   fuel: fuelState,
@@ -185,6 +187,7 @@ export default {
   ...branchInfo,
   ...notifications,
   ...noshow,
+  ...nightAudit,
   ...printRegistrationCardPDFReservationDetail,
   ...printDepositPDFReservationDetail,
   ...fuel,

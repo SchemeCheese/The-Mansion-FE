@@ -23,5 +23,7 @@
   "Update note successfully!": "Update note successfully!",
   "Update room available successfully!": "Update room available successfully!",
   "Cancel reservation successfully!": "Cancel reservation successfully!",
-  "The checkin time or checkout time is invalid": "The checkin time or checkout time is invalid"
+  "The checkin time or checkout time is invalid": "The checkin time or checkout time is invalid",
+  "Handle night audit successfully!": "Handle night audit successfully!",
+  "Handle no show successfully!": "Handle no show successfully!"
 }

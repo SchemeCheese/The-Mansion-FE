@@ -12,23 +12,28 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, Col, Form, Modal, Row, Select, Switch, Table } from 'antd';
+import { Button, Card, Col, Form, message, Modal, Row, Select, Switch, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import {
+  selectFacilitesByBranch,
+  selectNightAuditState,
+  selectNoShowState,
   selectReservationRoomCheckinTodayState,
   selectReservationRoomCheckoutTodayState,
   selectReservationRoomInhouseState,
-  selectReservationSearch,
 } from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
 
 import {
+  branchFacilites,
   getReservationRoomCheckinTodayAction,
   getReservationRoomCheckoutTodayAction,
   getReservationRoomInhouseAction,
+  handleNightAuditAction,
   handleNoShowReservationDetailAction,
 } from 'actions';
 
@@ -56,6 +61,13 @@ function NightAudit() {
   const reservationRoomCheckinTodayData: any = useAppSelector(
     selectReservationRoomCheckinTodayState,
   );
+  const branchFacilities: any = useAppSelector(selectFacilitesByBranch);
+
+  const selectNightAuditData = useAppSelector(selectNightAuditState);
+  const { changed: selectNightAuditDateChanged } = useTreeChanges(selectNightAuditData);
+
+  const selectNoShowData = useAppSelector(selectNoShowState);
+  const { changed: selectNoShowChanged } = useTreeChanges(selectNoShowData);
 
   const showModal = () => {
     setIsPaymentMethodModalOpen(true);
@@ -113,19 +125,20 @@ function NightAudit() {
       dataIndex: '',
       render: (text: string, record: any) => {
         return (
-          <PattonButton
-            onClick={event => {
-              event.stopPropagation();
-              dispatch(
-                handleNoShowReservationDetailAction({
-                  reservation_detail_id: 1,
-                }),
-              );
-            }}
-          >
-            {' '}
-            No Show
-          </PattonButton>
+          record.is_can_noshow && (
+            <PattonButton
+              onClick={event => {
+                event.stopPropagation();
+                dispatch(
+                  handleNoShowReservationDetailAction({
+                    reservation_detail_id: record.reservation_detail_id,
+                  }),
+                );
+              }}
+            >
+              {t('nightAudit.No Show')}
+            </PattonButton>
+          )
         );
       },
     },
@@ -253,6 +266,33 @@ function NightAudit() {
     );
   }, []);
 
+  useEffect(() => {
+    if (selectNightAuditDateChanged('is_finish', true)) {
+      message.success(t('message.Handle night audit successfully!'));
+
+      dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '1' }));
+    }
+  }, [selectNightAuditDateChanged]);
+
+  useEffect(() => {
+    if (selectNoShowChanged('is_finish', true)) {
+      message.success(t('message.Handle no show successfully!'));
+
+      dispatch(
+        getReservationRoomCheckinTodayAction({
+          filter: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
+        }),
+      );
+    }
+  }, [selectNoShowChanged]);
+
   const checkinTodayDataTable = reservationRoomCheckinTodayData?.data.items.map((item: any) => {
     return {
       ...item,
@@ -298,7 +338,7 @@ function NightAudit() {
   return (
     <>
       <p className="title">{t('nightAudit.Night Audit')}</p>
-      <Button onClick={showModal}>Payment Method</Button>
+      {/* <Button onClick={showModal}>Payment Method</Button> */}
       <Modal
         okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
         okText={t('common.Save')}
@@ -349,8 +389,23 @@ function NightAudit() {
             <span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.85)' }}>27/12/2022</span>
           </p>
         </Col>
-        <Col span={12} style={{ textAlign: 'right', paddingRight: 20, paddingBottom: 10 }}>
-          <PattonButton>{t('nightAudit.Process Night Audit')}</PattonButton>
+        <Col span={12} style={{ textAlign: 'right', paddingRight: 20 }}>
+          <PattonButton
+            disabled={!branchFacilities.data.can_night_audit}
+            onClick={() => {
+              dispatch(
+                handleNightAuditAction({
+                  facility_id: 1,
+                }),
+              );
+            }}
+            style={{
+              position: 'relative',
+              top: -15,
+            }}
+          >
+            {t('nightAudit.Process Night Audit')}
+          </PattonButton>
         </Col>
       </Row>
       <Row className="content">

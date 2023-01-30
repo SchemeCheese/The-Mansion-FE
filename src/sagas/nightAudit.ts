@@ -7,6 +7,8 @@ import { NightAuditEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import {
+  handleNightAuditAction,
+  handleNightAuditFinishAction,
   handleNoShowReservationDetailAction,
   handleNoShowReservationDetailFinishAction,
   logOut,
@@ -39,6 +41,32 @@ export function* postHandleNoShowSaga({
   }
 }
 
+export function* postHandleNightAuditSaga({ payload }: ReturnType<typeof handleNightAuditAction>) {
+  try {
+    yield call(
+      request,
+      `${apiEndPoint(NightAuditEndpoint.HANDLE_NIGHT_AUDIT)}/${payload.facility_id}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    );
+
+    yield put(handleNightAuditFinishAction());
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot process night audit!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([takeLatest(ActionTypes.NIGHT_AUDIT_NO_SHOW, postHandleNoShowSaga)]);
+  yield all([takeLatest(ActionTypes.NIGHT_AUDIT_HANDLE, postHandleNightAuditSaga)]);
 }
