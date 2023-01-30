@@ -216,3 +216,8 @@ export const selectFuelState = createSelector(
   (state: RootState) => state.fuel,
   fuel => fuel,
 );
+
+export const noShowState = createSelector(
+  (state: RootState) => state.noshow,
+  noshow => noshow,
+);

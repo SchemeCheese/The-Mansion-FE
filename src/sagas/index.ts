@@ -9,6 +9,7 @@ import fuel from './fuel';
 import github from './github';
 import guest from './guest';
 import languageCode from './languageCode';
+import nightAudit from './nightAudit';
 import notifications from './notifications';
 import payment from './payment';
 import product from './product';
@@ -42,5 +43,6 @@ export default function* root() {
     fork(branchs),
     fork(notifications),
     fork(fuel),
+    fork(nightAudit),
   ]);
 }

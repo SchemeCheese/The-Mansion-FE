@@ -29,6 +29,7 @@ import {
   getReservationRoomCheckinTodayAction,
   getReservationRoomCheckoutTodayAction,
   getReservationRoomInhouseAction,
+  handleNoShowReservationDetailAction,
 } from 'actions';
 
 import MInput from 'components/MInput';
@@ -111,7 +112,21 @@ function NightAudit() {
       title: '',
       dataIndex: '',
       render: (text: string, record: any) => {
-        return <PattonButton> No Show</PattonButton>;
+        return (
+          <PattonButton
+            onClick={event => {
+              event.stopPropagation();
+              dispatch(
+                handleNoShowReservationDetailAction({
+                  reservation_detail_id: 1,
+                }),
+              );
+            }}
+          >
+            {' '}
+            No Show
+          </PattonButton>
+        );
       },
     },
   ];

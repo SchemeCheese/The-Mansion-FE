@@ -251,6 +251,11 @@ export interface ReservationTypeState {
   is_finish: boolean;
 }
 
+export interface NoShowState {
+  is_finish: boolean;
+  reservation_detail_id: number;
+}
+
 export interface ResendEmailReservationState {
   reservation_id: string;
   status: string;
@@ -530,6 +535,7 @@ export interface RootState {
   getRooms: GetRoomState;
   getWalkinRooms: GetWalkinRoomState;
   github: GitHubState;
+  noshow: NoShowState;
   notifications: NotificationsState;
   printDepositPDFReservationDetail: PrintDepositPDFReservationDetailState;
   printRegistrationCardPDFReservationDetail: PrintRegistrationCardPDFReservationDetailState;

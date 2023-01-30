@@ -108,6 +108,11 @@ export const GetFacilitiesByBranch = {
   GET: 'api/v1/branch-facility',
 };
 
+export const NightAuditEndpoint = {
+  HANDLE_NOSHOW: 'api/v1/no-show-reservation-detail',
+  HANDLE_NIGHT_AUDIT: 'api/v1/night-audit/facility',
+};
+
 export const IOTEndpoint = {
   dashboard: {
     fuel: {

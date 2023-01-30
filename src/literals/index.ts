@@ -133,6 +133,10 @@ export const ActionTypes = keyMirror({
   RESERVATION_DETAIL_PRINT_DEPOSIT_PDF_FAILURE: undefined,
   DASHBOARD_GET_FUEL_INFO: undefined,
   DASHBOARD_GET_FUEL_INFO_FINISH: undefined,
+  NIGHT_AUDIT_NO_SHOW: undefined,
+  NIGHT_AUDIT_NO_SHOW_FINISH: undefined,
+  NIGHT_AUDIT_HANDLE: undefined,
+  NIGHT_AUDIT_HANDLE_FINISH: undefined,
 });
 
 export const STATUS: Status = {
