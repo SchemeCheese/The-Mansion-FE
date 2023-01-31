@@ -18,3 +18,4 @@ export * from './branchHeader';
 export * from './getBranchs';
 export * from './notification';
 export * from './dashboard';
+export * from './nightAudit';

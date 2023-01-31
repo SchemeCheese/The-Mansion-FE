@@ -197,12 +197,32 @@ export const selectGetWalkinRooms = createSelector(
   getWalkinRooms => getWalkinRooms,
 );
 
-export const selectReservationRoomsState = createSelector(
-  (state: RootState) => state.reservationRooms,
-  reservationRooms => reservationRooms,
+export const selectReservationRoomInhouseState = createSelector(
+  (state: RootState) => state.reservationRoomInhouse,
+  reservationRoomInhouse => reservationRoomInhouse,
+);
+
+export const selectReservationRoomCheckoutTodayState = createSelector(
+  (state: RootState) => state.reservationRoomCheckoutToday,
+  reservationRoomCheckoutToday => reservationRoomCheckoutToday,
+);
+
+export const selectReservationRoomCheckinTodayState = createSelector(
+  (state: RootState) => state.reservationRoomCheckinToday,
+  reservationRoomCheckinToday => reservationRoomCheckinToday,
 );
 
 export const selectFuelState = createSelector(
   (state: RootState) => state.fuel,
   fuel => fuel,
+);
+
+export const selectNoShowState = createSelector(
+  (state: RootState) => state.noshow,
+  noshow => noshow,
+);
+
+export const selectNightAuditState = createSelector(
+  (state: RootState) => state.nightAudit,
+  nightAudit => nightAudit,
 );

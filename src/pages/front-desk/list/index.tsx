@@ -11,7 +11,11 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
 
-import { getReservationRoomsAction, searchReservation } from 'actions';
+import {
+  getReservationRoomCheckoutTodayAction,
+  getReservationRoomInhouseAction,
+  searchReservation,
+} from 'actions';
 
 import ReservationList from './ReservationList';
 import ReservationRoomList from './ReservationRoomList';
@@ -49,8 +53,8 @@ function FrontDesk() {
 
     if (activeKey === '3') {
       dispatch(
-        getReservationRoomsAction({
-          checkout_today: {
+        getReservationRoomInhouseAction({
+          filter: {
             booker_info: '',
             current_page: 1,
             per_page: 10,
@@ -58,23 +62,14 @@ function FrontDesk() {
             source_id: '',
             status: '',
           },
-          inhouse_today: {
-            booker_info: '',
-            current_page: 1,
-            per_page: 10,
-            room_no: '',
-            source_id: '',
-            status: '',
-          },
-          type: 'inhouse_today',
         }),
       );
     }
 
     if (activeKey === '4') {
       dispatch(
-        getReservationRoomsAction({
-          checkout_today: {
+        getReservationRoomCheckoutTodayAction({
+          filter: {
             booker_info: '',
             current_page: 1,
             per_page: 10,
@@ -82,15 +77,6 @@ function FrontDesk() {
             source_id: '',
             status: '',
           },
-          inhouse_today: {
-            booker_info: '',
-            current_page: 1,
-            per_page: 10,
-            room_no: '',
-            source_id: '',
-            status: '',
-          },
-          type: 'checkout_today',
         }),
       );
     }

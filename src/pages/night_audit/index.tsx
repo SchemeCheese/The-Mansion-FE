@@ -8,11 +8,34 @@ Main functions : Night Audit Index
 
 import 'styles/night_audit.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Col, Form, Input, Modal, Row, Select, Switch, Table } from 'antd';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Button, Card, Col, Form, message, Modal, Row, Select, Switch, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { ColumnsType } from 'antd/lib/table';
+import { formatNumber } from 'helpers';
+import {
+  selectFacilitesByBranch,
+  selectNightAuditState,
+  selectNoShowState,
+  selectReservationRoomCheckinTodayState,
+  selectReservationRoomCheckoutTodayState,
+  selectReservationRoomInhouseState,
+} from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
+
+import { useAppSelector } from 'modules/hooks';
+
+import {
+  branchFacilites,
+  getReservationRoomCheckinTodayAction,
+  getReservationRoomCheckoutTodayAction,
+  getReservationRoomInhouseAction,
+  handleNightAuditAction,
+  handleNoShowReservationDetailAction,
+} from 'actions';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
@@ -28,7 +51,23 @@ const { Option } = Select;
 
 function NightAudit() {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isPaymentMethodModalOpen, setIsPaymentMethodModalOpen] = useState(false);
+  const reservationRoomInhouseData: any = useAppSelector(selectReservationRoomInhouseState);
+  const reservationRoomCheckoutTodayData: any = useAppSelector(
+    selectReservationRoomCheckoutTodayState,
+  );
+  const reservationRoomCheckinTodayData: any = useAppSelector(
+    selectReservationRoomCheckinTodayState,
+  );
+  const branchFacilities: any = useAppSelector(selectFacilitesByBranch);
+
+  const selectNightAuditData = useAppSelector(selectNightAuditState);
+  const { changed: selectNightAuditDateChanged } = useTreeChanges(selectNightAuditData);
+
+  const selectNoShowData = useAppSelector(selectNoShowState);
+  const { changed: selectNoShowChanged } = useTreeChanges(selectNoShowData);
 
   const showModal = () => {
     setIsPaymentMethodModalOpen(true);
@@ -45,127 +84,261 @@ function NightAudit() {
   const checkinTodayColumns: ColumnsType<DataType> = [
     {
       title: t('reservation.Folio ID'),
-      dataIndex: 'name',
+      dataIndex: 'folio_id',
     },
     {
       title: t('reservation.Room No'),
-      dataIndex: 'age',
+      dataIndex: 'room_no',
     },
     {
       title: t('common.Booker Name'),
-      dataIndex: 'address',
+      dataIndex: 'booker_name',
     },
     {
       title: t('common.Booker Via'),
-      dataIndex: 'address',
+      dataIndex: 'booker_via',
     },
     {
       title: t('reservation.Checkin'),
-      dataIndex: 'address',
+      dataIndex: 'checkin',
     },
     {
       title: t('reservation.Checkout'),
-      dataIndex: 'address',
+      dataIndex: 'checkout',
     },
     {
-      title: t('common.Total Guest'),
-      dataIndex: 'address',
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('common.Total Guest')}</div>;
+      },
+      dataIndex: 'total_guest',
+      key: 'total_guest',
+      render: (text: string) => (
+        <div style={{ textAlign: 'center', color: 'rgba(0, 0, 0, 0.65)' }}>{text}</div>
+      ),
     },
     {
       title: t('common.Status'),
-      dataIndex: 'address',
+      dataIndex: 'status',
     },
     {
       title: '',
-      dataIndex: 'address',
+      dataIndex: '',
+      render: (text: string, record: any) => {
+        return (
+          record.is_can_noshow && (
+            <PattonButton
+              onClick={event => {
+                event.stopPropagation();
+                dispatch(
+                  handleNoShowReservationDetailAction({
+                    reservation_detail_id: record.reservation_detail_id,
+                  }),
+                );
+              }}
+            >
+              {t('nightAudit.No Show')}
+            </PattonButton>
+          )
+        );
+      },
     },
   ];
 
   const checkoutTodayColumns: ColumnsType<DataType> = [
     {
       title: t('reservation.Room No'),
-      dataIndex: 'age',
+      dataIndex: 'room_no',
     },
     {
       title: t('common.Booker Name'),
-      dataIndex: 'address',
+      dataIndex: 'booker_name',
     },
     {
       title: t('common.Booking Number'),
-      dataIndex: 'address',
+      dataIndex: 'booking_number',
     },
     {
       title: t('reservation.Checkin'),
-      dataIndex: 'address',
+      dataIndex: 'checkin',
     },
     {
       title: t('reservation.Checkout'),
-      dataIndex: 'address',
+      dataIndex: 'checkout',
     },
     {
-      title: t('common.Total Guest'),
-      dataIndex: 'address',
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('common.Total Guest')}</div>;
+      },
+      dataIndex: 'total_guest',
+      key: 'total_guest',
+      render: (text: string) => (
+        <div style={{ textAlign: 'center', color: 'rgba(0, 0, 0, 0.65)' }}>{text}</div>
+      ),
     },
     {
       title: t('common.Remain'),
-      dataIndex: 'address',
+      dataIndex: 'remain',
     },
     {
       title: t('common.Status'),
-      dataIndex: 'address',
+      dataIndex: 'status',
     },
   ];
 
   const inhouseTodayColumns: ColumnsType<DataType> = [
     {
       title: t('reservation.Room No'),
-      dataIndex: 'age',
+      dataIndex: 'room_no',
     },
     {
       title: t('common.Booker Name'),
-      dataIndex: 'address',
+      dataIndex: 'booker_name',
     },
     {
       title: t('common.Booking Number'),
-      dataIndex: 'address',
+      dataIndex: 'booking_number',
     },
     {
       title: t('reservation.Checkin'),
-      dataIndex: 'address',
+      dataIndex: 'checkin',
     },
     {
       title: t('reservation.Checkout'),
-      dataIndex: 'address',
+      dataIndex: 'checkout',
     },
     {
-      title: t('common.Total Guest'),
-      dataIndex: 'address',
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('common.Total Guest')}</div>;
+      },
+      dataIndex: 'total_guest',
+      key: 'total_guest',
+      render: (text: string) => (
+        <div style={{ textAlign: 'center', color: 'rgba(0, 0, 0, 0.65)' }}>{text}</div>
+      ),
     },
     {
       title: t('common.Rate'),
-      dataIndex: 'address',
+      dataIndex: 'rate',
     },
     {
       title: t('common.Amount'),
-      dataIndex: 'address',
+      dataIndex: 'amount',
     },
   ];
 
-  const data: DataType[] = [];
+  useEffect(() => {
+    dispatch(
+      getReservationRoomCheckinTodayAction({
+        filter: {
+          booker_info: '',
+          current_page: 1,
+          per_page: 10,
+          room_no: '',
+          source_id: '',
+          status: '',
+        },
+      }),
+    );
+    dispatch(
+      getReservationRoomInhouseAction({
+        filter: {
+          booker_info: '',
+          current_page: 1,
+          per_page: 10,
+          room_no: '',
+          source_id: '',
+          status: '',
+        },
+      }),
+    );
 
-  for (let index = 0; index < 8; index++) {
-    data.push({
-      key: index,
-      name: `Edward King ${index}`,
-      age: 32,
-      address: `London, Park Lane no. ${index}`,
-    });
-  }
+    dispatch(
+      getReservationRoomCheckoutTodayAction({
+        filter: {
+          booker_info: '',
+          current_page: 1,
+          per_page: 10,
+          room_no: '',
+          source_id: '',
+          status: '',
+        },
+      }),
+    );
+  }, []);
+
+  useEffect(() => {
+    if (selectNightAuditDateChanged('is_finish', true)) {
+      message.success(t('message.Handle night audit successfully!'));
+
+      dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '1' }));
+    }
+  }, [selectNightAuditDateChanged]);
+
+  useEffect(() => {
+    if (selectNoShowChanged('is_finish', true)) {
+      message.success(t('message.Handle no show successfully!'));
+
+      dispatch(
+        getReservationRoomCheckinTodayAction({
+          filter: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
+        }),
+      );
+    }
+  }, [selectNoShowChanged]);
+
+  const checkinTodayDataTable = reservationRoomCheckinTodayData?.data.items.map((item: any) => {
+    return {
+      ...item,
+      folio_id: item.folio_id,
+      room_no: item.room_no,
+      booker_name: item.booker_name,
+      booker_via: item.source,
+      checkin: item.checkin,
+      checkout: item.checkout,
+      total_guest: item.total_guest,
+      status: item.status,
+    };
+  });
+
+  const inhouseDataTable = reservationRoomInhouseData?.data.items.map((item: any) => {
+    return {
+      ...item,
+      room_no: item.room_no,
+      booker_name: item.booker_name,
+      booking_number: item.folio_id,
+      checkin: item.checkin,
+      checkout: item.checkout,
+      total_guest: item.total_guest,
+      rate: '',
+      amount: item.total_amount,
+    };
+  });
+
+  const checkoutTodayDataTable = reservationRoomCheckoutTodayData?.data.items.map((item: any) => {
+    return {
+      ...item,
+      room_no: item.room_no,
+      booker_name: item.booker_name,
+      booking_number: item.folio_id,
+      checkin: item.checkin,
+      checkout: item.checkout,
+      total_guest: item.total_guest,
+      remain: formatNumber(item.total_remain),
+      status: item.status,
+    };
+  });
 
   return (
     <>
       <p className="title">{t('nightAudit.Night Audit')}</p>
-      <Button onClick={showModal}>Payment Method</Button>
+      {/* <Button onClick={showModal}>Payment Method</Button> */}
       <Modal
         okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
         okText={t('common.Save')}
@@ -216,13 +389,40 @@ function NightAudit() {
             <span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.85)' }}>27/12/2022</span>
           </p>
         </Col>
-        <Col span={12} style={{ textAlign: 'right', paddingRight: 20, paddingBottom: 10 }}>
-          <PattonButton>{t('nightAudit.Process Night Audit')}</PattonButton>
+        <Col span={12} style={{ textAlign: 'right', paddingRight: 20 }}>
+          <PattonButton
+            disabled={!branchFacilities.data.can_night_audit}
+            onClick={() => {
+              dispatch(
+                handleNightAuditAction({
+                  facility_id: 1,
+                }),
+              );
+            }}
+            style={{
+              position: 'relative',
+              top: -15,
+            }}
+          >
+            {t('nightAudit.Process Night Audit')}
+          </PattonButton>
         </Col>
       </Row>
       <Row className="content">
         <Card bordered={false} style={{ width: '100%' }} title={t('nightAudit.I. Checkin Today')}>
-          <Table columns={checkinTodayColumns} dataSource={data} pagination={false} size="middle" />
+          <Table
+            columns={checkinTodayColumns}
+            dataSource={checkinTodayDataTable}
+            onRow={(record: any) => {
+              return {
+                onClick: () => {
+                  navigate(`/front-desk/checkin-today/${record.reservation_id}`);
+                },
+              };
+            }}
+            pagination={false}
+            size="small"
+          />
         </Card>
         <Card
           bordered={false}
@@ -231,9 +431,18 @@ function NightAudit() {
         >
           <Table
             columns={checkoutTodayColumns}
-            dataSource={data}
+            dataSource={checkoutTodayDataTable}
+            onRow={(record: any) => {
+              return {
+                onClick: () => {
+                  navigate(
+                    `/front-desk/inhouse-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
+                  );
+                },
+              };
+            }}
             pagination={false}
-            size="middle"
+            size="small"
           />
         </Card>
         <Card
@@ -241,7 +450,21 @@ function NightAudit() {
           style={{ width: '100%', marginTop: 20 }}
           title={t('nightAudit.III. Inhouse')}
         >
-          <Table columns={inhouseTodayColumns} dataSource={data} pagination={false} size="middle" />
+          <Table
+            columns={inhouseTodayColumns}
+            dataSource={inhouseDataTable}
+            onRow={(record: any) => {
+              return {
+                onClick: () => {
+                  navigate(
+                    `/front-desk/checkout-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
+                  );
+                },
+              };
+            }}
+            pagination={false}
+            size="small"
+          />
         </Card>
       </Row>
     </>

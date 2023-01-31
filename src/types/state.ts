@@ -251,6 +251,16 @@ export interface ReservationTypeState {
   is_finish: boolean;
 }
 
+export interface NoShowState {
+  is_finish: boolean;
+  reservation_detail_id: number;
+}
+
+export interface NightAuditState {
+  facility_id: number;
+  is_finish: boolean;
+}
+
 export interface ResendEmailReservationState {
   reservation_id: string;
   status: string;
@@ -454,12 +464,11 @@ interface ReservationRoomItemFilter {
   status: string;
 }
 
-export interface ReservationRoomState {
-  checkout_today: ReservationRoomItemFilter;
+export interface ReservationRoomInhouseState {
   data: any;
-  inhouse_today: ReservationRoomItemFilter;
+  filter: ReservationRoomItemFilter;
   is_searching: boolean;
-  type: string;
+  total: number;
 }
 
 export interface PrintRegistrationCardPDFReservationDetailState {
@@ -531,6 +540,8 @@ export interface RootState {
   getRooms: GetRoomState;
   getWalkinRooms: GetWalkinRoomState;
   github: GitHubState;
+  nightAudit: NightAuditState;
+  noshow: NoShowState;
   notifications: NotificationsState;
   printDepositPDFReservationDetail: PrintDepositPDFReservationDetailState;
   printRegistrationCardPDFReservationDetail: PrintRegistrationCardPDFReservationDetailState;
@@ -538,7 +549,9 @@ export interface RootState {
   removeGuest: RemoveGuestState;
   resendEmailReservation: ResendEmailReservationState;
   reservation: ReservationSearchState;
-  reservationRooms: ReservationRoomState;
+  reservationRoomCheckinToday: ReservationRoomInhouseState;
+  reservationRoomCheckoutToday: ReservationRoomInhouseState;
+  reservationRoomInhouse: ReservationRoomInhouseState;
   searchAvailableSchedule: SearchAvailableScheduleState;
   searchRoom: RoomSearchState;
   searchSchedule: SearchScheduleState;

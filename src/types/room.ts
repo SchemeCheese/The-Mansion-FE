@@ -39,11 +39,10 @@ interface ReservationRoomItemFilter {
 }
 
 export interface ReservationRoomFilter {
-  checkout_today: ReservationRoomItemFilter;
-  inhouse_today: ReservationRoomItemFilter;
-  type: string;
+  filter: ReservationRoomItemFilter;
 }
 
 export interface ReservationRoomResult {
   data: any;
+  total: number;
 }

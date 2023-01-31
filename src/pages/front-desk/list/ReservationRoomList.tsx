@@ -8,17 +8,18 @@ Main functions : Reservation Room List Page
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Col, Pagination, Row, Spin, Table } from 'antd';
 import { formatNumber } from 'helpers';
-import { selectReservationRoomsState } from 'selectors';
+import {
+  selectReservationRoomCheckoutTodayState,
+  selectReservationRoomInhouseState,
+} from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { searchReservation } from 'actions';
-
-import { RootState } from 'types';
 
 import ReservationRoomListFilter from './ReservationRoomListFilter';
 
@@ -43,12 +44,10 @@ function ReservationRoomList({ type }: Props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const isSearching = useSelector<RootState>(
-    ({ reservationRooms }) => reservationRooms.is_searching,
+  const reservationRoomInhouseData: any = useAppSelector(selectReservationRoomInhouseState);
+  const reservationRoomCheckoutTodayData: any = useAppSelector(
+    selectReservationRoomCheckoutTodayState,
   );
-  const reservationRoomsData: any = useAppSelector(selectReservationRoomsState);
-  const total = reservationRoomsData.data[type]?.total;
-  const currentPage = reservationRoomsData[type].current_page;
 
   const onChangeCurrentPage = (page: number, pageSize: number) => {
     setSearchCondition({
@@ -66,7 +65,7 @@ function ReservationRoomList({ type }: Props) {
     );
   };
 
-  const columnsReservationRooms = [
+  const tableColumns = [
     {
       title: t('common.Room No'),
       dataIndex: 'room_no',
@@ -149,8 +148,6 @@ function ReservationRoomList({ type }: Props) {
     },
   ].filter(item => !item.hidden);
 
-  const checkoutTodayRooms = useAppSelector(selectReservationRoomsState);
-
   const convertReservationRoomsData = (data: any) => {
     if (data) {
       return data.map((item: any) => {
@@ -168,8 +165,21 @@ function ReservationRoomList({ type }: Props) {
     return [];
   };
 
-  const tableColumns = columnsReservationRooms;
-  const tableData = convertReservationRoomsData(checkoutTodayRooms.data[type]?.items);
+  let tableData = [];
+  let currentPage = 1;
+  let total = 0;
+
+  if (type === 'inhouse_today') {
+    tableData = convertReservationRoomsData(reservationRoomInhouseData.data?.items);
+    currentPage = reservationRoomInhouseData.filter.current_page;
+    total = reservationRoomInhouseData.total;
+  }
+
+  if (type === 'checkout_today') {
+    tableData = convertReservationRoomsData(reservationRoomCheckoutTodayData.data?.items);
+    currentPage = reservationRoomCheckoutTodayData.filter.current_page;
+    total = reservationRoomCheckoutTodayData.total;
+  }
 
   return (
     <Row style={{ background: 'white', padding: 16 }}>
@@ -181,7 +191,7 @@ function ReservationRoomList({ type }: Props) {
         />
       </Col>
       <Col span={24} style={{ paddingTop: 16 }}>
-        {!isSearching ? (
+        {true ? (
           <>
             <Table
               className="reservation-list"

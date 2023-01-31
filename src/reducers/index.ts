@@ -41,6 +41,8 @@ import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
 import getWalkinRooms, { getWalkinRoomsState } from './getWalkinRooms';
 import github, { githubState } from './github';
+import nightAudit, { nightAuditState } from './nightAudit';
+import noshow, { noshowState } from './noshow';
 import printRegistrationCardPDFReservationDetail, {
   printRegistrationCardPDFReservationDetailState,
 } from './printRegistrationCardPDFReservationDetail';
@@ -49,7 +51,13 @@ import readNotification, { readNotificationState } from './readNotification';
 import removeGuest, { removeGuestState } from './removeGuest';
 import resendEmailReservation, { resendEmailReservationState } from './resendEmailReservation';
 import reservation, { reservationSearchState } from './reservation';
-import reservationRooms, { reservationRoomState } from './reservationRooms';
+import reservationRoomCheckinToday, {
+  reservationRoomCheckinTodayState,
+} from './reservationRoomCheckinToday';
+import reservationRoomCheckoutToday, {
+  reservationRoomCheckoutTodayState,
+} from './reservationRoomCheckoutToday';
+import reservationRoomInhouse, { reservationRoomInhouseState } from './reservationRoomInhouse';
 import searchAvailableSchedule, { searchAvailableScheduleState } from './searchAvailableSchedule';
 import searchRoom, { roomSearchState } from './searchRoom';
 import searchSchedule, { searchScheduleState } from './searchSchedule';
@@ -103,8 +111,10 @@ export const initialState = {
   updateGuest: updateGuestState,
   updateRoomAvailable: updateRoomAvailableState,
   removeGuest: removeGuestState,
-  readNotificationState,
-  reservationRooms: reservationRoomState,
+  readNotification: readNotificationState,
+  reservationRoomInhouse: reservationRoomInhouseState,
+  reservationRoomCheckoutToday: reservationRoomCheckoutTodayState,
+  reservationRoomCheckinToday: reservationRoomCheckinTodayState,
   getLanguageCode: getLanguageCodeState,
   getRooms: getRoomsState,
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
@@ -116,6 +126,8 @@ export const initialState = {
   getBranchFacilities: getBranchFacilitesState,
   branchInfo: branchInfoState,
   notifications: notificationsState,
+  noshow: noshowState,
+  nightAudit: nightAuditState,
   printRegistrationCardPDFReservationDetail: printRegistrationCardPDFReservationDetailState,
   printDepositPDFReservationDetail: printDepositPDFReservationDetailState,
   fuel: fuelState,
@@ -158,7 +170,9 @@ export default {
   ...updateGuest,
   ...removeGuest,
   ...readNotification,
-  ...reservationRooms,
+  ...reservationRoomInhouse,
+  ...reservationRoomCheckinToday,
+  ...reservationRoomCheckoutToday,
   ...getLanguageCode,
   ...getRooms,
   ...updateRoomAvailable,
@@ -172,6 +186,8 @@ export default {
   ...getBranchFacilites,
   ...branchInfo,
   ...notifications,
+  ...noshow,
+  ...nightAudit,
   ...printRegistrationCardPDFReservationDetail,
   ...printDepositPDFReservationDetail,
   ...fuel,

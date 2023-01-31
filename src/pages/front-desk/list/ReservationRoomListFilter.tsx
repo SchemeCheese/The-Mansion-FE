@@ -10,11 +10,18 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Input, Row, Select } from 'antd';
 import { t } from 'i18next';
-import { selectReservationRoomsState } from 'selectors';
+import {
+  selectReservationRoomCheckoutTodayState,
+  selectReservationRoomInhouseState,
+} from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { getAgentInfos, getReservationRoomsAction } from 'actions';
+import {
+  getAgentInfos,
+  getReservationRoomCheckoutTodayAction,
+  getReservationRoomInhouseAction,
+} from 'actions';
 
 import MInput from 'components/MInput';
 
@@ -30,26 +37,24 @@ const { Option } = Select;
 
 function ReservationRoomListFilter({ searchCondition, setSearchCondition, type }: Props) {
   const dispatch = useDispatch();
-  const [showMore, setShowMore] = useState(false);
-  const reservationRoomsData: any = useAppSelector(selectReservationRoomsState);
+  const reservationRoomInhouseData: any = useAppSelector(selectReservationRoomInhouseState);
+  const reservationRoomCheckoutTodayData: any = useAppSelector(
+    selectReservationRoomCheckoutTodayState,
+  );
 
   const fetchSearchReservationRooms = (data: any) => {
     if (type === 'inhouse_today') {
       dispatch(
-        getReservationRoomsAction({
-          checkout_today: reservationRoomsData.checkout_today,
-          inhouse_today: data,
-          type: 'inhouse_today',
+        getReservationRoomInhouseAction({
+          filter: reservationRoomInhouseData.filter,
         }),
       );
     }
 
     if (type === 'checkout_today') {
       dispatch(
-        getReservationRoomsAction({
-          inhouse_today: reservationRoomsData.inhouse_today,
-          checkout_today: data,
-          type: 'checkout_today',
+        getReservationRoomCheckoutTodayAction({
+          filter: reservationRoomCheckoutTodayData.inhouse_today,
         }),
       );
     }
