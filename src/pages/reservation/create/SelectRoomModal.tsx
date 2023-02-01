@@ -232,7 +232,7 @@ function SelectRoomModal({
         co: item.checkout_date,
         quantity: item.quantity,
         // Data to send API
-        room_type: roomCondition.room_type,
+        room_type: item.room_type,
         checkin_date: item.checkin_date,
         checkout_date: item.checkout_date,
         actual_amount: item.actual_amount,
