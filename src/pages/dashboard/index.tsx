@@ -12,6 +12,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Row } from 'antd';
 
+import IntroduceRow from './IntroduceRow';
 import SalesCard from './SalesCard';
 
 function Dashboard() {
@@ -19,6 +20,9 @@ function Dashboard() {
 
   return (
     <Row className="content">
+      <Col span={24} style={{ paddingBottom: 10 }}>
+        <IntroduceRow />
+      </Col>
       <Col span={24} style={{ paddingBottom: 10 }}>
         <SalesCard />
       </Col>

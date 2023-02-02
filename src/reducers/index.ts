@@ -30,6 +30,7 @@ import fuel, { fuelState } from './fuel';
 import getBranchFacilites, { getBranchFacilitesState } from './getBranchFacilites';
 import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getBranchs, { getBranchsState } from './getBranchs';
+import getElectricYesterday, { getElectricYesterdayState } from './getElectricYesterday';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import notifications, { notificationsState } from './getNotification';
 import getProductType, { getProductTypeState } from './getProductType';
@@ -40,6 +41,7 @@ import getReservationNumber, { reservationNumberState } from './getReservationNu
 import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
 import getWalkinRooms, { getWalkinRoomsState } from './getWalkinRooms';
+import getWaterYesterday, { getWaterYesterdayState } from './getWaterYesterday';
 import github, { githubState } from './github';
 import nightAudit, { nightAuditState } from './nightAudit';
 import noshow, { noshowState } from './noshow';
@@ -131,6 +133,8 @@ export const initialState = {
   printRegistrationCardPDFReservationDetail: printRegistrationCardPDFReservationDetailState,
   printDepositPDFReservationDetail: printDepositPDFReservationDetailState,
   fuel: fuelState,
+  getElectricYesterday: getElectricYesterdayState,
+  getWaterYesterday: getWaterYesterdayState,
 };
 
 export default {
@@ -191,4 +195,6 @@ export default {
   ...printRegistrationCardPDFReservationDetail,
   ...printDepositPDFReservationDetail,
   ...fuel,
+  ...getElectricYesterday,
+  ...getWaterYesterday,
 };

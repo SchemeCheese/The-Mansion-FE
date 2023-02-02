@@ -226,3 +226,13 @@ export const selectNightAuditState = createSelector(
   (state: RootState) => state.nightAudit,
   nightAudit => nightAudit,
 );
+
+export const selectElectricYesterdayState = createSelector(
+  (state: RootState) => state.getElectricYesterday,
+  getElectricYesterday => getElectricYesterday,
+);
+
+export const selectWaterYesterdayState = createSelector(
+  (state: RootState) => state.getWaterYesterday,
+  getWaterYesterday => getWaterYesterday,
+);
