@@ -286,7 +286,7 @@ export function* getReservationRoomCheckinTodaySaga({
       operator_code,
       branch_code,
       facility_code,
-      type: 'checkin_today',
+      type: 'noshow_today',
     };
     const query = new URLSearchParams(Object(newPayload)).toString();
 

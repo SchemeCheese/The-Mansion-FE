@@ -16,6 +16,7 @@ import { Button, Card, Col, Form, message, Modal, Row, Select, Switch, Table } f
 import TextArea from 'antd/lib/input/TextArea';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
+import moment from 'moment';
 import {
   selectFacilitesByBranch,
   selectNightAuditState,
@@ -386,7 +387,9 @@ function NightAudit() {
             <span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.45)' }}>
               {t('nightAudit.Current Date')}:{' '}
             </span>
-            <span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.85)' }}>27/12/2022</span>
+            <span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.85)' }}>
+              {moment(branchFacilities.data.business_date).format('DD/MM/YYYY')}
+            </span>
           </p>
         </Col>
         <Col span={12} style={{ textAlign: 'right', paddingRight: 20 }}>
@@ -411,6 +414,7 @@ function NightAudit() {
       <Row className="content">
         <Card bordered={false} style={{ width: '100%' }} title={t('nightAudit.I. Checkin Today')}>
           <Table
+            className="rooming-table"
             columns={checkinTodayColumns}
             dataSource={checkinTodayDataTable}
             onRow={(record: any) => {
@@ -430,6 +434,7 @@ function NightAudit() {
           title={t('nightAudit.II. Checkout Today')}
         >
           <Table
+            className="rooming-table"
             columns={checkoutTodayColumns}
             dataSource={checkoutTodayDataTable}
             onRow={(record: any) => {
@@ -451,6 +456,7 @@ function NightAudit() {
           title={t('nightAudit.III. Inhouse')}
         >
           <Table
+            className="rooming-table"
             columns={inhouseTodayColumns}
             dataSource={inhouseDataTable}
             onRow={(record: any) => {
