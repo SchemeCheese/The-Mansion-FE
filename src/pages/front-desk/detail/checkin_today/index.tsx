@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import type { RadioChangeEvent } from 'antd';
 import { Checkbox, Col, message, Modal, Radio, Row, Skeleton, Space } from 'antd';
-import { formatNumber } from 'helpers';
+import { formatNumber, mappingStatus } from 'helpers';
 import moment from 'moment';
 import DownloadFile from 'pages/reservation/component/DownloadFile';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
@@ -175,7 +175,7 @@ function ReservationCheckinTodayDetail() {
         const itemTemporary = {
           key: item.id,
           reservation_detail_id: item.id,
-          status: item.status,
+          status: mappingStatus(item.status),
           name: item.main_guest_name ? item.main_guest_name : '-',
           room_type: item.equipment_type_id,
           room_type_text: item.room_type_text,
