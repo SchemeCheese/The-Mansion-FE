@@ -194,26 +194,32 @@ function NightAudit() {
     {
       title: t('reservation.Folio ID'),
       dataIndex: 'folio_id',
+      key: 'folio_id',
     },
     {
       title: t('reservation.Room No'),
       dataIndex: 'room_no',
+      key: 'room_no',
     },
     {
       title: t('common.Booker Name'),
       dataIndex: 'booker_name',
+      key: 'booker_name',
     },
     {
       title: t('common.Booker Via'),
       dataIndex: 'booker_via',
+      key: 'booker_via',
     },
     {
       title: t('reservation.Checkin'),
       dataIndex: 'checkin',
+      key: 'checkin',
     },
     {
       title: t('reservation.Checkout'),
       dataIndex: 'checkout',
+      key: 'checkout',
     },
     {
       title: () => {
@@ -259,22 +265,27 @@ function NightAudit() {
     {
       title: t('reservation.Room No'),
       dataIndex: 'room_no',
+      key: 'room_no',
     },
     {
       title: t('common.Booker Name'),
       dataIndex: 'booker_name',
+      key: 'booker_name',
     },
     {
       title: t('common.Booking Number'),
       dataIndex: 'booking_number',
+      key: 'booking_number',
     },
     {
       title: t('reservation.Checkin'),
       dataIndex: 'checkin',
+      key: 'checkin',
     },
     {
       title: t('reservation.Checkout'),
       dataIndex: 'checkout',
+      key: 'checkout',
     },
     {
       title: () => {
@@ -289,6 +300,7 @@ function NightAudit() {
     {
       title: t('common.Remain'),
       dataIndex: 'remain',
+      key: 'remain',
     },
     {
       title: t('common.Status'),
@@ -302,22 +314,27 @@ function NightAudit() {
     {
       title: t('reservation.Room No'),
       dataIndex: 'room_no',
+      key: 'room_no',
     },
     {
       title: t('common.Booker Name'),
       dataIndex: 'booker_name',
+      key: 'booker_name',
     },
     {
       title: t('common.Booking Number'),
       dataIndex: 'booking_number',
+      key: 'booking_number',
     },
     {
       title: t('reservation.Checkin'),
       dataIndex: 'checkin',
+      key: 'checkin',
     },
     {
       title: t('reservation.Checkout'),
       dataIndex: 'checkout',
+      key: 'checkout',
     },
     {
       title: () => {
@@ -331,11 +348,13 @@ function NightAudit() {
     },
     {
       title: t('common.Rate'),
-      dataIndex: 'rate',
+      dataIndex: 'rate_name',
+      key: 'rate_name',
     },
     {
       title: t('common.Amount'),
       dataIndex: 'amount',
+      key: 'amount',
     },
   ];
 
@@ -429,7 +448,7 @@ function NightAudit() {
       checkin: item.checkin,
       checkout: item.checkout,
       total_guest: item.total_guest,
-      rate: '',
+      rate_name: item.rate_name,
       amount: item.total_amount,
     };
   });
