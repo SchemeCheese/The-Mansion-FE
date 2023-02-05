@@ -14,8 +14,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { RadioChangeEvent } from 'antd';
 import { Checkbox, Col, message, Modal, Radio, Row, Select, Skeleton, Space } from 'antd';
-import { formatNumber } from 'helpers';
+import { formatNumber, mappingStatus } from 'helpers';
 import moment from 'moment';
+import DownloadFile from 'pages/reservation/component/DownloadFile';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -42,8 +43,6 @@ import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
 
 import { RootState } from 'types';
-
-import DownloadFile from '../component/DownloadFile';
 
 const BreadscrumTitle = styled.p`
   color: rgba(0 0 0 85%);
@@ -122,35 +121,6 @@ function ReservationDetail() {
     setIsModalVisible(true);
   };
 
-  const dataSearchRoom = [];
-
-  for (let index = 0; index < 3; index++) {
-    dataSearchRoom.push({
-      created_date: '',
-      rate_name: '',
-      adult: '',
-      child: '',
-      rate_detail: '',
-      unit_price: '',
-      updated_price: '',
-      task: '',
-    });
-  }
-
-  const dataSelectedRoomsResult = [];
-
-  for (let index = 0; index < 3; index++) {
-    dataSelectedRoomsResult.push({
-      checkin: '',
-      checkout: '',
-      room_type: '',
-      rate_name: '',
-      quantity: '',
-      subtotal: '',
-      task: '',
-    });
-  }
-
   const dispatch = useDispatch();
   const reservationRedux: any = useSelector<RootState>(
     ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
@@ -208,7 +178,7 @@ function ReservationDetail() {
         const itemTemporary = {
           key: item.id,
           reservation_detail_id: item.id,
-          status: item.status,
+          status: mappingStatus(item.status),
           name: item.main_guest_name ? item.main_guest_name : '-',
           room_type: item.equipment_type_id,
           room_type_text: item.room_type_text,

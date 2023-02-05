@@ -82,6 +82,114 @@ function NightAudit() {
     setIsPaymentMethodModalOpen(false);
   };
 
+  const statusMapping = (status: string) => {
+    const svgStatus = {
+      checkout: (
+        <>
+          <svg
+            fill="none"
+            height="6"
+            style={{ marginRight: 6, position: 'relative', top: -2 }}
+            viewBox="0 0 6 6"
+            width="6"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="3" cy="3" fill="#9254DE" r="3" />
+          </svg>
+          Checkout
+        </>
+      ),
+      reserved: (
+        <>
+          <svg
+            fill="none"
+            height="6"
+            style={{ marginRight: 6, position: 'relative', top: -2 }}
+            viewBox="0 0 6 6"
+            width="6"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="3" cy="3" fill="#1D39C4" r="3" />
+          </svg>
+          Reserved
+        </>
+      ),
+      canceled: (
+        <>
+          <svg
+            fill="none"
+            height="6"
+            style={{ marginRight: 6, position: 'relative', top: -2 }}
+            viewBox="0 0 6 6"
+            width="6"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="3" cy="3" fill="#F5222D" r="3" />
+          </svg>
+          Canceled
+        </>
+      ),
+      inhouse: (
+        <>
+          <svg
+            fill="none"
+            height="6"
+            style={{ marginRight: 6, position: 'relative', top: -2 }}
+            viewBox="0 0 6 6"
+            width="6"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="3" cy="3" fill="#52C41A" r="3" />
+          </svg>
+          In House
+        </>
+      ),
+      no_show: (
+        <>
+          <svg
+            fill="none"
+            height="6"
+            style={{ marginRight: 6, position: 'relative', top: -2 }}
+            viewBox="0 0 6 6"
+            width="6"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="3" cy="3" fill="#52C41A" r="3" />
+          </svg>
+          No Show
+        </>
+      ),
+      waitlist: (
+        <>
+          <svg
+            fill="none"
+            height="6"
+            style={{ marginRight: 6, position: 'relative', top: -2 }}
+            viewBox="0 0 6 6"
+            width="6"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="3" cy="3" fill="black" fillOpacity="0.25" r="3" />
+          </svg>
+          Waitlist
+        </>
+      ),
+    };
+
+    if (
+      status === 'checkout' ||
+      status === 'reserved' ||
+      status === 'canceled' ||
+      status === 'inhouse' ||
+      status === 'waitlist' ||
+      status === 'no_show'
+    ) {
+      return svgStatus[status];
+    }
+
+    return '';
+  };
+
   const checkinTodayColumns: ColumnsType<DataType> = [
     {
       title: t('reservation.Folio ID'),
@@ -120,6 +228,8 @@ function NightAudit() {
     {
       title: t('common.Status'),
       dataIndex: 'status',
+      key: 'status',
+      render: (text: string) => statusMapping(text),
     },
     {
       title: '',
@@ -183,6 +293,8 @@ function NightAudit() {
     {
       title: t('common.Status'),
       dataIndex: 'status',
+      key: 'status',
+      render: (text: string) => statusMapping(text),
     },
   ];
 
@@ -294,7 +406,7 @@ function NightAudit() {
     }
   }, [selectNoShowChanged]);
 
-  const checkinTodayDataTable = reservationRoomCheckinTodayData?.data.items.map((item: any) => {
+  const checkinTodayDataTable = reservationRoomCheckinTodayData?.data.items?.map((item: any) => {
     return {
       ...item,
       folio_id: item.folio_id,
@@ -308,7 +420,7 @@ function NightAudit() {
     };
   });
 
-  const inhouseDataTable = reservationRoomInhouseData?.data.items.map((item: any) => {
+  const inhouseDataTable = reservationRoomInhouseData?.data.items?.map((item: any) => {
     return {
       ...item,
       room_no: item.room_no,
@@ -322,7 +434,7 @@ function NightAudit() {
     };
   });
 
-  const checkoutTodayDataTable = reservationRoomCheckoutTodayData?.data.items.map((item: any) => {
+  const checkoutTodayDataTable = reservationRoomCheckoutTodayData?.data.items?.map((item: any) => {
     return {
       ...item,
       room_no: item.room_no,

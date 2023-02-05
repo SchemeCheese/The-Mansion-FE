@@ -51,3 +51,20 @@ export const getDaysBetweenDates = function (startDate: any, endDate: any) {
 export const onlyUnique = function (value: any, index: number, self: any) {
   return value && self.indexOf(value) === index;
 };
+
+export const mappingStatus = (status: string) => {
+  switch (status) {
+    case 'checkout':
+      return 'Checked Out';
+    case 'canceled':
+      return 'Canceled';
+    case 'in_house':
+      return 'In House';
+    case 'no_show':
+      return 'No Show';
+    case 'waitlist':
+      return 'Waitlist';
+    default:
+      return '';
+  }
+};
