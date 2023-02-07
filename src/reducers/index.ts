@@ -13,6 +13,7 @@ import cancelReservationDetail, { cancelReservationDetailState } from './cancelR
 import changeDisk, { changeDiskState } from './changeDisk';
 import changeRoom, { changeRoomState } from './changeRoom';
 import channel, { channelState } from './channel';
+import checkin, { checkinState } from './checkin';
 import createGuest, { createGuestState } from './createGuest';
 import createPayment, { createPaymentState } from './createPayment';
 import createReservation, { createReservationState } from './createReservation';
@@ -102,6 +103,7 @@ export const initialState = {
   searchAvailableSchedule: searchAvailableScheduleState,
   getProductType: getProductTypeState,
   channel: channelState,
+  checkin: checkinState,
   addItem: addItemState,
   deleteItem: deleteItemState,
   createPayment: createPaymentState,
@@ -163,6 +165,7 @@ export default {
   ...searchAvailableSchedule,
   ...getProductType,
   ...channel,
+  ...checkin,
   ...addItem,
   ...deleteItem,
   ...createPayment,

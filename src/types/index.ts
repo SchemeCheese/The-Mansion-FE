@@ -1,4 +1,5 @@
 export * from './common';
+export * from './checkin';
 export * from './state';
 export * from './login';
 export * from './reservation';

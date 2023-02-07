@@ -236,3 +236,8 @@ export const selectWaterYesterdayState = createSelector(
   (state: RootState) => state.getWaterYesterday,
   getWaterYesterday => getWaterYesterday,
 );
+
+export const selectCheckinState = createSelector(
+  (state: RootState) => state.checkin,
+  checkin => checkin,
+);

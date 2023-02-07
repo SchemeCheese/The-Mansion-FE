@@ -452,6 +452,8 @@ export interface GetBranchFacilitiesState {
 export interface BranchInfoState {
   branch_code: string;
   facility_code: string;
+  normal_time_check_in: string;
+  normal_time_check_out: string;
   operator_code: string;
 }
 
@@ -525,6 +527,18 @@ export interface GetWaterYesterdayState {
   totalYesterday: number;
 }
 
+interface CheckinPayload {
+  hide_room_rate: boolean;
+  print_registration_card: boolean;
+  reservation_detail: Array<Record<string, any>>;
+  reservation_id: string;
+}
+
+export interface CheckinState {
+  payload: CheckinPayload;
+  status: string;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -537,6 +551,7 @@ export interface RootState {
   changeDisk: ChangeDiskState;
   changeRoom: ChangeRoomState;
   channel: FetchChannelState;
+  checkin: CheckinState;
   createGuest: CreateGuestState;
   createPayment: CreatePaymentState;
   createReservation: CreateReservationState;

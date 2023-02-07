@@ -83,6 +83,8 @@ function MLayout(props: Props) {
     branch_code: '',
     facility_code: '',
     name: '',
+    normal_time_check_in: '',
+    normal_time_check_out: '',
   });
 
   const changeBranch = (value: string) => {
@@ -93,6 +95,8 @@ function MLayout(props: Props) {
       branch_code: '',
       facility_code: '',
       name: '',
+      normal_time_check_in: '',
+      normal_time_check_out: '',
     });
     form.setFieldsValue({
       outlet: undefined,
@@ -119,6 +123,8 @@ function MLayout(props: Props) {
           operator_code: currentFacility?.operator_code,
           branch_code: currentFacility?.branch_code,
           facility_code: currentFacility?.facility_code,
+          normal_time_check_in: currentFacility?.normal_time_check_in,
+          normal_time_check_out: currentFacility?.normal_time_check_out,
         }),
       );
       setCurrentBranchName(currentFacility?.name);
@@ -165,6 +171,8 @@ function MLayout(props: Props) {
           branch_code: facilitySelected.branch_code,
           facility_code: facilitySelected.facility_code,
           name: facilitySelected.name,
+          normal_time_check_in: facilitySelected.normal_time_check_in,
+          normal_time_check_out: facilitySelected.normal_time_check_out,
         });
       } else {
         const facilitySelected = branchFacilities.data.facilities[0];
@@ -177,6 +185,8 @@ function MLayout(props: Props) {
           branch_code: facilitySelected.branch_code,
           facility_code: facilitySelected.facility_code,
           name: facilitySelected.name,
+          normal_time_check_in: facilitySelected.normal_time_check_in,
+          normal_time_check_out: facilitySelected.normal_time_check_out,
         });
 
         window.localStorage.setItem('branch_id', branchFacilities.branch_id);
@@ -187,6 +197,8 @@ function MLayout(props: Props) {
             operator_code: facilitySelected.operator_code,
             branch_code: facilitySelected.branch_code,
             facility_code: facilitySelected.facility_code,
+            normal_time_check_in: facilitySelected.normal_time_check_in,
+            normal_time_check_out: facilitySelected.normal_time_check_out,
           }),
         );
       }

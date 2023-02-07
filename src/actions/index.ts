@@ -9,6 +9,7 @@ export * from './agentInfos';
 export * from './schedule';
 export * from './productType';
 export * from './channel';
+export * from './checkin';
 export * from './transaction';
 export * from './payment';
 export * from './guest';

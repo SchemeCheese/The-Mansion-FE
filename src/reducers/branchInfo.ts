@@ -8,6 +8,8 @@ export const branchInfoState = {
   operator_code: '',
   branch_code: '',
   facility_code: '',
+  normal_time_check_in: '',
+  normal_time_check_out: '',
 };
 
 export default {
@@ -16,6 +18,8 @@ export default {
       draft.operator_code = payload.operator_code;
       draft.branch_code = payload.branch_code;
       draft.facility_code = payload.facility_code;
+      draft.normal_time_check_in = payload.normal_time_check_in;
+      draft.normal_time_check_out = payload.normal_time_check_out;
     });
   }),
 };
