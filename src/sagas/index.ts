@@ -4,6 +4,7 @@ import agentInfos from './agentInfos';
 import branchHeader from './branchHeader';
 import branchs from './branchs';
 import channel from './channel';
+import dashboard from './dashboard';
 import file from './file';
 import fuel from './fuel';
 import github from './github';
@@ -44,5 +45,6 @@ export default function* root() {
     fork(notifications),
     fork(fuel),
     fork(nightAudit),
+    fork(dashboard),
   ]);
 }

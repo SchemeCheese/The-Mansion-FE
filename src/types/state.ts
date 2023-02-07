@@ -507,6 +507,24 @@ export interface FuelState {
   water: any;
 }
 
+export interface GetElectricYesterdayState {
+  avgYesterday: number;
+  dayPass: any | number;
+  listData: Array<Record<string, any>>;
+  status: string;
+  totalMonth: number;
+  totalYesterday: number;
+}
+
+export interface GetWaterYesterdayState {
+  avgYesterday: number;
+  dayPass: any | number;
+  listData: Array<Record<string, any>>;
+  status: string;
+  totalMonth: number;
+  totalYesterday: number;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -530,6 +548,7 @@ export interface RootState {
   getBranchFacilites: GetBranchFacilitiesState;
   getBranchHeader: BranchHeaderState;
   getBranchs: GetBranchsState;
+  getElectricYesterday: GetElectricYesterdayState;
   getLanguageCode: LanguageCodeState;
   getProductType: ProductTypeState;
   getReservation: GetReservationState;
@@ -539,6 +558,7 @@ export interface RootState {
   getRoomType: RoomTypeState;
   getRooms: GetRoomState;
   getWalkinRooms: GetWalkinRoomState;
+  getWaterYesterday: GetWaterYesterdayState;
   github: GitHubState;
   nightAudit: NightAuditState;
   noshow: NoShowState;
