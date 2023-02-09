@@ -13,5 +13,7 @@ export interface GetBranchFacilityFinishPayload {
 export interface BranchSelected {
   branch_code: string;
   facility_code: string;
+  normal_time_check_in: string;
+  normal_time_check_out: string;
   operator_code: string;
 }

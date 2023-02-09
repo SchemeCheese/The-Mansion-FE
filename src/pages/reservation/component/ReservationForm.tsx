@@ -9,7 +9,6 @@ Main functions : Reservation Form
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Card,
@@ -58,11 +57,13 @@ interface Props {
   reservationId: string;
   reservationInfo?: any;
   reservationNumber: number;
+  resetSelectedRows?: () => void;
   roomCondition: any;
   roomTotalForm: any;
   roomingListColumns: any;
   rowSelection: any;
   selectedRowKeys: any;
+  selectedRows?: any;
   setCancelCurrentItem?: any;
   setIsCancelBookingModalVisible?: any;
   setRedirectDetail?: any;
@@ -80,11 +81,13 @@ function ReservationForm({
   reservationId,
   reservationInfo,
   reservationNumber,
+  resetSelectedRows,
   roomCondition,
   roomingListColumns,
   roomTotalForm,
   rowSelection,
   selectedRowKeys,
+  selectedRows,
   setCancelCurrentItem,
   setIsCancelBookingModalVisible,
   setRedirectDetail,
@@ -203,6 +206,8 @@ function ReservationForm({
       {type === 'checkin_today' && (
         <CheckinModal
           openModalCheckin={isModalCheckinOpen}
+          resetSelectedRows={resetSelectedRows}
+          selectedRows={selectedRows}
           setIsModalCheckinOpen={setIsModalCheckinOpen}
         />
       )}
@@ -467,6 +472,7 @@ function ReservationForm({
                     )}
                     {type === 'checkin_today' && (
                       <PattonButton
+                        disabled={selectedRowKeys.length === 0}
                         onClick={showModalCheckin}
                         style={{ marginLeft: 15 }}
                         type="primary"

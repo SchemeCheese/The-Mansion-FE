@@ -55,12 +55,18 @@ const BreadscrumData = styled.p`
 
 function ReservationCheckinTodayDetail() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
+
+  const resetSelectedRows = () => {
+    setSelectedRowKeys([]);
+  };
 
   const rowSelection = {
     selectedRowKeys,
-    onChange: (selectedRowKeysTable: any) => {
+    onChange: (selectedRowKeysTable: any, selectedRowsTable: any) => {
       setSelectedRowKeys(selectedRowKeysTable);
+      setSelectedRows(selectedRowsTable);
     },
     getCheckboxProps: (record: any) => ({
       disabled: record.status?.toLowerCase() === 'canceled',
@@ -462,11 +468,13 @@ function ReservationCheckinTodayDetail() {
           reservationId={id}
           reservationInfo={reservationRedux}
           reservationNumber={reservationRedux.reservation_number}
+          resetSelectedRows={resetSelectedRows}
           roomCondition={roomCondition}
           roomTotalForm={roomTotalForm}
           roomingListColumns={roomingListColumns}
           rowSelection={rowSelection}
           selectedRowKeys={selectedRowKeys}
+          selectedRows={selectedRows}
           setCancelCurrentItem={setCancelCurrentItem}
           setIsCancelBookingModalVisible={setIsCancelBookingModalVisible}
           setRoomCondition={setRoomCondition}

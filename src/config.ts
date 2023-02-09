@@ -38,6 +38,7 @@ export const ReservationEndpoint = {
   DOWNLOAD_DOCX: 'api/v1/reservations',
   PRINT_REGISTRATION_CARD_PDF: 'api/v1/reservations',
   PRINT_DEPOSIT_PDF: 'api/v1/reservations',
+  CHECKIN: 'api/v1/reservations',
 };
 
 export const RoomEndpoint = {

@@ -1,17 +1,29 @@
 import 'styles/reservation.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Card, Checkbox, Col, Modal, Row, Table, Upload } from 'antd';
+import { Card, Checkbox, Col, message, Modal, Row, Table, Upload } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload';
+import { formatNumber } from 'helpers';
+import moment from 'moment';
+import { selectBranchInfo, selectCheckinState, selectFacilitesByBranch } from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { checkinAction, getReservation } from 'actions';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
 
 interface Props {
   openModalCheckin: any;
+  resetSelectedRows?: () => void;
+  selectedRows: any;
   setIsModalCheckinOpen: any;
 }
 
@@ -36,10 +48,34 @@ interface DataTypeEarly {
   unit_price: string;
 }
 
-function CheckinModal({ openModalCheckin, setIsModalCheckinOpen }: Props) {
+function CheckinModal({
+  openModalCheckin,
+  resetSelectedRows,
+  selectedRows,
+  setIsModalCheckinOpen,
+}: Props) {
   const { t } = useTranslation();
+  const [hideRoomRate, setHideRoomRate] = useState(false);
+  const [printRegistrationCard, setPrintRegistrationCard] = useState(false);
+  const [earlyCheckinFee, setEearlyCheckinFee]: any[] = useState([]);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+
+  const selectCheckinData = useAppSelector(selectCheckinState);
+  const { changed } = useTreeChanges(selectCheckinData);
 
   const handleOk = () => {
+    dispatch(
+      checkinAction({
+        payload: {
+          reservation_id: id ?? '',
+          hide_room_rate: hideRoomRate,
+          print_registration_card: printRegistrationCard,
+          reservation_detail: earlyCheckinFee,
+        },
+      }),
+    );
+
     setIsModalCheckinOpen(false);
   };
 
@@ -77,53 +113,30 @@ function CheckinModal({ openModalCheckin, setIsModalCheckinOpen }: Props) {
       title: t('reservation.Deposit Amount'),
       key: 'deposit_amount',
       dataIndex: 'deposit_amount',
-      render: () => {
-        return (
-          <MInput name="actual_amount" placeholder="0" style={{ borderRadius: 4, width: 100 }} />
-        );
-      },
     },
-    {
-      title: t('common.Task'),
-      key: 'task',
-      dataIndex: 'task',
-      render: text => (
-        <a href="/" style={{ color: '#1D39C4' }}>
-          {text}
-        </a>
-      ),
-    },
+    // {
+    //   title: t('common.Task'),
+    //   key: 'task',
+    //   dataIndex: 'task',
+    //   render: text => (
+    //     <a href="/" style={{ color: '#1D39C4' }}>
+    //       {text}
+    //     </a>
+    //   ),
+    // },
   ];
 
-  const dataRoomDeposit: DataTypeRoomDeposit[] = [
-    {
-      id: '',
-      name: '',
-      room_type: '',
-      room_no: '',
+  const dataRoomDeposit: DataTypeRoomDeposit[] = selectedRows.map((item: any, index: number) => {
+    return {
+      id: 1 + index,
+      name: item.name,
+      room_type: item.room_type_text,
+      room_no: item.room_no,
       deposit_method: '',
-      deposit_amount: '',
+      deposit_amount: item.deposit,
       task: 'Duplicate',
-    },
-    {
-      id: '',
-      name: '',
-      room_type: '',
-      room_no: '',
-      deposit_method: '',
-      deposit_amount: '',
-      task: '',
-    },
-    {
-      id: '',
-      name: '',
-      room_type: '',
-      room_no: '',
-      deposit_method: '',
-      deposit_amount: '',
-      task: '',
-    },
-  ];
+    };
+  });
 
   const columnsEarly: ColumnsType<DataTypeEarly> = [
     {
@@ -160,46 +173,64 @@ function CheckinModal({ openModalCheckin, setIsModalCheckinOpen }: Props) {
       title: t('common.Unit Price'),
       key: 'unit_price',
       dataIndex: 'unit_price',
+      render: (text: any, record: any, index: number) => {
+        return (
+          <MInput
+            onChange={e => {
+              const earlyCheckinFeeTemporary = [...earlyCheckinFee];
+              const editRecord = {
+                id: earlyCheckinFeeTemporary[index].id,
+                early_checkin_fee: {
+                  ...earlyCheckinFeeTemporary[index].early_checkin_fee,
+                  sale_price: e.target.value,
+                },
+              };
+
+              earlyCheckinFeeTemporary[index] = editRecord;
+              setEearlyCheckinFee(earlyCheckinFeeTemporary);
+            }}
+            placeholder="0"
+            style={{ borderRadius: 4, width: 100 }}
+            value={earlyCheckinFee[index]?.early_checkin_fee.sale_price}
+          />
+        );
+      },
     },
     {
       title: 'Early C/I Fee',
       key: 'early_CI_fee',
       dataIndex: 'early_CI_fee',
+      render: (text: any, record: any, index: number) => {
+        return formatNumber(
+          parseInt(earlyCheckinFee[index]?.early_checkin_fee.sale_price, 10) *
+            parseInt(earlyCheckinFee[index]?.early_checkin_fee.hour_total, 10),
+        );
+      },
     },
   ];
 
-  const dataEarly: DataTypeEarly[] = [
-    {
-      id: '',
-      name: '',
-      room_no: '',
-      default_CI_time: '',
-      actual_CI_time: '',
-      early_CI_time: '',
-      unit_price: '',
-      early_CI_fee: '',
-    },
-    {
-      id: '',
-      name: '',
-      room_no: '',
-      default_CI_time: '',
-      actual_CI_time: '',
-      early_CI_time: '',
-      unit_price: '',
-      early_CI_fee: '',
-    },
-    {
-      id: '',
-      name: '',
-      room_no: '',
-      default_CI_time: '',
-      actual_CI_time: '',
-      early_CI_time: '',
-      unit_price: '',
-      early_CI_fee: '',
-    },
-  ];
+  const branchInfoSelected: any = useAppSelector(selectBranchInfo);
+
+  const defaultTime = moment(branchInfoSelected.normal_time_check_in, 'HH:mm:ss');
+  const actualTime: any = useRef(moment());
+  const duration = moment.duration(defaultTime.diff(actualTime.current));
+
+  const dataEarly: DataTypeEarly[] = selectedRows
+    .map((item: any, index: number) => {
+      return {
+        id: 1 + index,
+        name: item.name,
+        room_no: item.room_no,
+        default_CI_time: defaultTime.format('HH:mm:ss'),
+        actual_CI_time: actualTime.current.format('HH:mm:ss'),
+        early_CI_time: Math.round(duration.asHours()),
+        unit_price: '',
+        early_CI_fee: '',
+      };
+    })
+    .filter((item: any) => {
+      return item.early_CI_time > 0;
+    });
 
   const getBase64 = (img: RcFile, callback: (url: string) => void) => {
     const reader = new FileReader();
@@ -239,6 +270,40 @@ function CheckinModal({ openModalCheckin, setIsModalCheckinOpen }: Props) {
     </div>
   );
 
+  useEffect(() => {
+    const checkInFee = selectedRows
+      .map((item: any) => {
+        return {
+          id: item.reservation_detail_id,
+          early_checkin_fee: {
+            hour_total: Math.round(duration.asHours()),
+            sale_price: 200000,
+          },
+        };
+      })
+      .filter((item: any) => {
+        return item.early_checkin_fee.hour_total > 0;
+      });
+
+    setEearlyCheckinFee(checkInFee);
+  }, [selectedRows]);
+
+  useEffect(() => {
+    if (changed('status', 'SUCCESS')) {
+      message.success(t('message.Checkin successfully!'));
+
+      dispatch(
+        getReservation({
+          reservation_id: id ?? '',
+        }),
+      );
+
+      if (resetSelectedRows) {
+        resetSelectedRows();
+      }
+    }
+  }, [changed]);
+
   return (
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
@@ -247,17 +312,21 @@ function CheckinModal({ openModalCheckin, setIsModalCheckinOpen }: Props) {
       onCancel={handleCancel}
       onOk={handleOk}
       style={{ top: 60, borderRadius: 4 }}
-      title={<b>Checkin confirmation</b>}
+      title={<b>{t('reservation.Checkin confirmation')}</b>}
       visible={openModalCheckin}
       width={1000}
     >
       <Checkbox.Group style={{ width: '100%' }}>
         <Row>
           <Col span={8}>
-            <Checkbox value="1">Hide room rates</Checkbox>
+            <Checkbox onChange={e => setHideRoomRate(e.target.checked)} value="1">
+              {t('reservation.Hide room rates')}
+            </Checkbox>
           </Col>
           <Col span={16}>
-            <Checkbox value="2">Print Registration Card</Checkbox>
+            <Checkbox onChange={e => setPrintRegistrationCard(e.target.checked)} value="2">
+              {t('common.Print Registration Card')}
+            </Checkbox>
           </Col>
         </Row>
       </Checkbox.Group>
@@ -265,16 +334,21 @@ function CheckinModal({ openModalCheckin, setIsModalCheckinOpen }: Props) {
       <Card bordered={false} style={{ marginTop: 44 }} title={t('reservation.Room Deposit')}>
         <Row>
           <Col span={24} style={{ marginBottom: 15 }}>
-            <Table columns={columnsRoomDeposit} dataSource={dataRoomDeposit} pagination={false} />
+            <Table
+              columns={columnsRoomDeposit}
+              dataSource={dataRoomDeposit}
+              pagination={false}
+              size="small"
+            />
           </Col>
         </Row>
       </Card>
 
       <Card bordered={false} style={{ marginTop: 16 }} title={t('reservation.Early Checkin Fee')}>
-        <Table columns={columnsEarly} dataSource={dataEarly} pagination={false} />
+        <Table columns={columnsEarly} dataSource={dataEarly} pagination={false} size="small" />
       </Card>
 
-      <Row>
+      {/* <Row>
         <Col span={16}>
           <Upload
             action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -343,7 +417,7 @@ function CheckinModal({ openModalCheckin, setIsModalCheckinOpen }: Props) {
             <Col span={12} />
           </Row>
         </Col>
-      </Row>
+      </Row> */}
     </Modal>
   );
 }
