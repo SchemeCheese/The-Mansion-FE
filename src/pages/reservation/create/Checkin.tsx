@@ -10,7 +10,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
-import { selectBranchInfo, selectCheckinState, selectFacilitesByBranch } from 'selectors';
+import { selectBranchInfo, selectCheckinState } from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
@@ -155,17 +155,17 @@ function CheckinModal({
       key: 'room_no',
     },
     {
-      title: 'Default C/I Time',
+      title: t('reservation.Default C/I Time'),
       key: 'default_CI_time',
       dataIndex: 'default_CI_time',
     },
     {
-      title: 'Actual C/I Time',
+      title: t('reservation.Actual C/I Time'),
       key: 'actual_CI_time',
       dataIndex: 'actual_CI_time',
     },
     {
-      title: 'Early C/I Time',
+      title: t('reservation.Early C/I Time'),
       key: 'early_CI_time',
       dataIndex: 'early_CI_time',
     },
@@ -197,7 +197,7 @@ function CheckinModal({
       },
     },
     {
-      title: 'Early C/I Fee',
+      title: t('reservation.Early C/I Fee'),
       key: 'early_CI_fee',
       dataIndex: 'early_CI_fee',
       render: (text: any, record: any, index: number) => {

@@ -10,6 +10,7 @@ export * from './schedule';
 export * from './productType';
 export * from './channel';
 export * from './checkin';
+export * from './checkout';
 export * from './transaction';
 export * from './payment';
 export * from './guest';

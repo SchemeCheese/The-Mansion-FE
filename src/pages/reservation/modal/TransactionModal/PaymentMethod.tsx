@@ -131,7 +131,7 @@ function PaymentMethod({ computePaidAmount, form, name, restField }: Props) {
             rules={[{ required: true }]}
           >
             <Select onChange={value => onChangeCurrency(value, restField.fieldKey)}>
-              {exchangeRates.map((item: any) => {
+              {exchangeRates?.map((item: any) => {
                 return <Option value={item.id}>{item.currency_code.toUpperCase()}</Option>;
               })}
             </Select>

@@ -182,6 +182,7 @@ export interface AddItemState {
 }
 
 export interface CreatePaymentPayload {
+  paid: Record<string, any>;
   payment_methods: Array<Record<string, any>>;
   reservation_detail_id: string;
   sales_detail_id: Array<Record<string, any>>;
@@ -534,6 +535,20 @@ interface CheckinPayload {
   reservation_id: string;
 }
 
+interface AddLateCheckoutFeePayload {
+  reservation_detail: Array<Record<string, any>>;
+  reservation_id: string;
+}
+
+interface CheckoutPayload {
+  paid: Record<string, any>;
+  payment_methods: Array<Record<string, any>>;
+  reservation_detail_id: string;
+  reservation_id: string;
+  sales_detail_id: Array<Record<string, any>>;
+  sales_info_id: string;
+}
+
 export interface CheckinState {
   payload: CheckinPayload;
   status: string;
@@ -546,11 +561,21 @@ export interface GetElectricAreaState {
 
 export interface GetWaterAreaState {
   data: Array<Record<string, any>>;
+}
+
+export interface CheckoutState {
+  payload: CheckoutPayload;
+  status: string;
+}
+
+export interface AddLateCheckoutFeeState {
+  payload: AddLateCheckoutFeePayload;
   status: string;
 }
 
 export interface RootState {
   addItem: AddItemState;
+  addLateCheckoutFee: AddLateCheckoutFeeState;
   addReservationDetail: AddReservationDetailState;
   agentInfos: AgentInfosState;
   alerts: AlertsState;
@@ -562,6 +587,7 @@ export interface RootState {
   changeRoom: ChangeRoomState;
   channel: FetchChannelState;
   checkin: CheckinState;
+  checkout: CheckoutState;
   createGuest: CreateGuestState;
   createPayment: CreatePaymentState;
   createReservation: CreateReservationState;
