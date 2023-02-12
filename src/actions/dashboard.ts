@@ -5,9 +5,11 @@ import { actionPayload } from 'modules/helpers';
 import { ActionTypes } from 'literals';
 
 import {
+  ElectricAreaResult,
   ElectricYesterdayResult,
   FuelInfolResult,
   FuelInfoPayload,
+  WaterAreaResult,
   WaterYesterdayResult,
 } from 'types';
 
@@ -35,4 +37,18 @@ export const getWaterYesterdayAction = createAction(ActionTypes.DASHBOARD_GET_WA
 export const getWaterYesterdayFinishAction = createAction(
   ActionTypes.DASHBOARD_GET_WATER_YESTERDAY_FINISH,
   (payload: WaterYesterdayResult) => actionPayload(payload),
+);
+
+export const getElectricAreaAction = createAction(ActionTypes.DASHBOARD_GET_ELECTRIC_AREA);
+
+export const getElectricAreaFinishAction = createAction(
+  ActionTypes.DASHBOARD_GET_ELECTRIC_AREA_FINISH,
+  (payload: ElectricAreaResult) => actionPayload(payload),
+);
+
+export const getWaterAreaAction = createAction(ActionTypes.DASHBOARD_GET_WATER_AREA);
+
+export const getWaterAreaFinishAction = createAction(
+  ActionTypes.DASHBOARD_GET_WATER_AREA_FINISH,
+  (payload: WaterAreaResult) => actionPayload(payload),
 );

@@ -22,3 +22,11 @@ export interface WaterYesterdayResult {
   totalMonth: number;
   totalYesterday: number;
 }
+
+export interface ElectricAreaResult {
+  data: Array<Record<string, any>>;
+}
+
+export interface WaterAreaResult {
+  data: Array<Record<string, any>>;
+}

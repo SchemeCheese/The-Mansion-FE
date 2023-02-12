@@ -31,6 +31,7 @@ import fuel, { fuelState } from './fuel';
 import getBranchFacilites, { getBranchFacilitesState } from './getBranchFacilites';
 import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getBranchs, { getBranchsState } from './getBranchs';
+import getElectricArea, { getElectricAreaState } from './getElectricArea';
 import getElectricYesterday, { getElectricYesterdayState } from './getElectricYesterday';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import notifications, { notificationsState } from './getNotification';
@@ -42,6 +43,7 @@ import getReservationNumber, { reservationNumberState } from './getReservationNu
 import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
 import getWalkinRooms, { getWalkinRoomsState } from './getWalkinRooms';
+import getWaterArea, { getWaterAreaState } from './getWaterArea';
 import getWaterYesterday, { getWaterYesterdayState } from './getWaterYesterday';
 import github, { githubState } from './github';
 import nightAudit, { nightAuditState } from './nightAudit';
@@ -137,6 +139,8 @@ export const initialState = {
   fuel: fuelState,
   getElectricYesterday: getElectricYesterdayState,
   getWaterYesterday: getWaterYesterdayState,
+  getElectricArea: getElectricAreaState,
+  getWaterArea: getWaterAreaState,
 };
 
 export default {
@@ -200,4 +204,6 @@ export default {
   ...fuel,
   ...getElectricYesterday,
   ...getWaterYesterday,
+  ...getElectricArea,
+  ...getWaterArea,
 };
