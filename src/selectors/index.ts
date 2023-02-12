@@ -241,3 +241,13 @@ export const selectCheckinState = createSelector(
   (state: RootState) => state.checkin,
   checkin => checkin,
 );
+
+export const selectElectricAreaState = createSelector(
+  (state: RootState) => state.getElectricArea,
+  getElectricArea => getElectricArea,
+);
+
+export const selectWaterAreaState = createSelector(
+  (state: RootState) => state.getWaterArea,
+  getWaterArea => getWaterArea,
+);

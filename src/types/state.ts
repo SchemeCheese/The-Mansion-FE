@@ -539,6 +539,16 @@ export interface CheckinState {
   status: string;
 }
 
+export interface GetElectricAreaState {
+  data: Array<Record<string, any>>;
+  status: string;
+}
+
+export interface GetWaterAreaState {
+  data: Array<Record<string, any>>;
+  status: string;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addReservationDetail: AddReservationDetailState;
@@ -563,6 +573,7 @@ export interface RootState {
   getBranchFacilites: GetBranchFacilitiesState;
   getBranchHeader: BranchHeaderState;
   getBranchs: GetBranchsState;
+  getElectricArea: GetElectricAreaState;
   getElectricYesterday: GetElectricYesterdayState;
   getLanguageCode: LanguageCodeState;
   getProductType: ProductTypeState;
@@ -573,6 +584,7 @@ export interface RootState {
   getRoomType: RoomTypeState;
   getRooms: GetRoomState;
   getWalkinRooms: GetWalkinRoomState;
+  getWaterArea: GetWaterAreaState;
   getWaterYesterday: GetWaterYesterdayState;
   github: GitHubState;
   nightAudit: NightAuditState;

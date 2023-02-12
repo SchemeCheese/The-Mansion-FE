@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { Col, Row } from 'antd';
 
 import IntroduceRow from './IntroduceRow';
+import ProportionCircle from './ProportionCircle';
 import SalesCard from './SalesCard';
 
 function Dashboard() {
@@ -25,6 +26,9 @@ function Dashboard() {
       </Col>
       <Col span={24} style={{ paddingBottom: 10 }}>
         <SalesCard />
+      </Col>
+      <Col span={12} style={{ paddingBottom: 10 }}>
+        <ProportionCircle />
       </Col>
     </Row>
   );
