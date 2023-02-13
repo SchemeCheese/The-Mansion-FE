@@ -572,7 +572,7 @@ function NightAudit() {
               return {
                 onClick: () => {
                   navigate(
-                    `/front-desk/inhouse-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
+                    `/front-desk/checkout-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
                   );
                 },
               };
@@ -594,7 +594,7 @@ function NightAudit() {
               return {
                 onClick: () => {
                   navigate(
-                    `/front-desk/checkout-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
+                    `/front-desk/inhouse-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
                   );
                 },
               };

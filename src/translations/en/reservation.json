@@ -170,5 +170,13 @@
   "Deposit Amount": "Deposit Amount",
   "Early Checkin Fee": "Early Checkin Fee",
   "Room Deposit": "Room Deposit",
-  "Checkin confirmation": "Checkin confirmation"
+  "Checkin confirmation": "Checkin confirmation",
+  "Default C/I Time": "Default C/I Time",
+  "Actual C/I Time": "Actual C/I Time",
+  "Early C/I Time": "Early C/I Time",
+  "Early C/I Fee": "Early C/I Fee",
+  "Default C/O Time": "Default C/0 Time",
+  "Actual C/O Time": "Actual C/O Time",
+  "Late C/O Time": "Late C/O Time",
+  "Late C/O Fee": "Late C/O Fee"
 }

@@ -3,6 +3,7 @@ import printDepositPDFReservationDetail, {
 } from 'reducers/printDepositPDFReservationDetail';
 
 import addItem, { addItemState } from './addItem';
+import addLateCheckoutFee, { addLateCheckoutFeeState } from './addLateCheckoutFee';
 import addReservationDetail, { addReservationDetailState } from './addReservationDetail';
 import agentInfos, { agentInfosState } from './agentInfos';
 import alerts, { alertsState } from './alerts';
@@ -14,6 +15,7 @@ import changeDisk, { changeDiskState } from './changeDisk';
 import changeRoom, { changeRoomState } from './changeRoom';
 import channel, { channelState } from './channel';
 import checkin, { checkinState } from './checkin';
+import checkout, { checkoutState } from './checkout';
 import createGuest, { createGuestState } from './createGuest';
 import createPayment, { createPaymentState } from './createPayment';
 import createReservation, { createReservationState } from './createReservation';
@@ -81,6 +83,7 @@ import user, { userState } from './user';
 export const initialState = {
   alerts: alertsState,
   app: appState,
+  addLateCheckoutFee: addLateCheckoutFeeState,
   github: githubState,
   getWalkinRooms: getWalkinRoomsState,
   user: userState,
@@ -106,6 +109,7 @@ export const initialState = {
   getProductType: getProductTypeState,
   channel: channelState,
   checkin: checkinState,
+  checkout: checkoutState,
   addItem: addItemState,
   deleteItem: deleteItemState,
   createPayment: createPaymentState,
@@ -146,6 +150,7 @@ export const initialState = {
 export default {
   ...alerts,
   ...app,
+  ...addLateCheckoutFee,
   ...github,
   ...user,
   ...reservation,
@@ -170,6 +175,7 @@ export default {
   ...getProductType,
   ...channel,
   ...checkin,
+  ...checkout,
   ...addItem,
   ...deleteItem,
   ...createPayment,

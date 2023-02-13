@@ -147,6 +147,10 @@ export const ActionTypes = keyMirror({
   NIGHT_AUDIT_HANDLE_FINISH: undefined,
   CHECKIN: undefined,
   CHECKIN_SUCCESS: undefined,
+  ADD_LATE_CHECKOUT_FEE: undefined,
+  ADD_LATE_CHECKOUT_FEE_SUCCESS: undefined,
+  CHECKOUT: undefined,
+  CHECKOUT_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

@@ -32,6 +32,11 @@ export const selectGetReservationDetail = createSelector(
   getReservationDetail => getReservationDetail,
 );
 
+export const selectGetReservation = createSelector(
+  (state: RootState) => state.getReservation,
+  getReservation => getReservation,
+);
+
 export const selectUpdateReservation = createSelector(
   (state: RootState) => state.updateReservation,
   updateReservation => updateReservation,
@@ -250,4 +255,14 @@ export const selectElectricAreaState = createSelector(
 export const selectWaterAreaState = createSelector(
   (state: RootState) => state.getWaterArea,
   getWaterArea => getWaterArea,
+);
+
+export const selectAddLateCheckoutFeeState = createSelector(
+  (state: RootState) => state.addLateCheckoutFee,
+  addLateCheckoutFee => addLateCheckoutFee,
+);
+
+export const selectCheckoutState = createSelector(
+  (state: RootState) => state.checkout,
+  checkout => checkout,
 );

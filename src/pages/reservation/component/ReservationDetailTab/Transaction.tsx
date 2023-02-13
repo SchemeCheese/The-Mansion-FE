@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Card, Col, Input, message, Modal, Radio, RadioChangeEvent, Row, Space } from 'antd';
 import { formatNumber } from 'helpers';
+import moment from 'moment';
 import Disk from 'pages/reservation/detail/Disk';
 import Paid from 'pages/reservation/detail/Paid';
 import AddDiscount from 'pages/reservation/modal/TransactionModal/AddDiscount';
@@ -25,6 +26,7 @@ import SelectedPayMethodModal from 'pages/reservation/modal/TransactionModal/Sel
 import TransferRoom from 'pages/reservation/modal/TransactionModal/TransferRoom';
 import {
   selectAddItem,
+  selectBranchInfo,
   selectChangeDisk,
   selectChangeRoom,
   selectCreatePayment,
@@ -32,7 +34,7 @@ import {
   selectGetReservationDetail,
 } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
-import _ from 'underscore';
+import _, { isEmpty } from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -41,11 +43,12 @@ import {
   downloadPDFInvoiceTransaction,
   getReservation,
   getReservationDetail,
-  resetReservationByFolio,
 } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
+
+import CheckoutModal from './CheckoutModal';
 
 interface Props {
   noPadding?: boolean;
@@ -59,6 +62,7 @@ const { TextArea } = Input;
 function Transaction({ noPadding, reservationDetailId, reservationId, type }: Props) {
   const { t } = useTranslation();
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
+  const branchInfoSelected: any = useAppSelector(selectBranchInfo);
   const { amount_info: amountInfo, paid, transactions } = reservationDetailInfo.data;
 
   const [isModalOpenAddItem, setIsModalOpenAddItem] = useState(false);
@@ -66,6 +70,9 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const [isModalOpenChangeDisk, setIsModalOpenChangeDisk] = useState(false);
   const [isModalOpenAditRoomCharge, setIsModalOpenAditRoomCharge] = useState(false);
   const [isModalOpenTransferRoom, setIsModalOpenTransferRoom] = useState(false);
+  const [isModalShowLateFee, setIsModalShowLateFee] = useState(false);
+  const [isModalShowPaymentDetail, setIsModalShowPaymentDetail] = useState(false);
+  const [isModalSelectedPaymentMethod, setIsModalSelectedPaymentMethod] = useState(false);
   const [deleteSaleDetailId, setDeleteSaleDetailId] = useState(0);
 
   const [discountAmount, setDiscountAmount] = useState('');
@@ -196,9 +203,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
     contentList.paid = <Paid items={paid} />;
   }
 
-  const [activeTabKey, setActiveTabKey] = useState<string>(
-    transactions ? Object.keys(transactions)[0] : '',
-  );
+  const [activeTabKey, setActiveTabKey] = useState<string>('');
   const [isModalOpenSelectedPaymentMethod, setIsModalOpenSelectedPaymentMethod] = useState(false);
   const [isModalOpenAddDiscount, setIsModalOpenAddDiscount] = useState(false);
   const [isModalOpenDeposit, setIsModalOpenDeposit] = useState(false);
@@ -265,10 +270,12 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   }, [deleteItemChanged]);
 
   useEffect(() => {
-    if (transactions) {
+    if (!isEmpty(transactions)) {
       setActiveTabKey(Object.keys(transactions)[0]);
+    } else if (paid?.length) {
+      setActiveTabKey('paid');
     }
-  }, [transactions]);
+  }, [transactions, paid]);
 
   useEffect(() => {
     resetSelectedSelect();
@@ -362,6 +369,16 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
         paddingLeft: noPadding ? 6 : 15,
       }}
     >
+      {type === 'checkout_today' && (
+        <CheckoutModal
+          isModalSelectedPaymentMethod={isModalSelectedPaymentMethod}
+          isModalShowLateFee={isModalShowLateFee}
+          isModalShowPaymentDetail={isModalShowPaymentDetail}
+          setIsModalSelectedPaymentMethod={setIsModalSelectedPaymentMethod}
+          setIsModalShowLateFee={setIsModalShowLateFee}
+          setIsModalShowPaymentDetail={setIsModalShowPaymentDetail}
+        />
+      )}
       <Modal
         okButtonProps={{
           style: { backgroundColor: '#1D39C4' },
@@ -381,6 +398,45 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           rows={4}
           value={deleteReason}
         />
+      </Modal>
+      <Modal footer={null} visible={false}>
+        <Row style={{ marginTop: 15 }}>
+          <Col span={4} style={{ textAlign: 'right' }}>
+            <svg
+              fill="none"
+              height="22"
+              viewBox="0 0 22 22"
+              width="22"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 0C4.92545 0 0 4.92545 0 11C0 17.0746 4.92545 22 11 22C17.0746 22 22 17.0746 22 11C22 4.92545 17.0746 0 11 0ZM11 20.1339C5.9567 20.1339 1.86607 16.0433 1.86607 11C1.86607 5.9567 5.9567 1.86607 11 1.86607C16.0433 1.86607 20.1339 5.9567 20.1339 11C20.1339 16.0433 16.0433 20.1339 11 20.1339Z"
+                fill="#52C41A"
+              />
+            </svg>
+            <svg
+              fill="none"
+              height="8"
+              style={{ position: 'relative', top: -7, right: 16 }}
+              viewBox="0 0 10 8"
+              width="10"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M9.59169 0.0957031H8.44013C8.18968 0.0957031 7.95151 0.216015 7.80419 0.422265L3.94437 5.77494L2.19615 3.34905C2.04883 3.14526 1.81312 3.02249 1.56022 3.02249H0.408654C0.249055 3.02249 0.155752 3.20419 0.249055 3.33432L3.30843 7.57718C3.3807 7.67805 3.47598 7.76025 3.58636 7.81695C3.69674 7.87365 3.81905 7.90323 3.94314 7.90323C4.06723 7.90323 4.18954 7.87365 4.29992 7.81695C4.4103 7.76025 4.50558 7.67805 4.57785 7.57718L9.74883 0.407534C9.84459 0.2774 9.75129 0.0957031 9.59169 0.0957031Z"
+                fill="#52C41A"
+              />
+            </svg>
+          </Col>
+          <Col span={18}>
+            <p style={{ fontSize: 16, fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.88)' }}>
+              Checkout Success{' '}
+            </p>
+
+            <p> Don’t forget to say Thank You to our beloved guest ! </p>
+            <PattonButton style={{ float: 'right', marginTop: 20 }}>Done</PattonButton>
+          </Col>
+        </Row>
       </Modal>
       <Col span={16} style={{ paddingRight: 16 }}>
         <Card
@@ -778,9 +834,27 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           </Col>
 
           <Col span={12}>
-            <PattonButton onClick={handlePayment} style={{ width: '100%' }} type="primary">
-              {t('common.Payment')}
-            </PattonButton>
+            {type === 'checkout_today' ? (
+              <PattonButton
+                onClick={() => {
+                  if (
+                    moment().isAfter(moment(branchInfoSelected.normal_time_check_in, 'HH:mm:ss'))
+                  ) {
+                    setIsModalShowLateFee(true);
+                  } else {
+                    setIsModalShowPaymentDetail(true);
+                  }
+                }}
+                style={{ width: '100%' }}
+                type="primary"
+              >
+                {t('reservation.Checkout')}
+              </PattonButton>
+            ) : (
+              <PattonButton onClick={handlePayment} style={{ width: '100%' }} type="primary">
+                {t('common.Payment')}
+              </PattonButton>
+            )}
             <SelectedPayMethodModal
               discountAmount={discountAmount}
               paySelectedRowKeys={paySelectedRowKeys}

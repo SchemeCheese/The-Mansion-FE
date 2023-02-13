@@ -9,47 +9,45 @@ Main functions : Select Pay Method Modal
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Button, Col, Form, Modal, Row } from 'antd';
 import { formatNumber } from 'helpers';
+import PaymentMethod from 'pages/reservation/modal/TransactionModal/PaymentMethod';
 import { selectGetReservationDetail } from 'selectors';
 import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { createPaymentAction } from 'actions';
-
-import PaymentMethod from './PaymentMethod';
+import { checkoutAction } from 'actions';
 
 interface Props {
-  discountAmount: string;
-  paySelectedRowKeys: any;
-  reservationDetailId: string;
-  setIsModalOpenPaySelected: (visible: boolean) => void;
-  setIsModalOpenSelectedPaymentMethod: (visible: boolean) => void;
-  totalAmount: any;
+  setIsModalSelectedPaymentMethod: (visible: boolean) => void;
   visible: boolean;
 }
 
-function SelectedPayMethodModal({
-  discountAmount,
-  paySelectedRowKeys,
-  reservationDetailId,
-  setIsModalOpenPaySelected,
-  setIsModalOpenSelectedPaymentMethod,
-  totalAmount,
-  visible,
-}: Props) {
-  const totalAmountAfterDiscount = discountAmount
-    ? totalAmount - parseInt(discountAmount, 10)
-    : totalAmount;
-
+function SelectedPayMethodModalFinal({ setIsModalSelectedPaymentMethod, visible }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
-  const [paidAmount, setPaidAmount] = useState(totalAmountAfterDiscount);
+  const { id } = useParams();
 
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
+  const totalAmountAfterDiscount = reservationDetailInfo?.data.amount_info?.grand_total;
+  const totalAmount = reservationDetailInfo?.data.amount_info?.grand_total;
   const exchangeRates = reservationDetailInfo.data.exchange_rates;
+  const { amount_info: amountInfo, paid, transactions } = reservationDetailInfo.data;
+
+  const [paidAmount, setPaidAmount] = useState(totalAmountAfterDiscount);
+
+  const saleDetailUnPaidId: any = [];
+
+  if (transactions) {
+    Object.keys(transactions).forEach((key: any) => {
+      transactions[key].items.forEach((item: any) => {
+        saleDetailUnPaidId.push(item.sale_detail_id);
+      });
+    });
+  }
 
   useEffect(() => {
     setPaidAmount(totalAmountAfterDiscount);
@@ -84,20 +82,22 @@ function SelectedPayMethodModal({
         });
 
         dispatch(
-          createPaymentAction({
+          checkoutAction({
             payload: {
-              reservation_detail_id: reservationDetailId,
+              reservation_detail_id: reservationDetailInfo?.reservation_detail_id,
               sales_info_id: reservationDetailInfo.data.sales_info_id,
-              sales_detail_id: paySelectedRowKeys,
+              sales_detail_id: saleDetailUnPaidId,
               payment_methods: paymentMethods,
-              discount_amount: discountAmount ? parseInt(discountAmount, 10) : 0,
-              paid: {},
+              reservation_id: id ?? '',
+              paid: {
+                total_amount: amountInfo.grand_total,
+                discount_amount: amountInfo.discount,
+                balance_amount: 0,
+              },
             },
           }),
         );
-
-        setIsModalOpenSelectedPaymentMethod(false);
-        setIsModalOpenPaySelected(false);
+        setIsModalSelectedPaymentMethod(false);
       })
       .catch(error => {
         console.log('Validate Failed:', error);
@@ -131,7 +131,7 @@ function SelectedPayMethodModal({
       cancelButtonProps={{ style: { borderRadius: 4, width: '111px' } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4, width: '111px' } }}
       okText={t('common.Pay')}
-      onCancel={() => setIsModalOpenSelectedPaymentMethod(false)}
+      onCancel={() => setIsModalSelectedPaymentMethod(false)}
       onOk={handleSubmitPayment}
       title={<b>{t('payDetail.Select Payment Method')}</b>}
       visible={visible}
@@ -168,9 +168,7 @@ function SelectedPayMethodModal({
           <Col span={9}>
             <span style={{ lineHeight: '31px' }}>{t('common.Balance')}</span>
             <span style={{ fontSize: 20, float: 'right' }}>
-              {discountAmount
-                ? formatNumber(totalAmount - parseInt(discountAmount, 10) - paidAmount)
-                : formatNumber(totalAmount - paidAmount)}
+              {formatNumber(totalAmount - paidAmount)}
             </span>
           </Col>
         </Row>
@@ -213,4 +211,4 @@ function SelectedPayMethodModal({
   );
 }
 
-export default SelectedPayMethodModal;
+export default SelectedPayMethodModalFinal;

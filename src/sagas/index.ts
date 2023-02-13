@@ -5,6 +5,7 @@ import branchHeader from './branchHeader';
 import branchs from './branchs';
 import channel from './channel';
 import checkin from './checkin';
+import checkout from './checkout';
 import dashboard from './dashboard';
 import file from './file';
 import fuel from './fuel';
@@ -37,6 +38,7 @@ export default function* root() {
     fork(productType),
     fork(channel),
     fork(checkin),
+    fork(checkout),
     fork(transaction),
     fork(payment),
     fork(guest),

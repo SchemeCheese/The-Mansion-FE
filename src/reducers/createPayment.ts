@@ -10,6 +10,7 @@ export const createPaymentState = {
     sales_info_id: '',
     sales_detail_id: [],
     reservation_detail_id: '',
+    paid: {},
   },
   status: '',
 };

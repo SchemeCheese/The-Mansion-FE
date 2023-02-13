@@ -39,6 +39,8 @@ export const ReservationEndpoint = {
   PRINT_REGISTRATION_CARD_PDF: 'api/v1/reservations',
   PRINT_DEPOSIT_PDF: 'api/v1/reservations',
   CHECKIN: 'api/v1/reservations',
+  CHECKOUT: 'api/v1/reservations',
+  CHECKOUT_ADD_LATE_FEE: 'api/v1/reservations',
 };
 
 export const RoomEndpoint = {
