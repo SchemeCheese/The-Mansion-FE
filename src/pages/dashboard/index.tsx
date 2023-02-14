@@ -12,9 +12,21 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Row } from 'antd';
 
+import ActualPower from './ActualPower';
 import IntroduceRow from './IntroduceRow';
 import ProportionCircle from './ProportionCircle';
 import SalesCard from './SalesCard';
+
+const topColResponsiveProps = {
+  xs: 24,
+  sm: 12,
+  md: 12,
+  lg: 12,
+  xl: 12,
+  style: {
+    marginBottom: 24,
+  },
+};
 
 function Dashboard() {
   const { t } = useTranslation();
@@ -27,8 +39,15 @@ function Dashboard() {
       <Col span={24} style={{ paddingBottom: 10 }}>
         <SalesCard />
       </Col>
-      <Col span={12} style={{ paddingBottom: 10 }}>
-        <ProportionCircle />
+      <Col span={24} style={{ paddingBottom: 10 }}>
+        <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+            <ProportionCircle />
+          </Col>
+          <Col {...topColResponsiveProps}>
+            <ActualPower />
+          </Col>
+        </Row>
       </Col>
     </Row>
   );

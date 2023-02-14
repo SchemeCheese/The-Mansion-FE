@@ -561,6 +561,7 @@ export interface GetElectricAreaState {
 
 export interface GetWaterAreaState {
   data: Array<Record<string, any>>;
+  status: string;
 }
 
 export interface CheckoutState {
@@ -570,6 +571,11 @@ export interface CheckoutState {
 
 export interface AddLateCheckoutFeeState {
   payload: AddLateCheckoutFeePayload;
+  status: string;
+}
+
+export interface GetElectricPowerState {
+  data: Array<Record<string, any>>;
   status: string;
 }
 
@@ -600,6 +606,7 @@ export interface RootState {
   getBranchHeader: BranchHeaderState;
   getBranchs: GetBranchsState;
   getElectricArea: GetElectricAreaState;
+  getElectricPower: GetElectricPowerState;
   getElectricYesterday: GetElectricYesterdayState;
   getLanguageCode: LanguageCodeState;
   getProductType: ProductTypeState;

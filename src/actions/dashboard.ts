@@ -6,6 +6,7 @@ import { ActionTypes } from 'literals';
 
 import {
   ElectricAreaResult,
+  ElectricPowerResult,
   ElectricYesterdayResult,
   FuelInfolResult,
   FuelInfoPayload,
@@ -51,4 +52,11 @@ export const getWaterAreaAction = createAction(ActionTypes.DASHBOARD_GET_WATER_A
 export const getWaterAreaFinishAction = createAction(
   ActionTypes.DASHBOARD_GET_WATER_AREA_FINISH,
   (payload: WaterAreaResult) => actionPayload(payload),
+);
+
+export const getElectricPowerAction = createAction(ActionTypes.DASHBOARD_GET_ELECTRIC_POWER);
+
+export const getElectricPowerFinishAction = createAction(
+  ActionTypes.DASHBOARD_GET_ELECTRIC_POWER_FINISH,
+  (payload: ElectricPowerResult) => actionPayload(payload),
 );

@@ -34,6 +34,7 @@ import getBranchFacilites, { getBranchFacilitesState } from './getBranchFacilite
 import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getBranchs, { getBranchsState } from './getBranchs';
 import getElectricArea, { getElectricAreaState } from './getElectricArea';
+import getElectricPower, { getElectricPowerState } from './getElectricPower';
 import getElectricYesterday, { getElectricYesterdayState } from './getElectricYesterday';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import notifications, { notificationsState } from './getNotification';
@@ -145,6 +146,7 @@ export const initialState = {
   getWaterYesterday: getWaterYesterdayState,
   getElectricArea: getElectricAreaState,
   getWaterArea: getWaterAreaState,
+  getElectricPower: getElectricPowerState,
 };
 
 export default {
@@ -212,4 +214,5 @@ export default {
   ...getWaterYesterday,
   ...getElectricArea,
   ...getWaterArea,
+  ...getElectricPower,
 };

@@ -8,6 +8,7 @@ import { ActionTypes } from 'literals';
 
 import {
   getElectricAreaFinishAction,
+  getElectricPowerFinishAction,
   getElectricYesterdayFinishAction,
   getWaterAreaFinishAction,
   getWaterYesterdayFinishAction,
@@ -126,9 +127,36 @@ export function* getWaterAreaSaga() {
   }
 }
 
+export function* getElectricPowerSaga() {
+  try {
+    let data = [];
+
+    data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.electric)}/power`, {
+      method: 'GET',
+    });
+
+    yield put(
+      getElectricPowerFinishAction({
+        data: data.data,
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Can not fetch channel info!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([takeLatest(ActionTypes.DASHBOARD_GET_ELECTRIC_YESTERDAY, getElectricYesterdaySaga)]);
   yield all([takeLatest(ActionTypes.DASHBOARD_GET_WATER_YESTERDAY, getWaterYesterdaySaga)]);
   yield all([takeLatest(ActionTypes.DASHBOARD_GET_ELECTRIC_AREA, getElectricAreaSaga)]);
   yield all([takeLatest(ActionTypes.DASHBOARD_GET_WATER_AREA, getWaterAreaSaga)]);
+  yield all([takeLatest(ActionTypes.DASHBOARD_GET_ELECTRIC_POWER, getElectricPowerSaga)]);
 }
