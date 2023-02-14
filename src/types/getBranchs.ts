@@ -11,6 +11,7 @@ export interface GetBranchFacilityFinishPayload {
 }
 
 export interface BranchSelected {
+  addition_cico_fee: string;
   branch_code: string;
   facility_code: string;
   normal_time_check_in: string;

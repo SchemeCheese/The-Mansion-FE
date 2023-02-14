@@ -62,6 +62,7 @@ function CheckinModal({
   const { id } = useParams();
 
   const selectCheckinData = useAppSelector(selectCheckinState);
+
   const { changed } = useTreeChanges(selectCheckinData);
 
   const handleOk = () => {
@@ -277,7 +278,7 @@ function CheckinModal({
           id: item.reservation_detail_id,
           early_checkin_fee: {
             hour_total: Math.round(duration.asHours()),
-            sale_price: 200000,
+            sale_price: branchInfoSelected.addition_cico_fee,
           },
         };
       })

@@ -129,8 +129,8 @@ function SelectedPayMethodModalFinal({ setIsModalSelectedPaymentMethod, visible 
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4, width: '111px' } }}
-      okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4, width: '111px' } }}
-      okText={t('common.Pay')}
+      okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
+      okText={t('reservation.Continue to checkout')}
       onCancel={() => setIsModalSelectedPaymentMethod(false)}
       onOk={handleSubmitPayment}
       title={<b>{t('payDetail.Select Payment Method')}</b>}
