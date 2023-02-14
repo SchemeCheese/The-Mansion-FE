@@ -266,3 +266,8 @@ export const selectCheckoutState = createSelector(
   (state: RootState) => state.checkout,
   checkout => checkout,
 );
+
+export const selectElectricPowerState = createSelector(
+  (state: RootState) => state.getElectricPower,
+  getElectricPower => getElectricPower,
+);

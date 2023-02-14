@@ -30,3 +30,7 @@ export interface ElectricAreaResult {
 export interface WaterAreaResult {
   data: Array<Record<string, any>>;
 }
+
+export interface ElectricPowerResult {
+  data: Array<Record<string, any>>;
+}
