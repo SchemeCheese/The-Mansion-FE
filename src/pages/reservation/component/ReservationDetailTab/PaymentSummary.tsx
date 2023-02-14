@@ -106,7 +106,7 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
         dataDescriptions.push({
           date: moment(item.date).format('DD/MM/YYYY'),
           description: item.description,
-          unit_price: formatNumber(item.unit_price),
+          unit_price: formatNumber(item.sales_price),
           amount: item.quantity,
           total: formatNumber(item.total_amount),
         });
@@ -139,26 +139,15 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
       footer={[
-        <Button
-          style={{
-            backgroundColor: '#ff4d4f',
-            borderColor: '#ff4d4f',
-            borderRadius: 4,
-            width: '109px',
-          }}
-          type="primary"
-        >
-          {t('payDetail.Pay Balance')}
-        </Button>,
         <Button onClick={closeModal} style={{ borderRadius: 4, width: '109px' }}>
           {t('common.Cancel')}
         </Button>,
         <Button
           onClick={() => setIsModalOpen()}
-          style={{ backgroundColor: '#1D39C4', borderRadius: 4, width: '109px' }}
+          style={{ backgroundColor: '#1D39C4', borderRadius: 4 }}
           type="primary"
         >
-          {t('common.OK')}
+          {t('reservation.Continue to checkout')}
         </Button>,
       ]}
       onCancel={closeModal}
@@ -179,36 +168,9 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
           pagination={false}
           size="small"
         />
-        <Row style={{ paddingTop: 30 }}>
-          <Col span={16} />
-          <Col span={6}>
-            <Form.Item label={t('common.Discount')}>
-              <Input
-                readOnly
-                style={{ width: 120, height: 32, borderRadius: 2 }}
-                value={formatNumber(amountInfo?.discount)}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={2}>
-            <Select defaultValue="VND">
-              <Option value="VND">VND</Option>
-              <Option value="EUR">EUR</Option>
-            </Select>
-          </Col>
-        </Row>
         <Row>
           <Col span={16} />
-          <Col span={8} style={{ marginBottom: 17 }}>
-            <span>{t('common.Total Amount (VND)')}</span>
-            <span style={{ fontSize: 16, float: 'right' }}>
-              {formatNumber(amountInfo?.sub_total)}
-            </span>
-          </Col>
-        </Row>
-        <Row>
-          <Col span={16} />
-          <Col span={8}>
+          <Col span={8} style={{ marginBottom: 15, marginTop: 7 }}>
             <span>{t('common.Sub Total')}</span>
             <span style={{ fontSize: 16, float: 'right' }}>
               {formatNumber(
@@ -218,6 +180,16 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
           </Col>
         </Row>
         <Row>
+          <Col span={16} />
+          <Col span={8}>
+            <span>{t('common.Total Amount (VND)')}</span>
+            <span style={{ fontSize: 16, float: 'right' }}>
+              {formatNumber(amountInfo?.sub_total)}
+            </span>
+          </Col>
+        </Row>
+
+        <Row>
           <Col span={12} style={{ marginBottom: 5 }}>
             <span style={{ fontSize: 14, fontWeight: 'bold' }}>{t('payDetail.Payments')}</span>
           </Col>
@@ -225,7 +197,7 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
         <Table columns={paymentColumns} dataSource={dataPayments} pagination={false} size="small" />
         <Row>
           <Col span={16} />
-          <Col span={8} style={{ marginBottom: 10, marginTop: 15 }}>
+          <Col span={8} style={{ marginBottom: 10, marginTop: 7 }}>
             <span style={{ lineHeight: '31px' }}>{t('common.Total')}</span>
             <span style={{ fontSize: 20, float: 'right' }}>
               {formatNumber(amountInfo?.sub_total)}

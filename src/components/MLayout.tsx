@@ -85,6 +85,7 @@ function MLayout(props: Props) {
     name: '',
     normal_time_check_in: '',
     normal_time_check_out: '',
+    addition_cico_fee: '',
   });
 
   const changeBranch = (value: string) => {
@@ -97,6 +98,7 @@ function MLayout(props: Props) {
       name: '',
       normal_time_check_in: '',
       normal_time_check_out: '',
+      addition_cico_fee: '',
     });
     form.setFieldsValue({
       outlet: undefined,
@@ -125,6 +127,7 @@ function MLayout(props: Props) {
           facility_code: currentFacility?.facility_code,
           normal_time_check_in: currentFacility?.normal_time_check_in,
           normal_time_check_out: currentFacility?.normal_time_check_out,
+          addition_cico_fee: branchFacilities.data.addition_cico_fee,
         }),
       );
       setCurrentBranchName(currentFacility?.name);
@@ -141,7 +144,29 @@ function MLayout(props: Props) {
   useEffect(() => {
     dispatch(branchs({}));
     dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '1' }));
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    const facilityLocal = window.localStorage.getItem('facility_id');
+    const branchLocal = window.localStorage.getItem('branch_id');
+
+    if (facilityLocal && branchLocal) {
+      const facilitySelected = _.find(branchFacilities.data.facilities, (item: any) => {
+        return item.id.toString() === facilityLocal;
+      });
+
+      dispatch(
+        branchSelected({
+          operator_code: facilitySelected.operator_code,
+          branch_code: facilitySelected.branch_code,
+          facility_code: facilitySelected.facility_code,
+          normal_time_check_in: facilitySelected.normal_time_check_in,
+          normal_time_check_out: facilitySelected.normal_time_check_out,
+          addition_cico_fee: branchFacilities.data.addition_cico_fee,
+        }),
+      );
+    }
+  }, [branchFacilities]);
 
   useEffect(() => {
     if (
@@ -173,6 +198,7 @@ function MLayout(props: Props) {
           name: facilitySelected.name,
           normal_time_check_in: facilitySelected.normal_time_check_in,
           normal_time_check_out: facilitySelected.normal_time_check_out,
+          addition_cico_fee: branchFacilities.data.addition_cico_fee,
         });
       } else {
         const facilitySelected = branchFacilities.data.facilities[0];
@@ -187,20 +213,11 @@ function MLayout(props: Props) {
           name: facilitySelected.name,
           normal_time_check_in: facilitySelected.normal_time_check_in,
           normal_time_check_out: facilitySelected.normal_time_check_out,
+          addition_cico_fee: branchFacilities.data.addition_cico_fee,
         });
 
         window.localStorage.setItem('branch_id', branchFacilities.branch_id);
         window.localStorage.setItem('facility_id', facilitySelected.id);
-
-        dispatch(
-          branchSelected({
-            operator_code: facilitySelected.operator_code,
-            branch_code: facilitySelected.branch_code,
-            facility_code: facilitySelected.facility_code,
-            normal_time_check_in: facilitySelected.normal_time_check_in,
-            normal_time_check_out: facilitySelected.normal_time_check_out,
-          }),
-        );
       }
     }
   }, [allBranchs, branchFacilities]);

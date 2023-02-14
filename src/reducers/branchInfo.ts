@@ -5,6 +5,7 @@ import { branchSelected } from 'actions';
 import { BranchInfoState } from 'types';
 
 export const branchInfoState = {
+  addition_cico_fee: '',
   operator_code: '',
   branch_code: '',
   facility_code: '',
@@ -20,6 +21,7 @@ export default {
       draft.facility_code = payload.facility_code;
       draft.normal_time_check_in = payload.normal_time_check_in;
       draft.normal_time_check_out = payload.normal_time_check_out;
+      draft.addition_cico_fee = payload.addition_cico_fee;
     });
   }),
 };
