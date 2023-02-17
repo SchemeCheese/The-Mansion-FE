@@ -115,16 +115,6 @@ function CheckinModal({
       key: 'deposit_amount',
       dataIndex: 'deposit_amount',
     },
-    // {
-    //   title: t('common.Task'),
-    //   key: 'task',
-    //   dataIndex: 'task',
-    //   render: text => (
-    //     <a href="/" style={{ color: '#1D39C4' }}>
-    //       {text}
-    //     </a>
-    //   ),
-    // },
   ];
 
   const dataRoomDeposit: DataTypeRoomDeposit[] = selectedRows.map((item: any, index: number) => {
@@ -133,7 +123,7 @@ function CheckinModal({
       name: item.name,
       room_type: item.room_type_text,
       room_no: item.room_no,
-      deposit_method: '',
+      deposit_method: item.deposit_method,
       deposit_amount: item.deposit,
       task: 'Duplicate',
     };

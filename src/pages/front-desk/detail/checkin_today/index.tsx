@@ -197,6 +197,7 @@ function ReservationCheckinTodayDetail() {
           rate: item.rate_name,
           subtotal: formatNumber(item.total_price),
           deposit: item.deposit_amount === 0 ? '-' : formatNumber(item.deposit_amount),
+          deposit_method: item.deposit_method,
           actual_amount: item.total_price,
         };
 
