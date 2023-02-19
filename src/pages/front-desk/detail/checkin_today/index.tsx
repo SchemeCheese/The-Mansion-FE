@@ -6,8 +6,6 @@ Updated Date : 30/10/2022
 Main functions : Reservation Detail Page
 ************************************ */
 
-// import 'styles/reservation.css';
-
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -179,6 +177,7 @@ function ReservationCheckinTodayDetail() {
 
       reservationRedux.rooms.forEach((item: any) => {
         const itemTemporary = {
+          ...item,
           key: item.id,
           reservation_detail_id: item.id,
           status: mappingStatus(item.status),

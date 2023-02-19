@@ -6,8 +6,6 @@ Updated Date : 30/10/2022
 Main functions : Reservation Detail Page
 ************************************ */
 
-// import 'styles/reservation.css';
-
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';

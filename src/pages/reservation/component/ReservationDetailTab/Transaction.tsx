@@ -755,6 +755,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           <Col span={12}>
             {type === 'checkout_today' ? (
               <PattonButton
+                disabled={!reservationDetailInfo.data.can_checkout}
                 onClick={() => {
                   if (
                     moment().isAfter(moment(branchInfoSelected.normal_time_check_in, 'HH:mm:ss'))

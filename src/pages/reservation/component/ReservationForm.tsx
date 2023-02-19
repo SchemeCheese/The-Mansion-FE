@@ -248,6 +248,10 @@ function ReservationForm({
     }
   }, [deleteItemChanged]);
 
+  const canCheckin = selectedRows?.every((item: any) => {
+    return item.can_checkin === true;
+  });
+
   return (
     <>
       {type === 'checkin_today' && (
@@ -519,7 +523,7 @@ function ReservationForm({
                     )}
                     {type === 'checkin_today' && (
                       <PattonButton
-                        disabled={selectedRowKeys.length === 0}
+                        disabled={selectedRowKeys.length === 0 || !canCheckin}
                         onClick={showModalCheckin}
                         style={{ marginLeft: 15 }}
                         type="primary"
