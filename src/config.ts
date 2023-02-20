@@ -127,4 +127,7 @@ export const IOTEndpoint = {
       electric: 'api/electric',
     },
   },
+  powerMonitor: {
+    device: 'api/device',
+  },
 };

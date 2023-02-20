@@ -275,3 +275,8 @@ export const selectElectricPowerState = createSelector(
   (state: RootState) => state.getElectricPower,
   getElectricPower => getElectricPower,
 );
+
+export const selectDeviceManagerState = createSelector(
+  (state: RootState) => state.getDeviceManager,
+  getDeviceManager => getDeviceManager,
+);

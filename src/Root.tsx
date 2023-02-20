@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Branch from 'pages/branch-manager';
 import Dashboard from 'pages/dashboard';
+import DeviceManager from 'pages/device-manager';
+import DeviceManagerCreate from 'pages/device-manager/DeviceManagerCreate';
 import ReservationCheckinTodayDetail from 'pages/front-desk/detail/checkin_today';
 import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_today';
 import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
@@ -283,6 +285,30 @@ function Root() {
                 </PrivateRoute>
               }
               path="/branch-manager"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={frontDeskBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <DeviceManager />
+                </PrivateRoute>
+              }
+              path="/power/device"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={frontDeskBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <DeviceManagerCreate />
+                </PrivateRoute>
+              }
+              path="/power/device/create"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>

@@ -16,6 +16,7 @@ import languageCode from './languageCode';
 import nightAudit from './nightAudit';
 import notifications from './notifications';
 import payment from './payment';
+import powerMonitor from './powerMonitor';
 import product from './product';
 import productType from './productType';
 import reservation from './reservation';
@@ -52,5 +53,6 @@ export default function* root() {
     fork(fuel),
     fork(nightAudit),
     fork(dashboard),
+    fork(powerMonitor),
   ]);
 }
