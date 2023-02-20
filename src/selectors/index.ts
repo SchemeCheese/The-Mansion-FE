@@ -161,6 +161,10 @@ export const selectBranchHeader = createSelector(
   (state: RootState) => state.getBranchHeader,
   getBranchHeader => getBranchHeader,
 );
+export const selectBranchManagerState = createSelector(
+  (state: RootState) => state.getBranchManager,
+  getBranchManager => getBranchManager,
+);
 
 export const selectReservationByFolio = createSelector(
   (state: RootState) => state.getReservationByFolio,

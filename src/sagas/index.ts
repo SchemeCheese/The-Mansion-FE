@@ -2,6 +2,7 @@ import { all, fork } from 'redux-saga/effects';
 
 import agentInfos from './agentInfos';
 import branchHeader from './branchHeader';
+import branchManager from './branchManager';
 import branchs from './branchs';
 import channel from './channel';
 import checkin from './checkin';
@@ -46,6 +47,7 @@ export default function* root() {
     fork(languageCode),
     fork(branchHeader),
     fork(branchs),
+    fork(branchManager),
     fork(notifications),
     fork(fuel),
     fork(nightAudit),

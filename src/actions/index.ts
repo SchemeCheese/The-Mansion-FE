@@ -21,3 +21,4 @@ export * from './getBranchs';
 export * from './notification';
 export * from './dashboard';
 export * from './nightAudit';
+export * from './branchManager';

@@ -153,6 +153,8 @@ export const ActionTypes = keyMirror({
   ADD_LATE_CHECKOUT_FEE_SUCCESS: undefined,
   CHECKOUT: undefined,
   CHECKOUT_SUCCESS: undefined,
+  BRANCH_MANAGER_GET: undefined,
+  BRANCH_MANAGER_GET_FINISH: undefined,
 });
 
 export const STATUS: Status = {

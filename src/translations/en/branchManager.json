@@ -1,0 +1,13 @@
+{
+  "title": "Branch Manager",
+  "tab_electricity": "Electricity",
+  "tab_water": "Water",
+  "tab_dowload": "Download reports",
+  "action": "Action",
+  "area": "Area",
+  "avg": "Daily Avg.",
+  "branch_code": "Branch Code",
+  "branch_name": "Branch Name",
+  "consumption": "Consumption",
+  "yoy": "Y-o-Y"
+}
