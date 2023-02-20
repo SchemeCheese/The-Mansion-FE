@@ -1,6 +1,7 @@
 import { initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import auditRoomChargeEn from 'translations/en/auditRoomCharge.json';
+import branchManagerEn from 'translations/en/branchManager.json';
 import commonEn from 'translations/en/common.json';
 import frontDeskEn from 'translations/en/frontDesk.json';
 import guestEn from 'translations/en/guest.json';
@@ -12,6 +13,7 @@ import reservationEn from 'translations/en/reservation.json';
 import selectedPayMethodEn from 'translations/en/selectedPayMethod.json';
 import transactionEn from 'translations/en/transaction.json';
 import auditRoomChargeJa from 'translations/ja/auditRoomCharge.json';
+import branchManagerJa from 'translations/ja/branchManager.json';
 import commonJa from 'translations/ja/common.json';
 import frontDeskJa from 'translations/ja/frontDesk.json';
 import guestJa from 'translations/ja/guest.json';
@@ -23,6 +25,7 @@ import reservationJa from 'translations/ja/reservation.json';
 import selectedPayMethodJA from 'translations/ja/selectedPayMethod.json';
 import transactionJa from 'translations/ja/transaction.json';
 import auditRoomChargeVi from 'translations/vi/auditRoomCharge.json';
+import branchManagerVi from 'translations/vi/branchManager.json';
 import commonVi from 'translations/vi/common.json';
 import frontDeskVi from 'translations/vi/frontDesk.json';
 import guestVi from 'translations/vi/guest.json';
@@ -51,6 +54,7 @@ i18n.use(initReactI18next).init({
         payDetail: payDetailEn,
         selectedPayMethod: selectedPayMethodEn,
         frontDesk: frontDeskEn,
+        branchManager: branchManagerEn,
       },
     },
     ja: {
@@ -67,6 +71,7 @@ i18n.use(initReactI18next).init({
         payDetail: payDetailJA,
         selectedPayMethod: selectedPayMethodJA,
         frontDesk: frontDeskJa,
+        branchManager: branchManagerJa,
       },
     },
     vi: {
@@ -83,6 +88,7 @@ i18n.use(initReactI18next).init({
         payDetail: payDetailVi,
         selectedPayMethod: selectedPayMethodVi,
         frontDesk: frontDeskVi,
+        branchManager: branchManagerVi,
       },
     },
   },

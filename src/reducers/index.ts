@@ -32,6 +32,7 @@ import downloadPDFReservationDetail, {
 import fuel, { fuelState } from './fuel';
 import getBranchFacilites, { getBranchFacilitesState } from './getBranchFacilites';
 import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
+import getBranchManager, { getBranchManagerState } from './getBranchManager';
 import getBranchs, { getBranchsState } from './getBranchs';
 import getElectricArea, { getElectricAreaState } from './getElectricArea';
 import getElectricPower, { getElectricPowerState } from './getElectricPower';
@@ -134,6 +135,7 @@ export const initialState = {
   downloadPDFInvoiceTransaction: downloadPDFInvoiceTransactionState,
   getBranchHeader: getBranchHeaderState,
   getBranchs: getBranchsState,
+  getBranchManager: getBranchManagerState,
   getBranchFacilities: getBranchFacilitesState,
   branchInfo: branchInfoState,
   notifications: notificationsState,
@@ -202,6 +204,7 @@ export default {
   ...getBranchHeader,
   ...getReservationByFolio,
   ...getBranchs,
+  ...getBranchManager,
   ...getBranchFacilites,
   ...branchInfo,
   ...notifications,

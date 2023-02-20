@@ -580,6 +580,21 @@ export interface GetElectricPowerState {
   status: string;
 }
 
+interface BranchDataType {
+  area: string;
+  code: string;
+  consumption: number;
+  dailyAbg: number;
+  name: string;
+  yOY: number;
+}
+
+export interface BranchManagerState {
+  DataElectric: BranchDataType[];
+  DataWater: BranchDataType[];
+  status: string;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addLateCheckoutFee: AddLateCheckoutFeeState;
@@ -605,6 +620,7 @@ export interface RootState {
   fuel: FuelState;
   getBranchFacilites: GetBranchFacilitiesState;
   getBranchHeader: BranchHeaderState;
+  getBranchManager: BranchManagerState;
   getBranchs: GetBranchsState;
   getElectricArea: GetElectricAreaState;
   getElectricPower: GetElectricPowerState;

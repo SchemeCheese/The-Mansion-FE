@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
+import Branch from 'pages/branch-manager';
 import Dashboard from 'pages/dashboard';
 import ReservationCheckinTodayDetail from 'pages/front-desk/detail/checkin_today';
 import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_today';
@@ -98,6 +99,24 @@ function Root() {
         style={{ paddingLeft: 8, cursor: 'pointer' }}
       >
         {t('frontDesk.Front Desk')}
+      </span>
+    </>
+  );
+  const branchManagerBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/branch-manager');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('branchManager.title')}
       </span>
     </>
   );
@@ -252,6 +271,18 @@ function Root() {
                 </PrivateRoute>
               }
               path="/dashboard"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={branchManagerBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <Branch />
+                </PrivateRoute>
+              }
+              path="/branch-manager"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>

@@ -107,6 +107,10 @@ export const GetAllBranchsEndpoint = {
   GET: 'api/v1/branchs',
 };
 
+export const GetAllBranchManagerEndpoint = {
+  GET: 'api/branch',
+};
+
 export const GetFacilitiesByBranch = {
   GET: 'api/v1/branch-facility',
 };

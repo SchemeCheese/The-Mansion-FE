@@ -1,0 +1,54 @@
+.branch-manager .ant-tabs-tab {
+  font-size: 12px;
+}
+.branch-manager .ant-tabs-content-holder {
+  background-color: #e5e5e5;
+}
+.branch-filter-time {
+  height: 100%;
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 12px;
+}
+.branch-filter-time div.active {
+  color: #1890ff;
+}
+.branch-filter-time div {
+  margin-left: 15px;
+  color: rgba(0, 0, 0, 0.85);
+}
+.branch-filter-time div:hover {
+  cursor: pointer;
+  color: #1890ff;
+}
+
+.header-infor {
+  position: relative;
+  text-align: center;
+}
+.header-infor > span {
+  display: inline-block;
+  margin-bottom: 4px;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 14px;
+  line-height: 22px;
+}
+.header-infor > p {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 24px;
+  line-height: 32px;
+}
+.header-infor > em {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 56px;
+  background-color: #f0f0f0;
+}
+
+.branch-manager-list button {
+  color: #1890ff;
+}
