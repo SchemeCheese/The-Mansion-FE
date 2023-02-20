@@ -595,6 +595,11 @@ export interface BranchManagerState {
   status: string;
 }
 
+export interface GetDeviceManagerState {
+  data: Array<Record<string, any>>;
+  status: string;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addLateCheckoutFee: AddLateCheckoutFeeState;
@@ -622,6 +627,7 @@ export interface RootState {
   getBranchHeader: BranchHeaderState;
   getBranchManager: BranchManagerState;
   getBranchs: GetBranchsState;
+  getDeviceManager: GetDeviceManagerState;
   getElectricArea: GetElectricAreaState;
   getElectricPower: GetElectricPowerState;
   getElectricYesterday: GetElectricYesterdayState;

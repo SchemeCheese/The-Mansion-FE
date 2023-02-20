@@ -1,0 +1,97 @@
+.device-manager-list .filter-style {
+  display: flex;
+  align-items: center;
+}
+
+.device-manager-list .filter-style div {
+  width: 70%;
+  display: flex;
+  margin-right: 10px;
+  align-items: center;
+}
+
+.device-manager-list .filter-style span.label-filter {
+  width: 20%;
+  margin-right: 5px;
+}
+
+.device-manager-list .filter-style .input-style {
+  display: inline-block;
+  width: 70%;
+}
+
+.device-manager-list .scroll-Type button{
+  margin-right: 8px;
+}
+
+.btn-music {
+  background: #ffd6e7 !important;
+  border: 1px solid #f759ab !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  color: #c41d7f !important;
+}
+
+.btn-aircon {
+  background: #e6f7ff !important;
+  border: 1px solid #e6f7ff !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  color: #1890ff !important;
+}
+
+.btn-counter {
+  background: #fffbe6 !important;
+  border: 1px solid #fffbe6 !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  color: #faad14 !important;
+}
+
+.btn-lightning {
+  background: #fff1f0 !important;
+  border: 1px solid #fff1f0 !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  color: #f5222d !important;
+}
+
+.btn-door {
+  background: #d9f7be !important;
+  border: 1px solid #d9f7be !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  color: #237804 !important;
+}
+
+.btn-headpump {
+  background: #85a5ff !important;
+  border: 1px solid #85a5ff !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  color: #1d39c4 !important;
+}
+
+.btn-curtain {
+  background: #b5f5ec !important;
+  border: 1px solid #b5f5ec !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  color: #08979c !important;
+}
+
+.btn-other {
+  background: #f5f5f5 !important;
+  border: 1px solid #f5f5f5 !important;
+  box-sizing: border-box !important;
+  border-radius: 4px !important;
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+.modal-update-device .mb3 {
+  margin-bottom: 30px;
+}
+
+.modal-update-device .formItem {
+  margin-bottom: 18px;
+}
