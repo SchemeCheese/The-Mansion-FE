@@ -25,12 +25,10 @@ import SelectDiskModal from 'pages/reservation/modal/TransactionModal/SelectDisk
 import SelectedPayMethodModal from 'pages/reservation/modal/TransactionModal/SelectedPayMethodModal';
 import TransferRoom from 'pages/reservation/modal/TransactionModal/TransferRoom';
 import {
-  selectAddItem,
   selectBranchInfo,
   selectChangeDisk,
   selectChangeRoom,
   selectCreatePayment,
-  selectDeleteItem,
   selectGetReservationDetail,
 } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
@@ -38,12 +36,7 @@ import _, { isEmpty } from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import {
-  deleteItemAction,
-  downloadPDFInvoiceTransaction,
-  getReservation,
-  getReservationDetail,
-} from 'actions';
+import { deleteItemAction, downloadPDFInvoiceTransaction, getReservationDetail } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -78,14 +71,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
 
   const [discountAmount, setDiscountAmount] = useState('');
 
-  const addItemData = useAppSelector(selectAddItem);
-  const deleteItemData = useAppSelector(selectDeleteItem);
   const changeDiskData = useAppSelector(selectChangeDisk);
   const changeRoomData = useAppSelector(selectChangeRoom);
   const createPaymentData = useAppSelector(selectCreatePayment);
 
-  const { changed: addItemChanged } = useTreeChanges(addItemData);
-  const { changed: deleteItemChanged } = useTreeChanges(deleteItemData);
   const { changed: changeDiskChanged } = useTreeChanges(changeDiskData);
   const { changed: changeRoomChanged } = useTreeChanges(changeRoomData);
   const { changed: createPaymentChanged } = useTreeChanges(createPaymentData);
@@ -237,38 +226,6 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
     },
     0,
   );
-
-  useEffect(() => {
-    if (addItemChanged('status', 'SUCCESS')) {
-      message.success(t('message.Add item successfully!'));
-
-      dispatch(
-        getReservation({
-          reservation_id: reservationId,
-        }),
-      );
-
-      dispatch(
-        getReservationDetail({
-          reservation_id: reservationId,
-          reservation_detail_id: reservationDetailId,
-        }),
-      );
-    }
-  }, [addItemChanged]);
-
-  useEffect(() => {
-    if (deleteItemChanged('status', 'SUCCESS')) {
-      message.success(t('message.Delete item successfully!'));
-
-      dispatch(
-        getReservationDetail({
-          reservation_id: reservationId,
-          reservation_detail_id: reservationDetailId,
-        }),
-      );
-    }
-  }, [deleteItemChanged]);
 
   useEffect(() => {
     if (!isEmpty(transactions)) {
@@ -798,6 +755,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           <Col span={12}>
             {type === 'checkout_today' ? (
               <PattonButton
+                disabled={!reservationDetailInfo.data.can_checkout}
                 onClick={() => {
                   if (
                     moment().isAfter(moment(branchInfoSelected.normal_time_check_in, 'HH:mm:ss'))

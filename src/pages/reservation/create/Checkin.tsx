@@ -18,7 +18,6 @@ import { useAppSelector } from 'modules/hooks';
 import { checkinAction, getReservation } from 'actions';
 
 import MInput from 'components/MInput';
-import PattonButton from 'components/PattonButton';
 
 interface Props {
   openModalCheckin: any;
@@ -115,16 +114,6 @@ function CheckinModal({
       key: 'deposit_amount',
       dataIndex: 'deposit_amount',
     },
-    // {
-    //   title: t('common.Task'),
-    //   key: 'task',
-    //   dataIndex: 'task',
-    //   render: text => (
-    //     <a href="/" style={{ color: '#1D39C4' }}>
-    //       {text}
-    //     </a>
-    //   ),
-    // },
   ];
 
   const dataRoomDeposit: DataTypeRoomDeposit[] = selectedRows.map((item: any, index: number) => {
@@ -133,7 +122,7 @@ function CheckinModal({
       name: item.name,
       room_type: item.room_type_text,
       room_no: item.room_no,
-      deposit_method: '',
+      deposit_method: item.deposit_method,
       deposit_amount: item.deposit,
       task: 'Duplicate',
     };
@@ -348,77 +337,6 @@ function CheckinModal({
       <Card bordered={false} style={{ marginTop: 16 }} title={t('reservation.Early Checkin Fee')}>
         <Table columns={columnsEarly} dataSource={dataEarly} pagination={false} size="small" />
       </Card>
-
-      {/* <Row>
-        <Col span={16}>
-          <Upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            className="avatar-uploader checkin"
-            listType="picture-card"
-            name="avatar"
-            onChange={handleChange}
-            showUploadList={false}
-          >
-            {imageUrl ? (
-              <img alt="avatar" src={imageUrl} style={{ width: '100%' }} />
-            ) : (
-              uploadButton
-            )}
-          </Upload>
-        </Col>
-        <Col span={8}>
-          <Row style={{ paddingTop: 20 }}>
-            <Col span={12}>
-              <PattonButton style={{ width: 121, height: 44 }} type="primary">
-                201
-              </PattonButton>
-            </Col>
-            <Col span={12}>
-              <img
-                alt="upload img"
-                src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
-                style={{ width: 54, height: 44 }}
-              />
-            </Col>
-          </Row>
-          <Row style={{ paddingTop: 20 }}>
-            <Col span={12}>
-              <PattonButton style={{ width: 121, height: 44 }} type="primary">
-                202
-              </PattonButton>
-            </Col>
-            <Col span={12}>
-              <img
-                alt="upload img"
-                src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
-                style={{ width: 54, height: 44 }}
-              />
-            </Col>
-          </Row>
-          <Row style={{ paddingTop: 20 }}>
-            <Col span={12}>
-              <PattonButton style={{ width: 121, height: 44 }} type="primary">
-                203
-              </PattonButton>
-            </Col>
-            <Col span={12}>
-              <img
-                alt="upload img"
-                src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
-                style={{ width: 54, height: 44 }}
-              />
-            </Col>
-          </Row>
-          <Row style={{ paddingTop: 20 }}>
-            <Col span={12}>
-              <PattonButton style={{ width: 121, height: 44 }} type="primary">
-                204
-              </PattonButton>
-            </Col>
-            <Col span={12} />
-          </Row>
-        </Col>
-      </Row> */}
     </Modal>
   );
 }

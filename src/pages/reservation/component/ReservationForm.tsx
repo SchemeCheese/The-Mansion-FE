@@ -15,6 +15,7 @@ import {
   Checkbox,
   Col,
   Form,
+  message,
   Modal,
   Radio,
   RadioChangeEvent,
@@ -28,12 +29,16 @@ import { formatNumber } from 'helpers';
 import moment from 'moment';
 import ReservationDetailCard from 'pages/reservation/component/ReservationDetailCard';
 import CheckinModal from 'pages/reservation/create/Checkin';
+import { selectAddItem, selectDeleteItem } from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
 import _ from 'underscore';
 
+import { useAppSelector } from 'modules/hooks';
 import { colors } from 'modules/theme';
 
 import {
   getAgentInfos,
+  getReservation,
   getReservationDetail,
   printRegistrationCardPDFReservationDetail,
 } from 'actions';
@@ -200,6 +205,52 @@ function ReservationForm({
       }),
     );
   };
+
+  const addItemData = useAppSelector(selectAddItem);
+  const deleteItemData = useAppSelector(selectDeleteItem);
+
+  const { changed: addItemChanged } = useTreeChanges(addItemData);
+  const { changed: deleteItemChanged } = useTreeChanges(deleteItemData);
+
+  useEffect(() => {
+    if (addItemChanged('status', 'SUCCESS')) {
+      message.success(t('message.Add item successfully!'));
+
+      dispatch(
+        getReservation({
+          reservation_id: reservationId,
+        }),
+      );
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailInfo.id,
+        }),
+      );
+
+      if (resetSelectedRows) {
+        resetSelectedRows();
+      }
+    }
+  }, [addItemChanged]);
+
+  useEffect(() => {
+    if (deleteItemChanged('status', 'SUCCESS')) {
+      message.success(t('message.Delete item successfully!'));
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailInfo.id,
+        }),
+      );
+    }
+  }, [deleteItemChanged]);
+
+  const canCheckin = selectedRows?.every((item: any) => {
+    return item.can_checkin === true;
+  });
 
   return (
     <>
@@ -472,7 +523,7 @@ function ReservationForm({
                     )}
                     {type === 'checkin_today' && (
                       <PattonButton
-                        disabled={selectedRowKeys.length === 0}
+                        disabled={selectedRowKeys.length === 0 || !canCheckin}
                         onClick={showModalCheckin}
                         style={{ marginLeft: 15 }}
                         type="primary"
