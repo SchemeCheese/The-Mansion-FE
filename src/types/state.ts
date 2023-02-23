@@ -605,6 +605,19 @@ export interface GetDeviceManagerState {
   status: string;
 }
 
+export interface BranchManagerDownloadCSVPayload {
+  cate_id: number | string;
+  end_date: string;
+  file_name: string;
+  language: string;
+  start_date: string;
+}
+
+export interface DownloadCSVBranchManagerState {
+  payload: BranchManagerDownloadCSVPayload;
+  status: string;
+}
+
 export interface RootState {
   addItem: AddItemState;
   addLateCheckoutFee: AddLateCheckoutFeeState;
@@ -624,6 +637,7 @@ export interface RootState {
   createPayment: CreatePaymentState;
   createReservation: CreateReservationState;
   deleteItem: DeleteItemState;
+  downloadCSVBranchManager: DownloadCSVBranchManagerState;
   downloadDocxReservationDetail: DownloadDocxReservationDetailState;
   downloadPDFInvoiceTransaction: DownloadPDFInvoiceTransactionState;
   downloadPDFReservationDetail: DownloadPDFReservationDetailState;

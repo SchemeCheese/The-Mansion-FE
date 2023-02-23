@@ -159,6 +159,8 @@ export const ActionTypes = keyMirror({
   CHECKOUT_SUCCESS: undefined,
   BRANCH_MANAGER_GET: undefined,
   BRANCH_MANAGER_GET_FINISH: undefined,
+  BRANCH_MANAGER_DOWNLOAD_CSV: undefined,
+  BRANCH_MANAGER_DOWNLOAD_CSV_FINISH: undefined,
 });
 
 export const STATUS: Status = {
