@@ -129,5 +129,6 @@ export const IOTEndpoint = {
   },
   powerMonitor: {
     device: 'api/device',
+    branchDownLoadCsv: 'api/export/ExportBranchPowerMonitor',
   },
 };

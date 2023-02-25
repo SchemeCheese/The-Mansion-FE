@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Pagination, Row, Select, Space, Spin, Table, Tabs } from 'antd';
 import * as _ from 'lodash';
+import DownLoadCSV from 'pages/branch-manager/DownLoadCSV';
 import { selectBranchManagerState } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
@@ -409,7 +410,11 @@ function Branch() {
           </Row>
         </TabPane>
         <TabPane key="d" className="content" tab={t('branchManager.tab_dowload')}>
-          Tab 3
+          <Row>
+            <Col span={24} style={{ paddingTop: 16 }}>
+              <DownLoadCSV />
+            </Col>
+          </Row>
         </TabPane>
       </Tabs>
     </>

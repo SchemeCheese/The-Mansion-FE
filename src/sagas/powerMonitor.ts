@@ -6,7 +6,12 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { IOTEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
-import { getDeviceManagerFinishAction, logOut } from 'actions';
+import {
+  downloadCSVBranchManagerAction,
+  downloadCSVBranchManagerFinishAction,
+  getDeviceManagerFinishAction,
+  logOut,
+} from 'actions';
 
 export function* getDeviceManagerSaga() {
   try {
@@ -34,6 +39,41 @@ export function* getDeviceManagerSaga() {
   }
 }
 
+export function* getDownloadCSVBranchManagerSaga({
+  payload,
+}: ReturnType<typeof downloadCSVBranchManagerAction>) {
+  try {
+    const urlApi = `${iotApiEndPoint(IOTEndpoint.powerMonitor.branchDownLoadCsv)}`;
+
+    console.log('payload', payload);
+    fetch(urlApi, {
+      method: 'GET',
+    }).then(response => {
+      response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+
+        a.href = url;
+        a.download = payload.payload.file_name;
+        a.click();
+      });
+    });
+
+    yield put(downloadCSVBranchManagerFinishAction());
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot download file!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([takeLatest(ActionTypes.POWER_MONITOR_GET_DEVICE_MANAGER, getDeviceManagerSaga)]);
+  yield all([takeLatest(ActionTypes.BRANCH_MANAGER_DOWNLOAD_CSV, getDownloadCSVBranchManagerSaga)]);
 }

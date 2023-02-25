@@ -20,6 +20,9 @@ import createGuest, { createGuestState } from './createGuest';
 import createPayment, { createPaymentState } from './createPayment';
 import createReservation, { createReservationState } from './createReservation';
 import deleteItem, { deleteItemState } from './deleteItem';
+import downloadCSVBranchManager, {
+  downloadCSVBranchManagerState,
+} from './downloadCSVBranchManager';
 import downloadDocxReservationDetail, {
   downloadDocxReservationDetailState,
 } from './downloadDocxReservationDetail';
@@ -135,6 +138,7 @@ export const initialState = {
   setMainGuest: setMainGuestState,
   downloadDocxReservationDetail: downloadDocxReservationDetailState,
   downloadPDFInvoiceTransaction: downloadPDFInvoiceTransactionState,
+  downloadCSVBranchManager: downloadCSVBranchManagerState,
   getBranchHeader: getBranchHeaderState,
   getBranchs: getBranchsState,
   getBranchManager: getBranchManagerState,
@@ -224,4 +228,5 @@ export default {
   ...getElectricPower,
   ...getDeviceManager,
   ...getDurationCurve,
+  ...downloadCSVBranchManager,
 };
