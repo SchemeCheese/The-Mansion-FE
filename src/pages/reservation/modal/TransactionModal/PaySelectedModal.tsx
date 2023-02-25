@@ -6,7 +6,7 @@ Updated Date : 21/11/2022
 Main functions : Transaction AddDiscount
 ************************************ */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
@@ -51,6 +51,8 @@ function PaySelectedModal({
   const { t } = useTranslation();
   const { Option } = Select;
   const reservationDetailData = useAppSelector(selectGetReservationDetail);
+  const [discountType, setDiscountType] = useState('amount');
+  const [discount, setDiscount] = useState('');
 
   const columns: ColumnsType<DataTypePaySelected> = [
     {
@@ -86,7 +88,13 @@ function PaySelectedModal({
   };
 
   const handleChangePaySelected = (value: string) => {
-    console.log(`selected ${value}`);
+    setDiscountType(value);
+
+    if (value === 'percent') {
+      setDiscountAmount((parseInt(discount, 10) / 100) * totalAmount);
+    } else {
+      setDiscountAmount(discount);
+    }
   };
 
   const handleSelectPaymentMethod = () => {
@@ -124,39 +132,42 @@ function PaySelectedModal({
           size="small"
         />
         <Row style={{ paddingTop: 30 }}>
-          <Col span={16} />
+          <Col span={14} />
           <Col span={6}>
-            <Form.Item
-              label={
-                t('common.Discount') +
-                (reservationDetailData.data.amount_info?.discount_percent
-                  ? ` (${reservationDetailData.data.amount_info?.discount_percent}%)`
-                  : '')
-              }
-            >
-              <Input
-                onChange={event => setDiscountAmount(event.target.value)}
-                placeholder="0"
-                style={{ width: 120, height: 32, borderRadius: 2 }}
-                value={discountAmount}
-              />
+            <Form.Item label={t('common.Discount')}>
+              <Select defaultValue="amount" onChange={handleChangePaySelected}>
+                <Option value="amount">Amount</Option>
+                <Option value="percent">Percent</Option>
+              </Select>
             </Form.Item>
           </Col>
-          <Col span={2}>
-            <Select defaultValue="VND" onChange={handleChangePaySelected}>
-              <Option value="VND">VND</Option>
-              <Option value="EUR">EUR</Option>
-            </Select>
+          <Col span={3}>
+            <Input
+              onChange={event => {
+                console.log('discountttt type', discountType);
+
+                if (discountType === 'percent') {
+                  setDiscountAmount((parseInt(event.target.value, 10) / 100) * totalAmount);
+                  setDiscount(event.target.value);
+                } else {
+                  setDiscountAmount(event.target.value);
+                  setDiscount(event.target.value);
+                }
+              }}
+              placeholder="0"
+              style={{ width: 120, height: 32, borderRadius: 2 }}
+              value={discount}
+            />
           </Col>
         </Row>
-        <Row>
+        <Row style={{ paddingRight: 10 }}>
           <Col span={16} />
           <Col span={8} style={{ marginBottom: 17 }}>
             <span>{t('common.Total Amount (VND)')}</span>
             <span style={{ fontSize: 16, float: 'right' }}>{formatNumber(totalAmount)}</span>
           </Col>
         </Row>
-        <Row>
+        <Row style={{ paddingRight: 10 }}>
           <Col span={16} />
           <Col span={8}>
             <span>{t('common.Sub Total')}</span>

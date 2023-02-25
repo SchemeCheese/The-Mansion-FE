@@ -2,14 +2,17 @@
 Module Name : Reservation
 Developer Name : Xuan
 Created Date : 14/09/2022
-Updated Date : 21/11/2022
-Main functions : Transaction AddDiscount
+Updated Date : 25/02/2023
+Main functions : Transaction Disk
 ************************************ */
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Table from 'antd/lib/table';
 import { formatNumber } from 'helpers';
+import { selectGetReservationDetail } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 interface Props {
   handleDeleteItem: any;
@@ -19,6 +22,7 @@ interface Props {
 
 function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
   const { t } = useTranslation();
+  const reservationDetailInfo = useAppSelector(selectGetReservationDetail);
 
   const columnsDisk: any[] = [
     {
@@ -57,6 +61,23 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       dataIndex: 'payment_method',
       hidden: rowSelectionDisk !== null,
     },
+  ].filter(item => !item.hidden);
+
+  reservationDetailInfo.data.tax_info.forEach((item: any) => {
+    columnsDisk.push({
+      title: `${item.name} (${item.price}%)`,
+      dataIndex: item.description_code,
+      render: (value: any, record: any) => {
+        if (record.price_type === 'percent') {
+          return '';
+        }
+
+        return value;
+      },
+    });
+  });
+
+  columnsDisk.push(
     {
       title: t('common.Total'),
       dataIndex: 'total',
@@ -101,10 +122,10 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
         );
       },
     },
-  ].filter(item => !item.hidden);
+  );
 
   const data = items.map((item: any) => {
-    return {
+    const itemTemporary: any = {
       key: item.sale_detail_id,
       date: item.payment_date,
       description: item.description,
@@ -117,6 +138,13 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       payment_method: item.payment_method,
       price_type: item.price_type,
     };
+
+    // Add tax info
+    reservationDetailInfo.data.tax_info.forEach((taxInfo: any, index: number) => {
+      itemTemporary[taxInfo.description_code] = formatNumber(item.tax[index]);
+    });
+
+    return itemTemporary;
   });
 
   return (
@@ -133,6 +161,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
         return '';
       }}
       rowSelection={rowSelectionDisk}
+      scroll={{ x: '100%' }}
       size="small"
     />
   );

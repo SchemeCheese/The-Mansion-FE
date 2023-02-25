@@ -644,6 +644,24 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                   </span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.deposit)}</span>
                 </div>
+                {reservationDetailInfo.data.tax_info.map((taxInfo: any, index: number) => {
+                  return (
+                    <div className="checkout-card-grid">
+                      <span style={gridStyleLeft}>{taxInfo.name}</span>
+                      <span style={gridStyleRight}>
+                        {formatNumber(amountInfo?.total_tax[index])}
+                      </span>
+                    </div>
+                  );
+                })}
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>{t('common.Grand Total')}</span>
+                  <span style={gridStyleRight}>{formatNumber(amountInfo?.grand_total)}</span>
+                </div>
+                <div className="checkout-card-grid">
+                  <span style={gridStyleLeft}>{t('common.Paid')}</span>
+                  <span style={gridStyleRight}>{formatNumber(amountInfo?.paid)}</span>
+                </div>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>
                     {t('common.Discount')}{' '}
@@ -667,14 +685,6 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                     />
                   </span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.discount)}</span>
-                </div>
-                <div className="checkout-card-grid">
-                  <span style={gridStyleLeft}>{t('common.VAT')}</span>
-                  <span style={gridStyleRight}>{formatNumber(amountInfo?.vat)}</span>
-                </div>
-                <div className="checkout-card-grid">
-                  <span style={gridStyleLeft}>{t('common.Paid')}</span>
-                  <span style={gridStyleRight}>{formatNumber(amountInfo?.paid)}</span>
                 </div>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>
@@ -710,10 +720,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
             </div>
             <div style={{ borderTop: '1px solid #1D39C4' }}>
               <span style={{ ...gridStyleLeft, position: 'relative', top: '40%' }}>
-                {t('common.Grand Total')}
+                {t('common.Unpaid')}
               </span>
               <span style={{ ...gridStyleRight, position: 'relative', top: '40%' }}>
-                {formatNumber(amountInfo?.grand_total)}
+                {formatNumber(amountInfo?.unpaid)}
               </span>
             </div>
           </Card>
