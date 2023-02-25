@@ -34,3 +34,7 @@ export interface WaterAreaResult {
 export interface ElectricPowerResult {
   data: Array<Record<string, any>>;
 }
+export interface DurationCurveResult {
+  data: Array<Record<string, any>>;
+  status: string;
+}

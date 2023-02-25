@@ -35,6 +35,7 @@ import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getBranchManager, { getBranchManagerState } from './getBranchManager';
 import getBranchs, { getBranchsState } from './getBranchs';
 import getDeviceManager, { getDeviceManagerState } from './getDeviceManager';
+import getDurationCurve, { getDurationCurveState } from './getDurationCurve';
 import getElectricArea, { getElectricAreaState } from './getElectricArea';
 import getElectricPower, { getElectricPowerState } from './getElectricPower';
 import getElectricYesterday, { getElectricYesterdayState } from './getElectricYesterday';
@@ -151,6 +152,7 @@ export const initialState = {
   getWaterArea: getWaterAreaState,
   getElectricPower: getElectricPowerState,
   getDeviceManager: getDeviceManagerState,
+  getDurationCurve: getDurationCurveState,
 };
 
 export default {
@@ -221,4 +223,5 @@ export default {
   ...getWaterArea,
   ...getElectricPower,
   ...getDeviceManager,
+  ...getDurationCurve,
 };

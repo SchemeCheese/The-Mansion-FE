@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { Col, Row } from 'antd';
 
 import ActualPower from './ActualPower';
+import DurationCurve from './DurationCurve';
 import IntroduceRow from './IntroduceRow';
 import ProportionCircle from './ProportionCircle';
 import SalesCard from './SalesCard';
@@ -48,6 +49,9 @@ function Dashboard() {
             <ActualPower />
           </Col>
         </Row>
+      </Col>
+      <Col span={24} style={{ paddingBottom: 10 }}>
+        <DurationCurve />
       </Col>
     </Row>
   );

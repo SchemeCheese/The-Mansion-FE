@@ -280,3 +280,8 @@ export const selectDeviceManagerState = createSelector(
   (state: RootState) => state.getDeviceManager,
   getDeviceManager => getDeviceManager,
 );
+
+export const selectDurationCurveState = createSelector(
+  (state: RootState) => state.getDurationCurve,
+  getDurationCurve => getDurationCurve,
+);

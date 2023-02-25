@@ -444,6 +444,11 @@ export interface GetBranchsState {
   data: Array<Record<string, any>>;
 }
 
+export interface GetDurationCurveState {
+  data: Array<Record<string, any>>;
+  status: string;
+}
+
 export interface GetBranchFacilitiesState {
   branchFacilitySelected: string;
   branch_id: string;
@@ -628,6 +633,7 @@ export interface RootState {
   getBranchManager: BranchManagerState;
   getBranchs: GetBranchsState;
   getDeviceManager: GetDeviceManagerState;
+  getDurationCurve: GetDurationCurveState;
   getElectricArea: GetElectricAreaState;
   getElectricPower: GetElectricPowerState;
   getElectricYesterday: GetElectricYesterdayState;
