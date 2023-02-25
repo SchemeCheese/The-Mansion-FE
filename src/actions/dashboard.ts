@@ -5,6 +5,7 @@ import { actionPayload } from 'modules/helpers';
 import { ActionTypes } from 'literals';
 
 import {
+  DurationCurveResult,
   ElectricAreaResult,
   ElectricPowerResult,
   ElectricYesterdayResult,
@@ -59,4 +60,11 @@ export const getElectricPowerAction = createAction(ActionTypes.DASHBOARD_GET_ELE
 export const getElectricPowerFinishAction = createAction(
   ActionTypes.DASHBOARD_GET_ELECTRIC_POWER_FINISH,
   (payload: ElectricPowerResult) => actionPayload(payload),
+);
+
+export const getDurationCurveAction = createAction(ActionTypes.DASHBOARD_GET_DURATION_CURVE);
+
+export const getDurationCurveFinishAction = createAction(
+  ActionTypes.DASHBOARD_GET_DURATION_CURVE_FINISH,
+  (payload: DurationCurveResult) => actionPayload(payload),
 );

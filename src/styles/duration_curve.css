@@ -1,0 +1,15 @@
+.analysis-item {
+  border-right: solid 1px #E8E8E8;
+}
+.analysis-item h6 {
+  color: rgba(0, 0, 0, 0.45);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+.analysis-item h3 {
+  color: rgba(0, 0, 0, 0.45);
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 2.2rem;
+}
