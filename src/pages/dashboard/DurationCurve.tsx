@@ -83,11 +83,11 @@ function DurationCurve() {
   });
   dv.transform({
     type: 'map',
-    callback(row: { y1: string; y2: string }) {
+    callback(row: { Electric: string; Water: string; y1: string; y2: string }) {
       const newRow = { ...row };
 
-      newRow[titleMap.y1] = row.y1;
-      newRow[titleMap.y2] = row.y2;
+      newRow.Electric = row.y1;
+      newRow.Water = row.y2;
 
       return newRow;
     },
