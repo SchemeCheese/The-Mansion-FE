@@ -82,6 +82,11 @@ export const selectChannel = createSelector(
   channel => channel,
 );
 
+export const selectAddDisk = createSelector(
+  (state: RootState) => state.addDisk,
+  addDisk => addDisk,
+);
+
 export const selectAddItem = createSelector(
   (state: RootState) => state.addItem,
   addItem => addItem,

@@ -172,12 +172,20 @@ export interface AddItemPayload {
   reservation_id: string;
 }
 
+export interface AddDiskPayload {
+  name: string;
+}
+
 export interface DeleteItemPayload {
   sale_detail_ids: Array<Record<string, any>>;
 }
 
 export interface AddItemState {
   payload: AddItemPayload;
+  status: string;
+}
+export interface AddDiskState {
+  payload: AddDiskPayload;
   status: string;
 }
 
@@ -619,6 +627,7 @@ export interface DownloadCSVBranchManagerState {
 }
 
 export interface RootState {
+  addDisk: AddDiskState;
   addItem: AddItemState;
   addLateCheckoutFee: AddLateCheckoutFeeState;
   addReservationDetail: AddReservationDetailState;

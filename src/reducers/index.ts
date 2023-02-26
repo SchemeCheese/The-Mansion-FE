@@ -2,6 +2,7 @@ import printDepositPDFReservationDetail, {
   printDepositPDFReservationDetailState,
 } from 'reducers/printDepositPDFReservationDetail';
 
+import addDisk, { addDiskState } from './addDisk';
 import addItem, { addItemState } from './addItem';
 import addLateCheckoutFee, { addLateCheckoutFeeState } from './addLateCheckoutFee';
 import addReservationDetail, { addReservationDetailState } from './addReservationDetail';
@@ -118,6 +119,7 @@ export const initialState = {
   checkin: checkinState,
   checkout: checkoutState,
   addItem: addItemState,
+  addDisk: addDiskState,
   deleteItem: deleteItemState,
   createPayment: createPaymentState,
   changeDisk: changeDiskState,
@@ -188,6 +190,7 @@ export default {
   ...channel,
   ...checkin,
   ...checkout,
+  ...addDisk,
   ...addItem,
   ...deleteItem,
   ...createPayment,

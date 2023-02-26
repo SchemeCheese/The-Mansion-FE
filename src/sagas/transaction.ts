@@ -7,6 +7,8 @@ import { TransactionEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import {
+  addDiskAction,
+  addDiskActionSuccess,
   addItemAction,
   addItemActionSuccess,
   changeDiskAction,
@@ -19,6 +21,40 @@ import {
   downloadPDFInvoiceTransactionSuccess,
   logOut,
 } from 'actions';
+
+export function* postAddDiskSaga({ payload }: ReturnType<typeof addDiskAction>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.ADD_DISK)}`, {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        branch_code,
+        operator_code,
+        facility_code,
+      },
+    }));
+
+    if (success) {
+      yield put(addDiskActionSuccess());
+    } else {
+      message.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Something went wrong!');
+    }
+  }
+}
 
 export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) {
   try {
@@ -198,6 +234,7 @@ export function* getDownloadPDFInvoiceTransactionSaga({
 }
 
 export default function* root() {
+  yield all([takeLatest(ActionTypes.TRANSACTION_ADD_DISK, postAddDiskSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_ADD_ITEM, postAddItemSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_DELETE_ITEM, postDeleteItemSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_CHANGE_DISK, postChangeDiskSaga)]);

@@ -17,6 +17,7 @@ import moment from 'moment';
 import Disk from 'pages/reservation/detail/Disk';
 import Paid from 'pages/reservation/detail/Paid';
 import AddDiscount from 'pages/reservation/modal/TransactionModal/AddDiscount';
+import AddDisk from 'pages/reservation/modal/TransactionModal/AddDisk';
 import AddItem from 'pages/reservation/modal/TransactionModal/AddItem';
 import Deposit from 'pages/reservation/modal/TransactionModal/Deposit';
 import PaySelectedModal from 'pages/reservation/modal/TransactionModal/PaySelectedModal';
@@ -66,6 +67,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const [isModalShowLateFee, setIsModalShowLateFee] = useState(false);
   const [isModalShowPaymentDetail, setIsModalShowPaymentDetail] = useState(false);
   const [isModalSelectedPaymentMethod, setIsModalSelectedPaymentMethod] = useState(false);
+  const [isModalOpenAddDisk, setIsModalOpenAddDisk] = useState(false);
 
   const [deleteSaleDetailId, setDeleteSaleDetailId] = useState(0);
 
@@ -566,7 +568,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 </Row>
                 <Row style={{ paddingTop: 18 }}>
                   <Col span={8} style={{ paddingRight: 17 }}>
-                    <MButton style={{ width: '100%' }}>{t('transaction.Add Disk')}</MButton>
+                    <MButton onClick={() => setIsModalOpenAddDisk(true)} style={{ width: '100%' }}>
+                      {t('transaction.Add Disk')}
+                    </MButton>
+                    <AddDisk setIsModalOpen={setIsModalOpenAddDisk} visible={isModalOpenAddDisk} />
                   </Col>
                   <Col span={8} style={{ paddingRight: 17 }}>
                     <MButton
