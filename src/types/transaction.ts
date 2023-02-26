@@ -4,6 +4,10 @@ interface AddItemPayload {
   reservation_id: string;
 }
 
+interface AddDiskPayload {
+  name: string;
+}
+
 interface DeleteItemPayload {
   sale_detail_ids: Array<Record<string, any>>;
 }
@@ -22,6 +26,10 @@ interface ChangeRoomPayload {
 
 export interface AddItem {
   payload: AddItemPayload;
+}
+
+export interface AddDisk {
+  payload: AddDiskPayload;
 }
 
 export interface DeleteItem {

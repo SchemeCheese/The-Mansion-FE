@@ -4,13 +4,26 @@ import { actionPayload } from 'modules/helpers';
 
 import { ActionTypes } from 'literals';
 
-import { AddItem, ChangeDisk, ChangeRoom, DeleteItem, DownloadPDFInvoiceTransaction } from 'types';
+import {
+  AddDisk,
+  AddItem,
+  ChangeDisk,
+  ChangeRoom,
+  DeleteItem,
+  DownloadPDFInvoiceTransaction,
+} from 'types';
 
 export const addItemAction = createAction(ActionTypes.TRANSACTION_ADD_ITEM, (payload: AddItem) =>
   actionPayload(payload),
 );
 
 export const addItemActionSuccess = createAction(ActionTypes.TRANSACTION_ADD_ITEM_SUCCESS);
+
+export const addDiskAction = createAction(ActionTypes.TRANSACTION_ADD_DISK, (payload: AddDisk) =>
+  actionPayload(payload),
+);
+
+export const addDiskActionSuccess = createAction(ActionTypes.TRANSACTION_ADD_DISK_SUCCESS);
 
 export const deleteItemAction = createAction(
   ActionTypes.TRANSACTION_DELETE_ITEM,

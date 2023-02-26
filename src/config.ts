@@ -73,6 +73,7 @@ export const ChannelEndpoint = {
 };
 
 export const TransactionEndpoint = {
+  ADD_DISK: 'api/v1/disk/create',
   ADD_ITEM: 'api/v1/sale-info/product/create',
   DELETE_ITEM: 'api/v1/sale-info/product/delete',
   CHANGE_DISK: 'api/v1/change-disk',
