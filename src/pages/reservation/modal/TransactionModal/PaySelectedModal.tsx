@@ -17,6 +17,7 @@ import { useAppSelector } from 'modules/hooks';
 
 interface Props {
   discountAmount: any;
+  isSelectAll: boolean;
   paySelectedRowKeys: any;
   selectedRows: any;
   setDiscountAmount: (value: any) => void;
@@ -38,6 +39,7 @@ interface DataTypePaySelected {
 
 function PaySelectedModal({
   discountAmount,
+  isSelectAll,
   paySelectedRowKeys,
   selectedRows,
   setDiscountAmount,
@@ -91,9 +93,11 @@ function PaySelectedModal({
     setDiscountType(value);
 
     if (value === 'percent') {
-      setDiscountAmount((parseInt(discount, 10) / 100) * totalAmount);
+      setDiscountAmount(0);
+      setDiscount('');
     } else {
-      setDiscountAmount(discount);
+      setDiscountAmount(0);
+      setDiscount('');
     }
   };
 
@@ -101,13 +105,13 @@ function PaySelectedModal({
     setIsModalOpenSelectedPaymentMethod(true);
   };
 
-  useEffect(() => {
-    if (reservationDetailData.data.amount_info?.discount_percent) {
-      setDiscountAmount(
-        (totalAmount * reservationDetailData.data.amount_info.discount_percent) / 100,
-      );
-    }
-  }, [totalAmount]);
+  // useEffect(() => {
+  //   if (reservationDetailData.data.amount_info?.discount_percent) {
+  //     setDiscountAmount(
+  //       (totalAmount * reservationDetailData.data.amount_info.discount_percent) / 100,
+  //     );
+  //   }
+  // }, [totalAmount]);
 
   return (
     <Modal
@@ -135,7 +139,11 @@ function PaySelectedModal({
           <Col span={14} />
           <Col span={6}>
             <Form.Item label={t('common.Discount')}>
-              <Select defaultValue="amount" onChange={handleChangePaySelected}>
+              <Select
+                defaultValue="amount"
+                onChange={handleChangePaySelected}
+                style={{ width: '95%' }}
+              >
                 <Option value="amount">Amount</Option>
                 <Option value="percent">Percent</Option>
               </Select>
@@ -144,8 +152,6 @@ function PaySelectedModal({
           <Col span={3}>
             <Input
               onChange={event => {
-                console.log('discountttt type', discountType);
-
                 if (discountType === 'percent') {
                   setDiscountAmount((parseInt(event.target.value, 10) / 100) * totalAmount);
                   setDiscount(event.target.value);

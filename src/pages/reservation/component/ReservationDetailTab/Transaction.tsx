@@ -87,6 +87,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [paySelectedRowKeys, setPaySelectedRowKeys] = useState<any>([]);
   const [paySelectedRows, setPaySelectedRows] = useState<any>([]);
+  const [isSelectAll, setIsSelectAll] = useState(false);
 
   const resetSelectedSelect = () => {
     setSelectedRowKeys([]);
@@ -106,6 +107,9 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
       // Column configuration not to be checked
       name: record.name,
     }),
+    onSelectAll: (selected: any) => {
+      setIsSelectAll(selected);
+    },
   };
 
   const handleDeleteItem = (item: any) => {
@@ -219,13 +223,20 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
     cursor: 'pointer',
   };
 
-  const totalAmount = _.reduce(
-    paySelectedRows,
-    function (total, item: any) {
-      return parseInt(item.total_amount, 10) + total;
-    },
-    0,
-  );
+  let totalAmount;
+
+  if (isSelectAll) {
+    totalAmount = amountInfo.unpaid;
+  } else {
+    totalAmount = amountInfo.unpaid;
+    totalAmount = _.reduce(
+      paySelectedRows,
+      function (total, item: any) {
+        return parseInt(item.total_amount, 10) + total;
+      },
+      0,
+    );
+  }
 
   useEffect(() => {
     if (!isEmpty(transactions)) {
@@ -367,7 +378,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           style={{ width: '100%' }}
           tabList={tabList}
         >
-          <div style={{ minHeight: type && type === 'checkout_today' ? 430 : 380 }}>
+          <div style={{ minHeight: type && type === 'checkout_today' ? 430 : 400 }}>
             {contentList[activeTabKey]}
           </div>
           <div>
@@ -410,6 +421,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       </MButton>
                       <PaySelectedModal
                         discountAmount={discountAmount}
+                        isSelectAll={isSelectAll}
                         paySelectedRowKeys={paySelectedRowKeys}
                         selectedRows={selectedRows}
                         setDiscountAmount={setDiscountAmount}
@@ -538,6 +550,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                     </MButton>
                     <PaySelectedModal
                       discountAmount={discountAmount}
+                      isSelectAll={isSelectAll}
                       paySelectedRowKeys={paySelectedRowKeys}
                       selectedRows={selectedRows}
                       setDiscountAmount={setDiscountAmount}
@@ -606,14 +619,14 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
       <Col span={8}>
         <div
           className="site-card-border-less-wrapper transaction-checkout"
-          style={{ height: '90%' }}
+          // style={{ height: '90%' }}
         >
           <Card
             bordered={false}
             style={{ border: '1px solid #1D39C4', height: '100%' }}
             title="Checkout"
           >
-            <div style={{ flexGrow: 1, background: '#F7F9FA', marginTop: 1 }}>
+            <div style={{ flexGrow: 1, background: '#F7F9FA', marginTop: 1, paddingBottom: 25 }}>
               <Space direction="vertical" size="small" style={{ display: 'flex', paddingTop: 20 }}>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>{t('common.Sub total')}</span>
@@ -718,7 +731,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 </div>
               </Space>
             </div>
-            <div style={{ borderTop: '1px solid #1D39C4' }}>
+            <div style={{ borderTop: '1px solid #1D39C4', paddingTop: 15, paddingBottom: 15 }}>
               <span style={{ ...gridStyleLeft, position: 'relative', top: '40%' }}>
                 {t('common.Unpaid')}
               </span>
