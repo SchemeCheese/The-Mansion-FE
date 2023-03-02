@@ -79,10 +79,12 @@ export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) 
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
+      console.log('Error', error.response);
     }
 
-    if (error.status === 401) {
+    if (error.status === 422) {
+      message.warning(error.response.message);
+    } else if (error.status === 401) {
       yield put(logOut());
     } else {
       message.error('Something went wrong!');
