@@ -50,7 +50,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       dataIndex: 'amount',
       render: (value: any, record: any) => {
         if (record.price_type === 'percent') {
-          return '';
+          return `${record.unit_price}%`;
         }
 
         return value;
@@ -83,8 +83,8 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       dataIndex: 'total',
       align: 'right',
       render: (value: any, record: any) => {
-        if (record.price_type === 'percent') {
-          return `${record.unit_price}%`;
+        if (record.description.toLowerCase() === 'discount') {
+          return formatNumber(record.discount_amount);
         }
 
         return value;
@@ -126,6 +126,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
 
   const data = items.map((item: any) => {
     const itemTemporary: any = {
+      ...item,
       key: item.sale_detail_id,
       date: item.payment_date,
       description: item.description,
