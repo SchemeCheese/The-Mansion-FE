@@ -5,6 +5,8 @@ import moment from 'moment';
 
 import { downloadCSVBranchManagerAction } from 'actions';
 
+import PattonButton from 'components/PattonButton';
+
 const { Option } = Select;
 const formatDate = 'YYYY-MM-DD';
 
@@ -89,9 +91,7 @@ function DownLoadCSV() {
         </Col>
 
         <Col sm={3}>
-          <Button onClick={handlerDownloadCsv} size="large" type="primary">
-            Download
-          </Button>
+          <PattonButton onClick={handlerDownloadCsv}>Download</PattonButton>
         </Col>
       </Row>
     </Card>

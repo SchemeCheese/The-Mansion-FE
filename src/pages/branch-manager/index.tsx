@@ -68,24 +68,12 @@ function Branch() {
     }
   }, [branchManagerChanged]);
 
-  const showModal = () => {
-    console.log('showModal');
-  };
-
-  const handleAction = () => {
-    console.log('showModal');
-  };
-
   const columns = [
     {
       title: t('branchManager.branch_code'),
       dataIndex: 'code',
       key: 'code',
-      render: (text: any) => (
-        <button onClick={showModal} type="button">
-          {text}
-        </button>
-      ),
+      render: (text: any) => <button type="button">{text}</button>,
     },
     {
       title: t('branchManager.branch_name'),
@@ -117,9 +105,7 @@ function Branch() {
       key: 'action',
       render: (text: any, record: any) => (
         <Space size="middle">
-          <button onClick={handleAction} type="button">
-            More
-          </button>
+          <button type="button">More</button>
         </Space>
       ),
     },
@@ -276,7 +262,6 @@ function Branch() {
 
   return !isLoading ? (
     <>
-      <p className="title">{t('branchManager.title')}</p>
       <Row align="middle">
         {/* START Branch Select */}
         <Col span={2}>
