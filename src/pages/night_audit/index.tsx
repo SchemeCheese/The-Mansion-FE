@@ -403,6 +403,44 @@ function NightAudit() {
       message.success(t('message.Handle night audit successfully!'));
 
       dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '1' }));
+
+      dispatch(
+        getReservationRoomCheckinTodayAction({
+          filter: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
+        }),
+      );
+      dispatch(
+        getReservationRoomInhouseAction({
+          filter: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
+        }),
+      );
+
+      dispatch(
+        getReservationRoomCheckoutTodayAction({
+          filter: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
+        }),
+      );
     }
   }, [selectNightAuditDateChanged]);
 
@@ -449,7 +487,7 @@ function NightAudit() {
       checkout: item.checkout,
       total_guest: item.total_guest,
       rate_name: item.rate_name,
-      amount: item.total_amount,
+      amount: formatNumber(item.total_amount),
     };
   });
 
@@ -543,7 +581,7 @@ function NightAudit() {
         </Col>
       </Row>
       <Row className="content">
-        <Card bordered={false} style={{ width: '100%' }} title={t('nightAudit.I. Checkin Today')}>
+        <Card bordered={false} style={{ width: '100%' }} title={t('nightAudit.I. Noshow Today')}>
           <Table
             className="rooming-table"
             columns={checkinTodayColumns}
