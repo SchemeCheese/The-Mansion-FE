@@ -228,9 +228,9 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   let totalAmount;
 
   if (isSelectAll) {
-    totalAmount = amountInfo.unpaid;
+    totalAmount = amountInfo?.unpaid;
   } else {
-    totalAmount = amountInfo.unpaid;
+    totalAmount = amountInfo?.unpaid;
     totalAmount = _.reduce(
       paySelectedRows,
       function (total, item: any) {
@@ -329,6 +329,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const onChangeLanguage = (e: RadioChangeEvent) => {
     setLanguage(e.target.value);
   };
+
+  if (amountInfo === undefined) {
+    return null;
+  }
 
   return (
     <Row
