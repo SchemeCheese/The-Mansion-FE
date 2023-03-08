@@ -17,7 +17,6 @@ import { useAppSelector } from 'modules/hooks';
 
 import { fetchChannelsAction, searchReservation, searchScheduleAction } from 'actions';
 
-// import BreadcrumbList from 'components/BreadcrumbList';
 import Calendar from './Calendar';
 import ChannelManager from './ChannelManager';
 import ReservationList from './ReservationList';

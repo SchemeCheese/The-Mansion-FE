@@ -147,13 +147,12 @@ function MLayout(props: Props) {
   }, []);
 
   useEffect(() => {
-    const facilityLocal = window.localStorage.getItem('facility_id');
-    const branchLocal = window.localStorage.getItem('branch_id');
-
-    if (facilityLocal && branchLocal) {
-      const facilitySelected = _.find(branchFacilities.data.facilities, (item: any) => {
-        return item.id.toString() === facilityLocal;
-      });
+    if (
+      branchFacilities &&
+      branchFacilities.data.length > 0 &&
+      branchFacilities.data.facilities.length > 0
+    ) {
+      const facilitySelected = branchFacilities.data.facilities[0];
 
       dispatch(
         branchSelected({
