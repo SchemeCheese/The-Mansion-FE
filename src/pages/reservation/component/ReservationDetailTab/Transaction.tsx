@@ -96,6 +96,19 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
     setSelectedRows([]);
   };
 
+  const allTransactionKeys: any = [];
+
+  Object.keys(transactions).forEach((key: any) => {
+    transactions[key].items.forEach((item: any) => {
+      if (
+        item.description.toLowerCase() !== 'discount' &&
+        item.description.toLowerCase() !== 'deposit'
+      ) {
+        allTransactionKeys.push(item.sale_detail_id);
+      }
+    });
+  });
+
   const rowSelectionDisk = {
     selectedRowKeys,
     onChange: (newSelectedRowKeys: React.Key[], newSelectedRows: any) => {
@@ -103,15 +116,18 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
       setSelectedRows(newSelectedRows);
       setPaySelectedRowKeys(newSelectedRowKeys);
       setPaySelectedRows(newSelectedRows);
+
+      if (_.isEqual(allTransactionKeys.sort(), newSelectedRowKeys.sort()) === true) {
+        setIsSelectAll(true);
+      } else {
+        setIsSelectAll(false);
+      }
     },
     getCheckboxProps: (record: any) => ({
       disabled: record.description === 'Discount' || record.description === 'Deposit',
       // Column configuration not to be checked
       name: record.name,
     }),
-    onSelectAll: (selected: any) => {
-      setIsSelectAll(selected);
-    },
   };
 
   const handleDeleteItem = (item: any) => {
@@ -120,34 +136,36 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   };
 
   const handlePayment = () => {
-    const { items } = transactions[activeTabKey];
     const newSelectedRows: any = [];
     const newSelectedRowKeys: any = [];
 
-    items.forEach((item: any) => {
-      if (
-        item.description.toLowerCase() !== 'discount' &&
-        item.description.toLowerCase() !== 'deposit'
-      ) {
-        newSelectedRows.push({
-          amount: item.quantity,
-          date: item.date,
-          description: item.description,
-          key: item.sale_detail_id,
-          sale_detail_id: item.sale_detail_id,
-          storage_id: item.storage_id,
-          total: formatNumber(item.total_amount),
-          total_amount: item.total_amount,
-          unit_price: item.unit_price,
-        });
-        newSelectedRowKeys.push(item.sale_detail_id);
-      }
+    Object.keys(transactions).forEach((key: any) => {
+      transactions[key].items.forEach((item: any) => {
+        if (
+          item.description.toLowerCase() !== 'discount' &&
+          item.description.toLowerCase() !== 'deposit'
+        ) {
+          newSelectedRows.push({
+            amount: item.quantity,
+            date: item.date,
+            description: item.description,
+            key: item.sale_detail_id,
+            sale_detail_id: item.sale_detail_id,
+            storage_id: item.storage_id,
+            total: formatNumber(item.total_amount),
+            total_amount: item.total_amount,
+            unit_price: item.unit_price,
+          });
+          newSelectedRowKeys.push(item.sale_detail_id);
+        }
+      });
     });
 
     setSelectedRowKeys(newSelectedRowKeys);
     setSelectedRows(newSelectedRows);
     setPaySelectedRowKeys(newSelectedRowKeys);
     setPaySelectedRows(newSelectedRows);
+    setIsSelectAll(true);
 
     setIsModalOpenPaySelected(true);
   };
