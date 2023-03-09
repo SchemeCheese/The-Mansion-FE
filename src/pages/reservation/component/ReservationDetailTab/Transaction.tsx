@@ -98,16 +98,18 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
 
   const allTransactionKeys: any = [];
 
-  Object.keys(transactions).forEach((key: any) => {
-    transactions[key].items.forEach((item: any) => {
-      if (
-        item.description.toLowerCase() !== 'discount' &&
-        item.description.toLowerCase() !== 'deposit'
-      ) {
-        allTransactionKeys.push(item.sale_detail_id);
-      }
+  if (transactions) {
+    Object.keys(transactions).forEach((key: any) => {
+      transactions[key].items.forEach((item: any) => {
+        if (
+          item.description.toLowerCase() !== 'discount' &&
+          item.description.toLowerCase() !== 'deposit'
+        ) {
+          allTransactionKeys.push(item.sale_detail_id);
+        }
+      });
     });
-  });
+  }
 
   const rowSelectionDisk = {
     selectedRowKeys,
