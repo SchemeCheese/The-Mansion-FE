@@ -290,6 +290,7 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/reservation');
               },
+              hidden: user.permission.reservation.view === false,
             },
             {
               key: '2',
@@ -316,6 +317,9 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/front-desk');
               },
+              hidden:
+                user.permission.frontDeskWalkin.view === false &&
+                user.permission.frontDeskCheckin.view === false,
             },
             {
               key: '3',
@@ -360,8 +364,11 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/night-audit');
               },
+              hidden: user.permission.nightAudit.view === false,
             },
-          ]}
+          ].filter((item: any) => {
+            return !item.hidden;
+          })}
           mode="inline"
           subMenuCloseDelay={1}
           subMenuOpenDelay={1}

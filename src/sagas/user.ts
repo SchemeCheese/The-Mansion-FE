@@ -33,8 +33,9 @@ export function* loginSaga({ payload }: ReturnType<typeof login>) {
 export function* getLogginedUserInfoSaga() {
   try {
     let username = '';
+    let permission = [];
 
-    ({ username } = yield call(request, apiEndPoint(AuthPath.PROFILE_PATH), {
+    ({ permission, username } = yield call(request, apiEndPoint(AuthPath.PROFILE_PATH), {
       method: 'POST',
       headers: headerWithAuthorization(),
     }));
@@ -42,6 +43,7 @@ export function* getLogginedUserInfoSaga() {
     yield put(
       loginSuccess({
         username,
+        permission,
       }),
     );
   } catch (error) {

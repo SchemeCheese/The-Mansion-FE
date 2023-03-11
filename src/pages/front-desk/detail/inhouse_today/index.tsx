@@ -23,6 +23,7 @@ import {
   selectGetReservationDetail,
   selectResendEmailReservation,
   selectUpdateReservation,
+  selectUser,
 } from 'selectors';
 import styled from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
@@ -60,6 +61,7 @@ function ReservationInhouseTodayDetail() {
   const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const { amount_info: amountInfo } = reservationDetailInfo.data;
+  const user = useAppSelector(selectUser);
 
   const rowSelection = {
     selectedRowKeys,
@@ -366,14 +368,18 @@ function ReservationInhouseTodayDetail() {
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
             <DownloadFile />
-            <MButton
-              disabled={Boolean(reservationRedux.booker_email)}
-              onClick={() => setIsSelectLanguageModalOpen(true)}
-            >
-              {t('common.Resend Email')}
-            </MButton>
-            <MButton>{t('common.Rollback Checkin')}</MButton>
-            <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
+            {user.permission.reservation.edit && (
+              <>
+                <MButton
+                  disabled={Boolean(reservationRedux.booker_email)}
+                  onClick={() => setIsSelectLanguageModalOpen(true)}
+                >
+                  {t('common.Resend Email')}
+                </MButton>
+                <MButton>{t('common.Rollback Checkin')}</MButton>
+                <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
+              </>
+            )}
           </Space>
         </Col>
       </Row>

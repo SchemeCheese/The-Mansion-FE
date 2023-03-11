@@ -29,7 +29,7 @@ import { formatNumber } from 'helpers';
 import moment from 'moment';
 import ReservationDetailCard from 'pages/reservation/component/ReservationDetailCard';
 import CheckinModal from 'pages/reservation/create/Checkin';
-import { selectAddItem, selectDeleteItem } from 'selectors';
+import { selectAddItem, selectDeleteItem, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
 import _ from 'underscore';
 
@@ -106,10 +106,10 @@ function ReservationForm({
   const reservationDetailInfo: any = useSelector<RootState>(
     ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
-
   const reservationRedux: any = useSelector<RootState>(
     ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
   );
+  const user = useAppSelector(selectUser);
 
   const confirm = () => {
     Modal.confirm({
@@ -486,29 +486,35 @@ function ReservationForm({
               >
                 <Row>
                   <Col span={24}>
-                    <PattonButton onClick={showModal} type="primary">
-                      {' '}
-                      <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
-                    </PattonButton>
-                    {isCreateForm ? (
-                      <MButton
-                        disabled={selectedRowKeys.length === 0}
-                        onClick={confirm}
-                        style={{ marginLeft: 15 }}
-                      >
-                        {t('common.Cancel Selected')}
-                      </MButton>
-                    ) : (
-                      <MButton
-                        disabled={selectedRowKeys.length === 0}
-                        onClick={() => {
-                          setCancelCurrentItem(null);
-                          setIsCancelBookingModalVisible(true);
-                        }}
-                        style={{ marginLeft: 15 }}
-                      >
-                        {t('common.Cancel Selected')}
-                      </MButton>
+                    {user.permission.reservation.edit && (
+                      <>
+                        <PattonButton onClick={showModal} type="primary">
+                          {' '}
+                          <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} />{' '}
+                          {t('common.New')}
+                        </PattonButton>
+
+                        {isCreateForm ? (
+                          <MButton
+                            disabled={selectedRowKeys.length === 0}
+                            onClick={confirm}
+                            style={{ marginLeft: 15 }}
+                          >
+                            {t('common.Cancel Selected')}
+                          </MButton>
+                        ) : (
+                          <MButton
+                            disabled={selectedRowKeys.length === 0}
+                            onClick={() => {
+                              setCancelCurrentItem(null);
+                              setIsCancelBookingModalVisible(true);
+                            }}
+                            style={{ marginLeft: 15 }}
+                          >
+                            {t('common.Cancel Selected')}
+                          </MButton>
+                        )}
+                      </>
                     )}
                     {!isCreateForm && (
                       <MButton
@@ -521,7 +527,7 @@ function ReservationForm({
                         {t('common.Print Registration Card')}
                       </MButton>
                     )}
-                    {type === 'checkin_today' && (
+                    {type === 'checkin_today' && user.permission.frontDeskCheckin.edit && (
                       <PattonButton
                         disabled={selectedRowKeys.length === 0 || !canCheckin}
                         onClick={showModalCheckin}

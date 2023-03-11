@@ -19,7 +19,7 @@ import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
-import { selectResendEmailReservation, selectUpdateReservation } from 'selectors';
+import { selectResendEmailReservation, selectUpdateReservation, selectUser } from 'selectors';
 import styled from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -55,6 +55,7 @@ function ReservationCheckinTodayDetail() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
+  const user = useAppSelector(selectUser);
 
   const resetSelectedRows = () => {
     setSelectedRowKeys([]);
@@ -378,13 +379,17 @@ function ReservationCheckinTodayDetail() {
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
             <DownloadFile />
-            <MButton
-              disabled={Boolean(reservationRedux.booker_email)}
-              onClick={() => setIsSelectLanguageModalOpen(true)}
-            >
-              {t('common.Resend Email')}
-            </MButton>
-            <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
+            {user.permission.reservation.edit && (
+              <>
+                <MButton
+                  disabled={Boolean(reservationRedux.booker_email)}
+                  onClick={() => setIsSelectLanguageModalOpen(true)}
+                >
+                  {t('common.Resend Email')}
+                </MButton>
+                <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
+              </>
+            )}
           </Space>
         </Col>
       </Row>

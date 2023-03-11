@@ -33,6 +33,7 @@ import {
   selectGetReservationDetail,
   selectAvailableSearchSchedule,
   selectRoomTypes,
+  selectUser,
 } from 'selectors';
 
 import PattonButton from 'components/PattonButton';
@@ -73,6 +74,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
   const reservationDetailData = useAppSelector(selectGetReservationDetail);
   const searchAvailableEventsData: any = useAppSelector(selectAvailableSearchSchedule);
+  const user = useAppSelector(selectUser);
 
   const reservationDetailInfo: any = useSelector<RootState>(
     ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
@@ -548,9 +550,11 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
             >
               Smoking Room
             </Checkbox>
-            <PattonButton onClick={updateBookingRoom} style={{ float: 'right' }}>
-              {t('common.Update')}
-            </PattonButton>
+            {user.permission.reservation.edit && (
+              <PattonButton onClick={updateBookingRoom} style={{ float: 'right' }}>
+                {t('common.Update')}
+              </PattonButton>
+            )}
           </Col>
           <Col span={8}>
             <Form.Item

@@ -2,7 +2,7 @@
 Module Name : Reservation
 Developer Name : MinhNV
 Created Date : 24/08/2022
-Updated Date : 22/12/2022
+Updated Date : 11/03/2023
 Main functions : Reservation Detail Page
 ************************************ */
 
@@ -21,7 +21,7 @@ import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
-import { selectResendEmailReservation, selectUpdateReservation } from 'selectors';
+import { selectResendEmailReservation, selectUpdateReservation, selectUser } from 'selectors';
 import styled from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -59,6 +59,7 @@ function ReservationDetail() {
 
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
+  const user = useAppSelector(selectUser);
 
   const rowSelection = {
     selectedRowKeys,
@@ -297,12 +298,6 @@ function ReservationDetail() {
     });
   }, [reservationRedux]);
 
-  // useEffect(() => {
-  //   if (downloadPDFReservationDetailChanged('status', 'SUCCESS')) {
-  //     message.success('Download file pdf successfully!');
-  //   }
-  // }, [downloadPDFReservationDetailChanged]);
-
   return (
     <>
       <SelectRoomModal
@@ -365,25 +360,31 @@ function ReservationDetail() {
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
-            <MInfoButton
-              onClick={() =>
-                navigate('/reservation/create', {
-                  state: {
-                    reservationInfo: reservationRedux,
-                  },
-                })
-              }
-            >
-              {t('reservation.Copy to new reservation')}
-            </MInfoButton>
+            {user.permission.reservation.create && (
+              <MInfoButton
+                onClick={() =>
+                  navigate('/reservation/create', {
+                    state: {
+                      reservationInfo: reservationRedux,
+                    },
+                  })
+                }
+              >
+                {t('reservation.Copy to new reservation')}
+              </MInfoButton>
+            )}
             <DownloadFile />
-            <MButton
-              disabled={Boolean(reservationRedux.booker_email)}
-              onClick={() => setIsSelectLanguageModalOpen(true)}
-            >
-              {t('common.Resend Email')}
-            </MButton>
-            <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
+            {user.permission.reservation.edit && (
+              <>
+                <MButton
+                  disabled={Boolean(reservationRedux.booker_email)}
+                  onClick={() => setIsSelectLanguageModalOpen(true)}
+                >
+                  {t('common.Resend Email')}
+                </MButton>
+                <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
+              </>
+            )}
           </Space>
         </Col>
       </Row>

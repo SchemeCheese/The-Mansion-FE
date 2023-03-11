@@ -14,7 +14,7 @@ import { Checkbox, Col, DatePicker, message, Modal, Row, Select, Spin, TimePicke
 import type { RangePickerProps } from 'antd/es/date-picker';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
-import { selectUpdateGeneralInfo } from 'selectors';
+import { selectUpdateGeneralInfo, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
 
@@ -50,6 +50,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
     ({ getRoomType: getRoomTypeTemporary }) => getRoomTypeTemporary.data,
   );
   const { data } = reservationDetailInfo;
+  const user = useAppSelector(selectUser);
 
   const roomTypeOption = _.keys(roomTypes).map((key: any) => {
     return (
@@ -207,9 +208,11 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
           {reservationDetailInfo &&
             moment(reservationDetailInfo.data.created_date).format('DD/MM/YYYY')}
         </span>
-        <PattonButton onClick={() => handleUpdateGeneralInfo()} style={{ float: 'right' }}>
-          {t('common.Update')}
-        </PattonButton>
+        {user.permission.reservation.edit && (
+          <PattonButton onClick={() => handleUpdateGeneralInfo()} style={{ float: 'right' }}>
+            {t('common.Update')}
+          </PattonButton>
+        )}
       </Col>
       <Col span={8}>
         <Row>

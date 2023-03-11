@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Card, Col, message, Modal, Radio, Row, Typography } from 'antd';
 import CreateGuestModal from 'pages/reservation/modal/CreateGuestModal';
-import { selectSetMainGuest } from 'selectors';
+import { selectSetMainGuest, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
@@ -38,6 +38,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
 
   const setMainGuestData = useAppSelector(selectSetMainGuest);
   const { changed } = useTreeChanges(setMainGuestData);
+  const user = useAppSelector(selectUser);
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -100,13 +101,15 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
 
   return (
     <>
-      <CreateGuestModal
-        currentGuest={currentGuest}
-        isModalVisible={isModalVisible}
-        reservationDetailId={reservationDetailId}
-        reservationId={reservationId}
-        setIsModalVisible={setIsModalVisible}
-      />
+      {user.permission.reservation.edit && (
+        <CreateGuestModal
+          currentGuest={currentGuest}
+          isModalVisible={isModalVisible}
+          reservationDetailId={reservationDetailId}
+          reservationId={reservationId}
+          setIsModalVisible={setIsModalVisible}
+        />
+      )}
 
       <Row
         className="guest-list"
@@ -119,35 +122,37 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
           minHeight: 300,
         }}
       >
-        <Col onClick={showModal} span={8}>
-          <div
-            style={{
-              width: '95%',
-              height: '95%',
-              border: '2px dashed rgba(0, 0, 0, 0.15)',
-              borderRadius: 2,
-              cursor: 'pointer',
-            }}
-          >
-            <p
+        {user.permission.reservation.edit && (
+          <Col onClick={showModal} span={8}>
+            <div
               style={{
-                position: 'absolute',
-                fontStyle: 'normal',
-                fontWeight: 400,
-                fontSize: 14,
-                lineHeight: 22,
-                color: 'rgba(0, 0, 0, 0.45)',
-                margin: 0,
-                top: '50%',
-                left: '50%',
-                msTransform: 'translate(-50%, -50%)',
-                transform: 'translate(-50%, -50%)',
+                width: '95%',
+                height: '95%',
+                border: '2px dashed rgba(0, 0, 0, 0.15)',
+                borderRadius: 2,
+                cursor: 'pointer',
               }}
             >
-              + {t('common.Add New')}
-            </p>
-          </div>
-        </Col>
+              <p
+                style={{
+                  position: 'absolute',
+                  fontStyle: 'normal',
+                  fontWeight: 400,
+                  fontSize: 14,
+                  lineHeight: 22,
+                  color: 'rgba(0, 0, 0, 0.45)',
+                  margin: 0,
+                  top: '50%',
+                  left: '50%',
+                  msTransform: 'translate(-50%, -50%)',
+                  transform: 'translate(-50%, -50%)',
+                }}
+              >
+                + {t('common.Add New')}
+              </p>
+            </div>
+          </Col>
+        )}
         {data.map((value: any) => (
           <Col span={8}>
             <Card

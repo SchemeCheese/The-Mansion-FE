@@ -10,6 +10,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
+import { selectUser } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 import {
   getReservationRoomCheckoutTodayAction,
@@ -26,6 +29,7 @@ const { TabPane } = Tabs;
 function FrontDesk() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const user = useAppSelector(selectUser);
 
   const handeleActive = (activeKey: string) => {
     if (activeKey === '2') {
@@ -92,18 +96,24 @@ function FrontDesk() {
         onChange={activeKey => handeleActive(activeKey)}
         style={{ minHeight: '100%' }}
       >
-        <TabPane key="1" className="content" tab={t('frontDesk.Walk In')}>
-          <WalkIn />
-        </TabPane>
-        <TabPane key="2" className="content" tab={t('frontDesk.CheckIn Today')}>
-          <ReservationList type="checkin_today" />
-        </TabPane>
-        <TabPane key="3" className="content" tab={t('frontDesk.In House')}>
-          <ReservationRoomList type="inhouse_today" />
-        </TabPane>
-        <TabPane key="4" className="content" tab={t('frontDesk.Checkout Today')}>
-          <ReservationRoomList type="checkout_today" />
-        </TabPane>
+        {user.permission.frontDeskWalkin.view && (
+          <TabPane key="1" className="content" tab={t('frontDesk.Walk In')}>
+            <WalkIn />
+          </TabPane>
+        )}
+        {user.permission.frontDeskCheckin.view && (
+          <>
+            <TabPane key="2" className="content" tab={t('frontDesk.CheckIn Today')}>
+              <ReservationList type="checkin_today" />
+            </TabPane>
+            <TabPane key="3" className="content" tab={t('frontDesk.In House')}>
+              <ReservationRoomList type="inhouse_today" />
+            </TabPane>
+            <TabPane key="4" className="content" tab={t('frontDesk.Checkout Today')}>
+              <ReservationRoomList type="checkout_today" />
+            </TabPane>
+          </>
+        )}
       </Tabs>
     </>
   );

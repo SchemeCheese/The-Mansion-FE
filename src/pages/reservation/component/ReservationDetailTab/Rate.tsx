@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Col, message, Row, Table } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
-import { selectUpdateRate } from 'selectors';
+import { selectUpdateRate, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
@@ -38,6 +38,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
   const reservationDetailInfo: any = useSelector<RootState>(
     ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     setRatesState(reservationDetailInfo.charges);
@@ -172,14 +173,16 @@ function Rate({ reservationDetailId, reservationId }: Props) {
 
   return (
     <Row justify="end" style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
-      <Col span={24}>
-        <PattonButton
-          onClick={() => handleUpdateRate()}
-          style={{ float: 'right', marginRight: 20 }}
-        >
-          {t('common.Update')}
-        </PattonButton>
-      </Col>
+      {user.permission.reservation.edit && (
+        <Col span={24}>
+          <PattonButton
+            onClick={() => handleUpdateRate()}
+            style={{ float: 'right', marginRight: 20 }}
+          >
+            {t('common.Update')}
+          </PattonButton>
+        </Col>
+      )}
       <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
         <Table columns={columns} dataSource={data} pagination={false} size="small" />
       </Col>
