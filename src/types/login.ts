@@ -5,5 +5,6 @@ export interface LoginCredentials {
 
 export interface LoginSuccess {
   name?: string;
+  permission: Record<string, any>;
   username: string;
 }

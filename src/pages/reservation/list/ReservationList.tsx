@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import { Col, Pagination, Row, Spin, Table, Tag } from 'antd';
-import { selectReservationSearch } from 'selectors';
+import { selectReservationSearch, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
@@ -59,6 +59,7 @@ function ReservationList({ type }: Props) {
   const currentPage: any = useSelector<RootState>(({ reservation }) => reservation.current_page);
   const searchReservationData = useAppSelector(selectReservationSearch);
   const { changed: searchReservationChanged } = useTreeChanges(searchReservationData);
+  const user = useAppSelector(selectUser);
 
   useEffect(() => {
     dispatch(searchReservation(searchCondition));
@@ -286,12 +287,14 @@ function ReservationList({ type }: Props) {
           setSearchCondition={setSearchCondition}
         />
       </Col>
-      <Col span={24} style={{ paddingTop: 16 }}>
-        <PattonButton onClick={() => navigate(`/reservation/create`)}>
-          {' '}
-          <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> {t('common.New')}
-        </PattonButton>
-      </Col>
+      {user.permission.reservation.create && (
+        <Col span={24} style={{ paddingTop: 16 }}>
+          <PattonButton onClick={() => navigate(`/reservation/create`)}>
+            {' '}
+            <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> {t('common.New')}
+          </PattonButton>
+        </Col>
+      )}
       <Col span={24} style={{ paddingTop: 16 }}>
         {!isSearching ? (
           <>
