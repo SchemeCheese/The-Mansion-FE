@@ -19,7 +19,11 @@ import ReservationForm from 'pages/reservation/component/ReservationForm';
 import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
-import { selectResendEmailReservation, selectUpdateReservation } from 'selectors';
+import {
+  selectGetReservationDetail,
+  selectResendEmailReservation,
+  selectUpdateReservation,
+} from 'selectors';
 import styled from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
@@ -54,6 +58,8 @@ const BreadscrumData = styled.p`
 function ReservationCheckoutTodayDetail() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [isHidenRoomRate, setIsHideRoomRate] = useState(false);
+  const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
+  const { amount_info: amountInfo } = reservationDetailInfo.data;
 
   const rowSelection = {
     selectedRowKeys,
@@ -416,7 +422,7 @@ function ReservationCheckoutTodayDetail() {
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               {reservationRedux.price ? (
-                <p>{formatNumber(reservationRedux.price.total)}</p>
+                <p>{formatNumber(amountInfo?.grand_total)}</p>
               ) : (
                 <Skeleton.Button />
               )}
@@ -428,7 +434,7 @@ function ReservationCheckoutTodayDetail() {
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               {reservationRedux.price ? (
-                <p>{formatNumber(reservationRedux.price.deposit)}</p>
+                <p>{formatNumber(amountInfo?.deposit)}</p>
               ) : (
                 <Skeleton.Button />
               )}
@@ -440,7 +446,7 @@ function ReservationCheckoutTodayDetail() {
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
               {reservationRedux.price ? (
-                <p>{formatNumber(reservationRedux.price.amount_due)}</p>
+                <p>{formatNumber(amountInfo?.unpaid)}</p>
               ) : (
                 <Skeleton.Button />
               )}
