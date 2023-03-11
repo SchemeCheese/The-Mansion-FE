@@ -261,19 +261,15 @@ function CheckinModal({
   );
 
   useEffect(() => {
-    const checkInFee = selectedRows
-      .map((item: any) => {
-        return {
-          id: item.reservation_detail_id,
-          early_checkin_fee: {
-            hour_total: Math.round(duration.asHours()),
-            sale_price: branchInfoSelected.addition_cico_fee,
-          },
-        };
-      })
-      .filter((item: any) => {
-        return item.early_checkin_fee.hour_total > 0;
-      });
+    const checkInFee = selectedRows.map((item: any) => {
+      return {
+        id: item.reservation_detail_id,
+        early_checkin_fee: {
+          hour_total: Math.round(duration.asHours()),
+          sale_price: branchInfoSelected.addition_cico_fee,
+        },
+      };
+    });
 
     setEearlyCheckinFee(checkInFee);
   }, [selectedRows]);

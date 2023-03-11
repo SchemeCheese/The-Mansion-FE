@@ -581,7 +581,7 @@ function NightAudit() {
         </Col>
       </Row>
       <Row className="content">
-        <Card bordered={false} style={{ width: '100%' }} title={t('nightAudit.I. Noshow Today')}>
+        <Card bordered={false} style={{ width: '100%' }} title={t('nightAudit.I. Checkin Today')}>
           <Table
             className="rooming-table"
             columns={checkinTodayColumns}
@@ -589,7 +589,11 @@ function NightAudit() {
             onRow={(record: any) => {
               return {
                 onClick: () => {
-                  navigate(`/front-desk/checkin-today/${record.reservation_id}`);
+                  window.open(
+                    `/front-desk/checkin-today/${record.reservation_id}`,
+                    '_blank',
+                    'noopener,noreferrer',
+                  );
                 },
               };
             }}
@@ -609,8 +613,10 @@ function NightAudit() {
             onRow={(record: any) => {
               return {
                 onClick: () => {
-                  navigate(
+                  window.open(
                     `/front-desk/checkout-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
+                    '_blank',
+                    'noopener,noreferrer',
                   );
                 },
               };
@@ -631,8 +637,10 @@ function NightAudit() {
             onRow={(record: any) => {
               return {
                 onClick: () => {
-                  navigate(
+                  window.open(
                     `/front-desk/inhouse-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
+                    '_blank',
+                    'noopener,noreferrer',
                   );
                 },
               };
