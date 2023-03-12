@@ -58,6 +58,9 @@ import getWaterYesterday, { getWaterYesterdayState } from './getWaterYesterday';
 import github, { githubState } from './github';
 import nightAudit, { nightAuditState } from './nightAudit';
 import noshow, { noshowState } from './noshow';
+import printCheckinConfirmPDFReservationDetail, {
+  printCheckinConfirmPDFReservationDetailState,
+} from './printCheckinConfirmPDFReservationDetail';
 import printRegistrationCardPDFReservationDetail, {
   printRegistrationCardPDFReservationDetailState,
 } from './printRegistrationCardPDFReservationDetail';
@@ -150,6 +153,7 @@ export const initialState = {
   noshow: noshowState,
   nightAudit: nightAuditState,
   printRegistrationCardPDFReservationDetail: printRegistrationCardPDFReservationDetailState,
+  printCheckinConfirmPDFReservationDetail: printCheckinConfirmPDFReservationDetailState,
   printDepositPDFReservationDetail: printDepositPDFReservationDetailState,
   fuel: fuelState,
   getElectricYesterday: getElectricYesterdayState,
@@ -222,6 +226,7 @@ export default {
   ...noshow,
   ...nightAudit,
   ...printRegistrationCardPDFReservationDetail,
+  ...printCheckinConfirmPDFReservationDetail,
   ...printDepositPDFReservationDetail,
   ...fuel,
   ...getElectricYesterday,

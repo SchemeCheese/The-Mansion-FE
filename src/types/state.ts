@@ -627,6 +627,18 @@ export interface DownloadCSVBranchManagerState {
   status: string;
 }
 
+export interface PrintCheckinConfirmPDFReservationDetailState {
+  payload: ReservationDetailPrintCheckinConfirmPDFPayload;
+  status: string;
+}
+
+export interface ReservationDetailPrintCheckinConfirmPDFPayload {
+  file_name: string;
+  language: string;
+  reservation_detail_ids: any;
+  reservation_info_id: any;
+}
+
 export interface RootState {
   addDisk: AddDiskState;
   addItem: AddItemState;
@@ -676,6 +688,7 @@ export interface RootState {
   nightAudit: NightAuditState;
   noshow: NoShowState;
   notifications: NotificationsState;
+  printCheckinConfirmPDFReservationDetail: PrintCheckinConfirmPDFReservationDetailState;
   printDepositPDFReservationDetail: PrintDepositPDFReservationDetailState;
   printRegistrationCardPDFReservationDetail: PrintRegistrationCardPDFReservationDetailState;
   product: ProductSearchState;
