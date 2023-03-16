@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Card, Checkbox, Col, message, Modal, Row, Table, Upload } from 'antd';
+import { Card, Checkbox, Col, message, Modal, Row, Select, Table, Upload } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload';
 import { formatNumber } from 'helpers';
@@ -15,13 +15,17 @@ import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { checkinAction, getReservation } from 'actions';
+import { checkinAction, getReservation, printCheckinConfirmPDFReservationDetail } from 'actions';
 
 import MInput from 'components/MInput';
 
+const { Option } = Select;
+
 interface Props {
   openModalCheckin: any;
+  reservationId?: string | number;
   resetSelectedRows?: () => void;
+  selectedRowKeys?: any;
   selectedRows: any;
   setIsModalCheckinOpen: any;
 }
@@ -49,7 +53,9 @@ interface DataTypeEarly {
 
 function CheckinModal({
   openModalCheckin,
+  reservationId,
   resetSelectedRows,
+  selectedRowKeys,
   selectedRows,
   setIsModalCheckinOpen,
 }: Props) {
@@ -57,6 +63,7 @@ function CheckinModal({
   const [hideRoomRate, setHideRoomRate] = useState(false);
   const [printRegistrationCard, setPrintRegistrationCard] = useState(false);
   const [earlyCheckinFee, setEearlyCheckinFee]: any[] = useState([]);
+  const [language, setLanguage] = useState('en');
   const dispatch = useDispatch();
   const { id } = useParams();
 
@@ -260,6 +267,10 @@ function CheckinModal({
     </div>
   );
 
+  const handleChangeLanguage = (value: string) => {
+    setLanguage(value);
+  };
+
   useEffect(() => {
     const checkInFee = selectedRows.map((item: any) => {
       return {
@@ -283,6 +294,21 @@ function CheckinModal({
           reservation_id: id ?? '',
         }),
       );
+
+      if (printRegistrationCard) {
+        const formattedDateNow = moment(new Date()).format('DD_MM_YYYY');
+
+        dispatch(
+          printCheckinConfirmPDFReservationDetail({
+            payload: {
+              language,
+              reservation_info_id: reservationId ?? '',
+              reservation_detail_ids: selectedRowKeys,
+              file_name: `the_mansion_${formattedDateNow}_detail_${reservationId ?? ''}.'pdf'`,
+            },
+          }),
+        );
+      }
 
       if (resetSelectedRows) {
         resetSelectedRows();
@@ -309,10 +335,32 @@ function CheckinModal({
               {t('reservation.Hide room rates')}
             </Checkbox>
           </Col>
-          <Col span={16}>
+          <Col span={10}>
             <Checkbox onChange={e => setPrintRegistrationCard(e.target.checked)} value="2">
               {t('common.Print Registration Card')}
             </Checkbox>
+          </Col>
+          <Col span={6}>
+            <Row
+              style={{
+                alignItems: 'center',
+                display: printRegistrationCard ? 'flex' : 'none',
+              }}
+            >
+              <Col span={12}>{t('common.Select language')}</Col>
+              <Col span={12}>
+                <Select
+                  allowClear
+                  onChange={value => handleChangeLanguage(value)}
+                  style={{ width: '100%' }}
+                  value={language}
+                >
+                  <Option value="vi">{t('common.Vietnamese')}</Option>
+                  <Option value="en">{t('common.English')}</Option>
+                  <Option value="jp">{t('common.Japanese')}</Option>
+                </Select>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Checkbox.Group>

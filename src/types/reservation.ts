@@ -214,3 +214,14 @@ export interface PrintDepositPDFReservationDetailPayload {
 export interface PrintDepositPDFReservationDetail {
   payload: PrintDepositPDFReservationDetailPayload;
 }
+
+export interface PrintCheckinConfirmPDFReservationDetail {
+  payload: PrintCheckinConfirmPDFReservationDetailPayload;
+}
+
+export interface PrintCheckinConfirmPDFReservationDetailPayload {
+  file_name: string;
+  language: string;
+  reservation_detail_ids: any;
+  reservation_info_id: string | number;
+}

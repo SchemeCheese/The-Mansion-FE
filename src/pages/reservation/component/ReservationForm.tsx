@@ -257,7 +257,9 @@ function ReservationForm({
       {type === 'checkin_today' && (
         <CheckinModal
           openModalCheckin={isModalCheckinOpen}
+          reservationId={reservationId}
           resetSelectedRows={resetSelectedRows}
+          selectedRowKeys={selectedRowKeys}
           selectedRows={selectedRows}
           setIsModalCheckinOpen={setIsModalCheckinOpen}
         />
