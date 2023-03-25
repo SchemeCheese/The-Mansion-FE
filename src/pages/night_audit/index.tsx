@@ -129,7 +129,7 @@ function NightAudit() {
           Canceled
         </>
       ),
-      inhouse: (
+      in_house: (
         <>
           <svg
             fill="none"
@@ -180,7 +180,7 @@ function NightAudit() {
       status === 'checkout' ||
       status === 'reserved' ||
       status === 'canceled' ||
-      status === 'inhouse' ||
+      status === 'in_house' ||
       status === 'waitlist' ||
       status === 'no_show'
     ) {
