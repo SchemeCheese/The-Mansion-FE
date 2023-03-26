@@ -287,13 +287,15 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
                 fillRule="evenodd"
               />
             </svg>
-            <span style={{ paddingLeft: 6 }}>
-              {item.view === 0 && t('common.Not yet setting')}
-              {item.wing.toString() === '1' && wingMapping['1']}
-              {item.wing.toString() === '2' && wingMapping['2']}
-              {item.wing.toString() === '4' && wingMapping['4']}
-              {item.wing.toString() === '8' && wingMapping['8']}
-            </span>
+            {item && item.wing !== undefined && item.wing !== null && (
+              <span style={{ paddingLeft: 6 }}>
+                {item.wing === 0 && t('common.Not yet setting')}
+                {item.wing.toString() === '1' && wingMapping['1']}
+                {item.wing.toString() === '2' && wingMapping['2']}
+                {item.wing.toString() === '4' && wingMapping['4']}
+                {item.wing.toString() === '8' && wingMapping['8']}
+              </span>
+            )}
           </Col>
           <Col span={12} style={{ paddingTop: 20 }}>
             <span style={{ float: 'right', color: 'rgba(0, 0, 0, 0.45)' }}>
@@ -323,11 +325,13 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
                   fillRule="evenodd"
                 />
               </svg>
-              <span style={{ paddingLeft: 6 }}>
-                {item.view === 0 && t('common.Not yet setting')}
-                {item.view.toString() === '256' && viewMapping['256']}
-                {item.view.toString() === '512' && viewMapping['512']}
-              </span>
+              {item && item.view !== undefined && item.view !== null && (
+                <span style={{ paddingLeft: 6 }}>
+                  {item.view === 0 && t('common.Not yet setting')}
+                  {item.view.toString() === '256' && viewMapping['256']}
+                  {item.view.toString() === '512' && viewMapping['512']}
+                </span>
+              )}
             </div>
 
             <div style={{ paddingTop: 20 }}>
@@ -352,13 +356,15 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
                 />
               </svg>
 
-              <span style={{ paddingLeft: 8 }}>
-                {item.direction === 0 && t('common.Not yet setting')}
-                {item.direction.toString() === '16' && directionMapping['16']}
-                {item.direction.toString() === '32' && directionMapping['32']}
-                {item.direction.toString() === '64' && directionMapping['64']}
-                {item.direction.toString() === '128' && directionMapping['128']}
-              </span>
+              {item && item.direction !== undefined && item.direction !== null && (
+                <span style={{ paddingLeft: 8 }}>
+                  {item.direction === 0 && t('common.Not yet setting')}
+                  {item.direction.toString() === '16' && directionMapping['16']}
+                  {item.direction.toString() === '32' && directionMapping['32']}
+                  {item.direction.toString() === '64' && directionMapping['64']}
+                  {item.direction.toString() === '128' && directionMapping['128']}
+                </span>
+              )}
             </div>
             <div style={{ paddingTop: 20, paddingBottom: 5 }}>
               {item.is_smocking ? (
