@@ -415,6 +415,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 <Row>
                   <Col span={4} style={{ paddingRight: 17 }}>
                     <PattonButton
+                      disabled={reservationDetailInfo.data.status === 'checkout'}
                       onClick={() => setIsModalOpenAddItem(true)}
                       style={{
                         width: '100%',
@@ -437,7 +438,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                     <Row>
                       <Col span={4} style={{ paddingLeft: 10 }}>
                         <MButton
-                          disabled={selectedRowKeys.length === 0}
+                          disabled={
+                            selectedRowKeys.length === 0 ||
+                            reservationDetailInfo.data.status === 'checkout'
+                          }
                           onClick={() => setIsModalOpenPaySelected(true)}
                           style={{
                             width: '100%',
@@ -464,7 +468,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       </Col>
                       <Col span={4} style={{ paddingLeft: 10 }}>
                         <MButton
-                          disabled={selectedRowKeys.length === 0}
+                          disabled={
+                            selectedRowKeys.length === 0 ||
+                            reservationDetailInfo.data.status === 'checkout'
+                          }
                           onClick={() => setIsModalOpenChangeDisk(true)}
                           style={{
                             width: '100%',
@@ -483,6 +490,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       </Col>
                       <Col span={4} style={{ paddingLeft: 10 }}>
                         <MButton
+                          disabled={reservationDetailInfo.data.status === 'checkout'}
                           style={{
                             width: '100%',
                             height: '100%',
@@ -495,6 +503,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       </Col>
                       <Col span={4} style={{ paddingLeft: 10 }}>
                         <MButton
+                          disabled={reservationDetailInfo.data.status === 'checkout'}
                           onClick={() => setIsModalOpenAddDiscount(true)}
                           style={{
                             width: '100%',
@@ -512,6 +521,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       </Col>
                       <Col span={4} style={{ paddingLeft: 10 }}>
                         <MButton
+                          disabled={reservationDetailInfo.data.status === 'checkout'}
                           onClick={() => setIsModalOpenDeposit(true)}
                           style={{
                             width: '100%',
@@ -530,7 +540,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                       </Col>
                       <Col span={4} style={{ paddingLeft: 10 }}>
                         <MButton
-                          disabled={selectedRowKeys.length === 0}
+                          disabled={
+                            selectedRowKeys.length === 0 ||
+                            reservationDetailInfo.data.status === 'checkout'
+                          }
                           onClick={() => setIsModalOpenTransferRoom(true)}
                           style={{
                             width: '100%',
@@ -556,6 +569,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                   <Row>
                     <Col span={8} style={{ paddingRight: 17 }}>
                       <PattonButton
+                        disabled={reservationDetailInfo.data.status === 'checkout'}
                         onClick={() => setIsModalOpenAddItem(true)}
                         style={{ width: '100%' }}
                         type="primary"
@@ -571,7 +585,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                     </Col>
                     <Col span={8} style={{ paddingRight: 17 }}>
                       <MButton
-                        disabled={selectedRowKeys.length === 0}
+                        disabled={
+                          selectedRowKeys.length === 0 ||
+                          reservationDetailInfo.data.status === 'checkout'
+                        }
                         onClick={() => setIsModalOpenPaySelected(true)}
                         style={{ width: '100%' }}
                       >
@@ -593,6 +610,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                     </Col>
                     <Col span={8}>
                       <MButton
+                        disabled={reservationDetailInfo.data.status === 'checkout'}
                         onClick={() => setIsModalOpenAditRoomCharge(true)}
                         style={{ width: '100%' }}
                       >
@@ -609,6 +627,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                   <Row style={{ paddingTop: 18 }}>
                     <Col span={8} style={{ paddingRight: 17 }}>
                       <MButton
+                        disabled={reservationDetailInfo.data.status === 'checkout'}
                         onClick={() => setIsModalOpenAddDisk(true)}
                         style={{ width: '100%' }}
                       >
@@ -621,7 +640,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                     </Col>
                     <Col span={8} style={{ paddingRight: 17 }}>
                       <MButton
-                        disabled={selectedRowKeys.length === 0}
+                        disabled={
+                          selectedRowKeys.length === 0 ||
+                          reservationDetailInfo.data.status === 'checkout'
+                        }
                         onClick={() => setIsModalOpenChangeDisk(true)}
                         style={{ width: '100%' }}
                       >
@@ -635,7 +657,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                     </Col>
                     <Col span={8}>
                       <MButton
-                        disabled={selectedRowKeys.length === 0}
+                        disabled={
+                          selectedRowKeys.length === 0 ||
+                          reservationDetailInfo.data.status === 'checkout'
+                        }
                         onClick={() => setIsModalOpenTransferRoom(true)}
                         style={{ width: '100%' }}
                       >
@@ -674,25 +699,29 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>
                     {t('common.Deposit')}{' '}
-                    <svg
-                      fill="none"
-                      height="14"
-                      onClick={() => setIsModalOpenDeposit(true)}
-                      style={svgButton}
-                      viewBox="0 0 14 14"
-                      width="14"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M6.99992 0.333496C3.38087 0.333496 0.333252 3.38111 0.333252 7.00016C0.333252 10.6192 3.38087 13.6668 6.99992 13.6668C10.619 13.6668 13.6666 10.6192 13.6666 7.00016C13.6666 3.38111 10.619 0.333496 6.99992 0.333496ZM10.8094 7.00016C10.8094 7.26316 10.5962 7.47635 10.3333 7.47635H7.47611V10.3335C7.47611 10.5965 7.26291 10.8097 6.99992 10.8097C6.73693 10.8097 6.52373 10.5965 6.52373 10.3335V7.47635H3.66658C3.40359 7.47635 3.19039 7.26316 3.19039 7.00016C3.19039 6.73717 3.40359 6.52397 3.66659 6.52397H6.52373V3.66683C6.52373 3.40384 6.73693 3.19064 6.99992 3.19064C7.26291 3.19064 7.47611 3.40384 7.47611 3.66683V6.52397H10.3333C10.5962 6.52397 10.8094 6.73717 10.8094 7.00016Z"
-                        fill="#1D39C4"
-                      />
-                    </svg>
-                    <Deposit
-                      grandTotal={amountInfo?.grand_total}
-                      isModalVisible={isModalOpenDeposit}
-                      setModalVisible={setIsModalOpenDeposit}
-                    />
+                    {reservationDetailInfo.data.status !== 'checkout' && (
+                      <>
+                        <svg
+                          fill="none"
+                          height="14"
+                          onClick={() => setIsModalOpenDeposit(true)}
+                          style={svgButton}
+                          viewBox="0 0 14 14"
+                          width="14"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M6.99992 0.333496C3.38087 0.333496 0.333252 3.38111 0.333252 7.00016C0.333252 10.6192 3.38087 13.6668 6.99992 13.6668C10.619 13.6668 13.6666 10.6192 13.6666 7.00016C13.6666 3.38111 10.619 0.333496 6.99992 0.333496ZM10.8094 7.00016C10.8094 7.26316 10.5962 7.47635 10.3333 7.47635H7.47611V10.3335C7.47611 10.5965 7.26291 10.8097 6.99992 10.8097C6.73693 10.8097 6.52373 10.5965 6.52373 10.3335V7.47635H3.66658C3.40359 7.47635 3.19039 7.26316 3.19039 7.00016C3.19039 6.73717 3.40359 6.52397 3.66659 6.52397H6.52373V3.66683C6.52373 3.40384 6.73693 3.19064 6.99992 3.19064C7.26291 3.19064 7.47611 3.40384 7.47611 3.66683V6.52397H10.3333C10.5962 6.52397 10.8094 6.73717 10.8094 7.00016Z"
+                            fill="#1D39C4"
+                          />
+                        </svg>
+                        <Deposit
+                          grandTotal={amountInfo?.grand_total}
+                          isModalVisible={isModalOpenDeposit}
+                          setModalVisible={setIsModalOpenDeposit}
+                        />
+                      </>
+                    )}
                   </span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.deposit)}</span>
                 </div>
@@ -717,43 +746,49 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>
                     {t('common.Discount')}{' '}
-                    <svg
-                      fill="none"
-                      height="14"
-                      onClick={() => setIsModalOpenAddDiscount(true)}
-                      style={svgButton}
-                      viewBox="0 0 14 14"
-                      width="14"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M6.99992 0.333496C3.38087 0.333496 0.333252 3.38111 0.333252 7.00016C0.333252 10.6192 3.38087 13.6668 6.99992 13.6668C10.619 13.6668 13.6666 10.6192 13.6666 7.00016C13.6666 3.38111 10.619 0.333496 6.99992 0.333496ZM10.8094 7.00016C10.8094 7.26316 10.5962 7.47635 10.3333 7.47635H7.47611V10.3335C7.47611 10.5965 7.26291 10.8097 6.99992 10.8097C6.73693 10.8097 6.52373 10.5965 6.52373 10.3335V7.47635H3.66658C3.40359 7.47635 3.19039 7.26316 3.19039 7.00016C3.19039 6.73717 3.40359 6.52397 3.66659 6.52397H6.52373V3.66683C6.52373 3.40384 6.73693 3.19064 6.99992 3.19064C7.26291 3.19064 7.47611 3.40384 7.47611 3.66683V6.52397H10.3333C10.5962 6.52397 10.8094 6.73717 10.8094 7.00016Z"
-                        fill="#1D39C4"
-                      />
-                    </svg>
-                    <AddDiscount
-                      setIsModalOpen={setIsModalOpenAddDiscount}
-                      visible={isModalOpenAddDiscount}
-                    />
+                    {reservationDetailInfo.data.status !== 'checkout' && (
+                      <>
+                        <svg
+                          fill="none"
+                          height="14"
+                          onClick={() => setIsModalOpenAddDiscount(true)}
+                          style={svgButton}
+                          viewBox="0 0 14 14"
+                          width="14"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M6.99992 0.333496C3.38087 0.333496 0.333252 3.38111 0.333252 7.00016C0.333252 10.6192 3.38087 13.6668 6.99992 13.6668C10.619 13.6668 13.6666 10.6192 13.6666 7.00016C13.6666 3.38111 10.619 0.333496 6.99992 0.333496ZM10.8094 7.00016C10.8094 7.26316 10.5962 7.47635 10.3333 7.47635H7.47611V10.3335C7.47611 10.5965 7.26291 10.8097 6.99992 10.8097C6.73693 10.8097 6.52373 10.5965 6.52373 10.3335V7.47635H3.66658C3.40359 7.47635 3.19039 7.26316 3.19039 7.00016C3.19039 6.73717 3.40359 6.52397 3.66659 6.52397H6.52373V3.66683C6.52373 3.40384 6.73693 3.19064 6.99992 3.19064C7.26291 3.19064 7.47611 3.40384 7.47611 3.66683V6.52397H10.3333C10.5962 6.52397 10.8094 6.73717 10.8094 7.00016Z"
+                            fill="#1D39C4"
+                          />
+                        </svg>
+                        <AddDiscount
+                          setIsModalOpen={setIsModalOpenAddDiscount}
+                          visible={isModalOpenAddDiscount}
+                        />
+                      </>
+                    )}
                   </span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.discount)}</span>
                 </div>
                 <div className="checkout-card-grid">
                   <span style={gridStyleLeft}>
                     {t('common.Exchange currency')}{' '}
-                    <svg
-                      fill="none"
-                      height="14"
-                      style={svgButton}
-                      viewBox="0 0 14 14"
-                      width="14"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M6.99992 0.333496C3.38087 0.333496 0.333252 3.38111 0.333252 7.00016C0.333252 10.6192 3.38087 13.6668 6.99992 13.6668C10.619 13.6668 13.6666 10.6192 13.6666 7.00016C13.6666 3.38111 10.619 0.333496 6.99992 0.333496ZM10.8094 7.00016C10.8094 7.26316 10.5962 7.47635 10.3333 7.47635H7.47611V10.3335C7.47611 10.5965 7.26291 10.8097 6.99992 10.8097C6.73693 10.8097 6.52373 10.5965 6.52373 10.3335V7.47635H3.66658C3.40359 7.47635 3.19039 7.26316 3.19039 7.00016C3.19039 6.73717 3.40359 6.52397 3.66659 6.52397H6.52373V3.66683C6.52373 3.40384 6.73693 3.19064 6.99992 3.19064C7.26291 3.19064 7.47611 3.40384 7.47611 3.66683V6.52397H10.3333C10.5962 6.52397 10.8094 6.73717 10.8094 7.00016Z"
-                        fill="#1D39C4"
-                      />
-                    </svg>
+                    {reservationDetailInfo.data.status !== 'checkout' && (
+                      <svg
+                        fill="none"
+                        height="14"
+                        style={svgButton}
+                        viewBox="0 0 14 14"
+                        width="14"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.99992 0.333496C3.38087 0.333496 0.333252 3.38111 0.333252 7.00016C0.333252 10.6192 3.38087 13.6668 6.99992 13.6668C10.619 13.6668 13.6666 10.6192 13.6666 7.00016C13.6666 3.38111 10.619 0.333496 6.99992 0.333496ZM10.8094 7.00016C10.8094 7.26316 10.5962 7.47635 10.3333 7.47635H7.47611V10.3335C7.47611 10.5965 7.26291 10.8097 6.99992 10.8097C6.73693 10.8097 6.52373 10.5965 6.52373 10.3335V7.47635H3.66658C3.40359 7.47635 3.19039 7.26316 3.19039 7.00016C3.19039 6.73717 3.40359 6.52397 3.66659 6.52397H6.52373V3.66683C6.52373 3.40384 6.73693 3.19064 6.99992 3.19064C7.26291 3.19064 7.47611 3.40384 7.47611 3.66683V6.52397H10.3333C10.5962 6.52397 10.8094 6.73717 10.8094 7.00016Z"
+                          fill="#1D39C4"
+                        />
+                      </svg>
+                    )}
                   </span>
                   <span style={gridStyleRight}>USD</span>
                 </div>
@@ -834,7 +869,12 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                   {t('reservation.Checkout')}
                 </PattonButton>
               ) : (
-                <PattonButton onClick={handlePayment} style={{ width: '100%' }} type="primary">
+                <PattonButton
+                  disabled={reservationDetailInfo.data.status === 'checkout'}
+                  onClick={handlePayment}
+                  style={{ width: '100%' }}
+                  type="primary"
+                >
                   {t('common.Payment')}
                 </PattonButton>
               )}

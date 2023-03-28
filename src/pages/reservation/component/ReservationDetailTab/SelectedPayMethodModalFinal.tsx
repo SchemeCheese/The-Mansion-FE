@@ -32,8 +32,8 @@ function SelectedPayMethodModalFinal({ setIsModalSelectedPaymentMethod, visible 
   const { id } = useParams();
 
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
-  const totalAmountAfterDiscount = reservationDetailInfo?.data.amount_info?.grand_total;
-  const totalAmount = reservationDetailInfo?.data.amount_info?.grand_total;
+  const totalAmountAfterDiscount = reservationDetailInfo?.data.amount_info?.unpaid;
+  const totalAmount = reservationDetailInfo?.data.amount_info?.unpaid;
   const exchangeRates = reservationDetailInfo.data.exchange_rates;
   const { amount_info: amountInfo, paid, transactions } = reservationDetailInfo.data;
 
@@ -90,9 +90,9 @@ function SelectedPayMethodModalFinal({ setIsModalSelectedPaymentMethod, visible 
               payment_methods: paymentMethods,
               reservation_id: id ?? '',
               paid: {
-                total_amount: amountInfo.grand_total,
+                total_amount: totalAmount,
                 discount_amount: amountInfo.discount,
-                balance_amount: 0,
+                balance_amount: totalAmount - paidAmount,
               },
             },
           }),
