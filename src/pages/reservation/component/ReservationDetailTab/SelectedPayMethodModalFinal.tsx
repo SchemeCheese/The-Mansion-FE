@@ -32,8 +32,8 @@ function SelectedPayMethodModalFinal({ setIsModalSelectedPaymentMethod, visible 
   const { id } = useParams();
 
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
-  const totalAmountAfterDiscount = reservationDetailInfo?.data.amount_info?.grand_total;
-  const totalAmount = reservationDetailInfo?.data.amount_info?.grand_total;
+  const totalAmountAfterDiscount = reservationDetailInfo?.data.amount_info?.unpaid;
+  const totalAmount = reservationDetailInfo?.data.amount_info?.unpaid;
   const exchangeRates = reservationDetailInfo.data.exchange_rates;
   const { amount_info: amountInfo, paid, transactions } = reservationDetailInfo.data;
 

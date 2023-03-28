@@ -2,13 +2,13 @@
 Module Name : Reservation
 Developer Name : MinhNV
 Created Date : 15/09/2022
-Updated Date : 23/11/2022
+Updated Date : 29/03/2023
 Main functions : Payment Detail Modal
 ************************************ */
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Form, Input, Modal, Row, Select, Table } from 'antd';
+import { Button, Col, Form, Modal, Row, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -184,7 +184,7 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
           <Col span={8}>
             <span>{t('common.Total Amount (VND)')}</span>
             <span style={{ fontSize: 16, float: 'right' }}>
-              {formatNumber(amountInfo?.sub_total)}
+              {formatNumber(amountInfo?.grand_total)}
             </span>
           </Col>
         </Row>
@@ -199,18 +199,14 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
           <Col span={16} />
           <Col span={8} style={{ marginBottom: 10, marginTop: 7 }}>
             <span style={{ lineHeight: '31px' }}>{t('common.Total')}</span>
-            <span style={{ fontSize: 20, float: 'right' }}>
-              {formatNumber(amountInfo?.sub_total)}
-            </span>
+            <span style={{ fontSize: 20, float: 'right' }}>{formatNumber(amountInfo?.paid)}</span>
           </Col>
         </Row>
         <Row>
           <Col span={16} />
           <Col span={8}>
             <span style={{ lineHeight: '31px' }}>{t('common.Balance')}</span>
-            <span style={{ fontSize: 20, float: 'right' }}>
-              {formatNumber(amountInfo?.grand_total)}
-            </span>
+            <span style={{ fontSize: 20, float: 'right' }}>{formatNumber(amountInfo?.unpaid)}</span>
           </Col>
         </Row>
       </Form>
