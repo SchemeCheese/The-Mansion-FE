@@ -248,7 +248,7 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success(t('common.Booking room successfully!'));
+      message.success(t('message.Booking room successfully!'));
 
       dispatch(
         getReservation({
