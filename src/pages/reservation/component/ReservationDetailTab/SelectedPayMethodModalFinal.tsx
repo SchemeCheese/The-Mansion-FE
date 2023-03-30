@@ -90,9 +90,9 @@ function SelectedPayMethodModalFinal({ setIsModalSelectedPaymentMethod, visible 
               payment_methods: paymentMethods,
               reservation_id: id ?? '',
               paid: {
-                total_amount: amountInfo.grand_total,
+                total_amount: totalAmount,
                 discount_amount: amountInfo.discount,
-                balance_amount: 0,
+                balance_amount: totalAmount - paidAmount,
               },
             },
           }),
