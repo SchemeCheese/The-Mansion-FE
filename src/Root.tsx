@@ -104,6 +104,42 @@ function Root() {
       </span>
     </>
   );
+  const dashboardBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/front-desk');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('common.Dashboard')}
+      </span>
+    </>
+  );
+  const deviceBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/front-desk');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('common.Device Manager')}
+      </span>
+    </>
+  );
   const branchManagerBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
@@ -142,7 +178,7 @@ function Root() {
           <Routes>
             <Route
               element={
-                <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
+                <PublicRoute isAuthenticated={isAuthenticated} to="/dashboard">
                   <Login />
                 </PublicRoute>
               }
@@ -150,7 +186,7 @@ function Root() {
             />
             <Route
               element={
-                <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
+                <PublicRoute isAuthenticated={isAuthenticated} to="/dashboard">
                   <Login />
                 </PublicRoute>
               }
@@ -265,7 +301,7 @@ function Root() {
             <Route
               element={
                 <PrivateRoute
-                  breadCrumb={frontDeskBreadCrum}
+                  breadCrumb={dashboardBreadCrum}
                   isAuthenticated={isAuthenticated}
                   to="/"
                 >
@@ -288,11 +324,7 @@ function Root() {
             />
             <Route
               element={
-                <PrivateRoute
-                  breadCrumb={frontDeskBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  to="/"
-                >
+                <PrivateRoute breadCrumb={deviceBreadCrum} isAuthenticated={isAuthenticated} to="/">
                   <DeviceManager />
                 </PrivateRoute>
               }

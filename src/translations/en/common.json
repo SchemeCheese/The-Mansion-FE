@@ -174,5 +174,9 @@
   "Continue to checkout": "Continue to checkout",
   "Late Checkout Fee": "Late Checkout Fee",
   "Unpaid": "Unpaid",
-  "Before Tax and Fee": "Before Tax and Fee"
+  "Before Tax and Fee": "Before Tax and Fee",
+  "Dashboard": "Dashboard",
+  "Power Monitoring": "Power Monitoring",
+  "Branch Manager": "Branch Manager",
+  "Device Manager": "Device Manager"
 }
