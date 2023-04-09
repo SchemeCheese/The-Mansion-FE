@@ -15,6 +15,7 @@ import { selectUser } from 'selectors';
 import { useAppSelector } from 'modules/hooks';
 
 import {
+  getReservationRoomCheckinTodayAction,
   getReservationRoomCheckoutTodayAction,
   getReservationRoomInhouseAction,
   searchReservation,
@@ -51,6 +52,19 @@ function FrontDesk() {
           checkout_to: '',
           inhouse: '',
           type: 'checkin_today',
+        }),
+      );
+
+      dispatch(
+        getReservationRoomCheckinTodayAction({
+          filter: {
+            booker_info: '',
+            current_page: 1,
+            per_page: 10,
+            room_no: '',
+            source_id: '',
+            status: '',
+          },
         }),
       );
     }
@@ -104,7 +118,7 @@ function FrontDesk() {
         {user.permission.frontDeskCheckin.view && (
           <>
             <TabPane key="2" className="content" tab={t('frontDesk.CheckIn Today')}>
-              <ReservationList type="checkin_today" />
+              <ReservationRoomList type="checkin_today" />
             </TabPane>
             <TabPane key="3" className="content" tab={t('frontDesk.In House')}>
               <ReservationRoomList type="inhouse_today" />
