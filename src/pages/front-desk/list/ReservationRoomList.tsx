@@ -10,9 +10,10 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, Pagination, Row, Spin, Table } from 'antd';
-import { formatNumber } from 'helpers';
+import { Col, Pagination, Row, Spin, Table, Tag } from 'antd';
+import { formatNumber, mappingStatus } from 'helpers';
 import {
+  selectReservationRoomCheckinTodayState,
   selectReservationRoomCheckoutTodayState,
   selectReservationRoomInhouseState,
 } from 'selectors';
@@ -48,6 +49,9 @@ function ReservationRoomList({ type }: Props) {
   const reservationRoomCheckoutTodayData: any = useAppSelector(
     selectReservationRoomCheckoutTodayState,
   );
+  const reservationRoomCheckinTodayData: any = useAppSelector(
+    selectReservationRoomCheckinTodayState,
+  );
 
   const onChangeCurrentPage = (page: number, pageSize: number) => {
     setSearchCondition({
@@ -70,11 +74,30 @@ function ReservationRoomList({ type }: Props) {
       title: t('common.Room No'),
       dataIndex: 'room_no',
       key: 'room_no',
+      hidden: type !== 'inhouse_today' && type !== 'checkout_today',
     },
     {
       title: t('reservation.Folio ID'),
       dataIndex: 'folio_id',
       key: 'folio_id',
+    },
+    {
+      title: t('common.Status'),
+      dataIndex: 'status',
+      key: 'status',
+      hidden: type !== 'checkin_today',
+    },
+    {
+      title: t('common.Created Date'),
+      dataIndex: 'created_date',
+      key: 'created_date',
+      hidden: type !== 'checkin_today',
+    },
+    {
+      title: t('common.Source TA'),
+      dataIndex: 'source',
+      key: 'source',
+      hidden: type !== 'checkin_today',
     },
     {
       title: t('common.Booker Name'),
@@ -83,8 +106,14 @@ function ReservationRoomList({ type }: Props) {
     },
     {
       title: t('common.Phone'),
-      dataIndex: 'phone',
-      key: 'phone',
+      dataIndex: 'booker_phone',
+      key: 'booker_phone',
+    },
+    {
+      title: t('reservation.Email.title'),
+      dataIndex: 'booker_email',
+      key: 'booker_email',
+      hidden: type !== 'checkin_today',
     },
     {
       title: t('reservation.Checkin'),
@@ -98,6 +127,28 @@ function ReservationRoomList({ type }: Props) {
     },
     {
       title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('common.Total Guest')}</div>;
+      },
+      dataIndex: 'total_guest',
+      key: 'total_guest',
+      render: (text: string) => (
+        <div style={{ textAlign: 'center', color: 'rgba(0, 0, 0, 0.65)' }}>{text}</div>
+      ),
+      hidden: type !== 'checkin_today',
+    },
+    {
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('common.Total Room')}</div>;
+      },
+      dataIndex: 'total_room',
+      key: 'total_room',
+      render: (text: string) => (
+        <div style={{ textAlign: 'center', color: 'rgba(0, 0, 0, 0.65)' }}>{text}</div>
+      ),
+      hidden: type !== 'checkin_today',
+    },
+    {
+      title: () => {
         return <div style={{ textAlign: 'center' }}>{t('common.Guest')}</div>;
       },
       dataIndex: 'total_guest',
@@ -105,6 +156,7 @@ function ReservationRoomList({ type }: Props) {
       render: (text: string) => (
         <div style={{ textAlign: 'center', color: 'rgba(0, 0, 0, 0.65)' }}>{text}</div>
       ),
+      hidden: type === 'checkin_today',
     },
     {
       title: t('common.Total Amount'),
@@ -145,6 +197,40 @@ function ReservationRoomList({ type }: Props) {
       },
       dataIndex: 'notes',
       key: 'notes',
+      hidden: type === 'checkin_today',
+    },
+    {
+      title: () => {
+        return <div style={{ textAlign: 'center' }}>{t('common.Alert')}</div>;
+      },
+      dataIndex: 'alert',
+      key: 'alert',
+      render: (text: string, record: any) => {
+        const alert = [];
+
+        if (record.isEarlyCheckin) {
+          alert.push(<Tag color="#f50">E/L</Tag>);
+        }
+
+        if (record.isLateCheckout) {
+          alert.push(<Tag color="#2db7f5">E/C</Tag>);
+        }
+
+        if (record.isDropOff) {
+          alert.push(<Tag color="#87d068">D/O</Tag>);
+        }
+
+        if (record.isPickup) {
+          alert.push(<Tag color="#108ee9">P/U</Tag>);
+        }
+
+        if (alert.length > 0) {
+          return <div style={{ minWidth: 0 }}>{alert}</div>;
+        }
+
+        return <div style={{ textAlign: 'center' }}>{text ?? '-'}</div>;
+      },
+      hidden: type !== 'checkin_today',
     },
   ].filter(item => !item.hidden);
 
@@ -158,6 +244,7 @@ function ReservationRoomList({ type }: Props) {
           paid: item.total_paid,
           remain: item.total_remain,
           notes: item.note,
+          status: mappingStatus(item.status),
         };
       });
     }
@@ -181,6 +268,12 @@ function ReservationRoomList({ type }: Props) {
     total = reservationRoomCheckoutTodayData.total;
   }
 
+  if (type === 'checkin_today') {
+    tableData = convertReservationRoomsData(reservationRoomCheckinTodayData.data?.items);
+    currentPage = reservationRoomCheckinTodayData.filter.current_page;
+    total = reservationRoomCheckinTodayData.total;
+  }
+
   return (
     <Row style={{ background: 'white', padding: 16 }}>
       <Col span={24}>
@@ -200,11 +293,7 @@ function ReservationRoomList({ type }: Props) {
               onRow={(record: any) => {
                 return {
                   onClick: () => {
-                    navigate(
-                      `/front-desk/${type.replace('_', '-')}/${record.reservation_id}/detail/${
-                        record.reservation_detail_id
-                      }`,
-                    );
+                    navigate(`/front-desk/checkin-today/${record.reservation_id}`);
                   },
                 };
               }}

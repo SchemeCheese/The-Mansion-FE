@@ -870,7 +870,9 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 </PattonButton>
               ) : (
                 <PattonButton
-                  disabled={reservationDetailInfo.data.status === 'checkout'}
+                  disabled={
+                    reservationDetailInfo.data.status === 'checkout' || amountInfo?.unpaid === 0
+                  }
                   onClick={handlePayment}
                   style={{ width: '100%' }}
                   type="primary"

@@ -64,6 +64,8 @@ export const mappingStatus = (status: string) => {
       return 'No Show';
     case 'waitlist':
       return 'Waitlist';
+    case 'reserved':
+      return 'Reserved';
     default:
       return '';
   }

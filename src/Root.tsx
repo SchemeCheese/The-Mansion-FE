@@ -104,6 +104,7 @@ function Root() {
       </span>
     </>
   );
+
   const dashboardBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
@@ -122,6 +123,7 @@ function Root() {
       </span>
     </>
   );
+
   const deviceBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
@@ -140,6 +142,7 @@ function Root() {
       </span>
     </>
   );
+
   const branchManagerBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
@@ -155,6 +158,25 @@ function Root() {
         style={{ paddingLeft: 8, cursor: 'pointer' }}
       >
         {t('branchManager.title')}
+      </span>
+    </>
+  );
+
+  const nightAuditBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/night-audit');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('common.Night Audit')}
       </span>
     </>
   );
@@ -240,7 +262,7 @@ function Root() {
             <Route
               element={
                 <PrivateRoute
-                  breadCrumb={reservationBreadCrum}
+                  breadCrumb={nightAuditBreadCrum}
                   isAuthenticated={isAuthenticated}
                   to="/"
                 >

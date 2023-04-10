@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, Col, Form, message, Modal, Row, Select, Switch, Table } from 'antd';
+import { Alert, Card, Col, Form, message, Modal, Row, Select, Switch, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
@@ -507,7 +507,6 @@ function NightAudit() {
 
   return (
     <>
-      <p className="title">{t('nightAudit.Night Audit')}</p>
       {/* <Button onClick={showModal}>Payment Method</Button> */}
       <Modal
         okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
@@ -561,7 +560,7 @@ function NightAudit() {
             </span>
           </p>
         </Col>
-        <Col span={12} style={{ textAlign: 'right', paddingRight: 20 }}>
+        <Col span={12} style={{ textAlign: 'right', paddingRight: 20, paddingTop: 10 }}>
           <PattonButton
             disabled={!branchFacilities.data.can_night_audit}
             onClick={() => {
@@ -580,6 +579,13 @@ function NightAudit() {
           </PattonButton>
         </Col>
       </Row>
+      {branchFacilities.data.warning_na_msg && (
+        <Row>
+          <Col span={24} style={{ paddingBottom: 20 }}>
+            <Alert banner message={branchFacilities.data.warning_na_msg} />
+          </Col>
+        </Row>
+      )}
       <Row className="content">
         <Card bordered={false} style={{ width: '100%' }} title={t('nightAudit.I. Checkin Today')}>
           <Table
