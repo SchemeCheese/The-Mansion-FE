@@ -5,6 +5,7 @@ import branchManagerEn from 'translations/en/branchManager.json';
 import commonEn from 'translations/en/common.json';
 import frontDeskEn from 'translations/en/frontDesk.json';
 import guestEn from 'translations/en/guest.json';
+import houseKeepingEn from 'translations/en/houseKeeping.json';
 import messageEn from 'translations/en/message.json';
 import nightAuditEn from 'translations/en/nightAudit.json';
 import payDetailEn from 'translations/en/payDetail.json';
@@ -17,6 +18,7 @@ import branchManagerJa from 'translations/ja/branchManager.json';
 import commonJa from 'translations/ja/common.json';
 import frontDeskJa from 'translations/ja/frontDesk.json';
 import guestJa from 'translations/ja/guest.json';
+import houseKeepingJa from 'translations/ja/houseKeeping.json';
 import messageJa from 'translations/ja/message.json';
 import nightAuditJa from 'translations/ja/nightAudit.json';
 import payDetailJA from 'translations/ja/payDetail.json';
@@ -29,6 +31,7 @@ import branchManagerVi from 'translations/vi/branchManager.json';
 import commonVi from 'translations/vi/common.json';
 import frontDeskVi from 'translations/vi/frontDesk.json';
 import guestVi from 'translations/vi/guest.json';
+import houseKeepingVi from 'translations/vi/houseKeeping.json';
 import messageVi from 'translations/vi/message.json';
 import nightAuditVi from 'translations/vi/nightAudit.json';
 import payDetailVi from 'translations/vi/payDetail.json';
@@ -48,6 +51,7 @@ i18n.use(initReactI18next).init({
         guest: guestEn,
         message: messageEn,
         nightAudit: nightAuditEn,
+        houseKeeping: houseKeepingEn,
         paySelected: paySelectedEn,
         auditRoomCharge: auditRoomChargeEn,
         transaction: transactionEn,
@@ -65,6 +69,7 @@ i18n.use(initReactI18next).init({
         guest: guestJa,
         message: messageJa,
         nightAudit: nightAuditJa,
+        houseKeeping: houseKeepingJa,
         paySelected: paySelectedJa,
         auditRoomCharge: auditRoomChargeJa,
         transaction: transactionJa,
@@ -82,6 +87,7 @@ i18n.use(initReactI18next).init({
         guest: guestVi,
         message: messageVi,
         nightAudit: nightAuditVi,
+        houseKeeping: houseKeepingVi,
         paySelected: paySelectedVi,
         auditRoomCharge: auditRoomChargeVi,
         transaction: transactionVi,

@@ -1,0 +1,46 @@
+.house-keeping-content .ant-card-head-title {
+  font-style: normal;
+  font-weight: 400 !important;
+  font-size: 14px;
+  line-height: 22px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.house-keeping-content .ant-card-body p {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22px;
+  color: rgba(0, 0, 0, 0.45);
+}
+.house-keeping-content .ant-card-body .ant-radio-wrapper {
+  margin: 0 8px 15px 0;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+}
+.house-keeping-content .ant-card-bordered {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+.house-keeping-content .ant-card-head {
+  background: #f7f9fa;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0;
+  box-shadow: none;
+}
+.house-keeping-content .ant-radio-checked:after {
+  border: 1px solid #1d39c4;
+}
+.house-keeping-content .ant-radio-checked .ant-radio-inner {
+  border-color: #1d39c4;
+}
+.house-keeping-content .ant-radio-inner::after {
+  background-color: #1d39c4;
+}
+.ant-radio-input:focus + .ant-radio-inner,
+.ant-radio-wrapper:hover .ant-radio,
+.ant-radio:hover .ant-radio-inner {
+  border-color: #1d39c4 !important;
+}
