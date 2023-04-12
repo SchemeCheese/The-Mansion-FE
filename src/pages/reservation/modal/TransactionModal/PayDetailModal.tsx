@@ -44,7 +44,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
   const { Option } = Select;
 
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
-  const { amountInfo } = reservationDetailInfo.data;
+  const { amount_info: amountInfo } = reservationDetailInfo.data;
 
   const descriptionColumns: ColumnsType<DataTypeDescription> = [
     {
@@ -142,7 +142,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
             borderColor: '#ff4d4f',
             borderRadius: 4,
             width: '109px',
-            display: amountInfo === 0 ? 'none' : '',
+            display: amountInfo?.unpaid === 0 ? 'none' : '',
           }}
           type="primary"
         >
