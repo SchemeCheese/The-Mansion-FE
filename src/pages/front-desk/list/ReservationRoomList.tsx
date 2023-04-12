@@ -9,8 +9,7 @@ Main functions : Reservation Room List Page
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Col, Pagination, Row, Spin, Table, Tag } from 'antd';
+import { Col, Pagination, Row, Table, Tag } from 'antd';
 import { formatNumber, mappingStatus } from 'helpers';
 import {
   selectReservationRoomCheckinTodayState,
@@ -42,7 +41,6 @@ function ReservationRoomList({ type }: Props) {
   });
 
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const reservationRoomInhouseData: any = useAppSelector(selectReservationRoomInhouseState);

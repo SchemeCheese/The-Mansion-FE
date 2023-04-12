@@ -12,6 +12,9 @@ import { Button, Col, Form, Input, Modal, Row, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
+import { selectGetReservationDetail } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 interface Props {
   payment: any;
@@ -39,6 +42,9 @@ interface DataTypePayment {
 function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
   const { t } = useTranslation();
   const { Option } = Select;
+
+  const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
+  const { amountInfo } = reservationDetailInfo.data;
 
   const descriptionColumns: ColumnsType<DataTypeDescription> = [
     {
@@ -96,7 +102,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
     return {
       date: moment(item.date).format('DD/MM/YYYY'),
       description: item.description,
-      unit_price: formatNumber(item.unit_price),
+      unit_price: formatNumber(item.sales_price),
       amount: item.quantity,
       total: formatNumber(item.total),
     };
@@ -136,6 +142,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
             borderColor: '#ff4d4f',
             borderRadius: 4,
             width: '109px',
+            display: amountInfo === 0 ? 'none' : '',
           }}
           type="primary"
         >

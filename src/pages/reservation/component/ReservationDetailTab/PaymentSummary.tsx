@@ -57,7 +57,7 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
     },
     {
       title: t('common.Unit price'),
-      dataIndex: 'unit_price',
+      dataIndex: 'sales_price',
       align: 'right',
     },
     {
