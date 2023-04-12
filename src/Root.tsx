@@ -11,6 +11,7 @@ import ReservationCheckinTodayDetail from 'pages/front-desk/detail/checkin_today
 import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_today';
 import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
 import FrontDesk from 'pages/front-desk/list';
+import HouseKeeping from 'pages/house-keeping';
 import NightAudit from 'pages/night_audit';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
@@ -180,6 +181,24 @@ function Root() {
       </span>
     </>
   );
+  const houseKeepingBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/house-keeping');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('common.House Keeping')}
+      </span>
+    </>
+  );
 
   return (
     <ThemeProvider theme={theme}>
@@ -270,6 +289,19 @@ function Root() {
                 </PrivateRoute>
               }
               path="night-audit"
+            />
+
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={houseKeepingBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <HouseKeeping />
+                </PrivateRoute>
+              }
+              path="house-keeping"
             />
 
             <Route
