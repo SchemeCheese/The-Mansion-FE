@@ -284,36 +284,48 @@ function ReservationRoomList({ type }: Props) {
         />
       </Col>
       <Col span={24} style={{ paddingTop: 16 }}>
-        {true ? (
-          <>
-            <Table
-              className="reservation-list"
-              columns={tableColumns}
-              dataSource={tableData}
-              onRow={(record: any) => {
-                return {
-                  onClick: () => {
-                    navigate(`/front-desk/checkin-today/${record.reservation_id}`);
-                  },
-                };
-              }}
-              pagination={false}
-              size="small"
-              style={{ overflowX: 'hidden', overflowY: 'auto', minHeight: 450 }}
-            />
-            {total > 0 && (
-              <Pagination
-                current={currentPage}
-                onChange={onChangeCurrentPage}
-                pageSize={10}
-                showSizeChanger={false}
-                style={{ float: 'right', marginTop: 15 }}
-                total={total}
-              />
-            )}
-          </>
-        ) : (
-          <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />
+        <Table
+          className="reservation-list"
+          columns={tableColumns}
+          dataSource={tableData}
+          onRow={(record: any) => {
+            return {
+              onClick: () => {
+                if (type === 'inhouse_today') {
+                  window.open(
+                    `/front-desk/inhouse-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
+                    '_blank',
+                    'noopener,noreferrer',
+                  );
+                } else if (type === 'checkin_today') {
+                  window.open(
+                    `/front-desk/checkin-today/${record.reservation_id}`,
+                    '_blank',
+                    'noopener,noreferrer',
+                  );
+                } else {
+                  window.open(
+                    `/front-desk/checkout-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
+                    '_blank',
+                    'noopener,noreferrer',
+                  );
+                }
+              },
+            };
+          }}
+          pagination={false}
+          size="small"
+          style={{ overflowX: 'hidden', overflowY: 'auto', minHeight: 450 }}
+        />
+        {total > 0 && (
+          <Pagination
+            current={currentPage}
+            onChange={onChangeCurrentPage}
+            pageSize={10}
+            showSizeChanger={false}
+            style={{ float: 'right', marginTop: 15 }}
+            total={total}
+          />
         )}
       </Col>
     </Row>
