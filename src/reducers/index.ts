@@ -59,6 +59,9 @@ import getWaterYesterday, { getWaterYesterdayState } from './getWaterYesterday';
 import github, { githubState } from './github';
 import nightAudit, { nightAuditState } from './nightAudit';
 import noshow, { noshowState } from './noshow';
+import paymentVNPayReservationDetail, {
+  paymentVNPayReservationDetailState,
+} from './paymentVNPayReservationDetail';
 import printCheckinConfirmPDFReservationDetail, {
   printCheckinConfirmPDFReservationDetailState,
 } from './printCheckinConfirmPDFReservationDetail';
@@ -167,6 +170,7 @@ export const initialState = {
   getElectricPower: getElectricPowerState,
   getDeviceManager: getDeviceManagerState,
   getDurationCurve: getDurationCurveState,
+  paymentVNPayReservationDetail: paymentVNPayReservationDetailState,
 };
 
 export default {
@@ -243,4 +247,5 @@ export default {
   ...getDeviceManager,
   ...getDurationCurve,
   ...downloadCSVBranchManager,
+  ...paymentVNPayReservationDetail,
 };

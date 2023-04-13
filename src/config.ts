@@ -41,6 +41,7 @@ export const ReservationEndpoint = {
   CHECKIN: 'api/v1/reservations',
   CHECKOUT: 'api/v1/reservations',
   CHECKOUT_ADD_LATE_FEE: 'api/v1/reservations',
+  VN_PAYMENT: 'api/v1/reservations',
 };
 
 export const RoomEndpoint = {

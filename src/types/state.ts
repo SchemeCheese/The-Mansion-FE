@@ -665,6 +665,18 @@ export interface HouseKeepingState {
   total: number;
 }
 
+export interface ReservationDetailPaymentVNPayPayload {
+  amount: number;
+  bank_code: string;
+  reservation_detail_id: string | number;
+  reservation_id: string | number;
+}
+
+export interface PaymentVNPayReservationDetailState {
+  payload: ReservationDetailPaymentVNPayPayload;
+  status: string;
+}
+
 export interface RootState {
   addDisk: AddDiskState;
   addItem: AddItemState;
@@ -715,6 +727,7 @@ export interface RootState {
   nightAudit: NightAuditState;
   noshow: NoShowState;
   notifications: NotificationsState;
+  paymentVNPayReservationDetail: PaymentVNPayReservationDetailState;
   printCheckinConfirmPDFReservationDetail: PrintCheckinConfirmPDFReservationDetailState;
   printDepositPDFReservationDetail: PrintDepositPDFReservationDetailState;
   printRegistrationCardPDFReservationDetail: PrintRegistrationCardPDFReservationDetailState;

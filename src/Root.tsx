@@ -15,6 +15,7 @@ import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today
 import FrontDesk from 'pages/front-desk/list';
 import HouseKeeping from 'pages/house-keeping';
 import NightAudit from 'pages/night_audit';
+import StatusPayment from 'pages/payment/StatusPayment';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
 import Reservation from 'pages/reservation/list';
@@ -279,7 +280,18 @@ function Root() {
               }
               path="/reservation/create"
             />
-
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <StatusPayment />
+                </PrivateRoute>
+              }
+              path="/status-payment"
+            />
             <Route
               element={
                 <PrivateRoute

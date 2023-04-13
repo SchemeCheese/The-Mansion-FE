@@ -31,6 +31,7 @@ import { useAppSelector } from 'modules/hooks';
 import {
   getReservation,
   getReservationDetail,
+  paymentVNPayReservationDetail,
   resendEmailReservationAction,
   resetReservation,
   resetReservationDetail,
@@ -120,6 +121,20 @@ function ReservationDetail() {
     setQuantity(1);
     setRoomSelected([]);
     setIsModalVisible(true);
+  };
+
+  const handlePaymentVNPay = () => {
+    dispatch(
+      paymentVNPayReservationDetail({
+        payload: {
+          reservation_id: id ?? '',
+          reservation_detail_id: 1,
+          amount: 50000,
+          bank_code: 'VNBANK',
+        },
+      }),
+    );
+    console.log('handlePaymentVNPay');
   };
 
   const dispatch = useDispatch();
@@ -457,6 +472,9 @@ function ReservationDetail() {
               )}
             </Col>
           </Row>
+        </Col>
+        <Col span={24} style={{ paddingRight: 20, marginBottom: 10 }}>
+          <MButton onClick={handlePaymentVNPay}>Next</MButton>
         </Col>
       </Row>
       {!_.isEmpty(reservationRedux) && id && (

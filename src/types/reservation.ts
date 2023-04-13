@@ -225,3 +225,14 @@ export interface PrintCheckinConfirmPDFReservationDetailPayload {
   reservation_detail_ids: any;
   reservation_info_id: string | number;
 }
+
+export interface PaymentVNPayReservationDetailPayload {
+  amount: number;
+  bank_code: string;
+  reservation_detail_id: string | number;
+  reservation_id: string | number;
+}
+
+export interface PaymentVNPayReservationDetail {
+  payload: PaymentVNPayReservationDetailPayload;
+}
