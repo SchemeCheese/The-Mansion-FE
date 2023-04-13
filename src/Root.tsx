@@ -13,6 +13,7 @@ import ReservationCheckinTodayDetail from 'pages/front-desk/detail/checkin_today
 import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_today';
 import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
 import FrontDesk from 'pages/front-desk/list';
+import Guest from 'pages/guest';
 import HouseKeeping from 'pages/house-keeping';
 import NightAudit from 'pages/night_audit';
 import StatusPayment from 'pages/payment/StatusPayment';
@@ -433,6 +434,19 @@ function Root() {
                 </PrivateRoute>
               }
               path="/customer/:id"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <Guest />
+                </PrivateRoute>
+              }
+              path="/guest"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>

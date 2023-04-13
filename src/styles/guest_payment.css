@@ -1,0 +1,7 @@
+.guest-payment-content .ant-radio-wrapper {
+  display: unset !important;
+}
+
+.guest-payment-content .ant-steps-item-title {
+  font-size: 14px;
+}
