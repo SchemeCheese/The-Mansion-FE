@@ -677,6 +677,18 @@ export interface PaymentVNPayReservationDetailState {
   status: string;
 }
 
+export interface ReservationDetailPaymentMomoPayPayload {
+  amount: number;
+  request_type: string;
+  reservation_detail_id: string | number;
+  reservation_id: string | number;
+}
+
+export interface PaymentMomoPayReservationDetailState {
+  payload: ReservationDetailPaymentMomoPayPayload;
+  status: string;
+}
+
 export interface RootState {
   addDisk: AddDiskState;
   addItem: AddItemState;
@@ -727,6 +739,7 @@ export interface RootState {
   nightAudit: NightAuditState;
   noshow: NoShowState;
   notifications: NotificationsState;
+  paymentMomoPayReservationDetail: PaymentMomoPayReservationDetailState;
   paymentVNPayReservationDetail: PaymentVNPayReservationDetailState;
   printCheckinConfirmPDFReservationDetail: PrintCheckinConfirmPDFReservationDetailState;
   printDepositPDFReservationDetail: PrintDepositPDFReservationDetailState;

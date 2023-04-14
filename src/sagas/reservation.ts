@@ -28,6 +28,7 @@ import {
   getReservationNumber,
   getReservationNumberFinish,
   logOut,
+  paymentMomoPayReservationDetail,
   paymentVNPayReservationDetail,
   printCheckinConfirmPDFReservationDetail,
   printCheckinConfirmPDFReservationDetailSuccess,
@@ -788,6 +789,44 @@ export function* paymentVNPaySaga({ payload }: ReturnType<typeof paymentVNPayRes
   }
 }
 
+export function* paymentMomoPaySaga({
+  payload,
+}: ReturnType<typeof paymentMomoPayReservationDetail>) {
+  try {
+    let url = '';
+
+    ({ url } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.MOMO_PAYMENT)}/${
+        payload.payload.reservation_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/paymentMomoPay`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+        },
+      },
+    ));
+
+    const win = window.open(url, '_blank');
+
+    if (win != null) {
+      win.focus();
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Can not create payment!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
@@ -819,5 +858,6 @@ export default function* root() {
       getPrintDepositPDFReservationDetailSaga,
     ),
     takeLatest(ActionTypes.RESERVATION_DETAIL_PAYMENT_VNPAY, paymentVNPaySaga),
+    takeLatest(ActionTypes.RESERVATION_DETAIL_PAYMENT_MOMOPAY, paymentMomoPaySaga),
   ]);
 }

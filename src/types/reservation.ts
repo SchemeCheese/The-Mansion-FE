@@ -236,3 +236,14 @@ export interface PaymentVNPayReservationDetailPayload {
 export interface PaymentVNPayReservationDetail {
   payload: PaymentVNPayReservationDetailPayload;
 }
+
+export interface PaymentMomoPayReservationDetailPayload {
+  amount: number;
+  request_type: string;
+  reservation_detail_id: string | number;
+  reservation_id: string | number;
+}
+
+export interface PaymentMomoPayReservationDetail {
+  payload: PaymentMomoPayReservationDetailPayload;
+}

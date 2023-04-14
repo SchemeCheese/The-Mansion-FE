@@ -31,6 +31,7 @@ import { useAppSelector } from 'modules/hooks';
 import {
   getReservation,
   getReservationDetail,
+  paymentMomoPayReservationDetail,
   paymentVNPayReservationDetail,
   resendEmailReservationAction,
   resetReservation,
@@ -135,6 +136,20 @@ function ReservationDetail() {
       }),
     );
     console.log('handlePaymentVNPay');
+  };
+
+  const handlePaymentMomoPay = () => {
+    dispatch(
+      paymentMomoPayReservationDetail({
+        payload: {
+          reservation_id: id ?? '',
+          reservation_detail_id: 1,
+          amount: 50000,
+          request_type: 'payWithATM',
+        },
+      }),
+    );
+    console.log('handlePaymentMomoPay');
   };
 
   const dispatch = useDispatch();
@@ -474,7 +489,10 @@ function ReservationDetail() {
           </Row>
         </Col>
         <Col span={24} style={{ paddingRight: 20, marginBottom: 10 }}>
-          <MButton onClick={handlePaymentVNPay}>Next</MButton>
+          <MButton onClick={handlePaymentVNPay}>Next VNPay</MButton>
+          <MButton onClick={handlePaymentMomoPay} style={{ marginLeft: 10 }}>
+            Next MomoPay
+          </MButton>
         </Col>
       </Row>
       {!_.isEmpty(reservationRedux) && id && (

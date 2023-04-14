@@ -1,3 +1,6 @@
+import paymentMomoPayReservationDetail, {
+  paymentMomoPayReservationDetailState,
+} from 'reducers/paymentMomoPayReservationDetail';
 import printDepositPDFReservationDetail, {
   printDepositPDFReservationDetailState,
 } from 'reducers/printDepositPDFReservationDetail';
@@ -171,6 +174,7 @@ export const initialState = {
   getDeviceManager: getDeviceManagerState,
   getDurationCurve: getDurationCurveState,
   paymentVNPayReservationDetail: paymentVNPayReservationDetailState,
+  paymentMomoPayReservationDetail: paymentMomoPayReservationDetailState,
 };
 
 export default {
@@ -248,4 +252,5 @@ export default {
   ...getDurationCurve,
   ...downloadCSVBranchManager,
   ...paymentVNPayReservationDetail,
+  ...paymentMomoPayReservationDetail,
 };

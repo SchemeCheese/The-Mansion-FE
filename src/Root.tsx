@@ -291,7 +291,7 @@ function Root() {
                   <StatusPayment />
                 </PrivateRoute>
               }
-              path="/status-payment"
+              path="/status-payment/:type"
             />
             <Route
               element={
