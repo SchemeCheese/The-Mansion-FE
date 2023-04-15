@@ -2,6 +2,10 @@
   display: unset !important;
 }
 
+.guest-payment-content .radio-payment-momo-vnpay .ant-radio-wrapper {
+  height: 50px;
+}
+
 .guest-payment-content .ant-steps-item-title {
   font-size: 14px;
 }

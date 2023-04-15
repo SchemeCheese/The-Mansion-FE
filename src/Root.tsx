@@ -14,6 +14,9 @@ import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_tod
 import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
 import FrontDesk from 'pages/front-desk/list';
 import Guest from 'pages/guest';
+import GuestCheckout from 'pages/guest/GuestCheckout';
+import GuestRoomNumber from 'pages/guest/GuestRoomNumber';
+import GuestThank from 'pages/guest/GuestThank';
 import HouseKeeping from 'pages/house-keeping';
 import NightAudit from 'pages/night_audit';
 import StatusPayment from 'pages/payment/StatusPayment';
@@ -206,7 +209,7 @@ function Root() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppWrapper data-testid="app">
+      <AppWrapper className="custom-wrapper" data-testid="app">
         <Helmet
           defer={false}
           encodeSpecialCharacters
@@ -447,6 +450,45 @@ function Root() {
                 </PrivateRoute>
               }
               path="/guest"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <GuestCheckout />
+                </PrivateRoute>
+              }
+              path="/guest-checkout"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <GuestRoomNumber />
+                </PrivateRoute>
+              }
+              path="/guest-room-number"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <GuestThank />
+                </PrivateRoute>
+              }
+              path="/guest-thank"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>

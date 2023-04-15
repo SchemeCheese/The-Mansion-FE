@@ -7,6 +7,7 @@ import customerEn from 'translations/en/customer.json';
 import customerDetailEn from 'translations/en/customerDetail.json';
 import frontDeskEn from 'translations/en/frontDesk.json';
 import guestEn from 'translations/en/guest.json';
+import guestCheckoutEn from 'translations/en/guestCheckout.json';
 import houseKeepingEn from 'translations/en/houseKeeping.json';
 import messageEn from 'translations/en/message.json';
 import nightAuditEn from 'translations/en/nightAudit.json';
@@ -22,6 +23,7 @@ import customerJa from 'translations/ja/customer.json';
 import customerDetailJa from 'translations/ja/customerDetail.json';
 import frontDeskJa from 'translations/ja/frontDesk.json';
 import guestJa from 'translations/ja/guest.json';
+import guestCheckoutJa from 'translations/ja/guestCheckout.json';
 import houseKeepingJa from 'translations/ja/houseKeeping.json';
 import messageJa from 'translations/ja/message.json';
 import nightAuditJa from 'translations/ja/nightAudit.json';
@@ -37,6 +39,7 @@ import customerVi from 'translations/vi/customer.json';
 import customerDetailVi from 'translations/vi/customerDetail.json';
 import frontDeskVi from 'translations/vi/frontDesk.json';
 import guestVi from 'translations/vi/guest.json';
+import guestCheckoutVi from 'translations/vi/guestCheckout.json';
 import houseKeepingVi from 'translations/vi/houseKeeping.json';
 import messageVi from 'translations/vi/message.json';
 import nightAuditVi from 'translations/vi/nightAudit.json';
@@ -55,6 +58,7 @@ i18n.use(initReactI18next).init({
         common: commonEn,
         reservation: reservationEn,
         guest: guestEn,
+        guestCheckout: guestCheckoutEn,
         message: messageEn,
         nightAudit: nightAuditEn,
         houseKeeping: houseKeepingEn,
@@ -75,6 +79,7 @@ i18n.use(initReactI18next).init({
         common: commonJa,
         reservation: reservationJa,
         guest: guestJa,
+        guestCheckout: guestCheckoutJa,
         message: messageJa,
         nightAudit: nightAuditJa,
         houseKeeping: houseKeepingJa,
@@ -95,6 +100,7 @@ i18n.use(initReactI18next).init({
         common: commonVi,
         reservation: reservationVi,
         guest: guestVi,
+        guestCheckout: guestCheckoutVi,
         message: messageVi,
         nightAudit: nightAuditVi,
         houseKeeping: houseKeepingVi,

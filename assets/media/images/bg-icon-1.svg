@@ -1,0 +1,15 @@
+<svg width="235" height="196" viewBox="0 0 235 196" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <ellipse opacity="0.25" cx="31.5466" cy="45.6674" rx="29.1176" ry="29.1402" transform="rotate(-5 31.5466 45.6674)" fill="#CFDAE6"/>
+  <ellipse opacity="0.3" cx="31.5466" cy="45.6664" rx="21.5686" ry="21.5854" transform="rotate(-5 31.5466 45.6664)" fill="#CFDAE6"/>
+  <ellipse opacity="0.4" cx="190.378" cy="141.195" rx="23.7255" ry="23.7439" transform="rotate(-5 190.378 141.195)" stroke="#CFDAE6"/>
+  <ellipse opacity="0.5" cx="31.5462" cy="45.6672" rx="10.7843" ry="10.7927" transform="rotate(-5 31.5462 45.6672)" fill="#BACAD9"/>
+  <ellipse cx="26.1746" cy="46.1371" rx="5.39216" ry="10.7927" transform="rotate(-5 26.1746 46.1371)" fill="#BACAD9"/>
+  <g opacity="0.45">
+    <ellipse opacity="0.45" cx="190.379" cy="141.196" rx="6.47059" ry="6.47561" transform="rotate(-5 190.379 141.196)" fill="#E6A1A6"/>
+    <ellipse cx="3.23529" cy="6.47561" rx="3.23529" ry="6.47561" transform="matrix(-0.996195 0.0871557 0.0871557 0.996195 189.814 134.746)" fill="#E6A1A6"/>
+  </g>
+  <ellipse cx="229.638" cy="138.3" rx="1.61765" ry="1.6189" transform="rotate(-5 229.638 138.3)" fill="#CFDAE6"/>
+  <ellipse opacity="0.35" cx="194.161" cy="178.241" rx="1.61765" ry="1.6189" transform="rotate(-5 194.161 178.241)" fill="#E0B4B7"/>
+  <ellipse opacity="0.35" cx="188.348" cy="105.619" rx="2.15686" ry="2.15854" transform="rotate(-5 188.348 105.619)" fill="#E0B4B7"/>
+  <path opacity="0.8" d="M31.5001 46.5013L182.081 136.629" stroke="#CFDAE6"/>
+</svg>
