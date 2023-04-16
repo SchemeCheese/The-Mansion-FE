@@ -165,6 +165,10 @@ export const ActionTypes = keyMirror({
   BRANCH_MANAGER_GET_FINISH: undefined,
   BRANCH_MANAGER_DOWNLOAD_CSV: undefined,
   BRANCH_MANAGER_DOWNLOAD_CSV_FINISH: undefined,
+  HOUSE_KEEPING_GET: undefined,
+  HOUSE_KEEPING_GET_FINISH: undefined,
+  UPDATE_HOUSE_KEEPING: undefined,
+  UPDATE_HOUSE_KEEPING_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

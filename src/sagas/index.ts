@@ -12,6 +12,7 @@ import file from './file';
 import fuel from './fuel';
 import github from './github';
 import guest from './guest';
+import houseKeeping from './houseKeeping';
 import languageCode from './languageCode';
 import nightAudit from './nightAudit';
 import notifications from './notifications';
@@ -44,6 +45,7 @@ export default function* root() {
     fork(transaction),
     fork(payment),
     fork(guest),
+    fork(houseKeeping),
     fork(file),
     fork(languageCode),
     fork(branchHeader),

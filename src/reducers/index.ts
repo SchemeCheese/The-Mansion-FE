@@ -43,6 +43,7 @@ import getDurationCurve, { getDurationCurveState } from './getDurationCurve';
 import getElectricArea, { getElectricAreaState } from './getElectricArea';
 import getElectricPower, { getElectricPowerState } from './getElectricPower';
 import getElectricYesterday, { getElectricYesterdayState } from './getElectricYesterday';
+import getHouseKeeping, { getHouseKeepingState } from './getHouseKeeping';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import notifications, { notificationsState } from './getNotification';
 import getProductType, { getProductTypeState } from './getProductType';
@@ -82,6 +83,7 @@ import searchSchedule, { searchScheduleState } from './searchSchedule';
 import setMainGuest, { setMainGuestState } from './setMainGuest';
 import updateGeneralInfo, { updateGeneralInfoState } from './updateGeneralInfo';
 import updateGuest, { updateGuestState } from './updateGuest';
+import updateHouseKeeping, { updateHouseKeepingState } from './updateHouseKeeping';
 import updateNoteReservationDetail, {
   updateNoteReservationDetailState,
 } from './updateNoteReservationDetail';
@@ -132,6 +134,7 @@ export const initialState = {
   resendEmailReservation: resendEmailReservationState,
   updateGuest: updateGuestState,
   updateRoomAvailable: updateRoomAvailableState,
+  updateHouseKeeping: updateHouseKeepingState,
   removeGuest: removeGuestState,
   readNotification: readNotificationState,
   reservationRoomInhouse: reservationRoomInhouseState,
@@ -157,6 +160,7 @@ export const initialState = {
   printDepositPDFReservationDetail: printDepositPDFReservationDetailState,
   fuel: fuelState,
   getElectricYesterday: getElectricYesterdayState,
+  getHouseKeeping: getHouseKeepingState,
   getWaterYesterday: getWaterYesterdayState,
   getElectricArea: getElectricAreaState,
   getWaterArea: getWaterAreaState,
@@ -187,6 +191,7 @@ export default {
   ...addReservationDetail,
   ...cancelReservationDetail,
   ...updateGeneralInfo,
+  ...updateHouseKeeping,
   ...uploadFile,
   ...searchSchedule,
   ...searchAvailableSchedule,
@@ -230,6 +235,7 @@ export default {
   ...printDepositPDFReservationDetail,
   ...fuel,
   ...getElectricYesterday,
+  ...getHouseKeeping,
   ...getWaterYesterday,
   ...getElectricArea,
   ...getWaterArea,

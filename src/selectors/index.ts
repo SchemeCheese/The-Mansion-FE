@@ -290,3 +290,8 @@ export const selectDurationCurveState = createSelector(
   (state: RootState) => state.getDurationCurve,
   getDurationCurve => getDurationCurve,
 );
+
+export const selectHouseKeepingState = createSelector(
+  (state: RootState) => state.getHouseKeeping,
+  getHouseKeeping => getHouseKeeping,
+);

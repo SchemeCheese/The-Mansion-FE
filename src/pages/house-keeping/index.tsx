@@ -6,18 +6,46 @@ Updated Date: 12/04/2023
 Main functions: House Keeping Index
 ************************************ */
 
-import 'styles/house_keeping.css';
-
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, Form, Pagination, Radio, Row } from 'antd';
+import { Col, Form, Pagination, Row, Spin } from 'antd';
+import { selectHouseKeepingState } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { getHouseKeepingAction } from 'actions';
 
 import MInput from 'components/MInput';
+import Room from 'components/Room';
 
 function HouseKeeping() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const houseKeepingData: any = useAppSelector(selectHouseKeepingState);
+  const [searchCondition, setSearchCondition] = useState<any>({
+    current_page: 1,
+    per_page: 9,
+  });
+
+  useEffect(() => {
+    dispatch(getHouseKeepingAction(searchCondition));
+  }, []);
+
+  const onChangeCurrentPage = (page: number, perPage: number) => {
+    setSearchCondition({
+      ...searchCondition,
+      current_page: page,
+      per_page: perPage,
+    });
+    dispatch(getHouseKeepingAction(searchCondition));
+  };
+
+  const searchInput = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      dispatch(getHouseKeepingAction(searchCondition));
+    }
+  };
 
   return (
     <>
@@ -49,341 +77,47 @@ function HouseKeeping() {
           </p>
         </Col>
       </Row>
-      <Row className="content house-keeping-content">
-        <Row style={{ background: 'white', width: '100%' }}>
-          <Col span={24}>
-            <Col span={5}>
-              <Form style={{ padding: '16px 0 0 16px' }}>
-                <Form.Item className="search-house-keeping">
-                  <MInput placeholder="Enter Equipment Code" />
-                </Form.Item>
-              </Form>
+      {houseKeepingData ? (
+        <Row className="content house-keeping-content">
+          <Row style={{ background: 'white', width: '100%' }}>
+            <Col span={24}>
+              <Col span={5}>
+                <Form style={{ padding: '16px 0 0 16px' }}>
+                  <Form.Item className="search-house-keeping">
+                    <MInput
+                      onChange={e =>
+                        setSearchCondition({
+                          ...searchCondition,
+                          room_no: e.target.value,
+                        })
+                      }
+                      onKeyUp={event => searchInput(event)}
+                      placeholder="Enter Equipment Code"
+                    />
+                  </Form.Item>
+                </Form>
+              </Col>
             </Col>
-          </Col>
-          <Col span={8}>
-            <Card
-              style={{ textAlign: 'center', margin: '0 0 16px 16px' }}
-              title="Alex - Premium Alex"
-            >
-              <Row>
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Room Status')}</p>
-                  <Radio.Group>
-                    <Col>
-                      <Radio value={1}>Empty</Radio>
-                    </Col>
-                    <Col>
-                      {' '}
-                      <Radio value={2}>Busy</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Inspect</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-                <Col span={4} />
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Cleaning Status')}</p>
-                  <Radio.Group>
-                    <Col>
-                      <Radio value={1}>Ready</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={2}>Cleaning</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Dirty</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card
-              style={{ textAlign: 'center', margin: '0 0 16px 16px' }}
-              title="An Hoi - Superior Double"
-            >
-              <Row>
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Room Status')}</p>
-                  <Radio.Group value={1}>
-                    <Col>
-                      <Radio value={1}>Empty</Radio>
-                    </Col>
-                    <Col>
-                      {' '}
-                      <Radio value={2}>Busy</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Inspect</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-                <Col span={4} />
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Cleaning Status')}</p>
-                  <Radio.Group value={2}>
-                    <Col>
-                      <Radio value={1}>Ready</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={2}>Cleaning</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Dirty</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card
-              style={{ textAlign: 'center', margin: '0 16px 16px 16px' }}
-              title="Dong Hiep - Superior Double"
-            >
-              <Row>
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Room Status')}</p>
-                  <Radio.Group value={1}>
-                    <Col>
-                      <Radio value={1}>Empty</Radio>
-                    </Col>
-                    <Col>
-                      {' '}
-                      <Radio value={2}>Busy</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Inspect</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-                <Col span={4} />
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Cleaning Status')}</p>
-                  <Radio.Group value={3}>
-                    <Col>
-                      <Radio value={1}>Ready</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={2}>Cleaning</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Dirty</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card
-              style={{ textAlign: 'center', margin: '0 0 16px 16px' }}
-              title="Alex - Premium Alex"
-            >
-              <Row>
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Room Status')}</p>
-                  <Radio.Group value={3}>
-                    <Col>
-                      <Radio value={1}>Empty</Radio>
-                    </Col>
-                    <Col>
-                      {' '}
-                      <Radio value={2}>Busy</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Inspect</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-                <Col span={4} />
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Cleaning Status')}</p>
-                  <Radio.Group value={2}>
-                    <Col>
-                      <Radio value={1}>Ready</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={2}>Cleaning</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Dirty</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card
-              style={{ textAlign: 'center', margin: '0 0 16px 16px' }}
-              title="An Hoi - Superior Double"
-            >
-              <Row>
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Room Status')}</p>
-                  <Radio.Group value={1}>
-                    <Col>
-                      <Radio value={1}>Empty</Radio>
-                    </Col>
-                    <Col>
-                      {' '}
-                      <Radio value={2}>Busy</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Inspect</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-                <Col span={4} />
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Cleaning Status')}</p>
-                  <Radio.Group value={2}>
-                    <Col>
-                      <Radio value={1}>Ready</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={2}>Cleaning</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Dirty</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card
-              style={{ textAlign: 'center', margin: '0 16px 16px 16px' }}
-              title="Dong Hiep - Superior Double"
-            >
-              <Row>
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Room Status')}</p>
-                  <Radio.Group value={1}>
-                    <Col>
-                      <Radio value={1}>Empty</Radio>
-                    </Col>
-                    <Col>
-                      {' '}
-                      <Radio value={2}>Busy</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Inspect</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-                <Col span={4} />
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Cleaning Status')}</p>
-                  <Radio.Group value={3}>
-                    <Col>
-                      <Radio value={1}>Ready</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={2}>Cleaning</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Dirty</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card
-              style={{ textAlign: 'center', margin: '0 0 16px 16px' }}
-              title="Alex - Premium Alex"
-            >
-              <Row>
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Room Status')}</p>
-                  <Radio.Group value={3}>
-                    <Col>
-                      <Radio value={1}>Empty</Radio>
-                    </Col>
-                    <Col>
-                      {' '}
-                      <Radio value={2}>Busy</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Inspect</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-                <Col span={4} />
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Cleaning Status')}</p>
-                  <Radio.Group value={2}>
-                    <Col>
-                      <Radio value={1}>Ready</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={2}>Cleaning</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Dirty</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-          <Col span={8}>
-            <Card
-              style={{ textAlign: 'center', margin: '0 0 16px 16px' }}
-              title="An Hoi - Superior Double"
-            >
-              <Row>
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Room Status')}</p>
-                  <Radio.Group value={1}>
-                    <Col>
-                      <Radio value={1}>Empty</Radio>
-                    </Col>
-                    <Col>
-                      {' '}
-                      <Radio value={2}>Busy</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Inspect</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-                <Col span={4} />
-                <Col span={10} style={{ textAlign: 'left' }}>
-                  <p>{t('houseKeeping.Cleaning Status')}</p>
-                  <Radio.Group value={2}>
-                    <Col>
-                      <Radio value={1}>Ready</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={2}>Cleaning</Radio>
-                    </Col>
-                    <Col>
-                      <Radio value={3}>Dirty</Radio>
-                    </Col>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-
-          <Col span={24}>
-            <Pagination
-              defaultCurrent={2}
-              pageSize={5}
-              showSizeChanger={false}
-              style={{ float: 'right', marginTop: 15, padding: '0 16px 16px 0' }}
-              total={40}
-            />
-          </Col>
+          </Row>
+          <Room />
+          <Row style={{ background: 'white', width: '100%' }}>
+            <Col span={24}>
+              {houseKeepingData.total > 0 && (
+                <Pagination
+                  defaultCurrent={houseKeepingData.current_page}
+                  onChange={onChangeCurrentPage}
+                  pageSize={houseKeepingData.per_page}
+                  showSizeChanger={false}
+                  style={{ float: 'right', marginTop: 15, padding: '0 16px 16px 0' }}
+                  total={houseKeepingData.total}
+                />
+              )}
+            </Col>
+          </Row>
         </Row>
-      </Row>
+      ) : (
+        <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />
+      )}
     </>
   );
 }
