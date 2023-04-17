@@ -441,7 +441,7 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
 
               <span style={{ paddingLeft: 6 }}>
                 {' '}
-                {item.is_smocking ? t('frontDesk.Smorking') : t('frontDesk.No Smorking')}
+                {item.is_smocking ? t('frontDesk.Smoking') : t('frontDesk.No Smoking')}
               </span>
             </div>
           </Col>

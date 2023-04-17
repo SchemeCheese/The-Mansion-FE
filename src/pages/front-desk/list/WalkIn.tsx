@@ -113,7 +113,7 @@ function WalkIn() {
               marginLeft: 35,
             }}
           >
-            {t('common.Smocking Room')}
+            {t('common.Smoking Room')}
           </Checkbox>
         </Col>
         {roomsList.items.map((item: any) => {
