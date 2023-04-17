@@ -52,6 +52,9 @@ import notifications, { notificationsState } from './getNotification';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
 import getReservationByFolio, { getReservationByFolioState } from './getReservationByFolio';
+import getReservationCheckoutFromRoomNo, {
+  getReservationCheckoutFromRoomNoState,
+} from './getReservationCheckoutFromRoomNo';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
 import getRooms, { getRoomsState } from './getRooms';
@@ -175,6 +178,7 @@ export const initialState = {
   getDurationCurve: getDurationCurveState,
   paymentVNPayReservationDetail: paymentVNPayReservationDetailState,
   paymentMomoPayReservationDetail: paymentMomoPayReservationDetailState,
+  getReservationCheckoutFromRoomNo: getReservationCheckoutFromRoomNoState,
 };
 
 export default {
@@ -253,4 +257,5 @@ export default {
   ...downloadCSVBranchManager,
   ...paymentVNPayReservationDetail,
   ...paymentMomoPayReservationDetail,
+  ...getReservationCheckoutFromRoomNo,
 };

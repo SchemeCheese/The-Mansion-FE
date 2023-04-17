@@ -11,6 +11,7 @@ import 'styles/guest_payment.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import SVG from 'react-inlinesvg';
+import { useNavigate } from 'react-router-dom';
 import { Col, Row } from 'antd';
 import GuestFooter from 'pages/guest/GuestFooter';
 
@@ -21,6 +22,7 @@ import GuestBgIcon from './GuestBgIcon';
 
 function Guest() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -74,6 +76,9 @@ function Guest() {
             {t('common.Checkin')}
           </PattonButton>
           <MButton
+            onClick={() => {
+              navigate('/guest-room-number');
+            }}
             style={{
               borderRadius: 4,
               height: 40,

@@ -4,7 +4,14 @@ import { actionPayload } from 'modules/helpers';
 
 import { ActionTypes } from 'literals';
 
-import { GuestCreate, GuestRemove, GuestUpdate, SetMainGuest } from 'types';
+import {
+  GetReservationCheckoutFromRoomNo,
+  GetReservationCheckoutFromRoomNoResult,
+  GuestCreate,
+  GuestRemove,
+  GuestUpdate,
+  SetMainGuest,
+} from 'types';
 
 export const createGuest = createAction(ActionTypes.GUEST_CREATE, (payload: GuestCreate) =>
   actionPayload(payload),
@@ -30,3 +37,13 @@ export const setMainGuestAction = createAction(
 );
 
 export const setMainGuestSuccessAction = createAction(ActionTypes.SET_MAIN_GUEST_SUCCESS);
+
+export const getReservationCheckoutByRoomNoAction = createAction(
+  ActionTypes.GET_RESERVATION_DETAIL_BY_ROOM_NO,
+  (payload: GetReservationCheckoutFromRoomNo) => actionPayload(payload),
+);
+
+export const getReservationCheckoutByRoomNoActionSuccess = createAction(
+  ActionTypes.GET_RESERVATION_DETAIL_BY_ROOM_NO_SUCCESS,
+  (payload: GetReservationCheckoutFromRoomNoResult) => actionPayload(payload),
+);

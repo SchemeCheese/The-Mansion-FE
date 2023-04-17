@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Col, DatePicker, Form, Input, Row, Steps, TimePicker } from 'antd';
 import GuestFooter from 'pages/guest/GuestFooter';
+import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -11,6 +15,19 @@ function GuestCheckout() {
   const { Step } = Steps;
   const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+
+  const { data: reservationCheckoutData } = useAppSelector(selectGetReservationCheckoutFromRoomNo);
+
+  if (reservationCheckoutData.client_info === undefined) {
+    return null;
+  }
+
+  const clientInfo = reservationCheckoutData.client_info;
+
+  const handleNext = () => {
+    navigate('/guest-payment');
+  };
 
   return (
     <>
@@ -46,6 +63,9 @@ function GuestCheckout() {
               <Form
                 autoComplete="off"
                 form={form}
+                initialValues={{
+                  last_name: clientInfo.last_name,
+                }}
                 labelCol={{
                   span: 24,
                 }}
@@ -64,8 +84,8 @@ function GuestCheckout() {
                         </Form.Item>
                       </Col>
                       <Col span={8}>
-                        <Form.Item label={t('guestCheckout.Last Name.title')} name="lastname">
-                          <Input placeholder={t('guestCheckout.Last Name.placeholder')} />
+                        <Form.Item label={t('guestCheckout.Last Name.title')} name="last_name">
+                          <Input placeholder={t('guestCheckout.Last Name.placeholder')} readOnly />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
@@ -178,7 +198,9 @@ function GuestCheckout() {
         </Col>
         <Col span={24} style={{ marginTop: 25, marginBottom: 25, textAlign: 'center' }}>
           <MButton>{t('common.Cancel')}</MButton>
-          <PattonButton style={{ marginLeft: 20 }}>{t('common.Next')}</PattonButton>
+          <PattonButton onClick={handleNext} style={{ marginLeft: 20 }}>
+            {t('common.Next')}
+          </PattonButton>
         </Col>
       </Row>
       <GuestFooter />

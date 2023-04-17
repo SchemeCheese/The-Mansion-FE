@@ -25,10 +25,25 @@ import {
   Tag,
 } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { formatNumber } from 'helpers';
 import GuestFooter from 'pages/guest/GuestFooter';
+import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
+
+import {
+  getReservation,
+  getReservationDetail,
+  paymentMomoPayReservationDetail,
+  paymentVNPayReservationDetail,
+  resendEmailReservationAction,
+  resetReservation,
+  resetReservationDetail,
+  searchRoomReset,
+  updateReservation,
+} from 'actions';
 
 import MButton from 'components/MButton';
-import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
 
 function GuestPayment() {
@@ -36,11 +51,18 @@ function GuestPayment() {
   const [isCash, setIsCash] = useState(false);
   const [isEWallet, setIsEisEWallet] = useState(false);
 
+  const [isMomo, setIsMomo] = useState(false);
+  const [isVNPay, setIsVNPay] = useState(false);
+
   interface DataType {
     age: number;
     key: string;
     name: string;
   }
+
+  const { data: reservationCheckoutData } = useAppSelector(selectGetReservationCheckoutFromRoomNo);
+
+  const amountinfo = reservationCheckoutData.amount_info;
 
   const paymentSummaryLabelStyle: React.CSSProperties = {
     lineHeight: '22px',
@@ -102,6 +124,48 @@ function GuestPayment() {
     setIsEisEWallet(e.target.checked);
   };
 
+  const onChangeMomo = (e: RadioChangeEvent) => {
+    setIsMomo(e.target.checked);
+    setIsVNPay(!e.target.checked);
+  };
+
+  const onChangeVNPay = (e: RadioChangeEvent) => {
+    setIsMomo(!e.target.checked);
+    setIsVNPay(e.target.checked);
+  };
+
+  const dispatch = useDispatch();
+
+  const handleNext = () => {
+    if (isEWallet) {
+      if (isMomo) {
+        dispatch(
+          paymentMomoPayReservationDetail({
+            payload: {
+              reservation_id: 1,
+              reservation_detail_id: 1,
+              amount: amountinfo.unpaid,
+              // request_type: 'payWithATM', // Bank
+              request_type: '',
+            },
+          }),
+        );
+      } else {
+        dispatch(
+          paymentVNPayReservationDetail({
+            payload: {
+              reservation_id: 1,
+              reservation_detail_id: 1,
+              amount: amountinfo.unpaid,
+              bank_code: 'VNBANK', // Bank
+              // bank_code: '',
+            },
+          }),
+        );
+      }
+    }
+  };
+
   return (
     <>
       <Row
@@ -122,11 +186,9 @@ function GuestPayment() {
             }}
           >
             <Col span={24} style={{ marginBottom: 30 }}>
-              <Steps current={3}>
-                <Step title={t('guest.Select your stay')} />
-                <Step title={t('guest.Select your room')} />
-                <Step title={t('guest.Upload your personal ID')} />
-                <Step title={t('guest.Payment')} />
+              <Steps current={1}>
+                <Step title={t('guestCheckout.Confirm your information')} />
+                <Step title={t('guestCheckout.Payment')} />
               </Steps>
             </Col>
             <Col span={24}>
@@ -235,7 +297,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    1.200.00
+                    {formatNumber(amountinfo.sub_total)}
                   </span>
                 </Col>
               </Row>
@@ -254,7 +316,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    1.200.00
+                    {formatNumber(amountinfo.deposit)}
                   </span>
                 </Col>
               </Row>
@@ -273,7 +335,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    1.200.00
+                    {formatNumber(amountinfo.discount)}
                   </span>
                 </Col>
               </Row>
@@ -330,7 +392,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    1.200.00
+                    23
                   </span>
                 </Col>
               </Row>
@@ -349,7 +411,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    1.200.00
+                    {formatNumber(amountinfo.paid)}
                   </span>
                 </Col>
               </Row>
@@ -377,7 +439,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    1.200.00
+                    {formatNumber(amountinfo.unpaid)}
                   </span>
                 </Col>
               </Row>
@@ -422,7 +484,7 @@ function GuestPayment() {
                     height: '66px',
                   }}
                 >
-                  <Radio name="momo_pay">
+                  <Radio checked={isMomo} onChange={onChangeMomo}>
                     <p
                       style={{
                         color: 'rgba(0, 0, 0, 0.85)',
@@ -448,7 +510,7 @@ function GuestPayment() {
                     float: 'right',
                   }}
                 >
-                  <Radio name="vn_pay">
+                  <Radio checked={isVNPay} onChange={onChangeVNPay}>
                     <p
                       style={{
                         color: 'rgba(0, 0, 0, 0.85)',
@@ -506,7 +568,9 @@ function GuestPayment() {
 
         <Col span={24} style={{ marginTop: 25, marginBottom: 25 }}>
           <MButton>{t('common.Cancel')}</MButton>
-          <PattonButton style={{ marginLeft: 20 }}>{t('common.Next')}</PattonButton>
+          <PattonButton onClick={handleNext} style={{ marginLeft: 20 }}>
+            {t('common.Next')}
+          </PattonButton>
         </Col>
       </Row>
       <GuestFooter />

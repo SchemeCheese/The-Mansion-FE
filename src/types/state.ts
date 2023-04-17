@@ -689,6 +689,12 @@ export interface PaymentMomoPayReservationDetailState {
   status: string;
 }
 
+export interface ReservationCheckoutFromRoomNoState {
+  data: Record<string, any>;
+  is_finish: boolean;
+  room_no: string;
+}
+
 export interface RootState {
   addDisk: AddDiskState;
   addItem: AddItemState;
@@ -728,6 +734,7 @@ export interface RootState {
   getProductType: ProductTypeState;
   getReservation: GetReservationState;
   getReservationByFolio: GetReservationByFolioState;
+  getReservationCheckoutFromRoomNo: ReservationCheckoutFromRoomNoState;
   getReservationDetail: ReservationDetailState;
   getReservationNumber: ReservationNumberState;
   getRoomType: RoomTypeState;

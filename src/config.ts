@@ -92,6 +92,7 @@ export const GuestEndpoint = {
   UPDATE: 'api/v1/guests',
   REMOVE: 'api/v1/reservation-detail',
   SET_MAIN_GUEST: 'api/v1/reservation-detail',
+  GET_RESERVATION_CHECKOUT_BY_ROOM_NO: 'api/v1/reservations/checkout-room-number',
 };
 
 export const FileEndpoint = {

@@ -1,24 +1,45 @@
 import 'styles/guest_room_number.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import SVG from 'react-inlinesvg';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Col, Input, Row } from 'antd';
 import GuestBgIcon from 'pages/guest/GuestBgIcon';
 import GuestFooter from 'pages/guest/GuestFooter';
+import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
 
-import MButton from 'components/MButton';
+import { useAppSelector } from 'modules/hooks';
+
+import { getReservationCheckoutByRoomNoAction } from 'actions';
+
+import PattonButton from 'components/PattonButton';
 
 function GuestRoomNumber() {
   const { t } = useTranslation();
   const [numberPhone, setNumberPhone] = useState('');
   const listNumber = [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, ''];
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleNumberPhone = (number: number | string) => {
     const txtNumber = `${numberPhone}${number}`;
 
     setNumberPhone(txtNumber);
   };
+
+  const getReservationCheckoutFromRoomNoData = useAppSelector(
+    selectGetReservationCheckoutFromRoomNo,
+  );
+  const { changed } = useTreeChanges(getReservationCheckoutFromRoomNoData);
+
+  useEffect(() => {
+    if (changed('is_finish', true)) {
+      navigate('/guest-checkout');
+    }
+  }, [changed]);
 
   return (
     <>
@@ -79,7 +100,18 @@ function GuestRoomNumber() {
         </div>
         <Col span={24} />
         <Col span={24} style={{ textAlign: 'center' }}>
-          <MButton className="btn-confirm">{t('common.Confirm')}</MButton>
+          <PattonButton
+            className="btn-confirm"
+            onClick={() => {
+              dispatch(
+                getReservationCheckoutByRoomNoAction({
+                  room_no: numberPhone,
+                }),
+              );
+            }}
+          >
+            {t('common.Confirm')}
+          </PattonButton>
         </Col>
       </Row>
       <GuestFooter />

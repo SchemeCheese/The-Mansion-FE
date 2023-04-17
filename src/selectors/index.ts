@@ -295,3 +295,8 @@ export const selectHouseKeepingState = createSelector(
   (state: RootState) => state.getHouseKeeping,
   getHouseKeeping => getHouseKeeping,
 );
+
+export const selectGetReservationCheckoutFromRoomNo = createSelector(
+  (state: RootState) => state.getReservationCheckoutFromRoomNo,
+  getDurationCurve => getDurationCurve,
+);

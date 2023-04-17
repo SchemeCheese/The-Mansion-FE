@@ -29,3 +29,11 @@ export interface SetMainGuest {
   guest_id: string;
   reservation_detail_id: string;
 }
+
+export interface GetReservationCheckoutFromRoomNo {
+  room_no: string;
+}
+
+export interface GetReservationCheckoutFromRoomNoResult {
+  data: Record<string, any>;
+}

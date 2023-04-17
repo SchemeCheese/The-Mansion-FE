@@ -1,7 +1,7 @@
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { GuestEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -9,6 +9,8 @@ import { ActionTypes } from 'literals';
 import {
   createGuest,
   createGuestSuccess,
+  getReservationCheckoutByRoomNoAction,
+  getReservationCheckoutByRoomNoActionSuccess,
   logOut,
   removeGuestAction,
   removeGuestSuccessAction,
@@ -148,9 +150,49 @@ export function* getSetMainGuestSaga({ payload }: ReturnType<typeof setMainGuest
   }
 }
 
+export function* getReservationCheckoutByRoomNoSaga({
+  payload,
+}: ReturnType<typeof getReservationCheckoutByRoomNoAction>) {
+  try {
+    let success = '';
+    let data = {};
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    ({ data, success } = yield call(
+      request,
+      `${apiEndPoint(GuestEndpoint.GET_RESERVATION_CHECKOUT_BY_ROOM_NO)}/${
+        payload.room_no
+      }?branch_code=${branch_code}&operator_code=${operator_code}&facility_code=${facility_code}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    if (success) {
+      yield put(getReservationCheckoutByRoomNoActionSuccess({ data }));
+    } else {
+      message.error('Get Reservation Info Failed!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Get Reservation Info Failed!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([takeLatest(ActionTypes.GUEST_CREATE, postCreateGuestSaga)]);
   yield all([takeLatest(ActionTypes.GUEST_UPDATE, postUpdateGuestSaga)]);
   yield all([takeLatest(ActionTypes.GUEST_REMOVE, deleteRemoveGuestSaga)]);
   yield all([takeLatest(ActionTypes.SET_MAIN_GUEST, getSetMainGuestSaga)]);
+  yield all([
+    takeLatest(ActionTypes.GET_RESERVATION_DETAIL_BY_ROOM_NO, getReservationCheckoutByRoomNoSaga),
+  ]);
 }
