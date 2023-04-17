@@ -151,6 +151,7 @@
   "No Smoking": "No Smoking",
   "Room No": "Room No",
   "Checkin": "Checkin",
+  "Checkout": "Checkout",
   "Detail Informations": "Detail Informations",
   "Overtime": "Overtime",
   "Rollback Checkin": "Rollback Checkin",
@@ -184,5 +185,5 @@
   "Finish": "Finish",
   "Confirm": "Confirm",
   "Age": "Age",
-  "Age": "Address"
+  "Address": "Address"
 }

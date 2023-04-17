@@ -459,6 +459,19 @@ function Root() {
                   isGuestScreen
                   to="/"
                 >
+                  <Guest />
+                </PrivateRoute>
+              }
+              path="/guest-payment"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
                   <GuestCheckout />
                 </PrivateRoute>
               }
