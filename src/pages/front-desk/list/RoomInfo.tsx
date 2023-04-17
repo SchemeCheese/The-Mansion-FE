@@ -233,10 +233,12 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
                 background: '#1d39c41a',
                 borderRadius: 2,
                 borderLeft: '5px solid #1d39c4',
-                width: 56,
                 height: 32,
                 textAlign: 'center',
                 paddingTop: 4,
+                paddingRight: 15,
+                paddingLeft: 15,
+                width: 'fit-content',
               }}
             >
               {' '}
@@ -247,7 +249,7 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
                   fontSize: 16,
                 }}
               >
-                {item.code}
+                {item.name}
               </span>{' '}
             </div>
           </Col>
