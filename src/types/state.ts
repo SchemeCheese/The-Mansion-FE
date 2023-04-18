@@ -389,6 +389,9 @@ export interface CreateGuestState {
   payload: CreateGuestPayload;
   status: string;
 }
+export interface UpdateHouseKeepingState {
+  status: string;
+}
 
 export interface UpdateGuestState {
   payload: CreateGuestPayload;
@@ -638,6 +641,29 @@ export interface ReservationDetailPrintCheckinConfirmPDFPayload {
   reservation_detail_ids: any;
   reservation_info_id: any;
 }
+interface HouseKeepingType {
+  clean_state: number;
+  code: string;
+  direction: number;
+  equipment_type_id: number;
+  floor: number;
+  id: number;
+  is_smocking: false;
+  name: string;
+  occupied_state: number;
+  size: number;
+  state: number;
+  type: string;
+  view: number;
+  wing: number;
+}
+export interface HouseKeepingState {
+  current_page: number | string;
+  items: HouseKeepingType[];
+  per_page: number;
+  status: string;
+  total: number;
+}
 
 export interface RootState {
   addDisk: AddDiskState;
@@ -673,6 +699,7 @@ export interface RootState {
   getElectricArea: GetElectricAreaState;
   getElectricPower: GetElectricPowerState;
   getElectricYesterday: GetElectricYesterdayState;
+  getHouseKeeping: HouseKeepingState;
   getLanguageCode: LanguageCodeState;
   getProductType: ProductTypeState;
   getReservation: GetReservationState;
@@ -704,6 +731,7 @@ export interface RootState {
   setMainGuest: SetMainGuestState;
   updateGeneralInfo: UpdateGeneralInfoState;
   updateGuest: UpdateGuestState;
+  updateHouseKeeping: UpdateHouseKeepingState;
   updateNoteReservationDetail: UpdateNoteReservationDetailState;
   updateRate: UpdateRateState;
   updateReservation: CreateReservationState;

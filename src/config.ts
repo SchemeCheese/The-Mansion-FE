@@ -133,3 +133,8 @@ export const IOTEndpoint = {
     branchDownLoadCsv: 'api/export/ExportBranchPowerMonitor',
   },
 };
+
+export const GetHouseKeepingEndpoint = {
+  GET: 'api/v1/rooms',
+  UPDATE: 'api/v1/rooms',
+};

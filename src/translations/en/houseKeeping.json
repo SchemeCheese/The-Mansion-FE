@@ -1,5 +1,11 @@
 {
   "House Keeping Management": "House Keeping Management",
   "Room Status": "Room Status",
-  "Cleaning Status": "Cleaning Status"
+  "Cleaning Status": "Cleaning Status",
+  "Room Status Empty": "Empty",
+  "Room Status Busy": "Busy",
+  "Room Status Inspect": "Inspect",
+  "Cleaning Status Ready": "Ready",
+  "Cleaning Status Cleaning": "Cleaning",
+  "Cleaning Status Dirty": "Dirty"
 }
