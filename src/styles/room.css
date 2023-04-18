@@ -1,12 +1,12 @@
-.room {
+.house-keeping-room {
   background-color: white;
   width: 100%;
   padding-right: 16px;
 }
-.room .ant-card {
+.house-keeping-room .ant-card {
   margin: 0 0 16px 16px;
 }
-.ant-card-head-title {
+.house-keeping-room .ant-card-head-title {
   font-style: normal;
   font-weight: 400 !important;
   font-size: 14px;
@@ -14,40 +14,40 @@
   text-align: center;
   color: rgba(0, 0, 0, 0.85);
 }
-.ant-card-body p {
+.house-keeping-room .ant-card-body p {
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 22px;
   color: rgba(0, 0, 0, 0.45);
 }
-.ant-card-body .ant-radio-wrapper {
+.house-keeping-room .ant-card-body .ant-radio-wrapper {
   margin: 0 8px 15px 0;
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 16px;
 }
-.ant-card-bordered {
+.house-keeping-room .ant-card-bordered {
   border: 1px solid rgba(0, 0, 0, 0.15);
 }
-.ant-card-head {
+.house-keeping-room .ant-card-head {
   background: #f7f9fa;
   border-bottom: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 0;
   box-shadow: none;
 }
-.ant-radio-checked:after {
+.house-keeping-room .ant-radio-checked:after {
   border: 1px solid #1d39c4 !important;
 }
-.ant-radio-checked .ant-radio-inner {
+.house-keeping-room .ant-radio-checked .ant-radio-inner {
   border-color: #1d39c4 !important;
 }
-.ant-radio-inner::after {
+.house-keeping-room .ant-radio-inner::after {
   background-color: #1d39c4 !important;
 }
-.ant-radio-input:focus + .ant-radio-inner,
-.ant-radio-wrapper:hover .ant-radio,
-.ant-radio:hover .ant-radio-inner {
+.house-keeping-room .ant-radio-input:focus + .ant-radio-inner,
+.house-keeping-room .ant-radio-wrapper:hover .ant-radio,
+.house-keeping-room .ant-radio:hover .ant-radio-inner {
   border-color: #1d39c4 !important;
 }

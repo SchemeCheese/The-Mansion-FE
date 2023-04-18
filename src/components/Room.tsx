@@ -81,7 +81,7 @@ function Room() {
   };
 
   return (
-    <Row className="room">
+    <Row className="house-keeping-room">
       {roomResultState?.map((item: any, index: number) => (
         <Col key={item.id} span={8}>
           <Card title={`${item.name} - ${item.type}`}>
