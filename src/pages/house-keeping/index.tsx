@@ -88,7 +88,7 @@ function HouseKeeping() {
                       onChange={e =>
                         setSearchCondition({
                           ...searchCondition,
-                          room_no: e.target.value,
+                          room_number: e.target.value,
                         })
                       }
                       onKeyUp={event => searchInput(event)}
