@@ -1,0 +1,141 @@
+{
+  "Status": "Status",
+  "Created Date": "Created Date",
+  "Incharge": "Incharge",
+  "Branch": "Branch",
+  "Direct Feedbacks": "Direct Feedbacks",
+  "Social Feedbacks": "Social Feedbacks",
+  "Folio ID": "Folio ID",
+  "Source TA": "Source TA",
+  "Checkin": "Checkin",
+  "Checkout": "Checkout",
+  "Booker Name": "Booker Name",
+  "Email": "Email",
+  "Phone": "Phone",
+  "Total room": "Total room",
+  "Incoming reservations": "Incoming reservations",
+  "Past reservations": "Past reservations",
+  "Contact Informations": "Contact Informations",
+  "Official Informations": "Official Informations",
+  "Type": {
+    "title": "Type",
+    "placeholder": "select type"
+  },
+  "First Name": {
+    "title": "First Name",
+    "placeholder": ""
+  },
+  "Email 1": {
+    "title": "Email 1",
+    "placeholder": "Input email"
+  },
+  "Email 2": {
+    "title": "Email 2",
+    "placeholder": "Input email"
+  },
+  "Mobile phone 1": {
+    "title": "Mobile phone 1",
+    "placeholder": "Input phone number"
+  },
+  "Mobile phone 2": {
+    "title": "Mobile phone 2",
+    "placeholder": "Input phone number"
+  },
+  "Last Name": {
+    "title": "Last Name",
+    "placeholder": "Input phone number"
+  },
+  "Address": {
+    "title": "Address",
+    "placeholder": "Enter address"
+  },
+  "Get to know more about your customer": "Get to know more about your customer",
+  "Rank": {
+    "title": "Rank",
+    "placeholder": "select rank"
+  },
+  "Date of birth": {
+    "title": "Date of birth",
+    "placeholder": ""
+  },
+  "Favourite Room Types 1": {
+    "title": "Favourite Room Types 1",
+    "placeholder": "select room type"
+  },
+  "Favourite Room Types 2": {
+    "title": "Favourite Room Types 2",
+    "placeholder": "select room type"
+  },
+  "Notes": {
+    "title": "Notes",
+    "placeholder": "Input notes"
+  },
+  "Member ID": {
+    "title": "Member ID",
+    "placeholder": "Input member ID"
+  },
+  "Marital Status": {
+    "title": "Marital Status",
+    "placeholder": "Select status"
+  },
+  "Pillow Type": {
+    "title": "Pillow Type",
+    "placeholder": "Select soft level"
+  },
+  "Mattress  Type": {
+    "title": "Mattress  Type",
+    "placeholder": "Select soft level"
+  },
+  "Favourite Tours": {
+    "title": "Favourite Tours",
+    "placeholder": "Input tours"
+  },
+  "Smoker": {
+    "title": "Smoker",
+    "placeholder": "Input tours"
+  },
+  "Gender": {
+    "title": "Gender",
+    "placeholder": "Select male or female"
+  },
+  "Allergies": {
+    "title": "Allergies",
+    "placeholder": "Select allergie kind"
+  },
+  "Baby seat": {
+    "title": "Baby seat",
+    "placeholder": "Select"
+  },
+  "Favourite Food and Beverage": {
+    "title": "Favourite Food and Beverage",
+    "placeholder": "Input F&B"
+  },
+  "Hastag": {
+    "title": "Hastag",
+    "placeholder": ""
+  },
+  "Invoice Informations": "Invoice Informations",
+  "Tax Code": {
+    "title": "Tax Code",
+    "placeholder": "Input tax number"
+  },
+  "Company Name": {
+    "title": "Company Name",
+    "placeholder": "Input company name"
+  },
+  "E-invoice email address": {
+    "title": "E-invoice email address",
+    "placeholder": "Input email address"
+  },
+  "Company Address": {
+    "title": "Company Address",
+    "placeholder": "Input company address"
+  },
+  "New reservation": "New reservation",
+  "Total Visits": "Total Visits",
+  "Total room night": "Total room night",
+  "Total Spent": "Total Spent",
+  "Average spent": "Average spent",
+  "Total Noshow": "Total Noshow",
+  "Total cancel": "Total cancel"
+}
