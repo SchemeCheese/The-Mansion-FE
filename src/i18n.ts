@@ -3,6 +3,7 @@ import i18n from 'i18next';
 import auditRoomChargeEn from 'translations/en/auditRoomCharge.json';
 import branchManagerEn from 'translations/en/branchManager.json';
 import commonEn from 'translations/en/common.json';
+import customerDetailEn from 'translations/en/customerDetail.json';
 import frontDeskEn from 'translations/en/frontDesk.json';
 import guestEn from 'translations/en/guest.json';
 import houseKeepingEn from 'translations/en/houseKeeping.json';
@@ -16,6 +17,7 @@ import transactionEn from 'translations/en/transaction.json';
 import auditRoomChargeJa from 'translations/ja/auditRoomCharge.json';
 import branchManagerJa from 'translations/ja/branchManager.json';
 import commonJa from 'translations/ja/common.json';
+import customerDetailJa from 'translations/ja/customerDetail.json';
 import frontDeskJa from 'translations/ja/frontDesk.json';
 import guestJa from 'translations/ja/guest.json';
 import houseKeepingJa from 'translations/ja/houseKeeping.json';
@@ -29,6 +31,7 @@ import transactionJa from 'translations/ja/transaction.json';
 import auditRoomChargeVi from 'translations/vi/auditRoomCharge.json';
 import branchManagerVi from 'translations/vi/branchManager.json';
 import commonVi from 'translations/vi/common.json';
+import customerDetailVi from 'translations/vi/customerDetail.json';
 import frontDeskVi from 'translations/vi/frontDesk.json';
 import guestVi from 'translations/vi/guest.json';
 import houseKeepingVi from 'translations/vi/houseKeeping.json';
@@ -59,6 +62,7 @@ i18n.use(initReactI18next).init({
         selectedPayMethod: selectedPayMethodEn,
         frontDesk: frontDeskEn,
         branchManager: branchManagerEn,
+        customerDetail: customerDetailEn,
       },
     },
     ja: {
@@ -77,6 +81,7 @@ i18n.use(initReactI18next).init({
         selectedPayMethod: selectedPayMethodJA,
         frontDesk: frontDeskJa,
         branchManager: branchManagerJa,
+        customerDetail: customerDetailJa,
       },
     },
     vi: {
@@ -95,6 +100,7 @@ i18n.use(initReactI18next).init({
         selectedPayMethod: selectedPayMethodVi,
         frontDesk: frontDeskVi,
         branchManager: branchManagerVi,
+        customerDetail: customerDetailVi,
       },
     },
   },

@@ -147,11 +147,7 @@ function MLayout(props: Props) {
   }, []);
 
   useEffect(() => {
-    if (
-      branchFacilities &&
-      branchFacilities.data.length > 0 &&
-      branchFacilities.data.facilities.length > 0
-    ) {
+    if (branchFacilities && branchFacilities.data.facilities.length > 0) {
       const facilitySelected = branchFacilities.data.facilities[0];
 
       dispatch(
