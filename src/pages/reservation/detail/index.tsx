@@ -131,7 +131,8 @@ function ReservationDetail() {
           reservation_id: id ?? '',
           reservation_detail_id: 1,
           amount: 50000,
-          bank_code: 'VNBANK',
+          // bank_code: 'VNBANK', // Bank
+          bank_code: '',
         },
       }),
     );
@@ -145,7 +146,8 @@ function ReservationDetail() {
           reservation_id: id ?? '',
           reservation_detail_id: 1,
           amount: 50000,
-          request_type: 'payWithATM',
+          // request_type: 'payWithATM', // Bank
+          request_type: '',
         },
       }),
     );
