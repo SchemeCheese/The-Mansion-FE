@@ -58,6 +58,10 @@ export const getReservationRoomInhouseActionFinish = createAction(
   (payload: ReservationRoomResult) => actionPayload(payload),
 );
 
+export const resetReservationRoomInhouseFilter = createAction(
+  ActionTypes.RESET_RESERVATION_ROOM_INHOUSE_FILTER,
+);
+
 export const getReservationRoomCheckoutTodayAction = createAction(
   ActionTypes.GET_RESERVATION_ROOM_CHECKOUT_TODAY,
   (payload: ReservationRoomFilter) => actionPayload(payload),
@@ -68,6 +72,10 @@ export const getReservationRoomCheckoutTodayActionFinish = createAction(
   (payload: ReservationRoomResult) => actionPayload(payload),
 );
 
+export const resetReservationRoomCheckoutFilter = createAction(
+  ActionTypes.RESET_RESERVATION_ROOM_CHECKOUT_FILTER,
+);
+
 export const getReservationRoomCheckinTodayAction = createAction(
   ActionTypes.GET_RESERVATION_ROOM_CHECKIN_TODAY,
   (payload: ReservationRoomFilter) => actionPayload(payload),
@@ -76,4 +84,8 @@ export const getReservationRoomCheckinTodayAction = createAction(
 export const getReservationRoomCheckinTodayActionFinish = createAction(
   ActionTypes.GET_RESERVATION_ROOM_CHECKIN_TODAY_FINISH,
   (payload: ReservationRoomResult) => actionPayload(payload),
+);
+
+export const resetReservationRoomCheckinFilter = createAction(
+  ActionTypes.RESET_RESERVATION_ROOM_CHECKIN_FILTER,
 );

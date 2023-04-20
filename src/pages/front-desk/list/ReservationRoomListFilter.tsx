@@ -2,23 +2,18 @@
 Module Name : Front Desk
 Developer Name : MinhNV
 Created Date : 10/12/2022
-Updated Date : 11/12/2022
+Updated Date : 20/04/2023
 Main functions : Reservation Room List Filter
 ************************************ */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Col, Input, Row, Select } from 'antd';
 import { t } from 'i18next';
-import {
-  selectReservationRoomCheckoutTodayState,
-  selectReservationRoomInhouseState,
-} from 'selectors';
-
-import { useAppSelector } from 'modules/hooks';
 
 import {
   getAgentInfos,
+  getReservationRoomCheckinTodayAction,
   getReservationRoomCheckoutTodayAction,
   getReservationRoomInhouseAction,
 } from 'actions';
@@ -37,16 +32,20 @@ const { Option } = Select;
 
 function ReservationRoomListFilter({ searchCondition, setSearchCondition, type }: Props) {
   const dispatch = useDispatch();
-  const reservationRoomInhouseData: any = useAppSelector(selectReservationRoomInhouseState);
-  const reservationRoomCheckoutTodayData: any = useAppSelector(
-    selectReservationRoomCheckoutTodayState,
-  );
 
-  const fetchSearchReservationRooms = (data: any) => {
+  const fetchSearchReservationRooms = (filters: any) => {
+    if (type === 'checkin_today') {
+      dispatch(
+        getReservationRoomCheckinTodayAction({
+          filter: filters,
+        }),
+      );
+    }
+
     if (type === 'inhouse_today') {
       dispatch(
         getReservationRoomInhouseAction({
-          filter: reservationRoomInhouseData.filter,
+          filter: filters,
         }),
       );
     }
@@ -54,7 +53,7 @@ function ReservationRoomListFilter({ searchCondition, setSearchCondition, type }
     if (type === 'checkout_today') {
       dispatch(
         getReservationRoomCheckoutTodayAction({
-          filter: reservationRoomCheckoutTodayData.inhouse_today,
+          filter: filters,
         }),
       );
     }

@@ -10,7 +10,11 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
-import { selectUser } from 'selectors';
+import {
+  selectReservationRoomCheckoutTodayState,
+  selectReservationRoomInhouseState,
+  selectUser,
+} from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -18,10 +22,8 @@ import {
   getReservationRoomCheckinTodayAction,
   getReservationRoomCheckoutTodayAction,
   getReservationRoomInhouseAction,
-  searchReservation,
 } from 'actions';
 
-import ReservationList from './ReservationList';
 import ReservationRoomList from './ReservationRoomList';
 import WalkIn from './WalkIn';
 
@@ -32,29 +34,13 @@ function FrontDesk() {
   const { t } = useTranslation();
   const user = useAppSelector(selectUser);
 
+  const reservationRoomInhouseData: any = useAppSelector(selectReservationRoomInhouseState);
+  const reservationRoomCheckoutTodayData: any = useAppSelector(
+    selectReservationRoomCheckoutTodayState,
+  );
+
   const handeleActive = (activeKey: string) => {
     if (activeKey === '2') {
-      dispatch(
-        searchReservation({
-          current_page: 1,
-          per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
-            ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
-            : 10,
-          booker_info: '',
-          folio_number: '',
-          agent_name: '',
-          status: '',
-          market: '',
-          source: '',
-          checkin_from: '',
-          checkin_to: '',
-          checkout_from: '',
-          checkout_to: '',
-          inhouse: '',
-          type: 'checkin_today',
-        }),
-      );
-
       dispatch(
         getReservationRoomCheckinTodayAction({
           filter: {
@@ -72,14 +58,7 @@ function FrontDesk() {
     if (activeKey === '3') {
       dispatch(
         getReservationRoomInhouseAction({
-          filter: {
-            booker_info: '',
-            current_page: 1,
-            per_page: 10,
-            room_no: '',
-            source_id: '',
-            status: '',
-          },
+          filter: reservationRoomInhouseData.filter,
         }),
       );
     }
@@ -87,14 +66,7 @@ function FrontDesk() {
     if (activeKey === '4') {
       dispatch(
         getReservationRoomCheckoutTodayAction({
-          filter: {
-            booker_info: '',
-            current_page: 1,
-            per_page: 10,
-            room_no: '',
-            source_id: '',
-            status: '',
-          },
+          filter: reservationRoomCheckoutTodayData.filter,
         }),
       );
     }
