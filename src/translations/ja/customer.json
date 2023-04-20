@@ -1,0 +1,47 @@
+{
+  "Customers Relations": "Customers Relations",
+  "Customer List": "Customer List",
+  "List": "List",
+  "Members Management": "Members Management",
+  "Create New Feedback":"Create New Feedback",
+  "Booker Name": {
+    "title": "Booker Name",
+    "placeholder": ""
+  },
+  "Receive Date": {
+    "title": "Receive Date",
+    "placeholder": "Select Date"
+  },
+  "Feedback Type": {
+    "title": "Feedback Type",
+    "placeholder": "Select Type"
+  },
+  "Receiving Feedback Staff": {
+    "title": "Receiving Feedback Staff",
+    "placeholder": ""
+  },
+  "Responding Staff": {
+    "title": "Responding Staff",
+    "placeholder": ""
+  },
+  "Feedback": {
+    "title": "Feedback",
+    "placeholder": "Feedback detail"
+  },
+  "Responding": {
+    "title": "Responding",
+    "placeholder": "Responding detail"
+  },
+  "Email Phone Name": {
+    "title": "",
+    "placeholder": "Email/Phone/Name"
+  },
+  "Level": {
+    "title": "",
+    "placeholder": "Level"
+  },
+  "Type": {
+    "title": "",
+    "placeholder": "Type"
+  }
+}
