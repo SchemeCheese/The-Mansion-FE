@@ -3,6 +3,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import {
   getReservationRoomCheckoutTodayAction,
   getReservationRoomCheckoutTodayActionFinish,
+  resetReservationRoomCheckoutFilter,
 } from 'actions';
 
 import { ReservationRoomInhouseState } from 'types';
@@ -34,6 +35,9 @@ export default {
           draft.is_searching = false;
           draft.data = payload.data;
           draft.total = payload.total;
+        })
+        .addCase(resetReservationRoomCheckoutFilter, draft => {
+          draft.filter = reservationRoomCheckoutTodayState.filter;
         });
     },
   ),

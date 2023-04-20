@@ -169,6 +169,9 @@ export const ActionTypes = keyMirror({
   HOUSE_KEEPING_GET_FINISH: undefined,
   UPDATE_HOUSE_KEEPING: undefined,
   UPDATE_HOUSE_KEEPING_SUCCESS: undefined,
+  RESET_RESERVATION_ROOM_INHOUSE_FILTER: undefined,
+  RESET_RESERVATION_ROOM_CHECKOUT_FILTER: undefined,
+  RESET_RESERVATION_ROOM_CHECKIN_FILTER: undefined,
 });
 
 export const STATUS: Status = {

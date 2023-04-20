@@ -1,6 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { getReservationRoomInhouseAction, getReservationRoomInhouseActionFinish } from 'actions';
+import {
+  getReservationRoomInhouseAction,
+  getReservationRoomInhouseActionFinish,
+  resetReservationRoomInhouseFilter,
+} from 'actions';
 
 import { ReservationRoomInhouseState } from 'types';
 
@@ -31,6 +35,9 @@ export default {
           draft.is_searching = false;
           draft.data = payload.data;
           draft.total = payload.total;
+        })
+        .addCase(resetReservationRoomInhouseFilter, draft => {
+          draft.filter = reservationRoomInhouseState.filter;
         });
     },
   ),

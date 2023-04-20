@@ -2,13 +2,14 @@
 Module Name : Front Desk
 Developer Name : MinhNV
 Created Date : 10/12/2022
-Updated Date : 11/12/2022
+Updated Date : 20/04/2023
 Main functions : Reservation Room List Page
 ************************************ */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Col, Pagination, Row, Table, Tag } from 'antd';
 import { formatNumber, mappingStatus } from 'helpers';
 import {
@@ -16,10 +17,18 @@ import {
   selectReservationRoomCheckoutTodayState,
   selectReservationRoomInhouseState,
 } from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { searchReservation } from 'actions';
+import {
+  getReservationRoomCheckinTodayAction,
+  getReservationRoomCheckoutTodayAction,
+  getReservationRoomInhouseAction,
+  resetReservationRoomCheckinFilter,
+  resetReservationRoomCheckoutFilter,
+  resetReservationRoomInhouseFilter,
+} from 'actions';
 
 import ReservationRoomListFilter from './ReservationRoomListFilter';
 
@@ -42,6 +51,7 @@ function ReservationRoomList({ type }: Props) {
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const reservationRoomInhouseData: any = useAppSelector(selectReservationRoomInhouseState);
   const reservationRoomCheckoutTodayData: any = useAppSelector(
@@ -50,21 +60,42 @@ function ReservationRoomList({ type }: Props) {
   const reservationRoomCheckinTodayData: any = useAppSelector(
     selectReservationRoomCheckinTodayState,
   );
+  const { changed: reservationRoomCheckoutTodayChanged } = useTreeChanges(
+    reservationRoomCheckoutTodayData,
+  );
 
   const onChangeCurrentPage = (page: number, pageSize: number) => {
-    setSearchCondition({
+    const newSearchCondition = {
       ...searchCondition,
       current_page: page,
       per_page: pageSize,
-    });
+    };
 
-    dispatch(
-      searchReservation({
-        ...searchCondition,
-        current_page: page,
-        per_page: pageSize,
-      }),
-    );
+    setSearchCondition(newSearchCondition);
+
+    if (type === 'checkin_today') {
+      dispatch(
+        getReservationRoomCheckinTodayAction({
+          filter: newSearchCondition,
+        }),
+      );
+    }
+
+    if (type === 'inhouse_today') {
+      dispatch(
+        getReservationRoomInhouseAction({
+          filter: newSearchCondition,
+        }),
+      );
+    }
+
+    if (type === 'checkout_today') {
+      dispatch(
+        getReservationRoomCheckoutTodayAction({
+          filter: newSearchCondition,
+        }),
+      );
+    }
   };
 
   const tableColumns = [
@@ -271,6 +302,29 @@ function ReservationRoomList({ type }: Props) {
     currentPage = reservationRoomCheckinTodayData.filter.current_page;
     total = reservationRoomCheckinTodayData.total;
   }
+
+  useEffect(() => {
+    if (reservationRoomCheckoutTodayChanged('is_searching', false)) {
+      if (
+        reservationRoomCheckoutTodayData.filter.room_no &&
+        reservationRoomCheckoutTodayData.data?.items.length > 0
+      ) {
+        const record = reservationRoomCheckoutTodayData.data?.items[0];
+
+        navigate(
+          `/front-desk/checkout-today/${record.reservation_id}/detail/${record.reservation_detail_id}`,
+        );
+      }
+    }
+  }, [reservationRoomCheckoutTodayChanged]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetReservationRoomCheckinFilter());
+      dispatch(resetReservationRoomCheckoutFilter());
+      dispatch(resetReservationRoomInhouseFilter());
+    };
+  }, []);
 
   return (
     <Row style={{ background: 'white', padding: 16 }}>
