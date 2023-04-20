@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import Branch from 'pages/branch-manager';
 import CustomerDetail from 'pages/customer/detail';
+import Customer from 'pages/customer/list';
 import Dashboard from 'pages/dashboard';
 import DeviceManager from 'pages/device-manager';
 import DeviceManagerCreate from 'pages/device-manager/DeviceManagerCreate';
@@ -396,6 +397,18 @@ function Root() {
                 </PrivateRoute>
               }
               path="/power/device/create"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <Customer />
+                </PrivateRoute>
+              }
+              path="/customer"
             />
             <Route
               element={
