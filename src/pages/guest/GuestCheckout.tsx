@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Col, DatePicker, Form, Input, Row, Steps, TimePicker } from 'antd';
+import moment from 'moment';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
 
@@ -24,6 +25,7 @@ function GuestCheckout() {
   }
 
   const clientInfo = reservationCheckoutData.client_info;
+  const reservationDetailInfo = reservationCheckoutData.reservation_detail;
 
   const handleNext = () => {
     navigate('/guest-payment');
@@ -65,6 +67,15 @@ function GuestCheckout() {
                 form={form}
                 initialValues={{
                   last_name: clientInfo.last_name,
+                  folio_id: reservationDetailInfo.reservation.reservation_number,
+                  email: clientInfo.email_address1,
+                  ota_booking_id: reservationDetailInfo.reservation.external_reservation_number,
+                  first_name: clientInfo.first_name,
+                  phone_number: clientInfo.telephone_number1,
+                  checkin_date: moment(reservationDetailInfo.check_in_date),
+                  checkin_time: moment(reservationDetailInfo.check_in_date),
+                  checkout_date: moment(),
+                  checkout_time: moment(),
                 }}
                 labelCol={{
                   span: 24,
@@ -80,7 +91,7 @@ function GuestCheckout() {
                     <Row>
                       <Col span={8}>
                         <Form.Item label={t('guestCheckout.Folio ID.title')} name="folio_id">
-                          <Input placeholder={t('guestCheckout.Folio ID.placeholder')} />
+                          <Input placeholder={t('guestCheckout.Folio ID.placeholder')} readOnly />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
@@ -89,35 +100,26 @@ function GuestCheckout() {
                         </Form.Item>
                       </Col>
                       <Col span={8}>
-                        <Form.Item label={t('guestCheckout.Email.title')} name="lastname">
-                          <Input placeholder={t('guestCheckout.Email.placeholder')} />
+                        <Form.Item label={t('guestCheckout.Email.title')} name="email">
+                          <Input placeholder={t('guestCheckout.Email.placeholder')} readOnly />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item
                           label={t('guestCheckout.OTA/TA Booking ID.title')}
-                          name="booking_time"
+                          name="ota_booking_id"
                         >
-                          <TimePicker
-                            format="HH:mm"
-                            placeholder={t('guestCheckout.OTA/TA Booking ID.placeholder')}
-                            style={{
-                              height: 32,
-                              borderRadius: 4,
-                              marginRight: 11,
-                              width: '100%',
-                            }}
-                          />
+                          <Input placeholder={t('guestCheckout.Email.placeholder')} readOnly />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
                         <Form.Item label={t('guestCheckout.First Name.title')} name="first_name">
-                          <Input placeholder={t('guestCheckout.First Name.placeholder')} />
+                          <Input placeholder={t('guestCheckout.First Name.placeholder')} readOnly />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
-                        <Form.Item label={t('guestCheckout.Mobile.title')} name="mobile">
-                          <Input placeholder={t('guestCheckout.Mobile.placeholder')} />
+                        <Form.Item label={t('guestCheckout.Mobile.title')} name="phone_number">
+                          <Input placeholder={t('guestCheckout.Mobile.placeholder')} readOnly />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
@@ -126,6 +128,7 @@ function GuestCheckout() {
                           name="checkin_date"
                         >
                           <DatePicker
+                            disabled
                             placeholder={t('guestCheckout.Checkin Date.placeholder')}
                             style={{
                               height: 32,
@@ -142,6 +145,7 @@ function GuestCheckout() {
                           name="checkout_date"
                         >
                           <DatePicker
+                            disabled
                             placeholder={t('guestCheckout.Checkout Date.placeholder')}
                             style={{
                               height: 32,
@@ -156,6 +160,7 @@ function GuestCheckout() {
                       <Col span={8}>
                         <Form.Item label={t('common.Checkin Time')} name="checkin_time">
                           <TimePicker
+                            disabled
                             format="HH:mm"
                             style={{
                               height: 32,
@@ -167,8 +172,9 @@ function GuestCheckout() {
                         </Form.Item>
                       </Col>
                       <Col span={8}>
-                        <Form.Item label={t('common.Checkin Time')} name="checkin_time">
+                        <Form.Item label={t('common.Checkout Time')} name="checkout_time">
                           <TimePicker
+                            disabled
                             format="HH:mm"
                             style={{
                               height: 32,

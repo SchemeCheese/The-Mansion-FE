@@ -20,23 +20,11 @@
   width: 64px;
   height: 64px;
   justify-content: center;
-  background: #DCE2EA;
+  background: #dce2ea;
   cursor: pointer;
 }
 
 .guest-room-number .list-number .item-number.not-number {
   cursor: unset;
   background: transparent;
-}
-
-.guest-room-number .btn-confirm {
-  background: #1890FF;
-  border-radius: 4px;
-  width: 368px;
-  height: 40px;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 24px;
-  text-align: center;
-  color: #FFFFFF;
 }

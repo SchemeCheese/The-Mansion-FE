@@ -101,13 +101,18 @@ function GuestRoomNumber() {
         <Col span={24} />
         <Col span={24} style={{ textAlign: 'center' }}>
           <PattonButton
-            className="btn-confirm"
+            disabled={numberPhone === ''}
             onClick={() => {
               dispatch(
                 getReservationCheckoutByRoomNoAction({
                   room_no: numberPhone,
                 }),
               );
+            }}
+            style={{
+              width: 370,
+              height: 40,
+              fontSize: 16,
             }}
           >
             {t('common.Confirm')}

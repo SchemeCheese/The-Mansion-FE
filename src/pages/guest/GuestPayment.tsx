@@ -27,7 +27,7 @@ import {
 import type { ColumnsType } from 'antd/es/table';
 import { formatNumber } from 'helpers';
 import GuestFooter from 'pages/guest/GuestFooter';
-import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
+import { selectGetReservationCheckoutFromRoomNo, selectGetReservationDetail } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -54,15 +54,9 @@ function GuestPayment() {
   const [isMomo, setIsMomo] = useState(false);
   const [isVNPay, setIsVNPay] = useState(false);
 
-  interface DataType {
-    age: number;
-    key: string;
-    name: string;
-  }
-
   const { data: reservationCheckoutData } = useAppSelector(selectGetReservationCheckoutFromRoomNo);
 
-  const amountinfo = reservationCheckoutData.amount_info;
+  const amountInfo = reservationCheckoutData.amount_info;
 
   const paymentSummaryLabelStyle: React.CSSProperties = {
     lineHeight: '22px',
@@ -71,46 +65,110 @@ function GuestPayment() {
     fontWeight: 400,
   };
 
-  const columns: ColumnsType<DataType> = [
+  const columns: any[] = [
     {
-      title: t('common.Name'),
-      dataIndex: 'name',
-      key: 'name',
+      title: t('common.Date'),
+      dataIndex: 'date',
     },
     {
-      title: t('common.Age'),
-      dataIndex: 'age',
-      key: 'age',
+      title: t('common.Description'),
+      dataIndex: 'description',
     },
     {
-      title: t('common.Address'),
-      dataIndex: 'address',
-      key: 'address',
+      title: t('common.Unit price'),
+      dataIndex: 'unit_price',
+      align: 'right',
+      render: (value: any, record: any) => {
+        if (record.price_type === 'percent') {
+          return '';
+        }
+
+        return value;
+      },
+    },
+    {
+      title: t('common.Amount'),
+      dataIndex: 'amount',
+      render: (value: any, record: any) => {
+        if (record.price_type === 'percent') {
+          return `${record.unit_price}%`;
+        }
+
+        return value;
+      },
+    },
+    {
+      title: t('common.Total'),
+      dataIndex: 'total',
+      align: 'right',
+      render: (value: any, record: any) => {
+        if (record.description.toLowerCase() === 'discount') {
+          return formatNumber(record.discount_amount);
+        }
+
+        return value;
+      },
+    },
+    {
+      title: t('common.Before Tax and Fee'),
+      dataIndex: 'price_before_tax',
+      align: 'right',
+      render: (value: any, record: any) => {
+        if (record.description.toLowerCase() !== 'discount') {
+          return value;
+        }
+
+        return '';
+      },
     },
   ];
 
-  const data: DataType[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-    },
-  ];
+  reservationCheckoutData.tax_info.forEach((item: any) => {
+    columns.push({
+      title: `${item.name} (${item.price}%)`,
+      dataIndex: item.description_code,
+      render: (value: any, record: any) => {
+        if (
+          record.price_type === 'percent' ||
+          record.description.toLowerCase() === 'discount' ||
+          record.description.toLowerCase() === 'deposit'
+        ) {
+          return '';
+        }
+
+        return value;
+      },
+    });
+  });
+
+  const data: any = [];
+
+  Object.keys(reservationCheckoutData.transactions).forEach(key => {
+    reservationCheckoutData.transactions[key].items.forEach((item: any) => {
+      const itemTemporary: any = {
+        ...item,
+        key: item.sale_detail_id,
+        date: item.payment_date,
+        description: item.description,
+        unit_price: formatNumber(item.sales_price),
+        amount: item.quantity,
+        total: formatNumber(item.total_amount),
+        price_before_tax: formatNumber(item.price_before_tax),
+        total_amount: item.total_amount,
+        sale_detail_id: item.sale_detail_id,
+        storage_id: item.storage_id,
+        payment_method: item.payment_method,
+        price_type: item.price_type,
+      };
+
+      // Add tax info
+      reservationCheckoutData.tax_info.forEach((taxInfo: any, index: number) => {
+        itemTemporary[taxInfo.description_code] = formatNumber(item.tax[index]);
+      });
+
+      data.push(itemTemporary);
+    });
+  });
 
   const { Step } = Steps;
 
@@ -144,7 +202,7 @@ function GuestPayment() {
             payload: {
               reservation_id: 1,
               reservation_detail_id: 1,
-              amount: amountinfo.unpaid,
+              amount: amountInfo.unpaid,
               // request_type: 'payWithATM', // Bank
               request_type: '',
             },
@@ -156,7 +214,7 @@ function GuestPayment() {
             payload: {
               reservation_id: 1,
               reservation_detail_id: 1,
-              amount: amountinfo.unpaid,
+              amount: amountInfo.unpaid,
               bank_code: 'VNBANK', // Bank
               // bank_code: '',
             },
@@ -297,7 +355,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    {formatNumber(amountinfo.sub_total)}
+                    {formatNumber(amountInfo.sub_total)}
                   </span>
                 </Col>
               </Row>
@@ -316,7 +374,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    {formatNumber(amountinfo.deposit)}
+                    {formatNumber(amountInfo.deposit)}
                   </span>
                 </Col>
               </Row>
@@ -335,29 +393,35 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    {formatNumber(amountinfo.discount)}
+                    {formatNumber(amountInfo.discount)}
                   </span>
                 </Col>
               </Row>
-              <Row style={{ paddingTop: 5 }}>
-                <Col span={16}>
-                  {' '}
-                  <span style={paymentSummaryLabelStyle}>{t('guest.VAT')}</span>
-                </Col>
-                <Col span={8} style={{ marginBottom: 3 }}>
-                  <span
-                    style={{
-                      fontSize: 14,
-                      float: 'right',
-                      color: '#1D39C4',
-                      fontWeight: 100,
-                      fontStyle: 'italic',
-                    }}
-                  >
-                    1.200.00
-                  </span>
-                </Col>
-              </Row>
+
+              {reservationCheckoutData.tax_info.map((taxInfo: any, index: number) => {
+                return (
+                  <Row style={{ paddingTop: 5 }}>
+                    <Col span={16}>
+                      {' '}
+                      <span style={paymentSummaryLabelStyle}>{taxInfo.name}</span>
+                    </Col>
+                    <Col span={8} style={{ marginBottom: 3 }}>
+                      <span
+                        style={{
+                          fontSize: 14,
+                          float: 'right',
+                          color: '#1D39C4',
+                          fontWeight: 100,
+                          fontStyle: 'italic',
+                        }}
+                      >
+                        {formatNumber(amountInfo?.total_tax[index])}
+                      </span>
+                    </Col>
+                  </Row>
+                );
+              })}
+
               <Row style={{ paddingTop: 5 }}>
                 <Col span={16}>
                   {' '}
@@ -373,7 +437,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    1.200.00
+                    USD
                   </span>
                 </Col>
               </Row>
@@ -392,7 +456,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    23
+                    23.000
                   </span>
                 </Col>
               </Row>
@@ -411,7 +475,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    {formatNumber(amountinfo.paid)}
+                    {formatNumber(parseInt(amountInfo?.grand_total, 10) / 23000)}
                   </span>
                 </Col>
               </Row>
@@ -439,7 +503,7 @@ function GuestPayment() {
                       fontStyle: 'italic',
                     }}
                   >
-                    {formatNumber(amountinfo.unpaid)}
+                    {formatNumber(amountInfo.unpaid)}
                   </span>
                 </Col>
               </Row>
@@ -568,7 +632,11 @@ function GuestPayment() {
 
         <Col span={24} style={{ marginTop: 25, marginBottom: 25 }}>
           <MButton>{t('common.Cancel')}</MButton>
-          <PattonButton onClick={handleNext} style={{ marginLeft: 20 }}>
+          <PattonButton
+            disabled={!(isCash || isMomo || isVNPay)}
+            onClick={handleNext}
+            style={{ marginLeft: 20 }}
+          >
             {t('common.Next')}
           </PattonButton>
         </Col>
