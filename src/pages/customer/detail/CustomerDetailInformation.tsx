@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Row, Select, Tabs } from 'antd';
+import { Col, DatePicker, Row, Select, Tabs } from 'antd';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
@@ -108,7 +108,176 @@ function CustomerDetailInformation() {
         </Row>
       </TabPane>
       <TabPane key="w" tab={t('customerDetail.Official Informations')}>
-        <Row style={{ padding: 16 }}>Official Informations</Row>
+        <Row style={{ padding: 16 }}>
+          <Col span={24} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
+            <PattonButton
+              onClick={() => console.log('handleUpdate Official Informations')}
+              style={{ float: 'right' }}
+            >
+              {t('common.Update')}
+            </PattonButton>
+          </Col>
+          <Col span={8}>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.National Identification ID Number.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <MInput
+                  placeholder={t('customerDetail.National Identification ID Number.placeholder')}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Date of issue.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <DatePicker
+                  placeholder={t('customerDetail.Date of issue.placeholder')}
+                  style={{
+                    height: 32,
+                    borderRadius: 4,
+                    marginRight: 11,
+                    width: '100%',
+                  }}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Valid until.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <DatePicker
+                  placeholder={t('customerDetail.Valid until.placeholder')}
+                  style={{
+                    height: 32,
+                    borderRadius: 4,
+                    marginRight: 11,
+                    width: '100%',
+                  }}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Issuing authority.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <MInput placeholder={t('customerDetail.Issuing authority.placeholder')} />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={8}>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Passport Number.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <MInput placeholder={t('customerDetail.Passport Number.placeholder')} />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Date of issue.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <DatePicker
+                  placeholder={t('customerDetail.Date of issue.placeholder')}
+                  style={{
+                    height: 32,
+                    borderRadius: 4,
+                    marginRight: 11,
+                    width: '100%',
+                  }}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Valid until.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <DatePicker
+                  placeholder={t('customerDetail.Valid until.placeholder')}
+                  style={{
+                    height: 32,
+                    borderRadius: 4,
+                    marginRight: 11,
+                    width: '100%',
+                  }}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Issuing authority.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <MInput placeholder={t('customerDetail.Issuing authority.placeholder')} />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={8}>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Nationality.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <Select
+                  allowClear
+                  placeholder={t('customerDetail.Nationality.placeholder')}
+                  style={{ width: '100%' }}
+                >
+                  <Option>1</Option>
+                  <Option>2</Option>
+                  <Option>3</Option>
+                </Select>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Immigration Visa Number.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <MInput placeholder={t('customerDetail.Immigration Visa Number.placeholder')} />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Date of issue.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <DatePicker
+                  placeholder={t('customerDetail.Date of issue.placeholder')}
+                  style={{
+                    height: 32,
+                    borderRadius: 4,
+                    marginRight: 11,
+                    width: '100%',
+                  }}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24} style={{ paddingBottom: 8 }}>
+                {t('customerDetail.Valid until.title')}
+              </Col>
+              <Col span={23} style={{ paddingBottom: 24 }}>
+                <DatePicker
+                  placeholder={t('customerDetail.Valid until.placeholder')}
+                  style={{
+                    height: 32,
+                    borderRadius: 4,
+                    marginRight: 11,
+                    width: '100%',
+                  }}
+                />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </TabPane>
     </Tabs>
   );

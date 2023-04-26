@@ -25,3 +25,12 @@
   background: #FAFAFA;
   box-shadow: inset 0 -1px 0 #E8E8E8;
 }
+
+.customer-detail-about .ant-card-head-title {
+  font-weight: normal !important;
+  padding: 12px 0 !important;
+}
+
+.customer-detail-about .ant-card-body {
+  padding: 0 !important;
+}

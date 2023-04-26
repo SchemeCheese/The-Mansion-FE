@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
 import { Col, Row, Table, Tabs } from 'antd';
@@ -50,6 +50,39 @@ function CustomerDetailFeedback({ directFeedback, socialFeedback, statusMapping 
     },
   ];
 
+  const socialFeedbackColumns = [
+    {
+      title: t('customerDetail.Created Date'),
+      dataIndex: 'created_date',
+      key: 'created_date',
+    },
+    {
+      title: t('customerDetail.Platform'),
+      dataIndex: 'platform',
+      key: 'platform',
+    },
+    {
+      title: t('customerDetail.Branch'),
+      dataIndex: 'branch',
+      key: 'branch',
+    },
+    {
+      title: t('customerDetail.Reviewer'),
+      dataIndex: 'reviewer',
+      key: 'reviewer',
+    },
+    {
+      title: t('customerDetail.Star'),
+      dataIndex: 'star',
+      key: 'star',
+    },
+    {
+      title: t('customerDetail.Comment'),
+      dataIndex: 'comment',
+      key: 'comment',
+    },
+  ];
+
   return (
     <Tabs className="customer-detail-tab" defaultActiveKey="1" style={{ minHeight: '100%' }}>
       <TabPane key="e" tab={t('customerDetail.Direct Feedbacks')}>
@@ -80,7 +113,7 @@ function CustomerDetailFeedback({ directFeedback, socialFeedback, statusMapping 
           </Col>
           <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
             <Table
-              columns={feedbackColumns}
+              columns={socialFeedbackColumns}
               dataSource={socialFeedback}
               pagination={false}
               size="small"

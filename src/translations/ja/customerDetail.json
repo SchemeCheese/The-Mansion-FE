@@ -137,5 +137,40 @@
   "Total Spent": "Total Spent",
   "Average spent": "Average spent",
   "Total Noshow": "Total Noshow",
-  "Total cancel": "Total cancel"
+  "Total cancel": "Total cancel",
+  "Platform": "Platform",
+  "Reviewer": "Reviewer",
+  "Star": "Star",
+  "Comment": "Comment",
+  "Room revenue": "Room revenue",
+  "Other revenue": "Other revenue",
+  "Total spent": "Total spent",
+  "National Identification ID Number": {
+    "title": "National Identification ID Number",
+    "placeholder": "Input ID"
+  },
+  "Date of issue": {
+    "title": "Date of issue",
+    "placeholder": ""
+  },
+  "Valid until": {
+    "title": "Valid until",
+    "placeholder": ""
+  },
+  "Issuing authority": {
+    "title": "Issuing authority",
+    "placeholder": "Input ID"
+  },
+  "Passport Number": {
+    "title": "Passport Number",
+    "placeholder": "Input number"
+  },
+  "Nationality": {
+    "title": "Nationality",
+    "placeholder": "Select country"
+  },
+  "Immigration Visa Number": {
+    "title": "Immigration Visa Number",
+    "placeholder": "Input number"
+  }
 }

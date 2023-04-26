@@ -77,6 +77,59 @@ function CustomerDetailReservation({ incomingReservation, pastReservation, statu
     },
   ];
 
+  const pastReservationColumns = [
+    {
+      title: t('customerDetail.Folio ID'),
+      dataIndex: 'folio_id',
+      key: 'folio_id',
+    },
+    {
+      title: t('customerDetail.Branch'),
+      dataIndex: 'branch',
+      key: 'branch',
+    },
+    {
+      title: t('customerDetail.Checkin'),
+      dataIndex: 'checkin',
+      key: 'checkin',
+    },
+    {
+      title: t('customerDetail.Checkout'),
+      dataIndex: 'checkout',
+      key: 'checkout',
+    },
+    {
+      title: t('customerDetail.Booker Name'),
+      dataIndex: 'booker_name',
+      key: 'booker_name',
+    },
+    {
+      title: t('customerDetail.Email'),
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: t('customerDetail.Phone'),
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: t('customerDetail.Room revenue'),
+      dataIndex: 'room_revenue',
+      key: 'room_revenue',
+    },
+    {
+      title: t('customerDetail.Other revenue'),
+      dataIndex: 'other_revenue',
+      key: 'other_revenue',
+    },
+    {
+      title: t('customerDetail.Total spent'),
+      dataIndex: 'total_spent',
+      key: 'total_spent',
+    },
+  ];
+
   return (
     <Tabs className="customer-detail-tab" defaultActiveKey="1" style={{ minHeight: '100%' }}>
       <TabPane key="e" tab={t('customerDetail.Incoming reservations')}>
@@ -103,7 +156,7 @@ function CustomerDetailReservation({ incomingReservation, pastReservation, statu
         <Row style={{ padding: 16 }}>
           <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
             <Table
-              columns={reservationsColumns}
+              columns={pastReservationColumns}
               dataSource={pastReservation}
               pagination={false}
               size="small"
