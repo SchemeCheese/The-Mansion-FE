@@ -18,8 +18,6 @@ import { useAppSelector } from 'modules/hooks';
 
 import { updateHouseKeepingAction } from 'actions';
 
-import { HouseKeepingType } from 'types';
-
 function Room() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -29,7 +27,6 @@ function Room() {
   const CLEAN_STATE_NAME = 'clean_state';
 
   useEffect(() => {
-    console.log('useEffect');
     setRoomResultState(items);
   }, [items]);
 
@@ -83,10 +80,10 @@ function Room() {
   return (
     <Row className="house-keeping-room">
       {roomResultState?.map((item: any, index: number) => (
-        <Col key={item.id} span={8}>
+        <Col key={item.id} lg={8} xs={24}>
           <Card title={`${item.name} - ${item.type}`}>
             <Row>
-              <Col span={10} style={{ textAlign: 'left' }}>
+              <Col lg={10} sm={10} style={{ textAlign: 'left' }} xs={24}>
                 <p>{t('houseKeeping.Room Status')}</p>
                 <Radio.Group
                   defaultValue={item.occupied_state}
@@ -104,8 +101,8 @@ function Room() {
                   </Col>
                 </Radio.Group>
               </Col>
-              <Col span={4} />
-              <Col span={10} style={{ textAlign: 'left' }}>
+              <Col lg={4} sm={4} xs={0} />
+              <Col lg={10} sm={10} style={{ textAlign: 'left' }} xs={24}>
                 <p>{t('houseKeeping.Cleaning Status')}</p>
                 <Radio.Group
                   defaultValue={item.clean_state}

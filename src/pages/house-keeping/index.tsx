@@ -81,8 +81,8 @@ function HouseKeeping() {
         <Row className="content house-keeping-content">
           <Row style={{ background: 'white', width: '100%' }}>
             <Col span={24}>
-              <Col span={5}>
-                <Form style={{ padding: '16px 0 0 16px' }}>
+              <Col lg={5} xs={24}>
+                <Form style={{ padding: '16px 16px 0 16px' }}>
                   <Form.Item className="search-house-keeping">
                     <MInput
                       onChange={e =>
