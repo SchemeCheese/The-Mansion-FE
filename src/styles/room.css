@@ -51,3 +51,9 @@
 .house-keeping-room .ant-radio:hover .ant-radio-inner {
   border-color: #1d39c4 !important;
 }
+
+@media screen and (max-width: 576px) {
+  .content {
+    padding: 12px 12px 0px 12px !important;
+  }
+}

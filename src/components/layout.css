@@ -192,3 +192,52 @@ textarea:hover,
 .fc-license-message {
   display: none;
 }
+
+/* For Mobile View */
+@media screen and (max-device-width: 640px) {
+  .trigger {
+    padding: 0 12px;
+  }
+  .header {
+    position: relative;
+    height: 100px !important;
+  }
+  .header-branch-name {
+    margin-left: 8% !important;
+  }
+  .header-logo {
+    position: absolute;
+    top: 10px;
+    right: 2%;
+  }
+  .header-user-name {
+    display: none;
+  }
+  .notification-badge {
+    position: absolute;
+    top: 1px;
+    right: 15%;
+  }
+  .notification-badge .ant-badge-count {
+    right: 19px;
+  }
+}
+/* For Mobile Landscape View */
+@media screen and (max-device-width: 900px) and (orientation: landscape) {
+  .header-branch-name {
+    margin-left: 2% !important;
+  }
+  .header-info .system-date {
+    margin-right: 15 !important;
+  }
+  .notification-badge .ant-badge-count {
+    right: 19px;
+  }
+}
+
+.ant-layout-sider-zero-width-trigger {
+  background-color: white;
+  color: black;
+  top: 5px;
+  right: -50px;
+}
