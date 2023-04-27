@@ -2,8 +2,7 @@ import 'styles/customer_detail.css';
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Checkbox, Col, DatePicker, Pagination, Row, Select, Space, Table, Tabs, Tag } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+import { Col, Row, Space } from 'antd';
 import CustomerDetailAbout from 'pages/customer/detail/CustomerDetailAbout';
 import CustomerDetailFeedback from 'pages/customer/detail/CustomerDetailFeedback';
 import CustomerDetailInformation from 'pages/customer/detail/CustomerDetailInformation';
@@ -12,12 +11,7 @@ import CustomerDetailReservation from 'pages/customer/detail/CustomerDetailReser
 import styled from 'styled-components';
 
 import MButton from 'components/MButton';
-import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
-
-const { Option } = Select;
-
-const { TabPane } = Tabs;
 
 const BreadscrumTitle = styled.p`
   color: rgba(0 0 0 85%);
@@ -44,7 +38,17 @@ function CustomerDetail() {
     },
   ]);
 
-  const [socialFeedbackState, setSocialFeedbackState] = useState<any>([]);
+  const [socialFeedbackState, setSocialFeedbackState] = useState<any>([
+    {
+      created_date: '11/04/2023',
+      platform: 'Google Profile',
+      branch: 'TMHA',
+      reviewer: 'Reviewer',
+      star: '5 stars',
+      comment:
+        '- Mình có xuống nhờ các bạn support lúc đêm muộn mà vẫn được hỗ trợ rất nhiệt tình. - Phòng rất xinh, đầy đủ tiện nghi.',
+    },
+  ]);
 
   const [incomingReservationsState, setIncomingReservationsState] = useState<any>([
     {
@@ -59,6 +63,33 @@ function CustomerDetail() {
       phone: '091 234 5678',
       total_room: '1',
       branch: 'TMHA',
+    },
+  ]);
+
+  const [pastReservationState, setPastReservationState] = useState<any>([
+    {
+      folio_id: '2944',
+      branch: 'TMHA',
+      checkin: '12/08/2020',
+      checkout: '12/08/2020',
+      booker_name: 'Du Vu',
+      email: 'du.vu@gmail.com',
+      phone: '091 234 5678',
+      room_revenue: '2.000.000',
+      other_revenue: '1.300.000',
+      total_spent: '3.300.000',
+    },
+    {
+      folio_id: '2944',
+      branch: 'TMHA',
+      checkin: '12/08/2020',
+      checkout: '12/08/2020',
+      booker_name: 'Du Vu',
+      email: 'du.vu@gmail.com',
+      phone: '091 234 5678',
+      room_revenue: '2.000.000',
+      other_revenue: '1.300.000',
+      total_spent: '3.300.000',
     },
   ]);
 
@@ -321,7 +352,7 @@ function CustomerDetail() {
         <Col span={24} style={{ background: 'white', marginTop: 16 }}>
           <CustomerDetailReservation
             incomingReservation={incomingReservationsState}
-            pastReservation={socialFeedbackState}
+            pastReservation={pastReservationState}
             statusMapping={statusMapping}
           />
         </Col>
