@@ -198,7 +198,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
                   <Text style={{ fontSize: 12 }}>{t('common.ID')}:</Text>
                 </Col>
                 <Col span={12} style={{ textAlign: 'right' }}>
-                  <Text style={{ fontSize: 12 }}>{value.passport_number}</Text>
+                  <Text style={{ fontSize: 12 }}>{value.id_number}</Text>
                 </Col>
               </Row>
               <Row style={{ marginBottom: 12 }}>

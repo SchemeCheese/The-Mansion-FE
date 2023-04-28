@@ -321,6 +321,8 @@ function CreateGuestModal({
       client_kind: currentGuest?.client_kind ? currentGuest?.client_kind.toString() : '1',
       client_rank: currentGuest?.client_rank?.toString() ?? null,
       passport_number: currentGuest?.passport_number ?? null,
+      id_number: currentGuest?.id_number ?? null,
+      visa_number: currentGuest?.visa_number ?? null,
       date_of_issue_of_passport: currentGuest?.date_of_issue_of_passport
         ? moment(currentGuest.date_of_issue_of_passport)
         : null,
@@ -471,11 +473,13 @@ function CreateGuestModal({
                     </Form.Item>
                   </Col>
                   <Col span={8}>
-                    <Form.Item
-                      label={t('guest.Identity / Passport No.title')}
-                      name="passport_number"
-                    >
-                      <Input placeholder={t('guest.Identity / Passport No.placeholder')} />
+                    <Form.Item label={t('guest.Identity No.title')} name="id_number">
+                      <Input placeholder={t('guest.Identity No.placeholder')} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item label={t('guest.Passport No.title')} name="passport_number">
+                      <Input placeholder={t('guest.Passport No.placeholder')} />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -546,6 +550,11 @@ function CreateGuestModal({
                         <Option value="2">Female</Option>
                         <Option value="3">Undefined</Option>
                       </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item label={t('guest.Visa No.title')} name="visa_number">
+                      <Input placeholder={t('guest.Visa No.placeholder')} />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
