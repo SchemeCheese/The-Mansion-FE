@@ -16,8 +16,16 @@
     "title": "Rank",
     "placeholder": "Select rank"
   },
-  "Identity / Passport No": {
-    "title": "Identity / Passport No",
+  "Identity No": {
+    "title": "Identity No",
+    "placeholder": "233202783028"
+  },
+  "Passport No": {
+    "title": "Passport No",
+    "placeholder": "233202783028"
+  },
+  "Visa No": {
+    "title": "Visa No",
     "placeholder": "233202783028"
   },
   "Passport Expire Date": "Passport Expire Date",
