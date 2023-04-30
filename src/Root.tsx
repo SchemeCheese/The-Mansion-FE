@@ -502,7 +502,7 @@ function Root() {
                   <GuestThank />
                 </PrivateRoute>
               }
-              path="/guest-thank"
+              path="/guest-thank/:type"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>

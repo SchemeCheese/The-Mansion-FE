@@ -203,8 +203,8 @@ function GuestPayment() {
               reservation_id: 1,
               reservation_detail_id: 1,
               amount: amountInfo.unpaid,
-              // request_type: 'payWithATM', // Bank
-              request_type: '',
+              request_type: 'payWithATM', // Bank
+              // request_type: '',
             },
           }),
         );

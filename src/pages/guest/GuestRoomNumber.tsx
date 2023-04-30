@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name: Payment
+Developer Name: MinhNV
+Created Date: 30/04/2023
+Updated Date: 30/04/2023
+Main functions: Guest Room Number
+************************************ */
+
 import 'styles/guest_room_number.css';
 
 import React, { useEffect, useState } from 'react';
@@ -76,6 +84,9 @@ function GuestRoomNumber() {
         </Col>
         <Col span={24} style={{ textAlign: 'center' }}>
           <Input
+            onChange={e => {
+              setNumberPhone(e.target.value);
+            }}
             style={{
               background: '#F0F3F7',
               border: '1px solid #1890FF',

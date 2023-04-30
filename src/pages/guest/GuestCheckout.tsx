@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name: Payment
+Developer Name: MinhNV
+Created Date: 30/04/2023
+Updated Date: 30/04/2023
+Main functions: Guest Checkout
+************************************ */
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';

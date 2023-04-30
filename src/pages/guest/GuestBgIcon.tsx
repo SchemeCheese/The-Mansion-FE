@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name: Payment
+Developer Name: MinhNV
+Created Date: 30/04/2023
+Updated Date: 30/04/2023
+Main functions: Guest BgIcon
+************************************ */
+
 import React from 'react';
 import SVG from 'react-inlinesvg';
 
