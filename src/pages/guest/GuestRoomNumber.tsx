@@ -27,15 +27,15 @@ import PattonButton from 'components/PattonButton';
 
 function GuestRoomNumber() {
   const { t } = useTranslation();
-  const [numberPhone, setNumberPhone] = useState('');
+  const [roomNumber, setRoomNumber] = useState('');
   const listNumber = [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, ''];
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleNumberPhone = (number: number | string) => {
-    const txtNumber = `${numberPhone}${number}`;
+  const handleChooseRoomNumber = (number: number | string) => {
+    const txtNumber = `${roomNumber}${number}`;
 
-    setNumberPhone(txtNumber);
+    setRoomNumber(txtNumber);
   };
 
   const getReservationCheckoutFromRoomNoData = useAppSelector(
@@ -45,7 +45,7 @@ function GuestRoomNumber() {
 
   useEffect(() => {
     if (changed('is_finish', true)) {
-      navigate('/guest-checkout');
+      navigate('/guest-customer-info');
     }
   }, [changed]);
 
@@ -68,7 +68,7 @@ function GuestRoomNumber() {
             textAlign: 'center',
           }}
         >
-          <SVG src="media/images/logo.svg" />
+          <SVG src="/media/images/logo.svg" />
         </Col>
         <Col
           span={24}
@@ -85,7 +85,7 @@ function GuestRoomNumber() {
         <Col span={24} style={{ textAlign: 'center' }}>
           <Input
             onChange={e => {
-              setNumberPhone(e.target.value);
+              setRoomNumber(e.target.value);
             }}
             style={{
               background: '#F0F3F7',
@@ -94,7 +94,7 @@ function GuestRoomNumber() {
               width: '514px',
               height: '48px',
             }}
-            value={numberPhone}
+            value={roomNumber}
           />
         </Col>
         <div style={{ width: 277, margin: 'auto', padding: '20px 0 24px 0' }}>
@@ -102,7 +102,7 @@ function GuestRoomNumber() {
             {listNumber.map((number: number | string) => (
               <Col
                 className={`item-number ${number === '' ? 'not-number' : ''}`}
-                onClick={() => handleNumberPhone(number)}
+                onClick={() => handleChooseRoomNumber(number)}
               >
                 <span>{number}</span>
               </Col>
@@ -112,11 +112,11 @@ function GuestRoomNumber() {
         <Col span={24} />
         <Col span={24} style={{ textAlign: 'center' }}>
           <PattonButton
-            disabled={numberPhone === ''}
+            disabled={roomNumber === ''}
             onClick={() => {
               dispatch(
                 getReservationCheckoutByRoomNoAction({
-                  room_no: numberPhone,
+                  room_no: roomNumber,
                 }),
               );
             }}

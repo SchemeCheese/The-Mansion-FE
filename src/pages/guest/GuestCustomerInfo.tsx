@@ -6,7 +6,7 @@ Updated Date: 30/04/2023
 Main functions: Guest Checkout
 ************************************ */
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Col, DatePicker, Form, Input, Row, Steps, TimePicker } from 'antd';
@@ -19,14 +19,16 @@ import { useAppSelector } from 'modules/hooks';
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
-function GuestCheckout() {
+import { useGuest } from './useGuest';
+
+function GuestCustomerInfo() {
   const { t } = useTranslation();
   const { Step } = Steps;
-  const [currentStep, setCurrentStep] = useState(0);
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
   const { data: reservationCheckoutData } = useAppSelector(selectGetReservationCheckoutFromRoomNo);
+  const { handleCancel } = useGuest();
 
   if (reservationCheckoutData.client_info === undefined) {
     return null;
@@ -57,19 +59,13 @@ function GuestCheckout() {
               height: '100%',
             }}
           >
-            <Col span={24} style={{ marginBottom: 30 }}>
-              <Steps current={currentStep}>
+            <Col span={10} style={{ marginBottom: 30 }}>
+              <Steps current={0}>
                 <Step title={t('guestCheckout.Confirm your information')} />
                 <Step title={t('guestCheckout.Payment')} />
               </Steps>
             </Col>
-            <Col
-              className="guest-checkout-confirm"
-              span={24}
-              style={{
-                display: currentStep === 0 ? 'block' : 'none',
-              }}
-            >
+            <Col className="guest-checkout-confirm" span={24}>
               <Form
                 autoComplete="off"
                 form={form}
@@ -199,19 +195,10 @@ function GuestCheckout() {
                 </Row>
               </Form>
             </Col>
-            <Col
-              className="guest-checkout-payment"
-              span={24}
-              style={{
-                display: currentStep === 1 ? 'block' : 'none',
-              }}
-            >
-              guest-checkout-payment
-            </Col>
           </Row>
         </Col>
         <Col span={24} style={{ marginTop: 25, marginBottom: 25, textAlign: 'center' }}>
-          <MButton>{t('common.Cancel')}</MButton>
+          <MButton onClick={handleCancel}>{t('common.Cancel')}</MButton>
           <PattonButton onClick={handleNext} style={{ marginLeft: 20 }}>
             {t('common.Next')}
           </PattonButton>
@@ -222,4 +209,4 @@ function GuestCheckout() {
   );
 }
 
-export default GuestCheckout;
+export default GuestCustomerInfo;

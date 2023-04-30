@@ -172,7 +172,7 @@ export function* getReservationCheckoutByRoomNoSaga({
     if (success) {
       yield put(getReservationCheckoutByRoomNoActionSuccess({ data }));
     } else {
-      message.error('Get Reservation Info Failed!');
+      message.warn('The room has no checkin today reservation');
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
@@ -181,6 +181,8 @@ export function* getReservationCheckoutByRoomNoSaga({
 
     if (error.status === 401) {
       yield put(logOut());
+    } else if (error.status === 422) {
+      message.warn('The room has no checkin today reservation');
     } else {
       message.error('Get Reservation Info Failed!');
     }
