@@ -14,7 +14,7 @@ import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_tod
 import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
 import FrontDesk from 'pages/front-desk/list';
 import Guest from 'pages/guest';
-import GuestCheckout from 'pages/guest/GuestCheckout';
+import GuestCustomerInfo from 'pages/guest/GuestCustomerInfo';
 import GuestPayment from 'pages/guest/GuestPayment';
 import GuestRoomNumber from 'pages/guest/GuestRoomNumber';
 import GuestThank from 'pages/guest/GuestThank';
@@ -473,10 +473,10 @@ function Root() {
                   isGuestScreen
                   to="/"
                 >
-                  <GuestCheckout />
+                  <GuestCustomerInfo />
                 </PrivateRoute>
               }
-              path="/guest-checkout"
+              path="/guest-customer-info"
             />
             <Route
               element={

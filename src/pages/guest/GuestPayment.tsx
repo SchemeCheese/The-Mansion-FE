@@ -8,43 +8,23 @@ Main functions: Guest Payment
 
 import 'styles/guest_payment.css';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import {
-  Card,
-  Col,
-  Form,
-  Pagination,
-  Radio,
-  RadioChangeEvent,
-  Row,
-  Space,
-  Steps,
-  Table,
-  Tag,
-} from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import { useNavigate } from 'react-router-dom';
+import { Col, Radio, RadioChangeEvent, Row, Space, Steps, Table, Tag } from 'antd';
 import { formatNumber } from 'helpers';
 import GuestFooter from 'pages/guest/GuestFooter';
-import { selectGetReservationCheckoutFromRoomNo, selectGetReservationDetail } from 'selectors';
+import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
-import {
-  getReservation,
-  getReservationDetail,
-  paymentMomoPayReservationDetail,
-  paymentVNPayReservationDetail,
-  resendEmailReservationAction,
-  resetReservation,
-  resetReservationDetail,
-  searchRoomReset,
-  updateReservation,
-} from 'actions';
+import { paymentMomoPayReservationDetail, paymentVNPayReservationDetail } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
+
+import { useGuest } from './useGuest';
 
 function GuestPayment() {
   const { t } = useTranslation();
@@ -53,6 +33,9 @@ function GuestPayment() {
 
   const [isMomo, setIsMomo] = useState(false);
   const [isVNPay, setIsVNPay] = useState(false);
+
+  const { handleCancel } = useGuest();
+  const navigate = useNavigate();
 
   const { data: reservationCheckoutData } = useAppSelector(selectGetReservationCheckoutFromRoomNo);
 
@@ -221,6 +204,8 @@ function GuestPayment() {
           }),
         );
       }
+    } else {
+      navigate('/guest-thank/cash');
     }
   };
 
@@ -243,7 +228,7 @@ function GuestPayment() {
               height: '100%',
             }}
           >
-            <Col span={24} style={{ marginBottom: 30 }}>
+            <Col span={10} style={{ marginBottom: 30 }}>
               <Steps current={1}>
                 <Step title={t('guestCheckout.Confirm your information')} />
                 <Step title={t('guestCheckout.Payment')} />
@@ -631,7 +616,7 @@ function GuestPayment() {
         </Col>
 
         <Col span={24} style={{ marginTop: 25, marginBottom: 25 }}>
-          <MButton>{t('common.Cancel')}</MButton>
+          <MButton onClick={handleCancel}>{t('common.Cancel')}</MButton>
           <PattonButton
             disabled={!(isCash || isMomo || isVNPay)}
             onClick={handleNext}

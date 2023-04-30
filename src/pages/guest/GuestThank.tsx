@@ -41,6 +41,10 @@ function GuestThank() {
       return '5';
     }
 
+    if (type === 'cash') {
+      return '1';
+    }
+
     return '';
   };
 
@@ -50,6 +54,10 @@ function GuestThank() {
     }
 
     if (type === 'momo-pay' && searchParam.get('resultCode') === '0') {
+      return true;
+    }
+
+    if (type === 'cash') {
       return true;
     }
 
