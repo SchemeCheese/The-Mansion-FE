@@ -7,16 +7,21 @@ interface Props {
   breadCrumb?: any;
   children: React.ReactElement;
   isAuthenticated: boolean;
+  isGuestScreen?: boolean;
   to?: string;
 }
 
 export default function PrivateRoute(props: Props): JSX.Element {
-  const { breadCrumb, children, isAuthenticated, to = '/login' } = props;
+  const { breadCrumb, children, isAuthenticated, isGuestScreen, to = '/login' } = props;
   const { pathname } = useLocation();
 
-  return isAuthenticated ? (
-    <MLayout breadCrumb={breadCrumb}>{children}</MLayout>
-  ) : (
-    <Navigate state={{ redirect: pathname, isAuthenticated }} to={to} />
-  );
+  if (isAuthenticated) {
+    if (isGuestScreen) {
+      return children;
+    }
+
+    return <MLayout breadCrumb={breadCrumb}>{children}</MLayout>;
+  }
+
+  return <Navigate state={{ redirect: pathname, isAuthenticated }} to={to} />;
 }

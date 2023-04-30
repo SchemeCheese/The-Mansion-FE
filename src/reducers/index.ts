@@ -1,3 +1,6 @@
+import paymentMomoPayReservationDetail, {
+  paymentMomoPayReservationDetailState,
+} from 'reducers/paymentMomoPayReservationDetail';
 import printDepositPDFReservationDetail, {
   printDepositPDFReservationDetailState,
 } from 'reducers/printDepositPDFReservationDetail';
@@ -49,6 +52,9 @@ import notifications, { notificationsState } from './getNotification';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
 import getReservationByFolio, { getReservationByFolioState } from './getReservationByFolio';
+import getReservationCheckoutFromRoomNo, {
+  getReservationCheckoutFromRoomNoState,
+} from './getReservationCheckoutFromRoomNo';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
 import getRooms, { getRoomsState } from './getRooms';
@@ -59,6 +65,9 @@ import getWaterYesterday, { getWaterYesterdayState } from './getWaterYesterday';
 import github, { githubState } from './github';
 import nightAudit, { nightAuditState } from './nightAudit';
 import noshow, { noshowState } from './noshow';
+import paymentVNPayReservationDetail, {
+  paymentVNPayReservationDetailState,
+} from './paymentVNPayReservationDetail';
 import printCheckinConfirmPDFReservationDetail, {
   printCheckinConfirmPDFReservationDetailState,
 } from './printCheckinConfirmPDFReservationDetail';
@@ -167,6 +176,9 @@ export const initialState = {
   getElectricPower: getElectricPowerState,
   getDeviceManager: getDeviceManagerState,
   getDurationCurve: getDurationCurveState,
+  paymentVNPayReservationDetail: paymentVNPayReservationDetailState,
+  paymentMomoPayReservationDetail: paymentMomoPayReservationDetailState,
+  getReservationCheckoutFromRoomNo: getReservationCheckoutFromRoomNoState,
 };
 
 export default {
@@ -243,4 +255,7 @@ export default {
   ...getDeviceManager,
   ...getDurationCurve,
   ...downloadCSVBranchManager,
+  ...paymentVNPayReservationDetail,
+  ...paymentMomoPayReservationDetail,
+  ...getReservationCheckoutFromRoomNo,
 };

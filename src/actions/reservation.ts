@@ -15,6 +15,8 @@ import {
   GetReservationByFolioPayload,
   GetReservationFinishPayload,
   GetReservationPayload,
+  PaymentMomoPayReservationDetail,
+  PaymentVNPayReservationDetail,
   PrintCheckinConfirmPDFReservationDetail,
   PrintDepositPDFReservationDetail,
   PrintRegistrationCardPDFReservationDetail,
@@ -202,4 +204,22 @@ export const printCheckinConfirmPDFReservationDetail = createAction(
 
 export const printCheckinConfirmPDFReservationDetailSuccess = createAction(
   ActionTypes.RESERVATION_DETAIL_PRINT_CHECKIN_CONFIRM_PDF_SUCCESS,
+);
+
+export const paymentVNPayReservationDetail = createAction(
+  ActionTypes.RESERVATION_DETAIL_PAYMENT_VNPAY,
+  (payload: PaymentVNPayReservationDetail) => actionPayload(payload),
+);
+
+export const paymentVNPayReservationDetailSuccess = createAction(
+  ActionTypes.RESERVATION_DETAIL_PAYMENT_VNPAY_SUCCESS,
+);
+
+export const paymentMomoPayReservationDetail = createAction(
+  ActionTypes.RESERVATION_DETAIL_PAYMENT_MOMOPAY,
+  (payload: PaymentMomoPayReservationDetail) => actionPayload(payload),
+);
+
+export const paymentMomoPayReservationDetailSuccess = createAction(
+  ActionTypes.RESERVATION_DETAIL_PAYMENT_MOMOPAY_SUCCESS,
 );

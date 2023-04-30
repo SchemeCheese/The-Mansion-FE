@@ -62,5 +62,19 @@
   "Address": {
     "title": "Address",
     "placeholder": "Address"
-  }
+  },
+  "Copyright©2020 The Mansions Hospitality": "Copyright©2020 The Mansions Hospitality",
+  "Thank you!": "Thank you!",
+  "Property Management System": "Property Management System",
+  "Please input your Room Number to checkout": "Please input your Room Number to checkout",
+  "Select your stay": "Select your stay",
+  "Select your room": "Select your room",
+  "Cash Credit Card": "Cash Credit Card",
+  "E-Wallet": "E-Wallet",
+  "VAT": "VAT",
+  "Please contact the Reception for instructions.": "Please contact the Reception for instructions.",
+  "Waiting for payment": "Waiting for payment",
+  "VNPay": "VNPay",
+  "MOMO Pay": "MOMO Pay",
+  "Welcome to The Mansion Hanoi Hotel": "Welcome to The Mansion Hanoi Hotel"
 }

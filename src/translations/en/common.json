@@ -151,6 +151,7 @@
   "No Smoking": "No Smoking",
   "Room No": "Room No",
   "Checkin": "Checkin",
+  "Checkout": "Checkout",
   "Detail Informations": "Detail Informations",
   "Overtime": "Overtime",
   "Rollback Checkin": "Rollback Checkin",
@@ -179,5 +180,10 @@
   "Power Monitoring": "Power Monitoring",
   "Branch Manager": "Branch Manager",
   "Device Manager": "Device Manager",
-  "House Keeping": "House Keeping"
+  "House Keeping": "House Keeping",
+  "Next": "Next",
+  "Finish": "Finish",
+  "Confirm": "Confirm",
+  "Age": "Age",
+  "Address": "Address"
 }

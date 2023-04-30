@@ -13,8 +13,14 @@ import ReservationCheckinTodayDetail from 'pages/front-desk/detail/checkin_today
 import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_today';
 import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
 import FrontDesk from 'pages/front-desk/list';
+import Guest from 'pages/guest';
+import GuestCheckout from 'pages/guest/GuestCheckout';
+import GuestPayment from 'pages/guest/GuestPayment';
+import GuestRoomNumber from 'pages/guest/GuestRoomNumber';
+import GuestThank from 'pages/guest/GuestThank';
 import HouseKeeping from 'pages/house-keeping';
 import NightAudit from 'pages/night_audit';
+import StatusPayment from 'pages/payment/StatusPayment';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
 import Reservation from 'pages/reservation/list';
@@ -204,7 +210,7 @@ function Root() {
 
   return (
     <ThemeProvider theme={theme}>
-      <AppWrapper data-testid="app">
+      <AppWrapper className="custom-wrapper" data-testid="app">
         <Helmet
           defer={false}
           encodeSpecialCharacters
@@ -279,7 +285,18 @@ function Root() {
               }
               path="/reservation/create"
             />
-
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={reservationBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  to="/"
+                >
+                  <StatusPayment />
+                </PrivateRoute>
+              }
+              path="/status-payment/:type"
+            />
             <Route
               element={
                 <PrivateRoute
@@ -421,6 +438,71 @@ function Root() {
                 </PrivateRoute>
               }
               path="/customer/:id"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <Guest />
+                </PrivateRoute>
+              }
+              path="/guest"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <GuestPayment />
+                </PrivateRoute>
+              }
+              path="/guest-payment"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <GuestCheckout />
+                </PrivateRoute>
+              }
+              path="/guest-checkout"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <GuestRoomNumber />
+                </PrivateRoute>
+              }
+              path="/guest-room-number"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={dashboardBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <GuestThank />
+                </PrivateRoute>
+              }
+              path="/guest-thank/:type"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>

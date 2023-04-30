@@ -31,6 +31,8 @@ import { useAppSelector } from 'modules/hooks';
 import {
   getReservation,
   getReservationDetail,
+  paymentMomoPayReservationDetail,
+  paymentVNPayReservationDetail,
   resendEmailReservationAction,
   resetReservation,
   resetReservationDetail,
@@ -120,6 +122,36 @@ function ReservationDetail() {
     setQuantity(1);
     setRoomSelected([]);
     setIsModalVisible(true);
+  };
+
+  const handlePaymentVNPay = () => {
+    dispatch(
+      paymentVNPayReservationDetail({
+        payload: {
+          reservation_id: id ?? '',
+          reservation_detail_id: 1,
+          amount: 50000,
+          // bank_code: 'VNBANK', // Bank
+          bank_code: '',
+        },
+      }),
+    );
+    console.log('handlePaymentVNPay');
+  };
+
+  const handlePaymentMomoPay = () => {
+    dispatch(
+      paymentMomoPayReservationDetail({
+        payload: {
+          reservation_id: id ?? '',
+          reservation_detail_id: 1,
+          amount: 50000,
+          // request_type: 'payWithATM', // Bank
+          request_type: '',
+        },
+      }),
+    );
+    console.log('handlePaymentMomoPay');
   };
 
   const dispatch = useDispatch();
@@ -457,6 +489,12 @@ function ReservationDetail() {
               )}
             </Col>
           </Row>
+        </Col>
+        <Col span={24} style={{ paddingRight: 20, marginBottom: 10 }}>
+          <MButton onClick={handlePaymentVNPay}>Next VNPay</MButton>
+          <MButton onClick={handlePaymentMomoPay} style={{ marginLeft: 10 }}>
+            Next MomoPay
+          </MButton>
         </Col>
       </Row>
       {!_.isEmpty(reservationRedux) && id && (

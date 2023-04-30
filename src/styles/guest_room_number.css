@@ -1,0 +1,30 @@
+.guest-room-number .list-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 16px;
+  border-radius: 4px;
+  flex-wrap: wrap;
+}
+
+.guest-room-number .list-number .item-number {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 38px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.65);
+  width: 64px;
+  height: 64px;
+  justify-content: center;
+  background: #dce2ea;
+  cursor: pointer;
+}
+
+.guest-room-number .list-number .item-number.not-number {
+  cursor: unset;
+  background: transparent;
+}

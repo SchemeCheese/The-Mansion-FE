@@ -1,0 +1,44 @@
+{
+  "Confirm your information": "Confirm your information",
+  "Payment": "Payment",
+  "Folio ID": {
+    "title": "Folio ID",
+    "placeholder": ""
+  },
+  "Last Name": {
+    "title": "Last Name",
+    "placeholder": ""
+  },
+  "Email": {
+    "title": "Email",
+    "placeholder": ""
+  },
+  "OTA/TA Booking ID": {
+    "title": "OTA/TA Booking ID",
+    "placeholder": "Input Booking ID"
+  },
+  "First Name": {
+    "title": "First Name",
+    "placeholder": ""
+  },
+  "Mobile": {
+    "title": "Mobile",
+    "placeholder": ""
+  },
+  "Checkin Date": {
+    "title": "Checkin Date",
+    "placeholder": ""
+  },
+  "Checkout Date": {
+    "title": "Checkout Date",
+    "placeholder": ""
+  },
+  "Checkin Time": {
+    "title": "Checkin Time",
+    "placeholder": ""
+  },
+  "Checkout Time": {
+    "title": "Checkout Time",
+    "placeholder": ""
+  }
+}
