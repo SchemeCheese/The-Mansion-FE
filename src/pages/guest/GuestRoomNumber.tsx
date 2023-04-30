@@ -68,7 +68,7 @@ function GuestRoomNumber() {
             textAlign: 'center',
           }}
         >
-          <SVG src="media/images/logo.svg" />
+          <SVG src="/media/images/logo.svg" />
         </Col>
         <Col
           span={24}
