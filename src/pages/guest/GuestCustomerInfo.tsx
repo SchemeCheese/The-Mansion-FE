@@ -31,7 +31,7 @@ function GuestCustomerInfo() {
   const { handleCancel } = useGuest();
 
   if (reservationCheckoutData.client_info === undefined) {
-    return null;
+    window.location.href = '/guest';
   }
 
   const clientInfo = reservationCheckoutData.client_info;
@@ -66,134 +66,142 @@ function GuestCustomerInfo() {
               </Steps>
             </Col>
             <Col className="guest-checkout-confirm" span={24}>
-              <Form
-                autoComplete="off"
-                form={form}
-                initialValues={{
-                  last_name: clientInfo.last_name,
-                  folio_id: reservationDetailInfo.reservation.reservation_number,
-                  email: clientInfo.email_address1,
-                  ota_booking_id: reservationDetailInfo.reservation.external_reservation_number,
-                  first_name: clientInfo.first_name,
-                  phone_number: clientInfo.telephone_number1,
-                  checkin_date: moment(reservationDetailInfo.check_in_date),
-                  checkin_time: moment(reservationDetailInfo.check_in_date),
-                  checkout_date: moment(),
-                  checkout_time: moment(),
-                }}
-                labelCol={{
-                  span: 24,
-                }}
-                layout="vertical"
-                name="basic"
-                wrapperCol={{
-                  span: 23,
-                }}
-              >
-                <Row style={{ maxHeight: '70vh', overflow: 'auto' }}>
-                  <Col span={24}>
-                    <Row>
-                      <Col span={8}>
-                        <Form.Item label={t('guestCheckout.Folio ID.title')} name="folio_id">
-                          <Input placeholder={t('guestCheckout.Folio ID.placeholder')} readOnly />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label={t('guestCheckout.Last Name.title')} name="last_name">
-                          <Input placeholder={t('guestCheckout.Last Name.placeholder')} readOnly />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label={t('guestCheckout.Email.title')} name="email">
-                          <Input placeholder={t('guestCheckout.Email.placeholder')} readOnly />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item
-                          label={t('guestCheckout.OTA/TA Booking ID.title')}
-                          name="ota_booking_id"
-                        >
-                          <Input placeholder={t('guestCheckout.Email.placeholder')} readOnly />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label={t('guestCheckout.First Name.title')} name="first_name">
-                          <Input placeholder={t('guestCheckout.First Name.placeholder')} readOnly />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label={t('guestCheckout.Mobile.title')} name="phone_number">
-                          <Input placeholder={t('guestCheckout.Mobile.placeholder')} readOnly />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item
-                          label={t('guestCheckout.Checkin Date.title')}
-                          name="checkin_date"
-                        >
-                          <DatePicker
-                            disabled
-                            placeholder={t('guestCheckout.Checkin Date.placeholder')}
-                            style={{
-                              height: 32,
-                              borderRadius: 4,
-                              marginRight: 11,
-                              width: '100%',
-                            }}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item
-                          label={t('guestCheckout.Checkout Date.title')}
-                          name="checkout_date"
-                        >
-                          <DatePicker
-                            disabled
-                            placeholder={t('guestCheckout.Checkout Date.placeholder')}
-                            style={{
-                              height: 32,
-                              borderRadius: 4,
-                              marginRight: 11,
-                              width: '100%',
-                            }}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8} />
-                      <Col span={8}>
-                        <Form.Item label={t('common.Checkin Time')} name="checkin_time">
-                          <TimePicker
-                            disabled
-                            format="HH:mm"
-                            style={{
-                              height: 32,
-                              borderRadius: 4,
-                              marginRight: 11,
-                              width: '100%',
-                            }}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label={t('common.Checkout Time')} name="checkout_time">
-                          <TimePicker
-                            disabled
-                            format="HH:mm"
-                            style={{
-                              height: 32,
-                              borderRadius: 4,
-                              marginRight: 11,
-                              width: '100%',
-                            }}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8} />
-                    </Row>
-                  </Col>
-                </Row>
-              </Form>
+              {reservationCheckoutData.client_info && (
+                <Form
+                  autoComplete="off"
+                  form={form}
+                  initialValues={{
+                    last_name: clientInfo.last_name,
+                    folio_id: reservationDetailInfo.reservation.reservation_number,
+                    email: clientInfo.email_address1,
+                    ota_booking_id: reservationDetailInfo.reservation.external_reservation_number,
+                    first_name: clientInfo.first_name,
+                    phone_number: clientInfo.telephone_number1,
+                    checkin_date: moment(reservationDetailInfo.check_in_date),
+                    checkin_time: moment(reservationDetailInfo.check_in_date),
+                    checkout_date: moment(),
+                    checkout_time: moment(),
+                  }}
+                  labelCol={{
+                    span: 24,
+                  }}
+                  layout="vertical"
+                  name="basic"
+                  wrapperCol={{
+                    span: 23,
+                  }}
+                >
+                  <Row style={{ maxHeight: '70vh', overflow: 'auto' }}>
+                    <Col span={24}>
+                      <Row>
+                        <Col span={8}>
+                          <Form.Item label={t('guestCheckout.Folio ID.title')} name="folio_id">
+                            <Input placeholder={t('guestCheckout.Folio ID.placeholder')} readOnly />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label={t('guestCheckout.Last Name.title')} name="last_name">
+                            <Input
+                              placeholder={t('guestCheckout.Last Name.placeholder')}
+                              readOnly
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label={t('guestCheckout.Email.title')} name="email">
+                            <Input placeholder={t('guestCheckout.Email.placeholder')} readOnly />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item
+                            label={t('guestCheckout.OTA/TA Booking ID.title')}
+                            name="ota_booking_id"
+                          >
+                            <Input placeholder={t('guestCheckout.Email.placeholder')} readOnly />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label={t('guestCheckout.First Name.title')} name="first_name">
+                            <Input
+                              placeholder={t('guestCheckout.First Name.placeholder')}
+                              readOnly
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label={t('guestCheckout.Mobile.title')} name="phone_number">
+                            <Input placeholder={t('guestCheckout.Mobile.placeholder')} readOnly />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item
+                            label={t('guestCheckout.Checkin Date.title')}
+                            name="checkin_date"
+                          >
+                            <DatePicker
+                              disabled
+                              placeholder={t('guestCheckout.Checkin Date.placeholder')}
+                              style={{
+                                height: 32,
+                                borderRadius: 4,
+                                marginRight: 11,
+                                width: '100%',
+                              }}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item
+                            label={t('guestCheckout.Checkout Date.title')}
+                            name="checkout_date"
+                          >
+                            <DatePicker
+                              disabled
+                              placeholder={t('guestCheckout.Checkout Date.placeholder')}
+                              style={{
+                                height: 32,
+                                borderRadius: 4,
+                                marginRight: 11,
+                                width: '100%',
+                              }}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8} />
+                        <Col span={8}>
+                          <Form.Item label={t('common.Checkin Time')} name="checkin_time">
+                            <TimePicker
+                              disabled
+                              format="HH:mm"
+                              style={{
+                                height: 32,
+                                borderRadius: 4,
+                                marginRight: 11,
+                                width: '100%',
+                              }}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                          <Form.Item label={t('common.Checkout Time')} name="checkout_time">
+                            <TimePicker
+                              disabled
+                              format="HH:mm"
+                              style={{
+                                height: 32,
+                                borderRadius: 4,
+                                marginRight: 11,
+                                width: '100%',
+                              }}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col span={8} />
+                      </Row>
+                    </Col>
+                  </Row>
+                </Form>
+              )}
             </Col>
           </Row>
         </Col>

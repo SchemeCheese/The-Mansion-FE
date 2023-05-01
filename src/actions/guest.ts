@@ -47,3 +47,7 @@ export const getReservationCheckoutByRoomNoActionSuccess = createAction(
   ActionTypes.GET_RESERVATION_DETAIL_BY_ROOM_NO_SUCCESS,
   (payload: GetReservationCheckoutFromRoomNoResult) => actionPayload(payload),
 );
+
+export const resetReservationCheckoutByRoomNoAction = createAction(
+  ActionTypes.RESET_RESERVATION_DETAIL_BY_ROOM_NO_SUCCESS,
+);
