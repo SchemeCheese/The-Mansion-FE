@@ -70,32 +70,34 @@ function GuestThank() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(
-      checkoutAction({
-        payload: {
-          reservation_detail_id: reservationCheckoutData.reservation_detail.id,
-          sales_info_id: reservationCheckoutData.sales_info_id,
-          sales_detail_id: reservationCheckoutData.sales_detail_id,
-          payment_methods: [
-            {
-              amount_in_vnd: reservationCheckoutData.amount_info.unpaid,
-              currency_conversion_id: 2,
-              payment_amount: reservationCheckoutData.amount_info.unpaid,
-              payment_method: getPaymentMethodConst(),
-              payment_exchange_rate: 1,
+    if (isSuccessPayment()) {
+      dispatch(
+        checkoutAction({
+          payload: {
+            reservation_detail_id: reservationCheckoutData.reservation_detail.id,
+            sales_info_id: reservationCheckoutData.sales_info_id,
+            sales_detail_id: reservationCheckoutData.sales_detail_id,
+            payment_methods: [
+              {
+                amount_in_vnd: reservationCheckoutData.amount_info.unpaid,
+                currency_conversion_id: 2,
+                payment_amount: reservationCheckoutData.amount_info.unpaid,
+                payment_method: getPaymentMethodConst(),
+                payment_exchange_rate: 1,
+              },
+            ],
+            reservation_id: reservationCheckoutData.reservation_detail.reservation.id,
+            paid: {
+              total_amount: reservationCheckoutData.amount_info.unpaid,
+              discount_amount: reservationCheckoutData.amount_info.discount,
+              balance_amount: 0,
             },
-          ],
-          reservation_id: reservationCheckoutData.reservation_detail.reservation.id,
-          paid: {
-            total_amount: reservationCheckoutData.amount_info.unpaid,
-            discount_amount: reservationCheckoutData.amount_info.discount,
-            balance_amount: 0,
           },
-        },
-      }),
-    );
+        }),
+      );
 
-    dispatch(resetReservationCheckoutByRoomNoAction());
+      dispatch(resetReservationCheckoutByRoomNoAction());
+    }
   }, []);
 
   return (
