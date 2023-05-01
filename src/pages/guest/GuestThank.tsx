@@ -18,7 +18,7 @@ import { selectCheckoutState, selectGetReservationCheckoutFromRoomNo } from 'sel
 
 import { useAppSelector } from 'modules/hooks';
 
-import { checkoutAction } from 'actions';
+import { checkoutAction, resetReservationCheckoutByRoomNoAction } from 'actions';
 
 import PattonButton from 'components/PattonButton';
 
@@ -94,6 +94,8 @@ function GuestThank() {
         },
       }),
     );
+
+    dispatch(resetReservationCheckoutByRoomNoAction());
   }, []);
 
   return (

@@ -3,6 +3,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import {
   getReservationCheckoutByRoomNoAction,
   getReservationCheckoutByRoomNoActionSuccess,
+  resetReservationCheckoutByRoomNoAction,
 } from 'actions';
 
 import { ReservationCheckoutFromRoomNoState } from 'types';
@@ -25,6 +26,11 @@ export default {
         .addCase(getReservationCheckoutByRoomNoActionSuccess, (draft, { payload }) => {
           draft.data = payload.data;
           draft.is_finish = true;
+        })
+        .addCase(resetReservationCheckoutByRoomNoAction, draft => {
+          draft.room_no = '';
+          draft.is_finish = false;
+          draft.data = {};
         });
     },
   ),
