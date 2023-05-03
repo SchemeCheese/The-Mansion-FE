@@ -2,18 +2,16 @@
 Module Name : Night Audit
 Developer Name : MinhNV
 Created Date : 01/01/2023
-Updated Date : 01/01/2023
+Updated Date : 03/05/2023
 Main functions : Night Audit Index
 ************************************ */
 
 import 'styles/night_audit.css';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { Alert, Card, Col, Form, message, Modal, Row, Select, Switch, Table } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+import { Alert, Card, Col, message, Row, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -38,7 +36,6 @@ import {
   handleNoShowReservationDetailAction,
 } from 'actions';
 
-import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
 
 interface DataType {
@@ -48,13 +45,9 @@ interface DataType {
   name: string;
 }
 
-const { Option } = Select;
-
 function NightAudit() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [isPaymentMethodModalOpen, setIsPaymentMethodModalOpen] = useState(false);
   const reservationRoomInhouseData: any = useAppSelector(selectReservationRoomInhouseState);
   const reservationRoomCheckoutTodayData: any = useAppSelector(
     selectReservationRoomCheckoutTodayState,
@@ -69,18 +62,6 @@ function NightAudit() {
 
   const selectNoShowData = useAppSelector(selectNoShowState);
   const { changed: selectNoShowChanged } = useTreeChanges(selectNoShowData);
-
-  const showModal = () => {
-    setIsPaymentMethodModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsPaymentMethodModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsPaymentMethodModalOpen(false);
-  };
 
   const statusMapping = (status: string) => {
     const svgStatus = {
@@ -508,46 +489,6 @@ function NightAudit() {
   return (
     <>
       {/* <Button onClick={showModal}>Payment Method</Button> */}
-      <Modal
-        okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
-        okText={t('common.Save')}
-        onCancel={handleCancel}
-        onOk={handleOk}
-        title={<b>{t('common.Payment Method')}</b>}
-        visible={isPaymentMethodModalOpen}
-        width={430}
-      >
-        <Form>
-          <Form.Item
-            label={t('nightAudit.Charge Money')}
-            name="switch"
-            style={{ textAlign: 'right' }}
-            valuePropName="checked"
-          >
-            <Switch />
-          </Form.Item>
-          <Form.Item className="payment-method-vertical-field" label={t('common.Amount')}>
-            <MInput />
-          </Form.Item>
-
-          <Form.Item className="payment-method-vertical-field" label={t('common.Currency')}>
-            <Select placeholder={t('common.Currency')}>
-              <Option value="1">VND</Option>
-              <Option value="2">USD</Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item className="payment-method-vertical-field" label={t('common.Payment Method')}>
-            <Select placeholder={t('common.Payment Method')}>
-              <Option value="1">Cash</Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item className="payment-method-vertical-field" label={t('common.Notes')}>
-            <TextArea rows={5} />
-          </Form.Item>
-        </Form>
-      </Modal>
       <Row>
         <Col span={12}>
           <p className="title">

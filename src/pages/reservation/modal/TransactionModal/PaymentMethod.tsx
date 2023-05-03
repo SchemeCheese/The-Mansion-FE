@@ -117,8 +117,10 @@ function PaymentMethod({ computePaidAmount, form, name, restField }: Props) {
             <Select onChange={(value: string) => setPaymentMethod(value)}>
               <Option value="1">Cash</Option>
               <Option value="2">Credit Card</Option>
-              <Option value="3">Transfer</Option>
-              <Option value="4">Virtual Credit Card</Option>
+              <Option value="3">Coupon</Option>
+              <Option value="4">VNPay</Option>
+              <Option value="5">Momo</Option>
+              <Option value="99">Other</Option>
             </Select>
           </Form.Item>
         </Col>
@@ -165,7 +167,7 @@ function PaymentMethod({ computePaidAmount, form, name, restField }: Props) {
           </Form.Item>
         </Col>
       </Row>
-      {(paymentMethod === '2' || paymentMethod === '4') && (
+      {paymentMethod === '2' && (
         <Row>
           <Col span={6} />
           <Col span={6}>
@@ -212,7 +214,7 @@ function PaymentMethod({ computePaidAmount, form, name, restField }: Props) {
           </Col>
         </Row>
       )}
-      {paymentMethod === '3' && (
+      {/* {paymentMethod === '3' && (
         <Row>
           <Col span={6} />
           <Col span={6}>
@@ -230,7 +232,7 @@ function PaymentMethod({ computePaidAmount, form, name, restField }: Props) {
           <Col span={6} />
           <Col span={6} />
         </Row>
-      )}
+      )} */}
     </>
   );
 }
