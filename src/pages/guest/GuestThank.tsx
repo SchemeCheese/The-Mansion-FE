@@ -97,6 +97,7 @@ function GuestThank() {
       );
 
       dispatch(resetReservationCheckoutByRoomNoAction());
+      window.localStorage.removeItem('checkout_room_no');
     }
   }, []);
 

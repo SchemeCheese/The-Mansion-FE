@@ -114,6 +114,8 @@ function GuestRoomNumber() {
           <PattonButton
             disabled={roomNumber === ''}
             onClick={() => {
+              window.localStorage.setItem('checkout_room_no', roomNumber);
+
               dispatch(
                 getReservationCheckoutByRoomNoAction({
                   room_no: roomNumber,
