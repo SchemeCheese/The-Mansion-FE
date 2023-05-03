@@ -6,8 +6,9 @@ Updated Date: 30/04/2023
 Main functions: Guest Checkout
 ************************************ */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Col, DatePicker, Form, Input, Row, Steps, TimePicker } from 'antd';
 import moment from 'moment';
@@ -15,6 +16,8 @@ import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
+
+import { getReservationCheckoutByRoomNoAction } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -26,6 +29,7 @@ function GuestCustomerInfo() {
   const { Step } = Steps;
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { data: reservationCheckoutData } = useAppSelector(selectGetReservationCheckoutFromRoomNo);
   const { handleCancel } = useGuest();
@@ -34,12 +38,41 @@ function GuestCustomerInfo() {
     window.location.href = '/guest';
   }
 
-  const clientInfo = reservationCheckoutData.client_info;
-  const reservationDetailInfo = reservationCheckoutData.reservation_detail;
-
   const handleNext = () => {
     navigate('/guest-payment');
   };
+
+  useEffect(() => {
+    const checkoutRoomNo = window.localStorage.getItem('checkout_room_no');
+
+    if (checkoutRoomNo) {
+      dispatch(
+        getReservationCheckoutByRoomNoAction({
+          room_no: checkoutRoomNo,
+        }),
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (reservationCheckoutData.client_info) {
+      const clientInfo = reservationCheckoutData.client_info;
+      const reservationDetailInfo = reservationCheckoutData.reservation_detail;
+
+      form.setFieldsValue({
+        last_name: clientInfo.last_name,
+        folio_id: reservationDetailInfo.reservation.reservation_number,
+        email: clientInfo.email_address1,
+        ota_booking_id: reservationDetailInfo.reservation.external_reservation_number,
+        first_name: clientInfo.first_name,
+        phone_number: clientInfo.telephone_number1,
+        checkin_date: moment(reservationDetailInfo.check_in_date),
+        checkin_time: moment(reservationDetailInfo.check_in_date),
+        checkout_date: moment(),
+        checkout_time: moment(),
+      });
+    }
+  }, [reservationCheckoutData]);
 
   return (
     <>
@@ -49,8 +82,8 @@ function GuestCustomerInfo() {
           background: 'white',
           width: '90%',
           marginLeft: '5%',
-          maxHeight: '90vh',
           marginTop: '5vh',
+          marginBottom: '10vh',
         }}
       >
         <Col span={24}>
@@ -70,18 +103,6 @@ function GuestCustomerInfo() {
                 <Form
                   autoComplete="off"
                   form={form}
-                  initialValues={{
-                    last_name: clientInfo.last_name,
-                    folio_id: reservationDetailInfo.reservation.reservation_number,
-                    email: clientInfo.email_address1,
-                    ota_booking_id: reservationDetailInfo.reservation.external_reservation_number,
-                    first_name: clientInfo.first_name,
-                    phone_number: clientInfo.telephone_number1,
-                    checkin_date: moment(reservationDetailInfo.check_in_date),
-                    checkin_time: moment(reservationDetailInfo.check_in_date),
-                    checkout_date: moment(),
-                    checkout_time: moment(),
-                  }}
                   labelCol={{
                     span: 24,
                   }}

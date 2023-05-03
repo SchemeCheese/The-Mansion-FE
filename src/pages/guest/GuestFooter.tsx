@@ -15,8 +15,6 @@ function GuestFooter() {
   return (
     <div
       style={{
-        position: 'fixed',
-        bottom: 0,
         width: '100%',
         fontFamily: 'SF Pro Display',
         fontStyle: 'normal',

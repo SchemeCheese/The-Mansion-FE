@@ -5,7 +5,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Avatar, Dropdown, Form, Layout, Menu, Modal, Select, Tooltip } from 'antd';
 import moment from 'moment';
 import { selectFacilitesByBranch, selectGetBranchs, selectUser } from 'selectors';
@@ -147,21 +146,21 @@ function MLayout(props: Props) {
   }, []);
 
   useEffect(() => {
-    if (branchFacilities && branchFacilities.data.facilities.length > 0) {
-      const facilitySelected = branchFacilities.data.facilities[0];
+    if (user && !window.localStorage.getItem('facility_id')) {
+      const branchInfo = user.branch_info;
 
       dispatch(
         branchSelected({
-          operator_code: facilitySelected.operator_code,
-          branch_code: facilitySelected.branch_code,
-          facility_code: facilitySelected.facility_code,
-          normal_time_check_in: facilitySelected.normal_time_check_in,
-          normal_time_check_out: facilitySelected.normal_time_check_out,
-          addition_cico_fee: branchFacilities.data.addition_cico_fee,
+          operator_code: branchInfo.operator_code,
+          branch_code: branchInfo.branch_code,
+          facility_code: branchInfo.facility_code,
+          normal_time_check_in: branchInfo.normal_time_check_in,
+          normal_time_check_out: branchInfo.normal_time_check_out,
+          addition_cico_fee: branchInfo.addition_cico_fee,
         }),
       );
     }
-  }, [branchFacilities]);
+  }, [user]);
 
   useEffect(() => {
     if (
@@ -235,8 +234,6 @@ function MLayout(props: Props) {
 
     return check;
   };
-
-  console.log('aaaa', isMobile());
 
   return (
     <Layout>

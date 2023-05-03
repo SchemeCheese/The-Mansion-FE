@@ -8,18 +8,22 @@ Main functions: Guest Payment
 
 import 'styles/guest_payment.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, Radio, RadioChangeEvent, Row, Space, Steps, Table, Tag } from 'antd';
+import { Col, Radio, RadioChangeEvent, Row, Steps, Table } from 'antd';
 import { formatNumber } from 'helpers';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { paymentMomoPayReservationDetail, paymentVNPayReservationDetail } from 'actions';
+import {
+  getReservationCheckoutByRoomNoAction,
+  paymentMomoPayReservationDetail,
+  paymentVNPayReservationDetail,
+} from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -217,6 +221,18 @@ function GuestPayment() {
     }
   };
 
+  useEffect(() => {
+    const checkoutRoomNo = window.localStorage.getItem('checkout_room_no');
+
+    if (checkoutRoomNo) {
+      dispatch(
+        getReservationCheckoutByRoomNoAction({
+          room_no: checkoutRoomNo,
+        }),
+      );
+    }
+  }, []);
+
   return (
     <>
       {reservationCheckoutData.client_info && (
@@ -227,7 +243,7 @@ function GuestPayment() {
             width: '90%',
             textAlign: 'center',
             marginLeft: '5%',
-            maxHeight: '90vh',
+            // maxHeight: '90vh',
             marginTop: '5vh',
           }}
         >

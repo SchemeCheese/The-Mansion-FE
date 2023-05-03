@@ -10,6 +10,7 @@ export const useGuest = () => {
   const handleCancel = () => {
     dispatch(resetReservationCheckoutByRoomNoAction());
 
+    window.localStorage.removeItem('checkout_room_no');
     navigate('/guest');
   };
 

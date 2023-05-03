@@ -251,7 +251,10 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
               >
                 <Option value="1">Cash</Option>
                 <Option value="2">Credit Card</Option>
-                <Option value="3">Bank Transfer</Option>
+                <Option value="3">Coupon</Option>
+                <Option value="4">VNPay</Option>
+                <Option value="5">Momo</Option>
+                <Option value="99">Other</Option>
               </Select>
             </Form.Item>
           </Col>

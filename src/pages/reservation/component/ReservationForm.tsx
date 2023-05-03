@@ -681,8 +681,10 @@ function ReservationForm({
                     >
                       <Select allowClear placeholder={t('reservation.Payment Method.placeholder')}>
                         <Option value="1">Cash</Option>
-                        <Option value="2">Credit Cash</Option>
+                        <Option value="2">Credit Card</Option>
                         <Option value="3">Coupon</Option>
+                        <Option value="4">VNPay</Option>
+                        <Option value="5">Momo</Option>
                         <Option value="99">Other</Option>
                       </Select>
                     </Form.Item>

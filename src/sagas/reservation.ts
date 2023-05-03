@@ -771,11 +771,12 @@ export function* paymentVNPaySaga({ payload }: ReturnType<typeof paymentVNPayRes
       },
     ));
 
-    const win = window.open(url, '_blank');
+    window.location.href = url;
+    // const win = window.open(url, '_blank');
 
-    if (win != null) {
-      win.focus();
-    }
+    // if (win != null) {
+    //   win.focus();
+    // }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
       console.log('Error', error);

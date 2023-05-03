@@ -57,8 +57,8 @@ function GuestRoomNumber() {
           // background: 'white',
           width: '90%',
           marginLeft: '5%',
-          maxHeight: '90vh',
-          marginTop: '5vh',
+          // maxHeight: '90vh',
+          // marginTop: '5vh',
         }}
       >
         <GuestBgIcon />
@@ -114,6 +114,8 @@ function GuestRoomNumber() {
           <PattonButton
             disabled={roomNumber === ''}
             onClick={() => {
+              window.localStorage.setItem('checkout_room_no', roomNumber);
+
               dispatch(
                 getReservationCheckoutByRoomNoAction({
                   room_no: roomNumber,
