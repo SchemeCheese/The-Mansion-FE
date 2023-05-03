@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, Radio, RadioChangeEvent, Row, Space, Steps, Table, Tag } from 'antd';
+import { Col, Radio, RadioChangeEvent, Row, Steps, Table } from 'antd';
 import { formatNumber } from 'helpers';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
