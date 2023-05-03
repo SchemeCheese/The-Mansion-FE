@@ -35,6 +35,7 @@ export interface GitHubState {
 }
 
 export interface UserState {
+  branch_info: Record<string, any>;
   isAuthenticated: boolean;
   name: string;
   permission: Record<string, any>;

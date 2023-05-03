@@ -12,6 +12,7 @@ export const userState = {
   username: '',
   name: '',
   permission: [],
+  branch_info: {},
 };
 
 export default {
@@ -25,6 +26,7 @@ export default {
         draft.status = STATUS.READY;
         draft.username = payload.username;
         draft.permission = payload.permission;
+        draft.branch_info = payload.branch_info;
       })
       .addCase(getLogginedUserInfo, draft => {
         draft.isAuthenticated = false;
