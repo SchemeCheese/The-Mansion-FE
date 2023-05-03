@@ -49,8 +49,8 @@ function GuestCustomerInfo() {
           background: 'white',
           width: '90%',
           marginLeft: '5%',
-          maxHeight: '90vh',
           marginTop: '5vh',
+          marginBottom: '10vh',
         }}
       >
         <Col span={24}>

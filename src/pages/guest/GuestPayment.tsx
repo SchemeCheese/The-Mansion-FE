@@ -227,7 +227,7 @@ function GuestPayment() {
             width: '90%',
             textAlign: 'center',
             marginLeft: '5%',
-            maxHeight: '90vh',
+            // maxHeight: '90vh',
             marginTop: '5vh',
           }}
         >
