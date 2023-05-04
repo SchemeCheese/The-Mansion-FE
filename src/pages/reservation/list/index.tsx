@@ -78,17 +78,6 @@ function Reservation() {
       );
     }
 
-    if (activeKey === '3') {
-      dispatch(
-        searchScheduleAction({
-          start_date: searchScheduleRedux.start_date ?? moment().format('YYYY-MM-DD'),
-          end_date: searchScheduleRedux.end_date ?? moment().add(15, 'days').format('YYYY-MM-DD'),
-          room_type: searchScheduleRedux.room_type ?? '',
-          room_number: searchScheduleRedux.room_number ?? '',
-        }),
-      );
-    }
-
     if (activeKey === '4') {
       dispatch(
         fetchChannelsAction({

@@ -19,7 +19,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import React, { useState, useEffect } from 'react';
 import FullCalendar, { EventApi, EventClickArg, EventContentArg } from '@fullcalendar/react';
 import { Button, Card, Col, DatePicker, Input, message, Modal, Row, Select } from 'antd';
-import moment from 'moment';
+import moment, { now } from 'moment';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -119,7 +119,26 @@ function Calendar() {
   const [resources, setResources] = useState([]);
 
   useEffect(() => {
-    dispatch(searchScheduleAction(searchCondition));
+    const date = moment();
+    const startDate = date;
+    const endDate = date.clone().add(1, 'weeks');
+    let temporaryState: any;
+
+    temporaryState =
+      startDate.format('MM') !== endDate.format('MM')
+        ? {
+            ...searchCondition,
+            start_week_date: date.format('YYYY-MM-DD'),
+            start_date: date.clone().startOf('month').format('YYYY-MM-DD'),
+            end_date: date.clone().add(1, 'weeks').format('YYYY-MM-DD'),
+          }
+        : {
+            ...searchCondition,
+            start_week_date: date.format('YYYY-MM-DD'),
+            start_date: date.clone().startOf('month').format('YYYY-MM-DD'),
+            end_date: date.clone().endOf('month').format('YYYY-MM-DD'),
+          };
+    dispatch(searchScheduleAction(temporaryState));
   }, []);
 
   useEffect(() => {
