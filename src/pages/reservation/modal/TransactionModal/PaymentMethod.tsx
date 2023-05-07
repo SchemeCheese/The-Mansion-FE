@@ -2,7 +2,7 @@
 Module Name : Reservation
 Developer Name : MinhNV
 Created Date : 15/09/2022
-Updated Date : 23/11/2022
+Updated Date : 07/05/2022
 Main functions : Payment Method Modal
 ************************************ */
 
@@ -30,7 +30,6 @@ function PaymentMethod({ computePaidAmount, form, name, restField }: Props) {
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const exchangeRates = reservationDetailInfo.data.exchange_rates;
   const creditcardTypes = reservationDetailInfo.data.creditcard_types;
-  const { employees } = reservationDetailInfo.data;
 
   const onChangeAmountToPay = (value: any, key: any) => {
     const fields = form.getFieldsValue();
@@ -118,8 +117,9 @@ function PaymentMethod({ computePaidAmount, form, name, restField }: Props) {
               <Option value="1">Cash</Option>
               <Option value="2">Credit Card</Option>
               <Option value="3">Coupon</Option>
-              <Option value="4">VNPay</Option>
+              <Option value="4">Virtual Credit Card</Option>
               <Option value="5">Momo</Option>
+              <Option value="6">VNPay</Option>
               <Option value="99">Other</Option>
             </Select>
           </Form.Item>
@@ -167,7 +167,7 @@ function PaymentMethod({ computePaidAmount, form, name, restField }: Props) {
           </Form.Item>
         </Col>
       </Row>
-      {paymentMethod === '2' && (
+      {(paymentMethod === '2' || paymentMethod === '4') && (
         <Row>
           <Col span={6} />
           <Col span={6}>
