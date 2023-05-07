@@ -34,7 +34,7 @@ function GuestThank() {
 
   const getPaymentMethodConst = () => {
     if (type === 'vn-pay') {
-      return '4';
+      return '6';
     }
 
     if (type === 'momo-pay') {
