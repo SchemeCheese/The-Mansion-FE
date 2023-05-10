@@ -467,7 +467,7 @@ function CreateGuestModal({
                       <Select allowClear placeholder={t('guest.Rank.placeholder')}>
                         <Option value="1">VIP</Option>
                         <Option value="2">Dominant</Option>
-                        <Option value="4">General</Option>
+                        <Option value="3">General</Option>
                         <Option value="9">Undesirable Guest</Option>
                       </Select>
                     </Form.Item>

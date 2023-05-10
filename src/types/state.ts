@@ -638,6 +638,7 @@ export interface PrintCheckinConfirmPDFReservationDetailState {
 
 export interface ReservationDetailPrintCheckinConfirmPDFPayload {
   file_name: string;
+  hide_room_rate: string;
   language: string;
   reservation_detail_ids: any;
   reservation_info_id: any;

@@ -305,6 +305,7 @@ function CheckinModal({
               reservation_info_id: reservationId ?? '',
               reservation_detail_ids: selectedRowKeys,
               file_name: `the_mansion_${formattedDateNow}_detail_${reservationId ?? ''}.'pdf'`,
+              hide_room_rate: hideRoomRate === true ? '1' : '0',
             },
           }),
         );

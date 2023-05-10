@@ -726,7 +726,7 @@ export function* getPrintCheckinConfirmPDFReservationDetailSaga({
       payload.payload.language
     }/downloadCheckinConfirmationPDF?reservationDetailIds=${
       payload.payload.reservation_detail_ids
-    }`;
+    }&hide_room_rate=${payload.payload.hide_room_rate}`;
 
     fetch(urlApi, {
       method: 'GET',

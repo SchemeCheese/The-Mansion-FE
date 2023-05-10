@@ -13,6 +13,7 @@ export const printCheckinConfirmPDFReservationDetailState = {
     language: '',
     reservation_info_id: '',
     reservation_detail_ids: [],
+    hide_room_rate: '',
   },
   status: '',
 };
