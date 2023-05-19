@@ -115,17 +115,7 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
   };
 
   const onChangePaymentMethod = (value: any) => {
-    let namePayment = '';
-
-    if (value.toString() === '1') {
-      namePayment = 'Cash';
-    } else if (value.toString() === '2') {
-      namePayment = 'Credit Card';
-    } else if (value.toString() === '3') {
-      namePayment = 'Bank Transfer';
-    }
-
-    setPaymentMethod(namePayment);
+    setPaymentMethod(value);
   };
 
   const transactionType = ['Deposit'];
