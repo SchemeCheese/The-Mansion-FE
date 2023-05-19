@@ -201,6 +201,11 @@ export const selectRoomTypes = createSelector(
   getRoomType => getRoomType,
 );
 
+export const selectRoomOptions = createSelector(
+  (state: RootState) => state.getRoomOption,
+  getRoomOption => getRoomOption,
+);
+
 export const selectNotifications = createSelector(
   (state: RootState) => state.notifications,
   notifications => notifications,

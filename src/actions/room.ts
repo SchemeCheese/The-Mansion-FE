@@ -8,6 +8,7 @@ import {
   GetRoomResult,
   ReservationRoomFilter,
   ReservationRoomResult,
+  RoomOptionResult,
   RoomSearch,
   RoomSearchResult,
   RoomTypeResult,
@@ -28,6 +29,13 @@ export const getRoomType = createAction(ActionTypes.ROOM_TYPE_GET);
 export const getRoomTypeFinish = createAction(
   ActionTypes.ROOM_TYPE_GET_FINISH,
   (payload: RoomTypeResult) => actionPayload(payload),
+);
+
+export const getRoomOption = createAction(ActionTypes.ROOM_OPTION_GET);
+
+export const getRoomOptionFinish = createAction(
+  ActionTypes.ROOM_OPTION_GET_FINISH,
+  (payload: RoomOptionResult) => actionPayload(payload),
 );
 
 export const searchRoomReset = createAction(ActionTypes.ROOM_SEARCH_RESET);

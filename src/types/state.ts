@@ -282,6 +282,11 @@ export interface RoomTypeState {
   is_finish: boolean;
 }
 
+export interface RoomOptionState {
+  data: Record<string, any>;
+  is_finish: boolean;
+}
+
 export interface ProductSearchState {
   data: Array<Record<string, any>>;
   is_searching: boolean;
@@ -739,6 +744,7 @@ export interface RootState {
   getReservationCheckoutFromRoomNo: ReservationCheckoutFromRoomNoState;
   getReservationDetail: ReservationDetailState;
   getReservationNumber: ReservationNumberState;
+  getRoomOption: RoomOptionState;
   getRoomType: RoomTypeState;
   getRooms: GetRoomState;
   getWalkinRooms: GetWalkinRoomState;
