@@ -11,12 +11,13 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Checkbox, Col, Form, Input, message, Modal, Row, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import { selectCancelReservationDetail, selectUser } from 'selectors';
+import _ from 'lodash';
+import { selectCancelReservationDetail, selectRoomOptions, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { cancelReservationDetail, getReservation } from 'actions';
+import { cancelReservationDetail, getReservation, getRoomOption } from 'actions';
 
 const { Option } = Select;
 
@@ -69,6 +70,19 @@ function CancelBookingModal({
   const { changed } = useTreeChanges(cancelReservationData);
 
   const userData = useAppSelector(selectUser);
+  const roomOptionsData: any = useAppSelector(selectRoomOptions);
+
+  const roomOptions = _.keys(roomOptionsData?.data).map((key: any) => {
+    return (
+      <Option key={key} value={key}>
+        {roomOptionsData?.data[key]}
+      </Option>
+    );
+  });
+
+  useEffect(() => {
+    dispatch(getRoomOption());
+  }, []);
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
@@ -188,12 +202,7 @@ function CancelBookingModal({
                 disabled={cancelCurrentItem !== null}
                 placeholder={t('reservation.Type.placeholder')}
               >
-                <Option value="1">{t('reservation.Request by guest')}</Option>
-                <Option value="2">{t('reservation.No-show')}</Option>
-                <Option value="3">{t('reservation.Invalid credit card')}</Option>
-                <Option value="4">{t('reservation.No deposit/pre-payment received')}</Option>
-                <Option value="5">{t('reservation.Overbooking')}</Option>
-                <Option value="6">{t('reservation.Double booking')}</Option>
+                {roomOptions}
               </Select>
             </Form.Item>
           </Col>

@@ -57,6 +57,7 @@ import getReservationCheckoutFromRoomNo, {
 } from './getReservationCheckoutFromRoomNo';
 import getReservationDetail, { reservationDetailState } from './getReservationDetail';
 import getReservationNumber, { reservationNumberState } from './getReservationNumber';
+import getRoomOption, { roomOptionState } from './getRoomOption';
 import getRooms, { getRoomsState } from './getRooms';
 import getRoomType, { roomTypeState } from './getRoomType';
 import getWalkinRooms, { getWalkinRoomsState } from './getWalkinRooms';
@@ -117,6 +118,7 @@ export const initialState = {
   product: productSearchState,
   getReservationNumber: reservationNumberState,
   getRoomType: roomTypeState,
+  getRoomOption: roomOptionState,
   getReservation: getReservationState,
   getReservationByFolio: getReservationByFolioState,
   agentInfos: agentInfosState,
@@ -196,6 +198,7 @@ export default {
   ...product,
   ...getReservationNumber,
   ...getRoomType,
+  ...getRoomOption,
   ...getReservation,
   ...agentInfos,
   ...bookRoom,

@@ -48,6 +48,7 @@ export const ReservationEndpoint = {
 export const RoomEndpoint = {
   SEARCH: 'api/v1/check-room-info',
   SEARCH_TYPE: 'api/v1/room-types',
+  SEARCH_OPTION: 'api/v1/room-options',
   GET_ROOM: 'api/v1/rooms',
   GET_RESERVATION_ROOM: 'api/v1/get-reservation-rooms',
 };

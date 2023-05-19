@@ -13,6 +13,7 @@ import {
   getReservationRoomCheckoutTodayActionFinish,
   getReservationRoomInhouseAction,
   getReservationRoomInhouseActionFinish,
+  getRoomOptionFinish,
   getRoomsActionFinish,
   getRoomTypeFinish,
   getWalkinRoomsAction,
@@ -101,6 +102,41 @@ export function* getRoomTypeSaga() {
       yield put(logOut());
     } else {
       message.error('Cannot get room type!');
+    }
+  }
+}
+
+export function* getRoomOptionSaga() {
+  try {
+    let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payload = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payload)).toString();
+
+    ({ data } = yield call(request, `${apiEndPoint(RoomEndpoint.SEARCH_OPTION)}?${query}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }));
+
+    yield put(
+      getRoomOptionFinish({
+        data,
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Cannot get room option!');
     }
   }
 }
@@ -324,6 +360,7 @@ export default function* root() {
   yield all([
     takeLatest(ActionTypes.ROOM_SEARCH, getSearchRoomnSaga),
     takeLatest(ActionTypes.ROOM_TYPE_GET, getRoomTypeSaga),
+    takeLatest(ActionTypes.ROOM_OPTION_GET, getRoomOptionSaga),
     takeLatest(ActionTypes.GET_ROOMS, getRoomsSaga),
     takeLatest(ActionTypes.GET_WALKIN_ROOMS, getWalkinRoomsSaga),
     takeLatest(ActionTypes.GET_RESERVATION_ROOM_INHOUSE, getReservationRoomInhouseSaga),

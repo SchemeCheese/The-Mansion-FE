@@ -17,6 +17,10 @@ export interface RoomTypeResult {
   data: Array<Record<string, any>>;
 }
 
+export interface RoomOptionResult {
+  data: Array<Record<string, any>>;
+}
+
 export interface GetRoomResult {
   items: Array<Record<string, any>>;
   total: number;
