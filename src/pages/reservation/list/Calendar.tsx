@@ -368,7 +368,7 @@ function Calendar() {
 
                     for (
                       let index = 0;
-                      index < searchScheduleRedux.data.resources.length ?? 0;
+                      index < searchScheduleRedux.data?.resources?.length;
                       index++
                     ) {
                       days.push(moment(argument.date).format('DD'));
@@ -391,7 +391,7 @@ function Calendar() {
 
                     for (
                       let index = 0;
-                      index < searchScheduleRedux.data.resources.length ?? 0;
+                      index < searchScheduleRedux.data?.resources?.length;
                       index++
                     ) {
                       days.push(moment(argument.date).format('DD'));
