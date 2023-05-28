@@ -305,3 +305,8 @@ export const selectGetReservationCheckoutFromRoomNo = createSelector(
   (state: RootState) => state.getReservationCheckoutFromRoomNo,
   getDurationCurve => getDurationCurve,
 );
+
+export const selectCreateQRCodeVNPayState = createSelector(
+  (state: RootState) => state.createQRCodeVNPay,
+  createQRCodeVNPay => createQRCodeVNPay,
+);
