@@ -2,7 +2,7 @@
 Module Name: Payment
 Developer Name: MinhNV
 Created Date: 14/04/2023
-Updated Date: 14/04/2023
+Updated Date: 28/05/2023
 Main functions: Guest Payment
 ************************************ */
 
@@ -10,16 +10,20 @@ import 'styles/guest_payment.css';
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import QRCode from 'react-qr-code';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, Radio, RadioChangeEvent, Row, Steps, Table } from 'antd';
-import { formatNumber } from 'helpers';
+import { ExpandOutlined } from '@ant-design/icons';
+import { Col, Radio, RadioChangeEvent, Row, Spin, Steps, Table } from 'antd';
+import { formatNumber, randomKey } from 'helpers';
 import GuestFooter from 'pages/guest/GuestFooter';
-import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
+import Pusher from 'pusher-js';
+import { selectCreateQRCodeVNPayState, selectGetReservationCheckoutFromRoomNo } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
 import {
+  createQRCodeVNPayAction,
   getReservationCheckoutByRoomNoAction,
   paymentMomoPayReservationDetail,
   paymentVNPayReservationDetail,
@@ -38,10 +42,13 @@ function GuestPayment() {
   const [isMomo, setIsMomo] = useState(false);
   const [isVNPay, setIsVNPay] = useState(false);
 
+  const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
+
   const { handleCancel } = useGuest();
   const navigate = useNavigate();
 
   const { data: reservationCheckoutData } = useAppSelector(selectGetReservationCheckoutFromRoomNo);
+  const createQRCodeVNPayData = useAppSelector(selectCreateQRCodeVNPayState);
 
   if (reservationCheckoutData.client_info === undefined) {
     window.location.href = '/guest';
@@ -185,6 +192,21 @@ function GuestPayment() {
   const onChangeVNPay = (e: RadioChangeEvent) => {
     setIsMomo(!e.target.checked);
     setIsVNPay(e.target.checked);
+
+    const saltKey = randomKey(5);
+
+    dispatch(
+      createQRCodeVNPayAction({
+        payload: {
+          reservation_info_id: reservationCheckoutData.reservation_detail.reservation_info_id,
+          reservation_detail_id: reservationCheckoutData.reservation_detail.id,
+          amount: reservationCheckoutData.amount_info.unpaid,
+          txn_id: `CHECKOUT-${reservationCheckoutData.reservation_detail.id}-${saltKey}`,
+          bill_number: `CHECKOUT-${reservationCheckoutData.reservation_detail.id}-${saltKey}}`,
+          txn_desc: `PAYMENT CHECKOUT ${reservationCheckoutData.reservation_detail.id}`,
+        },
+      }),
+    );
   };
 
   const dispatch = useDispatch();
@@ -198,24 +220,27 @@ function GuestPayment() {
               reservation_id: 1,
               reservation_detail_id: 1,
               amount: amountInfo.unpaid,
-              request_type: 'payWithATM', // Bank
-              // request_type: '',
+              // request_type: 'payWithATM', // Bank
+              request_type: '',
             },
           }),
         );
       } else {
-        dispatch(
-          paymentVNPayReservationDetail({
-            payload: {
-              reservation_id: 1,
-              reservation_detail_id: 1,
-              amount: amountInfo.unpaid,
-              bank_code: 'VNBANK', // Bank
-              // bank_code: '',
-            },
-          }),
-        );
+        navigate('/guest-thank/vn-pay');
       }
+      // } else {
+      //   dispatch(
+      //     paymentVNPayReservationDetail({
+      //       payload: {
+      //         reservation_id: 1,
+      //         reservation_detail_id: 1,
+      //         amount: amountInfo.unpaid,
+      //         bank_code: 'VNBANK', // Bank
+      //         // bank_code: '',
+      //       },
+      //     }),
+      //   );
+      // }
     } else {
       navigate('/guest-thank/cash');
     }
@@ -231,6 +256,20 @@ function GuestPayment() {
         }),
       );
     }
+  }, []);
+
+  useEffect(() => {
+    const pusher = new Pusher('cb63efd41ea7cecce762', {
+      cluster: 'ap1',
+    });
+
+    const channel = pusher.subscribe('checkout');
+
+    channel.bind('checkout.success', (reservationData: any) => {
+      if (reservationData.reservationDetail.id === reservationCheckoutData.reservation_detail.id) {
+        setIsPaymentSuccess(true);
+      }
+    });
   }, []);
 
   return (
@@ -289,7 +328,12 @@ function GuestPayment() {
                             height: '100%',
                           }}
                         >
-                          <Radio checked={isCash} name="cash" onChange={onChangeCash}>
+                          <Radio
+                            checked={isCash}
+                            disabled={isPaymentSuccess}
+                            name="cash"
+                            onChange={onChangeCash}
+                          >
                             <p
                               style={{
                                 color: 'rgba(0, 0, 0, 0.85)',
@@ -316,7 +360,12 @@ function GuestPayment() {
                             float: 'right',
                           }}
                         >
-                          <Radio checked={isEWallet} name="e_wallet" onChange={onChangeEWallet}>
+                          <Radio
+                            checked={isEWallet}
+                            disabled={isPaymentSuccess}
+                            name="e_wallet"
+                            onChange={onChangeEWallet}
+                          >
                             <p
                               style={{
                                 color: 'rgba(0, 0, 0, 0.85)',
@@ -540,11 +589,7 @@ function GuestPayment() {
               </div>
             )}
             {isEWallet && (
-              <Row
-                style={{
-                  height: '100%',
-                }}
-              >
+              <Row>
                 <Col className="radio-payment-momo-vnpay" span={12} style={{ height: '100%' }}>
                   <div
                     style={{
@@ -558,7 +603,7 @@ function GuestPayment() {
                       height: '66px',
                     }}
                   >
-                    <Radio checked={isMomo} onChange={onChangeMomo}>
+                    <Radio checked={isMomo} disabled={isPaymentSuccess} onChange={onChangeMomo}>
                       <p
                         style={{
                           color: 'rgba(0, 0, 0, 0.85)',
@@ -584,7 +629,7 @@ function GuestPayment() {
                       float: 'right',
                     }}
                   >
-                    <Radio checked={isVNPay} onChange={onChangeVNPay}>
+                    <Radio checked={isVNPay} disabled={isPaymentSuccess} onChange={onChangeVNPay}>
                       <p
                         style={{
                           color: 'rgba(0, 0, 0, 0.85)',
@@ -598,52 +643,143 @@ function GuestPayment() {
                 </Col>
               </Row>
             )}
+
+            {isEWallet &&
+              isVNPay &&
+              (createQRCodeVNPayData.status === 'SUCCESS' ? (
+                <Row
+                  style={{
+                    paddingTop: 10,
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Col
+                    span={24}
+                    style={{ backgroundColor: '#E6F7FF', border: '1px solid #9DD9FE' }}
+                  >
+                    <div style={{ backgroundColor: 'white', margin: '20px 40px 5px 40px' }}>
+                      <p
+                        style={{
+                          paddingTop: 5,
+                          color: '#1D39C4',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {' '}
+                        Scan to payment
+                      </p>
+                      <QRCode value={createQRCodeVNPayData.result.data} />
+                      <p
+                        style={{
+                          textAlign: 'center',
+                          paddingLeft: '15%',
+                          paddingRight: '15%',
+                          fontSize: 14,
+                          paddingTop: 5,
+                        }}
+                      >
+                        {' '}
+                        <ExpandOutlined /> Use <b>VNPay</b> app or Camera app with QR support to
+                        scan
+                      </p>
+                    </div>
+                  </Col>
+                </Row>
+              ) : (
+                <Row style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                  <Spin />
+                </Row>
+              ))}
           </Col>
-          <Col
-            span={24}
-            style={{
-              background: '#F7F9FA',
-              border: '1px solid #DCE2EA',
-              borderRadius: 2,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flexDirection: 'column',
-              marginTop: 15,
-              paddingTop: 25,
-              paddingBottom: 10,
-            }}
-          >
-            <svg
-              fill="none"
-              height="20"
-              viewBox="0 0 21 20"
-              width="21"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                clipRule="evenodd"
-                d="M0.0791016 10C0.0791016 4.57143 4.83126 0 10.4745 0C16.2156 0 20.8698 4.47715 20.8698 10C20.8698 15.4286 16.1176 20 10.4745 20C4.83126 20 0.0791016 15.4286 0.0791016 10ZM10.4745 3C6.45562 3 3.19771 6.13401 3.19771 10C3.19771 13.866 6.45562 17 10.4745 17C14.4933 17 17.7512 13.866 17.7512 10H10.4745V3Z"
-                fill="#FAAD14"
-                fillOpacity="0.85"
-                fillRule="evenodd"
-              />
-            </svg>
-            <p
+
+          {!isPaymentSuccess ? (
+            <Col
+              span={24}
               style={{
-                fontSize: 13,
-                color: 'rgba(0, 0, 0, 0.65)',
-                paddingTop: 5,
+                background: '#F7F9FA',
+                border: '1px solid #DCE2EA',
+                borderRadius: 2,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+                marginTop: 15,
+                paddingTop: 25,
+                paddingBottom: 10,
               }}
             >
-              {t('guest.Waiting for payment')}
-            </p>
-          </Col>
+              <svg
+                fill="none"
+                height="20"
+                viewBox="0 0 21 20"
+                width="21"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  clipRule="evenodd"
+                  d="M0.0791016 10C0.0791016 4.57143 4.83126 0 10.4745 0C16.2156 0 20.8698 4.47715 20.8698 10C20.8698 15.4286 16.1176 20 10.4745 20C4.83126 20 0.0791016 15.4286 0.0791016 10ZM10.4745 3C6.45562 3 3.19771 6.13401 3.19771 10C3.19771 13.866 6.45562 17 10.4745 17C14.4933 17 17.7512 13.866 17.7512 10H10.4745V3Z"
+                  fill="#FAAD14"
+                  fillOpacity="0.85"
+                  fillRule="evenodd"
+                />
+              </svg>
+              <p
+                style={{
+                  fontSize: 13,
+                  color: 'rgba(0, 0, 0, 0.65)',
+                  paddingTop: 5,
+                }}
+              >
+                {t('guest.Waiting for payment')}
+              </p>
+            </Col>
+          ) : (
+            <Col
+              span={24}
+              style={{
+                background: '#F7F9FA',
+                border: '1px solid #DCE2EA',
+                borderRadius: 2,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
+                marginTop: 15,
+                paddingTop: 25,
+                paddingBottom: 10,
+              }}
+            >
+              <svg
+                fill="none"
+                height="20"
+                viewBox="0 0 21 20"
+                width="21"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  clipRule="evenodd"
+                  d="M10.4745 0C4.83126 0 0.0791016 4.57143 0.0791016 10C0.0791016 15.4286 4.83126 20 10.4745 20C16.1176 20 20.8698 15.4286 20.8698 10C20.8698 4.57143 16.1176 0 10.4745 0ZM5.48923 10.7938C5.20647 10.5043 5.20589 10.0356 5.48791 9.74529C5.77154 9.45334 6.23326 9.45251 6.51788 9.74343L8.74485 12.0196L14.4275 6.21801C14.711 5.92864 15.1697 5.92715 15.4549 6.21466C15.7432 6.50524 15.7447 6.98021 15.4583 7.27269L8.95837 13.9098C8.84046 14.0302 8.64938 14.0301 8.53164 13.9095L5.48923 10.7938Z"
+                  fill="#52C41A"
+                  fillRule="evenodd"
+                />
+              </svg>
+
+              <p
+                style={{
+                  fontSize: 13,
+                  color: 'rgba(0, 0, 0, 0.65)',
+                  paddingTop: 5,
+                }}
+              >
+                Payment Success
+              </p>
+            </Col>
+          )}
 
           <Col span={24} style={{ marginTop: 25, marginBottom: 25 }}>
             <MButton onClick={handleCancel}>{t('common.Cancel')}</MButton>
             <PattonButton
-              disabled={!(isCash || isMomo || isVNPay)}
+              disabled={!(isCash || isMomo || (isVNPay && isPaymentSuccess))}
               onClick={handleNext}
               style={{ marginLeft: 20 }}
             >

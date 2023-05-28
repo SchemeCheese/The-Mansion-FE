@@ -10,3 +10,20 @@ interface CreatePaymentPayload {
 export interface CreatePayment {
   payload: CreatePaymentPayload;
 }
+
+interface CreateQRCodeVNPayPayload {
+  amount: number;
+  bill_number: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+  txn_desc: string;
+  txn_id: string;
+}
+
+export interface CreateQRCodeVNPay {
+  payload: CreateQRCodeVNPayPayload;
+}
+
+export interface CreateQRCodeVNPaySuccess {
+  result: any;
+}

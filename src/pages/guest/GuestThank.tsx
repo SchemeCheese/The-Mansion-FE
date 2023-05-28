@@ -33,10 +33,6 @@ function GuestThank() {
   const searchParam = new URLSearchParams(params.search);
 
   const getPaymentMethodConst = () => {
-    if (type === 'vn-pay') {
-      return '6';
-    }
-
     if (type === 'momo-pay') {
       return '5';
     }
@@ -49,7 +45,7 @@ function GuestThank() {
   };
 
   const isSuccessPayment = () => {
-    if (type === 'vn-pay' && searchParam.get('vnp_ResponseCode') === '00') {
+    if (type === 'vn-pay') {
       return true;
     }
 
@@ -70,7 +66,7 @@ function GuestThank() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isSuccessPayment()) {
+    if (isSuccessPayment() && type !== 'vn-pay') {
       dispatch(
         checkoutAction({
           payload: {
@@ -97,8 +93,9 @@ function GuestThank() {
       );
 
       dispatch(resetReservationCheckoutByRoomNoAction());
-      window.localStorage.removeItem('checkout_room_no');
     }
+
+    window.localStorage.removeItem('checkout_room_no');
   }, []);
 
   return (

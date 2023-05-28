@@ -204,6 +204,21 @@ export interface CreatePaymentState {
   status: string;
 }
 
+interface CreateQRCodeVNPayPayload {
+  amount: number;
+  bill_number: string;
+  reservation_detail_id: string | number;
+  reservation_info_id: string | number;
+  txn_desc: string;
+  txn_id: string;
+}
+
+export interface CreateQRCodeVNPayState {
+  payload: CreateQRCodeVNPayPayload;
+  result: any;
+  status: string;
+}
+
 export interface DeleteItemState {
   payload: DeleteItemPayload;
   status: string;
@@ -720,6 +735,7 @@ export interface RootState {
   checkout: CheckoutState;
   createGuest: CreateGuestState;
   createPayment: CreatePaymentState;
+  createQRCodeVNPay: CreateQRCodeVNPayState;
   createReservation: CreateReservationState;
   deleteItem: DeleteItemState;
   downloadCSVBranchManager: DownloadCSVBranchManagerState;
