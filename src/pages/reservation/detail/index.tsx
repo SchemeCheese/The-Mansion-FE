@@ -10,7 +10,6 @@ import 'styles/reservation.css';
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import QRCode from 'react-qr-code';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import type { RadioChangeEvent } from 'antd';
@@ -415,9 +414,6 @@ function ReservationDetail() {
             </Col>
             <Col span={12}>
               <BreadscrumData>{reservationRedux.created_user}</BreadscrumData>
-
-              <h1>OK</h1>
-              <QRCode value="00020101021226280010A00000077501100108615866520407425303704540716409255802VN5908MANSIONS6005HANOI62510120CHECKOUT-5016-1234560311MANSIONS QR0708MANS0001630441EF" />
             </Col>
           </Row>
         </Col>
