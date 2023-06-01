@@ -202,7 +202,7 @@ function GuestPayment() {
           reservation_detail_id: reservationCheckoutData.reservation_detail.id,
           amount: reservationCheckoutData.amount_info.unpaid,
           txn_id: `CHECKOUT-${reservationCheckoutData.reservation_detail.id}-${saltKey}`,
-          bill_number: `CHECKOUT-${reservationCheckoutData.reservation_detail.id}-${saltKey}}`,
+          bill_number: `CHECKOUT-${reservationCheckoutData.reservation_detail.id}-${saltKey}`,
           txn_desc: `PAYMENT CHECKOUT ${reservationCheckoutData.reservation_detail.id}`,
         },
       }),
