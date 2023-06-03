@@ -87,22 +87,24 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
     },
   ].filter(item => !item.hidden);
 
-  reservationDetailInfo.data.tax_info.forEach((item: any) => {
-    columnsDisk.push({
-      title: `${item.name} (${item.price}%)`,
-      dataIndex: item.description_code,
-      render: (value: any, record: any) => {
-        if (
-          record.price_type === 'percent' ||
-          record.description.toLowerCase() === 'discount' ||
-          record.description.toLowerCase() === 'deposit'
-        ) {
-          return '';
-        }
+  reservationDetailInfo.data.tax_info.forEach((item: any, index: number) => {
+    if (items[0].tax[index] !== undefined) {
+      columnsDisk.push({
+        title: `${item.name} (${item.price}%)`,
+        dataIndex: item.description_code,
+        render: (value: any, record: any) => {
+          if (
+            record.price_type === 'percent' ||
+            record.description.toLowerCase() === 'discount' ||
+            record.description.toLowerCase() === 'deposit'
+          ) {
+            return '';
+          }
 
-        return value;
-      },
-    });
+          return value;
+        },
+      });
+    }
   });
 
   columnsDisk.push({

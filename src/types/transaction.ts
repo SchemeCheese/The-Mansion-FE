@@ -47,6 +47,7 @@ export interface ChangeRoom {
 export interface DownloadPDFInvoiceTransactionPayload {
   file_name: string;
   language: string;
+  payment_id: number;
   reservation_detail_id: string | number;
   reservation_info_id: string | number;
 }

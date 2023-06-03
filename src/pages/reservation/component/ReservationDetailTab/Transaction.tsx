@@ -2,7 +2,7 @@
 Module Name : Reservation
 Developer Name : MinhNV
 Created Date : 15/09/2022
-Updated Date : 23/11/2022
+Updated Date : 04/06/2023
 Main functions : Transaction Tab
 ************************************ */
 
@@ -11,7 +11,7 @@ import 'styles/transaction.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, Input, message, Modal, Radio, RadioChangeEvent, Row, Space } from 'antd';
+import { Card, Col, Input, message, Modal, Row, Space } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import Disk from 'pages/reservation/detail/Disk';
@@ -38,7 +38,7 @@ import _, { isEmpty } from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { deleteItemAction, downloadPDFInvoiceTransaction, getReservationDetail } from 'actions';
+import { deleteItemAction, getReservationDetail } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -174,20 +174,6 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
     setIsModalOpenPaySelected(true);
   };
 
-  const handleInvoiceDownloadPdf = () => {
-    dispatch(
-      downloadPDFInvoiceTransaction({
-        payload: {
-          reservation_detail_id: reservationDetailId ?? '',
-          reservation_info_id: reservationId ?? '',
-          file_name: `the_mansion_hotel_${reservationId}_${reservationDetailId}.pdf`,
-          language,
-        },
-      }),
-    );
-    setIsSelectDownloadInvoiceModalOpen(false);
-  };
-
   if (transactions) {
     Object.keys(transactions).forEach((key: any) => {
       const tabKey = `${key}`;
@@ -225,8 +211,6 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const [isModalOpenSelectedPaymentMethod, setIsModalOpenSelectedPaymentMethod] = useState(false);
   const [isModalOpenAddDiscount, setIsModalOpenAddDiscount] = useState(false);
   const [isModalOpenDeposit, setIsModalOpenDeposit] = useState(false);
-  const [language, setLanguage] = useState('en');
-  const [isSelectDownloadInvoiceModalOpen, setIsSelectDownloadInvoiceModalOpen] = useState(false);
 
   const gridStyleLeft: React.CSSProperties = {
     textAlign: 'left',
@@ -346,10 +330,6 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const handleDeleteItemCancel = () => {
     setDeleteReason('');
     setIsDeleteItemModalOpen(false);
-  };
-
-  const onChangeLanguage = (e: RadioChangeEvent) => {
-    setLanguage(e.target.value);
   };
 
   if (amountInfo === undefined) {
@@ -816,41 +796,8 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           </Card>
         </div>
         <Row style={{ paddingTop: transactions?.length === 0 ? 18 : 22 }}>
-          <Col span={12} style={{ paddingRight: 18 }}>
-            <MButton
-              onClick={() => setIsSelectDownloadInvoiceModalOpen(true)}
-              style={{
-                width: '100%',
-                border: '1px solid #1D39C4',
-                color: '#1D39C4',
-                background: '#F0F2F5',
-              }}
-            >
-              {t('common.Print Invoice')}
-            </MButton>
-            <Modal
-              okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
-              onCancel={() => setIsSelectDownloadInvoiceModalOpen(false)}
-              onOk={handleInvoiceDownloadPdf}
-              title={t('common.Download File')}
-              visible={isSelectDownloadInvoiceModalOpen}
-            >
-              <Row>
-                <Col span={12}>
-                  <Radio.Group onChange={onChangeLanguage} value={language}>
-                    <Space direction="vertical">
-                      <Radio value="vi">{t('common.Vietnamese')}</Radio>
-                      <Radio value="en">{t('common.English')}</Radio>
-                      <Radio value="jp">{t('common.Japanese')}</Radio>
-                    </Space>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Modal>
-          </Col>
-
           {user.permission.reservation.edit && (
-            <Col span={12}>
+            <Col span={24}>
               {type === 'checkout_today' ? (
                 <PattonButton
                   disabled={!reservationDetailInfo.data.can_checkout}
