@@ -198,7 +198,7 @@ export function* getDownloadPDFInvoiceTransactionSaga({
       payload.payload.reservation_info_id
     }/reservation-detail/${payload.payload.reservation_detail_id}/${
       payload.payload.language
-    }/downloadInvoicePDF`;
+    }/payment/${payload.payload.payment_id}/downloadInvoicePDF`;
 
     fetch(urlApi, {
       method: 'GET',
