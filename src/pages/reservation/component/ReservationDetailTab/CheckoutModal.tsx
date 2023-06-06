@@ -142,22 +142,27 @@ function CheckoutModal({
   ];
 
   const handleAddCheckoutLateFee = () => {
-    dispatch(
-      addLateCheckoutFeeAction({
-        payload: {
-          reservation_id: id ?? '',
-          reservation_detail: [
-            {
-              id: reservationDetailInfo.data.id,
-              late_checkout_fee: {
-                hour_total: lateCOFee[0].late_CO_time,
-                sale_price: lateCOFee[0].unit_price,
+    if (parseInt(lateCOFee[0].unit_price, 10) > 0) {
+      dispatch(
+        addLateCheckoutFeeAction({
+          payload: {
+            reservation_id: id ?? '',
+            reservation_detail: [
+              {
+                id: reservationDetailInfo.data.id,
+                late_checkout_fee: {
+                  hour_total: lateCOFee[0].late_CO_time,
+                  sale_price: lateCOFee[0].unit_price,
+                },
               },
-            },
-          ],
-        },
-      }),
-    );
+            ],
+          },
+        }),
+      );
+    } else {
+      setIsModalShowLateFee(false);
+      setIsModalShowPaymentDetail(true);
+    }
   };
 
   useEffect(() => {

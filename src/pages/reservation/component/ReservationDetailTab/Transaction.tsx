@@ -707,12 +707,14 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 </div>
                 {reservationDetailInfo.data.tax_info.map((taxInfo: any, index: number) => {
                   return (
-                    <div className="checkout-card-grid">
-                      <span style={gridStyleLeft}>{taxInfo.name}</span>
-                      <span style={gridStyleRight}>
-                        {formatNumber(amountInfo?.total_tax[index])}
-                      </span>
-                    </div>
+                    amountInfo?.total_tax[index] && (
+                      <div className="checkout-card-grid">
+                        <span style={gridStyleLeft}>{taxInfo.name}</span>
+                        <span style={gridStyleRight}>
+                          {formatNumber(amountInfo?.total_tax[index])}
+                        </span>
+                      </div>
+                    )
                   );
                 })}
                 <div className="checkout-card-grid">
