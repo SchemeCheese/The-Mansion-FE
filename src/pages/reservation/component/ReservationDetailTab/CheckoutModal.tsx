@@ -142,7 +142,7 @@ function CheckoutModal({
   ];
 
   const handleAddCheckoutLateFee = () => {
-    if (parseInt(lateCOFee[0].unit_price, 10) > 0) {
+    if (lateCOFee.length > 0 && parseInt(lateCOFee[0].unit_price, 10) > 0) {
       dispatch(
         addLateCheckoutFeeAction({
           payload: {
