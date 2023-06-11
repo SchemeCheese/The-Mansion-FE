@@ -11,8 +11,8 @@ import 'styles/transaction.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, Input, message, Modal, Row, Space } from 'antd';
-import { formatNumber } from 'helpers';
+import { Card, Col, Input, message, Modal, Radio, RadioChangeEvent, Row, Space } from 'antd';
+import { formatNumber, headerWithAuthorization } from 'helpers';
 import moment from 'moment';
 import Disk from 'pages/reservation/detail/Disk';
 import Paid from 'pages/reservation/detail/Paid';
@@ -38,7 +38,7 @@ import _, { isEmpty } from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { deleteItemAction, getReservationDetail } from 'actions';
+import { deleteItemAction, downloadPDFInvoiceTransaction, getReservationDetail } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -92,6 +92,36 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const [paySelectedRowKeys, setPaySelectedRowKeys] = useState<any>([]);
   const [paySelectedRows, setPaySelectedRows] = useState<any>([]);
   const [isSelectAll, setIsSelectAll] = useState(false);
+  const [language, setLanguage] = useState('en');
+  const [isSelectDownloadInvoiceModalOpen, setIsSelectDownloadInvoiceModalOpen] = useState(false);
+
+  const handleInvoiceDownloadPdf = async () => {
+    fetch(
+      `${process.env.REACT_APP_API_HOST}/api/v1/reservations/${reservationId}/reservation-detail/${reservationDetailId}/${language}/downloadUnpaidInvoicePDF`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ).then(response => {
+      response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const iframe = document.createElement('iframe'); // load content in an iframe to print later
+
+        document.body.appendChild(iframe);
+
+        iframe.style.display = 'none';
+        iframe.src = url;
+
+        iframe.onload = function () {
+          setTimeout(function () {
+            iframe.focus();
+            iframe.contentWindow?.print();
+          }, 1);
+        };
+      });
+    });
+    setIsSelectDownloadInvoiceModalOpen(false);
+  };
 
   const resetSelectedSelect = () => {
     setSelectedRowKeys([]);
@@ -137,6 +167,10 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
   const handleDeleteItem = (item: any) => {
     showDeleteItemModal();
     setDeleteSaleDetailId(item.sale_detail_id);
+  };
+
+  const onChangeLanguage = (e: RadioChangeEvent) => {
+    setLanguage(e.target.value);
   };
 
   const handlePayment = () => {
@@ -798,8 +832,40 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           </Card>
         </div>
         <Row style={{ paddingTop: transactions?.length === 0 ? 18 : 22 }}>
+          <Col span={12} style={{ paddingRight: 18 }}>
+            <MButton
+              onClick={() => setIsSelectDownloadInvoiceModalOpen(true)}
+              style={{
+                width: '100%',
+                border: '1px solid #1D39C4',
+                color: '#1D39C4',
+                background: '#F0F2F5',
+              }}
+            >
+              {t('common.Print Invoice')}
+            </MButton>
+            <Modal
+              okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
+              onCancel={() => setIsSelectDownloadInvoiceModalOpen(false)}
+              onOk={handleInvoiceDownloadPdf}
+              title={t('common.Download File')}
+              visible={isSelectDownloadInvoiceModalOpen}
+            >
+              <Row>
+                <Col span={12}>
+                  <Radio.Group onChange={onChangeLanguage} value={language}>
+                    <Space direction="vertical">
+                      <Radio value="vi">{t('common.Vietnamese')}</Radio>
+                      <Radio value="en">{t('common.English')}</Radio>
+                      <Radio value="jp">{t('common.Japanese')}</Radio>
+                    </Space>
+                  </Radio.Group>
+                </Col>
+              </Row>
+            </Modal>
+          </Col>
           {user.permission.reservation.edit && (
-            <Col span={24}>
+            <Col span={12}>
               {type === 'checkout_today' ? (
                 <PattonButton
                   disabled={!reservationDetailInfo.data.can_checkout}
