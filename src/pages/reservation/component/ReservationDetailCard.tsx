@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Col, Tabs } from 'antd';
 import GuestList from 'pages/reservation/component/ReservationDetailTab/GuestList';
+import MonthlyInvoice from 'pages/reservation/component/ReservationDetailTab/MonthlyInvoice';
 import Rate from 'pages/reservation/component/ReservationDetailTab/Rate';
 import Schedule from 'pages/reservation/component/ReservationDetailTab/Schedule';
 import Transaction from 'pages/reservation/component/ReservationDetailTab/Transaction';
@@ -100,6 +101,12 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
           </TabPane>
           <TabPane key="5" tab={t('reservation.Transactions')}>
             <Transaction reservationDetailId={reservationDetail.id} reservationId={reservationId} />
+          </TabPane>
+          <TabPane key="6" tab={t('reservation.Monthly Invoices')}>
+            <MonthlyInvoice
+              reservationDetailId={reservationDetail.id}
+              reservationId={reservationId}
+            />
           </TabPane>
         </Tabs>
       </div>

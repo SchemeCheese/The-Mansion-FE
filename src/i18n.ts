@@ -10,6 +10,7 @@ import guestEn from 'translations/en/guest.json';
 import guestCheckoutEn from 'translations/en/guestCheckout.json';
 import houseKeepingEn from 'translations/en/houseKeeping.json';
 import messageEn from 'translations/en/message.json';
+import monthlyInvoiceEn from 'translations/en/monthlyInvoice.json';
 import nightAuditEn from 'translations/en/nightAudit.json';
 import payDetailEn from 'translations/en/payDetail.json';
 import paySelectedEn from 'translations/en/paySelected.json';
@@ -26,6 +27,7 @@ import guestJa from 'translations/ja/guest.json';
 import guestCheckoutJa from 'translations/ja/guestCheckout.json';
 import houseKeepingJa from 'translations/ja/houseKeeping.json';
 import messageJa from 'translations/ja/message.json';
+import monthlyInvoiceJa from 'translations/ja/monthlyInvoice.json';
 import nightAuditJa from 'translations/ja/nightAudit.json';
 import payDetailJA from 'translations/ja/payDetail.json';
 import paySelectedJa from 'translations/ja/paySelected.json';
@@ -42,6 +44,7 @@ import guestVi from 'translations/vi/guest.json';
 import guestCheckoutVi from 'translations/vi/guestCheckout.json';
 import houseKeepingVi from 'translations/vi/houseKeeping.json';
 import messageVi from 'translations/vi/message.json';
+import monthlyInvoiceVi from 'translations/vi/monthlyInvoice.json';
 import nightAuditVi from 'translations/vi/nightAudit.json';
 import payDetailVi from 'translations/vi/payDetail.json';
 import paySelectedVi from 'translations/vi/paySelected.json';
@@ -65,6 +68,7 @@ i18n.use(initReactI18next).init({
         paySelected: paySelectedEn,
         auditRoomCharge: auditRoomChargeEn,
         transaction: transactionEn,
+        monthlyInvoice: monthlyInvoiceEn,
         payDetail: payDetailEn,
         selectedPayMethod: selectedPayMethodEn,
         frontDesk: frontDeskEn,
@@ -86,6 +90,7 @@ i18n.use(initReactI18next).init({
         paySelected: paySelectedJa,
         auditRoomCharge: auditRoomChargeJa,
         transaction: transactionJa,
+        monthlyInvoice: monthlyInvoiceJa,
         payDetail: payDetailJA,
         selectedPayMethod: selectedPayMethodJA,
         frontDesk: frontDeskJa,
@@ -107,6 +112,7 @@ i18n.use(initReactI18next).init({
         paySelected: paySelectedVi,
         auditRoomCharge: auditRoomChargeVi,
         transaction: transactionVi,
+        monthlyInvoice: monthlyInvoiceVi,
         payDetail: payDetailVi,
         selectedPayMethod: selectedPayMethodVi,
         frontDesk: frontDeskVi,
