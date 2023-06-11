@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Col, message, Row, Table } from 'antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
-import { selectUpdateRate, selectUser } from 'selectors';
+import { selectGetReservation, selectUpdateRate, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
@@ -35,10 +35,12 @@ function Rate({ reservationDetailId, reservationId }: Props) {
 
   const [ratesState, setRatesState] = useState<any>([]);
   const dispatch = useDispatch();
+  const reservationData = useAppSelector(selectGetReservation).data;
   const reservationDetailInfo: any = useSelector<RootState>(
     ({ getReservationDetail: getReservationDetailTemporary }) => getReservationDetailTemporary.data,
   );
   const user = useAppSelector(selectUser);
+  const chargesSummary = reservationDetailInfo.charges_summary;
 
   useEffect(() => {
     setRatesState(reservationDetailInfo.charges);
@@ -53,6 +55,13 @@ function Rate({ reservationDetailId, reservationId }: Props) {
       rate_detail: item.rate_detail,
       unit_price: formatNumber(item.unit_price),
       actual_amount: item.actual_amount,
+      base_price: formatNumber(item.base_price),
+      update_price_with_tax: formatNumber(item.update_price_with_tax),
+      updated_price_without_tax: formatNumber(item.updated_price_without_tax),
+      tax_toal: formatNumber(item.tax_toal),
+      ta_comp_room_fee: formatNumber(item.ta_comp_room_fee),
+      ta_comp_tax: formatNumber(item.ta_comp_tax),
+      gross_price: formatNumber(item.gross_price),
     };
   });
 
@@ -73,6 +82,54 @@ function Rate({ reservationDetailId, reservationId }: Props) {
       key: 'rate_name',
     },
     {
+      title: t('common.Unit Price (Tax & SF Incl.)'),
+      dataIndex: 'unit_price',
+      key: 'unit_price',
+      hidden: !reservationData.external_reservation_number,
+    },
+    {
+      title: t('common.Base Price'),
+      dataIndex: 'base_price',
+      key: 'base_price',
+      hidden: !reservationData.external_reservation_number,
+    },
+    {
+      title: t('common.Updated Price (Tax Excl.)'),
+      dataIndex: 'updated_price_without_tax',
+      key: 'updated_price_without_tax',
+      hidden: !reservationData.external_reservation_number,
+    },
+    {
+      title: t('common.Tax'),
+      dataIndex: 'tax_toal',
+      key: 'tax_toal',
+      hidden: !reservationData.external_reservation_number,
+    },
+    {
+      title: t('common.Updated Price (Tax Incl.)'),
+      dataIndex: 'update_price_with_tax',
+      key: 'update_price_with_tax',
+      hidden: !reservationData.external_reservation_number,
+    },
+    {
+      title: t('common.TA Comp. On Room Fee'),
+      dataIndex: 'ta_comp_room_fee',
+      key: 'ta_comp_room_fee',
+      hidden: !reservationData.external_reservation_number,
+    },
+    {
+      title: t('common.TA Comp. On Tax'),
+      dataIndex: 'ta_comp_tax',
+      key: 'ta_comp_tax',
+      hidden: !reservationData.external_reservation_number,
+    },
+    {
+      title: t('common.Gross Unit Price'),
+      dataIndex: 'gross_price',
+      key: 'gross_price',
+      hidden: !reservationData.external_reservation_number,
+    },
+    {
       title: t('common.Rate Detail'),
       dataIndex: 'rate_detail',
       key: 'rate_detail',
@@ -81,6 +138,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
       title: t('common.Unit Price'),
       dataIndex: 'unit_price',
       key: 'unit_price',
+      hidden: reservationData.external_reservation_number,
     },
     {
       title: t('common.Update Price'),
@@ -136,7 +194,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
         );
       },
     },
-  ];
+  ].filter(item => !item.hidden);
 
   const updateRateData = useAppSelector(selectUpdateRate);
   const { changed } = useTreeChanges(updateRateData);
@@ -184,7 +242,74 @@ function Rate({ reservationDetailId, reservationId }: Props) {
         </Col>
       )}
       <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
-        <Table columns={columns} dataSource={data} pagination={false} size="small" />
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          size="small"
+          summary={() =>
+            reservationData.external_reservation_number && (
+              <Table.Summary fixed>
+                <Table.Summary.Row>
+                  <Table.Summary.Cell index={0}>{t('common.Subtotal')}</Table.Summary.Cell>
+                  <Table.Summary.Cell index={1} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2}>
+                    {formatNumber(chargesSummary.subtotal)}
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={2} />
+                </Table.Summary.Row>
+                <Table.Summary.Row>
+                  <Table.Summary.Cell index={0}>{t('common.Total TA Comp.')}</Table.Summary.Cell>
+                  <Table.Summary.Cell index={1} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2}>
+                    {formatNumber(chargesSummary.total_ta_comp)}
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={2} />
+                </Table.Summary.Row>
+                <Table.Summary.Row>
+                  <Table.Summary.Cell index={0}>
+                    <b>{t('common.Net Amount')}</b>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={1} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2} />
+                  <Table.Summary.Cell index={2}>
+                    {formatNumber(chargesSummary.net_income)}
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={2} />
+                </Table.Summary.Row>
+              </Table.Summary>
+            )
+          }
+        />
       </Col>
     </Row>
   );
