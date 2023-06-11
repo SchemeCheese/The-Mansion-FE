@@ -310,3 +310,8 @@ export const selectCreateQRCodeVNPayState = createSelector(
   (state: RootState) => state.createQRCodeVNPay,
   createQRCodeVNPay => createQRCodeVNPay,
 );
+
+export const selectCustomerSearch = createSelector(
+  (state: RootState) => state.customer,
+  customer => customer,
+);

@@ -24,3 +24,4 @@ export * from './powerMonitor';
 export * from './nightAudit';
 export * from './branchManager';
 export * from './houseKeeping';
+export * from './customer';

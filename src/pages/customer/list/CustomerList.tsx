@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { PlusOutlined } from '@ant-design/icons';
-import { Col, DatePicker, Form, Input, Modal, Pagination, Row, Select, Table } from 'antd';
+import { Col, DatePicker, Form, Input, Modal, Pagination, Row, Select, Spin, Table } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+
+import { searchCustomer } from 'actions';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
+
+import { CustomerSearch, RootState } from 'types';
 
 const { Option } = Select;
 
@@ -15,8 +20,90 @@ interface Props {
 
 function CustomerList({ type }: Props) {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
   const [isModalFeedbackVisible, setIsModalFeedbackVisibleState] = useState<boolean>(false);
+  const [searchCondition, setSearchCondition] = useState({
+    current_page: 1,
+    per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
+      ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
+      : 10,
+    client_kind: '',
+    client_rank: '',
+    client_info: '',
+    type,
+  });
+
+  const isSearching = useSelector<RootState>(({ customer }) => customer.is_searching);
+  const items: any = useSelector<RootState>(({ customer }) => customer.data);
+  const total: any = useSelector<RootState>(({ customer }) => customer.total);
+  const currentPage: any = useSelector<RootState>(({ customer }) => customer.current_page);
+
+  useEffect(() => {
+    dispatch(searchCustomer(searchCondition));
+  }, []);
+
+  const onChangeCurrentPage = (page: number, pageSize: number) => {
+    setSearchCondition({
+      ...searchCondition,
+      current_page: page,
+      per_page: pageSize,
+    });
+
+    dispatch(
+      searchCustomer({
+        ...searchCondition,
+        current_page: page,
+        per_page: pageSize,
+      }),
+    );
+  };
+
+  const convertData = (data: any) => {
+    if (data) {
+      return data.map((item: any) => {
+        return {
+          ...item,
+          key: item.id,
+          phone: item.phone_number,
+          level: 'Dominant',
+          type: 'Grp',
+        };
+      });
+    }
+
+    return [];
+  };
+
+  const fetchSearchCustomer = (data: CustomerSearch) => {
+    dispatch(searchCustomer(data));
+  };
+
+  const searchInput = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      fetchSearchCustomer({
+        ...searchCondition,
+        current_page: 1,
+      });
+    }
+  };
+
+  const searchSelect = (value: string, key: string) => {
+    let valueTemporary = value;
+
+    if (value === undefined) {
+      valueTemporary = '';
+    }
+
+    const stateTemporary = {
+      ...searchCondition,
+      [key]: valueTemporary,
+      current_page: 1,
+    };
+
+    setSearchCondition(stateTemporary);
+    fetchSearchCustomer(stateTemporary);
+  };
 
   const statusMapping = (status: string) => {
     const svgStatus = {
@@ -206,86 +293,6 @@ function CustomerList({ type }: Props) {
     },
   ];
 
-  const listItems: any[] = [
-    {
-      level: 'VIP',
-      type: 'Grp',
-      name: 'Du Vu',
-      email: 'du.vu@gmail.com',
-      phone: '091 234 5678',
-      nationality: 'Japan',
-      last_checkin: '12/08/2020',
-      checkout: '12/08/2020',
-      branch_name: 'TMHA',
-    },
-    {
-      level: 'Dominant',
-      type: 'Grp',
-      name: 'Du Vu',
-      email: 'du.vu@gmail.com',
-      phone: '091 234 5678',
-      nationality: 'Japan',
-      last_checkin: '12/08/2020',
-      checkout: '12/08/2020',
-      branch_name: 'TMHA',
-    },
-    {
-      level: 'General',
-      type: 'Grp',
-      name: 'Du Vu',
-      email: 'du.vu@gmail.com',
-      phone: '091 234 5678',
-      nationality: 'Japan',
-      last_checkin: '12/08/2020',
-      checkout: '12/08/2020',
-      branch_name: 'TMHA',
-    },
-    {
-      level: 'Undesirable',
-      type: 'Grp',
-      name: 'Du Vu',
-      email: 'du.vu@gmail.com',
-      phone: '091 234 5678',
-      nationality: 'Japan',
-      last_checkin: '12/08/2020',
-      checkout: '12/08/2020',
-      branch_name: 'TMHA',
-    },
-    {
-      level: 'VIP',
-      type: 'Grp',
-      name: 'Du Vu',
-      email: 'du.vu@gmail.com',
-      phone: '091 234 5678',
-      nationality: 'Japan',
-      last_checkin: '12/08/2020',
-      checkout: '12/08/2020',
-      branch_name: 'TMHA',
-    },
-    {
-      level: 'VIP',
-      type: 'Grp',
-      name: 'Du Vu',
-      email: 'du.vu@gmail.com',
-      phone: '091 234 5678',
-      nationality: 'Japan',
-      last_checkin: '12/08/2020',
-      checkout: '12/08/2020',
-      branch_name: 'TMHA',
-    },
-    {
-      level: 'VIP',
-      type: 'Grp',
-      name: 'Du Vu',
-      email: 'du.vu@gmail.com',
-      phone: '091 234 5678',
-      nationality: 'Japan',
-      last_checkin: '12/08/2020',
-      checkout: '12/08/2020',
-      branch_name: 'TMHA',
-    },
-  ];
-
   const handleOk = () => {
     form.submit();
   };
@@ -303,6 +310,7 @@ function CustomerList({ type }: Props) {
             <Col span={3} style={{ paddingRight: 16 }}>
               <Select
                 allowClear
+                onChange={value => searchSelect(value, 'client_kind')}
                 placeholder={t('customer.Type.placeholder')}
                 style={{ width: '100%', fontSize: 12 }}
               >
@@ -312,6 +320,7 @@ function CustomerList({ type }: Props) {
             <Col span={3} style={{ paddingRight: 16 }}>
               <Select
                 allowClear
+                onChange={value => searchSelect(value, 'client_rank')}
                 placeholder={t('customer.Level.placeholder')}
                 style={{ width: '100%', fontSize: 12 }}
               >
@@ -323,6 +332,13 @@ function CustomerList({ type }: Props) {
             </Col>
             <Col span={18}>
               <MInput
+                onChange={e =>
+                  setSearchCondition({
+                    ...searchCondition,
+                    client_info: e.target.value,
+                  })
+                }
+                onKeyUp={event => searchInput(event)}
                 placeholder={t('customer.Email Phone Name.placeholder')}
                 style={{ height: 32, fontSize: 12 }}
               />
@@ -337,35 +353,44 @@ function CustomerList({ type }: Props) {
         </PattonButton>
       </Col>
       <Col span={24} style={{ paddingTop: 16 }}>
-        <Table
-          className="customer-list"
-          columns={listColumns}
-          dataSource={listItems}
-          onRow={(record: any) => {
-            return {
-              onClick: () => {
-                console.log('click item');
-              },
-            };
-          }}
-          pagination={false}
-          rowClassName={(record: any) => {
-            if (record.isNew) {
-              return 'new-customer';
-            }
+        {!isSearching ? (
+          <>
+            <Table
+              className="customer-list"
+              columns={listColumns}
+              dataSource={convertData(items)}
+              onRow={(record: any) => {
+                return {
+                  onClick: () => {
+                    console.log('click item');
+                  },
+                };
+              }}
+              pagination={false}
+              rowClassName={(record: any) => {
+                if (record.isNew) {
+                  return 'new-customer';
+                }
 
-            return '';
-          }}
-          size="small"
-          style={{ overflowX: 'hidden', overflowY: 'auto', minHeight: 450 }}
-        />
-        <Pagination
-          defaultCurrent={10}
-          pageSize={10}
-          showSizeChanger={false}
-          style={{ float: 'right', marginTop: 15 }}
-          total={100}
-        />
+                return '';
+              }}
+              size="small"
+              style={{ overflowX: 'hidden', overflowY: 'auto', minHeight: 450 }}
+            />
+            {total > 0 && (
+              <Pagination
+                defaultCurrent={currentPage}
+                onChange={onChangeCurrentPage}
+                pageSize={10}
+                showSizeChanger={false}
+                style={{ float: 'right', marginTop: 15 }}
+                total={total}
+              />
+            )}
+          </>
+        ) : (
+          <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />
+        )}
       </Col>
       <Modal
         bodyStyle={{

@@ -95,6 +95,7 @@ export const GuestEndpoint = {
   REMOVE: 'api/v1/reservation-detail',
   SET_MAIN_GUEST: 'api/v1/reservation-detail',
   GET_RESERVATION_CHECKOUT_BY_ROOM_NO: 'api/v1/reservations/checkout-room-number',
+  SEARCH: 'api/v1/guests',
 };
 
 export const FileEndpoint = {
@@ -142,4 +143,8 @@ export const IOTEndpoint = {
 export const GetHouseKeepingEndpoint = {
   GET: 'api/v1/rooms',
   UPDATE: 'api/v1/rooms',
+};
+
+export const CustomerEndpoint = {
+  SEARCH: 'api/v1/guests',
 };

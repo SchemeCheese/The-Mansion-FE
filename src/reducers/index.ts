@@ -24,6 +24,7 @@ import createGuest, { createGuestState } from './createGuest';
 import createPayment, { createPaymentState } from './createPayment';
 import createQRCodeVNPay, { createQRCodeVNPayState } from './createQRCodeVNPay';
 import createReservation, { createReservationState } from './createReservation';
+import customer, { customerSearchState } from './customer';
 import deleteItem, { deleteItemState } from './deleteItem';
 import downloadCSVBranchManager, {
   downloadCSVBranchManagerState,
@@ -183,6 +184,7 @@ export const initialState = {
   paymentMomoPayReservationDetail: paymentMomoPayReservationDetailState,
   getReservationCheckoutFromRoomNo: getReservationCheckoutFromRoomNoState,
   createQRCodeVNPay: createQRCodeVNPayState,
+  customer: customerSearchState,
 };
 
 export default {
@@ -264,4 +266,5 @@ export default {
   ...paymentMomoPayReservationDetail,
   ...getReservationCheckoutFromRoomNo,
   ...createQRCodeVNPay,
+  ...customer,
 };
