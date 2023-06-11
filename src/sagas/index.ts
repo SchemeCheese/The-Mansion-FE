@@ -7,6 +7,7 @@ import branchs from './branchs';
 import channel from './channel';
 import checkin from './checkin';
 import checkout from './checkout';
+import customer from './customer';
 import dashboard from './dashboard';
 import file from './file';
 import fuel from './fuel';
@@ -56,5 +57,6 @@ export default function* root() {
     fork(nightAudit),
     fork(dashboard),
     fork(powerMonitor),
+    fork(customer),
   ]);
 }

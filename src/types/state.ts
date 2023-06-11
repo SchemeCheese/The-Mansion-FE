@@ -718,6 +718,13 @@ export interface ReservationCheckoutFromRoomNoState {
   room_no: string;
 }
 
+export interface CustomerSearchState {
+  current_page: number;
+  data: Array<Record<string, any>>;
+  is_searching: boolean;
+  total: number;
+}
+
 export interface RootState {
   addDisk: AddDiskState;
   addItem: AddItemState;
@@ -738,6 +745,7 @@ export interface RootState {
   createPayment: CreatePaymentState;
   createQRCodeVNPay: CreateQRCodeVNPayState;
   createReservation: CreateReservationState;
+  customer: CustomerSearchState;
   deleteItem: DeleteItemState;
   downloadCSVBranchManager: DownloadCSVBranchManagerState;
   downloadDocxReservationDetail: DownloadDocxReservationDetailState;

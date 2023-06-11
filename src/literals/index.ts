@@ -81,6 +81,8 @@ export const ActionTypes = keyMirror({
   GUEST_UPDATE_SUCCESS: undefined,
   GUEST_REMOVE: undefined,
   GUEST_REMOVE_SUCCESS: undefined,
+  CUSTOMER_SEARCH: undefined,
+  CUSTOMER_SEARCH_FINISH: undefined,
   RESERVATION_DETAIL_UPDATE_NOTE: undefined,
   RESERVATION_DETAIL_UPDATE_NOTE_SUCCESS: undefined,
   RESERVATION_DETAIL_UPDATE_NOTE_FAILURE: undefined,
