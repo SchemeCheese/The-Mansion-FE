@@ -186,5 +186,15 @@
   "Confirm": "Confirm",
   "Age": "Age",
   "Address": "Address",
-  "Month": "Month"
+  "Month": "Month",
+  "Unit Price (Tax & SF Incl.)": "Unit Price (Tax & SF Incl.)",
+  "Base Price": "Base Price",
+  "Updated Price (Tax Excl.)": "Updated Price (Tax Excl.)",
+  "Tax": "Tax",
+  "Updated Price (Tax Incl.)": "Updated Price (Tax Incl.)",
+  "TA Comp. On Room Fee": "TA Comp. On Room Fee",
+  "TA Comp. On Tax": "TA Comp. On Tax",
+  "Gross Unit Price": "Gross Unit Price",
+  "Total TA Comp.": "Total TA Comp.",
+  "Net Amount": "Net Amount"
 }
