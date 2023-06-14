@@ -43,6 +43,7 @@ import getBranchFacilites, { getBranchFacilitesState } from './getBranchFacilite
 import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getBranchManager, { getBranchManagerState } from './getBranchManager';
 import getBranchs, { getBranchsState } from './getBranchs';
+import getCustomerDetail, { getCustomerDetailState } from './getCustomerDetail';
 import getDeviceManager, { getDeviceManagerState } from './getDeviceManager';
 import getDurationCurve, { getDurationCurveState } from './getDurationCurve';
 import getElectricArea, { getElectricAreaState } from './getElectricArea';
@@ -123,6 +124,7 @@ export const initialState = {
   getRoomOption: roomOptionState,
   getReservation: getReservationState,
   getReservationByFolio: getReservationByFolioState,
+  getCustomerDetail: getCustomerDetailState,
   agentInfos: agentInfosState,
   bookRoom: bookRoomState,
   updateRate: updateRateState,
@@ -261,6 +263,7 @@ export default {
   ...getElectricPower,
   ...getDeviceManager,
   ...getDurationCurve,
+  ...getCustomerDetail,
   ...downloadCSVBranchManager,
   ...paymentVNPayReservationDetail,
   ...paymentMomoPayReservationDetail,

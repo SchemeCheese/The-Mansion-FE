@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Customer
+Developer Name : MinhNV
+Created Date : 23/06/2023
+Updated Date : 23/06/2023
+Main functions : Customer List Page
+************************************ */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tabs } from 'antd';
@@ -8,24 +16,14 @@ const { TabPane } = Tabs;
 function Customer() {
   const { t } = useTranslation();
 
-  const handleActive = (activeKey: string) => {
-    console.log('handleActive', activeKey);
-  };
-
   return (
     <>
-      {/* <BreadcrumbList data={breadcrumbData} /> */}
       <p className="title" style={{ color: 'rgba(0, 0, 0, 0.45)' }}>
         {t('customer.Customers Relations')}
       </p>
       <p className="title">{t('customer.Customer List')}</p>
 
-      <Tabs
-        className="customer-tabs"
-        defaultActiveKey="1"
-        onChange={activeKey => handleActive(activeKey)}
-        style={{ minHeight: '100%' }}
-      >
+      <Tabs className="customer-tabs" defaultActiveKey="1">
         <TabPane key="1" className="content" tab={t('customer.List')}>
           <CustomerList type="list" />
         </TabPane>

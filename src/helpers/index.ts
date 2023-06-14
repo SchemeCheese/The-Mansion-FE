@@ -70,3 +70,5 @@ export const mappingStatus = (status: string) => {
       return '';
   }
 };
+
+export const formatDate = 'YYYY-MM-DD';

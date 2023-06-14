@@ -315,3 +315,8 @@ export const selectCustomerSearch = createSelector(
   (state: RootState) => state.customer,
   customer => customer,
 );
+
+export const selectGetCustomerDetail = createSelector(
+  (state: RootState) => state.getCustomerDetail,
+  getCustomerDetail => getCustomerDetail,
+);

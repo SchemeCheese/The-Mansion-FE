@@ -43,7 +43,7 @@
   },
   "Last Name": {
     "title": "Last Name",
-    "placeholder": "Input phone number"
+    "placeholder": "Input last name"
   },
   "Address": {
     "title": "Address",
@@ -82,7 +82,7 @@
     "title": "Pillow Type",
     "placeholder": "Select soft level"
   },
-  "Mattress  Type": {
+  "Mattress Type": {
     "title": "Mattress  Type",
     "placeholder": "Select soft level"
   },
@@ -151,11 +151,11 @@
   },
   "Date of issue": {
     "title": "Date of issue",
-    "placeholder": ""
+    "placeholder": "Select date"
   },
   "Valid until": {
     "title": "Valid until",
-    "placeholder": ""
+    "placeholder": "Select date"
   },
   "Issuing authority": {
     "title": "Issuing authority",
@@ -172,5 +172,9 @@
   "Immigration Visa Number": {
     "title": "Immigration Visa Number",
     "placeholder": "Input number"
+  },
+  "Allergies Notes": {
+    "title": "Allergies Notes",
+    "placeholder": "Input Notes"
   }
 }

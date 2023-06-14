@@ -1,0 +1,5 @@
+.reservation-list .ant-table-row,
+.customer-list .ant-table-row,
+.feedback-list .ant-table-row {
+  cursor: pointer;
+}

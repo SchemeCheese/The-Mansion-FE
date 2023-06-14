@@ -147,4 +147,7 @@ export const GetHouseKeepingEndpoint = {
 
 export const CustomerEndpoint = {
   SEARCH: 'api/v1/guests',
+  GET_DETAIL(id: string) {
+    return `api/v1/guests/${id}`;
+  },
 };

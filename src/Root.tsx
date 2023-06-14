@@ -208,6 +208,25 @@ function Root() {
     </>
   );
 
+  const customerBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/customer');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('common.Customer')}
+      </span>
+    </>
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <AppWrapper className="custom-wrapper" data-testid="app">
@@ -458,7 +477,7 @@ function Root() {
                 <Route
                   element={
                     <PrivateRoute
-                      breadCrumb={reservationBreadCrum}
+                      breadCrumb={customerBreadCrum}
                       isAuthenticated={isAuthenticated}
                       to="/"
                     >
@@ -470,7 +489,7 @@ function Root() {
                 <Route
                   element={
                     <PrivateRoute
-                      breadCrumb={reservationBreadCrum}
+                      breadCrumb={customerBreadCrum}
                       isAuthenticated={isAuthenticated}
                       to="/"
                     >

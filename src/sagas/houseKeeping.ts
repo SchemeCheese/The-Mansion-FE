@@ -37,6 +37,8 @@ export function* getHouseKeepingSaga({ payload }: ReturnType<typeof getHouseKeep
     if (process.env.NODE_ENV === 'development') {
       console.log('Error house keeping', error);
     }
+
+    message.error('Error house keeping!');
   }
 }
 

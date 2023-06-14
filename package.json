@@ -30,6 +30,7 @@
     "@gilbarbara/helpers": "^0.5.1",
     "@reduxjs/toolkit": "^1.8.0",
     "antd": "^4.22.6",
+    "axios": "^1.4.0",
     "bizcharts": "^4.1.22",
     "i18next": "^21.9.1",
     "immer": "^9.0.12",

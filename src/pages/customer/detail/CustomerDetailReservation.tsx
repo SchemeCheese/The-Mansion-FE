@@ -1,23 +1,38 @@
-import React from 'react';
+/** ***********************************
+Module Name : Customer
+Developer Name : MinhNV
+Created Date : 23/06/2023
+Updated Date : 23/06/2023
+Main functions : Customer Detail Page
+************************************ */
+
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Col, Pagination, Row, Table, Tabs } from 'antd';
+import { formatNumber } from 'helpers';
+import { getAPI } from 'helpers/apiService';
+import { selectGetCustomerDetail } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 const { TabPane } = Tabs;
 
 interface Props {
-  incomingReservation: any;
-  pastReservation: any;
   statusMapping: (status: string) => any;
 }
 
-function CustomerDetailReservation({ incomingReservation, pastReservation, statusMapping }: Props) {
+function CustomerDetailReservation({ statusMapping }: Props) {
   const { t } = useTranslation();
+  const { id } = useParams();
+  const [incomingReservations, setIncomingReservations]: any = useState();
+  const [pastReservations, setPastReservations]: any = useState();
 
   const reservationsColumns = [
     {
       title: t('customerDetail.Folio ID'),
-      dataIndex: 'folio_id',
-      key: 'folio_id',
+      dataIndex: 'folio_number',
+      key: 'folio_number',
     },
     {
       title: t('customerDetail.Status'),
@@ -57,13 +72,13 @@ function CustomerDetailReservation({ incomingReservation, pastReservation, statu
     },
     {
       title: t('customerDetail.Email'),
-      dataIndex: 'email',
-      key: 'email',
+      dataIndex: 'booker_email',
+      key: 'booker_email',
     },
     {
       title: t('customerDetail.Phone'),
-      dataIndex: 'phone',
-      key: 'phone',
+      dataIndex: 'booker_phone',
+      key: 'booker_phone',
     },
     {
       title: t('customerDetail.Total room'),
@@ -80,8 +95,8 @@ function CustomerDetailReservation({ incomingReservation, pastReservation, statu
   const pastReservationColumns = [
     {
       title: t('customerDetail.Folio ID'),
-      dataIndex: 'folio_id',
-      key: 'folio_id',
+      dataIndex: 'folio_number',
+      key: 'folio_number',
     },
     {
       title: t('customerDetail.Branch'),
@@ -105,71 +120,118 @@ function CustomerDetailReservation({ incomingReservation, pastReservation, statu
     },
     {
       title: t('customerDetail.Email'),
-      dataIndex: 'email',
-      key: 'email',
+      dataIndex: 'booker_email',
+      key: 'booker_email',
     },
     {
       title: t('customerDetail.Phone'),
-      dataIndex: 'phone',
-      key: 'phone',
+      dataIndex: 'booker_phone',
+      key: 'booker_phone',
     },
     {
       title: t('customerDetail.Room revenue'),
       dataIndex: 'room_revenue',
       key: 'room_revenue',
+      render: (text: number) => {
+        return formatNumber(text);
+      },
     },
     {
       title: t('customerDetail.Other revenue'),
       dataIndex: 'other_revenue',
       key: 'other_revenue',
+      render: (text: number) => {
+        return formatNumber(text);
+      },
     },
     {
       title: t('customerDetail.Total spent'),
       dataIndex: 'total_spent',
       key: 'total_spent',
+      render: (text: number) => {
+        return formatNumber(text);
+      },
     },
   ];
+
+  const { data: customerData } = useAppSelector(selectGetCustomerDetail);
+
+  async function fetchIncomingReservations(page: number) {
+    const inComingReservationsResponse: any = await getAPI(
+      `/api/v1/guests/${id}/get-reservations/incoming?current_page=${page}`,
+    );
+
+    setIncomingReservations(inComingReservationsResponse.data);
+  }
+
+  async function fetchPastReservations(page: number) {
+    const pastReservationsResponse: any = await getAPI(
+      `/api/v1/guests/${id}/get-reservations/past?current_page=${page}`,
+    );
+
+    setPastReservations(pastReservationsResponse.data);
+  }
+
+  useEffect(() => {
+    fetchIncomingReservations(1);
+    fetchPastReservations(1);
+  }, []);
 
   return (
     <Tabs className="customer-detail-tab" defaultActiveKey="1" style={{ minHeight: '100%' }}>
       <TabPane key="e" tab={t('customerDetail.Incoming reservations')}>
         <Row style={{ padding: 16 }}>
           <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
-            <Table
-              columns={reservationsColumns}
-              dataSource={incomingReservation}
-              pagination={false}
-              size="small"
-            />
-            <Pagination
-              defaultCurrent={1}
-              onChange={() => console.log('paginate Incoming reservations')}
-              pageSize={10}
-              showSizeChanger={false}
-              style={{ float: 'right', marginTop: 15 }}
-              total={100}
-            />
+            {incomingReservations && (
+              <>
+                <Table
+                  className="reservation-list"
+                  columns={reservationsColumns}
+                  dataSource={incomingReservations.data}
+                  onRow={(record: any) => {
+                    return {
+                      onClick: () => {
+                        window.open(`/reservation/${record.id}`, '_blank');
+                      },
+                    };
+                  }}
+                  pagination={false}
+                  size="small"
+                />
+                <Pagination
+                  defaultCurrent={1}
+                  onChange={value => fetchIncomingReservations(value)}
+                  pageSize={10}
+                  showSizeChanger={false}
+                  style={{ float: 'right', marginTop: 15 }}
+                  total={incomingReservations.total}
+                />
+              </>
+            )}
           </Col>
         </Row>
       </TabPane>
       <TabPane key="w" tab={t('customerDetail.Past reservations')}>
         <Row style={{ padding: 16 }}>
-          <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
-            <Table
-              columns={pastReservationColumns}
-              dataSource={pastReservation}
-              pagination={false}
-              size="small"
-            />
-            <Pagination
-              defaultCurrent={1}
-              onChange={() => console.log('paginate Past reservations')}
-              pageSize={10}
-              showSizeChanger={false}
-              style={{ float: 'right', marginTop: 15 }}
-              total={100}
-            />
-          </Col>
+          {pastReservations && (
+            <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
+              <Table
+                className="reservation-list"
+                columns={pastReservationColumns}
+                dataSource={pastReservations.data}
+                pagination={false}
+                size="small"
+              />
+              <Pagination
+                defaultCurrent={1}
+                onChange={value => fetchPastReservations(value)}
+                pageSize={10}
+                showSizeChanger={false}
+                style={{ float: 'right', marginTop: 15 }}
+                total={pastReservations.total}
+              />
+            </Col>
+          )}
         </Row>
       </TabPane>
     </Tabs>
