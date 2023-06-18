@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, Col, Row, Table } from 'antd';
 import { formatNumber } from 'helpers';
+import AddInvoiceModal from 'pages/reservation/modal/TransactionModal/AddInvoiceModal';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -58,6 +59,7 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
   // };
   const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
   const [activeTabKey, setActiveTabKey] = useState<string>('electricity');
+  const [isOpenAddInvoiceModalVisible, setIsOpenAddInvoiceModalVisible] = useState(false);
   const columns = [
     {
       title: t('common.Month'),
@@ -135,6 +137,10 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
     }),
   };
 
+  const handleAddNewInvoice = () => {
+    setIsOpenAddInvoiceModalVisible(true);
+  };
+
   return (
     <Row
       style={{
@@ -145,7 +151,7 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
         paddingLeft: 15,
       }}
     >
-      <Col span={24} style={{ paddingRight: 16 }}>
+      <Col span={24}>
         <Card
           activeTabKey={activeTabKey}
           className="transaction-tabs"
@@ -156,7 +162,10 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
           tabList={tabList}
         >
           <Col style={{ textAlign: 'right', marginBottom: 16 }}>
-            <PattonButton style={{ marginLeft: 25, padding: '0 18px 0 24px' }}>
+            <PattonButton
+              onClick={() => handleAddNewInvoice()}
+              style={{ marginLeft: 25, padding: '0 18px 0 24px' }}
+            >
               {t('common.Add')}
             </PattonButton>
             <MButton style={{ marginLeft: 25, padding: '0 18px 0 18px' }}>
@@ -174,6 +183,10 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
           />
         </Card>
       </Col>
+      <AddInvoiceModal
+        isModalOpen={isOpenAddInvoiceModalVisible}
+        setModalVisible={setIsOpenAddInvoiceModalVisible}
+      />
     </Row>
   );
 }
