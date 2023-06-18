@@ -341,7 +341,7 @@ function ReservationDetail() {
           </Space>
         </Radio.Group>
       </Modal>
-      <Row style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}>
+      <Row style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 15 }}>
         <Col span={8}>
           <svg
             fill="none"

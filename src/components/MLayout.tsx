@@ -599,7 +599,7 @@ function MLayout(props: Props) {
           className="site-layout-background"
           style={{
             minHeight: 280,
-            paddingTop: 20,
+            paddingTop: 14,
           }}
         >
           {children}
