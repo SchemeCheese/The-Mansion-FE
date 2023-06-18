@@ -6,5 +6,27 @@
   "Laundry": "Laundry",
   "Extra Services": "Extra Services",
   "History": "History",
-  "Mark as paid": "Mark as paid"
+  "Mark as paid": "Mark as paid",
+  "Add new invoice": "Add new invoice",
+  "Send notification email": "Send notification email",
+  "Type": {
+    "title": "Type",
+    "placeholder": "Select type"
+  },
+  "Total": {
+    "title": "Total",
+    "placeholder": ""
+  },
+  "Guest Name": {
+    "title": "Guest Name",
+    "placeholder": ""
+  },
+  "Upload invoice": {
+    "title": "Upload invoice",
+    "placeholder": "Upload file here"
+  },
+  "Folio ID": {
+    "title": "Folio ID",
+    "placeholder": ""
+  }
 }

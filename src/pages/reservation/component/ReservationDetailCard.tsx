@@ -81,7 +81,14 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
 
   return (
     <Col span={24} style={{ marginTop: 20 }}>
-      <div ref={reservationDetailCardRef}>
+      <div
+        ref={reservationDetailCardRef}
+        style={{
+          background: '#F0F2F5',
+          border: '1px solid #E8E8E8',
+          borderRadius: '2px',
+        }}
+      >
         <Tabs className="tabs-cart" defaultActiveKey={tabParam ?? '1'} onChange={handleChangeTab}>
           <TabPane key="1" tab={t('common.General Infos')}>
             <GeneralInfo reservationDetailId={reservationDetail.id} reservationId={reservationId} />
