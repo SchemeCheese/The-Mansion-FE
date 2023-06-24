@@ -12,3 +12,11 @@ export interface CustomerSearchResult {
   data: Array<Record<string, any>>;
   total: number;
 }
+
+export interface CustomerDetail {
+  id: string;
+}
+
+export interface CustomerDetailResult {
+  data: Record<string, any>;
+}

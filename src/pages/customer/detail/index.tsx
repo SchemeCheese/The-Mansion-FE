@@ -1,17 +1,35 @@
+/** ***********************************
+Module Name : Customer
+Developer Name : MinhNV
+Created Date : 23/06/2023
+Updated Date : 23/06/2023
+Main functions : Customer Detail Page
+************************************ */
+
 import 'styles/customer_detail.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Col, Row, Space } from 'antd';
+import { formatNumber } from 'helpers';
 import CustomerDetailAbout from 'pages/customer/detail/CustomerDetailAbout';
 import CustomerDetailFeedback from 'pages/customer/detail/CustomerDetailFeedback';
 import CustomerDetailInformation from 'pages/customer/detail/CustomerDetailInformation';
 import CustomerDetailInvoiceInfo from 'pages/customer/detail/CustomerDetailInvoiceInfo';
 import CustomerDetailReservation from 'pages/customer/detail/CustomerDetailReservation';
+import { selectGetCustomerDetail } from 'selectors';
 import styled from 'styled-components';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { getCustomerDetailAction } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
+
+import { customerLevelMapping } from '../list/CustomerList';
 
 const BreadscrumTitle = styled.p`
   color: rgba(0 0 0 85%);
@@ -28,6 +46,11 @@ const BreadscrumData = styled.p`
 
 function CustomerDetail() {
   const { t } = useTranslation();
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { data: customerData } = useAppSelector(selectGetCustomerDetail);
+
   const [directFeedbackState, setDirectFeedbackState] = useState<any>([
     {
       status: 'waitlist',
@@ -168,6 +191,14 @@ function CustomerDetail() {
     );
   };
 
+  useEffect(() => {
+    dispatch(
+      getCustomerDetailAction({
+        id: String(id),
+      }),
+    );
+  }, []);
+
   return (
     <>
       <Row style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}>
@@ -186,107 +217,84 @@ function CustomerDetail() {
             />
           </svg>
           <span style={{ paddingLeft: 10, fontSize: 20 }}>
-            <span style={{ paddingRight: 16 }}>Lê Minh Quỳnh Duyên</span>
-            <svg
-              fill="none"
-              height="16"
-              viewBox="0 0 45 16"
-              width="45"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <rect fill="#DFD4FF" height="16" opacity="0.01" width="16" />
-              <rect
-                fill="#885EFE"
-                height="13.3333"
-                opacity="0.01"
-                width="13.3333"
-                x="1.33325"
-                y="1.33398"
-              />
-              <path
-                d="M7.99949 3.14285C8.30632 3.14285 8.55505 2.88702 8.55505 2.57143C8.55505 2.25584 8.30632 2 7.99949 2C7.69266 2 7.44393 2.25584 7.44393 2.57143C7.44393 2.88702 7.69266 3.14285 7.99949 3.14285Z"
-                fill="#FAAD14"
-                fillOpacity="0.85"
-              />
-              <path
-                d="M14.1115 5.99999C14.4183 5.99999 14.667 5.74415 14.667 5.42856C14.667 5.11297 14.4183 4.85714 14.1115 4.85714C13.8046 4.85714 13.5559 5.11297 13.5559 5.42856C13.5559 5.74415 13.8046 5.99999 14.1115 5.99999Z"
-                fill="#FAAD14"
-                fillOpacity="0.85"
-              />
-              <path
-                d="M2.44436 5.42856C2.44436 5.74415 2.19563 5.99999 1.88881 5.99999C1.58198 5.99999 1.33325 5.74415 1.33325 5.42856C1.33325 5.11297 1.58198 4.85714 1.88881 4.85714C2.19563 4.85714 2.44436 5.11297 2.44436 5.42856Z"
-                fill="#FAAD14"
-                fillOpacity="0.85"
-              />
-              <path
-                d="M2.98618 11.7143H13.0136L14.0976 6.69536C14.1217 6.58401 14.1128 6.46782 14.0721 6.36172C14.0314 6.25562 13.9608 6.16447 13.8693 6.10001C13.7778 6.03554 13.6697 6.00071 13.5588 6C13.4479 5.99929 13.3393 6.03272 13.2471 6.096L10.4372 8.02257L8.49659 4.03015C8.45045 3.93524 8.37952 3.85543 8.29177 3.79965C8.20401 3.74387 8.10288 3.71433 7.99972 3.71433C7.89656 3.71433 7.79543 3.74387 7.70767 3.79965C7.61992 3.85543 7.54899 3.93524 7.50285 4.03015L5.56222 8.02257L2.75229 6.096C2.66003 6.03274 2.55148 5.99933 2.44061 6.00006C2.32973 6.00078 2.22161 6.03562 2.13014 6.10008C2.03867 6.16453 1.96805 6.25567 1.92736 6.36176C1.88667 6.46784 1.87777 6.58402 1.9018 6.69536L2.98618 11.7143Z"
-                fill="#FAAD14"
-                fillOpacity="0.85"
-              />
-              <path
-                d="M2.99992 13.4286V12.2857H12.9999V13.4286C12.9999 13.5801 12.9414 13.7255 12.8372 13.8326C12.733 13.9398 12.5917 14 12.4444 14H3.55547C3.40813 14 3.26682 13.9398 3.16264 13.8326C3.05845 13.7255 2.99992 13.5801 2.99992 13.4286Z"
-                fill="#FAAD14"
-                fillOpacity="0.85"
-              />
-              <path
-                d="M29.0244 13L32.6611 3.13574H31.3691L28.4365 11.5029H28.3955L25.4629 3.13574H24.1709L27.8076 13H29.0244ZM35.0195 13V3.13574H33.7891V13H35.0195ZM36.9336 3.13574V13H38.1641V9.47949H40.4404C42.293 9.47949 43.6123 8.17383 43.6123 6.30078C43.6123 4.43457 42.3066 3.13574 40.4541 3.13574H36.9336ZM38.1641 4.22949H40.1328C41.5479 4.22949 42.3477 4.99512 42.3477 6.30078C42.3477 7.61328 41.541 8.38574 40.1328 8.38574H38.1641V4.22949Z"
-                fill="black"
-                fillOpacity="0.65"
-              />
-            </svg>
+            <span style={{ paddingRight: 16 }}>
+              {`${customerData.first_name} ${customerData.last_name}`}
+            </span>
+          </span>
+
+          <span
+            style={{
+              fontSize: 14,
+            }}
+          >
+            {customerLevelMapping(customerData.client_rank?.toString())}
           </span>
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
             <>
               <div>
-                <svg
-                  fill="none"
-                  height="16"
-                  style={{ verticalAlign: 'text-top' }}
-                  viewBox="0 0 16 16"
-                  width="16"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect fill="#DFD4FF" height="16" opacity="0.01" width="16" />
-                  <rect
-                    fill="#885EFE"
-                    height="13.3333"
-                    opacity="0.01"
-                    width="13.3333"
-                    x="1.33325"
-                    y="1.33398"
-                  />
-                  <path
-                    d="M4.01473 7.10435C5.0814 9.20065 6.79992 10.9118 8.89622 11.9858L10.5258 10.3562C10.7258 10.1562 11.0221 10.0895 11.2814 10.1784C12.111 10.4525 13.0073 10.6007 13.9258 10.6007C14.3333 10.6007 14.6666 10.934 14.6666 11.3414V13.9266C14.6666 14.334 14.3333 14.6673 13.9258 14.6673C6.97029 14.6673 1.33325 9.03028 1.33325 2.07473C1.33325 1.66732 1.66659 1.33398 2.07399 1.33398H4.66659C5.07399 1.33398 5.40733 1.66732 5.40733 2.07473C5.40733 3.00065 5.55547 3.88954 5.82955 4.71917C5.91103 4.97843 5.85177 5.26732 5.64436 5.47473L4.01473 7.10435Z"
-                    fill="black"
-                    fillOpacity="0.45"
-                  />
-                </svg>{' '}
-                +84 912 456 899
+                {customerData.telephone_number1 && (
+                  <>
+                    <svg
+                      fill="none"
+                      height="16"
+                      style={{ position: 'absolute', top: 6 }}
+                      viewBox="0 0 16 16"
+                      width="16"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect fill="#DFD4FF" height="16" opacity="0.01" width="16" />
+                      <rect
+                        fill="#885EFE"
+                        height="13.3333"
+                        opacity="0.01"
+                        width="13.3333"
+                        x="1.33325"
+                        y="1.33398"
+                      />
+                      <path
+                        d="M4.01473 7.10435C5.0814 9.20065 6.79992 10.9118 8.89622 11.9858L10.5258 10.3562C10.7258 10.1562 11.0221 10.0895 11.2814 10.1784C12.111 10.4525 13.0073 10.6007 13.9258 10.6007C14.3333 10.6007 14.6666 10.934 14.6666 11.3414V13.9266C14.6666 14.334 14.3333 14.6673 13.9258 14.6673C6.97029 14.6673 1.33325 9.03028 1.33325 2.07473C1.33325 1.66732 1.66659 1.33398 2.07399 1.33398H4.66659C5.07399 1.33398 5.40733 1.66732 5.40733 2.07473C5.40733 3.00065 5.55547 3.88954 5.82955 4.71917C5.91103 4.97843 5.85177 5.26732 5.64436 5.47473L4.01473 7.10435Z"
+                        fill="black"
+                        fillOpacity="0.45"
+                      />
+                    </svg>
+                    <span style={{ paddingLeft: 25 }}>{customerData.telephone_number1}</span>
+                  </>
+                )}
               </div>
-              <MButton>{t('common.Update')}</MButton>
-              <PattonButton>{t('customerDetail.New reservation')}</PattonButton>
+              <PattonButton
+                onClick={() => {
+                  navigate('/reservation/create', {
+                    state: {
+                      reservationInfo: {
+                        booker: customerData,
+                      },
+                    },
+                  });
+                }}
+              >
+                {t('customerDetail.New reservation')}
+              </PattonButton>
             </>
           </Space>
         </Col>
         <Col span={24} style={{ padding: '25px 0 0 28px' }}>
           <div className="customer-detail-tag">
-            <span>Smoking</span>
-            <span>Soft Pillow</span>
-            <span>Allergies</span>
-            <span>By group</span>
+            {customerData &&
+              customerData.labels &&
+              customerData.labels.map((item: string) => <span>{item}</span>)}
           </div>
         </Col>
       </Row>
       <Row justify="space-between" style={{ paddingRight: 20, paddingLeft: 20 }}>
-        <Col span={6}>
+        <Col span={6} style={{ paddingLeft: 30 }}>
           <Row>
             <Col span={12}>
               <BreadscrumTitle>{t('customerDetail.Total Visits')}</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <BreadscrumData>2</BreadscrumData>
+              <BreadscrumData>{customerData.reservation_info.total_visit}</BreadscrumData>
             </Col>
           </Row>
           <Row>
@@ -294,7 +302,7 @@ function CustomerDetail() {
               <BreadscrumTitle>{t('customerDetail.Total room night')}</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <BreadscrumData>2</BreadscrumData>
+              <BreadscrumData>{customerData.reservation_info.total_night}</BreadscrumData>
             </Col>
           </Row>
         </Col>
@@ -304,7 +312,9 @@ function CustomerDetail() {
               <BreadscrumTitle>{t('customerDetail.Total Spent')}</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <BreadscrumData>2.000.000 VND</BreadscrumData>
+              <BreadscrumData>
+                {formatNumber(customerData.reservation_info.total_spent)} VND
+              </BreadscrumData>
             </Col>
           </Row>
           <Row>
@@ -312,7 +322,9 @@ function CustomerDetail() {
               <BreadscrumTitle>{t('customerDetail.Average spent')}</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <BreadscrumData>1.000.000 VND</BreadscrumData>
+              <BreadscrumData>
+                {formatNumber(customerData.reservation_info.avg_spent)} VND
+              </BreadscrumData>
             </Col>
           </Row>
         </Col>
@@ -322,7 +334,7 @@ function CustomerDetail() {
               <BreadscrumTitle>{t('customerDetail.Total Noshow')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <BreadscrumData>0</BreadscrumData>
+              <BreadscrumData>{customerData.reservation_info.total_noshow}</BreadscrumData>
             </Col>
           </Row>
           <Row>
@@ -330,7 +342,7 @@ function CustomerDetail() {
               <BreadscrumTitle>{t('customerDetail.Total cancel')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <BreadscrumData>0</BreadscrumData>
+              <BreadscrumData>{customerData.reservation_info.total_cancel}</BreadscrumData>
             </Col>
           </Row>
         </Col>
@@ -350,11 +362,7 @@ function CustomerDetail() {
           />
         </Col>
         <Col span={24} style={{ background: 'white', marginTop: 16 }}>
-          <CustomerDetailReservation
-            incomingReservation={incomingReservationsState}
-            pastReservation={pastReservationState}
-            statusMapping={statusMapping}
-          />
+          <CustomerDetailReservation statusMapping={statusMapping} />
         </Col>
         <Col span={24} style={{ background: 'white', marginTop: 16 }}>
           <CustomerDetailInformation />

@@ -185,6 +185,8 @@ export const ActionTypes = keyMirror({
   RESET_RESERVATION_DETAIL_BY_ROOM_NO_SUCCESS: undefined,
   CREATE_QRCODE_VNPAY: undefined,
   CREATE_QRCODE_VNPAY_SUCCESS: undefined,
+  GET_CUSTOMER_DETAIL: undefined,
+  GET_CUSTOMER_DETAIL_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

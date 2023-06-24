@@ -1,3 +1,11 @@
+/** ***********************************
+Module Name : Customer
+Developer Name : MinhNV
+Created Date : 23/06/2023
+Updated Date : 23/06/2023
+Main functions : Customer Detail Page
+************************************ */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
@@ -95,6 +103,7 @@ function CustomerDetailFeedback({ directFeedback, socialFeedback, statusMapping 
           </Col>
           <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
             <Table
+              className="feedback-list"
               columns={feedbackColumns}
               dataSource={directFeedback}
               pagination={false}

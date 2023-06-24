@@ -725,6 +725,12 @@ export interface CustomerSearchState {
   total: number;
 }
 
+export interface GetCustomerDetailState {
+  data: Record<string, any>;
+  id: string;
+  is_finish: boolean;
+}
+
 export interface RootState {
   addDisk: AddDiskState;
   addItem: AddItemState;
@@ -756,6 +762,7 @@ export interface RootState {
   getBranchHeader: BranchHeaderState;
   getBranchManager: BranchManagerState;
   getBranchs: GetBranchsState;
+  getCustomerDetail: GetCustomerDetailState;
   getDeviceManager: GetDeviceManagerState;
   getDurationCurve: GetDurationCurveState;
   getElectricArea: GetElectricAreaState;
