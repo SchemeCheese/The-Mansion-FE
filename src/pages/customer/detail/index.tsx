@@ -218,7 +218,7 @@ function CustomerDetail() {
           </svg>
           <span style={{ paddingLeft: 10, fontSize: 20 }}>
             <span style={{ paddingRight: 16 }}>
-              {`${customerData.first_name} ${customerData.last_name}`}
+              {`${customerData?.first_name} ${customerData?.last_name}`}
             </span>
           </span>
 
@@ -227,14 +227,14 @@ function CustomerDetail() {
               fontSize: 14,
             }}
           >
-            {customerLevelMapping(customerData.client_rank?.toString())}
+            {customerLevelMapping(customerData?.client_rank?.toString())}
           </span>
         </Col>
         <Col span={16} style={{ textAlign: 'right' }}>
           <Space size="middle">
             <>
               <div>
-                {customerData.telephone_number1 && (
+                {customerData?.telephone_number1 && (
                   <>
                     <svg
                       fill="none"
@@ -259,7 +259,7 @@ function CustomerDetail() {
                         fillOpacity="0.45"
                       />
                     </svg>
-                    <span style={{ paddingLeft: 25 }}>{customerData.telephone_number1}</span>
+                    <span style={{ paddingLeft: 25 }}>{customerData?.telephone_number1}</span>
                   </>
                 )}
               </div>
@@ -294,7 +294,7 @@ function CustomerDetail() {
               <BreadscrumTitle>{t('customerDetail.Total Visits')}</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <BreadscrumData>{customerData.reservation_info.total_visit}</BreadscrumData>
+              <BreadscrumData>{customerData.reservation_info?.total_visit}</BreadscrumData>
             </Col>
           </Row>
           <Row>
@@ -302,7 +302,7 @@ function CustomerDetail() {
               <BreadscrumTitle>{t('customerDetail.Total room night')}</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <BreadscrumData>{customerData.reservation_info.total_night}</BreadscrumData>
+              <BreadscrumData>{customerData.reservation_info?.total_night}</BreadscrumData>
             </Col>
           </Row>
         </Col>
@@ -313,7 +313,7 @@ function CustomerDetail() {
             </Col>
             <Col span={12}>
               <BreadscrumData>
-                {formatNumber(customerData.reservation_info.total_spent)} VND
+                {formatNumber(customerData.reservation_info?.total_spent)} VND
               </BreadscrumData>
             </Col>
           </Row>
@@ -323,7 +323,7 @@ function CustomerDetail() {
             </Col>
             <Col span={12}>
               <BreadscrumData>
-                {formatNumber(customerData.reservation_info.avg_spent)} VND
+                {formatNumber(customerData.reservation_info?.avg_spent)} VND
               </BreadscrumData>
             </Col>
           </Row>
@@ -334,7 +334,7 @@ function CustomerDetail() {
               <BreadscrumTitle>{t('customerDetail.Total Noshow')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <BreadscrumData>{customerData.reservation_info.total_noshow}</BreadscrumData>
+              <BreadscrumData>{customerData.reservation_info?.total_noshow}</BreadscrumData>
             </Col>
           </Row>
           <Row>
@@ -342,7 +342,7 @@ function CustomerDetail() {
               <BreadscrumTitle>{t('customerDetail.Total cancel')}</BreadscrumTitle>
             </Col>
             <Col span={12} style={{ textAlign: 'right' }}>
-              <BreadscrumData>{customerData.reservation_info.total_cancel}</BreadscrumData>
+              <BreadscrumData>{customerData.reservation_info?.total_cancel}</BreadscrumData>
             </Col>
           </Row>
         </Col>

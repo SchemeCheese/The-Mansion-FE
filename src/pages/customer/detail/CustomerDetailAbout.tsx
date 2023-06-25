@@ -179,27 +179,31 @@ function CustomerDetailAbout() {
               </Select>
             </Form.Item>
 
-            <Form.Item
-              label={t('customerDetail.Favourite Room Types 2.title')}
-              name="favorite_equipment2"
-            >
+            <Form.Item label={t('customerDetail.Pillow Type.title')} name="pillow_type">
               <Select
                 allowClear
-                placeholder={t('customerDetail.Favourite Room Types 2.placeholder')}
+                placeholder={t('customerDetail.Pillow Type.placeholder')}
                 style={{ width: '100%' }}
               >
-                {getRoomsData.items?.map((item: any) => {
-                  return <Option value={item.id}>{item.name}</Option>;
-                })}
+                {customerConfig &&
+                  Object.keys(customerConfig.pillow_types).map((key: string) => {
+                    return <Option value={key}>{customerConfig.pillow_types[key]}</Option>;
+                  })}
               </Select>
+            </Form.Item>
+
+            <Form.Item
+              label={t('customerDetail.Favourite Food and Beverage.title')}
+              name="fav_food"
+            >
+              <TextArea
+                placeholder={t('customerDetail.Favourite Food and Beverage.placeholder')}
+                rows={5}
+              />
             </Form.Item>
 
             <Form.Item label={t('customerDetail.Notes.title')} name="note">
               <TextArea placeholder={t('customerDetail.Notes.placeholder')} rows={5} />
-            </Form.Item>
-
-            <Form.Item label={t('customerDetail.Allergies Notes.title')} name="allergies_note">
-              <TextArea placeholder={t('customerDetail.Allergies Notes.placeholder')} rows={5} />
             </Form.Item>
           </Col>
           <Col span={8}>
@@ -222,16 +226,18 @@ function CustomerDetailAbout() {
               </Select>
             </Form.Item>
 
-            <Form.Item label={t('customerDetail.Pillow Type.title')} name="pillow_type">
+            <Form.Item
+              label={t('customerDetail.Favourite Room Types 2.title')}
+              name="favorite_equipment2"
+            >
               <Select
                 allowClear
-                placeholder={t('customerDetail.Pillow Type.placeholder')}
+                placeholder={t('customerDetail.Favourite Room Types 2.placeholder')}
                 style={{ width: '100%' }}
               >
-                {customerConfig &&
-                  Object.keys(customerConfig.pillow_types).map((key: string) => {
-                    return <Option value={key}>{customerConfig.pillow_types[key]}</Option>;
-                  })}
+                {getRoomsData.items?.map((item: any) => {
+                  return <Option value={item.id}>{item.name}</Option>;
+                })}
               </Select>
             </Form.Item>
 
@@ -246,6 +252,10 @@ function CustomerDetailAbout() {
                     return <Option value={key}>{customerConfig.mattress_type[key]}</Option>;
                   })}
               </Select>
+            </Form.Item>
+
+            <Form.Item label={t('customerDetail.Allergies Notes.title')} name="allergies_note">
+              <TextArea placeholder={t('customerDetail.Allergies Notes.placeholder')} rows={5} />
             </Form.Item>
 
             <Form.Item label={t('customerDetail.Favourite Tours.title')} name="fav_tour">
@@ -268,6 +278,19 @@ function CustomerDetailAbout() {
               </Select>
             </Form.Item>
 
+            <Form.Item label={t('customerDetail.Baby seat.title')} name="baby_seat">
+              <Select
+                allowClear
+                placeholder={t('customerDetail.Baby seat.placeholder')}
+                style={{ width: '100%' }}
+              >
+                <Option value="0">No</Option>
+                <Option value="1">Yes</Option>
+              </Select>
+            </Form.Item>
+
+            <Form.Item label={' '} />
+
             <Form.Item label={t('customerDetail.Allergies.title')} name="allergies">
               <Select
                 allowClear
@@ -280,27 +303,6 @@ function CustomerDetailAbout() {
                     return <Option value={key}>{customerConfig.allergies[key]}</Option>;
                   })}
               </Select>
-            </Form.Item>
-
-            <Form.Item label={t('customerDetail.Baby seat.title')} name="baby_seat">
-              <Select
-                allowClear
-                placeholder={t('customerDetail.Baby seat.placeholder')}
-                style={{ width: '100%' }}
-              >
-                <Option value="0">No</Option>
-                <Option value="1">Yes</Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item
-              label={t('customerDetail.Favourite Food and Beverage.title')}
-              name="fav_food"
-            >
-              <TextArea
-                placeholder={t('customerDetail.Favourite Food and Beverage.placeholder')}
-                rows={5}
-              />
             </Form.Item>
           </Col>
           <Col span={24}>
