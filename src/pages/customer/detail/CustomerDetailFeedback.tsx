@@ -6,10 +6,11 @@ Updated Date : 23/06/2023
 Main functions : Customer Detail Page
 ************************************ */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
 import { Col, Row, Table, Tabs } from 'antd';
+import CreateCustomerFeedbackModal from 'pages/customer/modal/CreateCustomerFeedbackModal';
 
 import PattonButton from 'components/PattonButton';
 
@@ -23,6 +24,7 @@ interface Props {
 
 function CustomerDetailFeedback({ directFeedback, socialFeedback, statusMapping }: Props) {
   const { t } = useTranslation();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const feedbackColumns = [
     {
@@ -96,7 +98,7 @@ function CustomerDetailFeedback({ directFeedback, socialFeedback, statusMapping 
       <TabPane key="e" tab={t('customerDetail.Direct Feedbacks')}>
         <Row style={{ padding: 16 }}>
           <Col span={24} style={{ paddingTop: 16 }}>
-            <PattonButton type="primary">
+            <PattonButton onClick={() => setIsModalVisible(true)} type="primary">
               {' '}
               <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
             </PattonButton>
@@ -115,7 +117,7 @@ function CustomerDetailFeedback({ directFeedback, socialFeedback, statusMapping 
       <TabPane key="w" tab={t('customerDetail.Social Feedbacks')}>
         <Row style={{ padding: 16 }}>
           <Col span={24} style={{ paddingTop: 16 }}>
-            <PattonButton type="primary">
+            <PattonButton onClick={() => setIsModalVisible(true)} type="primary">
               {' '}
               <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} /> {t('common.New')}
             </PattonButton>
@@ -130,6 +132,10 @@ function CustomerDetailFeedback({ directFeedback, socialFeedback, statusMapping 
           </Col>
         </Row>
       </TabPane>
+      <CreateCustomerFeedbackModal
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+      />
     </Tabs>
   );
 }

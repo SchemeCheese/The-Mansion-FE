@@ -13,8 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
-import { Col, DatePicker, Form, Input, Modal, Pagination, Row, Select, Spin, Table } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+import { Col, Form, Input, Pagination, Row, Select, Spin, Table } from 'antd';
 
 import { searchCustomer } from 'actions';
 
@@ -177,8 +176,6 @@ function CustomerList({ type }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [form] = Form.useForm();
-  const [isModalFeedbackVisible, setIsModalFeedbackVisibleState] = useState<boolean>(false);
   const [searchCondition, setSearchCondition] = useState({
     current_page: 1,
     per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
@@ -313,14 +310,6 @@ function CustomerList({ type }: Props) {
     },
   ];
 
-  const handleOk = () => {
-    form.submit();
-  };
-
-  const onFinish = (values: any) => {
-    setIsModalFeedbackVisibleState(false);
-  };
-
   return (
     <Row style={{ background: 'white', padding: 16 }}>
       <Col span={24}>
@@ -367,7 +356,7 @@ function CustomerList({ type }: Props) {
         </Input.Group>
       </Col>
       <Col span={24} style={{ paddingTop: 16 }}>
-        <PattonButton onClick={() => setIsModalFeedbackVisibleState(true)}>
+        <PattonButton>
           {' '}
           <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> {t('common.New')}
         </PattonButton>
@@ -412,101 +401,6 @@ function CustomerList({ type }: Props) {
           <Spin style={{ width: '100%', minHeight: 300, marginTop: '15%' }} />
         )}
       </Col>
-      <Modal
-        bodyStyle={{
-          background: '#FFFFFF',
-        }}
-        className="new-customer-feedback-modal"
-        okText={t('common.Save')}
-        onCancel={() => setIsModalFeedbackVisibleState(false)}
-        onOk={handleOk}
-        style={{
-          top: 40,
-        }}
-        title={t('customer.Create New Feedback')}
-        visible={isModalFeedbackVisible}
-        width={1000}
-      >
-        <Form
-          autoComplete="off"
-          form={form}
-          labelCol={{
-            span: 24,
-          }}
-          layout="vertical"
-          name="basic"
-          onFinish={onFinish}
-          wrapperCol={{
-            span: 23,
-          }}
-        >
-          <Row style={{ maxHeight: '70vh', overflow: 'auto' }}>
-            <Col span={24}>
-              <Row>
-                <Col span={8}>
-                  <Form.Item label={t('customer.Booker Name.title')} name="booker_name">
-                    <Input placeholder="" />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item label={t('customer.Receive Date.title')} name="receive_date">
-                    <DatePicker
-                      placeholder={t('customer.Receive Date.placeholder')}
-                      style={{
-                        height: 32,
-                        borderRadius: 4,
-                        marginRight: 11,
-                        width: '100%',
-                      }}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item label={t('customer.Feedback Type.title')} name="feedback_type">
-                    <Select allowClear placeholder={t('customer.Feedback Type.placeholder')}>
-                      <Option value="1">VIP</Option>
-                      <Option value="2">Dominant</Option>
-                      <Option value="4">General</Option>
-                      <Option value="9">Undesirable Guest</Option>
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label={t('customer.Receiving Feedback Staff.title')}
-                    name="receiving_feedback_staff"
-                  >
-                    <Input placeholder="" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label={t('customer.Responding Staff.title')} name="responding_staff">
-                    <Input placeholder="" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label={t('customer.Feedback.title')} name="feedback">
-                    <TextArea
-                      placeholder={t('customer.Feedback.placeholder')}
-                      rows={5}
-                      style={{ borderRadius: 4 }}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item label={t('customer.Responding.title')} name="responding">
-                    <TextArea
-                      placeholder={t('customer.Responding.placeholder')}
-                      rows={5}
-                      style={{ borderRadius: 4 }}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Form>
-      </Modal>
     </Row>
   );
 }
