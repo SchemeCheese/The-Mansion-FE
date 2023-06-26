@@ -219,6 +219,13 @@ function CustomerDetailReservation({ statusMapping }: Props) {
                 className="reservation-list"
                 columns={pastReservationColumns}
                 dataSource={pastReservations.data}
+                onRow={(record: any) => {
+                  return {
+                    onClick: () => {
+                      window.open(`/reservation/${record.id}`, '_blank');
+                    },
+                  };
+                }}
                 pagination={false}
                 size="small"
               />
