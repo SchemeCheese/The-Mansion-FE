@@ -19,11 +19,11 @@
   "Official Informations": "Official Informations",
   "Type": {
     "title": "Type",
-    "placeholder": "select type"
+    "placeholder": "Select type"
   },
   "First Name": {
     "title": "First Name",
-    "placeholder": ""
+    "placeholder": "Input first name"
   },
   "Email 1": {
     "title": "Email 1",
@@ -52,7 +52,7 @@
   "Get to know more about your customer": "Get to know more about your customer",
   "Rank": {
     "title": "Rank",
-    "placeholder": "select rank"
+    "placeholder": "Select rank"
   },
   "Date of birth": {
     "title": "Date of birth",
@@ -60,11 +60,11 @@
   },
   "Favourite Room Types 1": {
     "title": "Favourite Room Types 1",
-    "placeholder": "select room type"
+    "placeholder": "Select room type"
   },
   "Favourite Room Types 2": {
     "title": "Favourite Room Types 2",
-    "placeholder": "select room type"
+    "placeholder": "Select room type"
   },
   "Notes": {
     "title": "Notes",
@@ -84,7 +84,7 @@
   },
   "Mattress Type": {
     "title": "Mattress Firmness Type",
-    "placeholder": "Select soft level"
+    "placeholder": "Select mattress type"
   },
   "Favourite Tours": {
     "title": "Favourite Tours",

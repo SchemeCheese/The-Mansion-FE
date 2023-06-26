@@ -20,7 +20,7 @@ import { selectGetCustomerDetail, selectGetRooms } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { getCustomerDetailAction } from 'actions';
+import { getCustomerDetailAction, getRoomsAction } from 'actions';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
@@ -96,6 +96,7 @@ function CustomerDetailAbout() {
     }
 
     fetchCustomerConfig();
+    dispatch(getRoomsAction());
   }, []);
 
   const handleSelectTag = (key: string) => {

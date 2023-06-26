@@ -79,7 +79,11 @@ function CustomerDetailInvoiceInfo() {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label={t('customerDetail.E-invoice email address.title')} name="e_mail">
+              <Form.Item
+                label={t('customerDetail.E-invoice email address.title')}
+                name="e_mail"
+                rules={[{ type: 'email' }]}
+              >
                 <MInput placeholder={t('customerDetail.E-invoice email address.placeholder')} />
               </Form.Item>
             </Col>
