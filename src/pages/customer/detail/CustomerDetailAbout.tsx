@@ -82,7 +82,7 @@ function CustomerDetailAbout() {
     });
 
     setTags(
-      customerData.tags.map((item: number) => {
+      customerData.tags?.map((item: number) => {
         return item.toString();
       }),
     );
@@ -316,7 +316,7 @@ function CustomerDetailAbout() {
                     Object.keys(customerConfig.tags).map((key: string) => {
                       return (
                         <Tag
-                          color={tags.includes(key) ? '#1D39C4' : 'rgba(0, 0, 0, 0.45)'}
+                          color={tags?.includes(key) ? '#1D39C4' : 'rgba(0, 0, 0, 0.45)'}
                           onClick={() => handleSelectTag(key)}
                           style={{ borderRadius: '15px', cursor: 'pointer' }}
                         >
