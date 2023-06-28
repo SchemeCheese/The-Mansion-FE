@@ -98,6 +98,7 @@ function ReservationList({ type }: Props) {
           folio_id: item.reservationNumber,
           source_ta: item.source,
           booker_name: item.booker.name,
+          booker_email: item.booker.email,
           phone: item.booker.phone_number,
           total_room: item.room_total,
         };
@@ -227,8 +228,8 @@ function ReservationList({ type }: Props) {
     },
     {
       title: t('common.Email.title'),
-      dataIndex: 'email',
-      key: 'email',
+      dataIndex: 'booker_email',
+      key: 'booker_email',
     },
     {
       title: t('common.Phone'),
