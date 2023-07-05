@@ -448,7 +448,7 @@ function NightAudit() {
     return {
       ...item,
       folio_id: item.folio_id,
-      room_no: item.room_no,
+      room_no: item.room_no || '-',
       booker_name: item.booker_name,
       booker_via: item.source,
       checkin: item.checkin,
@@ -545,6 +545,13 @@ function NightAudit() {
               };
             }}
             pagination={false}
+            rowClassName={(record: any) => {
+              if (record.room_no === '-') {
+                return 'new-reservation';
+              }
+
+              return '';
+            }}
             size="small"
           />
         </Card>
