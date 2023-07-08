@@ -24,6 +24,10 @@
     "title": "Passport No",
     "placeholder": "233202783028"
   },
+  "Identity Passport No": {
+    "title": "Identity / Passport No",
+    "placeholder": "233202783028"
+  },
   "Visa No": {
     "title": "Visa No",
     "placeholder": "233202783028"

@@ -276,6 +276,8 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
       room_type: room?.equipment_type_id.toString(),
       room_id: room?.id.toString(),
     });
+
+    searchRoomAction();
   }, [room]);
 
   return (
@@ -369,8 +371,8 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
                   </Form.Item>
                 </Col>
                 <Col span={8}>
-                  <Form.Item label={t('guest.Identity / Passport No.title')} name="passport_number">
-                    <Input placeholder={t('guest.Identity / Passport No.placeholder')} />
+                  <Form.Item label={t('guest.Identity Passport No.title')} name="passport_number">
+                    <Input placeholder={t('guest.Identity Passport No.placeholder')} />
                   </Form.Item>
                 </Col>
                 <Col span={8}>
