@@ -21,6 +21,7 @@ import GuestThank from 'pages/guest/GuestThank';
 import HouseKeeping from 'pages/house-keeping';
 import NightAudit from 'pages/night_audit';
 import StatusPayment from 'pages/payment/StatusPayment';
+import Report from 'pages/report/list';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
 import Reservation from 'pages/reservation/list';
@@ -223,6 +224,25 @@ function Root() {
         style={{ paddingLeft: 8, cursor: 'pointer' }}
       >
         {t('common.Customer')}
+      </span>
+    </>
+  );
+
+  const reportBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        TMHA
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/report');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('report.Reports')}
       </span>
     </>
   );
@@ -564,6 +584,14 @@ function Root() {
                 </PrivateRoute>
               }
               path="/guest-thank/:type"
+            />
+            <Route
+              element={
+                <PrivateRoute breadCrumb={reportBreadCrum} isAuthenticated={isAuthenticated} to="/">
+                  <Report />
+                </PrivateRoute>
+              }
+              path="/report"
             />
             <Route element={<NotFound />} path="*" />
           </Routes>

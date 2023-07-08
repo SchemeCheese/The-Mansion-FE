@@ -1,0 +1,40 @@
+{
+  "Report List": "Report List",
+  "Reports": "Reports",
+  "Report": "Report",
+  "Reset": "Reset",
+  "Hotel Facility": "Hotel Facility",
+  "Branch": {
+    "title": "Branch",
+    "placeholder": "Select branch"
+  },
+  "Facility": {
+    "title": "Facility",
+    "placeholder": "Select Facility"
+  },
+  "Equipment Type": {
+    "title": "Equipment Type",
+    "placeholder": "Select Equipment Type"
+  },
+  "Report Type": {
+    "title": "Report Type",
+    "placeholder": "Report Type"
+  },
+  "Sort order by": {
+    "title": "Sort order by",
+    "placeholder": "Select order by"
+  },
+  "Sort order type": {
+    "title": "Sort order type",
+    "placeholder": "Select order type"
+  },
+  "Report Start Date": {
+    "title": "Report Start Date",
+    "placeholder": ""
+  },
+  "Report End Date": {
+    "title": "Report End Date",
+    "placeholder": ""
+  },
+  "Export Excel": "Export Excel"
+}
