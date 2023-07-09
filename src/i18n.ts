@@ -14,6 +14,7 @@ import monthlyInvoiceEn from 'translations/en/monthlyInvoice.json';
 import nightAuditEn from 'translations/en/nightAudit.json';
 import payDetailEn from 'translations/en/payDetail.json';
 import paySelectedEn from 'translations/en/paySelected.json';
+import reportEn from 'translations/en/report.json';
 import reservationEn from 'translations/en/reservation.json';
 import selectedPayMethodEn from 'translations/en/selectedPayMethod.json';
 import transactionEn from 'translations/en/transaction.json';
@@ -31,6 +32,7 @@ import monthlyInvoiceJa from 'translations/ja/monthlyInvoice.json';
 import nightAuditJa from 'translations/ja/nightAudit.json';
 import payDetailJA from 'translations/ja/payDetail.json';
 import paySelectedJa from 'translations/ja/paySelected.json';
+import reportJa from 'translations/ja/report.json';
 import reservationJa from 'translations/ja/reservation.json';
 import selectedPayMethodJA from 'translations/ja/selectedPayMethod.json';
 import transactionJa from 'translations/ja/transaction.json';
@@ -48,6 +50,7 @@ import monthlyInvoiceVi from 'translations/vi/monthlyInvoice.json';
 import nightAuditVi from 'translations/vi/nightAudit.json';
 import payDetailVi from 'translations/vi/payDetail.json';
 import paySelectedVi from 'translations/vi/paySelected.json';
+import reportVi from 'translations/vi/report.json';
 import reservationVi from 'translations/vi/reservation.json';
 import selectedPayMethodVi from 'translations/vi/selectedPayMethod.json';
 import transactionVi from 'translations/vi/transaction.json';
@@ -75,6 +78,7 @@ i18n.use(initReactI18next).init({
         branchManager: branchManagerEn,
         customerDetail: customerDetailEn,
         customer: customerEn,
+        report: reportEn,
       },
     },
     ja: {
@@ -97,6 +101,7 @@ i18n.use(initReactI18next).init({
         branchManager: branchManagerJa,
         customerDetail: customerDetailJa,
         customer: customerJa,
+        report: reportJa,
       },
     },
     vi: {
@@ -119,6 +124,7 @@ i18n.use(initReactI18next).init({
         branchManager: branchManagerVi,
         customerDetail: customerDetailVi,
         customer: customerVi,
+        report: reportVi,
       },
     },
   },
