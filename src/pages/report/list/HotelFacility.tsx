@@ -62,6 +62,19 @@ function HotelFacility() {
     });
   };
 
+  const resetForm = () => {
+    form.setFieldsValue({
+      start_date: moment().subtract(15, 'days'),
+      end_date: moment(),
+      branch_id: window.localStorage.getItem('branch_id') ?? '1',
+      facility_id: window.localStorage.getItem('facility_id') ?? '1',
+      report_type: undefined,
+      sort_order_by: undefined,
+      sort_order_type: undefined,
+      equipment_type: undefined,
+    });
+  };
+
   useEffect(() => {
     dispatch(getRoomsAction());
 
@@ -101,6 +114,9 @@ function HotelFacility() {
       layout="vertical"
       name="basic"
       onFinish={onReportFormFinish}
+      style={{
+        minHeight: 'calc(100vh - 209px)',
+      }}
       wrapperCol={{
         span: 23,
       }}
@@ -198,6 +214,7 @@ function HotelFacility() {
               {t('report.Export Excel')}
             </PattonButton>
             <PattonButton
+              onClick={resetForm}
               style={{
                 width: 120,
                 height: 32,
