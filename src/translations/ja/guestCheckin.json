@@ -1,0 +1,36 @@
+{
+  "Select your stay": "Select your stay",
+  "Select your room": "Select your room",
+  "Upload your persional ID": "Upload your persional ID",
+  "No reserved yet": "No reserved yet",
+  "Scan QR code": "Scan QR code",
+  "Payment": "Payment",
+  "Do you have reservation ID already": "Do you have reservation ID already ?",
+  "Select stay type": "Select stay type: ",
+  "By hour": "By hour",
+  "By night": "By night",
+  "Adults": {
+    "title": "Adults",
+    "placeholder": ""
+  },
+  "Child": {
+    "title": "Child",
+    "placeholder": ""
+  },
+  "Checkin Date": {
+    "title": "Checkin Date",
+    "placeholder": ""
+  },
+  "Checkout Date": {
+    "title": "Checkout Date",
+    "placeholder": ""
+  },
+  "Checkin Time": {
+    "title": "Checkin Time",
+    "placeholder": ""
+  },
+  "Checkout Time": {
+    "title": "Checkout Time",
+    "placeholder": ""
+  }
+}

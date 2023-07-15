@@ -24,7 +24,8 @@ export type Icons =
   | 'sign-out'
   | 'times-circle-o'
   | 'times-circle'
-  | 'times';
+  | 'times'
+  | 'camera';
 
 export type PlainObject<T = any> = Record<string, T>;
 

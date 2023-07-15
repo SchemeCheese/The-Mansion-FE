@@ -86,6 +86,7 @@ function Guest() {
         <Col span={24} />
         <Col span={24} style={{ textAlign: 'center' }}>
           <PattonButton
+            onClick={() => navigate(`/guest/checkin`)}
             style={{
               borderRadius: 4,
               height: 40,
