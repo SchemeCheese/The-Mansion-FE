@@ -14,6 +14,7 @@ import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_tod
 import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
 import FrontDesk from 'pages/front-desk/list';
 import Guest from 'pages/guest';
+import GuestCheckin from 'pages/guest/checkin';
 import GuestCustomerInfo from 'pages/guest/GuestCustomerInfo';
 import GuestPayment from 'pages/guest/GuestPayment';
 import GuestRoomNumber from 'pages/guest/GuestRoomNumber';
@@ -532,6 +533,19 @@ function Root() {
                 </PrivateRoute>
               }
               path="/guest"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={frontDeskBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <GuestCheckin />
+                </PrivateRoute>
+              }
+              path="/guest/checkin"
             />
             <Route
               element={
