@@ -25,7 +25,11 @@ export type Icons =
   | 'times-circle-o'
   | 'times-circle'
   | 'times'
-  | 'camera';
+  | 'camera'
+  | 'view'
+  | 'northwing'
+  | 'smoking'
+  | 'checked';
 
 export type PlainObject<T = any> = Record<string, T>;
 

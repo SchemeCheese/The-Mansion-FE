@@ -32,5 +32,17 @@
   "Checkout Time": {
     "title": "Checkout Time",
     "placeholder": ""
-  }
+  },
+  "Room Type": "Room Type",
+  "View": "View",
+  "Concept": "Concept",
+  "Smoking Room": "Smoking Room",
+  "City View": "City View",
+  "Northwing": "Northwing",
+  "Studio Twin": "Studio Twin",
+  "Smoking": "Smoking",
+  "Hourly Rate": "Hourly Rate (VND)",
+  "Daily Rate": "Daily Rate (VND)",
+  "The Space": "The Space",
+  "Amenities": "Amenities"
 }

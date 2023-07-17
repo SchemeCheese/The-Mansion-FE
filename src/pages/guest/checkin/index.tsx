@@ -8,6 +8,7 @@ Main functions: Guest Checkin
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import {
   Col,
   DatePicker,
@@ -34,6 +35,7 @@ function GuestCheckin() {
   const { t } = useTranslation();
   const { Step } = Steps;
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const arrayPersonValue: Array<number> = [1, 2, 3, 4, 5];
 
   const [isNoReserved, setIsNoReserved] = useState(false);
@@ -42,6 +44,10 @@ function GuestCheckin() {
   const [isByHour, setIsByHour] = useState(false);
   const [isByNight, setIsIsByNight] = useState(false);
   const [generalInfoState, setGeneralInfoState] = useState<any>('');
+
+  const handleNext = () => {
+    navigate('/guest/checkin/select-room');
+  };
 
   const { handleCancel } = useGuest();
 
@@ -384,7 +390,9 @@ function GuestCheckin() {
         </Col>
         <Col span={24} style={{ marginTop: 25, marginBottom: 25, textAlign: 'center' }}>
           <MButton onClick={handleCancel}>{t('common.Back')}</MButton>
-          <PattonButton style={{ marginLeft: 20 }}>{t('common.Next')}</PattonButton>
+          <PattonButton onClick={handleNext} style={{ marginLeft: 20 }}>
+            {t('common.Next')}
+          </PattonButton>
         </Col>
       </Row>
       <GuestFooter />
