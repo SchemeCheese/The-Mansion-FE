@@ -19,6 +19,10 @@ export const iotApiEndPoint = (path: string): string => {
   return `${process.env.REACT_APP_IOT_API_HOST}/${path}`;
 };
 
+export const iridiumApiEndPoint = (path: string): string => {
+  return `${process.env.REACT_APP_IRIDIUM_HOST}/${path}`;
+};
+
 export const formatNumber = (data: number, emptyValue = ''): string => {
   if (!data && emptyValue !== '') {
     return emptyValue;
