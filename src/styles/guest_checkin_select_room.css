@@ -4,3 +4,37 @@
 .modal-room-detail .ant-modal-body {
   padding: 0 !important;
 }
+.modal-reservation-information .ant-modal-body {
+  padding: 0 !important;
+}
+.reservation-information_span {
+  color: rgba(0, 0, 0, 0.25);
+}
+.reservation-information_span-right {
+  float: right;
+}
+.modal-reservation-information .ant-modal-title {
+  font-weight: 600;
+}
+.modal-row {
+  background: 'white';
+  width: '90%';
+  text-align: 'center';
+  margin-left: '5%';
+  margin-top: '5vh';
+  background-color: 'rgba(240, 242, 245, 1)';
+  padding: '24px';
+  margin: 0;
+}
+.span-blur {
+  color: 'rgba(0, 0, 0, 0.25)';
+}
+.select-room-card .ant-card-body {
+  padding-top: 8px;
+  padding-bottom: 24px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.room-list .ant-card-body {
+  padding-top: 24px;
+}

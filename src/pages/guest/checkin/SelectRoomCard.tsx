@@ -7,18 +7,52 @@ Main functions: Guest Checkin
 ************************************ */
 
 import React from 'react';
-import { Card, Col } from 'antd';
+import { Button, Card, Col, Radio, Row } from 'antd';
 import { t } from 'i18next';
 
 import Icon from 'components/Icon';
 
 interface Props {
-  showModal: any;
+  isModalDetail?: any;
+  showModalDetail: any;
+  showModalSelectRoom?: any;
 }
 
-function SelectRoomCard({ showModal }: Props) {
+function SelectRoomCard({ isModalDetail, showModalDetail, showModalSelectRoom }: Props) {
   return (
     <Col span={8}>
+      {!isModalDetail && (
+        <Col
+          span={24}
+          style={{
+            border: '1px solid  #f0f0f0',
+            backgroundColor: '#ffffff',
+          }}
+        >
+          <Row style={{ paddingTop: '6%', paddingBottom: '8%' }}>
+            <Col span={8}>
+              <span
+                style={{
+                  fontSize: 16,
+                  color: '#1D39C4',
+                  fontWeight: 600,
+                  backgroundColor: 'rgb(0, 0, 255, 0.1)',
+                  borderLeft: '3px solid #1D39C4',
+                  borderRadius: '2px',
+                  height: '100%',
+                  width: '10vh',
+                  padding: '7% 14% 7% 14%',
+                }}
+              >
+                104
+              </span>
+            </Col>
+            <Col span={16} style={{ textAlign: 'center' }}>
+              <Radio name="select_room">{t('guestCheckin.Select this room')}</Radio>
+            </Col>
+          </Row>
+        </Col>
+      )}
       <Card
         cover={
           <img
@@ -26,32 +60,34 @@ function SelectRoomCard({ showModal }: Props) {
             src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
           />
         }
-        onClick={showModal}
-        style={{ width: '350px' }}
+        style={{ width: '100%' }}
       >
-        <Col
-          span={24}
-          style={{
-            marginBottom: '3vh',
-            height: '100%',
-          }}
-        >
-          <span
+        {isModalDetail && (
+          <Col
+            span={24}
             style={{
-              fontSize: 16,
-              color: '#1D39C4',
-              fontWeight: 600,
-              backgroundColor: 'rgb(0, 0, 255, 0.1)',
-              borderLeft: '3px solid #1D39C4',
-              borderRadius: '2px',
+              marginBottom: '3vh',
               height: '100%',
-              width: '10vh',
-              padding: '3% 5% 3% 5%',
             }}
           >
-            104
-          </span>
-        </Col>
+            <span
+              style={{
+                fontSize: 16,
+                color: '#1D39C4',
+                fontWeight: 600,
+                backgroundColor: 'rgb(0, 0, 255, 0.1)',
+                borderLeft: '3px solid #1D39C4',
+                borderRadius: '2px',
+                height: '100%',
+                width: '10vh',
+                padding: '3% 5% 3% 5%',
+              }}
+            >
+              104
+            </span>
+            {isModalDetail && <Button onClick={showModalSelectRoom}> Select Room </Button>}
+          </Col>
+        )}
         <Col
           span={24}
           style={{
@@ -63,12 +99,11 @@ function SelectRoomCard({ showModal }: Props) {
             <Icon name="view" width={20} />
           </span>
           <span style={{ fontSize: 14, paddingLeft: '2%', position: 'absolute' }}>
-            {' '}
             {t('guestCheckin.City View')}
           </span>
-          <span style={{ fontSize: 14, float: 'right', color: '#00000073' }}>
+          {/* <span style={{ fontSize: 14, float: 'right', color: '#00000073' }}>
             {t('guestCheckin.Room Type')}
-          </span>
+          </span> */}
         </Col>
         <Col
           span={24}
