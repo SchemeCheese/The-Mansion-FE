@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { apiEndPoint, headerWithAuthorization, iotApiEndPoint, iridiumApiEndPoint } from 'helpers';
+import { apiEndPoint, headerWithAuthorization, iridiumApiEndPoint } from 'helpers';
 
 export function putAPI(path: string, data: any) {
   return axios.put(apiEndPoint(path), data, {
@@ -19,14 +19,16 @@ export function postAPI(path: string, data: any, server = 'pms') {
   });
 }
 
-export function getAPI(path: string, server = 'pms') {
+export function getAPI(path: string, server = 'pms', searchParam = {}) {
   if (server === 'iridium') {
     return axios.get(iridiumApiEndPoint(path), {
       headers: headerWithAuthorization(),
+      params: searchParam,
     });
   }
 
   return axios.get(apiEndPoint(path), {
     headers: headerWithAuthorization(),
+    params: searchParam,
   });
 }

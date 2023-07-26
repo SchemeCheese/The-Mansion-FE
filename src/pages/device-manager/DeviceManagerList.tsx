@@ -9,7 +9,6 @@ Main functions : Device Manager List
 import 'styles/device-manager.css';
 
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import {
@@ -28,19 +27,16 @@ import {
   Tag,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import { getAPI } from 'helpers/apiService';
 import { t } from 'i18next';
-
-import { getDeviceManagerAction } from 'actions';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
 
-import { RootState } from 'types';
-
 const { Option } = Select;
-const FilterBranch = 'FilterBranch';
-const FilterArea = 'FilterArea';
-const FilterEqType = 'FilterEqType';
+const FilterBranch = 'branch';
+const FilterArea = 'area';
+const FilterEqType = 'eq_type';
 
 interface DataType {
   action: string;
@@ -74,65 +70,70 @@ const columnsModal = [
 ];
 
 function DeviceManagerList() {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [resultFilter, setResultFilter]: any[] = useState([]);
-  const [checkFilter, setCheckFilter] = useState(false);
+  const [deviceTypes, setDeviceTypes] = useState([]);
+  const [items, setDevices] = useState([]);
+  const [total, setTotal] = useState(0);
+
   const [modalVisible, setModalVisible] = useState(false);
-  const items: any = useSelector<RootState>(({ getDeviceManager }) => getDeviceManager.data);
+  const [searchCondition, setSearchCondition] = useState({
+    page: 1,
+    per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
+      ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
+      : 10,
+    branch: '',
+    area: '',
+    eq_type: '',
+  });
 
   useEffect(() => {
-    dispatch(getDeviceManagerAction());
-  }, []);
+    async function getDeviceTypes() {
+      const data = await getAPI('api/device-types', 'iridium', {});
 
-  const total = items?.length;
-  const currentPage = 1;
-
-  const filterData = (value: any, type: string) => {
-    setResultFilter([]);
-    let dataCurrent: any[] = [];
-
-    switch (type) {
-      case FilterBranch:
-        dataCurrent = items.filter((device: DataType) => {
-          return (
-            device.branch.toLowerCase() === value.toLowerCase() ||
-            (value.toLowerCase() === 'all' && true)
-          );
-        });
-        break;
-      case FilterArea:
-        dataCurrent = items.filter((device: DataType) => {
-          return (
-            device.area.toLocaleLowerCase() === value.toLowerCase() ||
-            (value.toLowerCase() === 'all' && true)
-          );
-        });
-        break;
-      case FilterEqType:
-        dataCurrent = items.filter((device: DataType) => {
-          return (
-            device.eq_type.toLowerCase() === value.toLowerCase() ||
-            (value.toLowerCase() === 'all' && true)
-          );
-        });
-        break;
-      default:
-        break;
+      setDeviceTypes(data?.data.device_type);
     }
 
-    setResultFilter(dataCurrent);
-    setCheckFilter(true);
+    getDevices();
+    getDeviceTypes();
+  }, []);
+
+  async function getDevices(params?: any) {
+    const data = await getAPI('api/devices', 'iridium', params);
+
+    setDevices(data?.data.data);
+    setTotal(data?.data.meta.total);
+  }
+
+  const filterData = (value: any, type: string) => {
+    setSearchCondition({
+      ...searchCondition,
+      [type]: value.toLowerCase(),
+    });
+
+    getDevices({
+      ...searchCondition,
+      [type]: value.toLowerCase(),
+    });
   };
 
   const onChangeCurrentPage = (page: number, pageSize: number) => {
-    console.log('onChangeCurrentPage', page, pageSize);
+    setSearchCondition({
+      ...searchCondition,
+      page,
+      per_page: pageSize,
+    });
+
+    getDevices({
+      ...searchCondition,
+      page,
+      per_page: pageSize,
+    });
   };
 
   const columnsDevice: ColumnsType<DataType> = [
     {
       title: 'Device ID',
-      dataIndex: 'device_id',
+      dataIndex: 'id',
       key: 'device_id',
       render: (text: any) => {
         return (
@@ -149,7 +150,7 @@ function DeviceManagerList() {
     },
     {
       title: 'Type',
-      dataIndex: 'type',
+      dataIndex: 'device_type',
       key: 'type',
       render: (type: any) => {
         const nameClass = `btn-${type.toLowerCase()}`;
@@ -190,6 +191,9 @@ function DeviceManagerList() {
       title: 'Action',
       key: 'action',
       dataIndex: 'action',
+      render: (action: any) => {
+        return <span className="device_list-action"> {action ? 'On' : 'Off'} </span>;
+      },
     },
   ];
 
@@ -218,7 +222,7 @@ function DeviceManagerList() {
                 placeholder="Select branch"
                 style={{ width: '100%', fontSize: 12 }}
               >
-                <Option value="all">All branch</Option>
+                <Option value="">All branch</Option>
                 <Option value="br_hn">Hanoi Branch</Option>
                 <Option value="br_pq">Phu Quoc Branch</Option>
                 <Option value="br_vt">Vung Tau Branch</Option>
@@ -236,7 +240,7 @@ function DeviceManagerList() {
                 placeholder="Select Area"
                 style={{ width: '100%', fontSize: 12 }}
               >
-                <Option value="all">All Area</Option>
+                <Option value="">All Area</Option>
                 <Option value="hotel">Hotel</Option>
                 <Option value="spa">Spa</Option>
                 <Option value="restaurant">Restaurant</Option>
@@ -253,7 +257,7 @@ function DeviceManagerList() {
                 placeholder="Select equipment type"
                 style={{ width: '100%', fontSize: 12 }}
               >
-                <Option value="all">All</Option>
+                <Option value="">All</Option>
                 <Option value="Locker">Locker</Option>
                 <Option value="Room">Room</Option>
               </Select>
@@ -275,30 +279,18 @@ function DeviceManagerList() {
                 xs={22}
               >
                 <div className="scroll-Type">
-                  <Button className="btn-music" size="small">
-                    Music
-                  </Button>
-                  <Button className="btn-aircon" size="small">
-                    Aircon
-                  </Button>
-                  <Button className="btn-counter" size="small">
-                    Counter
-                  </Button>
-                  <Button className="btn-lightning" size="small">
-                    Lightning
-                  </Button>
-                  <Button className="btn-door" size="small">
-                    Door
-                  </Button>
-                  <Button className="btn-headpump" size="small">
-                    Headpump
-                  </Button>
-                  <Button className="btn-curtain" size="small">
-                    Curtain
-                  </Button>
-                  <Button className="btn-other" size="small">
-                    Other
-                  </Button>
+                  {deviceTypes &&
+                    deviceTypes.map((item: any) => {
+                      return (
+                        <Button
+                          key={item.id}
+                          className={`btn-${item.name.toLowerCase()}`}
+                          size="small"
+                        >
+                          {item.name}
+                        </Button>
+                      );
+                    })}
                 </div>
               </Col>
             </Row>
@@ -311,16 +303,16 @@ function DeviceManagerList() {
             <Table
               className="table-device-manager-list"
               columns={columnsDevice}
-              dataSource={checkFilter ? resultFilter : items}
+              dataSource={items}
               pagination={false}
               size="small"
               style={{ overflowX: 'hidden', overflowY: 'auto', minHeight: 450 }}
             />
             {total > 0 && (
               <Pagination
-                defaultCurrent={currentPage}
+                defaultCurrent={searchCondition.page}
                 onChange={onChangeCurrentPage}
-                pageSize={20}
+                pageSize={searchCondition.per_page}
                 showSizeChanger={false}
                 style={{ float: 'right', marginTop: 15 }}
                 total={total}
