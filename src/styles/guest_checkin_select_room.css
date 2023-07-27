@@ -27,7 +27,7 @@
   margin: 0;
 }
 .span-blur {
-  color: 'rgba(0, 0, 0, 0.25)';
+  color: rgba(0, 0, 0, 0.25) !important;
 }
 .select-room-card .ant-card-body {
   padding-top: 8px;
@@ -37,4 +37,35 @@
 }
 .room-list .ant-card-body {
   padding-top: 24px;
+}
+.w-100 {
+  width: 100%;
+}
+.h-100 {
+  height: 100%;
+}
+.pt-15 {
+  padding-top: 15px;
+}
+.pl-15 {
+  padding-left: 15px;
+}
+.pr-15 {
+  padding-right: 15px;
+}
+.pb-15 {
+  padding-bottom: 15px;
+}
+.span-header {
+  font-size: 16px;
+  font-weight: 700;
+}
+.span-header-right {
+  padding-left: 1vh;
+}
+.modal-regard .ant-modal-footer {
+  text-align: center;
+  border: none;
+  padding-top: 0;
+  padding-bottom: 20px;
 }
