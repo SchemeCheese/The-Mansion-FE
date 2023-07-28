@@ -8,7 +8,7 @@ Main functions : Device Manager List
 
 import 'styles/device-manager.css';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import {
@@ -29,14 +29,18 @@ import {
 import { ColumnsType } from 'antd/lib/table';
 import { getAPI } from 'helpers/apiService';
 import { t } from 'i18next';
+import { selectGetRooms } from 'selectors';
+import _ from 'underscore';
+
+import { useAppSelector } from 'modules/hooks';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
 
 const { Option } = Select;
-const FilterBranch = 'branch';
-const FilterArea = 'area';
-const FilterEqType = 'eq_type';
+const FilterBranch = 'branch_code';
+const FilterArea = 'facility_code';
+const FilterEqType = 'eq_no';
 
 interface DataType {
   action: string;
@@ -74,6 +78,8 @@ function DeviceManagerList() {
   const [deviceTypes, setDeviceTypes] = useState([]);
   const [items, setDevices] = useState([]);
   const [total, setTotal] = useState(0);
+  const [facilities, setFacilities] = useState([]);
+  const [branchs, setBranchs] = useState([]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [searchCondition, setSearchCondition] = useState({
@@ -81,20 +87,56 @@ function DeviceManagerList() {
     per_page: process.env.REACT_APP_RESERVATION_PER_PAGE
       ? parseInt(process.env.REACT_APP_RESERVATION_PER_PAGE, 10)
       : 10,
-    branch: '',
-    area: '',
-    eq_type: '',
+    branch_code: undefined,
+    facility_code: undefined,
+    eq_no: undefined,
   });
+
+  const getRoomsData = useAppSelector(selectGetRooms);
 
   useEffect(() => {
     async function getDeviceTypes() {
-      const data = await getAPI('api/device-types', 'iridium', {});
+      const data = await getAPI('api/device-types', 'iridium');
 
       setDeviceTypes(data?.data.device_type);
     }
 
     getDevices();
     getDeviceTypes();
+  }, []);
+
+  useEffect(() => {
+    const branchId = window.localStorage.getItem('branch_id') ?? '1';
+    const facilityId = window.localStorage.getItem('facility_id') ?? '1';
+
+    async function fetchBranchInfo() {
+      const response = await getAPI(`/api/v1/branchs`);
+      const branchInfoSelected: any = _.find(response.data, (item: any) => {
+        return item.id.toString() === branchId;
+      });
+
+      setBranchs(response.data);
+      setSearchCondition({
+        ...searchCondition,
+        branch_code: branchInfoSelected.branch_code,
+      });
+    }
+
+    async function fetchFacilityInfo() {
+      const response = await getAPI(`/api/v1/branch-facility/${branchId}`);
+      const facilityInfoSelected: any = _.find(response.data.facilities, (item: any) => {
+        return item.id.toString() === facilityId;
+      });
+
+      setFacilities(response.data.facilities);
+      setSearchCondition({
+        ...searchCondition,
+        facility_code: facilityInfoSelected.facility_code,
+      });
+    }
+
+    fetchBranchInfo();
+    fetchFacilityInfo();
   }, []);
 
   async function getDevices(params?: any) {
@@ -104,16 +146,46 @@ function DeviceManagerList() {
     setTotal(data?.data.meta.total);
   }
 
-  const filterData = (value: any, type: string) => {
-    setSearchCondition({
-      ...searchCondition,
-      [type]: value.toLowerCase(),
-    });
+  const filterData = async (value: any, type: string) => {
+    if (type === FilterBranch) {
+      const branchInfoSelected: any = _.find(branchs, (item: any) => {
+        return item.id.toString() === value;
+      });
 
-    getDevices({
-      ...searchCondition,
-      [type]: value.toLowerCase(),
-    });
+      const response = await getAPI(`/api/v1/branch-facility/${branchInfoSelected.id}`);
+
+      setFacilities(response.data.facilities);
+      setSearchCondition({
+        ...searchCondition,
+        branch_code: branchInfoSelected.branch_code,
+        facility_code: undefined,
+      });
+    } else if (type === FilterArea) {
+      const facilityInfoSelected: any = _.find(facilities, (item: any) => {
+        return item.id.toString() === value;
+      });
+
+      getDevices({
+        ...searchCondition,
+        facility_code: facilityInfoSelected.facility_code,
+      });
+
+      setSearchCondition({
+        ...searchCondition,
+        facility_code: facilityInfoSelected.facility_code,
+      });
+    } else {
+      getDevices({
+        ...searchCondition,
+        [type]: value,
+      });
+
+      setSearchCondition({
+        ...searchCondition,
+        page: 1,
+        [type]: value,
+      });
+    }
   };
 
   const onChangeCurrentPage = (page: number, pageSize: number) => {
@@ -153,7 +225,7 @@ function DeviceManagerList() {
       dataIndex: 'device_type',
       key: 'type',
       render: (type: any) => {
-        const nameClass = `btn-${type.toLowerCase()}`;
+        const nameClass = `btn-${convertToSlug(type)}`;
 
         return (
           <Tag key={type} className={nameClass}>
@@ -209,62 +281,63 @@ function DeviceManagerList() {
     setModalVisible(false);
   };
 
+  const convertToSlug = (text: string) => {
+    return text
+      .toLowerCase()
+      .replace(/ /g, '-')
+      .replace(/[^\w-]+/g, '');
+  };
+
   return (
     <Row style={{ background: 'white', padding: 16 }}>
       <Col span={24}>
         <div className="device-manager-list">
           <div className="filter-style">
             <div>
-              <span className="label-filter">Branch</span>
               <Select
+                allowClear
                 className="input-style"
+                defaultValue={window.localStorage.getItem('branch_id') ?? '1'}
                 onChange={event => filterData(event, FilterBranch)}
                 placeholder="Select branch"
                 style={{ width: '100%', fontSize: 12 }}
               >
-                <Option value="">All branch</Option>
-                <Option value="br_hn">Hanoi Branch</Option>
-                <Option value="br_pq">Phu Quoc Branch</Option>
-                <Option value="br_vt">Vung Tau Branch</Option>
-                <Option value="br_qn">Quang Ninh Branch</Option>
-                <Option value="br_cm">Ca Mau Branch</Option>
-                <Option value="br_hcm">Ho Chi Minh Branch</Option>
-                <Option value="br_dn">Da Nang Branch</Option>
+                {branchs.length > 0 &&
+                  branchs.map((branch: any) => <Option key={branch.id}>{branch.name}</Option>)}
               </Select>
             </div>
             <div>
-              <span className="label-filter">Area</span>{' '}
               <Select
+                allowClear
                 className="input-style"
+                defaultValue={window.localStorage.getItem('facility_code') ?? '1'}
                 onChange={event => filterData(event, FilterArea)}
                 placeholder="Select Area"
                 style={{ width: '100%', fontSize: 12 }}
               >
-                <Option value="">All Area</Option>
-                <Option value="hotel">Hotel</Option>
-                <Option value="spa">Spa</Option>
-                <Option value="restaurant">Restaurant</Option>
-                <Option value="pool">Pool</Option>
-                <Option value="golf_course">Golf course</Option>
-                <Option value="other">Other</Option>
+                {facilities.length > 0 &&
+                  facilities.map((facility: any) => (
+                    <Option key={facility.id} value={facility.id.toString()}>
+                      {facility.name}
+                    </Option>
+                  ))}
               </Select>
             </div>
             <div>
-              <span className="label-filter">Eq Type</span>
               <Select
                 className="input-style"
                 onChange={event => filterData(event, FilterEqType)}
                 placeholder="Select equipment type"
                 style={{ width: '100%', fontSize: 12 }}
               >
-                <Option value="">All</Option>
-                <Option value="Locker">Locker</Option>
-                <Option value="Room">Room</Option>
+                {getRoomsData.items?.map((item: any) => {
+                  return <Option value={item.id}>{item.name}</Option>;
+                })}
               </Select>
             </div>
           </div>
-          <Col span={24} style={{ paddingTop: 16 }}>
-            <Divider dashed />
+          <Col span={24} style={{ marginTop: -10 }}>
+            <Divider dashed style={{ marginBottom: 15 }} />
             <Row align="middle" justify="space-between">
               <Col xs={2}>
                 <PattonButton onClick={() => navigate(`/power/device/create`)}>
@@ -284,7 +357,7 @@ function DeviceManagerList() {
                       return (
                         <Button
                           key={item.id}
-                          className={`btn-${item.name.toLowerCase()}`}
+                          className={`btn-${convertToSlug(item.name)} device-type`}
                           size="small"
                         >
                           {item.name}
@@ -310,7 +383,6 @@ function DeviceManagerList() {
             />
             {total > 0 && (
               <Pagination
-                defaultCurrent={searchCondition.page}
                 onChange={onChangeCurrentPage}
                 pageSize={searchCondition.per_page}
                 showSizeChanger={false}
