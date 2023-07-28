@@ -8,7 +8,7 @@ Main functions : Device Manager List
 
 import 'styles/device-manager.css';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 import {
@@ -29,10 +29,7 @@ import {
 import { ColumnsType } from 'antd/lib/table';
 import { getAPI } from 'helpers/apiService';
 import { t } from 'i18next';
-import { selectGetRooms } from 'selectors';
 import _ from 'underscore';
-
-import { useAppSelector } from 'modules/hooks';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
@@ -80,6 +77,7 @@ function DeviceManagerList() {
   const [total, setTotal] = useState(0);
   const [facilities, setFacilities] = useState([]);
   const [branchs, setBranchs] = useState([]);
+  const [rooms, setRooms] = useState([]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [searchCondition, setSearchCondition] = useState({
@@ -91,8 +89,6 @@ function DeviceManagerList() {
     facility_code: undefined,
     eq_no: undefined,
   });
-
-  const getRoomsData = useAppSelector(selectGetRooms);
 
   useEffect(() => {
     async function getDeviceTypes() {
@@ -128,6 +124,19 @@ function DeviceManagerList() {
         return item.id.toString() === facilityId;
       });
 
+      try {
+        const responseRoom = await getAPI(
+          `/api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
+        );
+
+        setRooms(responseRoom.data.items);
+      } catch (error) {
+        console.log('error', error);
+
+        setRooms([]);
+      }
+
+      setFacilities(response.data.facilities);
       setFacilities(response.data.facilities);
       setSearchCondition({
         ...searchCondition,
@@ -169,7 +178,7 @@ function DeviceManagerList() {
         ...searchCondition,
         facility_code: facilityInfoSelected.facility_code,
       });
-
+      changeFacility(value);
       setSearchCondition({
         ...searchCondition,
         facility_code: facilityInfoSelected.facility_code,
@@ -183,7 +192,7 @@ function DeviceManagerList() {
       setSearchCondition({
         ...searchCondition,
         page: 1,
-        [type]: value,
+        [type]: value === undefined ? '' : value,
       });
     }
   };
@@ -200,6 +209,25 @@ function DeviceManagerList() {
       page,
       per_page: pageSize,
     });
+  };
+
+  const changeFacility = async (value: string) => {
+    if (value) {
+      try {
+        const facilityInfoSelected: any = _.find(facilities, (item: any) => {
+          return item.id.toString() === value;
+        });
+        const response = await getAPI(
+          `/api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
+        );
+
+        setRooms(response.data.items);
+      } catch (error) {
+        console.log('error', error);
+
+        setRooms([]);
+      }
+    }
   };
 
   const columnsDevice: ColumnsType<DataType> = [
@@ -325,12 +353,13 @@ function DeviceManagerList() {
             </div>
             <div>
               <Select
+                allowClear
                 className="input-style"
                 onChange={event => filterData(event, FilterEqType)}
                 placeholder="Select equipment type"
                 style={{ width: '100%', fontSize: 12 }}
               >
-                {getRoomsData.items?.map((item: any) => {
+                {rooms.map((item: any) => {
                   return <Option value={item.id}>{item.name}</Option>;
                 })}
               </Select>

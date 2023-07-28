@@ -7,14 +7,13 @@ Main functions : Device Manager Create
 ************************************ */
 
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Card, Col, Form, Input, message, Row, Select, Space } from 'antd';
 import { getAPI, postAPI } from 'helpers/apiService';
-import { selectGetRooms } from 'selectors';
 import styled from 'styled-components';
-
-import { useAppSelector } from 'modules/hooks';
+import _ from 'underscore';
 
 import MInput from 'components/MInput';
 
@@ -26,19 +25,26 @@ const BreadscrumTitle = styled.p`
 
 function DeviceManagerCreate() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [deviceTypes, setDeviceTypes] = useState([]);
+  const [facilities, setFacilities] = useState([]);
+  const [branchs, setBranchs] = useState([]);
+  const [rooms, setRooms] = useState([]);
 
   const [form] = Form.useForm();
-  const getRoomsData = useAppSelector(selectGetRooms);
 
   const onFinish = async (values: any) => {
+    const facilityInfoSelected: any = _.find(facilities, (item: any) => {
+      return item.id.toString() === values.facility_id;
+    });
+
     const response = await postAPI(
       'api/devices/create',
       {
         ...values,
-        operator_code: 'the_mansion',
-        branch_code: 'the_mansion',
-        facility_code: 'hotel',
+        operator_code: facilityInfoSelected.operator_code,
+        branch_code: facilityInfoSelected.branch_code,
+        facility_code: facilityInfoSelected.facility_code,
       },
       'iridium',
     );
@@ -48,6 +54,34 @@ function DeviceManagerCreate() {
     }
 
     navigate(`/power/device`);
+  };
+
+  const changeBranch = async (value: string) => {
+    const response = await getAPI(`/api/v1/branch-facility/${value}`);
+
+    setFacilities(response.data.facilities);
+    form.setFieldsValue({
+      facility_id: undefined,
+    });
+  };
+
+  const changeFacility = async (value: string) => {
+    if (value) {
+      try {
+        const facilityInfoSelected: any = _.find(facilities, (item: any) => {
+          return item.id.toString() === value;
+        });
+        const response = await getAPI(
+          `/api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
+        );
+
+        setRooms(response.data.items);
+      } catch (error) {
+        console.log('error', error);
+
+        setRooms([]);
+      }
+    }
   };
 
   useEffect(() => {
@@ -60,17 +94,49 @@ function DeviceManagerCreate() {
     getDeviceTypes();
   }, []);
 
-  console.log('ssssss', deviceTypes);
+  useEffect(() => {
+    const branchId = window.localStorage.getItem('branch_id') ?? '1';
+
+    async function fetchBranchInfo() {
+      const response = await getAPI(`/api/v1/branchs`);
+
+      setBranchs(response.data);
+    }
+
+    async function fetchFacilityInfo() {
+      const facilityId = window.localStorage.getItem('facility_id') ?? '1';
+      const response = await getAPI(`/api/v1/branch-facility/${branchId}`);
+
+      const facilityInfoSelected: any = _.find(response.data.facilities, (item: any) => {
+        return item.id.toString() === facilityId;
+      });
+
+      try {
+        const responseRoom = await getAPI(
+          `/api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
+        );
+
+        setRooms(responseRoom.data.items);
+      } catch (error) {
+        console.log('error', error);
+
+        setRooms([]);
+      }
+
+      setFacilities(response.data.facilities);
+    }
+
+    fetchBranchInfo();
+    fetchFacilityInfo();
+  }, []);
 
   return (
     <Form
       autoComplete="off"
       form={form}
       initialValues={{
-        branch: 'the_mansion',
-        // area_type: 'all',
-        // area: 'all',
-        // counter_type: '1',
+        branch_id: window.localStorage.getItem('branch_id') ?? '1',
+        facility_id: window.localStorage.getItem('facility_id') ?? '1',
         device_topics: [
           {
             topic_kind: '1',
@@ -125,56 +191,52 @@ function DeviceManagerCreate() {
           <Card bordered={false} size="small" title="Business Unit Informations">
             <Row>
               <Col span={8}>
-                <Form.Item label="Branch" name="branch">
-                  <Select allowClear disabled>
-                    <Option value="all">Select branch</Option>
-                    <Option value="hotel">Hotel</Option>
-                    <Option value="spa">Spa</Option>
-                    <Option value="restaurant">Restaurant</Option>
-                    <Option value="pool">Pool</Option>
-                    <Option value="golf_course">Golf course</Option>
-                    <Option value="other">Other</Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item label="Area" name="area">
-                  <Select allowClear disabled>
-                    <Option value="all">Select branch</Option>
-                    <Option value="hotel">Hotel</Option>
-                    <Option value="spa">Spa</Option>
-                    <Option value="restaurant">Restaurant</Option>
-                    <Option value="pool">Pool</Option>
-                    <Option value="golf_course">Golf course</Option>
-                    <Option value="other">Other</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={8}>
-                <Form.Item label="Select Area Type" name="area_type">
-                  <Select allowClear disabled value="all">
-                    <Option value="all">Select branch</Option>
-                    <Option value="hotel">Hotel</Option>
-                    <Option value="spa">Spa</Option>
-                    <Option value="restaurant">Restaurant</Option>
-                    <Option value="pool">Pool</Option>
-                    <Option value="golf_course">Golf course</Option>
-                    <Option value="other">Other</Option>
+                <Form.Item
+                  label={t('report.Branch.title')}
+                  name="branch_id"
+                  rules={[{ required: true, message: 'Please select branch' }]}
+                >
+                  <Select
+                    allowClear
+                    onChange={changeBranch}
+                    placeholder={t('report.Branch.placeholder')}
+                  >
+                    {branchs.length > 0 &&
+                      branchs.map((branch: any) => <Option key={branch.id}>{branch.name}</Option>)}
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item
-                  label="Select equipment type"
-                  name="equipment_info_id"
-                  rules={[{ required: true, message: 'Select equipment type' }]}
+                  label={t('report.Facility.title')}
+                  name="facility_id"
+                  rules={[{ required: true, message: 'Please select facility' }]}
                 >
-                  <Select allowClear placeholder="Select equipment type">
-                    {getRoomsData.items?.map((item: any) => {
+                  <Select
+                    allowClear
+                    onChange={changeFacility}
+                    placeholder={t('report.Facility.placeholder')}
+                  >
+                    {facilities.length > 0 &&
+                      facilities.map((facility: any) => (
+                        <Option key={facility.facility_id} value={facility.id.toString()}>
+                          {facility.name}
+                        </Option>
+                      ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  label="Select equipment info"
+                  name="equipment_info_id"
+                  rules={[{ required: true, message: 'Select equipment info' }]}
+                >
+                  <Select allowClear placeholder="Select equipment info">
+                    {rooms.map((item: any) => {
                       return <Option value={item.id}>{item.name}</Option>;
                     })}
                   </Select>
-                </Form.Item>
-                <Form.Item label="Branch" name="branch_name">
-                  <MInput disabled placeholder="Basic usage" />
                 </Form.Item>
               </Col>
             </Row>
