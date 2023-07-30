@@ -29,7 +29,10 @@ export type Icons =
   | 'view'
   | 'northwing'
   | 'smoking'
-  | 'checked';
+  | 'checked'
+  | 'ic-camera'
+  | 'ic-change'
+  | 'ic-delete';
 
 export type PlainObject<T = any> = Record<string, T>;
 

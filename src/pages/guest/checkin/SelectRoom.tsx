@@ -10,6 +10,7 @@ import 'styles/guest_checkin_select_room.css';
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Col, Input, Modal, Row, Steps } from 'antd';
 import GuestFooter from 'pages/guest/GuestFooter';
 
@@ -24,6 +25,7 @@ import { useGuest } from '../useGuest';
 
 function GuestCheckinSelectRoom() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { Step } = Steps;
   const [searchCondition, setSearchCondition] = useState({
     room_type: '',
@@ -48,6 +50,10 @@ function GuestCheckinSelectRoom() {
   ];
 
   const { handleCancel } = useGuest();
+
+  const handleNext = () => {
+    navigate('/guest/checkin/personal-id');
+  };
 
   const showModalDetail = () => {
     setModalDetailVisible(true);
@@ -138,7 +144,9 @@ function GuestCheckinSelectRoom() {
         </Col>
         <Col span={24} style={{ marginTop: 25, marginBottom: 25, textAlign: 'center' }}>
           <MButton onClick={handleCancel}>{t('common.Back')}</MButton>
-          <PattonButton style={{ marginLeft: 20 }}>{t('common.Next')}</PattonButton>
+          <PattonButton onClick={handleNext} style={{ marginLeft: 20 }}>
+            {t('common.Next')}
+          </PattonButton>
         </Col>
       </Row>
       {/* Modal Room Detail */}
