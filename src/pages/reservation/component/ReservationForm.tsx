@@ -29,6 +29,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import ReservationDetailCard from 'pages/reservation/component/ReservationDetailCard';
+import Message from 'pages/reservation/component/ReservationDetailTab/Message';
 import CheckinModal from 'pages/reservation/create/Checkin';
 import { selectAddItem, selectDeleteItem, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
@@ -764,6 +765,9 @@ function ReservationForm({
                     />
                   </Card>
                 )}
+              </TabPane>
+              <TabPane key="3" style={{ padding: 20 }} tab={t('reservation.Message')}>
+                <Message />
               </TabPane>
             </Tabs>
           </Col>
