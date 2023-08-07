@@ -180,5 +180,11 @@
   "Late C/O Time": "Late C/O Time",
   "Late C/O Fee": "Late C/O Fee",
   "Continue to checkout": "Continue to checkout",
-  "Monthly Invoices": "Monthly Invoices"
+  "Monthly Invoices": "Monthly Invoices",
+  "Message": "Message",
+  "Send to Guest": "Send to Guest",
+  "Select file": "Select file",
+  "Reload Message": "Reload Message",
+  "Delete": "Delete",
+  "Input message": "Input message"
 }

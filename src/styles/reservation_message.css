@@ -1,0 +1,8 @@
+.reservation-message .customer-textarea .ant-form-item-row .ant-form-item-control{
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+.reservation-message .message-you {
+  padding-left: 33px;
+}
