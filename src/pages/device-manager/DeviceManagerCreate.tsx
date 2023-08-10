@@ -84,9 +84,40 @@ function DeviceManagerCreate() {
     }
   };
 
+  const changeDeviceType = (value: string) => {
+    const deviceTypeSelected: any = _.find(deviceTypes, (item: any) => {
+      return item.id.toString() === value.toString();
+    });
+
+    const functions = [];
+
+    for (let index = 0; index < deviceTypeSelected.no_of_funcs; index++) {
+      functions.push({
+        topic_kind: undefined,
+        topic_address: '',
+        topic_function_name: '',
+      });
+    }
+
+    form.setFieldsValue({
+      device_topics: functions,
+    });
+  };
+
   useEffect(() => {
     async function getDeviceTypes() {
-      const data = await getAPI('api/device-types', 'iridium');
+      const branchId = window.localStorage.getItem('branch_id') ?? '1';
+
+      const facilityId = window.localStorage.getItem('facility_id') ?? '1';
+      const response = await getAPI(`/api/v1/branch-facility/${branchId}`);
+
+      const facilityInfoSelected: any = _.find(response.data.facilities, (item: any) => {
+        return item.id.toString() === facilityId;
+      });
+      const data = await getAPI(
+        `api/device-types?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
+        'iridium',
+      );
 
       setDeviceTypes(data?.data.device_type);
     }
@@ -139,12 +170,12 @@ function DeviceManagerCreate() {
         facility_id: window.localStorage.getItem('facility_id') ?? '1',
         device_topics: [
           {
-            topic_kind: '1',
+            topic_kind: undefined,
             topic_address: '',
             topic_function_name: '',
           },
           {
-            topic_kind: '2',
+            topic_kind: undefined,
             topic_address: '',
             topic_function_name: '',
           },
@@ -259,7 +290,7 @@ function DeviceManagerCreate() {
                   name="device_type_id"
                   rules={[{ required: true, message: 'Select device type' }]}
                 >
-                  <Select allowClear placeholder="Select device type">
+                  <Select allowClear onChange={changeDeviceType} placeholder="Select device type">
                     {deviceTypes.map((item: any) => (
                       <Option value={item.id}>{item.name}</Option>
                     ))}
@@ -314,8 +345,8 @@ function DeviceManagerCreate() {
                               rules={[{ required: true, message: 'Input topic type' }]}
                             >
                               <Select placeholder="Select topic type">
-                                <Option value="1">cmd</Option>
-                                <Option value="2">stt</Option>
+                                <Option value="2">cmd</Option>
+                                <Option value="1">stt</Option>
                               </Select>
                             </Form.Item>
                           </Col>
@@ -324,7 +355,6 @@ function DeviceManagerCreate() {
                               {...field}
                               label="Function Name"
                               name={[field.name, 'topic_function_name']}
-                              rules={[{ required: true, message: 'Input function name' }]}
                             >
                               <Input placeholder="Input function name" />
                             </Form.Item>
@@ -334,7 +364,6 @@ function DeviceManagerCreate() {
                               {...field}
                               label="Parameter"
                               name={[field.name, 'topic_parameter']}
-                              rules={[{ required: true, message: 'Input parameter' }]}
                             >
                               <Select
                                 options={[
@@ -342,41 +371,16 @@ function DeviceManagerCreate() {
                                     label: 'Common',
                                     options: [
                                       { label: 'boolean', value: 'boolean' },
-                                      { label: 'integer_100', value: 'integer_100' },
+                                      // { label: '1', value: '1' },
+                                      // { label: '2', value: '2' },
+                                      // { label: '3', value: '3' },
+                                      // { label: '4', value: '4' },
+                                      // { label: '5', value: '5' },
                                     ],
                                   },
                                   {
-                                    label: 'Light',
-                                    options: [
-                                      { label: 'integer_red', value: 'integer_red' },
-                                      { label: 'integer_green', value: 'integer_green' },
-                                      { label: 'integer_blue', value: 'integer_blue' },
-                                    ],
-                                  },
-                                  {
-                                    label: 'Media',
-                                    options: [
-                                      { label: 'media_play_stop', value: 'media_play_stop' },
-                                      { label: 'media_skip', value: 'media_skip' },
-                                      { label: 'media_volume', value: 'media_volume' },
-                                      { label: 'media_pair', value: 'media_pair' },
-                                    ],
-                                  },
-                                  {
-                                    label: 'Curtain',
-                                    options: [
-                                      { label: 'curtain_close', value: 'curtain_close' },
-                                      { label: 'curtain_open', value: 'curtain_open' },
-                                      { label: 'curtain_stop', value: 'curtain_stop' },
-                                    ],
-                                  },
-                                  {
-                                    label: 'Air',
-                                    options: [
-                                      { label: 'air_fan', value: 'air_fan' },
-                                      { label: 'air_condition_mode', value: 'air_condition_mode' },
-                                      { label: 'air_temproom', value: 'air_temproom' },
-                                    ],
+                                    label: 'Custom',
+                                    options: [{ label: 'Empty', value: '' }],
                                   },
                                 ]}
                                 placeholder="Select type"
