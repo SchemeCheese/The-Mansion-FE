@@ -11,6 +11,17 @@ export const headerWithAuthorization = (headers = {}): AnyObject => {
   };
 };
 
+export const headerWithAuthorizationUploadFile = (headers = {}): AnyObject => {
+  const accessToken = localStorage.getItem('access_token');
+
+  return {
+    ...headers,
+    Accept: 'application/json',
+    'Content-Type': 'multipart/form-data',
+    Authorization: `Bearer ${accessToken}`,
+  };
+};
+
 export const apiEndPoint = (path: string): string => {
   return `${process.env.REACT_APP_API_HOST}/${path}`;
 };

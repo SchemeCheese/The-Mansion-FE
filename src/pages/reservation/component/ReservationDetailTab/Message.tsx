@@ -1,38 +1,82 @@
 import 'styles/reservation_message.css';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, Col, Form, Row, Space, Upload } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload';
+import { UploadFile } from 'antd/lib/upload';
+import { getAPI, postAPI } from 'helpers/apiService';
+import moment from 'moment';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
 function Message() {
   const { t } = useTranslation();
+  const [messages, setMessages] = useState([]);
+  const [contentMessage, setContentMessage] = useState('');
+  const contentMessageRef: any = React.createRef();
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-    const reader = new FileReader();
-
-    reader.addEventListener('load', () => callback(reader.result as string));
-    reader.readAsDataURL(img);
+  const handleChangeContentMessage = (value: string) => {
+    setContentMessage(value);
   };
 
-  const handleChangeUploadFile: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
-    if (info.file.status === 'uploading') {
-      return;
-    }
+  const handleSendMessage = async () => {
+    const formData = new FormData();
 
-    console.log('info', info);
+    fileList.forEach((file: any) => {
+      formData.append('file', file);
+    });
 
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as RcFile, url => {
-        console.log('handleChangeUploadFile url', url);
-      });
-    }
+    formData.append('content', contentMessage);
+
+    const response = await postAPI('api/v1/reservations/1/send-message', formData, 'pms', true);
+
+    const messageNew = {
+      id: '',
+      content: contentMessage,
+      author: 'host',
+      avatar: 'https://www.w3schools.com/howto/img_avatar.png',
+      time: moment().format('YYYY-MM-DD HH:mm:ss'),
+    };
+
+    const message: any = [...messages, messageNew];
+
+    setMessages(message);
+    setContentMessage('');
+    contentMessageRef.current.value = '';
   };
+
+  const props = {
+    name: 'file',
+    showUploadList: false,
+    onChange(info: any) {
+      // console.log('onChange file 1', info)
+      if (info.file.status === 'done') {
+        // message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        // message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    beforeUpload: (file: UploadFile) => {
+      // console.log('beforeUpload file 1', file)
+      setFileList([file]);
+
+      return false;
+    },
+    fileList,
+  };
+
+  useEffect(() => {
+    async function getMessages() {
+      const data = await getAPI('api/v1/reservations/1/get-messages');
+
+      setMessages(data?.data);
+    }
+
+    getMessages();
+  }, []);
 
   return (
     <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
@@ -47,74 +91,43 @@ function Message() {
           }}
         >
           <div>
-            <div className="message-guest" style={{ display: 'flex', gap: 9, marginBottom: 25 }}>
-              <div style={{ width: 24, height: 24 }}>
-                <img
-                  alt="example"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                  style={{ borderRadius: '50%', width: '100%%' }}
-                />
-              </div>
-              <div>
-                <div style={{ color: '#979797', lineHeight: '17px' }}>Tue 4 Jul 2023 11:15</div>
-                <div style={{ color: '#000', whiteSpace: 'pre-wrap' }}>
-                  {'Daer Yueh ting yu ! \nPremium Alex room has its own pool area!'}
+            {messages &&
+              messages.map((item: any, index) => (
+                <div
+                  key={index}
+                  className={item.author === 'host' ? 'message-you' : 'message-guest'}
+                  style={{ display: 'flex', gap: 9, marginBottom: 25 }}
+                >
+                  <div style={{ width: 24, height: 24 }}>
+                    {item?.avatar ? (
+                      <img
+                        alt="example"
+                        src={item?.avatar}
+                        style={{ borderRadius: '50%', width: '100%%' }}
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                  <div>
+                    <div style={{ color: '#979797', lineHeight: '17px' }}>
+                      {moment(item.time).format('ddd DD MMM YYYY HH:mm')}
+                    </div>
+                    <div style={{ color: '#000', whiteSpace: 'pre-wrap' }}>{item?.content}</div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="message-you" style={{ display: 'flex', gap: 9, marginBottom: 25 }}>
-              <div style={{ width: 24, height: 24 }}>
-                <img
-                  alt="example"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                  style={{ borderRadius: '50%', width: '100%%' }}
-                />
-              </div>
-              <div>
-                <div style={{ color: '#979797', lineHeight: '17px' }}>Tue 4 Jul 2023 11:15</div>
-                <div style={{ color: '#000', whiteSpace: 'pre-wrap' }}>
-                  {'Daer Yueh ting yu ! \nPremium Alex room has its own pool area!'}
-                </div>
-              </div>
-            </div>
-
-            <div className="message-guest" style={{ display: 'flex', gap: 9, marginBottom: 25 }}>
-              <div style={{ width: 24, height: 24 }}>
-                <img
-                  alt="example"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                  style={{ borderRadius: '50%', width: '100%%' }}
-                />
-              </div>
-              <div>
-                <div style={{ color: '#979797', lineHeight: '17px' }}>Tue 4 Jul 2023 11:15</div>
-                <div style={{ color: '#000', whiteSpace: 'pre-wrap' }}>
-                  {'Daer Yueh ting yu ! \nPremium Alex room has its own pool area!'}
-                </div>
-              </div>
-            </div>
-
-            <div className="message-guest" style={{ display: 'flex', gap: 9, marginBottom: 25 }}>
-              <div style={{ width: 24, height: 24 }}>
-                <img
-                  alt="example"
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                  style={{ borderRadius: '50%', width: '100%%' }}
-                />
-              </div>
-              <div>
-                <div style={{ color: '#979797', lineHeight: '17px' }}>Tue 4 Jul 2023 11:15</div>
-                <div style={{ color: '#000', whiteSpace: 'pre-wrap' }}>
-                  {'Daer Yueh ting yu ! \nPremium Alex room has its own pool area!'}
-                </div>
-              </div>
-            </div>
+              ))}
           </div>
         </Col>
         <Col span={24}>
           <Form.Item className="customer-textarea" name="message" style={{ width: '100%' }}>
-            <TextArea placeholder={t('reservation.Input message')} rows={5} />
+            <TextArea
+              ref={contentMessageRef}
+              onChange={e => handleChangeContentMessage(e.target.value)}
+              placeholder={t('reservation.Input message')}
+              rows={5}
+              value={contentMessage}
+            />
           </Form.Item>
         </Col>
         <Col span={24} style={{ textAlign: 'right' }}>
@@ -123,15 +136,10 @@ function Message() {
             <MButton onClick={() => console.log('Reload Message')}>
               {t('reservation.Reload Message')}
             </MButton>
-            <Upload
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              name="avatar"
-              onChange={handleChangeUploadFile}
-              showUploadList={false}
-            >
+            <Upload {...props}>
               <MButton>{t('reservation.Select file')}</MButton>
             </Upload>
-            <PattonButton onClick={e => console.log('sent message')}>
+            <PattonButton onClick={handleSendMessage}>
               {t('reservation.Send to Guest')}
             </PattonButton>
           </Space>
