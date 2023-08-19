@@ -1,8 +1,17 @@
+/** ***********************************
+Module Name : Reservation
+Developer Name : DungNT
+Created Date : 15/08/2023
+Updated Date : 15/08/2023
+Main functions : Message Tab
+************************************ */
+
 import 'styles/reservation_message.css';
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, Col, Form, Row, Space, Upload } from 'antd';
+import { useParams } from 'react-router-dom';
+import { Card, Col, Row, Space } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { UploadFile } from 'antd/lib/upload';
 import { getAPI, postAPI } from 'helpers/apiService';
@@ -15,8 +24,9 @@ function Message() {
   const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [contentMessage, setContentMessage] = useState('');
-  const contentMessageRef: any = React.createRef();
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  // const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const { id } = useParams();
+  const [uploadFile, setUploadFile] = useState<any>();
 
   const handleChangeContentMessage = (value: string) => {
     setContentMessage(value);
@@ -25,13 +35,13 @@ function Message() {
   const handleSendMessage = async () => {
     const formData = new FormData();
 
-    fileList.forEach((file: any) => {
-      formData.append('file', file);
-    });
+    if (uploadFile) {
+      formData.append('file', uploadFile);
+    }
 
     formData.append('content', contentMessage);
 
-    const response = await postAPI('api/v1/reservations/1/send-message', formData, 'pms', true);
+    const response = await postAPI(`api/v1/reservations/${id}/send-message`, formData, 'pms', true);
 
     const messageNew = {
       id: '',
@@ -45,34 +55,23 @@ function Message() {
 
     setMessages(message);
     setContentMessage('');
-    contentMessageRef.current.value = '';
   };
 
-  const props = {
-    name: 'file',
-    showUploadList: false,
-    onChange(info: any) {
-      // console.log('onChange file 1', info)
-      if (info.file.status === 'done') {
-        // message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        // message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-    beforeUpload: (file: UploadFile) => {
-      // console.log('beforeUpload file 1', file)
-      setFileList([file]);
+  const fetchMessages = async () => {
+    const data = await getAPI(`api/v1/reservations/${id}/get-messages`);
 
-      return false;
-    },
-    fileList,
+    setMessages(data?.data);
   };
+
+  // const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  //   if (e.target.files && e.target.files?.length > 0) {
+  //     setUploadFile(e.target.files[0])
+  //   }
+  // }
 
   useEffect(() => {
     async function getMessages() {
-      const data = await getAPI('api/v1/reservations/1/get-messages');
-
-      setMessages(data?.data);
+      fetchMessages();
     }
 
     getMessages();
@@ -84,10 +83,13 @@ function Message() {
         <Col
           span={24}
           style={{
-            height: 600,
+            height: 410,
             paddingTop: 13,
             paddingBottom: 25,
             overflowY: 'auto',
+            overflowX: 'scroll',
+            paddingRight: 20,
+            paddingLeft: 5,
           }}
         >
           <div>
@@ -96,7 +98,7 @@ function Message() {
                 <div
                   key={index}
                   className={item.author === 'host' ? 'message-you' : 'message-guest'}
-                  style={{ display: 'flex', gap: 9, marginBottom: 25 }}
+                  style={{ display: 'flex', gap: 9, marginBottom: 20 }}
                 >
                   <div style={{ width: 24, height: 24 }}>
                     {item?.avatar ? (
@@ -109,37 +111,45 @@ function Message() {
                       ''
                     )}
                   </div>
-                  <div>
-                    <div style={{ color: '#979797', lineHeight: '17px' }}>
+                  <div
+                    style={{
+                      border: '1px solid #F1F1F1',
+                      borderRadius: 10,
+                      paddingLeft: 13,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                      paddingRight: 20,
+                      width: '100%',
+                      backgroundColor: item.author === 'host' ? '#f7f7f7' : '',
+                    }}
+                  >
+                    <div style={{ color: '#979797', lineHeight: '17px', fontSize: 12 }}>
                       {moment(item.time).format('ddd DD MMM YYYY HH:mm')}
                     </div>
-                    <div style={{ color: '#000', whiteSpace: 'pre-wrap' }}>{item?.content}</div>
+                    <div style={{ whiteSpace: 'pre-wrap', fontSize: 14 }}>{item?.content}</div>
                   </div>
                 </div>
               ))}
           </div>
         </Col>
         <Col span={24}>
-          <Form.Item className="customer-textarea" name="message" style={{ width: '100%' }}>
-            <TextArea
-              ref={contentMessageRef}
-              onChange={e => handleChangeContentMessage(e.target.value)}
-              placeholder={t('reservation.Input message')}
-              rows={5}
-              value={contentMessage}
-            />
-          </Form.Item>
+          <TextArea
+            onChange={e => handleChangeContentMessage(e.target.value)}
+            placeholder={t('reservation.Input message')}
+            rows={3}
+            style={{
+              marginBottom: 20,
+              borderRadius: 5,
+            }}
+            value={contentMessage}
+          />
         </Col>
         <Col span={24} style={{ textAlign: 'right' }}>
           <Space size="middle">
-            <MButton onClick={() => console.log('Delete')}>{t('reservation.Delete')}</MButton>
-            <MButton onClick={() => console.log('Reload Message')}>
-              {t('reservation.Reload Message')}
-            </MButton>
-            <Upload {...props}>
-              <MButton>{t('reservation.Select file')}</MButton>
-            </Upload>
-            <PattonButton onClick={handleSendMessage}>
+            <MButton onClick={() => setContentMessage('')}>{t('reservation.Delete')}</MButton>
+            <MButton onClick={() => fetchMessages()}>{t('reservation.Reload Message')}</MButton>
+            {/* <input type={'file'} onChange={handleChangeFile}></input> */}
+            <PattonButton disabled={contentMessage.length === 0} onClick={handleSendMessage}>
               {t('reservation.Send to Guest')}
             </PattonButton>
           </Space>

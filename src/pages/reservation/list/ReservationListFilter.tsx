@@ -9,7 +9,7 @@ Main functions : Reservation List Filter
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Input, Row, Select } from 'antd';
+import { Button, Col, DatePicker, Input, Row, Select, Tag } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 
@@ -252,6 +252,23 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
                 width: '40%',
               }}
             />
+            <Tag
+              color="red"
+              onClick={() => {
+                dispatch(
+                  searchReservation({
+                    ...searchCondition,
+                    unread_msg: '1',
+                  }),
+                );
+              }}
+              style={{
+                marginLeft: 20,
+                cursor: 'pointer',
+              }}
+            >
+              Unread Message
+            </Tag>
           </Col>
         </Row>
       ) : null}

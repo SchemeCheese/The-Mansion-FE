@@ -10,6 +10,7 @@ export const reservationSearchState = {
   data: [],
   current_page: 1,
   total: 0,
+  unread_msg: 0,
 };
 
 export default {
@@ -24,6 +25,7 @@ export default {
         draft.data = payload.data;
         draft.total = payload.total;
         draft.current_page = payload.current_page;
+        draft.unread_msg = payload.unread_msg;
       });
   }),
 };
