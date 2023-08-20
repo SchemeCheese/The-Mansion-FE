@@ -61,7 +61,7 @@ function GuestCheckinPersonalId() {
           width: '90%',
           marginLeft: '5%',
           marginTop: '5vh',
-          marginBottom: '10vh',
+          marginBottom: 10,
         }}
       >
         <Col span={24}>
@@ -77,7 +77,6 @@ function GuestCheckinPersonalId() {
             <Col className="guest-checkout-confirm" span={24}>
               <Col span={24}>
                 <p>
-                  {' '}
                   {t('guestCheckin.Identity Card')} / {t('guestCheckin.Passport Photo')}{' '}
                 </p>
               </Col>

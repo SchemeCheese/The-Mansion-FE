@@ -63,11 +63,8 @@
 .span-header-right {
   padding-left: 1vh;
 }
-.modal-regard .ant-modal-footer {
-  text-align: center;
-  border: none;
-  padding-top: 0;
-  padding-bottom: 20px;
+.modal-reservation-info .ant-modal-body {
+  background-color: #f0f2f5;
 }
 .border-box {
   --b: 4px; /* thickness of the border */
