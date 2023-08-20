@@ -90,7 +90,7 @@ function GuestCheckinSelectRoom() {
           width: '90%',
           marginLeft: '5%',
           marginTop: '5vh',
-          marginBottom: '10vh',
+          marginBottom: 10,
         }}
       >
         <Col span={24}>
@@ -155,177 +155,178 @@ function GuestCheckinSelectRoom() {
         footer={[<PattonButton onClick={handleOkDetail}>{t('common.OK')}</PattonButton>]}
         onCancel={handleCancelModalDetail}
         onOk={handleOkDetail}
+        style={{ top: 60, borderRadius: 4, height: 500 }}
         title="Room Information"
         visible={modalDetailVisible}
         width={1024}
       >
-        <Row
-          gutter={30}
-          style={{ backgroundColor: 'rgba(240, 242, 245, 1)', padding: '24px', margin: 0 }}
+        <div
+          style={{
+            maxHeight: 650,
+            overflow: 'scroll',
+          }}
         >
-          <Col span={24}>
-            <Row>
-              <p className="">
-                <span
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 700,
-                    lineHeight: '24px',
-                    paddingBottom: '2vh',
-                  }}
-                >
-                  {t('guestCheckin.The Space')}
-                </span>
-              </p>
-            </Row>
-          </Col>
-          <Col span={8}>
-            <div>
-              <img
-                alt="example"
-                src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
-                style={{ borderRadius: '4px', width: '100%' }}
-              />
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 700, paddingTop: '3vh', paddingBottom: '1vh' }}>
-              {' '}
-              Bedroom 1{' '}
-            </div>
-            <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: '4vh' }}>
-              {' '}
-              King-size bed
-            </div>
-          </Col>
-          <Col span={8}>
-            <div>
-              <img
-                alt="example"
-                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                style={{ borderRadius: '4px', width: '100%' }}
-              />
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 700, paddingTop: '3vh', paddingBottom: '1vh' }}>
-              {' '}
-              Bedroom 1{' '}
-            </div>
-            <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: '2vh' }}>
-              {' '}
-              King-size bed
-            </div>
-          </Col>
-          <Col span={8}>
-            <div>
-              <img
-                alt="example"
-                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                style={{ borderRadius: '4px', width: '100%' }}
-              />
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 700, paddingTop: '3vh', paddingBottom: '1vh' }}>
-              {' '}
-              Bedroom 1{' '}
-            </div>
-            <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: '2vh' }}>
-              {' '}
-              King-size bed
-            </div>
-          </Col>
-          <Col span={8}>
-            <div>
-              <img
-                alt="example"
-                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                style={{ borderRadius: '4px', width: '100%' }}
-              />
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 700, paddingTop: '3vh', paddingBottom: '1vh' }}>
-              {' '}
-              Bedroom 1{' '}
-            </div>
-            <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: '2vh' }}>
-              {' '}
-              King-size bed
-            </div>
-          </Col>
-          <Col span={8}>
-            <div>
-              <img
-                alt="example"
-                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                style={{ borderRadius: '4px', width: '100%' }}
-              />
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 700, paddingTop: '3vh', paddingBottom: '1vh' }}>
-              {' '}
-              Bedroom 1{' '}
-            </div>
-            <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: '2vh' }}>
-              {' '}
-              King-size bed
-            </div>
-          </Col>
-          <Col span={8}>
-            <div>
-              <img
-                alt="example"
-                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-                style={{ borderRadius: '4px', width: '100%' }}
-              />
-            </div>
-            <div style={{ fontSize: 16, fontWeight: 700, paddingTop: '3vh', paddingBottom: '1vh' }}>
-              {' '}
-              Bedroom 1{' '}
-            </div>
-            <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: '2vh' }}>
-              {' '}
-              King-size bed
-            </div>
-          </Col>
-        </Row>
-        <Row
-          gutter={30}
-          style={{ background: 'rgba(247, 249, 250, 1)', padding: '24px', margin: 0 }}
-        >
-          <Col
-            span={24}
+          <Row
+            gutter={30}
             style={{
-              paddingBottom: '1vh',
+              backgroundColor: 'rgba(240, 242, 245, 1)',
+              padding: 20,
+              margin: 0,
             }}
           >
-            <span
+            <Col span={24}>
+              <Row>
+                <p className="">
+                  <span
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 700,
+                      lineHeight: '24px',
+                      paddingBottom: 20,
+                    }}
+                  >
+                    {t('guestCheckin.The Space')}
+                  </span>
+                </p>
+              </Row>
+            </Col>
+            <Col span={8}>
+              <div>
+                <img
+                  alt="example"
+                  src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
+                  style={{ borderRadius: '4px', width: '100%' }}
+                />
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, paddingTop: 10 }}>Bedroom 1</div>
+              <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: 10 }}>
+                King-size bed
+              </div>
+            </Col>
+            <Col span={8}>
+              <div>
+                <img
+                  alt="example"
+                  src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
+                  style={{ borderRadius: '4px', width: '100%' }}
+                />
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, paddingTop: 10 }}>Bedroom 1</div>
+              <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: 10 }}>
+                King-size bed
+              </div>
+            </Col>
+            <Col span={8}>
+              <div>
+                <img
+                  alt="example"
+                  src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
+                  style={{ borderRadius: '4px', width: '100%' }}
+                />
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, paddingTop: 10 }}>Bedroom 1</div>
+              <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: 10 }}>
+                King-size bed
+              </div>
+            </Col>
+            <Col span={8}>
+              <div>
+                <img
+                  alt="example"
+                  src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
+                  style={{ borderRadius: '4px', width: '100%' }}
+                />
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, paddingTop: 10 }}>Bedroom 1</div>
+              <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: 10 }}>
+                King-size bed
+              </div>
+            </Col>
+            <Col span={8}>
+              <div>
+                <img
+                  alt="example"
+                  src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
+                  style={{ borderRadius: '4px', width: '100%' }}
+                />
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, paddingTop: 10 }}>Bedroom 1</div>
+              <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: 10 }}>
+                King-size bed
+              </div>
+            </Col>
+            <Col span={8}>
+              <div>
+                <img
+                  alt="example"
+                  src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
+                  style={{ borderRadius: '4px', width: '100%' }}
+                />
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, paddingTop: 10 }}>Bedroom 1</div>
+              <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: 10 }}>
+                King-size bed
+              </div>
+            </Col>
+            <Col span={8}>
+              <div>
+                <img
+                  alt="example"
+                  src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_720/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/t9ur9cc1khkup1dmcbzd/IMGWorldsofAdventure.jpg"
+                  style={{ borderRadius: '4px', width: '100%' }}
+                />
+              </div>
+              <div style={{ fontSize: 16, fontWeight: 700, paddingTop: 10 }}>Bedroom 1</div>
+              <div style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)', paddingBottom: 10 }}>
+                King-size bed
+              </div>
+            </Col>
+          </Row>
+          <Row
+            gutter={30}
+            style={{ background: 'rgba(247, 249, 250, 1)', padding: '24px', margin: 0 }}
+          >
+            <Col
+              span={24}
               style={{
-                fontSize: 20,
-                fontWeight: 700,
+                paddingBottom: '1vh',
               }}
             >
-              {t('guestCheckin.Amenities')}
-            </span>
-          </Col>
-          {arrayAmeties.map((item: any) => {
-            return (
-              <Col
-                span={8}
+              <span
                 style={{
-                  marginTop: '2vh',
+                  fontSize: 20,
+                  fontWeight: 700,
                 }}
               >
-                <Icon name="checked" width={24} />
-                <span
-                  key={item}
+                {t('guestCheckin.Amenities')}
+              </span>
+            </Col>
+            {arrayAmeties.map((item: any) => {
+              return (
+                <Col
+                  span={8}
                   style={{
-                    fontSize: 14,
-                    paddingLeft: '2%',
-                    position: 'absolute',
-                    paddingTop: '1%',
+                    marginTop: 10,
                   }}
                 >
-                  {' '}
-                  {item}{' '}
-                </span>
-              </Col>
-            );
-          })}
-        </Row>
+                  <Icon name="checked" width={24} />
+                  <span
+                    key={item}
+                    style={{
+                      fontSize: 14,
+                      paddingLeft: '2%',
+                      position: 'absolute',
+                      paddingTop: '1%',
+                    }}
+                  >
+                    {' '}
+                    {item}{' '}
+                  </span>
+                </Col>
+              );
+            })}
+          </Row>
+        </div>
       </Modal>
       {/* Modal Room Select */}
       <Modal
@@ -334,30 +335,33 @@ function GuestCheckinSelectRoom() {
         onCancel={handleCancelModalSelectRoom}
         onOk={handleOkSelectRoom}
         title="Room Select"
-        visible={modalSelectRoomVisible}
+        visible={false}
         width={1024}
       >
         <Row
           gutter={30}
           style={{ backgroundColor: 'rgba(240, 242, 245, 1)', padding: '24px', margin: 0 }}
         >
-          <Col span={24}>
+          <Col
+            span={24}
+            style={{
+              paddingLeft: 0,
+            }}
+          >
             <Row>
-              <p className="">
-                <span
-                  style={{
-                    fontSize: 14,
-                    paddingBottom: '2vh',
-                  }}
-                >
-                  {t(
-                    'guestCheckin.Thank you for staying with us. Please select one of the available rooms below',
-                  )}
-                </span>
-              </p>
+              <span
+                style={{
+                  fontSize: 14,
+                  paddingBottom: 10,
+                }}
+              >
+                {t(
+                  'guestCheckin.Thank you for staying with us. Please select one of the available rooms below',
+                )}
+              </span>
             </Row>
           </Col>
-          <Row className="select-room-card" gutter={30} style={{ paddingTop: 30, width: '100%' }}>
+          <Row className="select-room-card" gutter={30} style={{ paddingTop: 5, width: '100%' }}>
             <SelectRoomCard showModalDetail={showModalDetail} />
             <SelectRoomCard showModalDetail={showModalDetail} />
             <SelectRoomCard showModalDetail={showModalDetail} />

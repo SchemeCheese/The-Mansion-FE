@@ -8,11 +8,14 @@ Main functions: Guest Checkin
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { QrReader } from 'react-qr-reader';
 import { useNavigate } from 'react-router-dom';
 import {
   Col,
   DatePicker,
   Form,
+  Input,
+  Modal,
   Radio,
   RadioChangeEvent,
   Row,
@@ -20,12 +23,15 @@ import {
   Steps,
   TimePicker,
 } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import GuestFooter from 'pages/guest/GuestFooter';
 
 import Icon from 'components/Icon';
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
+
+import ConfirmReservation from './modal/ConfirmReservation';
 
 import { useGuest } from '../useGuest';
 
@@ -37,6 +43,7 @@ function GuestCheckin() {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const arrayPersonValue: Array<number> = [1, 2, 3, 4, 5];
+  const [data, setData]: any = useState('No result');
 
   const [isNoReserved, setIsNoReserved] = useState(false);
   const [isScanQr, setIsScanQr] = useState(false);
@@ -46,7 +53,7 @@ function GuestCheckin() {
   const [generalInfoState, setGeneralInfoState] = useState<any>('');
 
   const handleNext = () => {
-    navigate('/guest/checkin/select-room');
+    setVisibleConfirm(true);
   };
 
   const { handleCancel } = useGuest();
@@ -91,9 +98,11 @@ function GuestCheckin() {
       is_by_night: isByNight,
     });
   });
+  const [visibleConfirm, setVisibleConfirm] = useState(false);
 
   return (
     <>
+      <ConfirmReservation setVisiable={setVisibleConfirm} visible={visibleConfirm} />
       <Row
         className="content guest-payment-content guest-checkout-content"
         style={{
@@ -101,9 +110,24 @@ function GuestCheckin() {
           width: '90%',
           marginLeft: '5%',
           marginTop: '5vh',
-          marginBottom: '10vh',
+          marginBottom: 10,
         }}
       >
+        {/* <Col span={3}>
+            <QrReader
+            onResult={(result: any, error) => {
+              if (!!result) {
+                setData(result?.text);
+              }
+
+              if (!!error) {
+                console.info(error);
+              }
+            }}
+            constraints={{ facingMode: 'user' }}
+          />
+          <p>{data}</p>
+        </Col> */}
         <Col span={24}>
           <Row
             style={{
@@ -143,7 +167,7 @@ function GuestCheckin() {
                   span: 23,
                 }}
               >
-                <Row style={{ maxHeight: '70vh', overflow: 'auto' }}>
+                <Row style={{ overflow: 'auto' }}>
                   <Col span={24}>
                     <Row>
                       <Col span={8}>
@@ -159,8 +183,8 @@ function GuestCheckin() {
                                 textAlign: 'center',
                                 paddingTop: 30,
                                 width: '98%',
-                                height: '100%',
                                 paddingBottom: '18%',
+                                height: 200,
                               }}
                             >
                               <Radio checked={isNoReserved} onChange={onChangeNoReserved}>
@@ -191,7 +215,7 @@ function GuestCheckin() {
                                 textAlign: 'center',
                                 paddingTop: 30,
                                 width: '98%',
-                                height: '100%',
+                                height: 200,
                               }}
                             >
                               <Radio checked={isScanQr} onChange={onChangeScanQr}>
