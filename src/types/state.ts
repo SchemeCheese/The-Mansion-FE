@@ -49,6 +49,7 @@ export interface ReservationSearchState {
   data: Array<Record<string, any>>;
   is_searching: boolean;
   total: number;
+  unread_msg: number;
 }
 
 export interface ReservationNumberState {

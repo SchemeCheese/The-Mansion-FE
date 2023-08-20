@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
-import { Col, Pagination, Row, Spin, Table, Tag } from 'antd';
+import { Alert, Col, Pagination, Row, Spin, Table, Tag } from 'antd';
 import { selectReservationSearch, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
@@ -57,6 +57,7 @@ function ReservationList({ type }: Props) {
   const items: any = useSelector<RootState>(({ reservation }) => reservation.data);
   const total: any = useSelector<RootState>(({ reservation }) => reservation.total);
   const currentPage: any = useSelector<RootState>(({ reservation }) => reservation.current_page);
+  const unreadMessage: any = useSelector<RootState>(({ reservation }) => reservation.unread_msg);
   const searchReservationData = useAppSelector(selectReservationSearch);
   const { changed: searchReservationChanged } = useTreeChanges(searchReservationData);
   const user = useAppSelector(selectUser);
@@ -271,6 +272,10 @@ function ReservationList({ type }: Props) {
           alert.push(<Tag color="#108ee9">P/U</Tag>);
         }
 
+        if (record.isUnreadMsg) {
+          alert.push(<Tag color="red">U/M</Tag>);
+        }
+
         if (alert.length > 0) {
           return <div style={{ minWidth: 0 }}>{alert}</div>;
         }
@@ -282,6 +287,30 @@ function ReservationList({ type }: Props) {
 
   return (
     <Row style={{ background: 'white', padding: 16 }}>
+      {unreadMessage > 0 && (
+        <Col
+          onClick={() => {
+            dispatch(
+              searchReservation({
+                ...searchCondition,
+                unread_msg: '1',
+              }),
+            );
+          }}
+          span={24}
+          style={{
+            paddingBottom: 20,
+            cursor: 'pointer',
+          }}
+        >
+          <Alert
+            closable
+            message={`You have ${unreadMessage} unread message(s) from customer!`}
+            showIcon
+            type="warning"
+          />
+        </Col>
+      )}
       <Col span={24}>
         <ReservationListFilter
           searchCondition={searchCondition}

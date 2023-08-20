@@ -488,7 +488,11 @@ function ReservationForm({
                   </Row>
                 </Card>
               </TabPane>
-              <TabPane key="2" style={{ padding: 20 }} tab={t('reservation.Rooming List')}>
+              <TabPane
+                key="2"
+                style={{ padding: 20, minHeight: '100%', overflowX: 'scroll' }}
+                tab={t('reservation.Rooming List')}
+              >
                 {type !== 'inhouse_today' && type !== 'checkout_today' && (
                   <>
                     <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
@@ -766,7 +770,11 @@ function ReservationForm({
                   </Card>
                 )}
               </TabPane>
-              <TabPane key="3" style={{ padding: 20 }} tab={t('reservation.Message')}>
+              <TabPane
+                key="3"
+                style={{ padding: 20, minHeight: '61rem', overflowX: 'scroll' }}
+                tab={t('reservation.Message')}
+              >
                 <Message />
               </TabPane>
             </Tabs>

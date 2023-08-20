@@ -54,6 +54,7 @@ export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchR
     let data = [];
     let total = 0;
     let currentPage = 0;
+    let unreadMessage = 0;
 
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
@@ -70,6 +71,7 @@ export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchR
       current_page: currentPage,
       data,
       total,
+      unread_msg: unreadMessage,
     } = yield call(request, `${apiEndPoint(ReservationEndpoint.SEARCH)}?${query}`, {
       method: 'GET',
       headers: headerWithAuthorization(),
@@ -80,6 +82,7 @@ export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchR
         data,
         total,
         current_page: currentPage,
+        unread_msg: unreadMessage,
       }),
     );
   } catch (error: any) {

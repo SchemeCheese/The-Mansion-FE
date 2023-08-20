@@ -13,6 +13,7 @@ export interface ReservationSearch {
   source?: string;
   status?: string;
   type?: string;
+  unread_msg?: string;
 }
 
 export interface ReservationPayload {
@@ -57,6 +58,7 @@ export interface ReservationSearchResult {
   current_page: number;
   data: Array<Record<string, any>>;
   total: number;
+  unread_msg: number;
 }
 
 export interface CreateReservationResult {
