@@ -1,5 +1,5 @@
 /** ***********************************
-Module Name: Payment
+Module Name: Checkin
 Developer Name: ThuLt
 Created Date: 15/07/2023
 Updated Date: 15/07/2023
@@ -13,12 +13,15 @@ import { t } from 'i18next';
 import Icon from 'components/Icon';
 
 interface Props {
-  isModalDetail?: any;
-  showModalDetail: any;
-  showModalSelectRoom?: any;
+  isModalDetail?: boolean;
+  showModalDetail: (visible: boolean) => void;
 }
 
-function SelectRoomCard({ isModalDetail, showModalDetail, showModalSelectRoom }: Props) {
+function SelectRoomCard({ isModalDetail, showModalDetail }: Props) {
+  const handleClickCover = () => {
+    showModalDetail(true);
+  };
+
   return (
     <Col span={8}>
       {!isModalDetail && (
@@ -55,10 +58,13 @@ function SelectRoomCard({ isModalDetail, showModalDetail, showModalSelectRoom }:
       )}
       <Card
         cover={
-          <img
-            alt="example"
-            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
-          />
+          <div aria-hidden onClick={handleClickCover} role="button">
+            <img
+              alt="example"
+              src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+              style={{ width: '100%' }}
+            />
+          </div>
         }
         style={{ width: '100%' }}
       >

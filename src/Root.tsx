@@ -573,7 +573,7 @@ function Root() {
                   <GuestCheckinPersonalId />
                 </PrivateRoute>
               }
-              path="/guest/checkin/personal-id"
+              path="/guest/checkin/upload-personal-id"
             />
             <Route
               element={

@@ -1,5 +1,5 @@
 /** ***********************************
-Module Name: Payment
+Module Name: Checkin
 Developer Name: ThuLt
 Created Date: 15/07/2023
 Updated Date: 15/07/2023
@@ -9,13 +9,10 @@ Main functions: Guest Checkin
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { QrReader } from 'react-qr-reader';
-import { useNavigate } from 'react-router-dom';
 import {
   Col,
   DatePicker,
   Form,
-  Input,
-  Modal,
   Radio,
   RadioChangeEvent,
   Row,
@@ -23,7 +20,6 @@ import {
   Steps,
   TimePicker,
 } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
 import GuestFooter from 'pages/guest/GuestFooter';
 
@@ -31,7 +27,9 @@ import Icon from 'components/Icon';
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
-import ConfirmReservation from './modal/ConfirmReservation';
+import ConfirmReservationModal from './modal/ConfirmReservationModal';
+import RoomDetailModal from './modal/RoomDetailModal';
+import SelectRoomModal from './modal/SelectRoomModal';
 
 import { useGuest } from '../useGuest';
 
@@ -41,7 +39,6 @@ function GuestCheckin() {
   const { t } = useTranslation();
   const { Step } = Steps;
   const [form] = Form.useForm();
-  const navigate = useNavigate();
   const arrayPersonValue: Array<number> = [1, 2, 3, 4, 5];
   const [data, setData]: any = useState('No result');
 
@@ -53,7 +50,7 @@ function GuestCheckin() {
   const [generalInfoState, setGeneralInfoState] = useState<any>('');
 
   const handleNext = () => {
-    setVisibleConfirm(true);
+    setVisibleSelectRoom(true);
   };
 
   const { handleCancel } = useGuest();
@@ -99,10 +96,19 @@ function GuestCheckin() {
     });
   });
   const [visibleConfirm, setVisibleConfirm] = useState(false);
+  const [visibleSelectRoom, setVisibleSelectRoom] = useState(false);
+  const [visibleRoomDetail, setVisibleRoomDetail] = useState(false);
 
   return (
     <>
-      <ConfirmReservation setVisiable={setVisibleConfirm} visible={visibleConfirm} />
+      <ConfirmReservationModal setVisiable={setVisibleConfirm} visible={visibleConfirm} />
+      <SelectRoomModal
+        setVisiable={setVisibleSelectRoom}
+        showModalConfirm={setVisibleConfirm}
+        showModalDetail={setVisibleRoomDetail}
+        visible={visibleSelectRoom}
+      />
+      <RoomDetailModal setVisiable={setVisibleRoomDetail} visible={visibleRoomDetail} />
       <Row
         className="content guest-payment-content guest-checkout-content"
         style={{

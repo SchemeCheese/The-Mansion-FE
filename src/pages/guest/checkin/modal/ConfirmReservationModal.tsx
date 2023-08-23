@@ -1,5 +1,5 @@
 /** ***********************************
-Module Name: Payment
+Module Name: Checkin
 Developer Name: ThuLt
 Created Date: 15/07/2023
 Updated Date: 15/07/2023
@@ -24,7 +24,7 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
   const navigate = useNavigate();
 
   const handleOkSelectRoom = () => {
-    navigate('/guest/checkin/select-room');
+    navigate('/guest/checkin/upload-personal-id');
   };
 
   const handleCancelModalSelectRoom = () => {
@@ -36,6 +36,7 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
       className="modal-reservation-info"
       footer={[<PattonButton onClick={handleOkSelectRoom}>Select Room</PattonButton>]}
       onCancel={handleCancelModalSelectRoom}
+      onOk={handleOkSelectRoom}
       title={<b>{t('Reservation Information')}</b>}
       visible={visible}
       width={1024}
@@ -43,7 +44,7 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
       <Row>
         <Col span={24}>
           <Row>
-            <p className="">
+            <p>
               <span
                 style={{
                   fontSize: 14,
