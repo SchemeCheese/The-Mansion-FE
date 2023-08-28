@@ -151,3 +151,8 @@ export const CustomerEndpoint = {
     return `api/v1/guests/${id}`;
   },
 };
+
+export const reservationMonthCharge = {
+  CHARGE_KIND: '5',
+  DESCRIPTION_KIND: 7,
+};

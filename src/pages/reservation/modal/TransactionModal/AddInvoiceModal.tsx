@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { InboxOutlined } from '@ant-design/icons';
-import { Checkbox, Col, Form, message, Modal, Row, Select, Upload } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+import { Checkbox, Col, DatePicker, Form, message, Modal, Row, Select, Upload } from 'antd';
+import { getAPI, postAPI } from 'helpers/apiService';
+import { selectBranchInfo } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { FileEndpoint, reservationMonthCharge } from 'config';
 
 import MInput from 'components/MInput';
 
@@ -18,25 +21,76 @@ interface Props {
 function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
   const { t } = useTranslation();
   const { Option } = Select;
-
-  const handleChange = (value: string) => {
-    setModalVisible(false);
-  };
+  const [form] = Form.useForm();
+  const [descriptions, setDescriptions] = useState([]);
+  const monthFormat = 'MM-YYY';
+  const branchInfo = useAppSelector(selectBranchInfo);
+  const [file, setFile] = useState();
 
   const handleButtonSubmit = () => {
-    setModalVisible(false);
+    form
+      .validateFields()
+      .then(async values => {
+        form.resetFields();
+        const formData = new FormData();
+
+        if (file) {
+          formData.append('file', file);
+        }
+
+        formData.append('charge_kind', reservationMonthCharge.CHARGE_KIND);
+        formData.append('description_id', values.description_id);
+        formData.append('use_month', values.use_month.format('MM-YYYY'));
+        formData.append('actual_amount', values.actual_amount);
+        formData.append('operator_code', branchInfo.operator_code);
+
+        const response = await postAPI(
+          `api/v1/reservations/${dataInvoice.reservation_id}/reservation-detail/${dataInvoice.reservation_detail_id}/monthly-invoices`,
+          formData,
+          '',
+          true,
+        );
+
+        response.data?.success
+          ? message.success('Create Monthly Invoice successfully.')
+          : message.error('Create Monthly Invoice failed.');
+
+        setModalVisible(false);
+      })
+      .catch(error => {
+        message.error('Create Monthly Invoice failed.');
+      });
   };
+
+  const onDescriptionChange = (value: string) => {
+    form.setFieldsValue({
+      description_id: value,
+    });
+  };
+
+  useEffect(() => {
+    async function getDescriptions() {
+      const data = await getAPI(
+        `api/v1/descriptions?description_kind=${reservationMonthCharge.DESCRIPTION_KIND}`,
+      );
+
+      setDescriptions(data?.data);
+    }
+
+    getDescriptions();
+  }, []);
 
   const DragProps = {
     name: 'file',
-    multiple: true,
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    maxCount: 1,
+    action: `${process.env.REACT_APP_API_HOST}/${FileEndpoint.UPLOAD}`,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+    },
     onChange(info: any) {
       const { status } = info.file;
 
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
+      setFile(info.fileList[0]?.originFileObj);
 
       if (status === 'done') {
         message.success(`${info.file.name} file uploaded successfully.`);
@@ -61,31 +115,68 @@ function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
       visible={isModalOpen}
       width={850}
     >
-      <Form layout="vertical">
+      <Form
+        form={form}
+        initialValues={{
+          guest_name: undefined,
+          use_month: undefined,
+          actual_amount: undefined,
+          description_id: undefined,
+        }}
+        layout="vertical"
+      >
         <Row>
           <Col span={9} style={{ paddingRight: 15 }}>
-            <Form.Item label={t('monthlyInvoice.Folio ID.title')}>
+            <Form.Item label={t('monthlyInvoice.Folio ID.title')} name="operator_code">
               <MInput />
             </Form.Item>
-            <Form.Item label={t('monthlyInvoice.Type.title')}>
-              <Select allowClear placeholder={t('monthlyInvoice.Type.placeholder')}>
-                <Option value="1">OTA</Option>
-                <Option value="2">CDT</Option>
-                <Option value="4">CORPORATE</Option>
-                <Option value="5">WHOLESALE</Option>
-                <Option value="7">FIT</Option>
+            <Form.Item
+              label={t('monthlyInvoice.Type.title')}
+              name="description_id"
+              rules={[{ required: true, message: 'Select type' }]}
+            >
+              <Select
+                allowClear
+                onChange={onDescriptionChange}
+                placeholder={t('monthlyInvoice.Type.placeholder')}
+              >
+                {descriptions.length > 0 &&
+                  descriptions.map((description: any) => (
+                    <Option key={description.id}>{description.name}</Option>
+                  ))}
               </Select>
             </Form.Item>
           </Col>
           <Col span={9} style={{ paddingLeft: 15 }}>
-            <Form.Item label={t('monthlyInvoice.Guest Name.title')}>
+            <Form.Item label={t('monthlyInvoice.Guest Name.title')} name="guest_name">
               <MInput />
             </Form.Item>
-            <Form.Item label={t('monthlyInvoice.Total.title')}>
+            <Form.Item
+              label={t('monthlyInvoice.Total.title')}
+              name="actual_amount"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input total',
+                },
+              ]}
+            >
               <MInput />
             </Form.Item>
           </Col>
           <Col span={6}>
+            <Form.Item
+              label={t('monthlyInvoice.Use Month.title')}
+              name="use_month"
+              rules={[{ required: true, message: 'Select use month' }]}
+              style={{ paddingLeft: 20 }}
+            >
+              <DatePicker
+                format={monthFormat}
+                picker="month"
+                placeholder={t('monthlyInvoice.Use Month.placeholder')}
+              />
+            </Form.Item>
             <Form.Item
               style={{
                 marginBottom: 12,
@@ -101,21 +192,23 @@ function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Dragger
-              {...DragProps}
-              style={{
-                background: '#FFFFFF',
-                border: '1px dashed rgba(0, 0, 0, 0.15)',
-                borderRadius: '2px',
-                height: 112,
-              }}
-            >
-              {/* <p className="ant-upload-drag-icon"> */}
-              {/*  <InboxOutlined /> */}
-              {/* </p> */}
-              {/* <p className="ant-upload-text">Click or drag file to this area to upload</p> */}
-              <p className="ant-upload-hint">Upload file here</p>
-            </Dragger>
+            <Form.Item>
+              <Dragger
+                {...DragProps}
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px dashed rgba(0, 0, 0, 0.15)',
+                  borderRadius: '2px',
+                  height: 112,
+                }}
+              >
+                {/* <p className="ant-upload-drag-icon"> */}
+                {/*  <InboxOutlined /> */}
+                {/* </p> */}
+                {/* <p className="ant-upload-text">Click or drag file to this area to upload</p> */}
+                <p className="ant-upload-hint">Upload file here</p>
+              </Dragger>
+            </Form.Item>
           </Col>
         </Row>
       </Form>

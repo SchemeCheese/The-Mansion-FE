@@ -28,5 +28,9 @@
   "Folio ID": {
     "title": "Folio ID",
     "placeholder": ""
+  },
+  "Use Month": {
+    "title": "Use Month",
+    "placeholder": "Select Month"
   }
 }
