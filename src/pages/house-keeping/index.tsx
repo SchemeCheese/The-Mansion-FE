@@ -62,7 +62,7 @@ function HouseKeeping() {
             </span>
           </p>
         </Col>
-        <Col span={24}>
+        <Col className="custom-bg-header" span={24}>
           <p className="">
             <span
               style={{

@@ -341,7 +341,10 @@ function ReservationDetail() {
           </Space>
         </Radio.Group>
       </Modal>
-      <Row style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 15 }}>
+      <Row
+        className="custom-bg-header"
+        style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 15 }}
+      >
         <Col span={8}>
           <svg
             fill="none"
@@ -390,7 +393,11 @@ function ReservationDetail() {
           </Space>
         </Col>
       </Row>
-      <Row justify="space-between" style={{ paddingRight: 20, paddingLeft: 20 }}>
+      <Row
+        className="custom-bg-header"
+        justify="space-between"
+        style={{ paddingRight: 20, paddingLeft: 20 }}
+      >
         <Col span={6}>
           <Row>
             <Col span={12}>

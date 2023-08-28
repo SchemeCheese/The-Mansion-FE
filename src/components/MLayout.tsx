@@ -674,9 +674,15 @@ function MLayout(props: Props) {
           className="site-layout-background"
           style={{
             minHeight: 280,
-            paddingTop: 14,
+            // paddingTop: 14,
           }}
         >
+          <div
+            className="custom-bg-header"
+            style={{
+              paddingTop: 14,
+            }}
+          />
           {children}
         </Content>
         <Footer />

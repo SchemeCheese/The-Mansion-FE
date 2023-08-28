@@ -119,9 +119,11 @@ function HotelFacility() {
         layout="vertical"
         name="basic"
         onFinish={onReportFormFinish}
-        style={{
-          minHeight: 'calc(100vh - 209px)',
-        }}
+        style={
+          {
+            // minHeight: 'calc(100vh - 209px)',
+          }
+        }
         wrapperCol={{
           span: 23,
         }}

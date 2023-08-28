@@ -262,7 +262,7 @@ function Branch() {
 
   return !isLoading ? (
     <>
-      <Row align="middle">
+      <Row align="middle" className="custom-bg-header">
         {/* START Branch Select */}
         <Col span={2}>
           <span style={{ paddingLeft: '24px', fontSize: '12px' }}>Branch</span>
@@ -343,7 +343,11 @@ function Branch() {
         </Col>
         {/* END Filter time */}
       </Row>
-      <Tabs className="branch-manager" defaultActiveKey="1" style={{ minHeight: '100%' }}>
+      <Tabs
+        className="branch-manager custom-bg-header"
+        defaultActiveKey="1"
+        style={{ minHeight: '100%' }}
+      >
         <TabPane key="e" className="content" tab={t('branchManager.tab_electricity')}>
           <Header avg={avgE} consum={Econsum} type={1} yoy={EYOY} />
           <Row>

@@ -34,9 +34,18 @@
 }
 
 .site-layout .site-layout-background {
-  background: #ffffff;
-  box-shadow: 0px 1px 4px rgba(0, 21, 41, 0.1);
+  background: #f0f2f5;
+  /*background: #ffffff;*/
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.1);
   padding: 0;
+}
+
+.site-layout .site-layout-background.header {
+  background: #ffffff;
+}
+
+.custom-bg-header {
+  background: #ffffff;
 }
 
 .site-layout .ant-avatar {
@@ -49,11 +58,13 @@
 }
 
 .title {
-  margin-bottom: 1rem;
+  margin-bottom: 0;
+  padding-bottom: 1rem;
   font-size: 14px;
   padding-left: 24px;
   padding-right: 24px;
   color: rgba(0, 0, 0, 0.85);
+  background: white;
 }
 
 .reservation-tabs .ant-tabs-tab {
@@ -67,7 +78,7 @@
 
 .content {
   background-color: #e5e5e5;
-  padding: 24px 24px 0px 24px;
+  padding: 24px 24px 24px 24px;
 }
 
 .ant-card-head {

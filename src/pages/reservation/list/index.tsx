@@ -94,7 +94,7 @@ function Reservation() {
       <p className="title">{t('reservation.Reservation List')}</p>
 
       <Tabs
-        className="reservation-tabs"
+        className="reservation-tabs custom-bg-header"
         defaultActiveKey="1"
         onChange={activeKey => handeleActive(activeKey)}
         style={{ minHeight: '100%' }}

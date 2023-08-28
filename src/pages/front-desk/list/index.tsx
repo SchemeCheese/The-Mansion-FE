@@ -77,7 +77,7 @@ function FrontDesk() {
       <p className="title">{t('frontDesk.Front Desk')}</p>
 
       <Tabs
-        className="reservation-tabs"
+        className="reservation-tabs custom-bg-header"
         defaultActiveKey="1"
         onChange={activeKey => handeleActive(activeKey)}
         style={{ minHeight: '100%' }}

@@ -201,7 +201,10 @@ function CustomerDetail() {
 
   return (
     <>
-      <Row style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}>
+      <Row
+        className="custom-bg-header"
+        style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}
+      >
         <Col span={8}>
           <svg
             fill="none"
@@ -287,7 +290,11 @@ function CustomerDetail() {
           </div>
         </Col>
       </Row>
-      <Row justify="space-between" style={{ paddingRight: 20, paddingLeft: 20 }}>
+      <Row
+        className="custom-bg-header"
+        justify="space-between"
+        style={{ paddingRight: 20, paddingLeft: 20 }}
+      >
         <Col span={6} style={{ paddingLeft: 30 }}>
           <Row>
             <Col span={12}>
@@ -350,8 +357,8 @@ function CustomerDetail() {
       <Row
         className="content-customer-detail"
         style={{
-          backgroundColor: '#e5e5e5',
-          padding: '24px 24px 0 24px',
+          backgroundColor: '#F0F3F7',
+          padding: '24px 24px 24px 24px',
         }}
       >
         <Col span={24} style={{ background: 'white' }}>
