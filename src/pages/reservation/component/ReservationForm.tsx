@@ -301,7 +301,7 @@ function ReservationForm({
           booker_email: reservationInfo?.booker?.email_address1,
           booker_email_2: reservationInfo?.booker?.email_address2,
           booker_phone_number: reservationInfo?.booker?.telephone_number1,
-          booker_rank: reservationInfo?.booker?.client_rank.toString(),
+          booker_rank: reservationInfo?.booker?.client_rank?.toString(),
           booker_note: reservationInfo?.note_sale,
           email_language: '2',
         }}

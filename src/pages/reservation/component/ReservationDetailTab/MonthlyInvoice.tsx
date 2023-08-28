@@ -17,7 +17,6 @@ interface Props {
 function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
   const { t } = useTranslation();
 
-  console.log('reservationDetailId', reservationDetailId, reservationId);
   const tabList: any = [
     {
       key: 'electricity',
@@ -184,6 +183,10 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
         </Card>
       </Col>
       <AddInvoiceModal
+        dataInvoice={{
+          reservation_detail_id: reservationDetailId,
+          reservation_id: reservationId,
+        }}
         isModalOpen={isOpenAddInvoiceModalVisible}
         setModalVisible={setIsOpenAddInvoiceModalVisible}
       />
