@@ -11,6 +11,8 @@ import {
   createGuestSuccess,
   getReservationCheckoutByRoomNoAction,
   getReservationCheckoutByRoomNoActionSuccess,
+  getReservationGuestCheckinAction,
+  getReservationGuestCheckinSuccessAction,
   logOut,
   removeGuestAction,
   removeGuestSuccessAction,
@@ -172,6 +174,47 @@ export function* getReservationCheckoutByRoomNoSaga({
     if (success) {
       yield put(getReservationCheckoutByRoomNoActionSuccess({ data }));
     } else {
+      message.warn('The room has no checkout today reservation');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else if (error.status === 422) {
+      message.warn('The room has no checkout today reservation');
+    } else {
+      message.error('Get Reservation Info Failed!');
+    }
+  }
+}
+
+export function* getReservationGuestCheckinSaga({
+  payload,
+}: ReturnType<typeof getReservationGuestCheckinAction>) {
+  try {
+    let success = '';
+    let data = {};
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    ({ data, success } = yield call(
+      request,
+      `${apiEndPoint(GuestEndpoint.GET_RESERVATION_GUEST_CHECKIN)}/${
+        payload.reservation_info_id
+      }/reservation-detail/${
+        payload.reservation_detail_id
+      }/show?branch_code=${branch_code}&operator_code=${operator_code}&facility_code=${facility_code}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    if (success) {
+      yield put(getReservationGuestCheckinSuccessAction({ data }));
+    } else {
       message.warn('The room has no checkin today reservation');
     }
   } catch (error: any) {
@@ -197,4 +240,5 @@ export default function* root() {
   yield all([
     takeLatest(ActionTypes.GET_RESERVATION_DETAIL_BY_ROOM_NO, getReservationCheckoutByRoomNoSaga),
   ]);
+  yield all([takeLatest(ActionTypes.GET_RESERVATION_CHECKIN, getReservationGuestCheckinSaga)]);
 }

@@ -95,6 +95,7 @@ export const GuestEndpoint = {
   REMOVE: 'api/v1/reservation-detail',
   SET_MAIN_GUEST: 'api/v1/reservation-detail',
   GET_RESERVATION_CHECKOUT_BY_ROOM_NO: 'api/v1/reservations/checkout-room-number',
+  GET_RESERVATION_GUEST_CHECKIN: 'api/v1/reservations',
   SEARCH: 'api/v1/guests',
 };
 

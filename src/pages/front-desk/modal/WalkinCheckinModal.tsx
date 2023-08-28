@@ -191,10 +191,13 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
               room_type: values.room_type,
               checkin_date: values.checkin.format('YYYY-MM-DD'),
               checkout_date: values.checkout.format('YYYY-MM-DD'),
+              checkin_time: values.checkin_time ? values.checkin_time.format('HH:mm') : null,
+              checkout_time: values.checkout_time ? values.checkout_time.format('HH:mm') : null,
               quantity: 1,
               charges,
             },
           ],
+          is_checkin: 1,
         },
       }),
     );
@@ -299,6 +302,10 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
       <Form
         autoComplete="off"
         form={form}
+        initialValues={{
+          adult: 2,
+          child: 1,
+        }}
         labelCol={{
           span: 24,
         }}
@@ -395,7 +402,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
                 </Col>
                 <Col span={4}>
                   <Form.Item label={t('common.Adult')} name="adult">
-                    <Select allowClear defaultValue="2">
+                    <Select allowClear>
                       <Option value="1">1</Option>
                       <Option value="2">2</Option>
                       <Option value="3">3</Option>
@@ -405,7 +412,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
                 </Col>
                 <Col span={4}>
                   <Form.Item label={t('common.Child')} name="child">
-                    <Select allowClear defaultValue="1">
+                    <Select allowClear>
                       <Option value="1">1</Option>
                       <Option value="2">2</Option>
                       <Option value="3">3</Option>

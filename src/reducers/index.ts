@@ -67,6 +67,7 @@ import getWalkinRooms, { getWalkinRoomsState } from './getWalkinRooms';
 import getWaterArea, { getWaterAreaState } from './getWaterArea';
 import getWaterYesterday, { getWaterYesterdayState } from './getWaterYesterday';
 import github, { githubState } from './github';
+import guestCheckin, { guestCheckinState } from './guestCheckin';
 import nightAudit, { nightAuditState } from './nightAudit';
 import noshow, { noshowState } from './noshow';
 import paymentVNPayReservationDetail, {
@@ -157,6 +158,7 @@ export const initialState = {
   reservationRoomCheckinToday: reservationRoomCheckinTodayState,
   getLanguageCode: getLanguageCodeState,
   getRooms: getRoomsState,
+  guestCheckin: guestCheckinState,
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
   setMainGuest: setMainGuestState,
   downloadDocxReservationDetail: downloadDocxReservationDetailState,
@@ -247,6 +249,7 @@ export default {
   ...getBranchs,
   ...getBranchManager,
   ...getBranchFacilites,
+  ...guestCheckin,
   ...branchInfo,
   ...notifications,
   ...noshow,

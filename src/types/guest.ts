@@ -34,6 +34,15 @@ export interface GetReservationCheckoutFromRoomNo {
   room_no: string;
 }
 
+export interface GetReservationCheckin {
+  reservation_detail_id: string;
+  reservation_info_id: string;
+}
+
 export interface GetReservationCheckoutFromRoomNoResult {
+  data: Record<string, any>;
+}
+
+export interface GetReservationCheckinResult {
   data: Record<string, any>;
 }
