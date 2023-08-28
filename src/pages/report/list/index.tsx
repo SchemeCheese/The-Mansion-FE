@@ -11,7 +11,11 @@ function Report() {
   return (
     <>
       <p className="title">{t('report.Report List')}</p>
-      <Tabs className="reservation-tabs" defaultActiveKey="1" style={{ minHeight: '100%' }}>
+      <Tabs
+        className="reservation-tabs custom-bg-header"
+        defaultActiveKey="1"
+        style={{ minHeight: '100%' }}
+      >
         <TabPane key="1" className="content" tab={t('report.Hotel Facility')}>
           <HotelFacility />
         </TabPane>

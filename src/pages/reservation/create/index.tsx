@@ -190,7 +190,16 @@ function Create() {
     <>
       {/* <BreadcrumbList data={breadcrumbData} /> */}
       <p className="title">{t('reservation.Create New Reservation')}</p>
-      <p style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.45)', paddingLeft: 24 }}>
+      <p
+        className="custom-bg-header"
+        style={{
+          fontSize: 13,
+          color: 'rgba(0, 0, 0, 0.45)',
+          paddingLeft: 24,
+          paddingBottom: '1em',
+          marginBottom: 0,
+        }}
+      >
         {t('reservation.Create New Reservation Note')}
       </p>
       <SelectRoomModal

@@ -489,7 +489,7 @@ function NightAudit() {
   return (
     <>
       {/* <Button onClick={showModal}>Payment Method</Button> */}
-      <Row>
+      <Row className="custom-bg-header">
         <Col span={12}>
           <p className="title">
             {' '}
@@ -522,7 +522,7 @@ function NightAudit() {
       </Row>
       {branchFacilities.data.warning_na_msg && (
         <Row>
-          <Col span={24} style={{ paddingBottom: 20 }}>
+          <Col span={24}>
             <Alert banner message={branchFacilities.data.warning_na_msg} />
           </Col>
         </Row>

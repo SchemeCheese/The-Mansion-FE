@@ -357,7 +357,10 @@ function ReservationCheckinTodayDetail() {
           </Space>
         </Radio.Group>
       </Modal>
-      <Row style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}>
+      <Row
+        className="custom-bg-header"
+        style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}
+      >
         <Col span={8}>
           <svg
             fill="none"
@@ -393,7 +396,11 @@ function ReservationCheckinTodayDetail() {
           </Space>
         </Col>
       </Row>
-      <Row justify="space-between" style={{ paddingRight: 20, paddingLeft: 20 }}>
+      <Row
+        className="custom-bg-header"
+        justify="space-between"
+        style={{ paddingRight: 20, paddingLeft: 20 }}
+      >
         <Col span={6}>
           <Row>
             <Col span={12}>

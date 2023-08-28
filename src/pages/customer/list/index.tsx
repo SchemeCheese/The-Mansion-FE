@@ -23,7 +23,7 @@ function Customer() {
       </p>
       <p className="title">{t('customer.Customer List')}</p>
 
-      <Tabs className="customer-tabs" defaultActiveKey="1">
+      <Tabs className="customer-tabs custom-bg-header" defaultActiveKey="1">
         <TabPane key="1" className="content" tab={t('customer.List')}>
           <CustomerList type="list" />
         </TabPane>
