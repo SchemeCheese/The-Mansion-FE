@@ -14,8 +14,8 @@ export const topic: Topic = {
 
 /* API Path */
 export const AuthPath = {
-  LOGIN_PATH: 'auth/login',
-  PROFILE_PATH: 'auth/me',
+  LOGIN_PATH: 'api/auth/login',
+  PROFILE_PATH: 'api/auth/me',
 };
 
 export const ReservationEndpoint = {

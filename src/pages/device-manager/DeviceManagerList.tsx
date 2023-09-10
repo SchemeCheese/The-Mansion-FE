@@ -106,7 +106,7 @@ function DeviceManagerList() {
     const facilityId = window.localStorage.getItem('facility_id') ?? '1';
 
     async function fetchBranchInfo() {
-      const response = await getAPI(`/api/v1/branchs`);
+      const response = await getAPI(`api/v1/branchs`);
       const branchInfoSelected: any = _.find(response.data, (item: any) => {
         return item.id.toString() === branchId;
       });
@@ -119,14 +119,14 @@ function DeviceManagerList() {
     }
 
     async function fetchFacilityInfo() {
-      const response = await getAPI(`/api/v1/branch-facility/${branchId}`);
+      const response = await getAPI(`api/v1/branch-facility/${branchId}`);
       const facilityInfoSelected: any = _.find(response.data.facilities, (item: any) => {
         return item.id.toString() === facilityId;
       });
 
       try {
         const responseRoom = await getAPI(
-          `/api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
+          `api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
         );
 
         setRooms(responseRoom.data.items);
@@ -161,7 +161,7 @@ function DeviceManagerList() {
         return item.id.toString() === value;
       });
 
-      const response = await getAPI(`/api/v1/branch-facility/${branchInfoSelected.id}`);
+      const response = await getAPI(`api/v1/branch-facility/${branchInfoSelected.id}`);
 
       setFacilities(response.data.facilities);
       setSearchCondition({
@@ -218,7 +218,7 @@ function DeviceManagerList() {
           return item.id.toString() === value;
         });
         const response = await getAPI(
-          `/api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
+          `api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
         );
 
         setRooms(response.data.items);

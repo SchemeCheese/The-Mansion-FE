@@ -52,7 +52,7 @@ function CustomerDetailAbout() {
   };
 
   const onContactFormFinish = async (values: any) => {
-    const result = await putAPI(`/api/v1/guests/${id}/update`, {
+    const result = await putAPI(`api/v1/guests/${id}/update`, {
       ...values,
       date_of_birth: values.date_of_birth ? values.date_of_birth.format(formatDate) : null,
       tags,
@@ -90,7 +90,7 @@ function CustomerDetailAbout() {
 
   useEffect(() => {
     async function fetchCustomerConfig() {
-      const response = await getAPI(`/api/v1/get-customer-config`);
+      const response = await getAPI(`api/v1/get-customer-config`);
 
       setCustomerConfig(response.data);
     }

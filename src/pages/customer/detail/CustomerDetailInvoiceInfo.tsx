@@ -31,7 +31,7 @@ function CustomerDetailInvoiceInfo() {
   const { id } = useParams();
 
   const onFormFinish = async (values: any) => {
-    const result = await putAPI(`/api/v1/guests/${id}/update`, values);
+    const result = await putAPI(`api/v1/guests/${id}/update`, values);
 
     if (result.data.success) {
       message.success('Update invoice info successfully!');

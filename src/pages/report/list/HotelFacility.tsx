@@ -58,7 +58,7 @@ function HotelFacility() {
   };
 
   const changeBranch = async (value: string) => {
-    const response = await getAPI(`/api/v1/branch-facility/${value}`);
+    const response = await getAPI(`api/v1/branch-facility/${value}`);
 
     setFacilities(response.data.facilities);
     form.setFieldsValue({
@@ -94,13 +94,13 @@ function HotelFacility() {
     const branchId = window.localStorage.getItem('branch_id') ?? '1';
 
     async function fetchBranchInfo() {
-      const response = await getAPI(`/api/v1/branchs`);
+      const response = await getAPI(`api/v1/branchs`);
 
       setBranchs(response.data);
     }
 
     async function fetchFacilityInfo() {
-      const response = await getAPI(`/api/v1/branch-facility/${branchId}`);
+      const response = await getAPI(`api/v1/branch-facility/${branchId}`);
 
       setFacilities(response.data.facilities);
     }

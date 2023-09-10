@@ -56,7 +56,7 @@ function CustomerDetailInformation() {
   };
 
   const onContactFormFinish = async (values: any) => {
-    const result = await putAPI(`/api/v1/guests/${id}/update`, values);
+    const result = await putAPI(`api/v1/guests/${id}/update`, values);
 
     if (result.data.success) {
       message.success('Update contact info successfully!');
@@ -70,7 +70,7 @@ function CustomerDetailInformation() {
   };
 
   const onOfficialFormFinish = async (values: any) => {
-    const result = await putAPI(`/api/v1/guests/${id}/update`, {
+    const result = await putAPI(`api/v1/guests/${id}/update`, {
       ...values,
       date_of_issue_of_id: getDateValue(values.date_of_issue_of_id),
       expiration_date_of_id: getDateValue(values.expiration_date_of_id),
@@ -108,7 +108,7 @@ function CustomerDetailInformation() {
 
   useEffect(() => {
     async function fetchCustomerConfig() {
-      const response = await getAPI(`/api/v1/get-customer-config`);
+      const response = await getAPI(`api/v1/get-customer-config`);
 
       setCustomerConfig(response.data);
     }

@@ -57,7 +57,7 @@ function DeviceManagerCreate() {
   };
 
   const changeBranch = async (value: string) => {
-    const response = await getAPI(`/api/v1/branch-facility/${value}`);
+    const response = await getAPI(`api/v1/branch-facility/${value}`);
 
     setFacilities(response.data.facilities);
     form.setFieldsValue({
@@ -72,7 +72,7 @@ function DeviceManagerCreate() {
           return item.id.toString() === value;
         });
         const response = await getAPI(
-          `/api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
+          `api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
         );
 
         setRooms(response.data.items);
@@ -109,7 +109,7 @@ function DeviceManagerCreate() {
       const branchId = window.localStorage.getItem('branch_id') ?? '1';
 
       const facilityId = window.localStorage.getItem('facility_id') ?? '1';
-      const response = await getAPI(`/api/v1/branch-facility/${branchId}`);
+      const response = await getAPI(`api/v1/branch-facility/${branchId}`);
 
       const facilityInfoSelected: any = _.find(response.data.facilities, (item: any) => {
         return item.id.toString() === facilityId;
@@ -129,14 +129,14 @@ function DeviceManagerCreate() {
     const branchId = window.localStorage.getItem('branch_id') ?? '1';
 
     async function fetchBranchInfo() {
-      const response = await getAPI(`/api/v1/branchs`);
+      const response = await getAPI(`api/v1/branchs`);
 
       setBranchs(response.data);
     }
 
     async function fetchFacilityInfo() {
       const facilityId = window.localStorage.getItem('facility_id') ?? '1';
-      const response = await getAPI(`/api/v1/branch-facility/${branchId}`);
+      const response = await getAPI(`api/v1/branch-facility/${branchId}`);
 
       const facilityInfoSelected: any = _.find(response.data.facilities, (item: any) => {
         return item.id.toString() === facilityId;
@@ -144,7 +144,7 @@ function DeviceManagerCreate() {
 
       try {
         const responseRoom = await getAPI(
-          `/api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
+          `api/v1/rooms?operator_code=${facilityInfoSelected.operator_code}&branch_code=${facilityInfoSelected.branch_code}&facility_code=${facilityInfoSelected.facility_code}`,
         );
 
         setRooms(responseRoom.data.items);

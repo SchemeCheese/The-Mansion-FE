@@ -158,7 +158,7 @@ function CustomerDetailReservation({ statusMapping }: Props) {
 
   async function fetchIncomingReservations(page: number) {
     const inComingReservationsResponse: any = await getAPI(
-      `/api/v1/guests/${id}/get-reservations/incoming?current_page=${page}`,
+      `api/v1/guests/${id}/get-reservations/incoming?current_page=${page}`,
     );
 
     setIncomingReservations(inComingReservationsResponse.data);
@@ -166,7 +166,7 @@ function CustomerDetailReservation({ statusMapping }: Props) {
 
   async function fetchPastReservations(page: number) {
     const pastReservationsResponse: any = await getAPI(
-      `/api/v1/guests/${id}/get-reservations/past?current_page=${page}`,
+      `api/v1/guests/${id}/get-reservations/past?current_page=${page}`,
     );
 
     setPastReservations(pastReservationsResponse.data);
