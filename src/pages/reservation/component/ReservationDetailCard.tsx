@@ -6,6 +6,8 @@ Updated Date : 23/11/2022
 Main functions : Reservation Detail Card
 ************************************ */
 
+import 'styles/reservation_detail_card.css';
+
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,9 +30,10 @@ const { TabPane } = Tabs;
 interface Props {
   reservationDetail: any;
   reservationId: string;
+  typeScreen?: string | undefined;
 }
 
-function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
+function ReservationDetailCard({ reservationDetail, reservationId, typeScreen }: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const reservationDetailInfo: any = useSelector<RootState>(
@@ -60,6 +63,10 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
     }
   };
 
+  const isScreenInHouseToday = (type: string | undefined) => {
+    return type === 'inhouse_today';
+  };
+
   const params = useLocation();
   const searchParam = new URLSearchParams(params.search);
   const tabParam = searchParam.get('tab');
@@ -80,35 +87,72 @@ function ReservationDetailCard({ reservationDetail, reservationId }: Props) {
   }, []);
 
   return (
-    <Col span={24} style={{ marginTop: 20 }}>
+    <Col
+      className="reservation-detail-card"
+      span={24}
+      style={{ marginTop: isScreenInHouseToday(typeScreen) ? 0 : 20 }}
+    >
       <div
         ref={reservationDetailCardRef}
         style={{
           background: '#F0F2F5',
-          border: '1px solid #E8E8E8',
+          border: !isScreenInHouseToday(typeScreen) ? '1px solid #E8E8E8' : 0,
           borderRadius: '2px',
         }}
       >
-        <Tabs className="tabs-cart" defaultActiveKey={tabParam ?? '1'} onChange={handleChangeTab}>
-          <TabPane key="1" tab={t('common.General Infos')}>
+        <Tabs
+          className={`tabs-cart ${isScreenInHouseToday(typeScreen) ? 'tabs-in-house-today' : ''}`}
+          defaultActiveKey={tabParam ?? (isScreenInHouseToday(typeScreen) ? '5' : '1')}
+          onChange={handleChangeTab}
+        >
+          {isScreenInHouseToday(typeScreen) && (
+            <TabPane key="5" tab={t('reservation.Transactions')}>
+              <Transaction
+                reservationDetailId={reservationDetail.id}
+                reservationId={reservationId}
+              />
+            </TabPane>
+          )}
+          <TabPane
+            key="1"
+            className={isScreenInHouseToday(typeScreen) ? 'tab-pane-in-house-today' : ''}
+            tab={t('common.General Infos')}
+          >
             <GeneralInfo reservationDetailId={reservationDetail.id} reservationId={reservationId} />
           </TabPane>
-          <TabPane key="2" tab={t('reservation.Rates')}>
+          <TabPane
+            key="2"
+            className={isScreenInHouseToday(typeScreen) ? 'tab-pane-in-house-today' : ''}
+            tab={t('reservation.Rates')}
+          >
             <Rate reservationDetailId={reservationDetail.id} reservationId={reservationId} />
           </TabPane>
-          <TabPane key="3" tab={t('reservation.Schedule')}>
+          <TabPane
+            key="3"
+            className={isScreenInHouseToday(typeScreen) ? 'tab-pane-in-house-today' : ''}
+            tab={t('reservation.Schedule')}
+          >
             <Schedule reservationDetailId={reservationDetail.id} reservationId={reservationId} />
           </TabPane>
-          <TabPane key="4" tab={t('reservation.Guest List')}>
+          <TabPane
+            key="4"
+            className={isScreenInHouseToday(typeScreen) ? 'tab-pane-in-house-today' : ''}
+            tab={t('reservation.Guest List')}
+          >
             <GuestList
               guests={reservationDetail.guests}
               reservationDetailId={reservationDetail.id}
               reservationId={reservationId}
             />
           </TabPane>
-          <TabPane key="5" tab={t('reservation.Transactions')}>
-            <Transaction reservationDetailId={reservationDetail.id} reservationId={reservationId} />
-          </TabPane>
+          {!isScreenInHouseToday(typeScreen) && (
+            <TabPane key="5" tab={t('reservation.Transactions')}>
+              <Transaction
+                reservationDetailId={reservationDetail.id}
+                reservationId={reservationId}
+              />
+            </TabPane>
+          )}
           <TabPane key="6" tab={t('reservation.Monthly Invoices')}>
             <MonthlyInvoice
               reservationDetailId={reservationDetail.id}
