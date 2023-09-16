@@ -1,8 +1,17 @@
+/** ***********************************
+Module Name : Monthly Invoice
+Developer Name : HanhTV
+Created Date : 26/02/2023
+Updated Date : 26/02/2023
+Main functions : Ann monthly invoice modal
+************************************ */
+
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Checkbox, Col, DatePicker, Form, message, Modal, Row, Select, Upload } from 'antd';
+import { AxiosError } from 'axios';
 import { getAPI, postAPI } from 'helpers/apiService';
-import { selectBranchInfo } from 'selectors';
+import { selectBranchInfo, selectGetReservation, selectGetReservationDetail } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -23,15 +32,16 @@ function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
   const { Option } = Select;
   const [form] = Form.useForm();
   const [descriptions, setDescriptions] = useState([]);
-  const monthFormat = 'MM-YYY';
+  const monthFormat = 'MM-YYYY';
   const branchInfo = useAppSelector(selectBranchInfo);
   const [file, setFile] = useState();
+  const reservationData = useAppSelector(selectGetReservation).data;
+  const reservationDetailInfoData = useAppSelector(selectGetReservationDetail).data;
 
   const handleButtonSubmit = () => {
     form
       .validateFields()
       .then(async values => {
-        form.resetFields();
         const formData = new FormData();
 
         if (file) {
@@ -55,10 +65,14 @@ function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
           ? message.success('Create Monthly Invoice successfully.')
           : message.error('Create Monthly Invoice failed.');
 
+        form.resetFields();
+
         setModalVisible(false);
       })
       .catch(error => {
-        message.error('Create Monthly Invoice failed.');
+        if (error instanceof AxiosError) {
+          message.error('Create Monthly Invoice failed.');
+        }
       });
   };
 
@@ -127,8 +141,8 @@ function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
       >
         <Row>
           <Col span={9} style={{ paddingRight: 15 }}>
-            <Form.Item label={t('monthlyInvoice.Folio ID.title')} name="operator_code">
-              <MInput />
+            <Form.Item label={t('monthlyInvoice.Folio ID.title')}>
+              <MInput defaultValue={reservationData.reservation_number} disabled />
             </Form.Item>
             <Form.Item
               label={t('monthlyInvoice.Type.title')}
@@ -148,8 +162,8 @@ function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
             </Form.Item>
           </Col>
           <Col span={9} style={{ paddingLeft: 15 }}>
-            <Form.Item label={t('monthlyInvoice.Guest Name.title')} name="guest_name">
-              <MInput />
+            <Form.Item label={t('monthlyInvoice.Guest Name.title')}>
+              <MInput defaultValue={reservationDetailInfoData.guest_name} disabled />
             </Form.Item>
             <Form.Item
               label={t('monthlyInvoice.Total.title')}
@@ -161,7 +175,7 @@ function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
                 },
               ]}
             >
-              <MInput />
+              <MInput placeholder="30.000" type="number" />
             </Form.Item>
           </Col>
           <Col span={6}>
