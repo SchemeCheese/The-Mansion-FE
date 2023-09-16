@@ -741,7 +741,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 </div>
                 {reservationDetailInfo.data.tax_info.map((taxInfo: any, index: number) => {
                   return (
-                    amountInfo?.total_tax[index] && (
+                    amountInfo?.total_tax[index] > 0 && (
                       <div className="checkout-card-grid">
                         <span style={gridStyleLeft}>{taxInfo.name}</span>
                         <span style={gridStyleRight}>

@@ -6,8 +6,6 @@ Updated Date : 23/11/2022
 Main functions : Reservation Detail Card
 ************************************ */
 
-import 'styles/reservation_detail_card.css';
-
 import React, { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -115,28 +113,36 @@ function ReservationDetailCard({ reservationDetail, reservationId, typeScreen }:
           )}
           <TabPane
             key="1"
-            className={isScreenInHouseToday(typeScreen) ? 'tab-pane-in-house-today' : ''}
+            style={{
+              padding: isScreenInHouseToday(typeScreen) ? '16px 15px 25px' : '',
+            }}
             tab={t('common.General Infos')}
           >
             <GeneralInfo reservationDetailId={reservationDetail.id} reservationId={reservationId} />
           </TabPane>
           <TabPane
             key="2"
-            className={isScreenInHouseToday(typeScreen) ? 'tab-pane-in-house-today' : ''}
+            style={{
+              padding: isScreenInHouseToday(typeScreen) ? '16px 15px 25px' : '',
+            }}
             tab={t('reservation.Rates')}
           >
             <Rate reservationDetailId={reservationDetail.id} reservationId={reservationId} />
           </TabPane>
           <TabPane
             key="3"
-            className={isScreenInHouseToday(typeScreen) ? 'tab-pane-in-house-today' : ''}
+            style={{
+              padding: isScreenInHouseToday(typeScreen) ? '16px 15px 25px' : '',
+            }}
             tab={t('reservation.Schedule')}
           >
             <Schedule reservationDetailId={reservationDetail.id} reservationId={reservationId} />
           </TabPane>
           <TabPane
             key="4"
-            className={isScreenInHouseToday(typeScreen) ? 'tab-pane-in-house-today' : ''}
+            style={{
+              padding: isScreenInHouseToday(typeScreen) ? '16px 15px 25px' : '',
+            }}
             tab={t('reservation.Guest List')}
           >
             <GuestList
