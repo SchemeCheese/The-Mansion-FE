@@ -56,9 +56,39 @@ import Transaction from './ReservationDetailTab/Transaction';
 const { TabPane } = Tabs;
 
 const { Option } = Select;
+const financialDetailDataSample = [
+  {
+    date: '22/07/2023',
+    description: 'Phong Junior Deluxe Double Traveloka',
+    gross_revenue: '1,012,500',
+    ta_comp: '151,875',
+    payment_method: 'VCC',
+    amount: '860,625',
+    system_fee: '26,417',
+  },
+  {
+    date: '22/07/2023',
+    description: 'Phong Junior Deluxe Double Traveloka',
+    gross_revenue: '1,012,500',
+    ta_comp: '151,875',
+    payment_method: 'VCC',
+    amount: '860,625',
+    system_fee: '26,417',
+  },
+  {
+    date: '22/07/2023',
+    description: 'Thue xe',
+    gross_revenue: '500,000',
+    ta_comp: '0',
+    payment_method: 'VNPAY',
+    amount: '500,000',
+    system_fee: '16,500',
+  },
+];
 
 interface Props {
   deleteSelectedRoom?: any;
+  financialDetailColumns?: any;
   formRef?: any;
   isCreateForm: boolean;
   onFinish: any;
@@ -83,6 +113,7 @@ interface Props {
 
 function ReservationForm({
   deleteSelectedRoom,
+  financialDetailColumns,
   formRef,
   isCreateForm,
   onFinish,
@@ -782,6 +813,93 @@ function ReservationForm({
                 >
                   <Message />
                 </TabPane>
+                {financialDetailColumns && (
+                  <TabPane
+                    key="4"
+                    style={{ padding: 20, minHeight: '61rem' }}
+                    tab={t('reservation.Financial Detail')}
+                  >
+                    <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
+                      <Table
+                        columns={financialDetailColumns}
+                        dataSource={financialDetailDataSample}
+                        pagination={false}
+                        size="small"
+                        summary={() => {
+                          return (
+                            <>
+                              <Table.Summary.Row
+                                style={{ fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.65)' }}
+                              >
+                                <Table.Summary.Cell colSpan={6} index={0}>
+                                  <div style={{ paddingLeft: 40 }}>Total Revenue</div>
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={1}>
+                                  <div style={{ textAlign: 'right', paddingRight: 80 }}>
+                                    2,525,000
+                                  </div>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                              <Table.Summary.Row
+                                style={{ fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.65)' }}
+                              >
+                                <Table.Summary.Cell colSpan={6} index={0}>
+                                  {' '}
+                                  <div style={{ paddingLeft: 40 }}> Total TA Comp. </div>
+                                </Table.Summary.Cell>
+
+                                <Table.Summary.Cell index={1}>
+                                  <div style={{ textAlign: 'right', paddingRight: 80 }}>
+                                    303,750
+                                  </div>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                              <Table.Summary.Row
+                                style={{ fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.65)' }}
+                              >
+                                <Table.Summary.Cell colSpan={6} index={0}>
+                                  <div style={{ paddingLeft: 40 }}>Total Payment System Fee</div>
+                                </Table.Summary.Cell>
+
+                                <Table.Summary.Cell index={1}>
+                                  <div style={{ textAlign: 'right', paddingRight: 80 }}>57,234</div>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                              <Table.Summary.Row style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
+                                <Table.Summary.Cell colSpan={6} index={0}>
+                                  <div style={{ paddingLeft: 40 }}>Payment System Fee (VCC)</div>
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={1}>
+                                  <div style={{ textAlign: 'right', paddingRight: 80 }}>52,834</div>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                              <Table.Summary.Row style={{ color: 'rgba(0, 0, 0, 0.65)' }}>
+                                <Table.Summary.Cell colSpan={6} index={0}>
+                                  <div style={{ paddingLeft: 40 }}>Payment System Fee (VNPAY)</div>
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={1}>
+                                  <div style={{ textAlign: 'right', paddingRight: 80 }}>4,400</div>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                              <Table.Summary.Row
+                                style={{ fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.65)' }}
+                              >
+                                <Table.Summary.Cell colSpan={6} index={0}>
+                                  <div style={{ paddingLeft: 40 }}>Net Revenue</div>{' '}
+                                </Table.Summary.Cell>
+                                <Table.Summary.Cell index={2}>
+                                  <div style={{ textAlign: 'right', paddingRight: 80 }}>
+                                    1,664,016
+                                  </div>
+                                </Table.Summary.Cell>
+                              </Table.Summary.Row>
+                            </>
+                          );
+                        }}
+                      />
+                    </Col>
+                  </TabPane>
+                )}
               </Tabs>
             </Col>
             <Col span={24} />

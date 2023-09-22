@@ -186,5 +186,10 @@
   "Select file": "Select file",
   "Reload Message": "Reload Message",
   "Delete": "Delete",
-  "Input message": "Input message"
+  "Input message": "Input message",
+  "Financial Detail": "Financial Detail",
+  "Gross Revenue": "Gross Revenue",
+  "TA Comp.": "TA Comp.",
+  "Transaction Amount": "Transaction Amount",
+  "Payment System Fee": "Payment System Fee"
 }
