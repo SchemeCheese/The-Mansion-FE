@@ -223,8 +223,6 @@ function ReservationDetail() {
     setCancelCurrentItem,
   });
 
-  const { financialDetailColumns } = useColumns();
-
   /** State */
   /** Search room Table In Modal */
   const [roomSelected, setRoomSelected] = useState<any>([]);
@@ -472,7 +470,6 @@ function ReservationDetail() {
       </Row>
       {!_.isEmpty(reservationRedux) && id && (
         <ReservationForm
-          financialDetailColumns={financialDetailColumns}
           formRef={formRef}
           isCreateForm={false}
           onFinish={onFinish}

@@ -144,17 +144,16 @@ const useColumns = (callback?: any) => {
       render: (text: string) => <div style={{ textAlign: 'right' }}>{text}</div>,
     },
     {
-      // title: t('reservation.Payment System Fee'),
       title: () => {
         return (
-          <div style={{ textAlign: 'right', paddingRight: 50 }}>
+          <div style={{ textAlign: 'right', paddingRight: 20 }}>
             {t('reservation.Payment System Fee')}
           </div>
         );
       },
       dataIndex: 'system_fee',
       with: 50,
-      render: (text: string) => <div style={{ textAlign: 'right', paddingRight: 50 }}>{text}</div>,
+      render: (text: string) => <div style={{ textAlign: 'right', paddingRight: 20 }}>{text}</div>,
     },
   ];
 
