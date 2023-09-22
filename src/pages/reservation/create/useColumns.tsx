@@ -103,6 +103,56 @@ const useColumns = (callback?: any) => {
     },
   ];
 
+  const financialDetailColumns = [
+    {
+      title: () => {
+        return <div style={{ textAlign: 'left', paddingLeft: 40 }}> {t('common.Date')}</div>;
+      },
+      dataIndex: 'date',
+      width: 100,
+      render: (text: string) => <div style={{ textAlign: 'center', paddingLeft: 40 }}>{text}</div>,
+    },
+    {
+      title: t('common.Description'),
+      dataIndex: 'description',
+      width: 150,
+    },
+    {
+      title: () => {
+        return <div style={{ textAlign: 'center' }}> {t('reservation.Gross Revenue')}</div>;
+      },
+      dataIndex: 'gross_revenue',
+      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
+    },
+    {
+      title: () => {
+        return (
+          <div style={{ textAlign: 'center', paddingRight: 20 }}> {t('reservation.TA Comp.')}</div>
+        );
+      },
+      dataIndex: 'ta_comp',
+      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
+    },
+
+    {
+      title: t('reservation.Payment Method.title'),
+      dataIndex: 'payment_method',
+    },
+    {
+      title: () => {
+        return <div style={{}}> {t('reservation.Transaction Amount')}</div>;
+      },
+      dataIndex: 'amount',
+      render: (text: string) => <div style={{ textAlign: 'center' }}>{text}</div>,
+    },
+    {
+      title: t('reservation.Payment System Fee'),
+      dataIndex: 'system_fee',
+      with: 50,
+      render: (text: string) => <div style={{ textAlign: 'right', paddingRight: 80 }}>{text}</div>,
+    },
+  ];
+
   // const selectedRoomsResultColumns = [
   //   {
   //     title: 'Checkin',
@@ -148,6 +198,7 @@ const useColumns = (callback?: any) => {
 
   return {
     roomingListColumns,
+    financialDetailColumns,
     // selectedRoomsResultColumns,
   };
 };
