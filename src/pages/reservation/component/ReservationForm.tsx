@@ -33,7 +33,7 @@ import Message from 'pages/reservation/component/ReservationDetailTab/Message';
 import CheckinModal from 'pages/reservation/create/Checkin';
 import { selectAddItem, selectDeleteItem, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
-import _ from 'underscore';
+import { isEmpty, reduce } from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 import { colors } from 'modules/theme';
@@ -57,35 +57,6 @@ import Transaction from './ReservationDetailTab/Transaction';
 const { TabPane } = Tabs;
 
 const { Option } = Select;
-const financialDetailDataSample = [
-  {
-    date: '22/07/2023',
-    description: 'Phong Junior Deluxe Double Traveloka',
-    gross_revenue: '1,012,500',
-    ta_comp: '151,875',
-    payment_method: 'VCC',
-    amount: '860,625',
-    system_fee: '26,417',
-  },
-  {
-    date: '22/07/2023',
-    description: 'Phong Junior Deluxe Double Traveloka',
-    gross_revenue: '1,012,500',
-    ta_comp: '151,875',
-    payment_method: 'VCC',
-    amount: '860,625',
-    system_fee: '26,417',
-  },
-  {
-    date: '22/07/2023',
-    description: 'Thue xe',
-    gross_revenue: '500,000',
-    ta_comp: '0',
-    payment_method: 'VNPAY',
-    amount: '500,000',
-    system_fee: '16,500',
-  },
-];
 
 interface Props {
   deleteSelectedRoom?: any;
@@ -163,7 +134,7 @@ function ReservationForm({
     setRedirectDetail(true);
   };
 
-  const totalPriceReservation = _.reduce(
+  const totalPriceReservation = reduce(
     roomTotalForm,
     function (memo, reservationDetailItem: any) {
       return memo + reservationDetailItem.actual_amount * reservationDetailItem.quantity;
@@ -613,7 +584,7 @@ function ReservationForm({
                                 }
 
                                 if (
-                                  !_.isEmpty(reservationDetailInfo) &&
+                                  !isEmpty(reservationDetailInfo) &&
                                   reservationDetailInfo.id === record.reservation_detail_id
                                 ) {
                                   nameClassRow += ' ant-table-row-selected';
@@ -698,7 +669,7 @@ function ReservationForm({
                           </Col>
                         </Row>
                       </Card>
-                      {!_.isEmpty(reservationDetailInfo) && !isCreateForm && (
+                      {!isEmpty(reservationDetailInfo) && !isCreateForm && (
                         <ReservationDetailCard
                           reservationDetail={reservationDetailInfo}
                           reservationId={reservationId}
@@ -812,11 +783,14 @@ function ReservationForm({
                 >
                   <Message />
                 </TabPane>
-                <TabPane key="4" style={{ padding: 20 }} tab={t('reservation.Financial Detail')}>
-                  <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
-                    <FinancialDetail />
-                  </Card>
-                </TabPane>
+
+                {reservationRedux.financial_details.length > 0 && (
+                  <TabPane key="4" style={{ padding: 20 }} tab={t('reservation.Financial Detail')}>
+                    <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
+                      <FinancialDetail />
+                    </Card>
+                  </TabPane>
+                )}
               </Tabs>
             </Col>
             <Col span={24} />
