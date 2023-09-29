@@ -784,7 +784,7 @@ function ReservationForm({
                   <Message />
                 </TabPane>
 
-                {reservationRedux.financial_details.length > 0 && (
+                {reservationRedux.financial_details?.length > 0 && (
                   <TabPane key="4" style={{ padding: 20 }} tab={t('reservation.Financial Detail')}>
                     <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
                       <FinancialDetail />
