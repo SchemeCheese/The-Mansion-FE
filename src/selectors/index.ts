@@ -22,6 +22,11 @@ export const selectReservationSearch = createSelector(
   reservation => reservation,
 );
 
+export const selectSearchRoom = createSelector(
+  (state: RootState) => state.searchRoom,
+  searchRoom => searchRoom,
+);
+
 export const selectCreateReservation = createSelector(
   (state: RootState) => state.createReservation,
   createReservation => createReservation,
@@ -319,4 +324,9 @@ export const selectCustomerSearch = createSelector(
 export const selectGetCustomerDetail = createSelector(
   (state: RootState) => state.getCustomerDetail,
   getCustomerDetail => getCustomerDetail,
+);
+
+export const selectGuestCheckin = createSelector(
+  (state: RootState) => state.guestCheckin,
+  guestCheckin => guestCheckin,
 );

@@ -5,6 +5,8 @@ import { actionPayload } from 'modules/helpers';
 import { ActionTypes } from 'literals';
 
 import {
+  GetReservationCheckin,
+  GetReservationCheckinResult,
   GetReservationCheckoutFromRoomNo,
   GetReservationCheckoutFromRoomNoResult,
   GuestCreate,
@@ -50,4 +52,18 @@ export const getReservationCheckoutByRoomNoActionSuccess = createAction(
 
 export const resetReservationCheckoutByRoomNoAction = createAction(
   ActionTypes.RESET_RESERVATION_DETAIL_BY_ROOM_NO_SUCCESS,
+);
+
+export const getReservationGuestCheckinAction = createAction(
+  ActionTypes.GET_RESERVATION_CHECKIN,
+  (payload: GetReservationCheckin) => actionPayload(payload),
+);
+
+export const getReservationGuestCheckinSuccessAction = createAction(
+  ActionTypes.GET_RESERVATION_CHECKIN_SUCCESS,
+  (payload: GetReservationCheckinResult) => actionPayload(payload),
+);
+
+export const resetReservationGuestCheckinAction = createAction(
+  ActionTypes.RESET_RESERVATION_CHECKIN,
 );

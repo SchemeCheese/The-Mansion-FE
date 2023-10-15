@@ -196,7 +196,7 @@ export interface CreatePaymentPayload {
   paid: Record<string, any>;
   payment_methods: Array<Record<string, any>>;
   reservation_detail_id: string;
-  sales_detail_id: Array<Record<string, any>>;
+  sales_detail_id: Array<string>;
   sales_info_id: string;
 }
 
@@ -271,6 +271,13 @@ export interface GetReservationByFolioState {
   data: Record<string, any>;
   folio: string;
   is_finish: boolean;
+}
+
+export interface GuestCheckinState {
+  data: Record<string, any>;
+  is_finish: boolean;
+  reservation_detail_id: string;
+  reservation_info_id: string;
 }
 
 export interface ReservationTypeState {
@@ -784,6 +791,7 @@ export interface RootState {
   getWaterArea: GetWaterAreaState;
   getWaterYesterday: GetWaterYesterdayState;
   github: GitHubState;
+  guestCheckin: GuestCheckinState;
   nightAudit: NightAuditState;
   noshow: NoShowState;
   notifications: NotificationsState;

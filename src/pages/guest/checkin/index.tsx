@@ -9,6 +9,8 @@ Main functions: Guest Checkin
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { QrReader } from 'react-qr-reader';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   Col,
   DatePicker,
@@ -22,13 +24,22 @@ import {
 } from 'antd';
 import moment from 'moment';
 import GuestFooter from 'pages/guest/GuestFooter';
+import { selectGuestCheckin } from 'selectors';
+import Tesseract from 'tesseract.js';
+import useTreeChanges from 'tree-changes-hook/lib';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { getReservationGuestCheckinAction, resetReservationGuestCheckinAction } from 'actions';
 
 import Icon from 'components/Icon';
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
+import { RoomInfoType } from './interface';
 import ConfirmReservationModal from './modal/ConfirmReservationModal';
 import RoomDetailModal from './modal/RoomDetailModal';
+import ScanQRCodeModal from './modal/ScanQRCodeModal';
 import SelectRoomModal from './modal/SelectRoomModal';
 
 import { useGuest } from '../useGuest';
@@ -39,8 +50,22 @@ function GuestCheckin() {
   const { t } = useTranslation();
   const { Step } = Steps;
   const [form] = Form.useForm();
-  const arrayPersonValue: Array<number> = [1, 2, 3, 4, 5];
-  const [data, setData]: any = useState('No result');
+  const [roomNote, setRoomNote] = useState<RoomInfoType>({
+    roomId: '',
+    roomNo: '',
+    roomTypeId: '',
+    specialNote: '',
+  });
+  const arrayPersonValue: Array<number> = [0, 1, 2, 3, 4, 5];
+  const checkinReservationData = useAppSelector(selectGuestCheckin);
+
+  const { changed } = useTreeChanges(checkinReservationData);
+
+  useEffect(() => {
+    if (changed('is_finish', true)) {
+      setVisibleSelectRoom(true);
+    }
+  }, [changed]);
 
   const [isNoReserved, setIsNoReserved] = useState(false);
   const [isScanQr, setIsScanQr] = useState(false);
@@ -48,9 +73,20 @@ function GuestCheckin() {
   const [isByHour, setIsByHour] = useState(false);
   const [isByNight, setIsIsByNight] = useState(false);
   const [generalInfoState, setGeneralInfoState] = useState<any>('');
+  const navigate = useNavigate();
 
-  const handleNext = () => {
-    setVisibleSelectRoom(true);
+  const handleNext = (values: any) => {
+    const data = JSON.stringify({
+      ...values,
+      checkin_date: values.checkin_date.format('YYYY-MM-DD'),
+      checkout_date: values.checkout_date.format('YYYY-MM-DD'),
+      checkin_time: values.checkin_time.format('HH:mm'),
+      checkout_time: values.checkout_time.format('HH:mm'),
+    });
+
+    localStorage.setItem('guest_checkin_booking', data);
+
+    navigate('/guest/checkin/select-room');
   };
 
   const { handleCancel } = useGuest();
@@ -82,27 +118,55 @@ function GuestCheckin() {
   };
 
   useEffect(() => {
+    const now = moment();
+
     form.setFieldsValue({
       is_no_reserved: isNoReserved,
       is_scan_qrcode: isScanQr,
-      checkin_date: moment(),
-      checkin_time: moment(),
-      checkout_date: moment(),
-      checkout_time: moment(),
-      adults: '',
-      child: '',
+      checkin_date: now,
+      checkin_time: now,
+      checkout_date: isByHour ? now : now.clone().add(1, 'day'),
+      checkout_time: isByHour ? now.clone().add(1, 'hour') : now,
+      adults: 1,
+      child: 0,
       is_by_hour: isByHour,
       is_by_night: isByNight,
     });
-  });
+
+    // Tesseract.recognize('http://localhost:3000/media/images/a.png', 'vie', {
+    //   logger: m => console.log(m),
+    // }).then(({ data: { text } }) => {
+    //   console.log(text);
+    // });
+  }, [isByHour, isByNight]);
+
   const [visibleConfirm, setVisibleConfirm] = useState(false);
   const [visibleSelectRoom, setVisibleSelectRoom] = useState(false);
   const [visibleRoomDetail, setVisibleRoomDetail] = useState(false);
+  const [visibleScanQRModal, setVisibleScanQRModal] = useState(false);
+
+  const captureQRCode = () => {
+    setVisibleScanQRModal(true);
+  };
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetReservationGuestCheckinAction());
+  }, []);
 
   return (
     <>
-      <ConfirmReservationModal setVisiable={setVisibleConfirm} visible={visibleConfirm} />
+      <ScanQRCodeModal setVisiable={setVisibleScanQRModal} visible={visibleScanQRModal} />
+      <ConfirmReservationModal
+        roomNote={roomNote}
+        setRoomNote={setRoomNote}
+        setVisiable={setVisibleConfirm}
+        visible={visibleConfirm}
+      />
       <SelectRoomModal
+        roomNote={roomNote}
+        setRoomNote={setRoomNote}
         setVisiable={setVisibleSelectRoom}
         showModalConfirm={setVisibleConfirm}
         showModalDetail={setVisibleRoomDetail}
@@ -119,21 +183,6 @@ function GuestCheckin() {
           marginBottom: 10,
         }}
       >
-        {/* <Col span={3}>
-            <QrReader
-            onResult={(result: any, error) => {
-              if (!!result) {
-                setData(result?.text);
-              }
-
-              if (!!error) {
-                console.info(error);
-              }
-            }}
-            constraints={{ facingMode: 'user' }}
-          />
-          <p>{data}</p>
-        </Col> */}
         <Col span={24}>
           <Row
             style={{
@@ -169,6 +218,7 @@ function GuestCheckin() {
                 }}
                 layout="vertical"
                 name="basic"
+                onFinish={handleNext}
                 wrapperCol={{
                   span: 23,
                 }}
@@ -234,6 +284,8 @@ function GuestCheckin() {
                                 >
                                   <span>{t('guestCheckin.Scan QR code')}</span>
                                   <div
+                                    aria-hidden="true"
+                                    onClick={captureQRCode}
                                     style={{
                                       paddingTop: '15%',
                                     }}
@@ -277,7 +329,11 @@ function GuestCheckin() {
                                 height: '100%',
                               }}
                             >
-                              <Radio checked={isByHour} onChange={onChangeByHour}>
+                              <Radio
+                                checked={isByHour}
+                                disabled={!isNoReserved}
+                                onChange={onChangeByHour}
+                              >
                                 <p
                                   style={{
                                     color: 'rgba(0, 0, 0, 0.85)',
@@ -308,7 +364,11 @@ function GuestCheckin() {
                                 height: '100%',
                               }}
                             >
-                              <Radio checked={isByNight} onChange={onChangeByNight}>
+                              <Radio
+                                checked={isByNight}
+                                disabled={!isNoReserved}
+                                onChange={onChangeByNight}
+                              >
                                 <p
                                   style={{
                                     color: 'rgba(0, 0, 0, 0.85)',
@@ -354,7 +414,7 @@ function GuestCheckin() {
                         </Form.Item>
                       </Col>
                       <Col span={8}>
-                        <Form.Item label={t('guestCheckin.Adults.title')} name="adult">
+                        <Form.Item label={t('guestCheckin.Adults.title')} name="adults">
                           <Select
                             onChange={value => handleChangeSelect(value, 'adults')}
                             style={{ width: '100%' }}
@@ -420,7 +480,7 @@ function GuestCheckin() {
         </Col>
         <Col span={24} style={{ marginTop: 25, marginBottom: 25, textAlign: 'center' }}>
           <MButton onClick={handleCancel}>{t('common.Back')}</MButton>
-          <PattonButton onClick={handleNext} style={{ marginLeft: 20 }}>
+          <PattonButton onClick={() => form.submit()} style={{ marginLeft: 20 }}>
             {t('common.Next')}
           </PattonButton>
         </Col>

@@ -3,6 +3,8 @@
 }
 .modal-room-detail .ant-modal-body {
   padding: 0 !important;
+  height: 600px;
+  overflow-x: scroll;
 }
 .modal-reservation-information .ant-modal-body {
   padding: 0 !important;

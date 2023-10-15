@@ -11,19 +11,61 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Col, Modal, Row } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
+import { formatNumber } from 'helpers';
+import { postAPI } from 'helpers/apiService';
+import { sumBy } from 'lodash';
+import moment from 'moment';
+import { selectGuestCheckin } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 import PattonButton from 'components/PattonButton';
 
+import { RoomInfoType } from '../interface';
+
 interface Props {
+  roomNote: RoomInfoType;
+  setRoomNote: (data: RoomInfoType) => void;
   setVisiable: (visible: boolean) => void;
   visible: boolean;
 }
 
-function ConfirmReservation({ setVisiable, visible }: Props) {
+function ConfirmReservationModal({ roomNote, setRoomNote, setVisiable, visible }: Props) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const handleOkSelectRoom = () => {
+  const checkinReservationState = useAppSelector(selectGuestCheckin);
+  const checkinReservationData = checkinReservationState.data;
+
+  const handleOkSelectRoom = async () => {
+    // Update room selection
+    await postAPI(
+      `api/v1/reservations/${checkinReservationData.reservation.id}/reservation-detail/${checkinReservationData.id}/book-room`,
+      {
+        rooms: [
+          {
+            reservation_equipment_id: null,
+            room_type: checkinReservationData.charges[0].equipment_type_id,
+            room_id: roomNote.roomId,
+            use_start_date: checkinReservationData.checkin,
+            use_end_date: checkinReservationData.checkout,
+          },
+        ],
+        online_reservation: true,
+        branch_code: checkinReservationData.reservation.branch_code,
+        operator_code: checkinReservationData.reservation.operator_code,
+        facility_code: checkinReservationData.reservation.facility_code,
+      },
+    );
+
+    // Update note
+    await postAPI(
+      `api/v1/reservations/${checkinReservationData.reservation.id}/reservation-detail/${checkinReservationData.id}/update-note`,
+      {
+        note: roomNote.specialNote,
+      },
+    );
+
     navigate('/guest/checkin/upload-personal-id');
   };
 
@@ -52,7 +94,7 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                 }}
               >
                 {t(
-                  'guestCheckin.Thank you for staying with us. Please select one of the available rooms below',
+                  'guestCheckin.Thank you for staying with us. Please confirm your booking confirmation as below',
                 )}
               </span>
             </p>
@@ -78,7 +120,9 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Date : </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> 20/10/1010</span>
+                  <span className="reservation-information_span-right">
+                    {moment(checkinReservationData.created_date).format('DD/MM/YYYY')}
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -87,7 +131,9 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Guest Name: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> 111 </span>
+                  <span className="reservation-information_span-right">
+                    {checkinReservationData.guest_name}
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -96,7 +142,9 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Booking Via: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> Internet </span>
+                  <span className="reservation-information_span-right">
+                    {checkinReservationData.source_ta}
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -105,7 +153,13 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Room Fee: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> 23.000 </span>
+                  <span className="reservation-information_span-right">
+                    {formatNumber(
+                      sumBy(checkinReservationData.charges, function (item: any) {
+                        return item.actual_amount;
+                      }),
+                    )}
+                  </span>
                 </Col>
               </Row>
               <Row style={{ paddingBottom: 15 }}>
@@ -114,7 +168,9 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Notes: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> Strong Wifi </span>
+                  <span className="reservation-information_span-right">
+                    {checkinReservationData.note}
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -123,7 +179,9 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Reservation No: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> 408 </span>
+                  <span className="reservation-information_span-right">
+                    {checkinReservationData.reservation_number}
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -132,7 +190,7 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Room Number: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> 14 </span>
+                  <span className="reservation-information_span-right"> {roomNote.roomNo} </span>
                 </Col>
               </Row>
               <Row>
@@ -141,7 +199,9 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Checkin Date: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> 20/10/2020 </span>
+                  <span className="reservation-information_span-right">
+                    {moment(checkinReservationData.checkin).format('DD/MM/YYYY')}
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -150,7 +210,9 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Checkout Date: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> 23/10/2020 </span>
+                  <span className="reservation-information_span-right">
+                    {moment(checkinReservationData.checkout).format('DD/MM/YYYY')}
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -159,7 +221,12 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Nights: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> 4 </span>
+                  <span className="reservation-information_span-right">
+                    {moment(checkinReservationData.checkout).diff(
+                      moment(checkinReservationData.checkin),
+                      'days',
+                    )}
+                  </span>
                 </Col>
               </Row>
               <Row>
@@ -168,7 +235,13 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
                   <span className="reservation-information_span">Guests: </span>
                 </Col>
                 <Col span={8} style={{ marginBottom: 3 }}>
-                  <span className="reservation-information_span-right"> 4 </span>
+                  <span className="reservation-information_span-right">
+                    {formatNumber(
+                      checkinReservationData.adults +
+                        checkinReservationData.child +
+                        checkinReservationData.baby,
+                    )}
+                  </span>
                 </Col>
               </Row>
             </Col>
@@ -184,7 +257,17 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
           <Row className="h-100">
             <Col span={24}>
               <Row style={{ paddingTop: 12 }}>
-                <TextArea rows={12} />
+                <TextArea
+                  onChange={e =>
+                    setRoomNote({
+                      roomId: roomNote.roomId,
+                      roomNo: roomNote.roomNo,
+                      roomTypeId: roomNote.roomTypeId,
+                      specialNote: e.target.value,
+                    })
+                  }
+                  rows={12}
+                />
               </Row>
             </Col>
           </Row>
@@ -194,4 +277,4 @@ function ConfirmReservation({ setVisiable, visible }: Props) {
   );
 }
 
-export default ConfirmReservation;
+export default ConfirmReservationModal;

@@ -92,6 +92,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       columnsDisk.push({
         title: `${item.name} (${item.price}%)`,
         dataIndex: item.description_code,
+        align: 'right',
         render: (value: any, record: any) => {
           if (
             record.price_type === 'percent' ||

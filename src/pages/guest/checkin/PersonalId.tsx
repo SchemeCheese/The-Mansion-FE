@@ -10,8 +10,16 @@ import 'styles/guest_checkin_select_room.css';
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import Webcam from 'react-webcam';
 import { Col, Radio, RadioChangeEvent, Row, Steps } from 'antd';
 import GuestFooter from 'pages/guest/GuestFooter';
+import { selectGuestCheckin } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { addItemAction } from 'actions';
 
 import Icon from 'components/Icon';
 import MButton from 'components/MButton';
@@ -29,6 +37,8 @@ function GuestCheckinPersonalId() {
   const [isBack, setIsBack] = useState(false);
 
   const { handleCancel } = useGuest();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onChangeIdentityCard = (e: RadioChangeEvent) => {
     setIsIdentityCard(e.target.checked);
@@ -50,6 +60,48 @@ function GuestCheckinPersonalId() {
   const onChangeBack = (e: RadioChangeEvent) => {
     setIsFront(!e.target.checked);
     setIsBack(e.target.checked);
+  };
+
+  const checkinReservationRedux: any = useAppSelector(selectGuestCheckin);
+  const checkinReservationData = checkinReservationRedux.data;
+
+  const handleNext = () => {
+    const transactionInfo: any = Object.values(checkinReservationData.transactions);
+    let transactionItems: any = [];
+
+    if (transactionInfo.length > 0) {
+      const transactionArray = transactionInfo[0];
+
+      transactionItems = transactionArray.items.map((item: any) => item.description_id);
+    }
+
+    const roomCharges = checkinReservationData.charges
+      .map((item: any) => {
+        return {
+          description_id: item.description_id,
+          quantity: 1,
+          normal_price: item.actual_amount,
+          sales_price: item.actual_amount,
+          storage_id: 1, // Disk A
+        };
+      })
+      .filter((item: any) => {
+        return !transactionItems.includes(item.description_id);
+      });
+
+    if (roomCharges.length > 0) {
+      dispatch(
+        addItemAction({
+          payload: {
+            items: roomCharges,
+            reservation_id: checkinReservationData.reservation.id,
+            reservation_detail_id: checkinReservationData.id,
+          },
+        }),
+      );
+    }
+
+    navigate('/guest/checkin/payment');
   };
 
   return (
@@ -131,6 +183,29 @@ function GuestCheckinPersonalId() {
                         <Icon name="ic-camera" width={25} />
                       </div>
                     </Radio>
+                    {/* <Webcam
+                      audio={false}
+                      // height={720}
+                      screenshotFormat="image/jpeg"
+                      // width={1280}
+                      // videoConstraints={{
+                      //   width: 1280,
+                      //   height: 720,
+                      //   facingMode: 'user',
+                      // }}
+                    >
+                      {({ getScreenshot }) => (
+                        <button
+                          onClick={() => {
+                            const imageSrc = getScreenshot();
+
+                            console.log('imageSrc', imageSrc);
+                          }}
+                        >
+                          Capture photo
+                        </button>
+                      )}
+                    </Webcam> */}
                   </div>
                 </Col>
                 {isIdentityCard && (
@@ -158,7 +233,7 @@ function GuestCheckinPersonalId() {
                   </Col>
                 )}
               </Row>
-              <Row style={{ maxHeight: '70vh', overflow: 'auto', paddingTop: 30 }}>
+              {/* <Row style={{ maxHeight: '70vh', overflow: 'auto', paddingTop: 30 }}>
                 <Col span={12} style={{ paddingRight: '1%' }}>
                   <div className="camera-input" style={{ display: 'grid' }}>
                     <p className="radio-label">
@@ -199,14 +274,16 @@ function GuestCheckinPersonalId() {
                     </div>
                   </div>
                 </Col>
-              </Row>
+              </Row> */}
               <Row />
             </Col>
           </Row>
         </Col>
         <Col span={24} style={{ marginTop: 25, marginBottom: 25, textAlign: 'center' }}>
           <MButton onClick={handleCancel}>{t('common.Back')}</MButton>
-          <PattonButton style={{ marginLeft: 20 }}>{t('common.Next')}</PattonButton>
+          <PattonButton onClick={handleNext} style={{ marginLeft: 20 }}>
+            {t('common.Next')}
+          </PattonButton>
         </Col>
       </Row>
       <GuestFooter />

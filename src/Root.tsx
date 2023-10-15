@@ -15,6 +15,10 @@ import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today
 import FrontDesk from 'pages/front-desk/list';
 import Guest from 'pages/guest';
 import GuestCheckin from 'pages/guest/checkin';
+import GuestCheckinBookerInfo from 'pages/guest/checkin/BookerInfo';
+import ConfirmReservation from 'pages/guest/checkin/ConfirmReservation';
+import FinishCheckin from 'pages/guest/checkin/FinishCheckin';
+import Payment from 'pages/guest/checkin/Payment';
 import GuestCheckinPersonalId from 'pages/guest/checkin/PersonalId';
 import GuestCheckinSelectRoom from 'pages/guest/checkin/SelectRoom';
 import GuestCustomerInfo from 'pages/guest/GuestCustomerInfo';
@@ -574,6 +578,58 @@ function Root() {
                 </PrivateRoute>
               }
               path="/guest/checkin/upload-personal-id"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={frontDeskBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <GuestCheckinBookerInfo />
+                </PrivateRoute>
+              }
+              path="/guest/checkin/booker-info"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={frontDeskBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <ConfirmReservation />
+                </PrivateRoute>
+              }
+              path="/guest/checkin/confirm"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={frontDeskBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <FinishCheckin />
+                </PrivateRoute>
+              }
+              path="/guest/checkin/finish"
+            />
+            <Route
+              element={
+                <PrivateRoute
+                  breadCrumb={frontDeskBreadCrum}
+                  isAuthenticated={isAuthenticated}
+                  isGuestScreen
+                  to="/"
+                >
+                  <Payment />
+                </PrivateRoute>
+              }
+              path="/guest/checkin/payment"
             />
             <Route
               element={

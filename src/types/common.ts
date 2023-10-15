@@ -29,6 +29,7 @@ export type Icons =
   | 'view'
   | 'northwing'
   | 'smoking'
+  | 'no-smoking'
   | 'checked'
   | 'ic-camera'
   | 'ic-change'
