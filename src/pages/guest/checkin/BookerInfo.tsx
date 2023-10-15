@@ -68,8 +68,8 @@ function GuestCheckinBookerInfo() {
           booker_lastname: values.last_name,
           booker_note: '',
           booker_phone_number: '',
-          booker_rank: '',
-          booker_type: '',
+          booker_rank: '3',
+          booker_type: '1',
           market_segment_id: '7',
           note: '',
           reservation_number: reservationNumberResult,
@@ -193,8 +193,8 @@ function GuestCheckinBookerInfo() {
         checkin: bookingInfo.checkin_date,
         checkout: bookingInfo.checkout_date,
         room_type: bookingInfo.room_type_id,
-        source_id: '7',
-        source_type: '25',
+        source_id: '25',
+        source_type: '7',
       }),
     );
   }, []);

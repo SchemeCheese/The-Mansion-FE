@@ -480,7 +480,11 @@ function GuestCheckin() {
         </Col>
         <Col span={24} style={{ marginTop: 25, marginBottom: 25, textAlign: 'center' }}>
           <MButton onClick={handleCancel}>{t('common.Back')}</MButton>
-          <PattonButton onClick={() => form.submit()} style={{ marginLeft: 20 }}>
+          <PattonButton
+            disabled={!(isNoReserved === true && (isByNight === true || isByHour === true))}
+            onClick={() => form.submit()}
+            style={{ marginLeft: 20 }}
+          >
             {t('common.Next')}
           </PattonButton>
         </Col>

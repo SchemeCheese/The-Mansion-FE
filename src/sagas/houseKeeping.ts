@@ -47,6 +47,7 @@ export function* postUpdateHouseKeepingSaga({
 }: ReturnType<typeof updateHouseKeepingAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     ({ success } = yield call(
       request,
@@ -56,6 +57,7 @@ export function* postUpdateHouseKeepingSaga({
         headers: headerWithAuthorization(),
         body: {
           ...payload,
+          operator_code,
         },
       },
     ));
