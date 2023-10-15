@@ -385,7 +385,7 @@ function ReservationCheckinTodayDetail() {
             {user.permission.reservation.edit && (
               <>
                 <MButton
-                  disabled={Boolean(reservationRedux.booker_email)}
+                  disabled={!reservationRedux.booker?.email_address1}
                   onClick={() => setIsSelectLanguageModalOpen(true)}
                 >
                   {t('common.Resend Email')}
