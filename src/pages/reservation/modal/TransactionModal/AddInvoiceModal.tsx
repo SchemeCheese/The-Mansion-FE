@@ -24,10 +24,16 @@ const { Dragger } = Upload;
 interface Props {
   dataInvoice?: any;
   isModalOpen: boolean;
+  setAddMonthlyInvoiceSucess: (value: boolean) => void;
   setModalVisible: (value: boolean) => void;
 }
 
-function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
+function AddInvoiceModal({
+  dataInvoice,
+  isModalOpen,
+  setAddMonthlyInvoiceSucess,
+  setModalVisible,
+}: Props) {
   const { t } = useTranslation();
   const { Option } = Select;
   const [form] = Form.useForm();
@@ -68,6 +74,7 @@ function AddInvoiceModal({ dataInvoice, isModalOpen, setModalVisible }: Props) {
         form.resetFields();
 
         setModalVisible(false);
+        setAddMonthlyInvoiceSucess(true);
       })
       .catch(error => {
         if (error instanceof AxiosError) {

@@ -1,13 +1,18 @@
 import 'styles/transaction.css';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Col, Row, Table } from 'antd';
 import { formatNumber } from 'helpers';
+import { getAPI } from 'helpers/apiService';
 import AddInvoiceModal from 'pages/reservation/modal/TransactionModal/AddInvoiceModal';
+import InvoiceDetailModal from 'pages/reservation/modal/TransactionModal/InvoiceDetailModal';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
+
+import { RootState } from 'types';
 
 interface Props {
   reservationDetailId: string;
@@ -75,7 +80,7 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
       dataIndex: 'total',
       key: 'total',
       render: (value: any, record: any) => {
-        return `${formatNumber(record.total)}VND`;
+        return `${formatNumber(record.total)} VND`;
       },
     },
     {
@@ -108,23 +113,13 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
       },
     },
   ];
+  const [data, setData] = useState<any>([]);
+  const [addMonthlyInvoiceSucess, setAddMonthlyInvoiceSucess] = useState(false);
+  const [isOpenInvoiceDetailModalVisible, setIsOpenInvoiceDetailModalVisible] = useState(false);
+  const [invoiceId, setInvoiceId] = useState();
 
-  const data: any = [
-    {
-      key: 1,
-      id: 1,
-      month: '07/2020',
-      description: 'Hóa đơn tiền điện tháng 7/2020',
-      total: '40000',
-    },
-    {
-      key: 2,
-      id: 2,
-      month: '06/2020',
-      description: 'Hóa đơn tiền điện tháng 6/2020',
-      total: '40000',
-    },
-  ];
+  const items: any = useSelector<RootState>(({ reservation }) => reservation.data);
+  const dispatch = useDispatch();
 
   const rowSelection = {
     selectedRowKeys,
@@ -139,6 +134,19 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
   const handleAddNewInvoice = () => {
     setIsOpenAddInvoiceModalVisible(true);
   };
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getAPI(
+        `api/v1/reservations/${reservationId}/reservation-detail/${reservationDetailId}/monthly-invoices`,
+      );
+
+      setData(response.data.data);
+    }
+
+    fetchData();
+    setAddMonthlyInvoiceSucess(false);
+  }, [addMonthlyInvoiceSucess]);
 
   return (
     <Row
@@ -171,11 +179,20 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
               {t('monthlyInvoice.Mark as paid')}
             </MButton>
           </Col>
-          {/* {contentList[activeTabKey]} */}
           <Table
             className="rooming-table"
             columns={columns}
             dataSource={data}
+            onRow={(record: any) => {
+              return {
+                onClick: () => {
+                  if (record.id) {
+                    setInvoiceId(record.id);
+                    setIsOpenInvoiceDetailModalVisible(true);
+                  }
+                },
+              };
+            }}
             pagination={false}
             rowSelection={rowSelection}
             size="small"
@@ -188,8 +205,16 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
           reservation_id: reservationId,
         }}
         isModalOpen={isOpenAddInvoiceModalVisible}
+        setAddMonthlyInvoiceSucess={setAddMonthlyInvoiceSucess}
         setModalVisible={setIsOpenAddInvoiceModalVisible}
       />
+      {invoiceId && (
+        <InvoiceDetailModal
+          invoiceId={invoiceId}
+          isModalOpen={isOpenInvoiceDetailModalVisible}
+          setModalVisible={setIsOpenInvoiceDetailModalVisible}
+        />
+      )}
     </Row>
   );
 }
