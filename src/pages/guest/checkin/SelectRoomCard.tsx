@@ -156,7 +156,7 @@ function SelectRoomCard({ roomInfo, roomNote, setRoomNote, showModalDetail }: Pr
             marginBottom: 8,
           }}
         >
-          {roomInfo.is_smocking ? (
+          {roomInfo.is_smoking ? (
             <>
               <Icon name="smoking" width={20} />
               <span style={{ fontSize: 14, paddingLeft: '1%' }}> {t('frontDesk.Smoking')}</span>

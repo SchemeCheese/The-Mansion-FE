@@ -6,9 +6,16 @@ Updated Date : 23/11/2022
 Main functions : Reservation List Filter
 ************************************ */
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Checkbox, Col, Input, Row, Select } from 'antd';
 import { t } from 'i18next';
+import { selectRoomTypes } from 'selectors';
+import { keys } from 'underscore';
+
+import { useAppSelector } from 'modules/hooks';
+
+import { getRoomType } from 'actions';
 
 interface Props {
   searchCondition: any;
@@ -18,7 +25,9 @@ interface Props {
 const { Option } = Select;
 
 function SelectRoomFilter({ searchCondition, setSearchCondition }: Props) {
-  const arrayPersonValue: Array<number> = [1, 2, 3, 4, 5];
+  const dispatch = useDispatch();
+
+  const { data: roomTypesData } = useAppSelector(selectRoomTypes);
 
   const searchSelect = (value: string, key: string) => {
     let valueTemporary = value;
@@ -44,34 +53,26 @@ function SelectRoomFilter({ searchCondition, setSearchCondition }: Props) {
     setSearchCondition(stateTemporary);
   };
 
+  useEffect(() => {
+    if (!roomTypesData) {
+      dispatch(getRoomType());
+    }
+  }, []);
+
   return (
     <Input.Group>
       <Row gutter={20}>
         <Col span={6}>
           <Select
+            allowClear
             onChange={value => searchSelect(value, 'room_type')}
             placeholder={t('guestCheckin.Room Type')}
             style={{ width: '100%' }}
           >
-            {arrayPersonValue.map((value: any) => {
+            {keys(roomTypesData).map((key: any) => {
               return (
-                <Option key={value} value={value}>
-                  {value}
-                </Option>
-              );
-            })}
-          </Select>
-        </Col>
-        <Col span={6}>
-          <Select
-            onChange={value => searchSelect(value, 'view')}
-            placeholder={t('guestCheckin.View')}
-            style={{ width: '100%' }}
-          >
-            {arrayPersonValue.map((value: any) => {
-              return (
-                <Option key={value} value={value}>
-                  {value}
+                <Option key={key} value={key}>
+                  {roomTypesData[key]}
                 </Option>
               );
             })}
@@ -80,17 +81,12 @@ function SelectRoomFilter({ searchCondition, setSearchCondition }: Props) {
         <Col span={6}>
           <Select
             allowClear
-            onChange={value => searchSelect(value, 'concept')}
-            placeholder={t('guestCheckin.Concept')}
+            onChange={value => searchSelect(value, 'view')}
+            placeholder={t('guestCheckin.View')}
             style={{ width: '100%' }}
           >
-            {arrayPersonValue.map((value: any) => {
-              return (
-                <Option key={value} value={value}>
-                  {value}
-                </Option>
-              );
-            })}
+            <Option value="1">Ocean View</Option>
+            <Option value="2">Mountain View</Option>
           </Select>
         </Col>
         <Col span={6} style={{ paddingLeft: '5%' }}>

@@ -7,7 +7,7 @@ import { GetWalkinRoomState } from 'types';
 export const getWalkinRoomsState = {
   room_type: '',
   room_number: '',
-  is_smocking: '',
+  is_smoking: '',
   is_searching: false,
   items: [],
   current_page: 1,
@@ -20,7 +20,7 @@ export default {
       .addCase(getWalkinRoomsAction, (draft, { payload }) => {
         draft.room_number = payload.room_number;
         draft.room_type = payload.room_type;
-        draft.is_smocking = payload.is_smocking;
+        draft.is_smoking = payload.is_smoking;
         draft.current_page = payload.current_page;
 
         draft.is_searching = true;

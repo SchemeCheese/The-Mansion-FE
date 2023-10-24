@@ -339,7 +339,7 @@ export interface GetRoomState {
 export interface GetWalkinRoomState {
   current_page: number;
   is_searching: boolean;
-  is_smocking: string;
+  is_smoking: string;
   items: Array<Record<string, any>>;
   room_number: string;
   room_type: string;
@@ -679,7 +679,7 @@ interface HouseKeepingType {
   equipment_type_id: number;
   floor: number;
   id: number;
-  is_smocking: false;
+  is_smoking: false;
   name: string;
   occupied_state: number;
   size: number;

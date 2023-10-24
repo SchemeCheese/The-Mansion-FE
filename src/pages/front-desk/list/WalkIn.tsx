@@ -32,7 +32,7 @@ function WalkIn() {
   const [roomFilter, setRoomFilter] = useState({
     room_number: '',
     room_type: '',
-    is_smocking: '',
+    is_smoking: '',
     current_page: 1,
   });
 
@@ -112,7 +112,7 @@ function WalkIn() {
             onChange={event => {
               const newState = {
                 ...roomFilter,
-                is_smocking: event.target.checked === true ? '1' : '',
+                is_smoking: event.target.checked === true ? '1' : '',
               };
 
               setRoomFilter(newState);

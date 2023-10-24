@@ -5,7 +5,7 @@ export interface HouseKeepingType {
   equipment_type_id: number;
   floor: number;
   id: number;
-  is_smocking: false;
+  is_smoking: false;
   name: string;
   occupied_state: number;
   size: number;

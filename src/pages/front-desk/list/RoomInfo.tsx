@@ -369,7 +369,7 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
               )}
             </div>
             <div style={{ paddingTop: 20, paddingBottom: 5 }}>
-              {item.is_smocking ? (
+              {item.is_smoking ? (
                 <svg
                   fill="none"
                   height="12"
@@ -441,7 +441,7 @@ function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
 
               <span style={{ paddingLeft: 6 }}>
                 {' '}
-                {item.is_smocking ? t('frontDesk.Smoking') : t('frontDesk.No Smoking')}
+                {item.is_smoking ? t('frontDesk.Smoking') : t('frontDesk.No Smoking')}
               </span>
             </div>
           </Col>

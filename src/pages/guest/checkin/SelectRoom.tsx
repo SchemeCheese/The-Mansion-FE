@@ -34,8 +34,7 @@ function GuestCheckinSelectRoom() {
   const [searchCondition, setSearchCondition] = useState({
     room_type: '',
     view: '',
-    concept: '',
-    is_smoking: false,
+    is_smoking: '',
   });
 
   const [modalDetailVisible, setModalDetailVisible] = useState(false);
@@ -74,12 +73,21 @@ function GuestCheckinSelectRoom() {
   const branchInfoSelected: any = useAppSelector(selectBranchInfo);
 
   const fetchRooms = async () => {
+    const searchQuery = new URLSearchParams({
+      ...searchCondition,
+      is_smoking: searchCondition.is_smoking ? '1' : '',
+    });
+
     const response = await getAPI(
-      `api/v1/rooms?operator_code=${branchInfoSelected.operator_code}&branch_code=${branchInfoSelected.branch_code}&facility_code=${branchInfoSelected.facility_code}&room_state=1`,
+      `api/v1/rooms?operator_code=${branchInfoSelected.operator_code}&branch_code=${branchInfoSelected.branch_code}&facility_code=${branchInfoSelected.facility_code}&room_state=1&${searchQuery}`,
     );
 
     setRoomsList(response.data.items);
   };
+
+  useEffect(() => {
+    fetchRooms();
+  }, [searchCondition]);
 
   useEffect(() => {
     fetchRooms();
@@ -142,7 +150,11 @@ function GuestCheckinSelectRoom() {
         </Col>
         <Col span={24} style={{ marginTop: 25, marginBottom: 25, textAlign: 'center' }}>
           <MButton onClick={handleCancel}>{t('common.Back')}</MButton>
-          <PattonButton onClick={handleNext} style={{ marginLeft: 20 }}>
+          <PattonButton
+            disabled={roomNote.roomId === ''}
+            onClick={handleNext}
+            style={{ marginLeft: 20 }}
+          >
             {t('common.Next')}
           </PattonButton>
         </Col>

@@ -28,7 +28,7 @@ export interface GetRoomResult {
 
 export interface SearchWalkinRoomFilter {
   current_page: number;
-  is_smocking: string;
+  is_smoking: string;
   room_number: string;
   room_type: string;
 }
