@@ -7,14 +7,19 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ExpandOutlined } from '@ant-design/icons';
 import { Col, Radio, RadioChangeEvent, Row, Spin, Steps, Table } from 'antd';
-import { formatNumber } from 'helpers';
+import { formatNumber, randomKey } from 'helpers';
 import GuestFooter from 'pages/guest/GuestFooter';
-import { selectCreatePayment, selectGuestCheckin } from 'selectors';
+import { selectCreatePayment, selectCreateQRCodeVNPayState, selectGuestCheckin } from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { addItemAction, createPaymentAction, getReservationGuestCheckinAction } from 'actions';
+import {
+  addItemAction,
+  createPaymentAction,
+  createQRCodeVNPayAction,
+  getReservationGuestCheckinAction,
+} from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -32,6 +37,10 @@ export default function Payment() {
 
   const [isPaymentSuccess, setIsPaymentSuccess] = useState(false);
 
+  const checkinReservationRedux: any = useAppSelector(selectGuestCheckin);
+  const checkinReservationData = checkinReservationRedux.data;
+  const createQRCodeVNPayData = useAppSelector(selectCreateQRCodeVNPayState);
+
   const onChangeCash = (e: RadioChangeEvent) => {
     setIsCash(e.target.checked);
     setIsEisEWallet(!e.target.checked);
@@ -47,8 +56,24 @@ export default function Payment() {
     setIsVNPay(!e.target.checked);
   };
 
-  const onChangeVNPay = () => {
-    console.log('change VNPay');
+  const onChangeVNPay = (e: RadioChangeEvent) => {
+    setIsMomo(!e.target.checked);
+    setIsVNPay(e.target.checked);
+
+    const saltKey = randomKey(5);
+
+    dispatch(
+      createQRCodeVNPayAction({
+        payload: {
+          reservation_info_id: checkinReservationData.reservation.id,
+          reservation_detail_id: checkinReservationData.id,
+          amount: amountInfo.unpaid,
+          txn_id: `CHECKIN-${checkinReservationData.id}-${saltKey}`,
+          bill_number: `CHECKIN-${checkinReservationData.id}-${saltKey}`,
+          txn_desc: `PAYMENT CHECKIN ${checkinReservationData.id}`,
+        },
+      }),
+    );
   };
 
   const paymentSummaryLabelStyle: React.CSSProperties = {
@@ -93,8 +118,6 @@ export default function Payment() {
   };
 
   const dispatch = useDispatch();
-  const checkinReservationState = useAppSelector(selectGuestCheckin);
-  const checkinReservationData: any = checkinReservationState.data;
   const amountInfo = checkinReservationData.amount_info;
 
   const paymentData = useAppSelector(selectCreatePayment);
@@ -601,9 +624,9 @@ export default function Payment() {
             </Row>
           )}
 
-          {
-            isEWallet && isVNPay && (
-              // (createQRCodeVNPayData.status === 'SUCCESS' ? (
+          {isEWallet &&
+            isVNPay &&
+            (createQRCodeVNPayData.status === 'SUCCESS' ? (
               <Row
                 style={{
                   paddingTop: 10,
@@ -622,7 +645,7 @@ export default function Payment() {
                       {' '}
                       Scan to payment
                     </p>
-                    {/* <QRCode value={createQRCodeVNPayData.result.data} /> */}
+                    <QRCode value={createQRCodeVNPayData.result.data} />
                     <p
                       style={{
                         textAlign: 'center',
@@ -638,13 +661,11 @@ export default function Payment() {
                   </div>
                 </Col>
               </Row>
-            )
-            // ) : (
-            //   <Row style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-            //     <Spin />
-            //   </Row>
-            // ))}
-          }
+            ) : (
+              <Row style={{ justifyContent: 'center', alignItems: 'center', height: '100%' }}>
+                <Spin />
+              </Row>
+            ))}
         </Col>
 
         {!isPaymentSuccess ? (
