@@ -61,7 +61,7 @@ function GuestCheckinBookerInfo() {
     dispatch(
       createReservation({
         payload: {
-          agent_info_id: '25',
+          // agent_info_id: '25',
           booker_email: values.email,
           booker_email_2: '',
           booker_firstname: values.first_name,
@@ -70,7 +70,7 @@ function GuestCheckinBookerInfo() {
           booker_phone_number: '',
           booker_rank: '3',
           booker_type: '1',
-          market_segment_id: '7',
+          // market_segment_id: '7',
           note: '',
           reservation_number: reservationNumberResult,
           rooms: [
@@ -85,6 +85,7 @@ function GuestCheckinBookerInfo() {
               charges: bookingInfo.charges,
             },
           ],
+          type: 'walkin_checkin',
         },
       }),
     );

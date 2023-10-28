@@ -17,7 +17,7 @@ export interface ReservationSearch {
 }
 
 export interface ReservationPayload {
-  agent_info_id: string;
+  agent_info_id?: string;
   booker_email: string;
   booker_email_2?: string;
   booker_firstname: string;
@@ -26,7 +26,7 @@ export interface ReservationPayload {
   booker_phone_number: string;
   booker_rank: string;
   booker_type: string;
-  market_segment_id: string;
+  market_segment_id?: string;
   no_deposit?: string;
   no_show?: string;
   note?: string;
@@ -36,6 +36,7 @@ export interface ReservationPayload {
   reservation_number: string;
   rooms: Array<Record<string, any>>;
   send_mail?: string;
+  type?: string;
 }
 
 export interface GetReservationPayload {
