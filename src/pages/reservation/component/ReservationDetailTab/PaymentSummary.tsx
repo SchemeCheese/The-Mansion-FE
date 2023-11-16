@@ -120,7 +120,7 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
     paid.forEach((p: any) => {
       p.payment_details.forEach((item: any) => {
         dataPayments.push({
-          date: moment(item.date).format('DD/MM/YYYY'),
+          date: item.date,
           payment_method: item.payment_method,
           amount: formatNumber(item.amount),
           currency: item.currency,

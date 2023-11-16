@@ -182,18 +182,20 @@ function MLayout(props: Props) {
           return item.id.toString() === branchLocal;
         });
 
-        setCurrentBranchName(facilitySelected.name);
-        setCurrentBranchId(branchInfoSelected.id.toString());
-        setCurrentFacility({
-          id: facilitySelected.id,
-          operator_code: facilitySelected.operator_code,
-          branch_code: facilitySelected.branch_code,
-          facility_code: facilitySelected.facility_code,
-          name: facilitySelected.name,
-          normal_time_check_in: facilitySelected.normal_time_check_in,
-          normal_time_check_out: facilitySelected.normal_time_check_out,
-          addition_cico_fee: branchFacilities.data.addition_cico_fee,
-        });
+        if (facilitySelected && branchInfoSelected) {
+          setCurrentBranchName(facilitySelected.name);
+          setCurrentBranchId(branchInfoSelected.id.toString());
+          setCurrentFacility({
+            id: facilitySelected.id,
+            operator_code: facilitySelected.operator_code,
+            branch_code: facilitySelected.branch_code,
+            facility_code: facilitySelected.facility_code,
+            name: facilitySelected.name,
+            normal_time_check_in: facilitySelected.normal_time_check_in,
+            normal_time_check_out: facilitySelected.normal_time_check_out,
+            addition_cico_fee: branchFacilities.data.addition_cico_fee,
+          });
+        }
       } else {
         const facilitySelected = branchFacilities.data.facilities[0];
 

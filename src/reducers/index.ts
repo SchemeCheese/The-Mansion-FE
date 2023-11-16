@@ -51,6 +51,7 @@ import getElectricPower, { getElectricPowerState } from './getElectricPower';
 import getElectricYesterday, { getElectricYesterdayState } from './getElectricYesterday';
 import getHouseKeeping, { getHouseKeepingState } from './getHouseKeeping';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
+import getMonthlyInvoice, { getMonthlyInvoiceState } from './getMonthlyInvoice';
 import notifications, { notificationsState } from './getNotification';
 import getProductType, { getProductTypeState } from './getProductType';
 import getReservation, { getReservationState } from './getReservation';
@@ -70,6 +71,7 @@ import github, { githubState } from './github';
 import guestCheckin, { guestCheckinState } from './guestCheckin';
 import nightAudit, { nightAuditState } from './nightAudit';
 import noshow, { noshowState } from './noshow';
+import paymentMonthlyInvoice, { paymentMonthlyInvoiceState } from './paymentMonthlyInvoice';
 import paymentVNPayReservationDetail, {
   paymentVNPayReservationDetailState,
 } from './paymentVNPayReservationDetail';
@@ -172,6 +174,7 @@ export const initialState = {
   notifications: notificationsState,
   noshow: noshowState,
   nightAudit: nightAuditState,
+  paymentMonthlyInvoice: paymentMonthlyInvoiceState,
   printRegistrationCardPDFReservationDetail: printRegistrationCardPDFReservationDetailState,
   printCheckinConfirmPDFReservationDetail: printCheckinConfirmPDFReservationDetailState,
   printDepositPDFReservationDetail: printDepositPDFReservationDetailState,
@@ -184,6 +187,7 @@ export const initialState = {
   getElectricPower: getElectricPowerState,
   getDeviceManager: getDeviceManagerState,
   getDurationCurve: getDurationCurveState,
+  getMonthlyInvoice: getMonthlyInvoiceState,
   paymentVNPayReservationDetail: paymentVNPayReservationDetailState,
   paymentMomoPayReservationDetail: paymentMomoPayReservationDetailState,
   getReservationCheckoutFromRoomNo: getReservationCheckoutFromRoomNoState,
@@ -254,12 +258,14 @@ export default {
   ...notifications,
   ...noshow,
   ...nightAudit,
+  ...paymentMonthlyInvoice,
   ...printRegistrationCardPDFReservationDetail,
   ...printCheckinConfirmPDFReservationDetail,
   ...printDepositPDFReservationDetail,
   ...fuel,
   ...getElectricYesterday,
   ...getHouseKeeping,
+  ...getMonthlyInvoice,
   ...getWaterYesterday,
   ...getElectricArea,
   ...getWaterArea,

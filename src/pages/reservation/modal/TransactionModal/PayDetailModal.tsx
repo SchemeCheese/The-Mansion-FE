@@ -117,7 +117,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
 
   const dataDescriptions = payment?.sale_detail.map((item: any) => {
     return {
-      date: moment(item.date).format('DD/MM/YYYY'),
+      date: item.date,
       description: item.description,
       unit_price: formatNumber(item.sales_price),
       amount: item.quantity,

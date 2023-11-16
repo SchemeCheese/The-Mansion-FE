@@ -157,3 +157,7 @@ export const reservationMonthCharge = {
   CHARGE_KIND: '5',
   DESCRIPTION_KIND: 7,
 };
+
+export const MonthlyInvoiceEndpoint = {
+  GET_MONTHLY_INVOICE: 'api/v1/reservations',
+};

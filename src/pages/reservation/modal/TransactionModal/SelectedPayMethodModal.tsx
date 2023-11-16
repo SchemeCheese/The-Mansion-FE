@@ -9,14 +9,16 @@ Main functions : Select Pay Method Modal
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Button, Col, Form, Modal, Row } from 'antd';
 import { formatNumber } from 'helpers';
+import { postAPI } from 'helpers/apiService';
 import { selectGetReservationDetail } from 'selectors';
 import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { createPaymentAction } from 'actions';
+import { createPaymentAction, paymentMonthlyInvoiceAction } from 'actions';
 
 import PaymentMethod from './PaymentMethod';
 
@@ -27,6 +29,7 @@ interface Props {
   setIsModalOpenPaySelected: (visible: boolean) => void;
   setIsModalOpenSelectedPaymentMethod: (visible: boolean) => void;
   totalAmount: any;
+  type?: string;
   visible: boolean;
 }
 
@@ -37,6 +40,7 @@ function SelectedPayMethodModal({
   setIsModalOpenPaySelected,
   setIsModalOpenSelectedPaymentMethod,
   totalAmount,
+  type,
   visible,
 }: Props) {
   const totalAmountAfterDiscount = discountAmount
@@ -50,6 +54,7 @@ function SelectedPayMethodModal({
 
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const exchangeRates = reservationDetailInfo.data.exchange_rates;
+  const { id } = useParams();
 
   useEffect(() => {
     setPaidAmount(totalAmountAfterDiscount);
@@ -83,18 +88,32 @@ function SelectedPayMethodModal({
           };
         });
 
-        dispatch(
-          createPaymentAction({
-            payload: {
-              reservation_detail_id: reservationDetailId,
-              sales_info_id: reservationDetailInfo.data.sales_info_id,
-              sales_detail_id: paySelectedRowKeys,
-              payment_methods: paymentMethods,
-              discount_amount: discountAmount ? parseInt(discountAmount, 10) : 0,
-              paid: {},
-            },
-          }),
-        );
+        if (type === 'monthly-invoice') {
+          dispatch(
+            paymentMonthlyInvoiceAction({
+              payload: {
+                reservation_info_id: id || '',
+                reservation_detail_id: reservationDetailId,
+                reservation_monthly_charge_id: paySelectedRowKeys,
+                payment_methods: paymentMethods,
+                discount_amount: discountAmount ? parseInt(discountAmount, 10) : 0,
+              },
+            }),
+          );
+        } else {
+          dispatch(
+            createPaymentAction({
+              payload: {
+                reservation_detail_id: reservationDetailId,
+                sales_info_id: reservationDetailInfo.data.sales_info_id,
+                sales_detail_id: paySelectedRowKeys,
+                payment_methods: paymentMethods,
+                discount_amount: discountAmount ? parseInt(discountAmount, 10) : 0,
+                paid: {},
+              },
+            }),
+          );
+        }
 
         setIsModalOpenSelectedPaymentMethod(false);
         setIsModalOpenPaySelected(false);
@@ -192,7 +211,7 @@ function SelectedPayMethodModal({
                   ))}
                   <Form.Item>
                     <Button
-                      key="button"
+                      disabled={totalAmount - paidAmount <= 0}
                       onClick={() => add()}
                       style={{
                         borderRadius: 4,
