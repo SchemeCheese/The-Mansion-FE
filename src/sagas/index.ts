@@ -15,6 +15,7 @@ import github from './github';
 import guest from './guest';
 import houseKeeping from './houseKeeping';
 import languageCode from './languageCode';
+import monthlyInvoice from './monthlyInvoice';
 import nightAudit from './nightAudit';
 import notifications from './notifications';
 import payment from './payment';
@@ -52,6 +53,7 @@ export default function* root() {
     fork(branchHeader),
     fork(branchs),
     fork(branchManager),
+    fork(monthlyInvoice),
     fork(notifications),
     fork(fuel),
     fork(nightAudit),

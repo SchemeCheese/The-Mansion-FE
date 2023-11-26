@@ -190,6 +190,10 @@ export const ActionTypes = keyMirror({
   GET_RESERVATION_CHECKIN: undefined,
   GET_RESERVATION_CHECKIN_SUCCESS: undefined,
   RESET_RESERVATION_CHECKIN: undefined,
+  GET_MONTHLY_INVOICE: undefined,
+  GET_MONTHLY_INVOICE_FINISH: undefined,
+  PAYMENT_MONTHLY_INVOICE: undefined,
+  PAYMENT_MONTHLY_INVOICE_SUCCESS: undefined,
 });
 
 export const STATUS: Status = {

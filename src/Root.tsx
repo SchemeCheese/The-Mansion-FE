@@ -32,7 +32,7 @@ import Report from 'pages/report/list';
 import Create from 'pages/reservation/create';
 import ReservationDetail from 'pages/reservation/detail';
 import Reservation from 'pages/reservation/list';
-import { selectUser } from 'selectors';
+import { selectFacilitesByBranch, selectUser } from 'selectors';
 import styled, { ThemeProvider } from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
 
@@ -67,6 +67,7 @@ function Root() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const user = useAppSelector(selectUser);
+  const branchFacilities: any = useAppSelector(selectFacilitesByBranch);
   const { changed } = useTreeChanges(user);
   const navigate = useNavigate();
 
@@ -87,7 +88,7 @@ function Root() {
   const reservationBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
+        {branchFacilities.data.abbreviation}
       </span>
       /
       <span
@@ -106,7 +107,7 @@ function Root() {
   const frontDeskBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
+        {branchFacilities.data.abbreviation}
       </span>
       /
       <span
@@ -125,7 +126,7 @@ function Root() {
   const dashboardBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
+        {branchFacilities.data.abbreviation}
       </span>
       /
       <span
@@ -144,7 +145,7 @@ function Root() {
   const deviceBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
+        {branchFacilities.data.abbreviation}
       </span>
       /
       <span
@@ -163,7 +164,7 @@ function Root() {
   const branchManagerBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
+        {branchFacilities.data.abbreviation}
       </span>
       /
       <span
@@ -182,7 +183,7 @@ function Root() {
   const nightAuditBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
+        {branchFacilities.data.abbreviation}
       </span>
       /
       <span
@@ -200,7 +201,7 @@ function Root() {
   const houseKeepingBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
+        {branchFacilities.data.abbreviation}
       </span>
       /
       <span
@@ -219,7 +220,7 @@ function Root() {
   const customerBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
+        {branchFacilities.data.abbreviation}
       </span>
       /
       <span
@@ -238,7 +239,7 @@ function Root() {
   const reportBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
-        TMHA
+        {branchFacilities.data.abbreviation}
       </span>
       /
       <span

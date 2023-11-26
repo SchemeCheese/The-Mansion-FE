@@ -38,7 +38,7 @@ import _, { isEmpty } from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { deleteItemAction, downloadPDFInvoiceTransaction, getReservationDetail } from 'actions';
+import { deleteItemAction, getReservationDetail } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';

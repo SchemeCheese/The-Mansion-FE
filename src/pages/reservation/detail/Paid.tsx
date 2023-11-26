@@ -16,6 +16,7 @@ import PayDetailModal from 'pages/reservation/modal/TransactionModal/PayDetailMo
 interface DataType {
   balance: string;
   date: string;
+  hidden?: boolean;
   paid: string;
   payment_method: string;
   total: string;
@@ -23,35 +24,40 @@ interface DataType {
 
 interface Props {
   items: Array<any>;
+  type?: string;
 }
 
-function Paid({ items }: Props) {
+function Paid({ items, type }: Props) {
   const { t } = useTranslation();
   const [isShowModal, setIsShowModal] = useState(false);
   const [currentItem, setCurrentItem] = useState();
 
-  const columns: ColumnsType<DataType> = [
+  const columns: any = [
     {
       title: t('common.Date'),
       dataIndex: 'date',
       key: 'date',
+      hidden: false,
     },
     {
       title: t('common.Payment Method'),
       dataIndex: 'payment_method',
       key: 'payment_method',
+      hidden: false,
     },
     {
       title: t('common.Total'),
       dataIndex: 'total',
       key: 'total',
       align: 'right',
+      hidden: false,
     },
     {
       title: t('common.Paid (VND)'),
       key: 'paid',
       dataIndex: 'paid',
       align: 'right',
+      hidden: type === 'monthly-invoice',
     },
     {
       title: t('common.Balance'),
@@ -61,8 +67,9 @@ function Paid({ items }: Props) {
       render: (text: any) => (
         <span style={{ color: text === '-' ? '#000000' : '#F5222D' }}>{text}</span>
       ),
+      hidden: false,
     },
-  ];
+  ].filter(item => !item.hidden);
 
   const data = items.map((item: any) => {
     return {

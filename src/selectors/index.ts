@@ -330,3 +330,13 @@ export const selectGuestCheckin = createSelector(
   (state: RootState) => state.guestCheckin,
   guestCheckin => guestCheckin,
 );
+
+export const selectGetMonthlyInvoices = createSelector(
+  (state: RootState) => state.getMonthlyInvoice,
+  getMonthlyInvoice => getMonthlyInvoice,
+);
+
+export const selectPaymentMonthlyInvoices = createSelector(
+  (state: RootState) => state.paymentMonthlyInvoice,
+  paymentMonthlyInvoice => paymentMonthlyInvoice,
+);

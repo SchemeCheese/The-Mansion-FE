@@ -352,6 +352,26 @@ export interface LanguageCodeState {
   items: Array<Record<string, any>>;
 }
 
+export interface MonthlyInvoiceState {
+  data: Record<string, any>;
+  is_searching: boolean;
+  reservation_detail_id: string;
+  reservation_info_id: string;
+}
+
+interface PaymentMonthlyInvoicePayload {
+  discount_amount: number;
+  payment_methods: Array<Record<string, any>>;
+  reservation_detail_id: string;
+  reservation_info_id: string;
+  reservation_monthly_charge_id: Array<Record<string, any>>;
+}
+
+export interface PaymentMonthlyInvoiceState {
+  payload: PaymentMonthlyInvoicePayload;
+  status: string;
+}
+
 export interface SearchScheduleState {
   data: Array<Record<string, any>>;
   end_date: string;
@@ -779,6 +799,7 @@ export interface RootState {
   getElectricYesterday: GetElectricYesterdayState;
   getHouseKeeping: HouseKeepingState;
   getLanguageCode: LanguageCodeState;
+  getMonthlyInvoice: MonthlyInvoiceState;
   getProductType: ProductTypeState;
   getReservation: GetReservationState;
   getReservationByFolio: GetReservationByFolioState;
@@ -797,6 +818,7 @@ export interface RootState {
   noshow: NoShowState;
   notifications: NotificationsState;
   paymentMomoPayReservationDetail: PaymentMomoPayReservationDetailState;
+  paymentMonthlyInvoice: PaymentMonthlyInvoiceState;
   paymentVNPayReservationDetail: PaymentVNPayReservationDetailState;
   printCheckinConfirmPDFReservationDetail: PrintCheckinConfirmPDFReservationDetailState;
   printDepositPDFReservationDetail: PrintDepositPDFReservationDetailState;

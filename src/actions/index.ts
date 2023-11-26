@@ -4,6 +4,7 @@ export * from './github';
 export * from './user';
 export * from './reservation';
 export * from './product';
+export * from './monthlyInvoice';
 export * from './room';
 export * from './agentInfos';
 export * from './schedule';
