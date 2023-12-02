@@ -80,7 +80,14 @@ function Room() {
   return (
     <Row className="house-keeping-room">
       {roomResultState?.map((item: any, index: number) => (
-        <Col key={item.id} lg={8} xs={24}>
+        <Col
+          key={item.id}
+          lg={8}
+          style={
+            !item.can_update_state ? { pointerEvents: 'none', opacity: '0.5' } : { opacity: '1' }
+          }
+          xs={24}
+        >
           <Card title={`${item.name} - ${item.type}`}>
             <Row>
               <Col lg={10} sm={10} style={{ textAlign: 'left' }} xs={24}>

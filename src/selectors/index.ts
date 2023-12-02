@@ -340,3 +340,8 @@ export const selectPaymentMonthlyInvoices = createSelector(
   (state: RootState) => state.paymentMonthlyInvoice,
   paymentMonthlyInvoice => paymentMonthlyInvoice,
 );
+
+export const selectUpdateHouseKeeping = createSelector(
+  (state: RootState) => state.updateHouseKeeping,
+  updateHouseKeeping => updateHouseKeeping,
+);

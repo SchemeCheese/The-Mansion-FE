@@ -10,7 +10,8 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Col, Form, Pagination, Row, Spin } from 'antd';
-import { selectHouseKeepingState } from 'selectors';
+import { selectHouseKeepingState, selectUpdateHouseKeeping } from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -22,7 +23,12 @@ import Room from 'components/Room';
 function HouseKeeping() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
   const houseKeepingData: any = useAppSelector(selectHouseKeepingState);
+  const updateHouseKeepingData: any = useAppSelector(selectUpdateHouseKeeping);
+
+  const { changed } = useTreeChanges(updateHouseKeepingData);
+
   const [searchCondition, setSearchCondition] = useState<any>({
     current_page: 1,
     per_page: 9,
@@ -31,6 +37,12 @@ function HouseKeeping() {
   useEffect(() => {
     dispatch(getHouseKeepingAction(searchCondition));
   }, []);
+
+  useEffect(() => {
+    if (changed('status', 'SUCCESS')) {
+      dispatch(getHouseKeepingAction(searchCondition));
+    }
+  }, [changed]);
 
   const onChangeCurrentPage = (page: number, perPage: number) => {
     setSearchCondition({
