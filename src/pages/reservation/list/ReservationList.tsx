@@ -38,6 +38,7 @@ function ReservationList({ type }: Props) {
     booker_info: '',
     folio_number: '',
     agent_name: '',
+    sort: '',
     status: '',
     market: '',
     source: '',
@@ -61,6 +62,9 @@ function ReservationList({ type }: Props) {
   const searchReservationData = useAppSelector(selectReservationSearch);
   const { changed: searchReservationChanged } = useTreeChanges(searchReservationData);
   const user = useAppSelector(selectUser);
+
+  const [columnSort, setColumnSort] = useState('');
+  const [orderSort, setOrderSort] = useState(undefined);
 
   useEffect(() => {
     dispatch(searchReservation(searchCondition));
@@ -184,7 +188,7 @@ function ReservationList({ type }: Props) {
     );
   };
 
-  const columnsWaitlist = [
+  const columnsWaitlist: any = [
     {
       title: t('reservation.Folio ID'),
       dataIndex: 'folio_id',
@@ -206,6 +210,8 @@ function ReservationList({ type }: Props) {
       title: t('common.Created Date'),
       dataIndex: 'created_at',
       key: 'created_at',
+      sorter: true,
+      sortOrder: columnSort === 'created_at' ? orderSort : undefined,
     },
     {
       title: t('common.Source TA'),
@@ -216,11 +222,15 @@ function ReservationList({ type }: Props) {
       title: t('reservation.Checkin'),
       dataIndex: 'checkin',
       key: 'checkin',
+      sorter: true,
+      sortOrder: columnSort === 'checkin' ? orderSort : undefined,
     },
     {
       title: t('reservation.Checkout'),
       dataIndex: 'checkout',
       key: 'checkout',
+      sorter: true,
+      sortOrder: columnSort === 'checkout' ? orderSort : undefined,
     },
     {
       title: t('common.Booker Name'),
@@ -285,6 +295,29 @@ function ReservationList({ type }: Props) {
     },
   ].filter(item => !item.hidden);
 
+  const handleChange = (pagination: any, filters: any, sorter: any) => {
+    setColumnSort(sorter.field);
+    setOrderSort(sorter.order);
+
+    let order = '';
+
+    if (sorter.order !== undefined) {
+      order = sorter.order === 'descend' ? 'desc' : 'asc';
+    }
+
+    setSearchCondition({
+      ...searchCondition,
+      sort: order !== '' ? `${sorter.field},${order}` : '',
+    });
+
+    dispatch(
+      searchReservation({
+        ...searchCondition,
+        sort: order !== '' ? `${sorter.field},${order}` : '',
+      }),
+    );
+  };
+
   return (
     <Row style={{ background: 'white', padding: 16 }}>
       {unreadMessage > 0 && (
@@ -332,6 +365,7 @@ function ReservationList({ type }: Props) {
               className="reservation-list"
               columns={columnsWaitlist}
               dataSource={convertData(items)}
+              onChange={handleChange}
               onRow={(record: any) => {
                 return {
                   onClick: () => {

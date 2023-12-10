@@ -57,19 +57,21 @@ function SelectedPayMethodModal({
   const { id } = useParams();
 
   useEffect(() => {
-    setPaidAmount(totalAmountAfterDiscount);
+    if (visible) {
+      setPaidAmount(totalAmountAfterDiscount);
 
-    form.setFieldsValue({
-      payment_methods: [
-        {
-          amount_in_vnd: formatNumber(totalAmountAfterDiscount),
-          currency_conversion_id: 2,
-          payment_amount: totalAmountAfterDiscount,
-          payment_method: '1',
-        },
-      ],
-    });
-  }, [totalAmountAfterDiscount]);
+      form.setFieldsValue({
+        payment_methods: [
+          {
+            amount_in_vnd: formatNumber(totalAmountAfterDiscount),
+            currency_conversion_id: 2,
+            payment_amount: totalAmountAfterDiscount,
+            payment_method: '1',
+          },
+        ],
+      });
+    }
+  }, [visible, totalAmountAfterDiscount]);
 
   const handleSubmitPayment = () => {
     form
@@ -77,16 +79,20 @@ function SelectedPayMethodModal({
       .then(values => {
         form.resetFields();
 
-        const paymentMethods = values.payment_methods.map((item: any) => {
-          const rate = _.find(exchangeRates, r => {
-            return r.id === item.currency_conversion_id;
-          });
+        const paymentMethods = values.payment_methods
+          .filter((item: any) => {
+            return item.payment_amount > 0;
+          })
+          .map((item: any) => {
+            const rate = _.find(exchangeRates, r => {
+              return r.id === item.currency_conversion_id;
+            });
 
-          return {
-            ...item,
-            payment_exchange_rate: rate.exchange_rate,
-          };
-        });
+            return {
+              ...item,
+              payment_exchange_rate: rate.exchange_rate,
+            };
+          });
 
         if (type === 'monthly-invoice') {
           dispatch(
@@ -148,7 +154,10 @@ function SelectedPayMethodModal({
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4, width: '111px' } }}
-      okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4, width: '111px' } }}
+      okButtonProps={{
+        style: { backgroundColor: '#1D39C4', borderRadius: 4, width: '111px' },
+        // disabled: true,
+      }}
       okText={t('common.Pay')}
       onCancel={() => setIsModalOpenSelectedPaymentMethod(false)}
       onOk={handleSubmitPayment}
@@ -197,12 +206,14 @@ function SelectedPayMethodModal({
         <Row>
           <Col span={24}>
             <Form.List name="payment_methods">
-              {(fields, { add }) => (
+              {(fields, { add, remove }) => (
                 <>
-                  {fields.map(({ key, name, ...restField }) => (
+                  {fields.map(({ key, name, ...restField }, index) => (
                     <React.Fragment key={key}>
                       <PaymentMethod
+                        canDelete={index > 0}
                         computePaidAmount={computePaidAmount}
+                        deleteRow={() => remove(name)}
                         form={form}
                         name={name}
                         restField={restField}

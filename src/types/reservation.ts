@@ -10,6 +10,7 @@ export interface ReservationSearch {
   inhouse?: string;
   market?: string;
   per_page?: string | number;
+  sort?: string;
   source?: string;
   status?: string;
   type?: string;
