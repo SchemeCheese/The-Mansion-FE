@@ -50,19 +50,21 @@ function SelectedPayMethodModalFinal({ setIsModalSelectedPaymentMethod, visible 
   }
 
   useEffect(() => {
-    setPaidAmount(totalAmountAfterDiscount);
+    if (visible) {
+      setPaidAmount(totalAmountAfterDiscount);
 
-    form.setFieldsValue({
-      payment_methods: [
-        {
-          amount_in_vnd: formatNumber(totalAmountAfterDiscount),
-          currency_conversion_id: 2,
-          payment_amount: totalAmountAfterDiscount,
-          payment_method: '1',
-        },
-      ],
-    });
-  }, [totalAmountAfterDiscount]);
+      form.setFieldsValue({
+        payment_methods: [
+          {
+            amount_in_vnd: formatNumber(totalAmountAfterDiscount),
+            currency_conversion_id: 2,
+            payment_amount: totalAmountAfterDiscount,
+            payment_method: '1',
+          },
+        ],
+      });
+    }
+  }, [visible, totalAmountAfterDiscount]);
 
   const handleSubmitPayment = () => {
     form

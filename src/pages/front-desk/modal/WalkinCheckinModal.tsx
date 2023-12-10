@@ -273,15 +273,28 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
   };
 
   useEffect(() => {
-    form.setFieldsValue({
-      checkin: moment(),
-      checkout: moment().add(1, 'days'),
-      room_type: room?.equipment_type_id.toString(),
-      room_id: room?.id.toString(),
-    });
+    if (isModalVisible) {
+      form.setFieldsValue({
+        booker_firstname: '',
+        booker_lastname: '',
+        booker_rank: undefined,
+        booker_email: '',
+        booker_phone_number: '',
+        passport_number: '',
+        date_of_issue_of_passport: undefined,
+        place_of_id: '',
+        checkin_time: moment(),
+        adult: 2,
+        child: 1,
+        checkin: moment(),
+        checkout: moment().add(1, 'days'),
+        room_type: room?.equipment_type_id.toString(),
+        room_id: room?.id.toString(),
+      });
 
-    searchRoomAction();
-  }, [room]);
+      searchRoomAction();
+    }
+  }, [isModalVisible]);
 
   return (
     <Modal
@@ -440,6 +453,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
                         ]}
                       >
                         <DatePicker
+                          disabled
                           disabledDate={disabledPastDate}
                           onChange={date => searchRoomAction()}
                           style={{
@@ -454,6 +468,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
                     <Col span={12}>
                       <Form.Item label={t('common.Checkin Time')} name="checkin_time">
                         <TimePicker
+                          disabled
                           format="HH:mm"
                           style={{
                             height: 32,

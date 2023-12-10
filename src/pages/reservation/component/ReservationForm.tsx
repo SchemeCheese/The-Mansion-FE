@@ -797,6 +797,7 @@ function ReservationForm({
             {isCreateForm && (
               <Col span={24} style={{ textAlign: 'center', marginTop: 20, marginBottom: 140 }}>
                 <MButton
+                  disabled={roomTotalForm.length === 0}
                   htmlType="submit"
                   onClick={handleSubmitAndMoreDetail}
                   style={{
