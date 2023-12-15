@@ -32,6 +32,7 @@ function PaymentMethod({ canDelete, computePaidAmount, deleteRow, form, name, re
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const exchangeRates = reservationDetailInfo.data.exchange_rates;
   const creditcardTypes = reservationDetailInfo.data.creditcard_types;
+  const { employees } = reservationDetailInfo.data;
 
   const onChangeAmountToPay = (value: any, key: any) => {
     const fields = form.getFieldsValue();
@@ -122,6 +123,7 @@ function PaymentMethod({ canDelete, computePaidAmount, deleteRow, form, name, re
               <Option value="4">Virtual Credit Card</Option>
               <Option value="5">Momo</Option>
               <Option value="6">VNPay</Option>
+              <Option value="7">Bank Transfer</Option>
               <Option value="99">Other</Option>
             </Select>
           </Form.Item>
@@ -248,7 +250,7 @@ function PaymentMethod({ canDelete, computePaidAmount, deleteRow, form, name, re
           </Col>
         </Row>
       )}
-      {/* {paymentMethod === '3' && (
+      {paymentMethod === '7' && (
         <Row>
           <Col span={6} />
           <Col span={6}>
@@ -266,7 +268,7 @@ function PaymentMethod({ canDelete, computePaidAmount, deleteRow, form, name, re
           <Col span={6} />
           <Col span={6} />
         </Row>
-      )} */}
+      )}
     </>
   );
 }
