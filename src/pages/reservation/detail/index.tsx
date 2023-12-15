@@ -259,6 +259,7 @@ function ReservationDetail() {
         payload: {
           ...formValues,
           reservation_id: id,
+          hide_room_rate: isHidenRoomRate,
           rooms: [],
         },
       }),
@@ -293,6 +294,9 @@ function ReservationDetail() {
   }, [resendEmailChanged]);
 
   useEffect(() => {
+    console.log('1111', reservationRedux);
+
+    setIsHideRoomRate(reservationRedux.hide_room_rate);
     setRoomCondition({
       ...roomCondition,
       source_type: reservationRedux.market_segment_id,
@@ -425,8 +429,8 @@ function ReservationDetail() {
           </Row>
         </Col>
         <Col span={6}>
-          <Checkbox onChange={e => setIsHideRoomRate(e.target.checked)}>
-            {t('reservation.Hide room rates in confirmation')}
+          <Checkbox checked={isHidenRoomRate} onChange={e => setIsHideRoomRate(e.target.checked)}>
+            {t('reservation.Hide room rates')}
           </Checkbox>
         </Col>
         <Col span={8} style={{ paddingRight: 20 }}>
