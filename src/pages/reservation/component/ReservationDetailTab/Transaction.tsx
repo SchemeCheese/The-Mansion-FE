@@ -227,6 +227,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           handleDeleteItem={handleDeleteItem}
           items={transactions[key].items}
           rowSelectionDisk={key.toLowerCase() === 'deposit' ? null : rowSelectionDisk}
+          tabKey={key.toLowerCase()}
         />
       );
     });

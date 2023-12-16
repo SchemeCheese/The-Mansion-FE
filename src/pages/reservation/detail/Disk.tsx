@@ -18,9 +18,10 @@ interface Props {
   handleDeleteItem: any;
   items: any;
   rowSelectionDisk: any;
+  tabKey: string;
 }
 
-function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
+function Disk({ handleDeleteItem, items, rowSelectionDisk, tabKey }: Props) {
   const { t } = useTranslation();
   const reservationDetailInfo = useAppSelector(selectGetReservationDetail);
 
@@ -79,6 +80,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
 
         return '';
       },
+      hidden: tabKey === 'deposit',
     },
     {
       title: t('common.Payment Method'),
@@ -87,22 +89,27 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
     },
   ].filter(item => !item.hidden);
 
-  reservationDetailInfo.data.tax_info.forEach((item: any, index: number) => {
-    if (items[0].tax[index] !== undefined) {
-      columnsDisk.push({
-        title: `${item.name} (${item.price}%)`,
-        dataIndex: item.description_code,
-        align: 'right',
-        render: (value: any, record: any) => {
-          if (record.price_type === 'percent' || record.description.toLowerCase() === 'discount') {
-            return '';
-          }
+  if (tabKey !== 'deposit') {
+    reservationDetailInfo.data.tax_info.forEach((item: any, index: number) => {
+      if (items[0].tax[index] !== undefined) {
+        columnsDisk.push({
+          title: `${item.name} (${item.price}%)`,
+          dataIndex: item.description_code,
+          align: 'right',
+          render: (value: any, record: any) => {
+            if (
+              record.price_type === 'percent' ||
+              record.description.toLowerCase() === 'discount'
+            ) {
+              return '';
+            }
 
-          return value;
-        },
-      });
-    }
-  });
+            return value;
+          },
+        });
+      }
+    });
+  }
 
   columnsDisk.push({
     title: '',
@@ -154,9 +161,11 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
     };
 
     // Add tax info
-    reservationDetailInfo.data.tax_info.forEach((taxInfo: any, index: number) => {
-      itemTemporary[taxInfo.description_code] = formatNumber(item.tax[index]);
-    });
+    if (tabKey !== 'deposit') {
+      reservationDetailInfo.data.tax_info.forEach((taxInfo: any, index: number) => {
+        itemTemporary[taxInfo.description_code] = formatNumber(item.tax[index]);
+      });
+    }
 
     return itemTemporary;
   });
