@@ -94,11 +94,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
         dataIndex: item.description_code,
         align: 'right',
         render: (value: any, record: any) => {
-          if (
-            record.price_type === 'percent' ||
-            record.description.toLowerCase() === 'discount' ||
-            record.description.toLowerCase() === 'deposit'
-          ) {
+          if (record.price_type === 'percent' || record.description.toLowerCase() === 'discount') {
             return '';
           }
 
@@ -113,8 +109,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
     dataIndex: 'delete',
     render: (value: any, record: any) => {
       return (
-        record.description.toLowerCase() !== 'discount' &&
-        record.description.toLowerCase() !== 'deposit' && (
+        record.description.toLowerCase() !== 'discount' && (
           <svg
             fill="none"
             height="14"
@@ -173,7 +168,7 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk }: Props) {
       dataSource={data}
       pagination={false}
       rowClassName={(record: any) => {
-        if (record.description === 'Deposit' || record.description === 'Discount') {
+        if (record.description === 'Discount') {
           return 'disabled-click';
         }
 
