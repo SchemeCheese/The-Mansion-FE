@@ -245,6 +245,12 @@ function ReservationForm({
       message.success(t('message.Delete item successfully!'));
 
       dispatch(
+        getReservation({
+          reservation_id: reservationId,
+        }),
+      );
+
+      dispatch(
         getReservationDetail({
           reservation_id: reservationId,
           reservation_detail_id: reservationDetailInfo.id,

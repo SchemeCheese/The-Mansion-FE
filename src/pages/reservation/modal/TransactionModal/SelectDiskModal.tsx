@@ -6,12 +6,18 @@ Updated Date : 23/11/2022
 Main functions : Select Disk Modal
 ************************************ */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, Modal, Select } from 'antd';
+import { getAPI } from 'helpers/apiService';
+import { selectGetReservationDetail } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 import { changeDiskAction } from 'actions';
+
+import { RootState } from 'types';
 
 interface Props {
   saleDetailIds: any;
@@ -25,6 +31,14 @@ function SelectDiskModal({ saleDetailIds, setIsModalOpen, visible }: Props) {
   const dispatch = useDispatch();
 
   const [diskSelected, setDiskSelected] = useState('1');
+  const [disks, setDisks] = useState([]);
+
+  const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
+  const reservationRedux: any = useSelector<RootState>(
+    ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
+  );
+
+  console.log('reservationDetailInfo ', reservationRedux);
 
   const handleChange = (value: string) => {
     setDiskSelected(value);
@@ -35,12 +49,25 @@ function SelectDiskModal({ saleDetailIds, setIsModalOpen, visible }: Props) {
     dispatch(
       changeDiskAction({
         payload: {
+          reservation_detail_id: reservationDetailInfo.data.id,
           sale_detail_ids: saleDetailIds,
           storage_id: diskSelected,
         },
       }),
     );
   };
+
+  useEffect(() => {
+    async function getDisks() {
+      const response = await getAPI(
+        `api/v1/get-disk?operator_code=${reservationRedux.operator_code}&branch_code=${reservationRedux.branch_code}&facility_code=${reservationRedux.facility_code}`,
+      );
+
+      setDisks(response.data);
+    }
+
+    getDisks();
+  }, []);
 
   return (
     <Modal
@@ -55,9 +82,9 @@ function SelectDiskModal({ saleDetailIds, setIsModalOpen, visible }: Props) {
       <Form layout="vertical">
         <Form.Item label={t('paySelected.Select Disk')}>
           <Select defaultValue="A" onChange={handleChange}>
-            <Option value="1">A</Option>
-            <Option value="2">B</Option>
-            <Option value="3">C</Option>
+            {Object.keys(disks).map((key: any) => {
+              return <Option value={key}>{disks[key]}</Option>;
+            })}
           </Select>
         </Form.Item>
       </Form>

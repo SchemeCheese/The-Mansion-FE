@@ -6,6 +6,7 @@ import { ChangeDiskState } from 'types';
 
 export const changeDiskState = {
   payload: {
+    reservation_detail_id: '',
     sale_detail_ids: [],
     storage_id: '',
   },

@@ -124,6 +124,7 @@ export interface UpdateGeneralInfoPayload {
 }
 
 export interface ChangeDiskPayload {
+  reservation_detail_id: string;
   sale_detail_ids: Array<Record<string, any>>;
   storage_id: string | number;
 }

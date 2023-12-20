@@ -419,7 +419,7 @@ function ReservationInhouseTodayDetail() {
         </Col>
         <Col span={6}>
           <Checkbox onChange={e => setIsHideRoomRate(e.target.checked)}>
-            {t('reservation.Hide room rates in confirmation')}
+            {t('reservation.Hide room rates')}
           </Checkbox>
         </Col>
         <Col span={8} style={{ paddingRight: 20 }}>
