@@ -106,6 +106,7 @@ function ReservationList({ type }: Props) {
           booker_email: item.booker.email,
           phone: item.booker.phone_number,
           total_room: item.room_total,
+          room_no: item.assignedRooms,
         };
       });
     }
@@ -231,6 +232,40 @@ function ReservationList({ type }: Props) {
       key: 'checkout',
       sorter: true,
       sortOrder: columnSort === 'checkout' ? orderSort : undefined,
+    },
+    {
+      title: t('reservation.Room No'),
+      dataIndex: 'room_no',
+      key: 'room_no',
+      render: (text: string, record: any) => {
+        if (record.assignedRooms === '') {
+          return (
+            <div
+              style={{
+                textAlign: 'center',
+                color: 'rgba(0, 0, 0, 0.65)',
+              }}
+            >
+              -
+            </div>
+          );
+        }
+
+        return (
+          <div
+            style={{
+              width: 70,
+              textAlign: 'center',
+              color: 'rgba(0, 0, 0, 0.65)',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+            }}
+          >
+            {text}
+          </div>
+        );
+      },
     },
     {
       title: t('common.Booker Name'),
