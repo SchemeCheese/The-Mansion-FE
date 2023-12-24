@@ -103,7 +103,7 @@ function ReservationRoomList({ type }: Props) {
       title: t('common.Room No'),
       dataIndex: 'room_no',
       key: 'room_no',
-      hidden: type !== 'inhouse_today' && type !== 'checkout_today',
+      // hidden: type !== 'inhouse_today' && type !== 'checkout_today',
     },
     {
       title: t('reservation.Folio ID'),

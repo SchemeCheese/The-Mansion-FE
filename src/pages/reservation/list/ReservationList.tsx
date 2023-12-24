@@ -242,6 +242,7 @@ function ReservationList({ type }: Props) {
           return (
             <div
               style={{
+                width: 70,
                 textAlign: 'center',
                 color: 'rgba(0, 0, 0, 0.65)',
               }}
