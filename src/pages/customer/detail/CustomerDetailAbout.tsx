@@ -171,7 +171,11 @@ function CustomerDetailAbout() {
             >
               <Select
                 allowClear
+                filterOption={(input, option: any) =>
+                  option.props.children.toLowerCase().includes(input.toLowerCase())
+                }
                 placeholder={t('customerDetail.Favourite Room Types 1.placeholder')}
+                showSearch
                 style={{ width: '100%' }}
               >
                 {getRoomsData.items?.map((item: any) => {
@@ -183,7 +187,11 @@ function CustomerDetailAbout() {
             <Form.Item label={t('customerDetail.Pillow Type.title')} name="pillow_type">
               <Select
                 allowClear
+                filterOption={(input, option: any) =>
+                  option.props.children.toLowerCase().includes(input.toLowerCase())
+                }
                 placeholder={t('customerDetail.Pillow Type.placeholder')}
+                showSearch
                 style={{ width: '100%' }}
               >
                 {customerConfig &&
@@ -233,7 +241,11 @@ function CustomerDetailAbout() {
             >
               <Select
                 allowClear
+                filterOption={(input, option: any) =>
+                  option.props.children.toLowerCase().includes(input.toLowerCase())
+                }
                 placeholder={t('customerDetail.Favourite Room Types 2.placeholder')}
+                showSearch
                 style={{ width: '100%' }}
               >
                 {getRoomsData.items?.map((item: any) => {

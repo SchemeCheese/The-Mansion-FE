@@ -536,7 +536,14 @@ function CreateGuestModal({
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('common.Nationality.title')} name="nationality">
-                      <Select allowClear placeholder={t('common.Nationality.placeholder')}>
+                      <Select
+                        allowClear
+                        filterOption={(input, option: any) =>
+                          option.props.children.toLowerCase().includes(input.toLowerCase())
+                        }
+                        placeholder={t('common.Nationality.placeholder')}
+                        showSearch
+                      >
                         {countries?.map((country: any) => (
                           <Option value={country.id.toString()}>{country.name}</Option>
                         ))}
@@ -588,7 +595,13 @@ function CreateGuestModal({
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('common.Language')} name="language">
-                      <Select placeholder="Select Language">
+                      <Select
+                        filterOption={(input, option: any) =>
+                          option.props.children.toLowerCase().includes(input.toLowerCase())
+                        }
+                        placeholder="Select Language"
+                        showSearch
+                      >
                         {languageCodeData.items?.map((item: any) => {
                           return <Option value={item.id}>{item.name}</Option>;
                         })}
@@ -667,7 +680,13 @@ function CreateGuestModal({
 
                   <Col span={8}>
                     <Form.Item label={t('guest.Preferred Room Type 1')} name="favorite_equipment1">
-                      <Select placeholder="Select prefred room">
+                      <Select
+                        filterOption={(input, option: any) =>
+                          option.props.children.toLowerCase().includes(input.toLowerCase())
+                        }
+                        placeholder="Select prefred room"
+                        showSearch
+                      >
                         {getRoomsData.items?.map((item: any) => {
                           return <Option value={item.id}>{item.name}</Option>;
                         })}
@@ -676,7 +695,13 @@ function CreateGuestModal({
                   </Col>
                   <Col span={8}>
                     <Form.Item label={t('guest.Preferred Room Type 2')} name="favorite_equipment2">
-                      <Select placeholder="Select prefred room">
+                      <Select
+                        filterOption={(input, option: any) =>
+                          option.props.children.toLowerCase().includes(input.toLowerCase())
+                        }
+                        placeholder="Select prefred room"
+                        showSearch
+                      >
                         {getRoomsData.items?.map((item: any) => {
                           return <Option value={item.id}>{item.name}</Option>;
                         })}

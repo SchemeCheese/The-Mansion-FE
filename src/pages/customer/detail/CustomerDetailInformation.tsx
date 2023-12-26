@@ -303,7 +303,11 @@ function CustomerDetailInformation() {
               <Form.Item label={t('customerDetail.Nationality.title')} name="nationality">
                 <Select
                   allowClear
+                  filterOption={(input, option: any) =>
+                    option.props.children.toLowerCase().includes(input.toLowerCase())
+                  }
                   placeholder={t('customerDetail.Nationality.placeholder')}
+                  showSearch
                   style={{ width: '100%' }}
                 >
                   {customerConfig &&
