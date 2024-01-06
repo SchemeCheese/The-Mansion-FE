@@ -103,7 +103,6 @@ function ReservationRoomList({ type }: Props) {
       title: t('common.Room No'),
       dataIndex: 'room_no',
       key: 'room_no',
-      // hidden: type !== 'inhouse_today' && type !== 'checkout_today',
     },
     {
       title: t('reservation.Folio ID'),
@@ -114,7 +113,7 @@ function ReservationRoomList({ type }: Props) {
       title: t('common.Status'),
       dataIndex: 'status',
       key: 'status',
-      hidden: type !== 'checkin_today',
+      hidden: type === 'inhouse_today',
     },
     {
       title: t('common.Created Date'),
@@ -126,7 +125,6 @@ function ReservationRoomList({ type }: Props) {
       title: t('common.Source TA'),
       dataIndex: 'source',
       key: 'source',
-      hidden: type !== 'checkin_today',
     },
     {
       title: t('common.Booker Name'),
@@ -137,6 +135,7 @@ function ReservationRoomList({ type }: Props) {
       title: t('common.Phone'),
       dataIndex: 'booker_phone',
       key: 'booker_phone',
+      hidden: type !== 'checkin_today',
     },
     {
       title: t('reservation.Email.title'),
@@ -155,9 +154,7 @@ function ReservationRoomList({ type }: Props) {
       key: 'checkout',
     },
     {
-      title: () => {
-        return <div style={{ textAlign: 'center' }}>{t('common.Total Guest')}</div>;
-      },
+      title: <div style={{ textAlign: 'center' }}>{t('common.Total Guest')}</div>,
       dataIndex: 'total_guest',
       key: 'total_guest',
       render: (text: string) => (
@@ -166,9 +163,7 @@ function ReservationRoomList({ type }: Props) {
       hidden: type !== 'checkin_today',
     },
     {
-      title: () => {
-        return <div style={{ textAlign: 'center' }}>{t('common.Total Room')}</div>;
-      },
+      title: <div style={{ textAlign: 'center' }}>{t('common.Total Room')}</div>,
       dataIndex: 'total_room',
       key: 'total_room',
       render: (text: string) => (
@@ -177,9 +172,7 @@ function ReservationRoomList({ type }: Props) {
       hidden: type !== 'checkin_today',
     },
     {
-      title: () => {
-        return <div style={{ textAlign: 'center' }}>{t('common.Guest')}</div>;
-      },
+      title: <div style={{ textAlign: 'center' }}>{t('common.Guest')}</div>,
       dataIndex: 'total_guest',
       key: 'total_guest',
       render: (text: string) => (
@@ -188,7 +181,7 @@ function ReservationRoomList({ type }: Props) {
       hidden: type === 'checkin_today',
     },
     {
-      title: t('common.Total Amount'),
+      title: <div style={{ textAlign: 'right', paddingRight: 20 }}>{t('common.Total Amount')}</div>,
       dataIndex: 'total_amount',
       key: 'total_amount',
       render: (text: number) => (
@@ -199,7 +192,7 @@ function ReservationRoomList({ type }: Props) {
       hidden: type !== 'inhouse_today' && type !== 'checkout_today',
     },
     {
-      title: t('common.Paid'),
+      title: <div style={{ textAlign: 'right', paddingRight: 20 }}>{t('common.Paid')}</div>,
       dataIndex: 'paid',
       key: 'paid',
       render: (text: number) => (
@@ -210,7 +203,7 @@ function ReservationRoomList({ type }: Props) {
       hidden: type !== 'inhouse_today' && type !== 'checkout_today',
     },
     {
-      title: t('common.Remain'),
+      title: <div style={{ textAlign: 'right', paddingRight: 20 }}>{t('common.Remain')}</div>,
       dataIndex: 'remain',
       key: 'remain',
       render: (text: number) => (
@@ -221,17 +214,13 @@ function ReservationRoomList({ type }: Props) {
       hidden: type !== 'inhouse_today' && type !== 'checkout_today',
     },
     {
-      title: () => {
-        return <div style={{ textAlign: 'center' }}>{t('common.Notes')}</div>;
-      },
+      title: <div style={{ textAlign: 'center' }}>{t('common.Notes')}</div>,
       dataIndex: 'notes',
       key: 'notes',
       hidden: type === 'checkin_today',
     },
     {
-      title: () => {
-        return <div style={{ textAlign: 'center' }}>{t('common.Alert')}</div>;
-      },
+      title: <div style={{ textAlign: 'center' }}>{t('common.Alert')}</div>,
       dataIndex: 'alert',
       key: 'alert',
       render: (text: string, record: any) => {

@@ -31,8 +31,6 @@ import { useAppSelector } from 'modules/hooks';
 import {
   getReservation,
   getReservationDetail,
-  paymentMomoPayReservationDetail,
-  paymentVNPayReservationDetail,
   resendEmailReservationAction,
   resetReservation,
   resetReservationDetail,
@@ -294,8 +292,6 @@ function ReservationDetail() {
   }, [resendEmailChanged]);
 
   useEffect(() => {
-    console.log('1111', reservationRedux);
-
     setIsHideRoomRate(reservationRedux.hide_room_rate);
     setRoomCondition({
       ...roomCondition,
@@ -429,9 +425,31 @@ function ReservationDetail() {
           </Row>
         </Col>
         <Col span={6}>
-          <Checkbox checked={isHidenRoomRate} onChange={e => setIsHideRoomRate(e.target.checked)}>
-            {t('reservation.Hide room rates')}
-          </Checkbox>
+          <div>
+            <Checkbox checked={isHidenRoomRate} onChange={e => setIsHideRoomRate(e.target.checked)}>
+              {t('reservation.Hide room rates')}
+            </Checkbox>
+          </div>
+          {reservationRedux.pay_at_ota && (
+            <div style={{ paddingTop: 10 }}>
+              <Checkbox
+                checked={reservationRedux.pay_at_ota}
+                onChange={e => setIsHideRoomRate(e.target.checked)}
+              >
+                {t('reservation.Pay at OTA')}
+              </Checkbox>
+            </div>
+          )}
+          {reservationRedux.pay_at_hotel && (
+            <div style={{ paddingTop: 10 }}>
+              <Checkbox
+                checked={reservationRedux.pay_at_hotel}
+                onChange={e => setIsHideRoomRate(e.target.checked)}
+              >
+                {t('reservation.Pay at hotel')}
+              </Checkbox>
+            </div>
+          )}
         </Col>
         <Col span={8} style={{ paddingRight: 20 }}>
           <Row>

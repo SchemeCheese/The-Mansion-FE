@@ -99,7 +99,7 @@ function PaymentMethod({ canDelete, computePaidAmount, deleteRow, form, name, re
               </label>
             }
             name={[name, 'payment_amount']}
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: 'Please input payment amount!' }]}
           >
             <Input
               id="amount-to-pay"
@@ -114,7 +114,7 @@ function PaymentMethod({ canDelete, computePaidAmount, deleteRow, form, name, re
             initialValue="1"
             label={t('selectedPayMethod.Payment Method.title')}
             name={[name, 'payment_method']}
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: 'Please select payment method!' }]}
           >
             <Select onChange={(value: string) => setPaymentMethod(value)}>
               <Option value="1">Cash</Option>
@@ -134,7 +134,7 @@ function PaymentMethod({ canDelete, computePaidAmount, deleteRow, form, name, re
             initialValue={2}
             label={t('selectedPayMethod.Currency.title')}
             name={[name, 'currency_conversion_id']}
-            rules={[{ required: true }]}
+            rules={[{ required: true, message: 'Please select currency conversion!' }]}
           >
             <Select onChange={value => onChangeCurrency(value, restField.fieldKey)}>
               {exchangeRates?.map((item: any) => {
@@ -210,6 +210,7 @@ function PaymentMethod({ canDelete, computePaidAmount, deleteRow, form, name, re
             <Form.Item
               label={t('selectedPayMethod.Credit Card Type.title')}
               name={[name, 'creditcard_type']}
+              rules={[{ required: true, message: 'Please select card type!' }]}
             >
               <Select placeholder={t('common.Select Type')}>
                 {creditcardTypes.map((cardType: any) => {
