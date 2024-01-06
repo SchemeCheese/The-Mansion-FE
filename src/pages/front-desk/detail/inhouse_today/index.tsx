@@ -418,9 +418,25 @@ function ReservationInhouseTodayDetail() {
           </Row>
         </Col>
         <Col span={6}>
-          <Checkbox onChange={e => setIsHideRoomRate(e.target.checked)}>
-            {t('reservation.Hide room rates')}
-          </Checkbox>
+          <div>
+            <Checkbox checked={isHidenRoomRate} onChange={e => setIsHideRoomRate(e.target.checked)}>
+              {t('reservation.Hide room rates')}
+            </Checkbox>
+          </div>
+          {reservationRedux.pay_at && reservationRedux.pay_at.includes('hotel') && (
+            <div style={{ paddingTop: 10 }}>
+              <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
+                {t('reservation.Pay at hotel')}
+              </Checkbox>
+            </div>
+          )}
+          {reservationRedux.pay_at && reservationRedux.pay_at.includes('ota') && (
+            <div style={{ paddingTop: 10 }}>
+              <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
+                {t('reservation.Pay at OTA')}
+              </Checkbox>
+            </div>
+          )}
         </Col>
         <Col span={8} style={{ paddingRight: 20 }}>
           <Row>

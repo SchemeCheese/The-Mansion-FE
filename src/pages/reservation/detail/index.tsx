@@ -430,23 +430,17 @@ function ReservationDetail() {
               {t('reservation.Hide room rates')}
             </Checkbox>
           </div>
-          {reservationRedux.pay_at_ota && (
+          {reservationRedux.pay_at && reservationRedux.pay_at.includes('hotel') && (
             <div style={{ paddingTop: 10 }}>
-              <Checkbox
-                checked={reservationRedux.pay_at_ota}
-                onChange={e => setIsHideRoomRate(e.target.checked)}
-              >
-                {t('reservation.Pay at OTA')}
+              <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
+                {t('reservation.Pay at hotel')}
               </Checkbox>
             </div>
           )}
-          {reservationRedux.pay_at_hotel && (
+          {reservationRedux.pay_at && reservationRedux.pay_at.includes('ota') && (
             <div style={{ paddingTop: 10 }}>
-              <Checkbox
-                checked={reservationRedux.pay_at_hotel}
-                onChange={e => setIsHideRoomRate(e.target.checked)}
-              >
-                {t('reservation.Pay at hotel')}
+              <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
+                {t('reservation.Pay at OTA')}
               </Checkbox>
             </div>
           )}
