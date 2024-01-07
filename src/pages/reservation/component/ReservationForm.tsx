@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ExclamationCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import {
+  Alert,
   Card,
   Checkbox,
   Col,
@@ -260,8 +261,18 @@ function ReservationForm({
   }, [deleteItemChanged]);
 
   const canCheckin = selectedRows?.every((item: any) => {
-    return item.can_checkin === true;
+    return item.can_checkin.is_pass === true;
   });
+
+  const cannotCheckinMessage = () => {
+    for (const item of selectedRows) {
+      if (!item.can_checkin.is_pass) {
+        return item.can_checkin.message;
+      }
+    }
+
+    return '';
+  };
 
   return (
     <>
@@ -556,6 +567,13 @@ function ReservationForm({
                               >
                                 {t('common.Checkin')}
                               </PattonButton>
+                            )}
+                            {type === 'checkin_today' && !canCheckin && (
+                              <Alert
+                                banner
+                                message={`Cannot checkin. ${cannotCheckinMessage()}`}
+                                style={{ marginTop: 10 }}
+                              />
                             )}
                           </Col>
                           <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>

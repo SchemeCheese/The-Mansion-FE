@@ -11,7 +11,7 @@ import 'styles/transaction.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, Input, message, Modal, Radio, RadioChangeEvent, Row, Space } from 'antd';
+import { Alert, Card, Col, Input, message, Modal, Radio, RadioChangeEvent, Row, Space } from 'antd';
 import { formatNumber, headerWithAuthorization } from 'helpers';
 import moment from 'moment';
 import Disk from 'pages/reservation/detail/Disk';
@@ -869,7 +869,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
             <Col span={12}>
               {type === 'checkout_today' ? (
                 <PattonButton
-                  disabled={!reservationDetailInfo.data.can_checkout}
+                  disabled={!reservationDetailInfo.data.can_checkout.is_pass}
                   onClick={() => {
                     if (
                       moment().isAfter(moment(branchInfoSelected.normal_time_check_in, 'HH:mm:ss'))
@@ -904,6 +904,14 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 setIsModalOpenSelectedPaymentMethod={setIsModalOpenSelectedPaymentMethod}
                 totalAmount={totalAmount}
                 visible={isModalOpenSelectedPaymentMethod}
+              />
+            </Col>
+          )}
+          {!reservationDetailInfo.data.can_checkout.is_pass && (
+            <Col span={24} style={{ paddingTop: 10 }}>
+              <Alert
+                banner
+                message={`${reservationDetailInfo.data.can_checkout.message}. Cannot checkout this booking`}
               />
             </Col>
           )}
