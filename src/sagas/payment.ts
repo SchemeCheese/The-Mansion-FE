@@ -12,6 +12,8 @@ import {
   createQRCodeVNPayAction,
   createQRCodeVNPaySuccessAction,
   logOut,
+  updatePaymentDetail,
+  updatePaymentDetailSuccess,
 } from 'actions';
 
 export function* postCreatePaymentSaga({ payload }: ReturnType<typeof createPaymentAction>) {
@@ -95,7 +97,44 @@ export function* postCreateQRCodeVNPaySaga({
   }
 }
 
+export function* postUpdatePaymentDetailSaga({ payload }: ReturnType<typeof updatePaymentDetail>) {
+  try {
+    let success = '';
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(PaymentEndpoint.UPDATE_PAYMENT_DETAIL)}/${
+        payload.payload.payment_detail_id
+      }/update`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(updatePaymentDetailSuccess());
+    } else {
+      message.error('Update Payment Detail Failed!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      message.error('Update Payment Detail Failed!');
+    }
+  }
+}
+
 export default function* root() {
   yield all([takeLatest(ActionTypes.PAYMENT_CREATE, postCreatePaymentSaga)]);
   yield all([takeLatest(ActionTypes.CREATE_QRCODE_VNPAY, postCreateQRCodeVNPaySaga)]);
+  yield all([takeLatest(ActionTypes.UPDATE_PAYMENT_DETAIL, postUpdatePaymentDetailSaga)]);
 }

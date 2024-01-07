@@ -524,6 +524,7 @@ function SelectRoomModal({
   return (
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
+      className="fit-modal"
       destroyOnClose
       okButtonProps={{ style: { backgroundColor: '#1D39C4' }, disabled: roomSelected.length === 0 }}
       okText={t('common.Save')}

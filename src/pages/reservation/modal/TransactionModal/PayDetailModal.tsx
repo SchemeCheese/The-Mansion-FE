@@ -6,7 +6,7 @@ Updated Date : 04/06/2023
 Main functions : Payment Detail Modal
 ************************************ */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import {
@@ -14,6 +14,7 @@ import {
   Col,
   Form,
   Input,
+  message,
   Modal,
   Radio,
   RadioChangeEvent,
@@ -21,17 +22,25 @@ import {
   Select,
   Space,
   Table,
+  Upload,
+  UploadFile,
+  UploadProps,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
-import { selectGetReservationDetail } from 'selectors';
+import { selectGetReservationDetail, selectUpdatePaymentDetail } from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { downloadPDFInvoiceTransaction } from 'actions';
+import { FileEndpoint } from 'config';
+
+import { downloadPDFInvoiceTransaction, getReservationDetail, updatePaymentDetail } from 'actions';
 
 import MButton from 'components/MButton';
+
+const { Dragger } = Upload;
 
 interface Props {
   payment: any;
@@ -58,8 +67,9 @@ interface DataTypePayment {
 
 function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
   const { t } = useTranslation();
+  const [vccImages, setVccImages] = useState<UploadFile[]>([]);
   const { Option } = Select;
-
+  const [vccStatus, setVccStatus] = useState(1);
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const { amount_info: amountInfo } = reservationDetailInfo.data;
 
@@ -127,6 +137,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
 
   const dataPayments = payment?.payment_details.map((item: any) => {
     return {
+      id: item.id,
       date: moment(item.date).format('DD/MM/YYYY'),
       payment_method: item.payment_method,
       amount: formatNumber(item.amount),
@@ -135,6 +146,27 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
       amount_in_vnd: formatNumber(item.amount_in_vn),
     };
   });
+  const updatePaymentDetailData = useAppSelector(selectUpdatePaymentDetail);
+  const { changed } = useTreeChanges(updatePaymentDetailData);
+
+  useEffect(() => {
+    if (payment?.payment_details.length > 0) {
+      const fileListTemporary = payment?.payment_details[0].vcc_images.map((file: any) => {
+        return {
+          uid: file.id,
+          name: file.name,
+          status: 'done',
+          url: file.url,
+          file_id: file.id,
+        };
+      });
+
+      setVccImages(fileListTemporary);
+      setVccStatus(payment?.payment_details[0].vcc_status);
+    } else {
+      setVccImages([]);
+    }
+  }, [payment]);
 
   const handleChangePaySelected = (value: string) => {
     console.log(`selected ${value}`);
@@ -142,6 +174,40 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
 
   const handleClickPayBalance = () => {
     console.log(`handleClickPayBalance`);
+  };
+
+  useEffect(() => {
+    if (changed('status', 'SUCCESS')) {
+      message.success('Update payment detail successfully!');
+
+      dispatch(
+        getReservationDetail({
+          reservation_id: reservationDetailData.reservation_id ?? '',
+          reservation_detail_id: reservationDetailData.reservation_detail_id ?? '',
+        }),
+      );
+    }
+  }, [changed]);
+
+  const onUpdate = (id: any) => {
+    const fileContents = vccImages.map((item: any) => {
+      return {
+        file_id: item.file_id,
+        data: item.xhr ? JSON.parse(item.xhr.responseText).fileName : null,
+      };
+    });
+
+    dispatch(
+      updatePaymentDetail({
+        payload: {
+          files: fileContents,
+          vcc_status: vccStatus,
+          payment_detail_id: id,
+        },
+      }),
+    );
+
+    setIsModalOpen(false);
   };
 
   const [isSelectDownloadInvoiceModalOpen, setIsSelectDownloadInvoiceModalOpen] = useState(false);
@@ -172,6 +238,13 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
     return null;
   }
 
+  const onChangeVccStatus = (e: RadioChangeEvent) => {
+    setVccStatus(e.target.value);
+  };
+
+  const handleFilesChange = ({ file: currentFile, fileList: newFileList }: any) =>
+    setVccImages(newFileList);
+
   return (
     <>
       <Modal
@@ -196,6 +269,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
 
       <Modal
         bodyStyle={{ backgroundColor: '#F0F2F5' }}
+        className="fit-modal"
         footer={[
           <Button
             onClick={handleClickPayBalance}
@@ -210,6 +284,13 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
           >
             {t('payDetail.Pay Balance')}
           </Button>,
+          <MButton
+            onClick={() => onUpdate(payment.payment_details[0].id)}
+            style={{ backgroundColor: '#1D39C4', borderRadius: 4, width: '109px', float: 'left' }}
+            type="primary"
+          >
+            {t('common.Update')}
+          </MButton>,
           <MButton onClick={() => setIsSelectDownloadInvoiceModalOpen(true)}>
             {t('common.Print Invoice')}
           </MButton>,
@@ -226,9 +307,12 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
         ]}
         onCancel={() => setIsModalOpen(false)}
         onOk={() => setIsModalOpen(false)}
+        style={{
+          top: 40,
+        }}
         title={<b>{t('payDetail.Payment Detail')}</b>}
         visible={visible}
-        width={850}
+        width={1000}
       >
         <Form colon={false} layout="horizontal">
           <Row>
@@ -303,6 +387,57 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
               <span style={{ fontSize: 20, float: 'right' }}>{payment.balance}</span>
             </Col>
           </Row>
+          {payment.payment_method.includes('VCC') && (
+            <>
+              <Row>
+                <Col span={24} style={{ marginBottom: 5, marginTop: 20 }}>
+                  <span style={{ fontSize: 14, fontWeight: 'bold' }}>
+                    {t('payDetail.Upload VCC Confirmation')}
+                  </span>
+                </Col>
+                <Col span={24} style={{ marginTop: 5 }}>
+                  <Row>
+                    <Col className="payment-detail" span={24}>
+                      <Dragger
+                        action={`${process.env.REACT_APP_API_HOST}/${FileEndpoint.UPLOAD}`}
+                        fileList={vccImages}
+                        headers={{
+                          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+                        }}
+                        onChange={handleFilesChange}
+                        style={{
+                          background: '#FFFFFF',
+                          border: '1px dashed rgba(0, 0, 0, 0.15)',
+                          borderRadius: '2px',
+                        }}
+                      >
+                        <p className="ant-upload-hint">Upload file here</p>
+                      </Dragger>
+                    </Col>
+                    <Col span={8} />
+                    <Col span={8} />
+                  </Row>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24} style={{ marginBottom: 5, marginTop: 20 }}>
+                  <span style={{ fontSize: 14, fontWeight: 'bold' }}>
+                    {t('payDetail.VCC Status')}
+                  </span>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={24}>
+                  <Radio.Group name="radiogroup" onChange={onChangeVccStatus} value={vccStatus}>
+                    <Radio style={{ paddingRight: 30 }} value={1}>
+                      {t('payDetail.Waiting for process')}
+                    </Radio>
+                    <Radio value={2}>{t('payDetail.Transaction Approved')}</Radio>
+                  </Radio.Group>
+                </Col>
+              </Row>
+            </>
+          )}
         </Form>
       </Modal>
     </>
