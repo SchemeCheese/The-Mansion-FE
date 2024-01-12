@@ -907,7 +907,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
               />
             </Col>
           )}
-          {!reservationDetailInfo.data.can_checkout.is_pass && (
+          {type === 'checkout_today' && !reservationDetailInfo.data.can_checkout.is_pass && (
             <Col span={24} style={{ paddingTop: 10 }}>
               <Alert
                 banner
