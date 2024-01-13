@@ -24,7 +24,6 @@ import {
   Table,
   Upload,
   UploadFile,
-  UploadProps,
 } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
@@ -36,7 +35,12 @@ import { useAppSelector } from 'modules/hooks';
 
 import { FileEndpoint } from 'config';
 
-import { downloadPDFInvoiceTransaction, getReservationDetail, updatePaymentDetail } from 'actions';
+import {
+  downloadPDFInvoiceTransaction,
+  getReservation,
+  getReservationDetail,
+  updatePaymentDetail,
+} from 'actions';
 
 import MButton from 'components/MButton';
 
@@ -184,6 +188,12 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
         getReservationDetail({
           reservation_id: reservationDetailData.reservation_id ?? '',
           reservation_detail_id: reservationDetailData.reservation_detail_id ?? '',
+        }),
+      );
+
+      dispatch(
+        getReservation({
+          reservation_id: reservationDetailData.reservation_id ?? '',
         }),
       );
     }

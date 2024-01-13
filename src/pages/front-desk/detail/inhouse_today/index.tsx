@@ -437,6 +437,13 @@ function ReservationInhouseTodayDetail() {
               </Checkbox>
             </div>
           )}
+          {reservationRedux.pay_at && reservationRedux.vcc_approved_status && (
+            <div style={{ paddingTop: 10 }}>
+              <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
+                {t('reservation.VCC Transaction Approved')}
+              </Checkbox>
+            </div>
+          )}
         </Col>
         <Col span={8} style={{ paddingRight: 20 }}>
           <Row>

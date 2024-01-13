@@ -193,5 +193,6 @@
   "Transaction Amount": "Transaction Amount",
   "Payment System Fee": "Payment System Fee",
   "Pay at OTA": "Pay at OTA",
-  "Pay at hotel": "Pay at hotel"
+  "Pay at hotel": "Pay at hotel",
+  "VCC Transaction Approved": "VCC Transaction Approved"
 }
