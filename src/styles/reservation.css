@@ -279,3 +279,12 @@
   width: 255px !important;
   height: 255px !important;
 }
+
+.payment-detail .ant-upload.ant-upload-drag {
+  height: auto;
+}
+
+.fit-modal .ant-modal-body {
+  max-height: 75vh;
+  overflow: auto;
+}

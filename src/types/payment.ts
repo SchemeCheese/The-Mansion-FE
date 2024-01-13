@@ -27,3 +27,18 @@ export interface CreateQRCodeVNPay {
 export interface CreateQRCodeVNPaySuccess {
   result: any;
 }
+
+interface UpdatePaymentDetailPayload {
+  files?: Array<Record<string, any>>;
+  payment_detail_id: string | number;
+  vcc_status?: string | number;
+}
+
+export interface UpdatePaymentDetail {
+  payload: UpdatePaymentDetailPayload;
+}
+
+export interface UpdatePaymentDetailState {
+  payload: UpdatePaymentDetailPayload;
+  status: string;
+}

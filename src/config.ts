@@ -87,6 +87,7 @@ export const TransactionEndpoint = {
 export const PaymentEndpoint = {
   CREATE_PAYMENT: 'api/v1/payments/create',
   CREATE_QRCODE_VNPAY: 'api/v1/reservations',
+  UPDATE_PAYMENT_DETAIL: 'api/v1/payments/payment-detail',
 };
 
 export const GuestEndpoint = {

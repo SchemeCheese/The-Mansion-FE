@@ -4,6 +4,7 @@ import { Variants } from 'styled-minimal/lib/types';
 import { ValueOf } from 'type-fest';
 
 import { AlertPosition, Icons, Status } from './common';
+import { UpdatePaymentDetailState } from './payment';
 
 export interface AlertData {
   icon: Icons;
@@ -839,6 +840,7 @@ export interface RootState {
   updateGuest: UpdateGuestState;
   updateHouseKeeping: UpdateHouseKeepingState;
   updateNoteReservationDetail: UpdateNoteReservationDetailState;
+  updatePaymentDetail: UpdatePaymentDetailState;
   updateRate: UpdateRateState;
   updateReservation: CreateReservationState;
   updateRoomAvailable: UpdateRoomAvailableState;

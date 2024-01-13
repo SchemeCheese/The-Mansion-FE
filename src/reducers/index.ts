@@ -103,6 +103,7 @@ import updateHouseKeeping, { updateHouseKeepingState } from './updateHouseKeepin
 import updateNoteReservationDetail, {
   updateNoteReservationDetailState,
 } from './updateNoteReservationDetail';
+import updatePaymentDetail, { updatePaymentDetailState } from './updatePaymentDetail';
 import updateRate, { updateRateState } from './updateRate';
 import updateReservation, { updateReservationState } from './updateReservation';
 import updateRoomAvailable, { updateRoomAvailableState } from './updateRoomAvailable';
@@ -193,6 +194,7 @@ export const initialState = {
   getReservationCheckoutFromRoomNo: getReservationCheckoutFromRoomNoState,
   createQRCodeVNPay: createQRCodeVNPayState,
   customer: customerSearchState,
+  updatePaymentDetail: updatePaymentDetailState,
 };
 
 export default {
@@ -279,4 +281,5 @@ export default {
   ...getReservationCheckoutFromRoomNo,
   ...createQRCodeVNPay,
   ...customer,
+  ...updatePaymentDetail,
 };

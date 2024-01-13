@@ -345,3 +345,8 @@ export const selectUpdateHouseKeeping = createSelector(
   (state: RootState) => state.updateHouseKeeping,
   updateHouseKeeping => updateHouseKeeping,
 );
+
+export const selectUpdatePaymentDetail = createSelector(
+  (state: RootState) => state.updatePaymentDetail,
+  updatePaymentDetail => updatePaymentDetail,
+);
