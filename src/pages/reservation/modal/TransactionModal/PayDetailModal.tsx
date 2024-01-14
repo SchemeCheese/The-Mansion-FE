@@ -281,22 +281,28 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
         bodyStyle={{ backgroundColor: '#F0F2F5' }}
         className="fit-modal"
         footer={[
-          <Button
-            onClick={handleClickPayBalance}
-            style={{
-              backgroundColor: '#ff4d4f',
-              borderColor: '#ff4d4f',
-              borderRadius: 4,
-              width: '109px',
-              display: amountInfo?.unpaid === 0 ? 'none' : '',
-            }}
-            type="primary"
-          >
-            {t('payDetail.Pay Balance')}
-          </Button>,
+          // <Button
+          //   onClick={handleClickPayBalance}
+          //   style={{
+          //     backgroundColor: '#ff4d4f',
+          //     borderColor: '#ff4d4f',
+          //     borderRadius: 4,
+          //     width: '109px',
+          //     display: amountInfo?.unpaid === 0 ? 'none' : '',
+          //   }}
+          //   type="primary"
+          // >
+          //   {t('payDetail.Pay Balance')}
+          // </Button>,
           <MButton
             onClick={() => onUpdate(payment.payment_details[0].id)}
-            style={{ backgroundColor: '#1D39C4', borderRadius: 4, width: '109px', float: 'left' }}
+            style={{
+              backgroundColor: '#1D39C4',
+              borderRadius: 4,
+              width: '109px',
+              float: 'left',
+              display: payment.payment_method.includes('VCC') ? 'block' : 'none',
+            }}
             type="primary"
           >
             {t('common.Update')}

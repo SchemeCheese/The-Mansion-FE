@@ -266,7 +266,7 @@ function Calendar() {
             fill="none"
             height="14"
             onClick={() =>
-              handleChangePickDate(moment(searchCondition.start_week_date).subtract(1, 'weeks'))
+              handleChangePickDate(moment(searchCondition.start_week_date).subtract(1, 'day'))
             }
             style={{ marginRight: 25, cursor: 'pointer' }}
             viewBox="0 0 8 14"
@@ -311,7 +311,7 @@ function Calendar() {
             fill="none"
             height="14"
             onClick={() =>
-              handleChangePickDate(moment(searchCondition.start_week_date).add(1, 'weeks'))
+              handleChangePickDate(moment(searchCondition.start_week_date).add(1, 'day'))
             }
             style={{ marginLeft: 25, cursor: 'pointer' }}
             viewBox="0 0 8 14"
