@@ -55,19 +55,96 @@ function ReservationList({ type }: Props) {
   const dispatch = useDispatch();
 
   const isSearching = useSelector<RootState>(({ reservation }) => reservation.is_searching);
-  const items: any = useSelector<RootState>(({ reservation }) => reservation.data);
-  const total: any = useSelector<RootState>(({ reservation }) => reservation.total);
-  const currentPage: any = useSelector<RootState>(({ reservation }) => reservation.current_page);
-  const unreadMessage: any = useSelector<RootState>(({ reservation }) => reservation.unread_msg);
-  const searchReservationData = useAppSelector(selectReservationSearch);
+  const searchReservationData: any = useAppSelector(selectReservationSearch);
   const { changed: searchReservationChanged } = useTreeChanges(searchReservationData);
   const user = useAppSelector(selectUser);
+
+  const {
+    current_page: currentPage,
+    data: items,
+    total,
+    unreadMessage,
+  } = searchReservationData[type];
 
   const [columnSort, setColumnSort] = useState('');
   const [orderSort, setOrderSort] = useState(undefined);
 
   useEffect(() => {
-    dispatch(searchReservation(searchCondition));
+    const {
+      agent_name,
+      booker_info,
+      checkin_from,
+      checkin_to,
+      checkout_from,
+      checkout_to,
+      inhouse_date,
+      market,
+      sort,
+      source,
+      status,
+    } = searchReservationData[type];
+
+    if (sort) {
+      const sortInfo: any = sort.split(',');
+      const orderSortString: any = `${sortInfo[1]}end` || '';
+
+      setColumnSort(sortInfo[0]);
+      setOrderSort(orderSortString);
+    }
+
+    setSearchCondition({
+      ...searchCondition,
+      sort: '',
+      folio_number: '',
+      booker_info: booker_info ?? '',
+      agent_name: agent_name ?? '',
+      source: source ?? '',
+      market: market ?? '',
+      status: status ?? '',
+      checkin_from: checkin_from ?? '',
+      checkin_to: checkin_to ?? '',
+      checkout_from: checkout_from ?? '',
+      checkout_to: checkout_to ?? '',
+      inhouse_date: inhouse_date ?? '',
+    });
+  }, [searchReservationData]);
+
+  useEffect(() => {
+    const {
+      agent_name,
+      booker_info,
+      checkin_from,
+      checkin_to,
+      checkout_from,
+      checkout_to,
+      current_page,
+      inhouse_date,
+      market,
+      per_page,
+      sort,
+      source,
+      status,
+    } = searchReservationData[type];
+
+    dispatch(
+      searchReservation({
+        current_page,
+        per_page,
+        booker_info,
+        folio_number: '',
+        agent_name,
+        sort,
+        status,
+        market,
+        source,
+        checkin_from,
+        checkin_to,
+        checkout_from,
+        checkout_to,
+        inhouse_date,
+        type,
+      }),
+    );
   }, []);
 
   useEffect(() => {
@@ -79,19 +156,29 @@ function ReservationList({ type }: Props) {
   }, [searchReservationChanged]);
 
   const onChangeCurrentPage = (page: number, pageSize: number) => {
-    setSearchCondition({
-      ...searchCondition,
-      current_page: page,
-      per_page: pageSize,
-    });
+    dispatchSearchReservation(page, pageSize);
+  };
 
-    dispatch(
-      searchReservation({
-        ...searchCondition,
-        current_page: page,
-        per_page: pageSize,
-      }),
-    );
+  const dispatchSearchReservation = (page: number, pageSize: number) => {
+    if (type === 'reserved') {
+      dispatch(
+        searchReservation({
+          ...searchCondition,
+          type: 'reserved',
+          current_page: page,
+          per_page: pageSize,
+        }),
+      );
+    } else {
+      dispatch(
+        searchReservation({
+          ...searchCondition,
+          type: 'waitlist',
+          current_page: page,
+          per_page: pageSize,
+        }),
+      );
+    }
   };
 
   const convertData = (data: any) => {
@@ -341,17 +428,66 @@ function ReservationList({ type }: Props) {
       order = sorter.order === 'descend' ? 'desc' : 'asc';
     }
 
-    setSearchCondition({
-      ...searchCondition,
-      sort: order !== '' ? `${sorter.field},${order}` : '',
-    });
+    if (type === 'reserved') {
+      dispatch(
+        searchReservation({
+          ...searchCondition,
+          sort: order !== '' ? `${sorter.field},${order}` : '',
+          type: 'reserved',
+        }),
+      );
+    } else {
+      dispatch(
+        searchReservation({
+          ...searchCondition,
+          sort: order !== '' ? `${sorter.field},${order}` : '',
+        }),
+      );
+    }
+  };
 
-    dispatch(
-      searchReservation({
-        ...searchCondition,
-        sort: order !== '' ? `${sorter.field},${order}` : '',
-      }),
-    );
+  const handleResetCondition = () => {
+    if (type === 'reserved') {
+      dispatch(
+        searchReservation({
+          booker_info: '',
+          agent_name: '',
+          checkin_from: '',
+          checkin_to: '',
+          checkout_from: '',
+          checkout_to: '',
+          folio_number: '',
+          inhouse_date: '',
+          market: '',
+          sort: '',
+          source: '',
+          status: '',
+          type: 'reserved',
+          current_page: 1,
+          unread_msg: '0',
+        }),
+      );
+    } else {
+      dispatch(
+        searchReservation({
+          booker_info: '',
+          agent_name: '',
+          checkin_from: '',
+          checkin_to: '',
+          checkout_from: '',
+          checkout_to: '',
+          folio_number: '',
+          inhouse_date: '',
+          market: '',
+          sort: '',
+          source: '',
+          status: '',
+          type: 'waitlist',
+          current_page: 1,
+          unread_msg: '0',
+        }),
+      );
+    }
   };
 
   return (
@@ -363,6 +499,7 @@ function ReservationList({ type }: Props) {
               searchReservation({
                 ...searchCondition,
                 unread_msg: '1',
+                type,
               }),
             );
           }}
@@ -382,6 +519,7 @@ function ReservationList({ type }: Props) {
       )}
       <Col span={24}>
         <ReservationListFilter
+          handleResetCondition={handleResetCondition}
           searchCondition={searchCondition}
           setSearchCondition={setSearchCondition}
         />
@@ -389,7 +527,6 @@ function ReservationList({ type }: Props) {
       {user.permission.reservation.create && (
         <Col span={24} style={{ paddingTop: 16 }}>
           <PattonButton onClick={() => navigate(`/reservation/create`)}>
-            {' '}
             <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> {t('common.New')}
           </PattonButton>
         </Col>

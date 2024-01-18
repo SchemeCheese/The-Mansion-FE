@@ -8,8 +8,8 @@ Main functions : Reservation List Filter
 
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Input, Row, Select, Tag } from 'antd';
+import { DownOutlined, ReloadOutlined, UpOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Input, Row, Select, Tag, Tooltip } from 'antd';
 import { t } from 'i18next';
 import moment from 'moment';
 
@@ -20,13 +20,18 @@ import MInput from 'components/MInput';
 import { ReservationSearch, RootState } from 'types';
 
 interface Props {
+  handleResetCondition: () => void;
   searchCondition: any;
   setSearchCondition: (data: any) => void;
 }
 
 const { Option } = Select;
 
-function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
+function ReservationListFilter({
+  handleResetCondition,
+  searchCondition,
+  setSearchCondition,
+}: Props) {
   const dispatch = useDispatch();
   const [showMore, setShowMore] = useState(false);
 
@@ -117,6 +122,18 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
     dispatch(getAgentInfos());
   }, []);
 
+  useEffect(() => {
+    if (
+      searchCondition.checkin_from ||
+      searchCondition.checkin_to ||
+      searchCondition.checkout_from ||
+      searchCondition.checkout_to ||
+      searchCondition.inhouse_date
+    ) {
+      setShowMore(true);
+    }
+  }, [searchCondition]);
+
   return (
     <Input.Group>
       <Row gutter={8}>
@@ -131,6 +148,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
             onKeyUp={event => searchInput(event)}
             placeholder="Email/Phone/Name"
             style={{ height: 32, fontSize: 12 }}
+            value={searchCondition.booker_info}
           />
         </Col>
         <Col span={3}>
@@ -157,14 +175,22 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
             onKeyUp={event => searchInput(event)}
             placeholder={t('common.Travel Agent')}
             style={{ height: 32, fontSize: 12 }}
+            value={searchCondition.agent_name}
           />
         </Col>
         <Col span={3}>
           <Select
             allowClear
-            onChange={value => searchSelect(value, 'status')}
+            onChange={value => {
+              setSearchCondition({
+                ...searchCondition,
+                status: value,
+              });
+              searchSelect(value, 'status');
+            }}
             placeholder="Status"
             style={{ width: '100%', fontSize: 12 }}
+            value={searchCondition.status === '' ? undefined : searchCondition.status}
           >
             <Option value="reserved">Reserved</Option>
             <Option value="inhouse">Inhouse</Option>
@@ -179,6 +205,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
             onChange={value => searchSelect(value, 'market')}
             placeholder={t('common.Market')}
             style={{ width: '100%', fontSize: 12 }}
+            value={searchCondition.market === '' ? undefined : searchCondition.market}
           >
             <Option value="1">OTA</Option>
             <Option value="2">CDT</Option>
@@ -193,11 +220,15 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
             onChange={value => searchSelect(value, 'source')}
             placeholder={t('common.Source')}
             style={{ width: '100%', fontSize: 12 }}
+            value={searchCondition.source === '' ? undefined : searchCondition.source}
           >
             {sourceOptions}
           </Select>
         </Col>
-        <Col span={3} style={{ textAlign: 'center' }}>
+        <Col span={3} style={{ textAlign: 'center', cursor: 'pointer' }}>
+          <Tooltip placement="top" title="Reset search">
+            <ReloadOutlined onClick={handleResetCondition} />
+          </Tooltip>
           <Button onClick={() => handleChange()} style={{ color: '#1D39C4' }} type="text">
             <span style={{ paddingRight: 6 }}>{t('common.Show more')}</span>
             {showMore ? <UpOutlined /> : <DownOutlined />}
@@ -251,6 +282,7 @@ function ReservationListFilter({ searchCondition, setSearchCondition }: Props) {
                 borderRadius: 4,
                 width: '40%',
               }}
+              value={searchCondition.inhouse_date ? moment(searchCondition.inhouse_date) : null}
             />
             <Tag
               color="red"

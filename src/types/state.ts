@@ -45,10 +45,27 @@ export interface UserState {
 }
 
 export interface ReservationSearchState {
-  booker_info: string;
-  current_page: number;
-  data: Array<Record<string, any>>;
   is_searching: boolean;
+  reserved: SearchParam;
+  type: string;
+  waitlist: SearchParam;
+}
+
+interface SearchParam {
+  agent_name?: string;
+  booker_info?: string;
+  checkin_from?: string;
+  checkin_to?: string;
+  checkout_from?: string;
+  checkout_to?: string;
+  current_page?: string | number;
+  data: Array<Record<string, any>>;
+  folio_number?: string;
+  inhouse_date?: string;
+  market?: string;
+  per_page?: string | number;
+  sort?: string;
+  source?: string;
   total: number;
   unread_msg: number;
 }

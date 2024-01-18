@@ -7,13 +7,13 @@ export interface ReservationSearch {
   checkout_to?: string;
   current_page?: string | number;
   folio_number?: string;
-  inhouse?: string;
+  inhouse_date?: string;
   market?: string;
   per_page?: string | number;
   sort?: string;
   source?: string;
   status?: string;
-  type?: string;
+  type: string;
   unread_msg?: string;
 }
 

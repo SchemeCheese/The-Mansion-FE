@@ -5,27 +5,88 @@ import { searchReservation, searchReservationFinish } from 'actions';
 import { ReservationSearchState } from 'types';
 
 export const reservationSearchState = {
-  booker_info: '',
+  reserved: {
+    booker_info: '',
+    agent_name: '',
+    checkin_from: '',
+    checkin_to: '',
+    checkout_from: '',
+    checkout_to: '',
+    folio_number: '',
+    inhouse_date: '',
+    market: '',
+    sort: '',
+    source: '',
+    status: '',
+    type: '',
+    is_searching: false,
+    data: [],
+    current_page: 1,
+    total: 0,
+    unread_msg: 0,
+  },
+  waitlist: {
+    booker_info: '',
+    agent_name: '',
+    checkin_from: '',
+    checkin_to: '',
+    checkout_from: '',
+    checkout_to: '',
+    folio_number: '',
+    inhouse_date: '',
+    market: '',
+    sort: '',
+    source: '',
+    status: '',
+    type: '',
+    is_searching: false,
+    data: [],
+    current_page: 1,
+    total: 0,
+    unread_msg: 0,
+  },
   is_searching: false,
-  data: [],
-  current_page: 1,
-  total: 0,
-  unread_msg: 0,
+  type: 'reserved',
 };
 
 export default {
   reservation: createReducer<ReservationSearchState>(reservationSearchState, builder => {
     builder
       .addCase(searchReservation, (draft, { payload }) => {
-        draft.booker_info = payload.booker_info ?? '';
+        draft.type = payload.type;
+
+        if (draft.type === 'reserved') {
+          draft.reserved = {
+            ...payload,
+            data: [],
+            total: 0,
+            unread_msg: 0,
+          };
+        } else {
+          draft.waitlist = {
+            ...payload,
+            data: [],
+            total: 0,
+            unread_msg: 0,
+          };
+        }
+
         draft.is_searching = true;
       })
       .addCase(searchReservationFinish, (draft, { payload }) => {
         draft.is_searching = false;
-        draft.data = payload.data;
-        draft.total = payload.total;
-        draft.current_page = payload.current_page;
-        draft.unread_msg = payload.unread_msg;
+
+        if (draft.type === 'reserved') {
+          draft.reserved.data = payload.data;
+          draft.reserved.total = payload.total;
+          draft.reserved.current_page = payload.current_page ?? 1;
+          draft.reserved.unread_msg = payload.unread_msg;
+        } else {
+          draft.waitlist.data = payload.data;
+          draft.waitlist.total = payload.total;
+          draft.waitlist.current_page = payload.current_page ?? 1;
+          draft.waitlist.unread_msg = payload.unread_msg;
+        }
       });
   }),
 };

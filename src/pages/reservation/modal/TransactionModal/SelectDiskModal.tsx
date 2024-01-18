@@ -38,8 +38,6 @@ function SelectDiskModal({ saleDetailIds, setIsModalOpen, visible }: Props) {
     ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
   );
 
-  console.log('reservationDetailInfo ', reservationRedux);
-
   const handleChange = (value: string) => {
     setDiskSelected(value);
   };
