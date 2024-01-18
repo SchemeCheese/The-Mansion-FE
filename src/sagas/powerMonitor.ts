@@ -45,7 +45,6 @@ export function* getDownloadCSVBranchManagerSaga({
   try {
     const urlApi = `${iotApiEndPoint(IOTEndpoint.powerMonitor.branchDownLoadCsv)}`;
 
-    console.log('payload', payload);
     fetch(urlApi, {
       method: 'GET',
     }).then(response => {
