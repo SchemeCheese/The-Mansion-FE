@@ -79,6 +79,7 @@ function ReservationList({ type }: Props) {
       checkout_to,
       inhouse_date,
       market,
+      per_page,
       sort,
       source,
       status,
@@ -106,6 +107,7 @@ function ReservationList({ type }: Props) {
       checkout_from: checkout_from ?? '',
       checkout_to: checkout_to ?? '',
       inhouse_date: inhouse_date ?? '',
+      per_page: per_page ?? 10,
     });
   }, [searchReservationData]);
 
@@ -129,7 +131,7 @@ function ReservationList({ type }: Props) {
     dispatch(
       searchReservation({
         current_page,
-        per_page,
+        per_page: per_page ?? 10,
         booker_info,
         folio_number: '',
         agent_name,
