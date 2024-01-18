@@ -284,6 +284,11 @@
   height: auto;
 }
 
+/* Always show remove icon for VCC images */
+.payment-detail .ant-upload-list-item-card-actions-btn.ant-btn-sm {
+  display: contents;
+}
+
 .fit-modal .ant-modal-body {
   max-height: 75vh;
   overflow: auto;
