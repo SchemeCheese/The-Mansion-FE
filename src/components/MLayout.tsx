@@ -237,6 +237,52 @@ function MLayout(props: Props) {
     return check;
   };
 
+  const defaultSelectedMenu = () => {
+    if (user.permission.calendar?.view === true) {
+      return 'reservation';
+    }
+
+    const urlPath = window.location.pathname;
+
+    if (urlPath.includes('reservation')) {
+      return 'reservation';
+    }
+
+    if (urlPath.includes('front-desk')) {
+      return 'front-desk';
+    }
+
+    if (urlPath.includes('night-audit')) {
+      return 'night-audit';
+    }
+
+    if (urlPath.includes('house-keeping')) {
+      return 'house-keeping';
+    }
+
+    if (urlPath.includes('customer')) {
+      return 'customer';
+    }
+
+    if (urlPath.includes('report')) {
+      return 'report';
+    }
+
+    if (urlPath.includes('power-monitoring')) {
+      return 'power-monitoring';
+    }
+
+    if (urlPath.includes('branch-manager')) {
+      return 'branch-manager';
+    }
+
+    if (urlPath.includes('device')) {
+      return 'device-manager';
+    }
+
+    return 'dashboard';
+  };
+
   return (
     <Layout>
       <Sider breakpoint="lg" collapsedWidth="0" collapsible>
@@ -272,7 +318,7 @@ function MLayout(props: Props) {
           )}
         </div>
         <Menu
-          defaultSelectedKeys={['dashboard']}
+          defaultSelectedKeys={[defaultSelectedMenu()]}
           items={[
             {
               key: 'dashboard',
@@ -320,14 +366,14 @@ function MLayout(props: Props) {
                   label: t('common.Branch Manager'),
                   key: 'branch-manager',
                   onClick: () => {
-                    navigate('/branch-manager');
+                    navigate('/power-monitoring/branch-manager');
                   },
                 },
                 {
                   label: t('common.Device Manager'),
                   key: 'device-manager',
                   onClick: () => {
-                    navigate('/power/device');
+                    navigate('/power-monitoring/device');
                   },
                 },
               ],
@@ -365,7 +411,9 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/reservation');
               },
-              hidden: user.permission.reservation.view === false,
+              hidden:
+                user.permission.reservation.view === false &&
+                user.permission.calendar.view === false,
             },
             {
               key: 'front-desk',
@@ -540,7 +588,7 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/report');
               },
-              hidden: false,
+              hidden: user.permission.reservation.view === false,
             },
           ].filter((item: any) => {
             return !item.hidden;
