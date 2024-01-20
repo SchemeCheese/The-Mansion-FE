@@ -28,7 +28,7 @@ import {
   INITIAL_EVENTS,
 } from 'pages/reservation/component/ReservationDetailTab/event-utils';
 import MInput from 'components/MInput';
-import { searchScheduleAction, updateNoteReservationDetail } from 'actions';
+import { getRoomType, searchScheduleAction, updateNoteReservationDetail } from 'actions';
 import {
   selectRoomTypes,
   selectSearchSchedule,
@@ -139,6 +139,10 @@ function Calendar() {
             end_date: date.clone().endOf('month').format('YYYY-MM-DD'),
           };
     dispatch(searchScheduleAction(temporaryState));
+
+    if (roomTypesData.length === 0) {
+      dispatch(getRoomType());
+    }
   }, []);
 
   useEffect(() => {
