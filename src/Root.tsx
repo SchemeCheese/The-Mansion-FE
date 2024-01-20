@@ -171,7 +171,7 @@ function Root() {
         aria-hidden="true"
         className="ant-breadcrumb-link"
         onClick={() => {
-          navigate('/branch-manager');
+          navigate('/power-monitoring/branch-manager');
         }}
         style={{ paddingLeft: 8, cursor: 'pointer' }}
       >
@@ -299,7 +299,8 @@ function Root() {
               }
               path="/private"
             />
-            {user.permission.reservation?.view === true && (
+            {(user.permission.reservation?.view === true ||
+              user.permission.calendar?.view === true) && (
               <>
                 <Route
                   element={
@@ -471,7 +472,7 @@ function Root() {
                       <Branch />
                     </PrivateRoute>
                   }
-                  path="/branch-manager"
+                  path="/power-monitoring/branch-manager"
                 />
                 <Route
                   element={
@@ -483,7 +484,7 @@ function Root() {
                       <DeviceManager />
                     </PrivateRoute>
                   }
-                  path="/power/device"
+                  path="/power-monitoring/device"
                 />
               </>
             )}
@@ -497,7 +498,7 @@ function Root() {
                   <DeviceManagerCreate />
                 </PrivateRoute>
               }
-              path="/power/device/create"
+              path="/power-monitoring/device/create"
             />
 
             {user.permission.customer?.view === true && (

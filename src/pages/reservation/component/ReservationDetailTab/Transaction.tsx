@@ -907,14 +907,16 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
               />
             </Col>
           )}
-          {type === 'checkout_today' && !reservationDetailInfo.data.can_checkout.is_pass && (
-            <Col span={24} style={{ paddingTop: 10 }}>
-              <Alert
-                banner
-                message={`${reservationDetailInfo.data.can_checkout.message}. Cannot checkout this booking`}
-              />
-            </Col>
-          )}
+          {type === 'checkout_today' &&
+            !reservationDetailInfo.data.can_checkout.is_pass &&
+            reservationDetailInfo.data.status !== 'checkout' && (
+              <Col span={24} style={{ paddingTop: 10 }}>
+                <Alert
+                  banner
+                  message={`${reservationDetailInfo.data.can_checkout.message}. Cannot checkout this booking`}
+                />
+              </Col>
+            )}
         </Row>
       </Col>
     </Row>
