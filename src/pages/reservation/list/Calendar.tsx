@@ -33,6 +33,7 @@ import {
   selectRoomTypes,
   selectSearchSchedule,
   selectUpdateNoteReservationDetail,
+  selectUser,
 } from 'selectors';
 import { useAppSelector } from 'modules/hooks';
 import useTreeChanges from 'tree-changes-hook';
@@ -51,6 +52,9 @@ function Calendar() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const user = useAppSelector(selectUser);
+
   const [state, setState] = useState<DemoAppState>({
     weekendsVisible: true,
     currentEvents: [],
@@ -154,7 +158,7 @@ function Calendar() {
       searchScheduleRedux.data.events.forEach((item: any) => {
         calendarApi.addEvent({
           id: createEventId(),
-          title: item.title,
+          title: user.permission.reservation.view ? item.title : '',
           start: item.start,
           end: item.end,
           allDay: true,
@@ -191,17 +195,19 @@ function Calendar() {
   };
 
   const showEventInfo = (clickInfo: EventClickArg) => {
-    const reservation = clickInfo.event.extendedProps;
+    if (user.permission.reservation.view) {
+      const reservation = clickInfo.event.extendedProps;
 
-    setInfoReservationSelected({
-      reservation_detail_id: reservation.reservationDetailId,
-      reservation_info_id: reservation.reservationInfoId,
-      title: clickInfo.event.title,
-      note: reservation.note,
-      folio_id: reservation.folioId,
-    });
+      setInfoReservationSelected({
+        reservation_detail_id: reservation.reservationDetailId,
+        reservation_info_id: reservation.reservationInfoId,
+        title: clickInfo.event.title,
+        note: reservation.note,
+        folio_id: reservation.folioId,
+      });
 
-    setIsEventInfoModalOpen(true);
+      setIsEventInfoModalOpen(true);
+    }
   };
 
   const handleChangeNote = (event: any) => {
