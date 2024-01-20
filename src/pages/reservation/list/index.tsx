@@ -61,12 +61,11 @@ function Reservation() {
             <ReservationList type="waitlist" />
           </TabPane>
         )}
-        {user.permission.reservation.view ||
-          (user.permission.calendar.view && (
-            <TabPane key="3" className="content" tab={t('reservation.Calendar')}>
-              <Calendar />
-            </TabPane>
-          ))}
+        {(user.permission.reservation.view || user.permission.calendar.view) && (
+          <TabPane key="3" className="content" tab={t('reservation.Calendar')}>
+            <Calendar />
+          </TabPane>
+        )}
         {user.permission.reservation.view && (
           <TabPane key="4" className="content" tab={t('reservation.Channel Manager')}>
             <ChannelManager fromDate={fromDate} setFromDate={setFromDate} />
