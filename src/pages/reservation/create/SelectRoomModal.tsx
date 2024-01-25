@@ -311,11 +311,11 @@ function SelectRoomModal({
       (key !== 'charge_kind' && roomCondition.charge_kind !== '1')
         ? {
             ...roomConditionTemporary,
-            checkout: roomConditionTemporary.checkin,
+            // checkout: roomConditionTemporary.checkin,
           }
         : {
             ...roomConditionTemporary,
-            checkout: moment(roomConditionTemporary.checkin).add(1, 'days').format('YYYY-MM-DD'),
+            // checkout: moment(roomConditionTemporary.checkin).add(1, 'days').format('YYYY-MM-DD'),
           };
 
     if (value === undefined) {
@@ -704,7 +704,7 @@ function SelectRoomModal({
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={3}>
                         <PattonButton
-                          disabled={totalAmount === 0}
+                          // disabled={totalAmount === 0}
                           onClick={handleAddRoom}
                           style={{ float: 'right' }}
                         >
