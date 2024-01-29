@@ -800,20 +800,29 @@ function ReservationForm({
                     </Card>
                   )}
                 </TabPane>
-                <TabPane
-                  key="3"
-                  style={{ padding: 20, minHeight: '61rem' }}
-                  tab={t('reservation.Message')}
-                >
-                  <Message />
-                </TabPane>
+                {/* If form is not create booking */}
+                {reservationId !== '' && (
+                  <>
+                    <TabPane
+                      key="3"
+                      style={{ padding: 20, minHeight: '61rem' }}
+                      tab={t('reservation.Message')}
+                    >
+                      <Message />
+                    </TabPane>
 
-                {reservationRedux.financial_details?.length > 0 && (
-                  <TabPane key="4" style={{ padding: 20 }} tab={t('reservation.Financial Detail')}>
-                    <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
-                      <FinancialDetail />
-                    </Card>
-                  </TabPane>
+                    {reservationRedux.financial_details?.length > 0 && (
+                      <TabPane
+                        key="4"
+                        style={{ padding: 20 }}
+                        tab={t('reservation.Financial Detail')}
+                      >
+                        <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
+                          <FinancialDetail />
+                        </Card>
+                      </TabPane>
+                    )}
+                  </>
                 )}
               </Tabs>
             </Col>
