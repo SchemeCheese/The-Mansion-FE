@@ -150,13 +150,19 @@ function SelectedPayMethodModal({
     setPaidAmount(paidAmountSum);
   };
 
+  const computeBalanceAmount = () => {
+    const discount = discountAmount || 0;
+
+    return totalAmount - parseInt(discount.toString(), 10) - paidAmount;
+  };
+
   return (
     <Modal
       bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4, width: '111px' } }}
       okButtonProps={{
         style: { backgroundColor: '#1D39C4', borderRadius: 4, width: '111px' },
-        // disabled: true,
+        disabled: computeBalanceAmount() !== 0,
       }}
       okText={t('common.Pay')}
       onCancel={() => setIsModalOpenSelectedPaymentMethod(false)}
@@ -196,9 +202,7 @@ function SelectedPayMethodModal({
           <Col span={9}>
             <span style={{ lineHeight: '31px' }}>{t('common.Balance')}</span>
             <span style={{ fontSize: 20, float: 'right' }}>
-              {discountAmount
-                ? formatNumber(totalAmount - parseInt(discountAmount, 10) - paidAmount)
-                : formatNumber(totalAmount - paidAmount)}
+              {formatNumber(computeBalanceAmount())}
             </span>
           </Col>
         </Row>

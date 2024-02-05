@@ -657,7 +657,7 @@ export function* getPrintRegistrationCardPDFReservationDetailSaga({
       payload.payload.reservation_info_id
     }/reservation-detail/${payload.payload.reservation_detail_id}/${
       payload.payload.language
-    }/downloadRegistrationCardPDF`;
+    }/download-registration-card`;
 
     fetch(urlApi, {
       method: 'GET',
@@ -727,7 +727,7 @@ export function* getPrintCheckinConfirmPDFReservationDetailSaga({
       payload.payload.reservation_info_id
     }/reservation-detail/${
       payload.payload.language
-    }/downloadCheckinConfirmationPDF?reservationDetailIds=${
+    }/download-checkin-confirmation?reservationDetailIds=${
       payload.payload.reservation_detail_ids
     }&hide_room_rate=${payload.payload.hide_room_rate}`;
 

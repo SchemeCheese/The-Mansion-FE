@@ -8,7 +8,7 @@ Main functions : Transaction Tab
 
 import 'styles/transaction.css';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Alert, Card, Col, Input, message, Modal, Radio, RadioChangeEvent, Row, Space } from 'antd';
@@ -56,6 +56,9 @@ const { TextArea } = Input;
 
 function Transaction({ noPadding, reservationDetailId, reservationId, type }: Props) {
   const { t } = useTranslation();
+
+  const reportPath = useRef('download-unpaid-invoice');
+
   const reservationDetailInfo: any = useAppSelector(selectGetReservationDetail);
   const branchInfoSelected: any = useAppSelector(selectBranchInfo);
   const { amount_info: amountInfo, paid, transactions } = reservationDetailInfo.data;
@@ -97,7 +100,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
 
   const handleInvoiceDownloadPdf = async () => {
     fetch(
-      `${process.env.REACT_APP_API_HOST}/api/v1/reservations/${reservationId}/reservation-detail/${reservationDetailId}/${language}/downloadUnpaidInvoicePDF`,
+      `${process.env.REACT_APP_API_HOST}/api/v1/reservations/${reservationId}/reservation-detail/${reservationDetailId}/${language}/${reportPath.current}`,
       {
         method: 'GET',
         headers: headerWithAuthorization(),
@@ -391,6 +394,25 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           setIsModalShowPaymentDetail={setIsModalShowPaymentDetail}
         />
       )}
+      <Modal
+        okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
+        onCancel={() => setIsSelectDownloadInvoiceModalOpen(false)}
+        onOk={handleInvoiceDownloadPdf}
+        title={t('common.Download File')}
+        visible={isSelectDownloadInvoiceModalOpen}
+      >
+        <Row>
+          <Col span={12}>
+            <Radio.Group onChange={onChangeLanguage} value={language}>
+              <Space direction="vertical">
+                <Radio value="vi">{t('common.Vietnamese')}</Radio>
+                <Radio value="en">{t('common.English')}</Radio>
+                <Radio value="jp">{t('common.Japanese')}</Radio>
+              </Space>
+            </Radio.Group>
+          </Col>
+        </Row>
+      </Modal>
       <Modal
         okButtonProps={{
           style: { backgroundColor: '#1D39C4' },
@@ -833,40 +855,41 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
           </Card>
         </div>
         <Row style={{ paddingTop: transactions?.length === 0 ? 18 : 22 }}>
-          <Col span={12} style={{ paddingRight: 18 }}>
-            <MButton
-              onClick={() => setIsSelectDownloadInvoiceModalOpen(true)}
-              style={{
-                width: '100%',
-                border: '1px solid #1D39C4',
-                color: '#1D39C4',
-                background: '#F0F2F5',
-              }}
-            >
-              {t('common.Print Invoice')}
-            </MButton>
-            <Modal
-              okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
-              onCancel={() => setIsSelectDownloadInvoiceModalOpen(false)}
-              onOk={handleInvoiceDownloadPdf}
-              title={t('common.Download File')}
-              visible={isSelectDownloadInvoiceModalOpen}
-            >
-              <Row>
-                <Col span={12}>
-                  <Radio.Group onChange={onChangeLanguage} value={language}>
-                    <Space direction="vertical">
-                      <Radio value="vi">{t('common.Vietnamese')}</Radio>
-                      <Radio value="en">{t('common.English')}</Radio>
-                      <Radio value="jp">{t('common.Japanese')}</Radio>
-                    </Space>
-                  </Radio.Group>
-                </Col>
-              </Row>
-            </Modal>
+          <Col span={16} style={{ paddingRight: 18 }}>
+            <Row>
+              <MButton
+                onClick={() => {
+                  reportPath.current = 'download-unpaid-invoice';
+                  setIsSelectDownloadInvoiceModalOpen(true);
+                }}
+                style={{
+                  width: '48%',
+                  border: '1px solid #1D39C4',
+                  color: '#1D39C4',
+                  background: '#F0F2F5',
+                }}
+              >
+                {t('common.Print Invoice')}
+              </MButton>
+              <MButton
+                onClick={() => {
+                  reportPath.current = 'download-all-transaction-invoice';
+                  setIsSelectDownloadInvoiceModalOpen(true);
+                }}
+                style={{
+                  width: '48%',
+                  border: '1px solid #1D39C4',
+                  color: '#1D39C4',
+                  background: '#F0F2F5',
+                  marginLeft: '4%',
+                }}
+              >
+                {t('common.Print Summary')}
+              </MButton>
+            </Row>
           </Col>
           {user.permission.reservation.edit && (
-            <Col span={12}>
+            <Col span={8}>
               {type === 'checkout_today' ? (
                 <PattonButton
                   disabled={!reservationDetailInfo.data.can_checkout.is_pass}
