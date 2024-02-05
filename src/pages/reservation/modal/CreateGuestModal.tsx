@@ -389,7 +389,7 @@ function CreateGuestModal({
         style={{
           top: 40,
         }}
-        title="Create New Guest"
+        title={currentGuest ? 'Update Guest' : 'Create New Guest'}
         visible={isModalVisible}
         width={1000}
       >

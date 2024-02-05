@@ -14,6 +14,7 @@ export default {
     builder
       .addCase(getReservationNumber, (draft, { payload }) => {
         draft.operator_code = payload.operator_code;
+        draft.reservation_number = '';
       })
       .addCase(getReservationNumberFinish, (draft, { payload }) => {
         draft.reservation_number = payload.reservation_number;
