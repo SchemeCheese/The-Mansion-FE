@@ -210,6 +210,12 @@ function CancelBookingModal({
             <Form.Item
               label={t('reservation.Reason for booking cancellation (Optional).title')}
               name="cancel_reason"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select a reason',
+                },
+              ]}
               wrapperCol={{ span: 24 }}
             >
               <TextArea
