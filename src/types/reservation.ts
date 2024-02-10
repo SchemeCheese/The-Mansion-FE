@@ -27,6 +27,7 @@ export interface ReservationPayload {
   booker_phone_number: string;
   booker_rank: string;
   booker_type: string;
+  hide_room_rate?: boolean;
   market_segment_id?: string;
   no_deposit?: string;
   no_show?: string;

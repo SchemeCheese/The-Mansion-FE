@@ -246,26 +246,25 @@ function ReservationCheckoutTodayDetail() {
   const formRef: any = React.createRef();
 
   const submitUpdateForm = (e: any) => {
-    const formValues = formRef.current?.getFieldsValue();
-
     dispatch(
       updateReservation({
         payload: {
           reservation_id: id,
-          booker_email: formValues.booker_email,
-          booker_email_2: formValues.booker_email_2,
-          booker_firstname: formValues.booker_firstname,
-          booker_lastname: formValues.booker_lastname,
-          booker_note: formValues.booker_note,
-          booker_phone_number: formValues.booker_phone_number,
-          booker_rank: formValues.booker_rank,
-          booker_type: formValues.booker_type,
-          market_segment_id: formValues.market_segment_id,
-          agent_info_id: formValues.agent_info_id,
+          booker_email: reservationRedux.booker?.email_address1,
+          booker_email_2: reservationRedux.booker?.email_address2,
+          booker_firstname: reservationRedux.booker?.first_name,
+          booker_lastname: reservationRedux.booker?.last_name,
+          booker_note: reservationRedux.note_sale,
+          booker_phone_number: reservationRedux.booker?.telephone_number1,
+          booker_rank: reservationRedux.booker?.client_rank?.toString(),
+          booker_type: reservationRedux.booker?.client_kind?.toString(),
+          market_segment_id: reservationRedux.market_segment_id?.toString(),
+          agent_info_id: reservationRedux.agent_info_id?.toString(),
           // payment_method: '1',
-          reservation_number: formValues.reservation_number,
+          reservation_number: reservationRedux.reservation_number,
           rooms: [],
-          note: formValues.note,
+          note: reservationRedux.note,
+          hide_room_rate: isHidenRoomRate,
         },
       }),
     );
@@ -304,6 +303,7 @@ function ReservationCheckoutTodayDetail() {
       source_type: reservationRedux.market_segment_id,
       source_id: reservationRedux.agent_info_id,
     });
+    setIsHideRoomRate(reservationRedux.hide_room_rate);
   }, [reservationRedux]);
 
   // useEffect(() => {
@@ -386,7 +386,9 @@ function ReservationCheckoutTodayDetail() {
                 >
                   {t('common.Resend Email')}
                 </MButton>
-                <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
+                <PattonButton disabled onClick={e => submitUpdateForm(e)}>
+                  {t('common.Update')}
+                </PattonButton>
               </>
             )}
           </Space>

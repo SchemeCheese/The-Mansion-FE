@@ -208,7 +208,7 @@ function CancelBookingModal({
           </Col>
           <Col span={24}>
             <Form.Item
-              label={t('reservation.Reason for booking cancellation (Optional).title')}
+              label={t('reservation.Reason for booking cancellation.title')}
               name="cancel_reason"
               rules={[
                 {
@@ -219,9 +219,7 @@ function CancelBookingModal({
               wrapperCol={{ span: 24 }}
             >
               <TextArea
-                placeholder={t(
-                  'reservation.Reason for booking cancellation (Optional).placeholder',
-                )}
+                placeholder={t('reservation.Reason for booking cancellation.placeholder')}
                 readOnly={cancelCurrentItem !== null}
                 rows={5}
               />

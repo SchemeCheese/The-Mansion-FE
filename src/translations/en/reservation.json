@@ -138,8 +138,8 @@
   },
   "Receptionist": "Receptionist",
   "Send confirmation email": "Send confirmation email",
-  "Reason for booking cancellation (Optional)": {
-    "title": "Reason for booking cancellation (Optional)",
+  "Reason for booking cancellation": {
+    "title": "Reason for booking cancellation",
     "placeholder": "Input Reason for booking cancellation"
   },
   "Email Language": "Email Language",
