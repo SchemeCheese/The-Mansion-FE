@@ -63,7 +63,7 @@ function ReservationList({ type }: Props) {
     current_page: currentPage,
     data: items,
     total,
-    unreadMessage,
+    unread_msg: unreadMessage,
   } = searchReservationData[type];
 
   const [columnSort, setColumnSort] = useState('');
