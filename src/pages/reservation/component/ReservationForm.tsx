@@ -801,7 +801,7 @@ function ReservationForm({
                   )}
                 </TabPane>
                 {/* If form is not create booking */}
-                {reservationId !== '' && (
+                {reservationId !== '' && reservationRedux.can_send_message && (
                   <>
                     <TabPane
                       key="3"
