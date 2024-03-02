@@ -49,6 +49,7 @@ import getDurationCurve, { getDurationCurveState } from './getDurationCurve';
 import getElectricArea, { getElectricAreaState } from './getElectricArea';
 import getElectricPower, { getElectricPowerState } from './getElectricPower';
 import getElectricYesterday, { getElectricYesterdayState } from './getElectricYesterday';
+import getFacility, { getFacilityState } from './getFacility';
 import getHouseKeeping, { getHouseKeepingState } from './getHouseKeeping';
 import getLanguageCode, { getLanguageCodeState } from './getLanguageCode';
 import getMonthlyInvoice, { getMonthlyInvoiceState } from './getMonthlyInvoice';
@@ -161,6 +162,7 @@ export const initialState = {
   reservationRoomCheckinToday: reservationRoomCheckinTodayState,
   getLanguageCode: getLanguageCodeState,
   getRooms: getRoomsState,
+  getFacility: getFacilityState,
   guestCheckin: guestCheckinState,
   DownloadPDFReservationDetail: downloadPDFReservationDetailState,
   setMainGuest: setMainGuestState,
@@ -255,6 +257,7 @@ export default {
   ...getBranchs,
   ...getBranchManager,
   ...getBranchFacilites,
+  ...getFacility,
   ...guestCheckin,
   ...branchInfo,
   ...notifications,

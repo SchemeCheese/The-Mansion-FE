@@ -350,3 +350,8 @@ export const selectUpdatePaymentDetail = createSelector(
   (state: RootState) => state.updatePaymentDetail,
   updatePaymentDetail => updatePaymentDetail,
 );
+
+export const selectGetFacility = createSelector(
+  (state: RootState) => state.getFacility,
+  getFacility => getFacility,
+);

@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
 import moment from 'moment';
-import { selectUser } from 'selectors';
+import { selectBranchInfo, selectUser } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -30,6 +30,7 @@ function Reservation() {
   const [fromDate, setFromDate] = useState<string>(moment().format('YYYY-MM-DD'));
 
   const user = useAppSelector(selectUser);
+  const branchInfoSelected: any = useAppSelector(selectBranchInfo);
 
   const handeleActive = (activeKey: string) => {
     if (activeKey === '4') {
@@ -66,7 +67,7 @@ function Reservation() {
             <Calendar />
           </TabPane>
         )}
-        {user.permission.reservation.view && (
+        {user.permission.reservation.view && branchInfoSelected.channel_manager && (
           <TabPane key="4" className="content" tab={t('reservation.Channel Manager')}>
             <ChannelManager fromDate={fromDate} setFromDate={setFromDate} />
           </TabPane>

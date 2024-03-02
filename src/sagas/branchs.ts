@@ -5,7 +5,14 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { GetAllBranchsEndpoint, GetFacilitiesByBranch } from 'config';
 import { ActionTypes } from 'literals';
 
-import { branchFacilites, branchFacilitesFinish, branchsFinish } from 'actions';
+import {
+  branchFacilites,
+  branchFacilitesFinish,
+  branchSelected,
+  branchsFinish,
+  getFacilityAction,
+  getFacilityFinishAction,
+} from 'actions';
 
 export function* getBranchsSaga() {
   let data = [];
@@ -29,9 +36,26 @@ export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFaci
   yield put(branchFacilitesFinish({ data }));
 }
 
+export function* getFacilitySaga({ payload }: ReturnType<typeof getFacilityAction>) {
+  let data = [];
+
+  data = yield call(
+    request,
+    `${apiEndPoint(GetFacilitiesByBranch.GET_FACILITY_DETAIL)}/${payload.facility_id}`,
+    {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    },
+  );
+
+  yield put(getFacilityFinishAction({ data }));
+  yield put(branchSelected(data));
+}
+
 export default function* root() {
   yield all([
     takeLatest(ActionTypes.GET_BRANCH, getBranchsSaga),
     takeLatest(ActionTypes.GET_BRANCH_FACILITY, getBranchFacitiesSaga),
+    takeLatest(ActionTypes.GET_FACILITY, getFacilitySaga),
   ]);
 }

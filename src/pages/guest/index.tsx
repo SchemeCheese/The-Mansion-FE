@@ -19,7 +19,7 @@ import { selectUser } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { branchSelected } from 'actions';
+import { branchSelected, getFacilityAction } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -34,16 +34,9 @@ function Guest() {
 
   useEffect(() => {
     if (user && !window.localStorage.getItem('facility_id')) {
-      const branchInfo = user.branch_info;
-
       dispatch(
-        branchSelected({
-          operator_code: branchInfo.operator_code,
-          branch_code: branchInfo.branch_code,
-          facility_code: branchInfo.facility_code,
-          normal_time_check_in: branchInfo.normal_time_check_in,
-          normal_time_check_out: branchInfo.normal_time_check_out,
-          addition_cico_fee: branchInfo.addition_cico_fee,
+        getFacilityAction({
+          facility_id: user.facility_id.toString(),
         }),
       );
     }
@@ -81,7 +74,7 @@ function Guest() {
             margin: '84px 0 106px 0',
           }}
         >
-          {`${t('guest.Welcome to')} ${user.branch_info.branch_name}`}
+          {`${t('guest.Welcome to')} ${user.name}`}
         </Col>
         <Col span={24} />
         <Col span={24} style={{ textAlign: 'center' }}>

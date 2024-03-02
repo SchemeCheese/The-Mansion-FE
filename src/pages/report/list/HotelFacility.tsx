@@ -58,7 +58,7 @@ function HotelFacility() {
   };
 
   const changeBranch = async (value: string) => {
-    const response = await getAPI(`api/v1/branch-facility/${value}`);
+    const response = await getAPI(`api/v1/branchs/${value}`);
 
     setFacilities(response.data.facilities);
     form.setFieldsValue({
@@ -100,7 +100,7 @@ function HotelFacility() {
     }
 
     async function fetchFacilityInfo() {
-      const response = await getAPI(`api/v1/branch-facility/${branchId}`);
+      const response = await getAPI(`api/v1/branchs/${branchId}`);
 
       setFacilities(response.data.facilities);
     }

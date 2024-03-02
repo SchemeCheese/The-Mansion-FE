@@ -121,7 +121,8 @@ export const GetAllBranchManagerEndpoint = {
 };
 
 export const GetFacilitiesByBranch = {
-  GET: 'api/v1/branch-facility',
+  GET: 'api/v1/branchs',
+  GET_FACILITY_DETAIL: 'api/v1/facilities',
 };
 
 export const NightAuditEndpoint = {

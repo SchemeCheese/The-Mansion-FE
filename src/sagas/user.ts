@@ -34,10 +34,10 @@ export function* getLogginedUserInfoSaga() {
   try {
     let username = '';
     let permission = [];
-    let branchInfo = {};
+    let facilityId = {};
 
     ({
-      branch_info: branchInfo,
+      facility_id: facilityId,
       permission,
       username,
     } = yield call(request, apiEndPoint(AuthPath.PROFILE_PATH), {
@@ -49,7 +49,7 @@ export function* getLogginedUserInfoSaga() {
       loginSuccess({
         username,
         permission,
-        branch_info: branchInfo,
+        facility_id: facilityId.toString(),
       }),
     );
   } catch (error) {
