@@ -18,6 +18,7 @@ export function* getSearchCustomer({ payload }: ReturnType<typeof searchCustomer
     let data = [];
     let total = 0;
     let currentPage = 0;
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
     const query = new URLSearchParams(Object(payload)).toString();
 
@@ -25,10 +26,16 @@ export function* getSearchCustomer({ payload }: ReturnType<typeof searchCustomer
       current_page: currentPage,
       data,
       total,
-    } = yield call(request, `${apiEndPoint(CustomerEndpoint.SEARCH)}?${query}`, {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    }));
+    } = yield call(
+      request,
+      `${apiEndPoint(
+        CustomerEndpoint.SEARCH,
+      )}?${query}&branch_code=${branch_code}&operator_code=${operator_code}&facility_code=${facility_code}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
 
     yield put(
       searchCustomerFinish({
