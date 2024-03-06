@@ -16,6 +16,7 @@ import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import {
+  selectBranchInfo,
   selectFacilitesByBranch,
   selectNightAuditState,
   selectNoShowState,
@@ -38,6 +39,8 @@ import {
 
 import PattonButton from 'components/PattonButton';
 
+import { BranchInfoState } from 'types';
+
 interface DataType {
   address: string;
   age: number;
@@ -55,7 +58,7 @@ function NightAudit() {
   const reservationRoomCheckinTodayData: any = useAppSelector(
     selectReservationRoomCheckinTodayState,
   );
-  const branchFacilities: any = useAppSelector(selectFacilitesByBranch);
+  const branchInfoSelected: BranchInfoState = useAppSelector(selectBranchInfo);
 
   const selectNightAuditData = useAppSelector(selectNightAuditState);
   const { changed: selectNightAuditDateChanged } = useTreeChanges(selectNightAuditData);
@@ -497,13 +500,13 @@ function NightAudit() {
               {t('nightAudit.Current Date')}:{' '}
             </span>
             <span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.85)' }}>
-              {moment(branchFacilities.data.business_date).format('DD/MM/YYYY')}
+              {moment(branchInfoSelected.business_date).format('DD/MM/YYYY')}
             </span>
           </p>
         </Col>
         <Col span={12} style={{ textAlign: 'right', paddingRight: 20, paddingTop: 10 }}>
           <PattonButton
-            disabled={!branchFacilities.data.can_night_audit}
+            disabled={!branchInfoSelected.can_night_audit}
             onClick={() => {
               dispatch(
                 handleNightAuditAction({
@@ -520,10 +523,10 @@ function NightAudit() {
           </PattonButton>
         </Col>
       </Row>
-      {branchFacilities.data.warning_na_msg && (
+      {branchInfoSelected.warning_na_msg && (
         <Row>
           <Col span={24}>
-            <Alert banner message={branchFacilities.data.warning_na_msg} />
+            <Alert banner message={branchInfoSelected.warning_na_msg} />
           </Col>
         </Row>
       )}

@@ -119,7 +119,7 @@ function DeviceManagerList() {
     }
 
     async function fetchFacilityInfo() {
-      const response = await getAPI(`api/v1/branch-facility/${branchId}`);
+      const response = await getAPI(`api/v1/branchs/${branchId}`);
       const facilityInfoSelected: any = _.find(response.data.facilities, (item: any) => {
         return item.id.toString() === facilityId;
       });
@@ -161,7 +161,7 @@ function DeviceManagerList() {
         return item.id.toString() === value;
       });
 
-      const response = await getAPI(`api/v1/branch-facility/${branchInfoSelected.id}`);
+      const response = await getAPI(`api/v1/branchs/${branchInfoSelected.id}`);
 
       setFacilities(response.data.facilities);
       setSearchCondition({

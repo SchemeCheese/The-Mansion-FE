@@ -7,14 +7,23 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Avatar, Dropdown, Form, Layout, Menu, Modal, Select, Tooltip } from 'antd';
 import moment from 'moment';
-import { selectFacilitesByBranch, selectGetBranchs, selectUser } from 'selectors';
+import {
+  selectBranchInfo,
+  selectFacilitesByBranch,
+  selectGetBranchs,
+  selectGetFacility,
+  selectUser,
+} from 'selectors';
+import useTreeChanges from 'tree-changes-hook/lib';
 import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { branchFacilites, branchs, branchSelected, logOut } from 'actions';
+import { branchFacilites, branchs, getFacilityAction, logOut } from 'actions';
 
 import Footer from 'components/Footer';
+
+import { BranchInfoState } from 'types';
 
 import MButton from './MButton';
 import Notification from './Notification';
@@ -31,6 +40,10 @@ interface Props {
 function MLayout(props: Props) {
   const { breadCrumb, children } = props;
   const [collapsed, setCollapsed] = useState(false);
+  const currentFacilityId = useRef('');
+  const currentFacility = useAppSelector(selectGetFacility);
+  const [isLoadData, setIsLoadData] = useState(false);
+  const { changed } = useTreeChanges(currentFacility);
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
@@ -40,6 +53,7 @@ function MLayout(props: Props) {
   };
 
   const user = useAppSelector(selectUser);
+  const branchInfoSelected: BranchInfoState = useAppSelector(selectBranchInfo);
 
   const menu = (
     <Menu
@@ -74,31 +88,9 @@ function MLayout(props: Props) {
   const [currentBranchId, setCurrentBranchId] = useState<string>(
     window.localStorage.getItem('branch_id') ?? '1',
   );
-  const [currentBranchName, setCurrentBranchName] = useState<string>('');
-
-  const [currentFacility, setCurrentFacility] = useState({
-    id: window.localStorage.getItem('facility_id') ?? '',
-    operator_code: '',
-    branch_code: '',
-    facility_code: '',
-    name: '',
-    normal_time_check_in: '',
-    normal_time_check_out: '',
-    addition_cico_fee: '',
-  });
 
   const changeBranch = (value: string) => {
     setCurrentBranchId(value);
-    setCurrentFacility({
-      id: '',
-      operator_code: '',
-      branch_code: '',
-      facility_code: '',
-      name: '',
-      normal_time_check_in: '',
-      normal_time_check_out: '',
-      addition_cico_fee: '',
-    });
     form.setFieldsValue({
       outlet: undefined,
     });
@@ -110,7 +102,7 @@ function MLayout(props: Props) {
       return item.id.toString() === value;
     });
 
-    setCurrentFacility(facilitySelected);
+    currentFacilityId.current = facilitySelected.id;
   };
 
   const [form] = Form.useForm();
@@ -119,20 +111,8 @@ function MLayout(props: Props) {
     form.validateFields().then(() => {
       setIsModalOpen(false);
 
-      dispatch(
-        branchSelected({
-          operator_code: currentFacility?.operator_code,
-          branch_code: currentFacility?.branch_code,
-          facility_code: currentFacility?.facility_code,
-          normal_time_check_in: currentFacility?.normal_time_check_in,
-          normal_time_check_out: currentFacility?.normal_time_check_out,
-          addition_cico_fee: branchFacilities.data.addition_cico_fee,
-        }),
-      );
-      setCurrentBranchName(currentFacility?.name);
-
       window.localStorage.setItem('branch_id', currentBranchId);
-      window.localStorage.setItem('facility_id', currentFacility.id);
+      window.localStorage.setItem('facility_id', currentFacilityId.current);
 
       window.location.reload();
     });
@@ -143,20 +123,20 @@ function MLayout(props: Props) {
   useEffect(() => {
     dispatch(branchs({}));
     dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '1' }));
+    dispatch(getFacilityAction({ facility_id: window.localStorage.getItem('facility_id') ?? '1' }));
   }, []);
 
   useEffect(() => {
-    if (user && !window.localStorage.getItem('facility_id')) {
-      const branchInfo = user.branch_info;
+    if (changed('status', 'FINISH')) {
+      setIsLoadData(true);
+    }
+  }, [dispatch, changed]);
 
+  useEffect(() => {
+    if (user && !window.localStorage.getItem('facility_id')) {
       dispatch(
-        branchSelected({
-          operator_code: branchInfo.operator_code,
-          branch_code: branchInfo.branch_code,
-          facility_code: branchInfo.facility_code,
-          normal_time_check_in: branchInfo.normal_time_check_in,
-          normal_time_check_out: branchInfo.normal_time_check_out,
-          addition_cico_fee: branchInfo.addition_cico_fee,
+        getFacilityAction({
+          facility_id: user.facility_id.toString(),
         }),
       );
     }
@@ -178,39 +158,17 @@ function MLayout(props: Props) {
           return item.id.toString() === facilityLocal;
         });
 
-        const branchInfoSelected = _.find(allBranchs.data, (item: any) => {
+        const branchInfoSelectedTemporary = _.find(allBranchs.data, (item: any) => {
           return item.id.toString() === branchLocal;
         });
 
-        if (facilitySelected && branchInfoSelected) {
-          setCurrentBranchName(facilitySelected.name);
-          setCurrentBranchId(branchInfoSelected.id.toString());
-          setCurrentFacility({
-            id: facilitySelected.id,
-            operator_code: facilitySelected.operator_code,
-            branch_code: facilitySelected.branch_code,
-            facility_code: facilitySelected.facility_code,
-            name: facilitySelected.name,
-            normal_time_check_in: facilitySelected.normal_time_check_in,
-            normal_time_check_out: facilitySelected.normal_time_check_out,
-            addition_cico_fee: branchFacilities.data.addition_cico_fee,
-          });
+        if (facilitySelected && branchInfoSelectedTemporary) {
+          setCurrentBranchId(branchInfoSelectedTemporary.id.toString());
         }
       } else {
         const facilitySelected = branchFacilities.data.facilities[0];
 
-        setCurrentBranchName(facilitySelected.name);
         setCurrentBranchId(branchFacilities.branch_id.toString());
-        setCurrentFacility({
-          id: facilitySelected.id,
-          operator_code: facilitySelected.operator_code,
-          branch_code: facilitySelected.branch_code,
-          facility_code: facilitySelected.facility_code,
-          name: facilitySelected.name,
-          normal_time_check_in: facilitySelected.normal_time_check_in,
-          normal_time_check_out: facilitySelected.normal_time_check_out,
-          addition_cico_fee: branchFacilities.data.addition_cico_fee,
-        });
 
         window.localStorage.setItem('branch_id', branchFacilities.branch_id);
         window.localStorage.setItem('facility_id', facilitySelected.id);
@@ -282,6 +240,10 @@ function MLayout(props: Props) {
 
     return 'dashboard';
   };
+
+  if (!isLoadData) {
+    return null;
+  }
 
   return (
     <Layout>
@@ -615,7 +577,7 @@ function MLayout(props: Props) {
             onClick={showModal}
             style={{ marginLeft: '31%', fontSize: 12, display: isMobile() ? 'block' : 'unset' }}
           >
-            {currentBranchName}
+            {branchInfoSelected.name}
           </MButton>
           <Modal
             bodyStyle={{ backgroundColor: '#F0F2F5' }}
@@ -631,7 +593,7 @@ function MLayout(props: Props) {
               form={form}
               initialValues={{
                 branch: currentBranchId,
-                outlet: currentFacility.id?.toString(),
+                outlet: branchInfoSelected.id?.toString(),
               }}
               layout="vertical"
             >
@@ -661,7 +623,7 @@ function MLayout(props: Props) {
                   allowClear
                   onChange={selectFacility}
                   placeholder="Select Outlet"
-                  value={currentFacility.id ? currentFacility.id.toString() : undefined}
+                  value={branchInfoSelected.id ? branchInfoSelected.id.toString() : undefined}
                 >
                   {branchFacilities.data.facilities?.length > 0 &&
                     branchFacilities.data.facilities.map((facility: any) => (
@@ -685,8 +647,8 @@ function MLayout(props: Props) {
                   top: isMobile() ? -46 : '',
                 }}
               >
-                {branchFacilities.data.business_date
-                  ? moment(branchFacilities.data.business_date).format('DD/MM/YYYY')
+                {branchInfoSelected.business_date
+                  ? moment(branchInfoSelected.business_date).format('DD/MM/YYYY')
                   : t('common.Not yet setting')}
               </span>
             </Tooltip>

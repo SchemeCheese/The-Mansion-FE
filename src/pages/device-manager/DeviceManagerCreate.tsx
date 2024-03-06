@@ -57,7 +57,7 @@ function DeviceManagerCreate() {
   };
 
   const changeBranch = async (value: string) => {
-    const response = await getAPI(`api/v1/branch-facility/${value}`);
+    const response = await getAPI(`api/v1/branchs/${value}`);
 
     setFacilities(response.data.facilities);
     form.setFieldsValue({
@@ -109,7 +109,7 @@ function DeviceManagerCreate() {
       const branchId = window.localStorage.getItem('branch_id') ?? '1';
 
       const facilityId = window.localStorage.getItem('facility_id') ?? '1';
-      const response = await getAPI(`api/v1/branch-facility/${branchId}`);
+      const response = await getAPI(`api/v1/branchs/${branchId}`);
 
       const facilityInfoSelected: any = _.find(response.data.facilities, (item: any) => {
         return item.id.toString() === facilityId;
@@ -136,7 +136,7 @@ function DeviceManagerCreate() {
 
     async function fetchFacilityInfo() {
       const facilityId = window.localStorage.getItem('facility_id') ?? '1';
-      const response = await getAPI(`api/v1/branch-facility/${branchId}`);
+      const response = await getAPI(`api/v1/branchs/${branchId}`);
 
       const facilityInfoSelected: any = _.find(response.data.facilities, (item: any) => {
         return item.id.toString() === facilityId;

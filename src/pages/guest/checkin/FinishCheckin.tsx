@@ -19,9 +19,8 @@ import { selectUser } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { branchSelected } from 'actions';
+import { getFacilityAction } from 'actions';
 
-import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
 import GuestBgIcon from '../GuestBgIcon';
@@ -34,16 +33,11 @@ function FinishCheckin() {
 
   useEffect(() => {
     if (user && !window.localStorage.getItem('facility_id')) {
-      const branchInfo = user.branch_info;
+      const branchInfo = user.facility_id;
 
       dispatch(
-        branchSelected({
-          operator_code: branchInfo.operator_code,
-          branch_code: branchInfo.branch_code,
-          facility_code: branchInfo.facility_code,
-          normal_time_check_in: branchInfo.normal_time_check_in,
-          normal_time_check_out: branchInfo.normal_time_check_out,
-          addition_cico_fee: branchInfo.addition_cico_fee,
+        getFacilityAction({
+          facility_id: user.facility_id.toString(),
         }),
       );
     }

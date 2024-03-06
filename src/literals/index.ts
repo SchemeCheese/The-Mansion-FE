@@ -196,6 +196,8 @@ export const ActionTypes = keyMirror({
   PAYMENT_MONTHLY_INVOICE_SUCCESS: undefined,
   UPDATE_PAYMENT_DETAIL: undefined,
   UPDATE_PAYMENT_DETAIL_SUCCESS: undefined,
+  GET_FACILITY: undefined,
+  GET_FACILITY_FINISH: undefined,
 });
 
 export const STATUS: Status = {

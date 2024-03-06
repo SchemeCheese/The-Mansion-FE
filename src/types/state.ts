@@ -36,7 +36,7 @@ export interface GitHubState {
 }
 
 export interface UserState {
-  branch_info: Record<string, any>;
+  facility_id: string | number;
   isAuthenticated: boolean;
   name: string;
   permission: Record<string, any>;
@@ -538,12 +538,19 @@ export interface GetBranchFacilitiesState {
 }
 
 export interface BranchInfoState {
-  addition_cico_fee: string;
+  abbreviation: string;
+  addition_cico_fee: number;
   branch_code: string;
+  business_date: string;
+  can_night_audit: boolean;
+  channel_manager: boolean;
   facility_code: string;
+  id: string | number;
+  name: string;
   normal_time_check_in: string;
   normal_time_check_out: string;
   operator_code: string;
+  warning_na_msg: string;
 }
 
 interface ReservationRoomItemFilter {
@@ -779,6 +786,11 @@ export interface GetCustomerDetailState {
   is_finish: boolean;
 }
 
+export interface GetFacilityState {
+  data: Record<string, any>;
+  status: string;
+}
+
 export interface RootState {
   addDisk: AddDiskState;
   addItem: AddItemState;
@@ -816,6 +828,7 @@ export interface RootState {
   getElectricArea: GetElectricAreaState;
   getElectricPower: GetElectricPowerState;
   getElectricYesterday: GetElectricYesterdayState;
+  getFacility: GetFacilityState;
   getHouseKeeping: HouseKeepingState;
   getLanguageCode: LanguageCodeState;
   getMonthlyInvoice: MonthlyInvoiceState;

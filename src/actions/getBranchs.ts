@@ -9,6 +9,8 @@ import {
   BranchsResult,
   GetBranchFacilityFinishPayload,
   GetBranchFacilityPayload,
+  GetFacilityPayload,
+  GetFacilityPayloadFinishResult,
 } from 'types';
 
 export const branchs = createAction(ActionTypes.GET_BRANCH, (payload: any) =>
@@ -31,4 +33,14 @@ export const branchFacilitesFinish = createAction(
 
 export const branchSelected = createAction(ActionTypes.BRANCH_SELECTED, (payload: BranchSelected) =>
   actionPayload(payload),
+);
+
+export const getFacilityAction = createAction(
+  ActionTypes.GET_FACILITY,
+  (payload: GetFacilityPayload) => actionPayload(payload),
+);
+
+export const getFacilityFinishAction = createAction(
+  ActionTypes.GET_FACILITY_FINISH,
+  (payload: GetFacilityPayloadFinishResult) => actionPayload(payload),
 );
