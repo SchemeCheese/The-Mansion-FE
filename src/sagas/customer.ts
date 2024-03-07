@@ -72,10 +72,7 @@ export function* getCustomerDetailSaga({ payload }: ReturnType<typeof getCustome
       `${apiEndPoint(CustomerEndpoint.GET_DETAIL(payload.id))}?${query}`,
       {
         method: 'GET',
-        headers: {
-          ...headerWithAuthorization(),
-          ...payloadWithBranch,
-        },
+        headers: headerWithAuthorization(),
       },
     ));
 

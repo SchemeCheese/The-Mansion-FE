@@ -14,9 +14,7 @@ export function* postUploadFileSaga({ payload }: ReturnType<typeof uploadFileAct
 
     ({ url } = yield call(request, `${apiEndPoint(FileEndpoint.UPLOAD)}`, {
       method: 'POST',
-      headers: {
-        ...headerWithAuthorization(),
-      },
+      headers: headerWithAuthorization(),
       body: {
         file: payload.file,
       },

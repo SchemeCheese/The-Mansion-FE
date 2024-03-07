@@ -231,16 +231,14 @@ export function* getReservationSaga({ payload }: ReturnType<typeof getReservatio
       branch_code,
       facility_code,
     };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
     ({ data } = yield call(
       request,
-      `${apiEndPoint(ReservationEndpoint.DETAIL)}/${payload.reservation_id}`,
+      `${apiEndPoint(ReservationEndpoint.DETAIL)}/${payload.reservation_id}?${query}`,
       {
         method: 'GET',
-        headers: {
-          ...headerWithAuthorization(),
-          ...payloadBranch,
-        },
+        headers: headerWithAuthorization(),
       },
     ));
 
@@ -601,16 +599,15 @@ export function* getDownloadPDFReservationDetailSaga({
       branch_code,
       facility_code,
     };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_PDF)}/${
       payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.language}/downloadPdf`;
+    }/reservation-detail/${payload.payload.language}/downloadPdf?${query}`;
 
     fetch(urlApi, {
       method: 'GET',
-      headers: {
-        ...headerWithAuthorization(),
-        ...payloadBranch,
-      },
+      headers: headerWithAuthorization(),
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -646,16 +643,16 @@ export function* getDownloadDocxReservationDetailSaga({
       branch_code,
       facility_code,
     };
+
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_DOCX)}/${
       payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.language}/downloadDocx`;
+    }/reservation-detail/${payload.payload.language}/downloadDocx?${query}`;
 
     fetch(urlApi, {
       method: 'GET',
-      headers: {
-        ...headerWithAuthorization(),
-        ...payloadBranch,
-      },
+      headers: headerWithAuthorization(),
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -691,18 +688,18 @@ export function* getPrintRegistrationCardPDFReservationDetailSaga({
       branch_code,
       facility_code,
     };
+
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
     const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_REGISTRATION_CARD_PDF)}/${
       payload.payload.reservation_info_id
     }/reservation-detail/${payload.payload.reservation_detail_id}/${
       payload.payload.language
-    }/download-registration-card`;
+    }/download-registration-card?${query}`;
 
     fetch(urlApi, {
       method: 'GET',
-      headers: {
-        ...headerWithAuthorization(),
-        ...payloadBranch,
-      },
+      headers: headerWithAuthorization(),
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -736,18 +733,17 @@ export function* getPrintDepositPDFReservationDetailSaga({
       branch_code,
       facility_code,
     };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
     const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_DEPOSIT_PDF)}/${
       payload.payload.reservation_info_id
     }/reservation-detail/${payload.payload.reservation_detail_id}/${
       payload.payload.language
-    }/download-deposit-pdf?payment_method=${payload.payload.payment_method}`;
+    }/download-deposit-pdf?payment_method=${payload.payload.payment_method}&${query}`;
 
     fetch(urlApi, {
       method: 'GET',
-      headers: {
-        ...headerWithAuthorization(),
-        ...payloadBranch,
-      },
+      headers: headerWithAuthorization(),
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -781,20 +777,20 @@ export function* getPrintCheckinConfirmPDFReservationDetailSaga({
       branch_code,
       facility_code,
     };
+
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
     const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_REGISTRATION_CARD_PDF)}/${
       payload.payload.reservation_info_id
     }/reservation-detail/${
       payload.payload.language
     }/download-checkin-confirmation?reservationDetailIds=${
       payload.payload.reservation_detail_ids
-    }&hide_room_rate=${payload.payload.hide_room_rate}`;
+    }&hide_room_rate=${payload.payload.hide_room_rate}&${query}`;
 
     fetch(urlApi, {
       method: 'GET',
-      headers: {
-        ...headerWithAuthorization(),
-        ...payloadBranch,
-      },
+      headers: headerWithAuthorization(),
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
