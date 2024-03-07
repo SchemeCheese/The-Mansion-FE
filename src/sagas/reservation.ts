@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
@@ -223,13 +224,23 @@ export function* getReservationDetailSaga({ payload }: ReturnType<typeof getRese
 export function* getReservationSaga({ payload }: ReturnType<typeof getReservation>) {
   try {
     let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ data } = yield call(
       request,
       `${apiEndPoint(ReservationEndpoint.DETAIL)}/${payload.reservation_id}`,
       {
         method: 'GET',
-        headers: headerWithAuthorization(),
+        headers: {
+          ...headerWithAuthorization(),
+          ...payloadBranch,
+        },
       },
     ));
 
@@ -242,7 +253,7 @@ export function* getReservationSaga({ payload }: ReturnType<typeof getReservatio
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Something went wrong!');
+      window.location.href = '/';
     }
   }
 }
@@ -583,13 +594,23 @@ export function* getDownloadPDFReservationDetailSaga({
   payload,
 }: ReturnType<typeof downloadPDFReservationDetail>) {
   try {
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_PDF)}/${
       payload.payload.reservation_info_id
     }/reservation-detail/${payload.payload.language}/downloadPdf`;
 
     fetch(urlApi, {
       method: 'GET',
-      headers: headerWithAuthorization(),
+      headers: {
+        ...headerWithAuthorization(),
+        ...payloadBranch,
+      },
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -618,13 +639,23 @@ export function* getDownloadDocxReservationDetailSaga({
   payload,
 }: ReturnType<typeof downloadDocxReservationDetail>) {
   try {
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_DOCX)}/${
       payload.payload.reservation_info_id
     }/reservation-detail/${payload.payload.language}/downloadDocx`;
 
     fetch(urlApi, {
       method: 'GET',
-      headers: headerWithAuthorization(),
+      headers: {
+        ...headerWithAuthorization(),
+        ...payloadBranch,
+      },
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -653,6 +684,13 @@ export function* getPrintRegistrationCardPDFReservationDetailSaga({
   payload,
 }: ReturnType<typeof printRegistrationCardPDFReservationDetail>) {
   try {
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
     const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_REGISTRATION_CARD_PDF)}/${
       payload.payload.reservation_info_id
     }/reservation-detail/${payload.payload.reservation_detail_id}/${
@@ -661,7 +699,10 @@ export function* getPrintRegistrationCardPDFReservationDetailSaga({
 
     fetch(urlApi, {
       method: 'GET',
-      headers: headerWithAuthorization(),
+      headers: {
+        ...headerWithAuthorization(),
+        ...payloadBranch,
+      },
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -688,6 +729,13 @@ export function* getPrintDepositPDFReservationDetailSaga({
   payload,
 }: ReturnType<typeof printDepositPDFReservationDetail>) {
   try {
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
     const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_DEPOSIT_PDF)}/${
       payload.payload.reservation_info_id
     }/reservation-detail/${payload.payload.reservation_detail_id}/${
@@ -696,7 +744,10 @@ export function* getPrintDepositPDFReservationDetailSaga({
 
     fetch(urlApi, {
       method: 'GET',
-      headers: headerWithAuthorization(),
+      headers: {
+        ...headerWithAuthorization(),
+        ...payloadBranch,
+      },
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -723,6 +774,13 @@ export function* getPrintCheckinConfirmPDFReservationDetailSaga({
   payload,
 }: ReturnType<typeof printCheckinConfirmPDFReservationDetail>) {
   try {
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
     const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_REGISTRATION_CARD_PDF)}/${
       payload.payload.reservation_info_id
     }/reservation-detail/${
@@ -733,7 +791,10 @@ export function* getPrintCheckinConfirmPDFReservationDetailSaga({
 
     fetch(urlApi, {
       method: 'GET',
-      headers: headerWithAuthorization(),
+      headers: {
+        ...headerWithAuthorization(),
+        ...payloadBranch,
+      },
     }).then(response => {
       response.blob().then(blob => {
         const url = window.URL.createObjectURL(blob);

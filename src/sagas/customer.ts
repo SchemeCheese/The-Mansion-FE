@@ -72,7 +72,10 @@ export function* getCustomerDetailSaga({ payload }: ReturnType<typeof getCustome
       `${apiEndPoint(CustomerEndpoint.GET_DETAIL(payload.id))}?${query}`,
       {
         method: 'GET',
-        headers: headerWithAuthorization(),
+        headers: {
+          ...headerWithAuthorization(),
+          ...payloadWithBranch,
+        },
       },
     ));
 
@@ -90,7 +93,7 @@ export function* getCustomerDetailSaga({ payload }: ReturnType<typeof getCustome
       console.log('Error get customer', error);
     }
 
-    message.error('Error get customer!');
+    window.location.href = '/';
   }
 }
 

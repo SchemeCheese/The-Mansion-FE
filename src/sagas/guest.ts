@@ -89,6 +89,13 @@ export function* postUpdateGuestSaga({ payload }: ReturnType<typeof updateGuestA
 export function* deleteRemoveGuestSaga({ payload }: ReturnType<typeof removeGuestAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(
       request,
@@ -97,7 +104,10 @@ export function* deleteRemoveGuestSaga({ payload }: ReturnType<typeof removeGues
       }/remove`,
       {
         method: 'DELETE',
-        headers: headerWithAuthorization(),
+        headers: {
+          ...headerWithAuthorization(),
+          ...payloadBranch,
+        },
       },
     ));
 
