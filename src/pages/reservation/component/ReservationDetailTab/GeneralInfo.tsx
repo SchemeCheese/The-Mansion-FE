@@ -333,6 +333,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
                   ? moment(generalInfoState.checkin_time, format)
                   : undefined
               }
+              disabled={data.status !== 'reserved' && data.status !== 'waitlist'}
               format={format}
               onChange={date => handleChangeDateTime(date, 'checkin_time', 'time')}
               style={{
@@ -439,6 +440,11 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
                 generalInfoState.checkout_time
                   ? moment(generalInfoState.checkout_time, format)
                   : undefined
+              }
+              disabled={
+                data.status !== 'reserved' &&
+                data.status !== 'waitlist' &&
+                data.status !== 'in_house'
               }
               format={format}
               onChange={date => handleChangeDateTime(date, 'checkout_time', 'time')}

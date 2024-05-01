@@ -1,7 +1,7 @@
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { ProductEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -11,7 +11,15 @@ import { logOut, searchProduct, searchProductFinish } from 'actions';
 export function* getSearchProductSaga({ payload }: ReturnType<typeof searchProduct>) {
   try {
     let data = [];
-    const query = new URLSearchParams(Object(payload)).toString();
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadWithBranch = {
+      ...payload,
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
 
     data = yield call(request, `${apiEndPoint(ProductEndpoint.SEARCH)}?${query}`, {
       method: 'GET',

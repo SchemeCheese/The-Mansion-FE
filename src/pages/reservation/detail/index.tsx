@@ -404,7 +404,7 @@ function ReservationDetail() {
               <BreadscrumTitle>{t('common.Branch Code')}:</BreadscrumTitle>
             </Col>
             <Col span={12}>
-              <p style={{ color: '#1D39C4', fontSize: 14 }}>{reservationRedux.operator_code}</p>
+              <p style={{ color: '#1D39C4', fontSize: 14 }}>{reservationRedux.branch_code}</p>
             </Col>
           </Row>
           <Row>
