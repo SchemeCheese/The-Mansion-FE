@@ -246,8 +246,8 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
           checkin: values.checkin.format('YYYY-MM-DD'),
           checkout: values.checkout.format('YYYY-MM-DD'),
           room_type: values.room_type,
-          source_type: '32',
-          source_id: '',
+          source_type: '7',
+          source_id: '23',
           charge_kind: '1',
         }),
       );
