@@ -513,8 +513,13 @@ function SelectRoomModal({
         hours: hoursTime,
         months: monthsTime,
         task: '',
-        actual_amount: sum,
-        charges: searchRoomResultState,
+        actual_amount: sum * quantity * monthsTime * hoursTime,
+        charges: searchRoomResultState.map((item: any) => {
+          return {
+            ...item,
+            actual_amount: item.actual_amount * monthsTime * hoursTime,
+          };
+        }),
       });
     });
 
