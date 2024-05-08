@@ -28,10 +28,16 @@ const { TabPane } = Tabs;
 interface Props {
   reservationDetail: any;
   reservationId: string;
+  resetSelectedRows?: any;
   typeScreen?: string | undefined;
 }
 
-function ReservationDetailCard({ reservationDetail, reservationId, typeScreen }: Props) {
+function ReservationDetailCard({
+  reservationDetail,
+  reservationId,
+  resetSelectedRows,
+  typeScreen,
+}: Props) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const reservationDetailInfo: any = useSelector<RootState>(
@@ -136,7 +142,11 @@ function ReservationDetailCard({ reservationDetail, reservationId, typeScreen }:
             }}
             tab={t('reservation.Schedule')}
           >
-            <Schedule reservationDetailId={reservationDetail.id} reservationId={reservationId} />
+            <Schedule
+              reservationDetailId={reservationDetail.id}
+              reservationId={reservationId}
+              resetSelectedRows={resetSelectedRows}
+            />
           </TabPane>
           <TabPane
             key="4"
