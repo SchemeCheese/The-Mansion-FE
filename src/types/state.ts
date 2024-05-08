@@ -311,7 +311,7 @@ export interface NoShowState {
 }
 
 export interface NightAuditState {
-  facility_id: number;
+  facility_id: number | string;
   is_finish: boolean;
 }
 

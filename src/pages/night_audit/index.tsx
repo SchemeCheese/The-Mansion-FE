@@ -17,7 +17,6 @@ import { formatNumber } from 'helpers';
 import moment from 'moment';
 import {
   selectBranchInfo,
-  selectFacilitesByBranch,
   selectNightAuditState,
   selectNoShowState,
   selectReservationRoomCheckinTodayState,
@@ -510,7 +509,7 @@ function NightAudit() {
             onClick={() => {
               dispatch(
                 handleNightAuditAction({
-                  facility_id: 1,
+                  facility_id: localStorage.getItem('facility_id')?.toString() || '',
                 }),
               );
             }}
