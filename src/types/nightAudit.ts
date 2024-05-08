@@ -3,5 +3,5 @@ export interface NoShowPayload {
 }
 
 export interface NightAuditPayload {
-  facility_id: number;
+  facility_id: number | string;
 }

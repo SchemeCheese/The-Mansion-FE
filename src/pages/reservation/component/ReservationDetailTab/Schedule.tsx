@@ -62,9 +62,10 @@ const { Option } = Select;
 interface Props {
   reservationDetailId: string;
   reservationId: string;
+  resetSelectedRows?: any;
 }
 
-function Schedule({ reservationDetailId, reservationId }: Props) {
+function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Props) {
   const [state, setState] = useState<DemoAppState>({
     weekendsVisible: true,
     currentEvents: [],
@@ -248,6 +249,10 @@ function Schedule({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
+      if (resetSelectedRows) {
+        resetSelectedRows([]);
+      }
+
       message.success(t('message.Booking room successfully!'));
 
       dispatch(

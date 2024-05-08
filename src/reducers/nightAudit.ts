@@ -5,7 +5,7 @@ import { handleNightAuditAction, handleNightAuditFinishAction } from 'actions';
 import { NightAuditState } from 'types';
 
 export const nightAuditState = {
-  facility_id: 0,
+  facility_id: '',
   is_finish: false,
 };
 

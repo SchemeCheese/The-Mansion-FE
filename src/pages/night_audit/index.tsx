@@ -17,7 +17,6 @@ import { formatNumber } from 'helpers';
 import moment from 'moment';
 import {
   selectBranchInfo,
-  selectFacilitesByBranch,
   selectNightAuditState,
   selectNoShowState,
   selectReservationRoomCheckinTodayState,
@@ -30,6 +29,7 @@ import { useAppSelector } from 'modules/hooks';
 
 import {
   branchFacilites,
+  getFacilityAction,
   getReservationRoomCheckinTodayAction,
   getReservationRoomCheckoutTodayAction,
   getReservationRoomInhouseAction,
@@ -343,6 +343,8 @@ function NightAudit() {
   ];
 
   useEffect(() => {
+    dispatch(getFacilityAction({ facility_id: window.localStorage.getItem('facility_id') ?? '1' }));
+
     dispatch(
       getReservationRoomCheckinTodayAction({
         filter: {
@@ -386,7 +388,9 @@ function NightAudit() {
     if (selectNightAuditDateChanged('is_finish', true)) {
       message.success(t('message.Handle night audit successfully!'));
 
-      dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '1' }));
+      dispatch(
+        getFacilityAction({ facility_id: window.localStorage.getItem('facility_id') ?? '1' }),
+      );
 
       dispatch(
         getReservationRoomCheckinTodayAction({
@@ -510,7 +514,7 @@ function NightAudit() {
             onClick={() => {
               dispatch(
                 handleNightAuditAction({
-                  facility_id: 1,
+                  facility_id: localStorage.getItem('facility_id')?.toString() || '',
                 }),
               );
             }}

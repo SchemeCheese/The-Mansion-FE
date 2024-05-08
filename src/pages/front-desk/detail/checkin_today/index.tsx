@@ -59,6 +59,7 @@ function ReservationCheckinTodayDetail() {
 
   const resetSelectedRows = () => {
     setSelectedRowKeys([]);
+    setSelectedRows([]);
   };
 
   const rowSelection = {

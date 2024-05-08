@@ -697,6 +697,7 @@ function ReservationForm({
                         <ReservationDetailCard
                           reservationDetail={reservationDetailInfo}
                           reservationId={reservationId}
+                          resetSelectedRows={resetSelectedRows}
                         />
                       )}
                     </>
