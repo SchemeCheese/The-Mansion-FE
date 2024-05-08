@@ -50,7 +50,13 @@ function HouseKeeping() {
       current_page: page,
       per_page: perPage,
     });
-    dispatch(getHouseKeepingAction(searchCondition));
+    dispatch(
+      getHouseKeepingAction({
+        ...searchCondition,
+        current_page: page,
+        per_page: perPage,
+      }),
+    );
   };
 
   const searchInput = (event: React.KeyboardEvent) => {
