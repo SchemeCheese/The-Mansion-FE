@@ -122,8 +122,16 @@ function MLayout(props: Props) {
 
   useEffect(() => {
     dispatch(branchs({}));
-    dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '1' }));
-    dispatch(getFacilityAction({ facility_id: window.localStorage.getItem('facility_id') ?? '1' }));
+
+    if (window.localStorage.getItem('branch_id')) {
+      dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '' }));
+    }
+
+    if (window.localStorage.getItem('facility_id')) {
+      dispatch(
+        getFacilityAction({ facility_id: window.localStorage.getItem('facility_id') ?? '' }),
+      );
+    }
   }, []);
 
   useEffect(() => {
@@ -134,11 +142,18 @@ function MLayout(props: Props) {
 
   useEffect(() => {
     if (user && !window.localStorage.getItem('facility_id')) {
+      window.localStorage.setItem('branch_id', user.branch_id.toString());
+      window.localStorage.setItem('facility_id', user.facility_id.toString());
+
+      setCurrentBranchId(user.branch_id.toString());
+
       dispatch(
         getFacilityAction({
           facility_id: user.facility_id.toString(),
         }),
       );
+
+      dispatch(branchFacilites({ branchId: user.branch_id.toString() }));
     }
   }, [user]);
 
@@ -576,6 +591,7 @@ function MLayout(props: Props) {
 
           <MButton
             className="header-branch-name"
+            disabled={!user.can_switch_branch}
             onClick={showModal}
             style={{ marginLeft: '31%', fontSize: 12, display: isMobile() ? 'block' : 'unset' }}
           >

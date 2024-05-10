@@ -36,6 +36,8 @@ export interface GitHubState {
 }
 
 export interface UserState {
+  branch_id: string | number;
+  can_switch_branch: boolean;
   facility_id: string | number;
   isAuthenticated: boolean;
   name: string;

@@ -4,6 +4,8 @@ export interface LoginCredentials {
 }
 
 export interface LoginSuccess {
+  branch_id: string | number;
+  can_switch_branch: boolean;
   facility_id: string | number;
   name?: string;
   permission: Record<string, any>;

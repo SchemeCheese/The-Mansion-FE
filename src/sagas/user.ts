@@ -34,9 +34,13 @@ export function* getLogginedUserInfoSaga() {
   try {
     let username = '';
     let permission = [];
-    let facilityId = {};
+    let facilityId = '';
+    let branchId = '';
+    let canSwitchBranch = false;
 
     ({
+      branch_id: branchId,
+      can_switch_branch: canSwitchBranch,
       facility_id: facilityId,
       permission,
       username,
@@ -47,9 +51,11 @@ export function* getLogginedUserInfoSaga() {
 
     yield put(
       loginSuccess({
+        branch_id: branchId,
+        can_switch_branch: canSwitchBranch,
         username,
         permission,
-        facility_id: facilityId.toString(),
+        facility_id: facilityId,
       }),
     );
   } catch (error) {
