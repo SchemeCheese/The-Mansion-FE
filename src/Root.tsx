@@ -141,7 +141,7 @@ function Root() {
       </span>
     </>
   );
-
+  /*
   const deviceBreadCrum = (
     <>
       <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
@@ -179,6 +179,7 @@ function Root() {
       </span>
     </>
   );
+  */
 
   const nightAuditBreadCrum = (
     <>
@@ -276,7 +277,7 @@ function Root() {
               element={
                 <PublicRoute
                   isAuthenticated={isAuthenticated}
-                  to={user.permission.dashboard?.view === true ? '/dashboard' : '/reservation'}
+                  to={user.permission.dashboard?.view === true ? '/reservation' : '/reservation'}
                 >
                   <Login />
                 </PublicRoute>
@@ -285,7 +286,7 @@ function Root() {
             />
             <Route
               element={
-                <PublicRoute isAuthenticated={isAuthenticated} to="/dashboard">
+                <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
                   <Login />
                 </PublicRoute>
               }
@@ -448,7 +449,8 @@ function Root() {
                 />
               </>
             )}
-            {user.permission.dashboard?.view === true && (
+
+            {/* {user.permission.dashboard?.view === true && (
               <>
                 <Route
                   element={
@@ -487,8 +489,8 @@ function Root() {
                   path="/power-monitoring/device"
                 />
               </>
-            )}
-            <Route
+            )} */}
+            {/* <Route
               element={
                 <PrivateRoute
                   breadCrumb={frontDeskBreadCrum}
@@ -499,7 +501,7 @@ function Root() {
                 </PrivateRoute>
               }
               path="/power-monitoring/device/create"
-            />
+            /> */}
 
             {user.permission.customer?.view === true && (
               <>

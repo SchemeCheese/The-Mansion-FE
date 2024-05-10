@@ -303,7 +303,8 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/dashboard');
               },
-              hidden: user.permission.dashboard.view === false,
+              hidden: true,
+              // hidden: user.permission.dashboard.view === false,
             },
             {
               key: 'power-monitoring',
@@ -339,7 +340,8 @@ function MLayout(props: Props) {
                   },
                 },
               ],
-              hidden: user.permission.dashboard.view === false,
+              hidden: true,
+              // hidden: user.permission.dashboard.view === false,
             },
             {
               key: 'reservation',
