@@ -22,7 +22,12 @@ import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { createReservation, getReservationNumber, searchRoomReset } from 'actions';
+import {
+  createReservation,
+  getReservationNumber,
+  resetReservation,
+  searchRoomReset,
+} from 'actions';
 
 import { RootState } from 'types';
 
@@ -138,6 +143,7 @@ function Create() {
 
   useEffect(() => {
     dispatch(getReservationNumber(branchInfo));
+    dispatch(resetReservation());
   }, []);
 
   const onFinishFailed = (errorInfo: any) => {
@@ -188,7 +194,6 @@ function Create() {
 
   return (
     <>
-      {/* <BreadcrumbList data={breadcrumbData} /> */}
       <p className="title">{t('reservation.Create New Reservation')}</p>
       <p
         className="custom-bg-header"
