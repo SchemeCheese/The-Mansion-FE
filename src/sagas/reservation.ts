@@ -259,10 +259,18 @@ export function* getReservationSaga({ payload }: ReturnType<typeof getReservatio
 export function* getReservationFolioSaga({ payload }: ReturnType<typeof getReservationByFolio>) {
   try {
     let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
     ({ data } = yield call(
       request,
-      `${apiEndPoint(ReservationEndpoint.GET_BY_FOLIO)}/${payload.folio}`,
+      `${apiEndPoint(ReservationEndpoint.GET_BY_FOLIO)}/${payload.folio}?${query}`,
       {
         method: 'GET',
         headers: headerWithAuthorization(),
@@ -287,6 +295,13 @@ export function* getReservationNumberSaga({ payload }: ReturnType<typeof getRese
   try {
     let success = '';
     let reservationNumber = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ reservation_number: reservationNumber, success } = yield call(
       request,
@@ -294,7 +309,7 @@ export function* getReservationNumberSaga({ payload }: ReturnType<typeof getRese
       {
         method: 'POST',
         headers: headerWithAuthorization(),
-        body: { ...payload },
+        body: { ...payload, ...payloadBranch },
       },
     ));
 
@@ -317,7 +332,13 @@ export function* getReservationNumberSaga({ payload }: ReturnType<typeof getRese
 export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) {
   try {
     let success = '';
-    const { operator_code } = yield select(s => s.branchInfo || {});
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(
       request,
@@ -329,7 +350,7 @@ export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) 
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
-          operator_code,
+          ...payloadBranch,
         },
       },
     ));
@@ -400,7 +421,13 @@ export function* postAddReservationDetailSaga({
 }: ReturnType<typeof addReservationDetail>) {
   try {
     let success = '';
-    const { operator_code } = yield select(s => s.branchInfo || {});
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(
       request,
@@ -412,7 +439,7 @@ export function* postAddReservationDetailSaga({
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
-          operator_code,
+          ...payloadBranch,
         },
       },
     ));
@@ -440,7 +467,13 @@ export function* postCancelReservationDetailSaga({
 }: ReturnType<typeof cancelReservationDetail>) {
   try {
     let success = '';
-    const { operator_code } = yield select(s => s.branchInfo || {});
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(
       request,
@@ -452,7 +485,7 @@ export function* postCancelReservationDetailSaga({
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
-          operator_code,
+          ...payloadBranch,
         },
       },
     ));
@@ -479,7 +512,13 @@ export function* postCancelReservationDetailSaga({
 export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof updateGeneralInfo>) {
   try {
     let success = '';
-    const { operator_code } = yield select(s => s.branchInfo || {});
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(
       request,
@@ -491,7 +530,7 @@ export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof update
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
-          operator_code,
+          ...payloadBranch,
         },
       },
     ));
@@ -519,6 +558,13 @@ export function* postUpdateNoteReservationDetailSaga({
 }: ReturnType<typeof updateNoteReservationDetail>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(
       request,
@@ -528,7 +574,10 @@ export function* postUpdateNoteReservationDetailSaga({
       {
         method: 'POST',
         headers: headerWithAuthorization(),
-        body: payload.payload,
+        body: {
+          ...payload.payload,
+          ...payloadBranch,
+        },
       },
     ));
 
@@ -555,6 +604,12 @@ export function* getResendEmailReservationSaga({
 }: ReturnType<typeof resendEmailReservationAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(
       request,
@@ -565,6 +620,7 @@ export function* getResendEmailReservationSaga({
         method: 'POST',
         headers: headerWithAuthorization(),
         body: {
+          ...payloadBranch,
           is_hide_room_rate: payload.is_hide_room_rate,
         },
       },
@@ -816,6 +872,12 @@ export function* getPrintCheckinConfirmPDFReservationDetailSaga({
 export function* paymentVNPaySaga({ payload }: ReturnType<typeof paymentVNPayReservationDetail>) {
   try {
     let url = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ url } = yield call(
       request,
@@ -827,6 +889,7 @@ export function* paymentVNPaySaga({ payload }: ReturnType<typeof paymentVNPayRes
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
+          ...payloadBranch,
         },
       },
     ));
@@ -855,6 +918,12 @@ export function* paymentMomoPaySaga({
 }: ReturnType<typeof paymentMomoPayReservationDetail>) {
   try {
     let url = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ url } = yield call(
       request,
@@ -866,6 +935,7 @@ export function* paymentMomoPaySaga({
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
+          ...payloadBranch,
         },
       },
     ));

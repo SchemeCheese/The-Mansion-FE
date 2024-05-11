@@ -339,7 +339,14 @@ function ReservationForm({
             <Col span={24}>
               <Tabs className="tabs-cart" defaultActiveKey="1">
                 <TabPane key="1" style={{ padding: 20 }} tab={t('common.General Infos')}>
-                  <Card bordered={false} size="small" title="General Informations">
+                  <Card
+                    bordered={false}
+                    size="small"
+                    style={{
+                      pointerEvents: user.permission.reservation.edit ? 'inherit' : 'none',
+                    }}
+                    title="General Informations"
+                  >
                     <Row>
                       <Col span={8}>
                         <Form.Item label={t('reservation.Folio ID')} name="reservation_number">
@@ -417,7 +424,11 @@ function ReservationForm({
                     style={{ marginTop: 20 }}
                     title={t('common.Booker Informations')}
                   >
-                    <Row>
+                    <Row
+                      style={{
+                        pointerEvents: user.permission.reservation.edit ? 'inherit' : 'none',
+                      }}
+                    >
                       <Col span={8}>
                         <Form.Item
                           label={t('reservation.Type.title')}

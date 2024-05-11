@@ -538,7 +538,17 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
   });
 
   return (
-    <Row style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
+    <Row
+      style={{
+        paddingLeft: 15,
+        backgroundColor: 'white',
+        paddingTop: 15,
+        pointerEvents:
+          user.permission.reservation.edit && reservationDetailInfo.status !== 'checkout'
+            ? 'inherit'
+            : 'none',
+      }}
+    >
       {reservationDetailData.is_finish === true &&
       searchAvailableEventsData.is_searching === false ? (
         <>

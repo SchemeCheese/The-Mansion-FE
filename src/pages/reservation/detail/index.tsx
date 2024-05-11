@@ -426,7 +426,11 @@ function ReservationDetail() {
         </Col>
         <Col span={6}>
           <div>
-            <Checkbox checked={isHidenRoomRate} onChange={e => setIsHideRoomRate(e.target.checked)}>
+            <Checkbox
+              checked={isHidenRoomRate}
+              disabled={!user.permission.reservation.edit}
+              onChange={e => setIsHideRoomRate(e.target.checked)}
+            >
               {t('reservation.Hide room rates')}
             </Checkbox>
           </div>

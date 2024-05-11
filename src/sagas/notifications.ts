@@ -49,10 +49,17 @@ export function* getNotificationsSaga() {
 export function* postReadNotificationsSaga({ payload }: ReturnType<typeof readNotifcationsAction>) {
   try {
     let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
     ({ data } = yield call(
       request,
-      `${apiEndPoint(NotificationEndpoint.READ_NOTIFICATION)}/${payload.id}`,
+      `${apiEndPoint(NotificationEndpoint.READ_NOTIFICATION)}/${payload.id}?${query}`,
       {
         method: 'POST',
         headers: headerWithAuthorization(),

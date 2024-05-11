@@ -17,12 +17,19 @@ import {
 export function* getMonthlyInvoiceSaga({ payload }: ReturnType<typeof getMonthlyInvoicesAction>) {
   try {
     let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
     ({ data } = yield call(
       request,
       `${apiEndPoint(MonthlyInvoiceEndpoint.GET_MONTHLY_INVOICE)}/${
         payload.reservation_info_id
-      }/reservation-detail/${payload.reservation_detail_id}/monthly-invoices`,
+      }/reservation-detail/${payload.reservation_detail_id}/monthly-invoices?${query}`,
       {
         method: 'GET',
         headers: headerWithAuthorization(),

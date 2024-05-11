@@ -58,11 +58,20 @@ export function* postUpdateRoomAvailableSaga({
 }: ReturnType<typeof updateRoomAvailableAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(request, `${apiEndPoint(ChannelEndpoint.SET_ROOM_DATE)}`, {
       method: 'POST',
       headers: headerWithAuthorization(),
-      body: payload.payload,
+      body: {
+        ...payload.payload,
+        ...payloadBranch,
+      },
     }));
 
     if (success) {

@@ -25,12 +25,19 @@ import {
 export function* postCreateGuestSaga({ payload }: ReturnType<typeof createGuest>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(request, apiEndPoint(GuestEndpoint.CREATE), {
       method: 'POST',
       headers: headerWithAuthorization(),
       body: {
         ...payload.payload,
+        ...payloadBranch,
       },
     }));
 
@@ -55,6 +62,12 @@ export function* postCreateGuestSaga({ payload }: ReturnType<typeof createGuest>
 export function* postUpdateGuestSaga({ payload }: ReturnType<typeof updateGuestAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(
       request,
@@ -64,6 +77,7 @@ export function* postUpdateGuestSaga({ payload }: ReturnType<typeof updateGuestA
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
+          ...payloadBranch,
         },
       },
     ));
@@ -89,12 +103,19 @@ export function* postUpdateGuestSaga({ payload }: ReturnType<typeof updateGuestA
 export function* deleteRemoveGuestSaga({ payload }: ReturnType<typeof removeGuestAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
     ({ success } = yield call(
       request,
       `${apiEndPoint(GuestEndpoint.REMOVE)}/${payload.payload.reservation_detail_id}/guests/${
         payload.payload.guest_id
-      }/remove`,
+      }/remove?${query}`,
       {
         method: 'DELETE',
         headers: headerWithAuthorization(),
@@ -122,12 +143,19 @@ export function* deleteRemoveGuestSaga({ payload }: ReturnType<typeof removeGues
 export function* getSetMainGuestSaga({ payload }: ReturnType<typeof setMainGuestAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
     ({ success } = yield call(
       request,
       `${apiEndPoint(GuestEndpoint.REMOVE)}/${payload.reservation_detail_id}/guests/${
         payload.guest_id
-      }/set-main-guest`,
+      }/set-main-guest?${query}`,
       {
         method: 'GET',
         headers: headerWithAuthorization(),

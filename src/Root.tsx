@@ -687,14 +687,20 @@ function Root() {
               }
               path="/guest-thank/:type"
             />
-            <Route
-              element={
-                <PrivateRoute breadCrumb={reportBreadCrum} isAuthenticated={isAuthenticated} to="/">
-                  <Report />
-                </PrivateRoute>
-              }
-              path="/report"
-            />
+            {user.permission.report?.view === true && (
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={reportBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    to="/"
+                  >
+                    <Report />
+                  </PrivateRoute>
+                }
+                path="/report"
+              />
+            )}
             <Route element={<NotFound />} path="*" />
           </Routes>
         </Main>

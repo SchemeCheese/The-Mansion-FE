@@ -567,7 +567,7 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/report');
               },
-              hidden: user.permission.reservation.view === false,
+              hidden: user.permission.report.view === false,
             },
           ].filter((item: any) => {
             return !item.hidden;

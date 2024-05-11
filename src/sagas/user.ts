@@ -67,6 +67,10 @@ export function* getLogginedUserInfoSaga() {
 export function* logoutSaga() {
   yield delay(200);
 
+  window.localStorage.removeItem('facility_id');
+  window.localStorage.removeItem('branch_id');
+  window.localStorage.removeItem('persist:rrsb');
+
   yield put(logOutSuccess());
 }
 

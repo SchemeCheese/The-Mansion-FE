@@ -53,11 +53,20 @@ function SelectedPayMethodModalFinal({ setIsModalSelectedPaymentMethod, visible 
     if (visible) {
       setPaidAmount(totalAmountAfterDiscount);
 
+      const currencyConversionBase: any = _.find(
+        reservationDetailInfo.data.exchange_rates,
+        (item: any) => {
+          return item.is_base;
+        },
+      );
+
       form.setFieldsValue({
         payment_methods: [
           {
             amount_in_vnd: formatNumber(totalAmountAfterDiscount),
-            currency_conversion_id: 2,
+            currency_conversion_id: currencyConversionBase
+              ? currencyConversionBase.id
+              : reservationDetailInfo.data.exchange_rates[0].id,
             payment_amount: totalAmountAfterDiscount,
             payment_method: '1',
           },
