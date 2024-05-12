@@ -10,7 +10,19 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Checkbox, Col, DatePicker, Form, Input, Modal, Radio, Row, Select, Space } from 'antd';
+import {
+  Checkbox,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  message,
+  Modal,
+  Radio,
+  Row,
+  Select,
+  Space,
+} from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -65,8 +77,8 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
                 {
                   description_id: 88,
                   quantity: 1,
-                  sales_price: values.amount * (rate?.exchange_rate ?? 1),
-                  normal_price: values.amount * (rate?.exchange_rate ?? 1),
+                  sales_price: values.amount * rate.exchange_rate,
+                  normal_price: values.amount * rate.exchange_rate,
                   storage_id: 4,
                   comment_deposit: values.deposit_comment,
                   deposit_date: values.deposit_date.format('YYYY-MM_DD'),
@@ -200,7 +212,6 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
           <Col span={12}>
             <Form.Item label={t('transaction.Select Currency.title')} name="currency">
               <Select
-                disabled={exchangeRates?.length === 0}
                 onChange={onChangeCurrency}
                 placeholder="Select Currency"
                 style={{ borderRadius: 2, width: '100%' }}
