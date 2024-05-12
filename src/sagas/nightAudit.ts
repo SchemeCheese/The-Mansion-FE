@@ -1,7 +1,7 @@
 import { request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
 import { NightAuditEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -18,9 +18,17 @@ export function* postHandleNoShowSaga({
   payload,
 }: ReturnType<typeof handleNoShowReservationDetailAction>) {
   try {
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
     yield call(
       request,
-      `${apiEndPoint(NightAuditEndpoint.HANDLE_NOSHOW)}/${payload.reservation_detail_id}`,
+      `${apiEndPoint(NightAuditEndpoint.HANDLE_NOSHOW)}/${payload.reservation_detail_id}?${query}`,
       {
         method: 'POST',
         headers: headerWithAuthorization(),

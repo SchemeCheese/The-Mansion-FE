@@ -100,6 +100,12 @@ export function* postCreateQRCodeVNPaySaga({
 export function* postUpdatePaymentDetailSaga({ payload }: ReturnType<typeof updatePaymentDetail>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(
       request,
@@ -111,6 +117,7 @@ export function* postUpdatePaymentDetailSaga({ payload }: ReturnType<typeof upda
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
+          ...payloadBranch,
         },
       },
     ));

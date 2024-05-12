@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { createReservation, createReservationSuccess } from 'actions';
+import { createReservation, createReservationSuccess, resetCreateReservation } from 'actions';
 
 import { CreateReservationState } from 'types';
 
@@ -37,6 +37,28 @@ export default {
       .addCase(createReservationSuccess, (draft, { payload }) => {
         draft.reservation_created = payload.reservation_info;
         draft.status = 'SUCCESS';
+      })
+      .addCase(resetCreateReservation, (draft, { payload }) => {
+        draft.payload = {
+          reservation_number: '',
+          market_segment_id: '',
+          agent_info_id: '',
+          note: '',
+          booker_type: '',
+          booker_firstname: '',
+          booker_email: '',
+          booker_phone_number: '',
+          booker_rank: '',
+          booker_email_2: '',
+          booker_note: '',
+          payment_method: '',
+          paid: '',
+          send_mail: '',
+          no_show: '',
+          no_deposit: '',
+        };
+        draft.status = '';
+        draft.reservation_created = null;
       });
   }),
 };

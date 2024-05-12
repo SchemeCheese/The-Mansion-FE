@@ -129,12 +129,19 @@ export function* postDeleteItemSaga({ payload }: ReturnType<typeof deleteItemAct
 export function* postChangeDiskSaga({ payload }: ReturnType<typeof changeDiskAction>) {
   try {
     let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
 
     ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.CHANGE_DISK)}`, {
       method: 'POST',
       headers: headerWithAuthorization(),
       body: {
         ...payload.payload,
+        ...payloadBranch,
       },
     }));
 
@@ -194,11 +201,20 @@ export function* getDownloadPDFInvoiceTransactionSaga({
   payload,
 }: ReturnType<typeof downloadPDFInvoiceTransaction>) {
   try {
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
     const urlApi = `${apiEndPoint(TransactionEndpoint.DOWNLOAD_INVOICE_PDF)}/${
       payload.payload.reservation_info_id
     }/reservation-detail/${payload.payload.reservation_detail_id}/${
       payload.payload.language
-    }/payment/${payload.payload.payment_id}/download-invoice`;
+    }/payment/${payload.payload.payment_id}/download-invoice?${query}`;
 
     fetch(urlApi, {
       method: 'GET',

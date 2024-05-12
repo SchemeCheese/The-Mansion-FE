@@ -454,7 +454,7 @@ function SelectRoomModal({
     );
   }
 
-  const disabledChekinDate: RangePickerProps['disabledDate'] = current => {
+  const disabledCheckinDate: RangePickerProps['disabledDate'] = current => {
     // Can not select days before today
     return current < moment().subtract(1, 'day').endOf('day');
   };
@@ -560,7 +560,7 @@ function SelectRoomModal({
           <Col span={5}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>{t('reservation.Checkin')}</span>
             <DatePicker
-              disabledDate={disabledChekinDate}
+              disabledDate={disabledCheckinDate}
               onChange={date => searchRoomDate(date, 'checkin')}
               style={{
                 height: 32,

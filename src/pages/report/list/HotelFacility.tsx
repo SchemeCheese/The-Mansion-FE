@@ -5,7 +5,7 @@ import { Card, Col, DatePicker, Form, Row, Select, Spin } from 'antd';
 import { headerWithAuthorization } from 'helpers';
 import { getAPI } from 'helpers/apiService';
 import moment from 'moment';
-import { selectGetRooms } from 'selectors';
+import { selectBranchInfo, selectGetRooms } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -25,10 +25,18 @@ function HotelFacility() {
   const [facilities, setFacilities] = useState([]);
   const [branchs, setBranchs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const branchInfoSelected: any = useAppSelector(selectBranchInfo);
 
   const onReportFormFinish = async (values: any) => {
+    const { branch_code, facility_code, operator_code } = branchInfoSelected;
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
     const newValues = {
       ...values,
+      ...payloadBranch,
       start_date: values.start_date.format(formatDate),
       end_date: values.end_date ? values.end_date.format(formatDate) : undefined,
     };
@@ -183,7 +191,7 @@ function HotelFacility() {
 
               <Form.Item label={t('report.Sort order by.title')} name="sort_order_by">
                 <Select allowClear placeholder={t('report.Sort order by.placeholder')}>
-                  <Option value="checkin_date">Chekin Date</Option>
+                  <Option value="checkin_date">Checkin Date</Option>
                   <Option value="checkout_date">Checkout Date</Option>
                   <Option value="equipment_type">Equipment Type</Option>
                   <Option value="folio_number">Booking ID</Option>

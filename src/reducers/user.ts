@@ -7,6 +7,8 @@ import { getLogginedUserInfo, login, loginSuccess, logOut, logOutSuccess } from 
 import { UserState } from 'types';
 
 export const userState = {
+  branch_id: '',
+  can_switch_branch: false,
   isAuthenticated: false,
   status: STATUS.IDLE,
   username: '',
@@ -27,6 +29,8 @@ export default {
         draft.username = payload.username;
         draft.permission = payload.permission;
         draft.facility_id = payload.facility_id;
+        draft.branch_id = payload.branch_id;
+        draft.can_switch_branch = payload.can_switch_branch;
       })
       .addCase(getLogginedUserInfo, draft => {
         draft.isAuthenticated = false;

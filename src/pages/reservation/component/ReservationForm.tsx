@@ -32,7 +32,7 @@ import moment from 'moment';
 import ReservationDetailCard from 'pages/reservation/component/ReservationDetailCard';
 import Message from 'pages/reservation/component/ReservationDetailTab/Message';
 import CheckinModal from 'pages/reservation/create/Checkin';
-import { selectAddItem, selectDeleteItem, selectUser } from 'selectors';
+import { selectAddItem, selectCreateReservation, selectDeleteItem, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook/lib';
 import { isEmpty, reduce } from 'underscore';
 
@@ -116,6 +116,7 @@ function ReservationForm({
     ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
   );
   const user = useAppSelector(selectUser);
+  const createReservationData = useAppSelector(selectCreateReservation);
 
   const confirm = () => {
     Modal.confirm({
@@ -339,7 +340,14 @@ function ReservationForm({
             <Col span={24}>
               <Tabs className="tabs-cart" defaultActiveKey="1">
                 <TabPane key="1" style={{ padding: 20 }} tab={t('common.General Infos')}>
-                  <Card bordered={false} size="small" title="General Informations">
+                  <Card
+                    bordered={false}
+                    size="small"
+                    style={{
+                      pointerEvents: user.permission.reservation.edit ? 'inherit' : 'none',
+                    }}
+                    title="General Informations"
+                  >
                     <Row>
                       <Col span={8}>
                         <Form.Item label={t('reservation.Folio ID')} name="reservation_number">
@@ -417,7 +425,11 @@ function ReservationForm({
                     style={{ marginTop: 20 }}
                     title={t('common.Booker Informations')}
                   >
-                    <Row>
+                    <Row
+                      style={{
+                        pointerEvents: user.permission.reservation.edit ? 'inherit' : 'none',
+                      }}
+                    >
                       <Col span={8}>
                         <Form.Item
                           label={t('reservation.Type.title')}
@@ -831,7 +843,7 @@ function ReservationForm({
             {isCreateForm && (
               <Col span={24} style={{ textAlign: 'center', marginTop: 20, marginBottom: 140 }}>
                 <MButton
-                  disabled={roomTotalForm.length === 0}
+                  disabled={roomTotalForm.length === 0 || createReservationData.status === 'INIT'}
                   htmlType="submit"
                   onClick={handleSubmitAndMoreDetail}
                   style={{
@@ -843,7 +855,10 @@ function ReservationForm({
                 >
                   {t('reservation.Save and add more details')}
                 </MButton>
-                <PattonButton disabled={roomTotalForm.length === 0} htmlType="submit">
+                <PattonButton
+                  disabled={roomTotalForm.length === 0 || createReservationData.status === 'INIT'}
+                  htmlType="submit"
+                >
                   {t('common.Save')}
                 </PattonButton>
               </Col>

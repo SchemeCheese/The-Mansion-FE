@@ -34,9 +34,13 @@ export function* getLogginedUserInfoSaga() {
   try {
     let username = '';
     let permission = [];
-    let facilityId = {};
+    let facilityId = '';
+    let branchId = '';
+    let canSwitchBranch = false;
 
     ({
+      branch_id: branchId,
+      can_switch_branch: canSwitchBranch,
       facility_id: facilityId,
       permission,
       username,
@@ -47,9 +51,11 @@ export function* getLogginedUserInfoSaga() {
 
     yield put(
       loginSuccess({
+        branch_id: branchId,
+        can_switch_branch: canSwitchBranch,
         username,
         permission,
-        facility_id: facilityId.toString(),
+        facility_id: facilityId,
       }),
     );
   } catch (error) {
@@ -60,6 +66,10 @@ export function* getLogginedUserInfoSaga() {
 
 export function* logoutSaga() {
   yield delay(200);
+
+  window.localStorage.removeItem('facility_id');
+  window.localStorage.removeItem('branch_id');
+  window.localStorage.removeItem('persist:rrsb');
 
   yield put(logOutSuccess());
 }
