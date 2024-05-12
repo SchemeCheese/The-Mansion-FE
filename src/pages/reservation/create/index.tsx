@@ -25,6 +25,7 @@ import { useAppSelector } from 'modules/hooks';
 import {
   createReservation,
   getReservationNumber,
+  resetCreateReservation,
   resetReservation,
   searchRoomReset,
 } from 'actions';
@@ -144,6 +145,7 @@ function Create() {
   useEffect(() => {
     dispatch(getReservationNumber(branchInfo));
     dispatch(resetReservation());
+    dispatch(resetCreateReservation());
   }, []);
 
   const onFinishFailed = (errorInfo: any) => {

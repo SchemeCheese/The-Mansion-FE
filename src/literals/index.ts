@@ -20,6 +20,7 @@ export const ActionTypes = keyMirror({
   RESERVATION_SEARCH_FINISH: undefined,
   RESERVATION_CREATE: undefined,
   RESERVATION_CREATE_SUCCESS: undefined,
+  RESERVATION_CREATE_RESET: undefined,
   RESERVATION_CREATE_FAILURE: undefined,
   RESERVATION_UPDATE: undefined,
   RESERVATION_UPDATE_SUCCESS: undefined,
