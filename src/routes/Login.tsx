@@ -58,7 +58,7 @@ function Login() {
             fontWeight: 500,
           }}
         >
-          The Mansions{' '}
+          MINOVA{' '}
         </p>
 
         <p style={{ paddingBottom: 20 }}>Property Management System </p>
