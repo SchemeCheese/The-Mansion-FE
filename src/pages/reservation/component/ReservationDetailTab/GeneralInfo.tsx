@@ -20,7 +20,7 @@ import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { getReservation, getReservationDetail, updateGeneralInfo } from 'actions';
+import { getReservation, getReservationDetail, getRoomType, updateGeneralInfo } from 'actions';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
@@ -96,6 +96,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
     setGeneralInfoState(dataReservationDetailInfo);
     setIsUpdateReservationDetail(true);
   }, [reservationDetailInfo]);
+
   useEffect(() => {
     if (reservationDetailInfo.is_finish === false) {
       setIsUpdateReservationDetail(false);
@@ -120,6 +121,10 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
       );
     }
   }, [changed]);
+
+  useEffect(() => {
+    dispatch(getRoomType());
+  }, []);
 
   const confirmUpdateCICO = () => {
     Modal.confirm({
