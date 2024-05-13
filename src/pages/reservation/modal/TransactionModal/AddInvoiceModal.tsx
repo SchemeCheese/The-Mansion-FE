@@ -98,8 +98,10 @@ function AddInvoiceModal({
       setDescriptions(data?.data);
     }
 
-    getDescriptions();
-  }, []);
+    if (isModalOpen) {
+      getDescriptions();
+    }
+  }, [isModalOpen]);
 
   const DragProps = {
     name: 'file',

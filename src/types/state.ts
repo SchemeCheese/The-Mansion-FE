@@ -338,9 +338,11 @@ export interface ProductSearchState {
 }
 
 export interface AgentInfosState {
+  cached: boolean;
   data: Array<Record<string, any>>;
   is_searching: boolean;
   total: number;
+  updatedAt: number;
 }
 
 export interface NotificationsState {
@@ -525,7 +527,10 @@ export interface BranchHeaderState {
 }
 
 export interface GetBranchsState {
+  cached: boolean;
   data: Array<Record<string, any>>;
+  is_searching: boolean;
+  updatedAt: number;
 }
 
 export interface GetDurationCurveState {
@@ -536,7 +541,9 @@ export interface GetDurationCurveState {
 export interface GetBranchFacilitiesState {
   branchFacilitySelected: string;
   branch_id: string;
+  cached: boolean;
   data: Array<Record<string, any>>;
+  updatedAt: number;
 }
 
 export interface BranchInfoState {

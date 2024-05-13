@@ -1,7 +1,9 @@
-import { request } from '@gilbarbara/helpers';
+import { now, request } from '@gilbarbara/helpers';
 import { message } from 'antd';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
+
+import { hasValidCache } from 'modules/helpers';
 
 import { AgentInfoEndpoint } from 'config';
 import { ActionTypes } from 'literals';
@@ -10,15 +12,20 @@ import { getAgentInfosFinish, logOut } from 'actions';
 
 export function* getAgentInfosSaga() {
   try {
-    let data = [];
     const total = 0;
+    const { cached = false, updatedAt = 0 } = yield select(s => s.agentInfos || {});
+    const hasCache = cached && hasValidCache(updatedAt);
 
-    ({ data } = yield call(request, `${apiEndPoint(AgentInfoEndpoint.GET_AGENT)}`, {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    }));
+    if (!hasCache) {
+      let data = [];
 
-    yield put(getAgentInfosFinish({ data, total }));
+      ({ data } = yield call(request, `${apiEndPoint(AgentInfoEndpoint.GET_AGENT)}`, {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      }));
+
+      yield put(getAgentInfosFinish({ data, total, updatedAt: now() }));
+    }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
       console.log('Error', error);

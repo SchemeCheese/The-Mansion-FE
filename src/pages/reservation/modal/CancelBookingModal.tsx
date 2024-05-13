@@ -81,10 +81,6 @@ function CancelBookingModal({
   });
 
   useEffect(() => {
-    dispatch(getRoomOption());
-  }, []);
-
-  useEffect(() => {
     if (changed('status', 'SUCCESS')) {
       message.success(t('message.Cancel reservation successfully!'));
 
@@ -99,10 +95,14 @@ function CancelBookingModal({
   }, [changed]);
 
   useEffect(() => {
-    form.setFieldsValue({
-      cancel_type: undefined,
-      cancel_reason: '',
-    });
+    if (isModalVisible) {
+      dispatch(getRoomOption());
+
+      form.setFieldsValue({
+        cancel_type: undefined,
+        cancel_reason: '',
+      });
+    }
   }, [isModalVisible]);
 
   useEffect(() => {

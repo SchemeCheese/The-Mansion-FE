@@ -1,6 +1,8 @@
-import { request } from '@gilbarbara/helpers';
+import { now, request } from '@gilbarbara/helpers';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
+
+import { hasValidCache } from 'modules/helpers';
 
 import { GetAllBranchsEndpoint, GetFacilitiesByBranch } from 'config';
 import { ActionTypes } from 'literals';
@@ -15,25 +17,35 @@ import {
 } from 'actions';
 
 export function* getBranchsSaga() {
-  let data = [];
+  const { cached = false, updatedAt = 0 } = yield select(s => s.getBranchs || {});
+  const hasCache = cached && hasValidCache(updatedAt);
 
-  data = yield call(request, `${apiEndPoint(GetAllBranchsEndpoint.GET)}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  });
+  if (!hasCache) {
+    let data = [];
 
-  yield put(branchsFinish({ data }));
+    data = yield call(request, `${apiEndPoint(GetAllBranchsEndpoint.GET)}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    });
+
+    yield put(branchsFinish({ data, updatedAt: now() }));
+  }
 }
 
 export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFacilites>) {
-  let data = [];
+  const { cached = false, updatedAt = 0 } = yield select(s => s.getBranchFacilites || {});
+  const hasCache = cached && hasValidCache(updatedAt);
 
-  data = yield call(request, `${apiEndPoint(GetFacilitiesByBranch.GET)}/${payload.branchId}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  });
+  if (!hasCache) {
+    let data = [];
 
-  yield put(branchFacilitesFinish({ data }));
+    data = yield call(request, `${apiEndPoint(GetFacilitiesByBranch.GET)}/${payload.branchId}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    });
+
+    yield put(branchFacilitesFinish({ data, updatedAt: now() }));
+  }
 }
 
 export function* getFacilitySaga({ payload }: ReturnType<typeof getFacilityAction>) {

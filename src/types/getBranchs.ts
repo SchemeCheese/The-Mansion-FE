@@ -1,5 +1,6 @@
 export interface BranchsResult {
   data: Array<Record<string, any>>;
+  updatedAt: number;
 }
 
 export interface GetBranchFacilityPayload {
@@ -16,6 +17,7 @@ export interface GetFacilityPayloadFinishResult {
 
 export interface GetBranchFacilityFinishPayload {
   data: Array<Record<string, any>>;
+  updatedAt: number;
 }
 
 export interface BranchSelected {

@@ -433,8 +433,10 @@ function SelectRoomModal({
   ].filter(item => !item.hidden);
 
   useEffect(() => {
-    dispatch(getRoomType());
-  }, []);
+    if (isModalVisible) {
+      dispatch(getRoomType());
+    }
+  }, [isModalVisible]);
 
   const roomTypeOption = _.keys(roomTypes).map((key: any) => {
     return (
