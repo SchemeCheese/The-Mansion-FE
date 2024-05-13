@@ -44,9 +44,11 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(searchProduct({ type_product: searchProductType }));
-    dispatch(productType({}));
-  }, []);
+    if (visible) {
+      dispatch(searchProduct({ type_product: searchProductType }));
+      dispatch(productType({}));
+    }
+  }, [visible]);
 
   const onChangeProductType = (value: string) => {
     setSearchProductType(value);

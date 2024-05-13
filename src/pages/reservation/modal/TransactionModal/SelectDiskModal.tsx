@@ -64,8 +64,10 @@ function SelectDiskModal({ saleDetailIds, setIsModalOpen, visible }: Props) {
       setDisks(response.data);
     }
 
-    getDisks();
-  }, []);
+    if (visible) {
+      getDisks();
+    }
+  }, [visible]);
 
   return (
     <Modal

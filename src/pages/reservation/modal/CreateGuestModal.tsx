@@ -363,9 +363,11 @@ function CreateGuestModal({
   }, [currentGuest]);
 
   useEffect(() => {
-    dispatch(getLanguageCodeAction());
-    dispatch(getRoomsAction());
-  }, []);
+    if (isModalVisible) {
+      dispatch(getLanguageCodeAction());
+      dispatch(getRoomsAction());
+    }
+  }, [isModalVisible]);
 
   return (
     <>

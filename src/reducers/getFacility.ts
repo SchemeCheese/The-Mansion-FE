@@ -14,7 +14,6 @@ export default {
     builder
       .addCase(getFacilityAction, draft => {
         draft.status = 'INIT';
-        draft.data = {};
       })
       .addCase(getFacilityFinishAction, (draft, { payload }) => {
         draft.status = 'FINISH';
