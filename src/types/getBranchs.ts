@@ -5,6 +5,7 @@ export interface BranchsResult {
 
 export interface GetBranchFacilityPayload {
   branchId: string;
+  cached?: boolean;
 }
 
 export interface GetFacilityPayload {

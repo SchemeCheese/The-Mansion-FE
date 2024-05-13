@@ -94,7 +94,7 @@ function MLayout(props: Props) {
     form.setFieldsValue({
       outlet: undefined,
     });
-    dispatch(branchFacilites({ branchId: value }));
+    dispatch(branchFacilites({ branchId: value, cached: false }));
   };
 
   const selectFacility = (value: string) => {

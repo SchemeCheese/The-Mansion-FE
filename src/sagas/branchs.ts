@@ -36,7 +36,7 @@ export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFaci
   const { cached = false, updatedAt = 0 } = yield select(s => s.getBranchFacilites || {});
   const hasCache = cached && hasValidCache(updatedAt);
 
-  if (!hasCache) {
+  if (payload.cached === false || !hasCache) {
     let data = [];
 
     data = yield call(request, `${apiEndPoint(GetFacilitiesByBranch.GET)}/${payload.branchId}`, {
