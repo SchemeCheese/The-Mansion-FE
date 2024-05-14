@@ -1,11 +1,9 @@
 export interface BranchsResult {
   data: Array<Record<string, any>>;
-  updatedAt: number;
 }
 
 export interface GetBranchFacilityPayload {
   branchId: string;
-  cached?: boolean;
 }
 
 export interface GetFacilityPayload {
@@ -18,7 +16,6 @@ export interface GetFacilityPayloadFinishResult {
 
 export interface GetBranchFacilityFinishPayload {
   data: Array<Record<string, any>>;
-  updatedAt: number;
 }
 
 export interface BranchSelected {

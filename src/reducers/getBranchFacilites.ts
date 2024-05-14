@@ -7,9 +7,6 @@ import { GetBranchFacilitiesState } from 'types';
 export const getBranchFacilitesState = {
   branch_id: '',
   data: [],
-  cached: true,
-  branchFacilitySelected: '',
-  updatedAt: 0,
 };
 
 export default {
@@ -20,7 +17,6 @@ export default {
       })
       .addCase(branchFacilitesFinish, (draft, { payload }) => {
         draft.data = payload.data;
-        draft.updatedAt = payload.updatedAt;
       });
   }),
 };

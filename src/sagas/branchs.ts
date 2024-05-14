@@ -17,35 +17,25 @@ import {
 } from 'actions';
 
 export function* getBranchsSaga() {
-  const { cached = false, updatedAt = 0 } = yield select(s => s.getBranchs || {});
-  const hasCache = cached && hasValidCache(updatedAt);
+  let data = [];
 
-  if (!hasCache) {
-    let data = [];
+  data = yield call(request, `${apiEndPoint(GetAllBranchsEndpoint.GET)}`, {
+    method: 'GET',
+    headers: headerWithAuthorization(),
+  });
 
-    data = yield call(request, `${apiEndPoint(GetAllBranchsEndpoint.GET)}`, {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    });
-
-    yield put(branchsFinish({ data, updatedAt: now() }));
-  }
+  yield put(branchsFinish({ data }));
 }
 
 export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFacilites>) {
-  const { cached = false, updatedAt = 0 } = yield select(s => s.getBranchFacilites || {});
-  const hasCache = cached && hasValidCache(updatedAt);
+  let data = [];
 
-  if (payload.cached === false || !hasCache) {
-    let data = [];
+  data = yield call(request, `${apiEndPoint(GetFacilitiesByBranch.GET)}/${payload.branchId}`, {
+    method: 'GET',
+    headers: headerWithAuthorization(),
+  });
 
-    data = yield call(request, `${apiEndPoint(GetFacilitiesByBranch.GET)}/${payload.branchId}`, {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    });
-
-    yield put(branchFacilitesFinish({ data, updatedAt: now() }));
-  }
+  yield put(branchFacilitesFinish({ data }));
 }
 
 export function* getFacilitySaga({ payload }: ReturnType<typeof getFacilityAction>) {

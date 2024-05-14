@@ -94,7 +94,7 @@ function MLayout(props: Props) {
     form.setFieldsValue({
       outlet: undefined,
     });
-    dispatch(branchFacilites({ branchId: value, cached: false }));
+    dispatch(branchFacilites({ branchId: value }));
   };
 
   const selectFacility = (value: string) => {
@@ -121,18 +121,22 @@ function MLayout(props: Props) {
   const branchFacilities: any = useAppSelector(selectFacilitesByBranch);
 
   useEffect(() => {
-    dispatch(branchs({}));
-
-    if (window.localStorage.getItem('branch_id')) {
-      dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '' }));
-    }
-
     if (window.localStorage.getItem('facility_id')) {
       dispatch(
         getFacilityAction({ facility_id: window.localStorage.getItem('facility_id') ?? '' }),
       );
     }
   }, []);
+
+  useEffect(() => {
+    if (isModalOpen) {
+      dispatch(branchs());
+
+      if (window.localStorage.getItem('branch_id')) {
+        dispatch(branchFacilites({ branchId: window.localStorage.getItem('branch_id') ?? '' }));
+      }
+    }
+  }, [isModalOpen]);
 
   useEffect(() => {
     if (changed('status', 'FINISH')) {
@@ -211,10 +215,6 @@ function MLayout(props: Props) {
   };
 
   const defaultSelectedMenu = () => {
-    if (user.permission.calendar?.view === true) {
-      return 'reservation';
-    }
-
     const urlPath = window.location.pathname;
 
     if (urlPath.includes('reservation')) {
@@ -251,6 +251,10 @@ function MLayout(props: Props) {
 
     if (urlPath.includes('device')) {
       return 'device-manager';
+    }
+
+    if (user.permission.calendar?.view === true) {
+      return 'reservation';
     }
 
     return 'dashboard';

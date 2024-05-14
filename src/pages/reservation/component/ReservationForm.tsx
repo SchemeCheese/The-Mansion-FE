@@ -357,7 +357,10 @@ function ReservationForm({
                           label={t('reservation.OTA Booking ID.title')}
                           name="external_reservation_number"
                         >
-                          <MInput placeholder={t('reservation.OTA Booking ID.placeholder')} />
+                          <MInput
+                            disabled={Boolean(reservationInfo?.external_reservation_number)}
+                            placeholder={t('reservation.OTA Booking ID.placeholder')}
+                          />
                         </Form.Item>
                       </Col>
                       <Col span={8}>
