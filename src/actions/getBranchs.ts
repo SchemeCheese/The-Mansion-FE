@@ -13,9 +13,7 @@ import {
   GetFacilityPayloadFinishResult,
 } from 'types';
 
-export const branchs = createAction(ActionTypes.GET_BRANCH, (payload: any) =>
-  actionPayload(payload),
-);
+export const branchs = createAction(ActionTypes.GET_BRANCH);
 
 export const branchsFinish = createAction(ActionTypes.GET_BRANCH_FINISH, (payload: BranchsResult) =>
   actionPayload(payload),
