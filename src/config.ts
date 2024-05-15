@@ -77,8 +77,10 @@ export const ChannelEndpoint = {
 
 export const TransactionEndpoint = {
   ADD_DISK: 'api/v1/disk/create',
-  ADD_ITEM: 'api/v1/sale-info/product/create',
-  DELETE_ITEM: 'api/v1/sale-info/product/delete',
+  ADD_ITEM: (reservationId: string, reservationDetailId: string) =>
+    `api/v1/reservations/${reservationId}/reservation-detail/${reservationDetailId}/products`,
+  DELETE_ITEM: (reservationId: string, reservationDetailId: string) =>
+    `api/v1/reservations/${reservationId}/reservation-detail/${reservationDetailId}/products/delete`,
   CHANGE_DISK: 'api/v1/change-disk',
   CHANGE_ROOM: 'api/v1/change-room',
   DOWNLOAD_INVOICE_PDF: 'api/v1/reservations',
