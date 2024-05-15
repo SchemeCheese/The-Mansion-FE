@@ -61,16 +61,25 @@ export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) 
     let success = '';
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
-    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.ADD_ITEM)}`, {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        branch_code,
-        operator_code,
-        facility_code,
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(
+        TransactionEndpoint.ADD_ITEM(
+          payload.payload.reservation_id,
+          payload.payload.reservation_detail_id,
+        ),
+      )}`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          branch_code,
+          operator_code,
+          facility_code,
+        },
       },
-    }));
+    ));
 
     if (success) {
       yield put(addItemActionSuccess());
@@ -92,21 +101,30 @@ export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) 
   }
 }
 
-export function* postDeleteItemSaga({ payload }: ReturnType<typeof deleteItemAction>) {
+export function* deleteItemSaga({ payload }: ReturnType<typeof deleteItemAction>) {
   try {
     let success = '';
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
-    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.DELETE_ITEM)}`, {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        branch_code,
-        operator_code,
-        facility_code,
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(
+        TransactionEndpoint.DELETE_ITEM(
+          payload.payload.reservation_id,
+          payload.payload.reservation_detail_id,
+        ),
+      )}`,
+      {
+        method: 'DELETE',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          branch_code,
+          operator_code,
+          facility_code,
+        },
       },
-    }));
+    ));
 
     if (success) {
       yield put(deleteItemActionSuccess());
@@ -254,7 +272,7 @@ export function* getDownloadPDFInvoiceTransactionSaga({
 export default function* root() {
   yield all([takeLatest(ActionTypes.TRANSACTION_ADD_DISK, postAddDiskSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_ADD_ITEM, postAddItemSaga)]);
-  yield all([takeLatest(ActionTypes.TRANSACTION_DELETE_ITEM, postDeleteItemSaga)]);
+  yield all([takeLatest(ActionTypes.TRANSACTION_DELETE_ITEM, deleteItemSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_CHANGE_DISK, postChangeDiskSaga)]);
   yield all([takeLatest(ActionTypes.TRANSACTION_CHANGE_ROOM, postChangeRoomSaga)]);
   yield all([

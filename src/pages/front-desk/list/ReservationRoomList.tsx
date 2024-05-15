@@ -226,20 +226,24 @@ function ReservationRoomList({ type }: Props) {
       render: (text: string, record: any) => {
         const alert = [];
 
-        if (record.isEarlyCheckin) {
+        if (record.is_early_checkin) {
           alert.push(<Tag color="#f50">E/L</Tag>);
         }
 
-        if (record.isLateCheckout) {
+        if (record.is_late_checkout) {
           alert.push(<Tag color="#2db7f5">E/C</Tag>);
         }
 
-        if (record.isDropOff) {
+        if (record.is_drop_off) {
           alert.push(<Tag color="#87d068">D/O</Tag>);
         }
 
-        if (record.isPickup) {
+        if (record.is_pickup) {
           alert.push(<Tag color="#108ee9">P/U</Tag>);
+        }
+
+        if (record.is_unread_msg) {
+          alert.push(<Tag color="red">U/M</Tag>);
         }
 
         if (alert.length > 0) {

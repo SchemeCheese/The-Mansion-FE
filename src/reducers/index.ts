@@ -40,7 +40,6 @@ import downloadPDFReservationDetail, {
 } from './downloadPDFReservationDetail';
 import fuel, { fuelState } from './fuel';
 import getBranchFacilites, { getBranchFacilitesState } from './getBranchFacilites';
-import getBranchHeader, { getBranchHeaderState } from './getBranchHeader';
 import getBranchManager, { getBranchManagerState } from './getBranchManager';
 import getBranchs, { getBranchsState } from './getBranchs';
 import getCustomerDetail, { getCustomerDetailState } from './getCustomerDetail';
@@ -169,7 +168,6 @@ export const initialState = {
   downloadDocxReservationDetail: downloadDocxReservationDetailState,
   downloadPDFInvoiceTransaction: downloadPDFInvoiceTransactionState,
   downloadCSVBranchManager: downloadCSVBranchManagerState,
-  getBranchHeader: getBranchHeaderState,
   getBranchs: getBranchsState,
   getBranchManager: getBranchManagerState,
   getBranchFacilities: getBranchFacilitesState,
@@ -252,7 +250,6 @@ export default {
   ...setMainGuest,
   ...downloadDocxReservationDetail,
   ...downloadPDFInvoiceTransaction,
-  ...getBranchHeader,
   ...getReservationByFolio,
   ...getBranchs,
   ...getBranchManager,

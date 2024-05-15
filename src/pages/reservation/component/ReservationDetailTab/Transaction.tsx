@@ -360,6 +360,8 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
     dispatch(
       deleteItemAction({
         payload: {
+          reservation_id: reservationId,
+          reservation_detail_id: reservationDetailId,
           sale_detail_ids: [
             {
               id: deleteSaleDetailId,

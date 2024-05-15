@@ -15,7 +15,6 @@ export * from './payment';
 export * from './guest';
 export * from './file';
 export * from './languageCode';
-export * from './branchHeader';
 export * from './getBranchs';
 export * from './notifications';
 export * from './dashboard';

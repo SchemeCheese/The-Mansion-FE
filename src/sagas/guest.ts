@@ -149,16 +149,16 @@ export function* getSetMainGuestSaga({ payload }: ReturnType<typeof setMainGuest
       branch_code,
       facility_code,
     };
-    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
     ({ success } = yield call(
       request,
       `${apiEndPoint(GuestEndpoint.REMOVE)}/${payload.reservation_detail_id}/guests/${
         payload.guest_id
-      }/set-main-guest?${query}`,
+      }/set-main-guest`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: headerWithAuthorization(),
+        body: payloadBranch,
       },
     ));
 

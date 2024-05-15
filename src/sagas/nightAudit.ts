@@ -55,7 +55,7 @@ export function* postHandleNightAuditSaga({ payload }: ReturnType<typeof handleN
       request,
       `${apiEndPoint(NightAuditEndpoint.HANDLE_NIGHT_AUDIT)}/${payload.facility_id}`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: headerWithAuthorization(),
       },
     );

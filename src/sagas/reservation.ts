@@ -144,7 +144,7 @@ export function* postCreateReservationSaga({ payload }: ReturnType<typeof create
   }
 }
 
-export function* postUpdateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
+export function* patchUpdateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
   try {
     let success = '';
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
@@ -153,7 +153,7 @@ export function* postUpdateReservationSaga({ payload }: ReturnType<typeof create
       request,
       apiEndPoint(`${ReservationEndpoint.UPDATE}/${payload.payload.reservation_id}/update`),
       {
-        method: 'POST',
+        method: 'PATCH',
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
@@ -329,7 +329,7 @@ export function* getReservationNumberSaga({ payload }: ReturnType<typeof getRese
   }
 }
 
-export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) {
+export function* putUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) {
   try {
     let success = '';
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
@@ -346,7 +346,7 @@ export function* postUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) 
         payload.payload.reservation_id
       }/reservation-detail/${payload.payload.reservation_detail_id}/update-rate`,
       {
-        method: 'POST',
+        method: 'PUT',
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
@@ -509,7 +509,7 @@ export function* postCancelReservationDetailSaga({
   }
 }
 
-export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof updateGeneralInfo>) {
+export function* putUpdateGeneralInfoSaga({ payload }: ReturnType<typeof updateGeneralInfo>) {
   try {
     let success = '';
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
@@ -526,7 +526,7 @@ export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof update
         payload.payload.reservation_id
       }/reservation-detail/${payload.payload.reservation_detail_id}/update`,
       {
-        method: 'POST',
+        method: 'PUT',
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
@@ -553,7 +553,7 @@ export function* postUpdateGeneralInfoSaga({ payload }: ReturnType<typeof update
   }
 }
 
-export function* postUpdateNoteReservationDetailSaga({
+export function* putUpdateNoteReservationDetailSaga({
   payload,
 }: ReturnType<typeof updateNoteReservationDetail>) {
   try {
@@ -572,7 +572,7 @@ export function* postUpdateNoteReservationDetailSaga({
         payload.payload.reservation_info_id
       }/reservation-detail/${payload.payload.reservation_detail_id}/update-note`,
       {
-        method: 'POST',
+        method: 'PUT',
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
@@ -659,7 +659,7 @@ export function* getDownloadPDFReservationDetailSaga({
 
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_PDF)}/${
       payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.language}/downloadPdf?${query}`;
+    }/reservation-detail/${payload.payload.language}/download-pdf?${query}`;
 
     fetch(urlApi, {
       method: 'GET',
@@ -704,7 +704,7 @@ export function* getDownloadDocxReservationDetailSaga({
 
     const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_DOCX)}/${
       payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.language}/downloadDocx?${query}`;
+    }/reservation-detail/${payload.payload.language}/download-docx?${query}`;
 
     fetch(urlApi, {
       method: 'GET',
@@ -883,7 +883,7 @@ export function* paymentVNPaySaga({ payload }: ReturnType<typeof paymentVNPayRes
       request,
       `${apiEndPoint(ReservationEndpoint.VN_PAYMENT)}/${
         payload.payload.reservation_id
-      }/reservation-detail/${payload.payload.reservation_detail_id}/paymentVNPayment`,
+      }/reservation-detail/${payload.payload.reservation_detail_id}/payments/vnpay`,
       {
         method: 'POST',
         headers: headerWithAuthorization(),
@@ -929,7 +929,7 @@ export function* paymentMomoPaySaga({
       request,
       `${apiEndPoint(ReservationEndpoint.MOMO_PAYMENT)}/${
         payload.payload.reservation_id
-      }/reservation-detail/${payload.payload.reservation_detail_id}/paymentMomoPay`,
+      }/reservation-detail/${payload.payload.reservation_detail_id}/payments/momo`,
       {
         method: 'POST',
         headers: headerWithAuthorization(),
@@ -962,16 +962,16 @@ export default function* root() {
   yield all([
     takeLatest(ActionTypes.RESERVATION_SEARCH, getSearchReservationSaga),
     takeLatest(ActionTypes.RESERVATION_CREATE, postCreateReservationSaga),
-    takeLatest(ActionTypes.RESERVATION_UPDATE, postUpdateReservationSaga),
+    takeLatest(ActionTypes.RESERVATION_UPDATE, patchUpdateReservationSaga),
     takeLatest(ActionTypes.RESERVATION_GET_DETAIL, getReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_NUMBER_GET, getReservationNumberSaga),
     takeLatest(ActionTypes.RESERVATION_GET, getReservationSaga),
-    takeLatest(ActionTypes.RESERVATION_RATE_UPDATE, postUpdateRateSaga),
+    takeLatest(ActionTypes.RESERVATION_RATE_UPDATE, putUpdateRateSaga),
     takeLatest(ActionTypes.RESERVATION_BOOK_ROOM, postBookRoomSaga),
     takeLatest(ActionTypes.RESERVATION_ADD_RESERVATION_DETAIL, postAddReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_CANCEL_RESERVATION_DETAIL, postCancelReservationDetailSaga),
-    takeLatest(ActionTypes.RESERVATION_GENERAL_INFO_UPDATE, postUpdateGeneralInfoSaga),
-    takeLatest(ActionTypes.RESERVATION_DETAIL_UPDATE_NOTE, postUpdateNoteReservationDetailSaga),
+    takeLatest(ActionTypes.RESERVATION_GENERAL_INFO_UPDATE, putUpdateGeneralInfoSaga),
+    takeLatest(ActionTypes.RESERVATION_DETAIL_UPDATE_NOTE, putUpdateNoteReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_RESEND_EMAIL, getResendEmailReservationSaga),
     takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_PDF, getDownloadPDFReservationDetailSaga),
     takeLatest(ActionTypes.RESERVATION_DETAIL_DOWNLOAD_DOCX, getDownloadDocxReservationDetailSaga),

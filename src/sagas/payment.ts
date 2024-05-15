@@ -62,7 +62,7 @@ export function* postCreateQRCodeVNPaySaga({
       request,
       `${apiEndPoint(PaymentEndpoint.CREATE_QRCODE_VNPAY)}/${
         payload.payload.reservation_info_id
-      }/reservation-detail/${payload.payload.reservation_detail_id}/createQRCodeVNPay`,
+      }/reservation-detail/${payload.payload.reservation_detail_id}/payments/create-qr-code-vnpay`,
       {
         method: 'POST',
         headers: headerWithAuthorization(),
@@ -97,7 +97,7 @@ export function* postCreateQRCodeVNPaySaga({
   }
 }
 
-export function* postUpdatePaymentDetailSaga({ payload }: ReturnType<typeof updatePaymentDetail>) {
+export function* putUpdatePaymentDetailSaga({ payload }: ReturnType<typeof updatePaymentDetail>) {
   try {
     let success = '';
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
@@ -113,7 +113,7 @@ export function* postUpdatePaymentDetailSaga({ payload }: ReturnType<typeof upda
         payload.payload.payment_detail_id
       }/update`,
       {
-        method: 'POST',
+        method: 'PUT',
         headers: headerWithAuthorization(),
         body: {
           ...payload.payload,
@@ -143,5 +143,5 @@ export function* postUpdatePaymentDetailSaga({ payload }: ReturnType<typeof upda
 export default function* root() {
   yield all([takeLatest(ActionTypes.PAYMENT_CREATE, postCreatePaymentSaga)]);
   yield all([takeLatest(ActionTypes.CREATE_QRCODE_VNPAY, postCreateQRCodeVNPaySaga)]);
-  yield all([takeLatest(ActionTypes.UPDATE_PAYMENT_DETAIL, postUpdatePaymentDetailSaga)]);
+  yield all([takeLatest(ActionTypes.UPDATE_PAYMENT_DETAIL, putUpdatePaymentDetailSaga)]);
 }

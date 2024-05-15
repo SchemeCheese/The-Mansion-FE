@@ -9,6 +9,8 @@ interface AddDiskPayload {
 }
 
 interface DeleteItemPayload {
+  reservation_detail_id: string;
+  reservation_id: string;
   sale_detail_ids: Array<Record<string, any>>;
 }
 

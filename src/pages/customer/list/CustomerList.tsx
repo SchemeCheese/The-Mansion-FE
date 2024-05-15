@@ -377,7 +377,7 @@ function CustomerList({ type }: Props) {
               }}
               pagination={false}
               rowClassName={(record: any) => {
-                if (record.isNew) {
+                if (record.is_new) {
                   return 'new-customer';
                 }
 
