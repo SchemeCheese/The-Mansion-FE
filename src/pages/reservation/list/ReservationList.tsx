@@ -189,13 +189,13 @@ function ReservationList({ type }: Props) {
         return {
           ...item,
           key: item.id,
-          folio_id: item.reservationNumber,
+          folio_id: item.reservation_number,
           source_ta: item.source,
           booker_name: item.booker.name,
           booker_email: item.booker.email,
           phone: item.booker.phone_number,
           total_room: item.room_total,
-          room_no: item.assignedRooms,
+          room_no: item.assigned_rooms,
         };
       });
     }
@@ -327,7 +327,7 @@ function ReservationList({ type }: Props) {
       dataIndex: 'room_no',
       key: 'room_no',
       render: (text: string, record: any) => {
-        if (record.assignedRooms === '') {
+        if (record.assigned_rooms === '') {
           return (
             <div
               style={{
@@ -391,11 +391,11 @@ function ReservationList({ type }: Props) {
       render: (text: string, record: any) => {
         const alert = [];
 
-        if (record.isEarlyCheckin) {
+        if (record.is_early_checkin) {
           alert.push(<Tag color="#f50">E/L</Tag>);
         }
 
-        if (record.isLateCheckout) {
+        if (record.is_late_checkout) {
           alert.push(<Tag color="#2db7f5">E/C</Tag>);
         }
 
@@ -403,11 +403,11 @@ function ReservationList({ type }: Props) {
           alert.push(<Tag color="#87d068">D/O</Tag>);
         }
 
-        if (record.isPickup) {
+        if (record.is_pickup) {
           alert.push(<Tag color="#108ee9">P/U</Tag>);
         }
 
-        if (record.isUnreadMsg) {
+        if (record.is_unread_msg) {
           alert.push(<Tag color="red">U/M</Tag>);
         }
 
@@ -544,10 +544,10 @@ function ReservationList({ type }: Props) {
               onRow={(record: any) => {
                 return {
                   onClick: () => {
-                    if (record.isNew) {
+                    if (record.is_new) {
                       dispatch(
                         readNotifcationsAction({
-                          id: record.newNotificationId,
+                          id: record.new_notification_id,
                         }),
                       );
                     }
@@ -558,7 +558,7 @@ function ReservationList({ type }: Props) {
               }}
               pagination={false}
               rowClassName={(record: any) => {
-                if (record.isNew) {
+                if (record.is_new) {
                   return 'new-reservation';
                 }
 
