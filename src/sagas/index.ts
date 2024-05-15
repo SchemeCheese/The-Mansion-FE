@@ -1,7 +1,6 @@
 import { all, fork } from 'redux-saga/effects';
 
 import agentInfos from './agentInfos';
-import branchHeader from './branchHeader';
 import branchManager from './branchManager';
 import branchs from './branchs';
 import channel from './channel';
@@ -50,7 +49,6 @@ export default function* root() {
     fork(houseKeeping),
     fork(file),
     fork(languageCode),
-    fork(branchHeader),
     fork(branchs),
     fork(branchManager),
     fork(monthlyInvoice),

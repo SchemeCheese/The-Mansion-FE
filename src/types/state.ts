@@ -522,10 +522,6 @@ export interface TransactionDownloadPDFInvoicePayload {
   reservation_info_id: string | number;
 }
 
-export interface BranchHeaderState {
-  data: Array<Record<string, any>>;
-}
-
 export interface GetBranchsState {
   data: Array<Record<string, any>>;
   is_searching: boolean;
@@ -823,7 +819,6 @@ export interface RootState {
   downloadPDFReservationDetail: DownloadPDFReservationDetailState;
   fuel: FuelState;
   getBranchFacilites: GetBranchFacilitiesState;
-  getBranchHeader: BranchHeaderState;
   getBranchManager: BranchManagerState;
   getBranchs: GetBranchsState;
   getCustomerDetail: GetCustomerDetailState;
