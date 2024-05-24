@@ -103,19 +103,13 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
   const fullCalendarRef: any = React.createRef();
 
   const { changed: changedEvents } = useTreeChanges(reservationDetailData);
-  // const { changed: changedAvailableEvents } = useTreeChanges(searchAvailableEventsData);
 
   const isValidSelectRoom = (bookRoomInfoData: any) => {
-    const rateNumber: any = {};
-    const validationNight: any = {};
     const availableEvents: any = {};
+    let isError = false;
 
-    reservationDetailInfo.charges.forEach((rItem: any) => {
-      rateNumber[rItem.use_date] = (rateNumber[rItem.use_date] ?? 0) + 1;
-    });
-
+    // Not click in available events
     searchAvailableEventsData.data.events.forEach((aEItem: any) => {
-      // availableEvents[rItem.use_date] = 1;
       getDaysBetweenDates(moment(aEItem.start), moment(aEItem.end).subtract(1, 'days')).forEach(
         (date: any) => {
           availableEvents[`${date}-${aEItem.room_id}`] = 1;
@@ -128,25 +122,24 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
         moment(item.use_start_date),
         moment(item.use_end_date).subtract(1, 'days'),
       ).forEach((date: any) => {
-        validationNight[date] = (validationNight[date] ?? 0) + 1;
+        if (availableEvents[`${date}-${item.room_id}`] === 1) {
+          isError = true;
+        }
       });
     });
 
-    let isError = false;
-
-    Object.keys(validationNight).forEach((item: string) => {
-      if (validationNight[item] > rateNumber[item]) {
-        isError = true;
-      }
-    });
+    // Validate 1 day - 1 room
+    const dateHasRooms: boolean[] = [];
 
     bookRoomInfoData.forEach((item: any) => {
       getDaysBetweenDates(
         moment(item.use_start_date),
         moment(item.use_end_date).subtract(1, 'days'),
       ).forEach((date: any) => {
-        if (availableEvents[`${date}-${item.room_id}`] === 1) {
+        if (dateHasRooms[date] !== undefined && dateHasRooms[date] === true) {
           isError = true;
+        } else {
+          dateHasRooms[date] = true;
         }
       });
     });
@@ -382,15 +375,19 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
   }, [searchAvailableEventsData.is_searching, reservationDetailData.is_finish]);
 
   const updateBookingRoom = () => {
-    dispatch(
-      bookRoom({
-        payload: {
-          rooms: bookRoomInfo,
-          reservation_id: reservationId,
-          reservation_detail_id: reservationDetailId,
-        },
-      }),
-    );
+    if (reservationDetailInfo.status === 'in_house' && bookRoomInfo.length === 0) {
+      message.warn('Booking is inhouse, please assign the corresponding room for today!');
+    } else {
+      dispatch(
+        bookRoom({
+          payload: {
+            rooms: bookRoomInfo,
+            reservation_id: reservationId,
+            reservation_detail_id: reservationDetailId,
+          },
+        }),
+      );
+    }
   };
 
   const handleEventClick = (clickInfo: EventClickArg) => {
