@@ -43,6 +43,8 @@ export const searchReservationFinish = createAction(
   (payload: ReservationSearchResult) => actionPayload(payload),
 );
 
+export const resetSearchReservation = createAction(ActionTypes.RESERVATION_SEARCH_RESET);
+
 export const createReservation = createAction(
   ActionTypes.RESERVATION_CREATE,
   (payload: ReservationCreate) => actionPayload(payload),

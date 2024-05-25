@@ -399,7 +399,7 @@ function ReservationList({ type }: Props) {
           alert.push(<Tag color="#2db7f5">E/C</Tag>);
         }
 
-        if (record.isDropOff) {
+        if (record.is_drop_off) {
           alert.push(<Tag color="#87d068">D/O</Tag>);
         }
 

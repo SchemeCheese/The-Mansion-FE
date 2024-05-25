@@ -10,8 +10,14 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Card, Col, Row } from 'antd';
+import moment from 'moment';
+import { selectBranchInfo } from 'selectors';
+
+import { useAppSelector } from 'modules/hooks';
 
 import { searchRoomReset } from 'actions';
+
+import { BranchInfoState } from 'types';
 
 interface Props {
   item: any;
@@ -20,8 +26,12 @@ interface Props {
 }
 
 function RoomInfo({ item, setCurrentRoom, setIsModalVisible }: Props) {
+  const branchInfoSelected: BranchInfoState = useAppSelector(selectBranchInfo);
+
   const { t } = useTranslation();
-  const isReadyItem = item.state?.toString() === '1';
+  const isReadyItem =
+    item.state?.toString() === '1' &&
+    branchInfoSelected.business_date === moment().format('YYYY-MM-DD');
   const dispatch = useDispatch();
 
   const viewMapping = {

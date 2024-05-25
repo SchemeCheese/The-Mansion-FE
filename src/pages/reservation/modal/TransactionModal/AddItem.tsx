@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Form, Input, Modal, Row, Select, Spin, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
+import { getAPI } from 'helpers/apiService';
 
 import { addItemAction, productType, searchProduct } from 'actions';
 
@@ -40,13 +41,28 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
 
   const [searchProductType, setSearchProductType] = useState('');
   const [dataAmount, setDataAmount] = useState<any>([]);
+  const [disks, setDisks] = useState([]);
 
   const dispatch = useDispatch();
+  const reservationRedux: any = useSelector<RootState>(
+    ({ getReservation: getReservationTemporary }) => getReservationTemporary.data,
+  );
 
   useEffect(() => {
+    async function getDisks() {
+      const response = await getAPI(
+        `api/v1/get-disk?operator_code=${reservationRedux.operator_code}&branch_code=${reservationRedux.branch_code}&facility_code=${reservationRedux.facility_code}`,
+      );
+
+      setDisks(response.data);
+    }
+
     if (visible) {
+      setDataAmount([]);
+
       dispatch(searchProduct({ type_product: searchProductType }));
       dispatch(productType({}));
+      getDisks();
     }
   }, [visible]);
 
@@ -88,8 +104,6 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
       setDataAmount(dataAmountState);
     };
 
-  const [valueCurrentRecord, setValueCurrentRecord] = useState('');
-  const [currentRecord, setCurrentRecord] = useState<any>('');
   const columns: ColumnsType<DataType> = [
     {
       title: t('common.Product'),
@@ -109,29 +123,28 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
       render: (text: string, record: any) => {
         return (
           <Input
+            defaultValue={record.sales_price}
             onChange={event => {
               const dataAmountStateTemporary = [...dataAmount];
+              const salePrice = Number(event.target.value);
 
               const indexAmount = dataAmountStateTemporary.findIndex(
                 element => element.id === record.id,
               );
 
               if (indexAmount !== -1) {
-                dataAmountStateTemporary[indexAmount].sales_price = event.target.value;
+                dataAmountStateTemporary[indexAmount].sales_price = salePrice;
               } else {
                 dataAmountStateTemporary.push({
                   ...record,
-                  sales_price: event.target.value,
+                  sales_price: salePrice,
                 });
               }
 
               setDataAmount(dataAmountStateTemporary);
-              setValueCurrentRecord(event.target.value);
-              setCurrentRecord(record.id);
             }}
             placeholder="0"
             style={{ width: 96, borderRadius: 4 }}
-            value={record.id === currentRecord ? valueCurrentRecord : record.sales_price}
           />
         );
       },
@@ -216,9 +229,9 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
           }}
           style={{ borderRadius: 2, width: 100, height: 32 }}
         >
-          <Option value="1">A</Option>
-          <Option value="2">B</Option>
-          <Option value="3">C</Option>
+          {Object.keys(disks).map((key: any) => {
+            return <Option value={key.toString()}>{disks[key]}</Option>;
+          })}
         </Select>
       ),
     },
@@ -288,16 +301,18 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
   };
 
   const handleAddItem = () => {
-    dispatch(
-      addItemAction({
-        payload: {
-          items: dataAmount,
-          reservation_id: reservationId,
-          reservation_detail_id: reservationDetailId,
-        },
-      }),
-    );
-    setDataAmount([]);
+    if (dataAmount.length) {
+      dispatch(
+        addItemAction({
+          payload: {
+            items: dataAmount,
+            reservation_id: reservationId,
+            reservation_detail_id: reservationDetailId,
+          },
+        }),
+      );
+    }
+
     setIsModalOpen(false);
   };
 
