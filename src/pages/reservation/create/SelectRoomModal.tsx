@@ -223,6 +223,7 @@ function SelectRoomModal({
       const uniqueKey = randomKey(5);
 
       dataRoomTotalForm.push({
+        ...item,
         key: uniqueKey,
         status: t('reservation.Waitlist'),
         name: '-',
@@ -711,7 +712,7 @@ function SelectRoomModal({
                       </Table.Summary.Cell>
                       <Table.Summary.Cell index={3}>
                         <PattonButton
-                          // disabled={totalAmount === 0}
+                          disabled={searchRoomResultState.length === 0}
                           onClick={handleAddRoom}
                           style={{ float: 'right' }}
                         >

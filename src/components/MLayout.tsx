@@ -19,7 +19,13 @@ import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
 
-import { branchFacilites, branchs, getFacilityAction, logOut } from 'actions';
+import {
+  branchFacilites,
+  branchs,
+  getFacilityAction,
+  logOut,
+  resetSearchReservation,
+} from 'actions';
 
 import Footer from 'components/Footer';
 
@@ -113,6 +119,8 @@ function MLayout(props: Props) {
 
       window.localStorage.setItem('branch_id', currentBranchId);
       window.localStorage.setItem('facility_id', currentFacilityId.current);
+
+      dispatch(resetSearchReservation());
 
       window.location.reload();
     });

@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { searchReservation, searchReservationFinish } from 'actions';
+import { resetSearchReservation, searchReservation, searchReservationFinish } from 'actions';
 
 import { ReservationSearchState } from 'types';
 
@@ -87,6 +87,12 @@ export default {
           draft.waitlist.current_page = payload.current_page ?? 1;
           draft.waitlist.unread_msg = payload.unread_msg;
         }
+      })
+      .addCase(resetSearchReservation, draft => {
+        draft.is_searching = reservationSearchState.is_searching;
+        draft.reserved = { ...reservationSearchState.reserved };
+        draft.type = reservationSearchState.type;
+        draft.waitlist = { ...reservationSearchState.waitlist };
       });
   }),
 };

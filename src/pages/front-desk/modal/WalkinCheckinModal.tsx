@@ -39,6 +39,7 @@ import { createReservation, searchRoom } from 'actions';
 import { RootState } from 'types';
 
 const { Option } = Select;
+const timeFormat = 'HH:mm';
 
 interface Props {
   isModalVisible: boolean;
@@ -58,6 +59,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
   const { changed: createReservationChanged } = useTreeChanges(createReservationData);
 
   const [searchRoomResultState, setSearchRoomResultState] = useState<any>([]);
+  const [chargeKind, setChargeKind] = useState('1');
 
   const roomColumns = [
     {
@@ -71,14 +73,22 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
       key: 'rate_name',
     },
     {
+      title: t('common.Hours'),
+      dataIndex: 'hours',
+      key: 'hours',
+      hidden: chargeKind === '1',
+    },
+    {
       title: t('common.Total Guest'),
       dataIndex: 'total_guest',
       key: 'total_guest',
+      hidden: chargeKind !== '1',
     },
     {
       title: t('common.Content'),
       dataIndex: 'content',
       key: 'content',
+      hidden: chargeKind !== '1',
     },
     {
       title: t('common.Unit Price'),
@@ -112,6 +122,12 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
       },
     },
     {
+      title: t('common.Subtotal'),
+      dataIndex: 'sub_total_format',
+      key: 'sub_total_format',
+      hidden: chargeKind === '1',
+    },
+    {
       title: t('common.Task'),
       dataIndex: 'rate_name',
       key: 'rate_name',
@@ -139,7 +155,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
         );
       },
     },
-  ];
+  ].filter((item: any) => !item.hidden);
 
   const searchRoomsResult: any = useSelector<RootState>(
     ({ searchRoom: searchRoomTemporary }) => searchRoomTemporary.charges,
@@ -162,7 +178,11 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
   const disabledCheckoutDate: RangePickerProps['disabledDate'] = current => {
     const formValues = form.getFieldsValue();
 
-    return current < moment(formValues.checkin).endOf('day');
+    if (chargeKind === '1') {
+      return current < moment(formValues.checkin).endOf('day');
+    }
+
+    return current < moment(formValues.checkin).subtract(1, 'day').endOf('day');
   };
 
   const onFinish = (values: any) => {
@@ -172,10 +192,11 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
       return {
         room_type: values.room_type,
         charge_kind: item.charge_kind,
-        actual_amount: item.updated_price,
+        actual_amount: item.hours * item.updated_price,
         use_date: item.use_date,
         description_id: item.description_id,
         equipment_charge_detail_id: item.equipment_charge_detail_id,
+        hours: item.hours,
       };
     });
 
@@ -211,8 +232,30 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
     resetForm();
   }, []);
 
-  useEffect(() => {
+  const computeCICOTime = () => {
     const temporary = [...searchRoomsResult];
+    const formValues = form.getFieldsValue();
+
+    let hoursTime = 1;
+
+    if (chargeKind === '2') {
+      const checkinTime = moment(
+        `${formValues.checkin.format('YYYY-MM-DD')} ${formValues.checkin_time.format(timeFormat)}`,
+      );
+      const checkoutTime = moment(
+        `${formValues.checkout.format('YYYY-MM-DD')} ${formValues.checkout_time.format(
+          timeFormat,
+        )}`,
+      );
+
+      hoursTime = Math.ceil(moment.duration(checkoutTime.diff(checkinTime)).asHours());
+
+      if (hoursTime <= 0) {
+        message.warn(t('message.The checkin time or checkout time is invalid'));
+
+        return;
+      }
+    }
 
     setSearchRoomResultState(
       temporary.map(item => {
@@ -220,9 +263,14 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
           ...item,
           unit_price: formatNumber(item.price),
           updated_price: item.price,
+          hours: chargeKind === '1' ? 1 : hoursTime,
         };
       }),
     );
+  };
+
+  useEffect(() => {
+    computeCICOTime();
   }, [searchRoomsResult]);
 
   useEffect(() => {
@@ -248,7 +296,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
           room_type: values.room_type,
           source_type: '7',
           source_id: '23',
-          charge_kind: '1',
+          charge_kind: chargeKind,
         }),
       );
     }
@@ -264,7 +312,10 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
         total_guest: 2,
         content: item.rate_detail,
         unit_price: formatNumber(item.price),
-        updated_price: item.price,
+        updated_price: item.updated_price,
+        hours: item.hours,
+        sub_total: item.hours * item.updated_price,
+        sub_total_format: formatNumber(item.hours * item.updated_price),
         task: '',
       });
     });
@@ -292,9 +343,26 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
         room_id: room?.id.toString(),
       });
 
+      setChargeKind('1');
       searchRoomAction();
     }
   }, [isModalVisible]);
+
+  useEffect(() => {
+    if (chargeKind === '2') {
+      form.setFieldsValue({
+        checkout: moment(),
+        checkout_time: moment().add(1, 'hours'),
+      });
+    } else {
+      form.setFieldsValue({
+        checkout: moment().add(1, 'days'),
+        checkout_time: undefined,
+      });
+    }
+
+    searchRoomAction();
+  }, [chargeKind]);
 
   return (
     <Modal
@@ -439,6 +507,56 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
           <Col span={24} style={{ marginTop: 20 }}>
             <Card bordered={false} size="small" title="Booking Information">
               <Row>
+                <Col span={8}>
+                  <Form.Item
+                    label={t('common.Room Type')}
+                    name="room_type"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Please input room type!',
+                      },
+                    ]}
+                  >
+                    <Select
+                      onChange={searchRoomAction}
+                      placeholder={t('reservation.Room Type.placeholder')}
+                    >
+                      {_.keys(roomTypesData).map((key: any) => {
+                        return (
+                          <Option key={key} value={key}>
+                            {roomTypesData[key]}
+                          </Option>
+                        );
+                      })}
+                    </Select>
+                  </Form.Item>
+                </Col>
+
+                <Col span={8}>
+                  <Form.Item label={t('common.Room Number')} name="room_id">
+                    <Select placeholder="Select room">
+                      {roomsList.items?.map((item: any) => (
+                        <Option value={item.id.toString()}>{item.code}</Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+
+                <Col span={8}>
+                  <Form.Item label={t('reservation.Rate Type.title')}>
+                    <Select
+                      onChange={value => setChargeKind(value)}
+                      placeholder={t('reservation.Rate Type.placeholder')}
+                      style={{ width: '93%' }}
+                      value={chargeKind}
+                    >
+                      <Option value="1">{t('reservation.Rate Type.Once')}</Option>
+                      <Option value="2">{t('reservation.Rate Type.By Hours')}</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+
                 <Col span={16}>
                   <Row>
                     <Col span={12}>
@@ -506,6 +624,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
                       <Form.Item label={t('common.Checkout Time')} name="checkout_time">
                         <TimePicker
                           format="HH:mm"
+                          onChange={computeCICOTime}
                           style={{
                             height: 32,
                             borderRadius: 4,
@@ -521,46 +640,6 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
                   <Form.Item label={t('common.Notes')} name="note">
                     <TextArea rows={5} style={{ borderRadius: 4 }} />
                   </Form.Item>
-                </Col>
-
-                <Col span={8}>
-                  <Form.Item
-                    label={t('common.Room Type')}
-                    name="room_type"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please input room type!',
-                      },
-                    ]}
-                  >
-                    <Select
-                      onChange={value => searchRoomAction()}
-                      placeholder={t('reservation.Room Type.placeholder')}
-                    >
-                      {_.keys(roomTypesData).map((key: any) => {
-                        return (
-                          <Option key={key} value={key}>
-                            {roomTypesData[key]}
-                          </Option>
-                        );
-                      })}
-                    </Select>
-                  </Form.Item>
-                </Col>
-
-                <Col span={16}>
-                  <Row>
-                    <Col span={12}>
-                      <Form.Item label={t('common.Room Number')} name="room_id">
-                        <Select placeholder="Select room">
-                          {roomsList.items?.map((item: any) => (
-                            <Option value={item.id.toString()}>{item.code}</Option>
-                          ))}
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                  </Row>
                 </Col>
               </Row>
             </Card>
