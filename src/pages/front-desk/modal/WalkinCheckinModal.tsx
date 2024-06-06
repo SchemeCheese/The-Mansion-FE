@@ -350,9 +350,11 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
 
   useEffect(() => {
     if (chargeKind === '2') {
+      const checkoutDate = moment().add(2, 'hours');
+
       form.setFieldsValue({
-        checkout: moment(),
-        checkout_time: moment().add(1, 'hours'),
+        checkout: checkoutDate,
+        checkout_time: checkoutDate,
       });
     } else {
       form.setFieldsValue({
