@@ -608,7 +608,7 @@ function SelectRoomModal({
                   setRoomCondition({
                     ...roomCondition,
                     checkin_time: time,
-                    checkout_time: time?.clone().add(1, 'hours'),
+                    checkout_time: time?.clone().add(2, 'hours'),
                   })
                 }
                 style={{
