@@ -307,17 +307,19 @@ function SelectRoomModal({
     let valueTemporary = value;
     let roomConditionTemporary = { ...roomCondition };
 
-    roomConditionTemporary =
-      (key === 'charge_kind' && value === '2') ||
-      (key !== 'charge_kind' && roomCondition.charge_kind !== '1')
-        ? {
-            ...roomConditionTemporary,
-            // checkout: roomConditionTemporary.checkin,
-          }
-        : {
-            ...roomConditionTemporary,
-            // checkout: moment(roomConditionTemporary.checkin).add(1, 'days').format('YYYY-MM-DD'),
-          };
+    if (key !== 'room_type') {
+      roomConditionTemporary =
+        (key === 'charge_kind' && value === '2') ||
+        (key !== 'charge_kind' && roomCondition.charge_kind !== '1')
+          ? {
+              ...roomConditionTemporary,
+              checkout: roomConditionTemporary.checkin,
+            }
+          : {
+              ...roomConditionTemporary,
+              checkout: moment(roomConditionTemporary.checkin).add(1, 'days').format('YYYY-MM-DD'),
+            };
+    }
 
     if (value === undefined) {
       valueTemporary = '';
