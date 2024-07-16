@@ -11,7 +11,7 @@ import 'styles/night_audit.css';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Alert, Card, Col, message, Row, Table } from 'antd';
+import { Alert, Card, Col, message, Pagination, Row, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -28,7 +28,6 @@ import useTreeChanges from 'tree-changes-hook/lib';
 import { useAppSelector } from 'modules/hooks';
 
 import {
-  branchFacilites,
   getFacilityAction,
   getReservationRoomCheckinTodayAction,
   getReservationRoomCheckoutTodayAction,
@@ -39,7 +38,7 @@ import {
 
 import PattonButton from 'components/PattonButton';
 
-import { BranchInfoState } from 'types';
+import { BranchInfoState, ReservationRoomInhouseState } from 'types';
 
 interface DataType {
   address: string;
@@ -51,11 +50,13 @@ interface DataType {
 function NightAudit() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const reservationRoomInhouseData: any = useAppSelector(selectReservationRoomInhouseState);
-  const reservationRoomCheckoutTodayData: any = useAppSelector(
+  const reservationRoomInhouseData: ReservationRoomInhouseState = useAppSelector(
+    selectReservationRoomInhouseState,
+  );
+  const reservationRoomCheckoutTodayData: ReservationRoomInhouseState = useAppSelector(
     selectReservationRoomCheckoutTodayState,
   );
-  const reservationRoomCheckinTodayData: any = useAppSelector(
+  const reservationRoomCheckinTodayData: ReservationRoomInhouseState = useAppSelector(
     selectReservationRoomCheckinTodayState,
   );
   const branchInfoSelected: BranchInfoState = useAppSelector(selectBranchInfo);
@@ -493,6 +494,42 @@ function NightAudit() {
     };
   });
 
+  const onChangeCurrentPageCheckinToday = (page: number, pageSize: number) => {
+    dispatch(
+      getReservationRoomCheckinTodayAction({
+        filter: {
+          ...reservationRoomCheckinTodayData.filter,
+          current_page: page,
+          per_page: pageSize,
+        },
+      }),
+    );
+  };
+
+  const onChangeCurrentPageInhouseToday = (page: number, pageSize: number) => {
+    dispatch(
+      getReservationRoomInhouseAction({
+        filter: {
+          ...reservationRoomInhouseData.filter,
+          current_page: page,
+          per_page: pageSize,
+        },
+      }),
+    );
+  };
+
+  const onChangeCurrentPageCheckoutToday = (page: number, pageSize: number) => {
+    dispatch(
+      getReservationRoomCheckoutTodayAction({
+        filter: {
+          ...reservationRoomCheckoutTodayData.filter,
+          current_page: page,
+          per_page: pageSize,
+        },
+      }),
+    );
+  };
+
   return (
     <>
       {/* <Button onClick={showModal}>Payment Method</Button> */}
@@ -561,6 +598,17 @@ function NightAudit() {
             }}
             size="small"
           />
+          {reservationRoomCheckinTodayData.total >
+            reservationRoomCheckinTodayData.filter.per_page && (
+            <Pagination
+              current={reservationRoomCheckinTodayData.filter.current_page}
+              onChange={onChangeCurrentPageCheckinToday}
+              pageSize={reservationRoomCheckinTodayData.filter.per_page}
+              showSizeChanger={false}
+              style={{ float: 'right', marginTop: 15 }}
+              total={reservationRoomCheckinTodayData.total}
+            />
+          )}
         </Card>
         <Card
           bordered={false}
@@ -585,6 +633,17 @@ function NightAudit() {
             pagination={false}
             size="small"
           />
+          {reservationRoomCheckoutTodayData.total >
+            reservationRoomCheckoutTodayData.filter.per_page && (
+            <Pagination
+              current={reservationRoomCheckoutTodayData.filter.current_page}
+              onChange={onChangeCurrentPageCheckoutToday}
+              pageSize={reservationRoomCheckoutTodayData.filter.per_page}
+              showSizeChanger={false}
+              style={{ float: 'right', marginTop: 15 }}
+              total={reservationRoomCheckoutTodayData.total}
+            />
+          )}
         </Card>
         <Card
           bordered={false}
@@ -609,6 +668,16 @@ function NightAudit() {
             pagination={false}
             size="small"
           />
+          {reservationRoomInhouseData.total > reservationRoomInhouseData.filter.per_page && (
+            <Pagination
+              current={reservationRoomInhouseData.filter.current_page}
+              onChange={onChangeCurrentPageInhouseToday}
+              pageSize={reservationRoomInhouseData.filter.per_page}
+              showSizeChanger={false}
+              style={{ float: 'right', marginTop: 15 }}
+              total={reservationRoomInhouseData.total}
+            />
+          )}
         </Card>
       </Row>
     </>
