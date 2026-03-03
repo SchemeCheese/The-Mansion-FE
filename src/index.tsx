@@ -1,7 +1,7 @@
 import './i18n';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { ErrorBoundary } from 'react-error-boundary';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
@@ -21,24 +21,30 @@ import Root from './Root';
 import { register } from './serviceWorkerRegistration';
 
 const { persistor, store } = configStore();
+const HelmetProviderCompat: any = HelmetProvider;
 
 window.store = store;
 
-ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={<Loader block size={100} />} persistor={persistor}>
-      <ErrorBoundary FallbackComponent={ErrorHandler}>
-        <HelmetProvider>
-          <BrowserRouter>
-            <Root />
-          </BrowserRouter>
-        </HelmetProvider>
-      </ErrorBoundary>
-      <GlobalStyles />
-    </PersistGate>
-  </Provider>,
-  document.getElementById('root'),
-);
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  const root = createRoot(rootElement);
+
+  root.render(
+    <Provider store={store}>
+      <PersistGate loading={<Loader block size={100} />} persistor={persistor}>
+        <ErrorBoundary FallbackComponent={ErrorHandler}>
+          <HelmetProviderCompat>
+            <BrowserRouter>
+              <Root />
+            </BrowserRouter>
+          </HelmetProviderCompat>
+        </ErrorBoundary>
+        <GlobalStyles />
+      </PersistGate>
+    </Provider>,
+  );
+}
 
 /* istanbul ignore next */
 register({

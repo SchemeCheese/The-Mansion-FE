@@ -16,7 +16,7 @@ import {
   logOut,
 } from 'actions';
 
-export function* getElectricYesterdaySaga() {
+export function* getElectricYesterdaySaga(): any {
   try {
     let data: any = [];
 
@@ -46,7 +46,7 @@ export function* getElectricYesterdaySaga() {
   }
 }
 
-export function* getWaterYesterdaySaga() {
+export function* getWaterYesterdaySaga(): any {
   try {
     let data: any = [];
 
@@ -76,7 +76,7 @@ export function* getWaterYesterdaySaga() {
   }
 }
 
-export function* getElectricAreaSaga() {
+export function* getElectricAreaSaga(): any {
   try {
     let data: any = [];
 
@@ -102,7 +102,7 @@ export function* getElectricAreaSaga() {
   }
 }
 
-export function* getWaterAreaSaga() {
+export function* getWaterAreaSaga(): any {
   try {
     let data: any = [];
 
@@ -128,7 +128,7 @@ export function* getWaterAreaSaga() {
   }
 }
 
-export function* getElectricPowerSaga() {
+export function* getElectricPowerSaga(): any {
   try {
     let data: any = [];
 
@@ -154,7 +154,7 @@ export function* getElectricPowerSaga() {
   }
 }
 
-export function* getDurationCurveSaga() {
+export function* getDurationCurveSaga(): any {
   try {
     let data: any = [];
 

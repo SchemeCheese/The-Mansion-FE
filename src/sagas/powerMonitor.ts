@@ -13,7 +13,7 @@ import {
   logOut,
 } from 'actions';
 
-export function* getDeviceManagerSaga() {
+export function* getDeviceManagerSaga(): any {
   try {
     let data: any = [];
 
@@ -41,7 +41,7 @@ export function* getDeviceManagerSaga() {
 
 export function* getDownloadCSVBranchManagerSaga({
   payload,
-}: ReturnType<typeof downloadCSVBranchManagerAction>) {
+}: ReturnType<typeof downloadCSVBranchManagerAction>): any {
   try {
     const urlApi = `${iotApiEndPoint(IOTEndpoint.powerMonitor.branchDownLoadCsv)}`;
 

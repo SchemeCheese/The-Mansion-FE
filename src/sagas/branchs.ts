@@ -16,7 +16,7 @@ import {
   getFacilityFinishAction,
 } from 'actions';
 
-export function* getBranchsSaga() {
+export function* getBranchsSaga(): any {
   let data: any = [];
 
   data = yield call(request, `${apiEndPoint(GetAllBranchsEndpoint.GET)}`, {
@@ -27,7 +27,7 @@ export function* getBranchsSaga() {
   yield put(branchsFinish({ data }));
 }
 
-export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFacilites>) {
+export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFacilites>): any {
   let data: any = [];
 
   data = yield call(request, `${apiEndPoint(GetFacilitiesByBranch.GET)}/${payload.branchId}`, {
@@ -38,7 +38,7 @@ export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFaci
   yield put(branchFacilitesFinish({ data }));
 }
 
-export function* getFacilitySaga({ payload }: ReturnType<typeof getFacilityAction>) {
+export function* getFacilitySaga({ payload }: ReturnType<typeof getFacilityAction>): any {
   let data: any = [];
 
   data = yield call(

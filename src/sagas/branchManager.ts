@@ -7,7 +7,7 @@ import { ActionTypes } from 'literals';
 
 import { branchManagerFinish } from 'actions';
 
-export function* getBranchManagerSaga() {
+export function* getBranchManagerSaga(): any {
   try {
     let data: any = [];
 

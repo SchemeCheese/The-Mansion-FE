@@ -13,7 +13,7 @@ import {
   updateHouseKeepingSuccessAction,
 } from 'actions';
 
-export function* getHouseKeepingSaga({ payload }: ReturnType<typeof getHouseKeepingAction>) {
+export function* getHouseKeepingSaga({ payload }: ReturnType<typeof getHouseKeepingAction>): any {
   try {
     let data: any = [];
 
@@ -44,7 +44,7 @@ export function* getHouseKeepingSaga({ payload }: ReturnType<typeof getHouseKeep
 
 export function* postUpdateHouseKeepingSaga({
   payload,
-}: ReturnType<typeof updateHouseKeepingAction>) {
+}: ReturnType<typeof updateHouseKeepingAction>): any {
   try {
     let success = '';
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});

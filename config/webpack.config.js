@@ -453,7 +453,8 @@ module.exports = webpackEnv => {
               // by webpacks internal loaders.
               exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
-                name: 'static/[contenthash].[git-hash].[ext]',
+                // Avoid MD4 hashing from loader-utils on modern Node/OpenSSL.
+                name: 'static/[sha256:hash:hex:20].[git-hash].[ext]',
               },
             },
             // ** STOP ** Are you adding a new loader?
