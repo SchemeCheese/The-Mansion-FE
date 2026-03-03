@@ -144,7 +144,7 @@ function ReservationRoomListFilter({ searchCondition, setSearchCondition, type }
           <Select
             allowClear
             onChange={value => searchSelect(value, 'source_id')}
-            placeholder={t('common.Source')}
+            placeholder={String(t('common.Source'))}
             style={{ width: '100%', fontSize: 12 }}
           >
             {sourceOptions}

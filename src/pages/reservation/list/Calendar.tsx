@@ -374,7 +374,7 @@ function Calendar() {
                     return moment(argument.date).format('DD[\n]dd');
                   },
                   slotLaneContent(argument) {
-                    const days = [];
+                    const days: string[] = [];
 
                     for (
                       let index = 0;
@@ -397,7 +397,7 @@ function Calendar() {
                     return moment(argument.date).format('DD[\n]dd');
                   },
                   slotLaneContent(argument) {
-                    const days = [];
+                    const days: string[] = [];
 
                     for (
                       let index = 0;

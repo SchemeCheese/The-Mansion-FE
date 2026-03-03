@@ -92,7 +92,7 @@ function SelectRoomCard({ roomInfo, roomNote, setRoomNote, showModalDetail }: Pr
               }
               value={roomInfo.id}
             >
-              {t('guestCheckin.Select this room')}
+              {String(t('guestCheckin.Select this room'))}
             </Radio>
           </Col>
         </Row>
@@ -118,14 +118,14 @@ function SelectRoomCard({ roomInfo, roomNote, setRoomNote, showModalDetail }: Pr
           <span style={{ fontSize: 14, position: 'absolute' }}>
             {roomInfo && roomInfo.view !== undefined && roomInfo.view !== null && (
               <span style={{ paddingLeft: 6 }}>
-                {roomInfo.view === 0 && t('common.Not yet setting')}
+                {roomInfo.view === 0 && String(t('common.Not yet setting'))}
                 {roomInfo.view.toString() === '256' && viewMapping['256']}
                 {roomInfo.view.toString() === '512' && viewMapping['512']}
               </span>
             )}
           </span>
           <span style={{ fontSize: 14, float: 'right', color: '#00000073' }}>
-            {t('guestCheckin.Room Type')}
+            {String(t('guestCheckin.Room Type'))}
           </span>
         </Col>
         <Col
@@ -139,7 +139,7 @@ function SelectRoomCard({ roomInfo, roomNote, setRoomNote, showModalDetail }: Pr
           <span style={{ fontSize: 14 }}>
             {roomInfo && roomInfo.wing !== undefined && roomInfo.wing !== null && (
               <span style={{ paddingLeft: 6 }}>
-                {roomInfo.wing === 0 && t('common.Not yet setting')}
+                {roomInfo.wing === 0 && String(t('common.Not yet setting'))}
                 {roomInfo.wing.toString() === '1' && wingMapping['1']}
                 {roomInfo.wing.toString() === '2' && wingMapping['2']}
                 {roomInfo.wing.toString() === '4' && wingMapping['4']}
@@ -159,12 +159,12 @@ function SelectRoomCard({ roomInfo, roomNote, setRoomNote, showModalDetail }: Pr
           {roomInfo.is_smoking ? (
             <>
               <Icon name="smoking" width={20} />
-              <span style={{ fontSize: 14, paddingLeft: '1%' }}> {t('frontDesk.Smoking')}</span>
+              <span style={{ fontSize: 14, paddingLeft: '1%' }}>{String(t('frontDesk.Smoking'))}</span>
             </>
           ) : (
             <>
               <Icon name="no-smoking" width={20} />
-              <span style={{ fontSize: 14, paddingLeft: '1%' }}> {t('frontDesk.No Smoking')}</span>
+              <span style={{ fontSize: 14, paddingLeft: '1%' }}>{String(t('frontDesk.No Smoking'))}</span>
             </>
           )}
         </Col>
@@ -175,10 +175,10 @@ function SelectRoomCard({ roomInfo, roomNote, setRoomNote, showModalDetail }: Pr
             marginBottom: 5,
           }}
         >
-          <span style={{ fontSize: 12, color: '#00000073' }}>{t('guestCheckin.Hourly Rate')}</span>
+          <span style={{ fontSize: 12, color: '#00000073' }}>{String(t('guestCheckin.Hourly Rate'))}</span>
           <span style={{ fontSize: 12, float: 'right', color: '#00000073' }}>
             {' '}
-            {t('guestCheckin.Daily Rate')}{' '}
+            {String(t('guestCheckin.Daily Rate'))}
           </span>
         </Col>
         <Col

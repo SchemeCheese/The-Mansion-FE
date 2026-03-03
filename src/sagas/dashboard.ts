@@ -18,7 +18,7 @@ import {
 
 export function* getElectricYesterdaySaga() {
   try {
-    let data = [];
+    let data: any = [];
 
     data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.electric)}/yesterday`, {
       method: 'GET',
@@ -48,7 +48,7 @@ export function* getElectricYesterdaySaga() {
 
 export function* getWaterYesterdaySaga() {
   try {
-    let data = [];
+    let data: any = [];
 
     data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.water)}/yesterday`, {
       method: 'GET',
@@ -78,7 +78,7 @@ export function* getWaterYesterdaySaga() {
 
 export function* getElectricAreaSaga() {
   try {
-    let data = [];
+    let data: any = [];
 
     data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.electric)}/area`, {
       method: 'GET',
@@ -104,7 +104,7 @@ export function* getElectricAreaSaga() {
 
 export function* getWaterAreaSaga() {
   try {
-    let data = [];
+    let data: any = [];
 
     data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.water)}/area`, {
       method: 'GET',
@@ -130,7 +130,7 @@ export function* getWaterAreaSaga() {
 
 export function* getElectricPowerSaga() {
   try {
-    let data = [];
+    let data: any = [];
 
     data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.electric)}/power`, {
       method: 'GET',
@@ -156,7 +156,7 @@ export function* getElectricPowerSaga() {
 
 export function* getDurationCurveSaga() {
   try {
-    let data = [];
+    let data: any = [];
 
     data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.water)}/duration`, {
       method: 'GET',

@@ -449,7 +449,7 @@ function SelectRoomModal({
     );
   });
 
-  const quantityOption = [];
+  const quantityOption: any[] = [];
 
   for (let index = 0; index < quantityResult; index++) {
     quantityOption.push(

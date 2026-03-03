@@ -66,7 +66,7 @@ export function navigate(options: NavigateOptions): void {
   jsdom.reconfigure({ url });
 }
 
-function getProviders(store): React.FC {
+function getProviders(store): React.FC<React.PropsWithChildren<{}>> {
   return ({ children }) => <Provider store={store}>{children}</Provider>;
 }
 

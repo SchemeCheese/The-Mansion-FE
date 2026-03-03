@@ -764,7 +764,7 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
                     return moment(argument.date).format('DD[\n]dd');
                   },
                   slotLaneContent(argument) {
-                    const days = [];
+                    const days: string[] = [];
 
                     for (let index = 0; index < resources.length; index++) {
                       days.push(moment(argument.date).format('DD'));
@@ -787,7 +787,7 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
                     return moment(argument.date).format('DD[\n]dd');
                   },
                   slotLaneContent(argument) {
-                    const days = [];
+                    const days: string[] = [];
 
                     for (let index = 0; index < resources.length; index++) {
                       days.push(moment(argument.date).format('DD'));

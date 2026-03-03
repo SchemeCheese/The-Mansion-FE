@@ -138,7 +138,7 @@ function Pie({ animate, data, height, lineWidth, subTitle, total, valueFormat }:
               {/* eslint-disable-next-line */}
               {total && (
                 <div className="pie-stat">
-                  {typeof total === 'function' ? total : numeral(total).format('0,0')}
+                  {typeof total === 'function' ? total() : numeral(total).format('0,0')}
                 </div>
               )}
             </div>

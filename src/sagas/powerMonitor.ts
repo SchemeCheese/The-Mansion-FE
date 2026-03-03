@@ -15,7 +15,7 @@ import {
 
 export function* getDeviceManagerSaga() {
   try {
-    let data = [];
+    let data: any = [];
 
     data = yield call(request, `${iotApiEndPoint(IOTEndpoint.powerMonitor.device)}`, {
       method: 'GET',

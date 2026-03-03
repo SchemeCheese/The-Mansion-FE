@@ -17,7 +17,7 @@ import {
 } from 'actions';
 
 export function* getBranchsSaga() {
-  let data = [];
+  let data: any = [];
 
   data = yield call(request, `${apiEndPoint(GetAllBranchsEndpoint.GET)}`, {
     method: 'GET',
@@ -28,7 +28,7 @@ export function* getBranchsSaga() {
 }
 
 export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFacilites>) {
-  let data = [];
+  let data: any = [];
 
   data = yield call(request, `${apiEndPoint(GetFacilitiesByBranch.GET)}/${payload.branchId}`, {
     method: 'GET',
@@ -39,7 +39,7 @@ export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFaci
 }
 
 export function* getFacilitySaga({ payload }: ReturnType<typeof getFacilityAction>) {
-  let data = [];
+  let data: any = [];
 
   data = yield call(
     request,

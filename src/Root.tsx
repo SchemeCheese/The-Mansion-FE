@@ -50,6 +50,8 @@ import Private from 'routes/Private';
 
 import { BranchInfoState, UserState } from 'types';
 
+const HelmetCompat: any = Helmet;
+
 const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -259,7 +261,7 @@ function Root() {
   return (
     <ThemeProvider theme={theme}>
       <AppWrapper className="custom-wrapper" data-testid="app">
-        <Helmet
+        <HelmetCompat
           defer={false}
           encodeSpecialCharacters
           htmlAttributes={{ lang: 'pt-br' }}
@@ -270,7 +272,7 @@ function Root() {
             href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap"
             rel="stylesheet"
           />
-        </Helmet>
+        </HelmetCompat>
         <Main isAuthenticated={isAuthenticated}>
           <Routes>
             <Route

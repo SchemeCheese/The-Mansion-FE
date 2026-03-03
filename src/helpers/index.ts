@@ -53,7 +53,7 @@ export const randomKey = (length: number) => {
 
 export const getDaysBetweenDates = function (startDate: any, endDate: any) {
   const now = startDate.clone();
-  const dates = [];
+  const dates: string[] = [];
 
   while (now.isSameOrBefore(endDate)) {
     dates.push(now.format('YYYY-MM-DD'));

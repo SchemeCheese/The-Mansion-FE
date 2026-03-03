@@ -15,7 +15,7 @@ import {
 
 export function* getHouseKeepingSaga({ payload }: ReturnType<typeof getHouseKeepingAction>) {
   try {
-    let data = [];
+    let data: any = [];
 
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 

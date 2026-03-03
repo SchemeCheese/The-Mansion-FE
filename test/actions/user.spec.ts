@@ -2,7 +2,7 @@ import { login, logOut } from 'actions/user';
 
 describe('actions/user', () => {
   it('login', () => {
-    expect(login()).toMatchSnapshot();
+    expect(login({ username: '', password: '' })).toMatchSnapshot();
   });
 
   it('logOut', () => {

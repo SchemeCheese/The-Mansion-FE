@@ -66,7 +66,7 @@ function SelectRoomFilter({ searchCondition, setSearchCondition }: Props) {
           <Select
             allowClear
             onChange={value => searchSelect(value, 'room_type')}
-            placeholder={t('guestCheckin.Room Type')}
+            placeholder={String(t('guestCheckin.Room Type'))}
             style={{ width: '100%' }}
           >
             {keys(roomTypesData).map((key: any) => {
@@ -82,7 +82,7 @@ function SelectRoomFilter({ searchCondition, setSearchCondition }: Props) {
           <Select
             allowClear
             onChange={value => searchSelect(value, 'view')}
-            placeholder={t('guestCheckin.View')}
+            placeholder={String(t('guestCheckin.View'))}
             style={{ width: '100%' }}
           >
             <Option value="1">Ocean View</Option>
@@ -91,7 +91,7 @@ function SelectRoomFilter({ searchCondition, setSearchCondition }: Props) {
         </Col>
         <Col span={6} style={{ paddingLeft: '5%' }}>
           <Checkbox onChange={e => searchIsSmokingRoom(e.target.checked)}>
-            {t('guestCheckin.Smoking Room')}
+            {String(t('guestCheckin.Smoking Room'))}
           </Checkbox>
         </Col>
       </Row>

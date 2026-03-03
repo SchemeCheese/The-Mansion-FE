@@ -174,7 +174,7 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visibl
           sale_detail_ids: selectedSaleRowKeys,
           storage_id: storageId,
           reservation_id: roomTotalForm[0].reservation_id,
-          reservation_detail_id: selectedReservationDetailRowKeys[0],
+          reservation_detail_id: selectedReservationDetailRowKeys[0] as string | number,
         },
       }),
     );

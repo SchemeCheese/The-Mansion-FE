@@ -5,6 +5,8 @@ import { throwError } from 'redux-saga-test-plan/providers';
 
 import user, { loginSaga, logoutSaga } from 'sagas/user';
 
+import { login } from 'actions/user';
+
 describe('user', () => {
   it('should have the expected watchers', () =>
     expectSaga(user)
@@ -15,7 +17,7 @@ describe('user', () => {
 
   describe('login', () => {
     it('should handle SUCCESS', () =>
-      expectSaga(loginSaga)
+      expectSaga(loginSaga, login({ username: '', password: '' }))
         .provide([[matchers.call.fn(delay), throwError(new Error('fail'))]])
         .run(400)
         .then(result => {

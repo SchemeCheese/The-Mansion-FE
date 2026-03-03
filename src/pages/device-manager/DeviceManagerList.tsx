@@ -369,9 +369,11 @@ function DeviceManagerList() {
             <Divider dashed style={{ marginBottom: 15 }} />
             <Row align="middle" justify="space-between">
               <Col xs={2}>
-                <PattonButton onClick={() => navigate(`/power/device/create`)}>
-                  {' '}
-                  <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> {t('common.New')}
+                <PattonButton
+                  icon={<PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} />}
+                  onClick={() => navigate(`/power/device/create`)}
+                >
+                  {String(t('common.New'))}
                 </PattonButton>
               </Col>
               <Col

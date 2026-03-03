@@ -176,7 +176,7 @@ function Create() {
     0,
   );
 
-  let reservationInfo = null;
+  let reservationInfo: any = null;
 
   if (params.state && params.state?.reservationInfo) {
     const reservationInfoState = params.state?.reservationInfo;

@@ -203,7 +203,7 @@ function ReservationListFilter({
           <Select
             allowClear
             onChange={value => searchSelect(value, 'market')}
-            placeholder={t('common.Market')}
+            placeholder={String(t('common.Market'))}
             style={{ width: '100%', fontSize: 12 }}
             value={searchCondition.market === '' ? undefined : searchCondition.market}
           >
@@ -218,7 +218,7 @@ function ReservationListFilter({
           <Select
             allowClear
             onChange={value => searchSelect(value, 'source')}
-            placeholder={t('common.Source')}
+            placeholder={String(t('common.Source'))}
             style={{ width: '100%', fontSize: 12 }}
             value={searchCondition.source === '' ? undefined : searchCondition.source}
           >
@@ -230,7 +230,7 @@ function ReservationListFilter({
             <ReloadOutlined onClick={handleResetCondition} />
           </Tooltip>
           <Button onClick={() => handleChange()} style={{ color: '#1D39C4' }} type="text">
-            <span style={{ paddingRight: 6 }}>{t('common.Show more')}</span>
+            <span style={{ paddingRight: 6 }}>{String(t('common.Show more'))}</span>
             {showMore ? <UpOutlined /> : <DownOutlined />}
           </Button>
         </Col>

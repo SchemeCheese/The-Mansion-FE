@@ -9,7 +9,7 @@ import { branchManagerFinish } from 'actions';
 
 export function* getBranchManagerSaga() {
   try {
-    let data = [];
+    let data: any = [];
 
     data = yield call(request, `${iotApiEndPoint(GetAllBranchManagerEndpoint.GET)}`, {
       method: 'GET',

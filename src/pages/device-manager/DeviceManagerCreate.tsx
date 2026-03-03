@@ -89,7 +89,7 @@ function DeviceManagerCreate() {
       return item.id.toString() === value.toString();
     });
 
-    const functions = [];
+    const functions: any[] = [];
 
     for (let index = 0; index < deviceTypeSelected.no_of_funcs; index++) {
       functions.push({

@@ -389,7 +389,7 @@ function ReservationList({ type }: Props) {
       dataIndex: 'alert',
       key: 'alert',
       render: (text: string, record: any) => {
-        const alert = [];
+        const alert: any[] = [];
 
         if (record.is_early_checkin) {
           alert.push(<Tag color="#f50">E/L</Tag>);

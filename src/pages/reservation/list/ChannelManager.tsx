@@ -137,7 +137,7 @@ function ChannelManager({ fromDate, setFromDate }: Props) {
     setIsShowMore(channelIsShowMore);
   }, [channelData]);
 
-  const dates = [];
+  const dates: any[] = [];
 
   if (channelData.is_searching === false) {
     for (let index = 0; index < channelData.dates.length; index++) {
