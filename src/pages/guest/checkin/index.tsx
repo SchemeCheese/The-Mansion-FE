@@ -8,7 +8,6 @@ Main functions: Guest Checkin
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { QrReader } from 'react-qr-reader';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {

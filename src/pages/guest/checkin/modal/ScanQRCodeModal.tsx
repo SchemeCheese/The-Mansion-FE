@@ -6,10 +6,9 @@ Updated Date: 15/10/2023
 Main functions: Scan QRCode Modal
 ************************************ */
 
-import React from 'react';
-import { useTranslation } from 'react-i18next';
-import { QrReader } from 'react-qr-reader';
+import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import { Scanner } from '@yudiel/react-qr-scanner';
 import { Modal } from 'antd';
 
 import { getReservationGuestCheckinAction } from 'actions';
@@ -20,14 +19,19 @@ interface Props {
 }
 
 function ScanQRCodeModal({ setVisiable, visible }: Props) {
-  const { t } = useTranslation();
   const dispatch = useDispatch();
+  const isScannedRef = useRef(false);
+
+  const handleClose = () => {
+    isScannedRef.current = false;
+    setVisiable(false);
+  };
 
   return (
     <Modal
       className="modal-room-detail"
       footer={null}
-      onCancel={() => setVisiable(false)}
+      onCancel={handleClose}
       title="Scan QR Code"
       visible={visible}
       width={800}
@@ -124,13 +128,29 @@ function ScanQRCodeModal({ setVisiable, visible }: Props) {
             top: '17%',
           }}
         >
-          <QrReader
+          <Scanner
             constraints={{ facingMode: 'user' }}
-            onResult={(result: any, error) => {
-              if (result) {
-                const data = JSON.parse(result?.text);
+            onError={error => {
+              if (process.env.NODE_ENV === 'development') {
+                console.info(error);
+              }
+            }}
+            onScan={detectedCodes => {
+              if (isScannedRef.current || !detectedCodes.length) {
+                return;
+              }
 
-                localStorage.setItem('checkin_booking', result?.text);
+              const qrValue = detectedCodes[0]?.rawValue;
+
+              if (!qrValue) {
+                return;
+              }
+
+              try {
+                const data = JSON.parse(qrValue);
+
+                isScannedRef.current = true;
+                localStorage.setItem('checkin_booking', qrValue);
 
                 dispatch(
                   getReservationGuestCheckinAction({
@@ -139,11 +159,11 @@ function ScanQRCodeModal({ setVisiable, visible }: Props) {
                   }),
                 );
 
-                setVisiable(false);
-              }
-
-              if (error) {
-                console.info(error);
+                handleClose();
+              } catch (error) {
+                if (process.env.NODE_ENV === 'development') {
+                  console.info('Invalid QR payload', error);
+                }
               }
             }}
           />
