@@ -20,7 +20,7 @@
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.34",
     "@ant-design/icons": "^4.8.3",
-    "@antv/data-set": "^0.11.8",
+    "@ant-design/plots": "^2.6.8",
     "@fullcalendar/core": "^5.11.5",
     "@fullcalendar/daygrid": "^5.11.5",
     "@fullcalendar/interaction": "^5.11.5",
@@ -32,7 +32,6 @@
     "@yudiel/react-qr-scanner": "^2.5.1",
     "antd": "^4.24.16",
     "axios": "^1.13.6",
-    "bizcharts": "^4.1.22",
     "i18next": "^21.9.1",
     "immer": "^9.0.12",
     "is-lite": "^0.8.1",
@@ -235,6 +234,9 @@
     "prepare": "husky install"
   },
   "prettier": "@gilbarbara/prettier-config",
+  "overrides": {
+    "@types/d3-dispatch": "3.0.6"
+  },
   "lint-staged": {
     "*.ts?(x)": [
       "eslint --fix",

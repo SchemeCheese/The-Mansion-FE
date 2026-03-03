@@ -8,12 +8,11 @@ Main functions : Duration Curve
 
 import 'styles/duration_curve.css';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EllipsisOutlined, ExportOutlined } from '@ant-design/icons';
-import DataSet from '@antv/data-set';
+import { Line as AntLine } from '@ant-design/plots';
 import { Button, Card, Col, DatePicker, Dropdown, Menu, Row, Select, Space, Spin } from 'antd';
-import { Axis, Chart, Geom, Legend, Line, Tooltip } from 'bizcharts';
 import moment from 'moment';
 import { selectDurationCurveState } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
@@ -26,6 +25,12 @@ import { RootState } from 'types';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
+
+interface DurationDataItem {
+  x: string;
+  y1: number;
+  y2: number;
+}
 
 function DurationCurve() {
   const dispatch = useDispatch();
@@ -43,12 +48,14 @@ function DurationCurve() {
       setIsLoading(false);
     }
   }, [durationCurveChanged]);
+
   const menu = (
     <Menu>
       <Menu.Item>Action 1</Menu.Item>
       <Menu.Item>Action 2</Menu.Item>
     </Menu>
   );
+
   const dropdownGroup = (
     <span>
       <Dropdown overlay={menu} placement="bottomRight">
@@ -57,68 +64,77 @@ function DurationCurve() {
     </span>
   );
 
-  const data = Array.isArray(dataDuration) ? [...dataDuration] : [{ x: 0, y1: 0, y2: 0 }];
+  const data: DurationDataItem[] = Array.isArray(dataDuration)
+    ? [...dataDuration].map(item => ({
+        x: `${item?.x ?? ''}`,
+        y1: Number(item?.y1) || 0,
+        y2: Number(item?.y2) || 0,
+      }))
+    : [{ x: '', y1: 0, y2: 0 }];
 
-  data.sort((a, b) => a.x - b.x);
-  const titleMap = {
-    y1: 'Electric',
-    y2: 'Water',
-  };
+  data.sort((a, b) => (a.x > b.x ? 1 : -1));
 
-  const ds = new DataSet({
-    state: {
-      start: data[0] && data[0].x ? data[0].x : '',
-      end: data[data.length - 1] ? data[data.length - 1].x : '',
+  const lineData = useMemo(
+    () =>
+      data.flatMap(item => [
+        {
+          x: item.x,
+          value: item.y1,
+          key: 'Electric',
+        },
+        {
+          x: item.x,
+          value: item.y2,
+          key: 'Water',
+        },
+      ]),
+    [data],
+  );
+
+  const maxValue = useMemo(
+    () => lineData.reduce((max, item) => (item.value > max ? item.value : max), 0),
+    [lineData],
+  );
+
+  const chartConfig: any = {
+    data: lineData,
+    xField: 'x',
+    yField: 'value',
+    seriesField: 'key',
+    height: 400,
+    autoFit: true,
+    xAxis: {
+      type: 'timeCat',
+      tickCount: 8,
+      label: {
+        formatter: (value: string) => {
+          const parsed = moment(value);
+
+          return parsed.isValid() ? parsed.format('HH:mm') : value;
+        },
+      },
     },
-  });
-  const dv = ds.createView().source(data);
-
-  dv.transform({
-    type: 'filter',
-    callback: (object: { x: string }) => {
-      const date = object.x;
-
-      return date <= ds.state.end && date >= ds.state.start;
-    },
-  });
-  dv.transform({
-    type: 'map',
-    callback(row: { Electric: string; Water: string; y1: string; y2: string }) {
-      const newRow = { ...row };
-
-      newRow.Electric = row.y1;
-      newRow.Water = row.y2;
-
-      return newRow;
-    },
-  });
-  dv.transform({
-    type: 'fold',
-    fields: [titleMap.y1, titleMap.y2], // 展开字段集
-    key: 'key', // key字段
-    value: 'value', // value字段
-  });
-  const timeScale = {
-    type: 'time',
-    tickInterval: 60 * 60 * 1000,
-    mask: 'HH:mm',
-    range: [0, 1],
-  };
-  let max;
-
-  if (data[0] && data[0].y1 && data[0].y2) {
-    max = Math.max(
-      [...data].sort((a, b) => b.y1 - a.y1)[0].y1,
-      [...data].sort((a, b) => b.y2 - a.y2)[0].y2,
-    );
-  }
-
-  const cols = {
-    x: timeScale,
-    value: {
-      max,
+    yAxis: {
       min: 0,
+      max: maxValue > 0 ? maxValue : undefined,
     },
+    legend: {
+      position: 'top',
+    },
+    tooltip: {
+      shared: true,
+      showCrosshairs: true,
+    },
+    color: ['#1890ff', '#13c2c2'],
+    lineStyle: {
+      lineWidth: 2,
+    },
+    point: {
+      size: 2,
+      shape: 'circle',
+    },
+    padding: [60, 20, 40, 40],
+    interactions: [{ type: 'element-active' }],
   };
 
   return !isLoading ? (
@@ -164,8 +180,8 @@ function DurationCurve() {
             >
               <RangePicker
                 ranges={{
-                  Today: [moment(), moment()], // 'This 2.Septh': [moment().startOf('2.Septh'), moment().endOf('2.Septh')],
-                }} // onChange={handleChange}
+                  Today: [moment(), moment()],
+                }}
               />
             </Space>
           </div>
@@ -241,11 +257,7 @@ function DurationCurve() {
           </Col>
         </Row>
         <div style={{ height: 430 }}>
-          <Chart autoFit data={dv} height={400} padding={[60, 20, 40, 40]} scale={cols}>
-            <Tooltip shared showCrosshairs />
-            <Legend itemHeight={50} name="key" position="top" />
-            <Geom color="key" position="x*value" size={2} type="line" />
-          </Chart>
+          <AntLine {...chartConfig} />
         </div>
       </div>
     </Card>

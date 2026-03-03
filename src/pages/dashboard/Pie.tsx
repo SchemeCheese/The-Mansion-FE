@@ -1,16 +1,18 @@
 import 'styles/chart_pie.css';
 
-import React, { useState } from 'react';
-import DataSet from '@antv/data-set';
+import React, { useMemo, useState } from 'react';
+import { Pie as AntPie } from '@ant-design/plots';
 import { Divider } from 'antd';
-import { Chart, Coord, G2, Geom, Legend, Tooltip } from 'bizcharts';
 import numeral from 'numeral';
 
-let chart1: G2.Chart | undefined;
+interface PieDataItem {
+  x: string;
+  y: number;
+}
 
 interface PieProps {
   animate?: boolean;
-  data?: any;
+  data?: Array<Record<string, any>>;
   height?: number;
   lineWidth?: number;
   subTitle?: React.ReactNode;
@@ -18,141 +20,134 @@ interface PieProps {
   valueFormat?: (value: string) => string | React.ReactNode;
 }
 
-function Pie({ animate, data, height, lineWidth, subTitle, total, valueFormat }: PieProps) {
-  const [legendData, setLegendData] = useState<any>([]);
-  const scale = {
-    x: {
-      type: 'cat',
-      range: [0, 1],
-    },
-    y: {
-      min: 0,
-    },
-  };
-  const forceFit = true;
-  const tooltip = true;
-  const padding = [12, 0, 12, 0] as [number, number, number, number];
-  const { DataView } = DataSet;
-  const dv = new DataView();
+const PIE_COLORS = [
+  '#1890ff',
+  '#13c2c2',
+  '#2fc25b',
+  '#facc14',
+  '#f04864',
+  '#8543e0',
+  '#3436c7',
+  '#223273',
+];
 
-  dv.source(data).transform({
-    type: 'percent',
-    field: 'y',
-    dimension: 'x',
-    as: 'percent',
-  });
+function Pie({
+  animate = true,
+  data = [],
+  height = 248,
+  lineWidth = 4,
+  subTitle,
+  total,
+  valueFormat,
+}: PieProps) {
+  const normalizedData = useMemo(
+    () =>
+      (Array.isArray(data) ? data : [])
+        .filter(item => item && item.x !== undefined && item.x !== null)
+        .map(item => ({
+          x: `${item.x}`,
+          y: Number(item.y) || 0,
+        })),
+    [data],
+  );
 
-  const getG2Instance = (chart: G2.Chart) => {
-    chart1 = chart;
-    requestAnimationFrame(() => {
-      getLegendData();
-      // this.resize();
-    });
-  };
+  const [hiddenKeys, setHiddenKeys] = useState<string[]>([]);
 
-  const tooltipFormat: [string, (...arguments_: any[]) => { name?: string; value: string }] = [
-    'x*percent',
-    (x: string, p: number) => ({
-      name: x,
-      value: `${(p * 100).toFixed(2)}%`,
-    }),
-  ];
+  const colorByKey = useMemo(() => {
+    const map = new Map<string, string>();
 
-  const handleLegendClick = (item: any, index: any) => {
-    const newItem = item;
-    const newLegendData = [...legendData];
-
-    newItem.checked = !newItem.checked;
-    newLegendData[index] = newItem;
-
-    const filteredLegendData = newLegendData.filter((l: any) => l.checked).map((l: any) => l.x);
-
-    if (chart1) {
-      chart1.filter('x', value => filteredLegendData.includes(`${value}`));
-    }
-
-    setLegendData(newLegendData);
-  };
-
-  // for custom lengend view
-  const getLegendData = () => {
-    if (!chart1) {
-      return;
-    }
-
-    const geom = chart1.getGeometries()[0]; // 获取所有的图形
-
-    if (!geom.dataArray) {
-      return;
-    }
-
-    const items = geom.dataArray; // 获取图形对应的
-
-    const newLegendData = items.map((item: any) => {
-      /* eslint no-underscore-dangle:0 */
-      const origin = item[0]._origin;
-
-      origin.color = item[0].color;
-      origin.checked = true;
-
-      return origin;
+    normalizedData.forEach((item, index) => {
+      if (!map.has(item.x)) {
+        map.set(item.x, PIE_COLORS[index % PIE_COLORS.length]);
+      }
     });
 
-    setLegendData(newLegendData);
+    return map;
+  }, [normalizedData]);
+
+  const totalValue = useMemo(
+    () => normalizedData.reduce((sum, item) => sum + item.y, 0),
+    [normalizedData],
+  );
+
+  const activeData = useMemo(
+    () => normalizedData.filter(item => !hiddenKeys.includes(item.x)),
+    [hiddenKeys, normalizedData],
+  );
+
+  const legendData = useMemo(
+    () =>
+      normalizedData.map(item => ({
+        ...item,
+        color: colorByKey.get(item.x) ?? PIE_COLORS[0],
+        checked: !hiddenKeys.includes(item.x),
+        percent: totalValue > 0 ? item.y / totalValue : 0,
+      })),
+    [colorByKey, hiddenKeys, normalizedData, totalValue],
+  );
+
+  const handleLegendClick = (key: string) => {
+    setHiddenKeys(prev =>
+      prev.includes(key) ? prev.filter(item => item !== key) : [...prev, key],
+    );
   };
 
-  if (data.length <= 0) {
+  if (normalizedData.length <= 0) {
     return <div />;
   }
+
+  const chartConfig: any = {
+    data: activeData.map(item => ({
+      type: item.x,
+      value: item.y,
+    })),
+    angleField: 'value',
+    colorField: 'type',
+    radius: 1,
+    innerRadius: 0.75,
+    autoFit: true,
+    animation: animate,
+    legend: false,
+    color: ({ type }: { type: string }) => colorByKey.get(type) ?? PIE_COLORS[0],
+    appendPadding: [12, 0, 12, 0],
+    tooltip: {
+      formatter: (datum: { type: string; value: number }) => ({
+        name: datum.type,
+        value: `${totalValue > 0 ? ((datum.value / totalValue) * 100).toFixed(2) : '0.00'}%`,
+      }),
+    },
+    pieStyle: {
+      lineWidth,
+      stroke: '#fff',
+    },
+    interactions: [{ type: 'element-active' }],
+    height,
+  };
 
   return (
     <div className="chart-pie">
       <br />
       <div className="chart">
-        <Chart
-          animate={animate}
-          className="chart-content-pie"
-          data={dv}
-          forceFit={forceFit}
-          height={height}
-          onGetG2Instance={getG2Instance}
-          padding={padding}
-          scale={scale}
-          width={415}
-        >
-          {tooltip && <Tooltip showTitle={false} />}
-          <Coord innerRadius={0.75} type="theta" />
-          <Legend visible={false} />
-          <Geom
-            adjust={{ type: 'stack' }}
-            color="x"
-            position="percent"
-            selected
-            style={{ lineWidth, stroke: '#fff' }}
-            tooltip={tooltip ? tooltipFormat : undefined}
-            type="interval"
-          />
-          {(subTitle || total) && (
-            <div className="total">
-              {subTitle && <h4 className="pie-sub-title">{subTitle}</h4>}
-              {/* eslint-disable-next-line */}
-              {total && (
-                <div className="pie-stat">
-                  {typeof total === 'function' ? total() : numeral(total).format('0,0')}
-                </div>
-              )}
-            </div>
-          )}
-        </Chart>
+        <AntPie {...chartConfig} />
+        {(subTitle || total) && (
+          <div className="total">
+            {subTitle && <h4 className="pie-sub-title">{subTitle}</h4>}
+            {total && (
+              <div className="pie-stat">
+                {typeof total === 'function' ? total() : numeral(total).format('0,0')}
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <ul className="legend">
-        {legendData.map((item: any, index: any) => (
+        {legendData.map(item => (
           <li key={item.x}>
             <div
               aria-hidden="true"
-              onClick={() => handleLegendClick(item, index)}
-              onKeyDown={() => handleLegendClick(item, index)}
+              onClick={() => handleLegendClick(item.x)}
+              onKeyDown={() => handleLegendClick(item.x)}
             >
               <span
                 className="dot"
@@ -162,10 +157,11 @@ function Pie({ animate, data, height, lineWidth, subTitle, total, valueFormat }:
               />
               <span className="legendTitle">{item.x}</span>
               <Divider type="vertical" />
-              <span className="percent">
-                {`${(Number.isNaN(item.percent) ? 0 : item.percent * 100).toFixed(2)}%`}
-              </span>
-              <span className="value">{valueFormat ? valueFormat(item.y) : item.y}</span>
+              <span className="percent">{`${(Number.isNaN(item.percent)
+                ? 0
+                : item.percent * 100
+              ).toFixed(2)}%`}</span>
+              <span className="value">{valueFormat ? valueFormat(`${item.y}`) : item.y}</span>
             </div>
           </li>
         ))}

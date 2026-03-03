@@ -1,33 +1,33 @@
 import React from 'react';
-import { Chart, Interval, Tooltip } from 'bizcharts';
+import { Column } from '@ant-design/plots';
 
 interface BarProps {
   data: any;
 }
 
 function Bar({ data }: BarProps) {
-  const scale = {
-    x: {
+  const chartData = Array.isArray(data) ? data : [];
+
+  const config: any = {
+    data: chartData,
+    height: 200,
+    xField: 'x',
+    yField: 'y',
+    xAxis: {
       type: 'cat',
     },
-    y: {
+    yAxis: {
       min: 0,
     },
+    tooltip: {
+      shared: true,
+    },
+    interactions: [{ type: 'element-active' }],
+    autoFit: true,
+    padding: 'auto',
   };
 
-  return (
-    <Chart
-      autoFit
-      data={data}
-      height={200}
-      interactions={['active-region']}
-      padding="auto"
-      scale={scale}
-    >
-      <Interval position="x*y" />
-      <Tooltip shared />
-    </Chart>
-  );
+  return <Column {...config} />;
 }
 
 export default Bar;
