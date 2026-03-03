@@ -248,7 +248,16 @@ module.exports = webpackEnv => {
             },
           },
         }),
-        new CssMinimizerPlugin(),
+        new CssMinimizerPlugin({
+          minimizerOptions: {
+            preset: [
+              'default',
+              {
+                svgo: false,
+              },
+            ],
+          },
+        }),
       ],
     },
     resolve: {
