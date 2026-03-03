@@ -8,10 +8,17 @@ Object {
       "combinator": false,
       "payload": Object {
         "args": Array [
-          400,
+          "undefined/api/auth/login",
+          Object {
+            "body": Object {
+              "password": "",
+              "username": "",
+            },
+            "method": "POST",
+          },
         ],
         "context": null,
-        "fn": "@@redux-saga-test-plan/json/function/delayP",
+        "fn": "@@redux-saga-test-plan/json/function/request",
       },
       "type": "CALL",
     },
@@ -23,7 +30,7 @@ Object {
       "payload": Object {
         "action": Object {
           "payload": undefined,
-          "type": "USER_LOGIN_SUCCESS",
+          "type": "USER_GET_LOGGINED_USER_INFO",
         },
         "channel": undefined,
       },
@@ -87,6 +94,19 @@ Object {
       "combinator": false,
       "payload": Object {
         "args": Array [
+          "USER_GET_LOGGINED_USER_INFO",
+          "@@redux-saga-test-plan/json/function/getLogginedUserInfoSaga",
+        ],
+        "context": null,
+        "fn": "@@redux-saga-test-plan/json/function/takeLatest",
+      },
+      "type": "FORK",
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "combinator": false,
+      "payload": Object {
+        "args": Array [
           "USER_LOGOUT_REQUEST",
           "@@redux-saga-test-plan/json/function/logoutSaga",
         ],
@@ -102,6 +122,14 @@ Object {
       "combinator": false,
       "payload": Object {
         "pattern": "USER_LOGIN_REQUEST",
+      },
+      "type": "TAKE",
+    },
+    Object {
+      "@@redux-saga/IO": true,
+      "combinator": false,
+      "payload": Object {
+        "pattern": "USER_GET_LOGGINED_USER_INFO",
       },
       "type": "TAKE",
     },

@@ -159,12 +159,16 @@ function SelectRoomCard({ roomInfo, roomNote, setRoomNote, showModalDetail }: Pr
           {roomInfo.is_smoking ? (
             <>
               <Icon name="smoking" width={20} />
-              <span style={{ fontSize: 14, paddingLeft: '1%' }}>{String(t('frontDesk.Smoking'))}</span>
+              <span style={{ fontSize: 14, paddingLeft: '1%' }}>
+                {String(t('frontDesk.Smoking'))}
+              </span>
             </>
           ) : (
             <>
               <Icon name="no-smoking" width={20} />
-              <span style={{ fontSize: 14, paddingLeft: '1%' }}>{String(t('frontDesk.No Smoking'))}</span>
+              <span style={{ fontSize: 14, paddingLeft: '1%' }}>
+                {String(t('frontDesk.No Smoking'))}
+              </span>
             </>
           )}
         </Col>
@@ -175,7 +179,9 @@ function SelectRoomCard({ roomInfo, roomNote, setRoomNote, showModalDetail }: Pr
             marginBottom: 5,
           }}
         >
-          <span style={{ fontSize: 12, color: '#00000073' }}>{String(t('guestCheckin.Hourly Rate'))}</span>
+          <span style={{ fontSize: 12, color: '#00000073' }}>
+            {String(t('guestCheckin.Hourly Rate'))}
+          </span>
           <span style={{ fontSize: 12, float: 'right', color: '#00000073' }}>
             {' '}
             {String(t('guestCheckin.Daily Rate'))}

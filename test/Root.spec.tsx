@@ -25,7 +25,15 @@ describe('Root', () => {
     });
 
     act(() => {
-      store.dispatch(loginSuccess({ username: '', permission: {}, branch_id: 1, facility_id: 1, can_switch_branch: false }));
+      store.dispatch(
+        loginSuccess({
+          username: '',
+          permission: {},
+          branch_id: 1,
+          facility_id: 1,
+          can_switch_branch: false,
+        }),
+      );
     });
 
     expect(screen.getByTestId('app')).toMatchSnapshot();
