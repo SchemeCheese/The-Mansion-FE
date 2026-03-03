@@ -138,7 +138,7 @@ const LoaderRotateCircle = styled.circle`
   stroke-linecap: round;
 `;
 
-const Loader = (props: Props) => {
+function Loader(props: Props) {
   let output;
 
   if (props.type === 'rotate') {
@@ -165,7 +165,7 @@ const Loader = (props: Props) => {
   }
 
   return output;
-};
+}
 
 Loader.defaultProps = {
   block: false,

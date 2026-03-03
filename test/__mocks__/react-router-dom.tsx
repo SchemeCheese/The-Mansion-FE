@@ -2,7 +2,17 @@ import React from 'react';
 
 import { navigate } from 'test-utils';
 
-export * from 'react-router-dom/umd/react-router-dom.development';
+const actualReactRouterDom = jest.requireActual('react-router-dom');
+export const {
+  BrowserRouter,
+  HashRouter,
+  MemoryRouter,
+  Outlet,
+  Route,
+  Routes,
+  useNavigate,
+  useSearchParams,
+} = actualReactRouterDom;
 
 export function Link(props) {
   const { children, className, onClick, style, to, ...rest } = props;

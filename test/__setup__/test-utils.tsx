@@ -51,7 +51,7 @@ export const emptyAction = { type: '', payload: {} };
 export function navigate(options: NavigateOptions): void {
   const { location } = window;
 
-  const { pathname = location.pathname, search, hash } = options;
+  const { hash, pathname = location.pathname, search } = options;
   let url = `${location.protocol}//${location.host}${pathname}`;
 
   if (search) {
