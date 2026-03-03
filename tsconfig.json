@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "esModuleInterop": true,
+    "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext", "webworker"],
     "outDir": "build",
     "paths": {
