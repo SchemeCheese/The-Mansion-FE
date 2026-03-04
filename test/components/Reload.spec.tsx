@@ -5,16 +5,20 @@ import Reload from 'components/Reload';
 import { fireEvent, render, screen } from 'test-utils';
 
 describe('Reload', () => {
-  const { location } = window;
+  const originalLocation = window.location;
 
   beforeAll(() => {
-    // @ts-ignore
-    delete window.location;
-    window.location = { ...location, reload: jest.fn() };
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { ...originalLocation, reload: jest.fn() } as Location,
+    });
   });
 
   afterAll(() => {
-    window.location = location;
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: originalLocation,
+    });
   });
 
   it('should render properly', () => {

@@ -7,9 +7,8 @@ Main functions : Schedule Tab
 ************************************ */
 
 /* Demo: https://github.com/fullcalendar/fullcalendar-example-projects/tree/master/react-typescript */
-/* eslint simple-import-sort/imports: 0 */
 /* eslint no-underscore-dangle: 0 */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
@@ -17,22 +16,22 @@ import FullCalendar from '@fullcalendar/react';
 import {
   DateSelectArg,
   EventApi,
+  EventChangeArg,
   EventClickArg,
   EventContentArg,
-  EventChangeArg,
 } from '@fullcalendar/core';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Checkbox, Col, DatePicker, Form, Row, Select, message } from 'antd';
+import { Checkbox, Col, DatePicker, Form, message, Row, Select } from 'antd';
 import moment from 'moment';
 import useTreeChanges from 'tree-changes-hook';
 import { useAppSelector } from 'modules/hooks';
 import {
+  selectAvailableSearchSchedule,
   selectBookRoom,
   selectGetReservationDetail,
-  selectAvailableSearchSchedule,
   selectRoomTypes,
   selectUser,
 } from 'selectors';

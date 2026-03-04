@@ -7,7 +7,6 @@ Main functions : Calendar Tab
 ************************************ */
 
 /* Demo: https://github.com/fullcalendar/fullcalendar-example-projects/tree/master/react-typescript */
-/* eslint simple-import-sort/imports: 0 */
 /* eslint no-underscore-dangle: 0 */
 
 import 'styles/calendar.css';
@@ -16,7 +15,7 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import { EventApi, EventClickArg, EventContentArg } from '@fullcalendar/core';
 import { Button, Card, Col, DatePicker, Input, message, Modal, Row, Select } from 'antd';
