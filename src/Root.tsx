@@ -1,37 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import Branch from 'pages/branch-manager';
-import CustomerDetail from 'pages/customer/detail';
-import Customer from 'pages/customer/list';
-import Dashboard from 'pages/dashboard';
-import DeviceManager from 'pages/device-manager';
-import DeviceManagerCreate from 'pages/device-manager/DeviceManagerCreate';
-import ReservationCheckinTodayDetail from 'pages/front-desk/detail/checkin_today';
-import ReservationCheckoutTodayDetail from 'pages/front-desk/detail/checkout_today';
-import ReservationInhouseTodayDetail from 'pages/front-desk/detail/inhouse_today';
-import FrontDesk from 'pages/front-desk/list';
-import Guest from 'pages/guest';
-import GuestCheckin from 'pages/guest/checkin';
-import GuestCheckinBookerInfo from 'pages/guest/checkin/BookerInfo';
-import ConfirmReservation from 'pages/guest/checkin/ConfirmReservation';
-import FinishCheckin from 'pages/guest/checkin/FinishCheckin';
-import Payment from 'pages/guest/checkin/Payment';
-import GuestCheckinPersonalId from 'pages/guest/checkin/PersonalId';
-import GuestCheckinSelectRoom from 'pages/guest/checkin/SelectRoom';
-import GuestCustomerInfo from 'pages/guest/GuestCustomerInfo';
-import GuestPayment from 'pages/guest/GuestPayment';
-import GuestRoomNumber from 'pages/guest/GuestRoomNumber';
-import GuestThank from 'pages/guest/GuestThank';
-import HouseKeeping from 'pages/house-keeping';
-import NightAudit from 'pages/night_audit';
-import StatusPayment from 'pages/payment/StatusPayment';
-import Report from 'pages/report/list';
-import Create from 'pages/reservation/create';
-import ReservationDetail from 'pages/reservation/detail';
-import Reservation from 'pages/reservation/list';
 import { selectBranchInfo, selectUser } from 'selectors';
 import styled, { ThemeProvider } from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
@@ -44,9 +15,6 @@ import { showAlert } from 'actions';
 import PrivateRoute from 'components/PrivateRoute';
 import PublicRoute from 'components/PublicRoute';
 import SystemAlerts from 'containers/SystemAlerts';
-import Login from 'routes/Login';
-import NotFound from 'routes/NotFound';
-import Private from 'routes/Private';
 
 import { BranchInfoState, UserState } from 'types';
 
@@ -64,6 +32,35 @@ const AppWrapper = styled.div`
 const Main = styled.main<Pick<UserState, 'isAuthenticated'>>`
   padding: 0;
 `;
+
+const CustomerDetail = lazy(() => import('pages/customer/detail'));
+const Customer = lazy(() => import('pages/customer/list'));
+const ReservationCheckinTodayDetail = lazy(() => import('pages/front-desk/detail/checkin_today'));
+const ReservationCheckoutTodayDetail = lazy(() => import('pages/front-desk/detail/checkout_today'));
+const ReservationInhouseTodayDetail = lazy(() => import('pages/front-desk/detail/inhouse_today'));
+const FrontDesk = lazy(() => import('pages/front-desk/list'));
+const Guest = lazy(() => import('pages/guest'));
+const GuestCheckin = lazy(() => import('pages/guest/checkin'));
+const GuestCheckinBookerInfo = lazy(() => import('pages/guest/checkin/BookerInfo'));
+const ConfirmReservation = lazy(() => import('pages/guest/checkin/ConfirmReservation'));
+const FinishCheckin = lazy(() => import('pages/guest/checkin/FinishCheckin'));
+const Payment = lazy(() => import('pages/guest/checkin/Payment'));
+const GuestCheckinPersonalId = lazy(() => import('pages/guest/checkin/PersonalId'));
+const GuestCheckinSelectRoom = lazy(() => import('pages/guest/checkin/SelectRoom'));
+const GuestCustomerInfo = lazy(() => import('pages/guest/GuestCustomerInfo'));
+const GuestPayment = lazy(() => import('pages/guest/GuestPayment'));
+const GuestRoomNumber = lazy(() => import('pages/guest/GuestRoomNumber'));
+const GuestThank = lazy(() => import('pages/guest/GuestThank'));
+const HouseKeeping = lazy(() => import('pages/house-keeping'));
+const NightAudit = lazy(() => import('pages/night_audit'));
+const StatusPayment = lazy(() => import('pages/payment/StatusPayment'));
+const Report = lazy(() => import('pages/report/list'));
+const Create = lazy(() => import('pages/reservation/create'));
+const ReservationDetail = lazy(() => import('pages/reservation/detail'));
+const Reservation = lazy(() => import('pages/reservation/list'));
+const Login = lazy(() => import('routes/Login'));
+const NotFound = lazy(() => import('routes/NotFound'));
+const Private = lazy(() => import('routes/Private'));
 
 function Root() {
   const dispatch = useDispatch();
@@ -274,37 +271,65 @@ function Root() {
           />
         </HelmetCompat>
         <Main isAuthenticated={isAuthenticated}>
-          <Routes>
-            <Route
-              element={
-                <PublicRoute
-                  isAuthenticated={isAuthenticated}
-                  to={user.permission.dashboard?.view === true ? '/reservation' : '/reservation'}
-                >
-                  <Login />
-                </PublicRoute>
-              }
-              path="/"
-            />
-            <Route
-              element={
-                <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
-                  <Login />
-                </PublicRoute>
-              }
-              path="/login"
-            />
-            <Route
-              element={
-                <PrivateRoute isAuthenticated={isAuthenticated} to="/">
-                  <Private />
-                </PrivateRoute>
-              }
-              path="/private"
-            />
-            {(user.permission.reservation?.view === true ||
-              user.permission.calendar?.view === true) && (
-              <>
+          <Suspense fallback={null}>
+            <Routes>
+              <Route
+                element={
+                  <PublicRoute
+                    isAuthenticated={isAuthenticated}
+                    to={user.permission.dashboard?.view === true ? '/reservation' : '/reservation'}
+                  >
+                    <Login />
+                  </PublicRoute>
+                }
+                path="/"
+              />
+              <Route
+                element={
+                  <PublicRoute isAuthenticated={isAuthenticated} to="/reservation">
+                    <Login />
+                  </PublicRoute>
+                }
+                path="/login"
+              />
+              <Route
+                element={
+                  <PrivateRoute isAuthenticated={isAuthenticated} to="/">
+                    <Private />
+                  </PrivateRoute>
+                }
+                path="/private"
+              />
+              {(user.permission.reservation?.view === true ||
+                user.permission.calendar?.view === true) && (
+                <>
+                  <Route
+                    element={
+                      <PrivateRoute
+                        breadCrumb={reservationBreadCrum}
+                        isAuthenticated={isAuthenticated}
+                        to="/"
+                      >
+                        <Reservation />
+                      </PrivateRoute>
+                    }
+                    path="/reservation"
+                  />
+                  <Route
+                    element={
+                      <PrivateRoute
+                        breadCrumb={reservationBreadCrum}
+                        isAuthenticated={isAuthenticated}
+                        to="/"
+                      >
+                        <ReservationDetail />
+                      </PrivateRoute>
+                    }
+                    path="/reservation/:id"
+                  />
+                </>
+              )}
+              {user.permission.reservation?.create === true && (
                 <Route
                   element={
                     <PrivateRoute
@@ -312,26 +337,12 @@ function Root() {
                       isAuthenticated={isAuthenticated}
                       to="/"
                     >
-                      <Reservation />
+                      <Create />
                     </PrivateRoute>
                   }
-                  path="/reservation"
+                  path="/reservation/create"
                 />
-                <Route
-                  element={
-                    <PrivateRoute
-                      breadCrumb={reservationBreadCrum}
-                      isAuthenticated={isAuthenticated}
-                      to="/"
-                    >
-                      <ReservationDetail />
-                    </PrivateRoute>
-                  }
-                  path="/reservation/:id"
-                />
-              </>
-            )}
-            {user.permission.reservation?.create === true && (
+              )}
               <Route
                 element={
                   <PrivateRoute
@@ -339,120 +350,107 @@ function Root() {
                     isAuthenticated={isAuthenticated}
                     to="/"
                   >
-                    <Create />
+                    <StatusPayment />
                   </PrivateRoute>
                 }
-                path="/reservation/create"
+                path="/status-payment/:type"
               />
-            )}
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={reservationBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  to="/"
-                >
-                  <StatusPayment />
-                </PrivateRoute>
-              }
-              path="/status-payment/:type"
-            />
-            {user.permission.nightAudit?.view === true && (
-              <Route
-                element={
-                  <PrivateRoute
-                    breadCrumb={nightAuditBreadCrum}
-                    isAuthenticated={isAuthenticated}
-                    to="/"
-                  >
-                    <NightAudit />
-                  </PrivateRoute>
-                }
-                path="night-audit"
-              />
-            )}
-            {user.permission.houseKeeping?.view === true && (
-              <Route
-                element={
-                  <PrivateRoute
-                    breadCrumb={houseKeepingBreadCrum}
-                    isAuthenticated={isAuthenticated}
-                    to="/"
-                  >
-                    <HouseKeeping />
-                  </PrivateRoute>
-                }
-                path="house-keeping"
-              />
-            )}
-            {user.permission.frontDeskWalkin?.view === true && (
-              <Route
-                element={
-                  <PrivateRoute
-                    breadCrumb={houseKeepingBreadCrum}
-                    isAuthenticated={isAuthenticated}
-                    to="/"
-                  >
-                    <HouseKeeping />
-                  </PrivateRoute>
-                }
-                path="house-keeping"
-              />
-            )}
-            {user.permission.frontDeskCheckin?.view === true && (
-              <>
+              {user.permission.nightAudit?.view === true && (
                 <Route
                   element={
                     <PrivateRoute
-                      breadCrumb={frontDeskBreadCrum}
+                      breadCrumb={nightAuditBreadCrum}
                       isAuthenticated={isAuthenticated}
                       to="/"
                     >
-                      <FrontDesk />
+                      <NightAudit />
                     </PrivateRoute>
                   }
-                  path="/front-desk"
+                  path="night-audit"
                 />
+              )}
+              {user.permission.houseKeeping?.view === true && (
                 <Route
                   element={
                     <PrivateRoute
-                      breadCrumb={frontDeskBreadCrum}
+                      breadCrumb={houseKeepingBreadCrum}
                       isAuthenticated={isAuthenticated}
                       to="/"
                     >
-                      <ReservationCheckinTodayDetail />
+                      <HouseKeeping />
                     </PrivateRoute>
                   }
-                  path="/front-desk/checkin-today/:id"
+                  path="house-keeping"
                 />
+              )}
+              {user.permission.frontDeskWalkin?.view === true && (
                 <Route
                   element={
                     <PrivateRoute
-                      breadCrumb={frontDeskBreadCrum}
+                      breadCrumb={houseKeepingBreadCrum}
                       isAuthenticated={isAuthenticated}
                       to="/"
                     >
-                      <ReservationInhouseTodayDetail />
+                      <HouseKeeping />
                     </PrivateRoute>
                   }
-                  path="/front-desk/inhouse-today/:id/detail/:reservationDetailId"
+                  path="house-keeping"
                 />
-                <Route
-                  element={
-                    <PrivateRoute
-                      breadCrumb={frontDeskBreadCrum}
-                      isAuthenticated={isAuthenticated}
-                      to="/"
-                    >
-                      <ReservationCheckoutTodayDetail />
-                    </PrivateRoute>
-                  }
-                  path="/front-desk/checkout-today/:id/detail/:reservationDetailId"
-                />
-              </>
-            )}
+              )}
+              {user.permission.frontDeskCheckin?.view === true && (
+                <>
+                  <Route
+                    element={
+                      <PrivateRoute
+                        breadCrumb={frontDeskBreadCrum}
+                        isAuthenticated={isAuthenticated}
+                        to="/"
+                      >
+                        <FrontDesk />
+                      </PrivateRoute>
+                    }
+                    path="/front-desk"
+                  />
+                  <Route
+                    element={
+                      <PrivateRoute
+                        breadCrumb={frontDeskBreadCrum}
+                        isAuthenticated={isAuthenticated}
+                        to="/"
+                      >
+                        <ReservationCheckinTodayDetail />
+                      </PrivateRoute>
+                    }
+                    path="/front-desk/checkin-today/:id"
+                  />
+                  <Route
+                    element={
+                      <PrivateRoute
+                        breadCrumb={frontDeskBreadCrum}
+                        isAuthenticated={isAuthenticated}
+                        to="/"
+                      >
+                        <ReservationInhouseTodayDetail />
+                      </PrivateRoute>
+                    }
+                    path="/front-desk/inhouse-today/:id/detail/:reservationDetailId"
+                  />
+                  <Route
+                    element={
+                      <PrivateRoute
+                        breadCrumb={frontDeskBreadCrum}
+                        isAuthenticated={isAuthenticated}
+                        to="/"
+                      >
+                        <ReservationCheckoutTodayDetail />
+                      </PrivateRoute>
+                    }
+                    path="/front-desk/checkout-today/:id/detail/:reservationDetailId"
+                  />
+                </>
+              )}
 
-            {/* {user.permission.dashboard?.view === true && (
+              {/* {user.permission.dashboard?.view === true && (
               <>
                 <Route
                   element={
@@ -492,7 +490,7 @@ function Root() {
                 />
               </>
             )} */}
-            {/* <Route
+              {/* <Route
               element={
                 <PrivateRoute
                   breadCrumb={frontDeskBreadCrum}
@@ -505,206 +503,207 @@ function Root() {
               path="/power-monitoring/device/create"
             /> */}
 
-            {user.permission.customer?.view === true && (
-              <>
-                <Route
-                  element={
-                    <PrivateRoute
-                      breadCrumb={customerBreadCrum}
-                      isAuthenticated={isAuthenticated}
-                      to="/"
-                    >
-                      <Customer />
-                    </PrivateRoute>
-                  }
-                  path="/customer"
-                />
-                <Route
-                  element={
-                    <PrivateRoute
-                      breadCrumb={customerBreadCrum}
-                      isAuthenticated={isAuthenticated}
-                      to="/"
-                    >
-                      <CustomerDetail />
-                    </PrivateRoute>
-                  }
-                  path="/customer/:id"
-                />
-              </>
-            )}
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={dashboardBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <Guest />
-                </PrivateRoute>
-              }
-              path="/guest"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={frontDeskBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <GuestCheckin />
-                </PrivateRoute>
-              }
-              path="/guest/checkin"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={frontDeskBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <GuestCheckinSelectRoom />
-                </PrivateRoute>
-              }
-              path="/guest/checkin/select-room"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={frontDeskBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <GuestCheckinPersonalId />
-                </PrivateRoute>
-              }
-              path="/guest/checkin/upload-personal-id"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={frontDeskBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <GuestCheckinBookerInfo />
-                </PrivateRoute>
-              }
-              path="/guest/checkin/booker-info"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={frontDeskBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <ConfirmReservation />
-                </PrivateRoute>
-              }
-              path="/guest/checkin/confirm"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={frontDeskBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <FinishCheckin />
-                </PrivateRoute>
-              }
-              path="/guest/checkin/finish"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={frontDeskBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <Payment />
-                </PrivateRoute>
-              }
-              path="/guest/checkin/payment"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={dashboardBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <GuestPayment />
-                </PrivateRoute>
-              }
-              path="/guest-payment"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={dashboardBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <GuestCustomerInfo />
-                </PrivateRoute>
-              }
-              path="/guest-customer-info"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={dashboardBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <GuestRoomNumber />
-                </PrivateRoute>
-              }
-              path="/guest-room-number"
-            />
-            <Route
-              element={
-                <PrivateRoute
-                  breadCrumb={dashboardBreadCrum}
-                  isAuthenticated={isAuthenticated}
-                  isGuestScreen
-                  to="/"
-                >
-                  <GuestThank />
-                </PrivateRoute>
-              }
-              path="/guest-thank/:type"
-            />
-            {user.permission.report?.view === true && (
+              {user.permission.customer?.view === true && (
+                <>
+                  <Route
+                    element={
+                      <PrivateRoute
+                        breadCrumb={customerBreadCrum}
+                        isAuthenticated={isAuthenticated}
+                        to="/"
+                      >
+                        <Customer />
+                      </PrivateRoute>
+                    }
+                    path="/customer"
+                  />
+                  <Route
+                    element={
+                      <PrivateRoute
+                        breadCrumb={customerBreadCrum}
+                        isAuthenticated={isAuthenticated}
+                        to="/"
+                      >
+                        <CustomerDetail />
+                      </PrivateRoute>
+                    }
+                    path="/customer/:id"
+                  />
+                </>
+              )}
               <Route
                 element={
                   <PrivateRoute
-                    breadCrumb={reportBreadCrum}
+                    breadCrumb={dashboardBreadCrum}
                     isAuthenticated={isAuthenticated}
+                    isGuestScreen
                     to="/"
                   >
-                    <Report />
+                    <Guest />
                   </PrivateRoute>
                 }
-                path="/report"
+                path="/guest"
               />
-            )}
-            <Route element={<NotFound />} path="*" />
-          </Routes>
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={frontDeskBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <GuestCheckin />
+                  </PrivateRoute>
+                }
+                path="/guest/checkin"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={frontDeskBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <GuestCheckinSelectRoom />
+                  </PrivateRoute>
+                }
+                path="/guest/checkin/select-room"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={frontDeskBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <GuestCheckinPersonalId />
+                  </PrivateRoute>
+                }
+                path="/guest/checkin/upload-personal-id"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={frontDeskBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <GuestCheckinBookerInfo />
+                  </PrivateRoute>
+                }
+                path="/guest/checkin/booker-info"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={frontDeskBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <ConfirmReservation />
+                  </PrivateRoute>
+                }
+                path="/guest/checkin/confirm"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={frontDeskBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <FinishCheckin />
+                  </PrivateRoute>
+                }
+                path="/guest/checkin/finish"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={frontDeskBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <Payment />
+                  </PrivateRoute>
+                }
+                path="/guest/checkin/payment"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={dashboardBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <GuestPayment />
+                  </PrivateRoute>
+                }
+                path="/guest-payment"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={dashboardBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <GuestCustomerInfo />
+                  </PrivateRoute>
+                }
+                path="/guest-customer-info"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={dashboardBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <GuestRoomNumber />
+                  </PrivateRoute>
+                }
+                path="/guest-room-number"
+              />
+              <Route
+                element={
+                  <PrivateRoute
+                    breadCrumb={dashboardBreadCrum}
+                    isAuthenticated={isAuthenticated}
+                    isGuestScreen
+                    to="/"
+                  >
+                    <GuestThank />
+                  </PrivateRoute>
+                }
+                path="/guest-thank/:type"
+              />
+              {user.permission.report?.view === true && (
+                <Route
+                  element={
+                    <PrivateRoute
+                      breadCrumb={reportBreadCrum}
+                      isAuthenticated={isAuthenticated}
+                      to="/"
+                    >
+                      <Report />
+                    </PrivateRoute>
+                  }
+                  path="/report"
+                />
+              )}
+              <Route element={<NotFound />} path="*" />
+            </Routes>
+          </Suspense>
         </Main>
         <SystemAlerts />
       </AppWrapper>

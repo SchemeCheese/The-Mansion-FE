@@ -23,9 +23,8 @@ const TerserPlugin = require('terser-webpack-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 const reactRefreshRuntimeEntry = require.resolve('react-refresh/runtime');
-const reactRefreshWebpackPluginRuntimeEntry = require.resolve(
-  '@pmmmwh/react-refresh-webpack-plugin',
-);
+const reactRefreshWebpackPluginRuntimeEntry =
+  require.resolve('@pmmmwh/react-refresh-webpack-plugin');
 
 const getClientEnvironment = require('./env');
 const modules = require('./modules');
@@ -497,7 +496,7 @@ module.exports = webpackEnv => {
       isEnvProduction &&
         new MiniCssExtractPlugin({
           filename: 'css/bundle.[git-hash].css',
-          chunkFilename: 'css/bundle.[git-hash].chunk.css',
+          chunkFilename: 'css/[name].[contenthash:8].chunk.css',
         }),
       isEnvDevelopment &&
         new CircularDependencyPlugin({
