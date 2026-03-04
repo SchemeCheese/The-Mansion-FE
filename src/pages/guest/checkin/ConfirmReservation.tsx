@@ -15,7 +15,7 @@ import { formatNumber } from 'helpers';
 import { sumBy } from 'lodash';
 import moment from 'moment';
 import { selectCheckinState, selectGuestCheckin } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 

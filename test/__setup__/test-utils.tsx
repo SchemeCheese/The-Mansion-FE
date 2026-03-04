@@ -23,12 +23,14 @@ function customRender(ui: React.ReactElement, options: Record<string, any> = {})
 
   if (mockDispatch) {
     // eslint-disable-next-line unicorn/consistent-function-scoping
-    middleware.push(() => next => action => {
-      if (!action.type.startsWith('persist/')) {
+    middleware.push(() => next => (action: any) => {
+      const actionType = typeof action?.type === 'string' ? action.type : '';
+
+      if (!actionType.startsWith('persist/')) {
         mockDispatch(action);
       }
 
-      next(action);
+      return next(action);
     });
   }
 

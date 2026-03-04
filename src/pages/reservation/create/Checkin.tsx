@@ -11,7 +11,7 @@ import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upl
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import { selectBranchInfo, selectCheckinState } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 

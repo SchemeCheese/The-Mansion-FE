@@ -17,7 +17,7 @@ import { Col, Input, Row } from 'antd';
 import GuestBgIcon from 'pages/guest/GuestBgIcon';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 

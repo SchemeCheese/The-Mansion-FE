@@ -14,7 +14,7 @@ import {
   selectGetFacility,
   selectUser,
 } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';

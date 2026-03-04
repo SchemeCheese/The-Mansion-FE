@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Col, Form, Input, message, Modal, Row } from 'antd';
 import { selectAddDisk } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 

@@ -25,7 +25,7 @@ import moment from 'moment';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGuestCheckin } from 'selectors';
 import Tesseract from 'tesseract.js';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 

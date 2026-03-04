@@ -23,7 +23,7 @@ import {
   selectReservationRoomCheckoutTodayState,
   selectReservationRoomInhouseState,
 } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 

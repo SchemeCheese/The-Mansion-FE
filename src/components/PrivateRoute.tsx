@@ -11,7 +11,7 @@ interface Props {
   to?: string;
 }
 
-export default function PrivateRoute(props: Props): JSX.Element {
+export default function PrivateRoute(props: Props): React.ReactElement {
   const { breadCrumb, children, isAuthenticated, isGuestScreen, to = '/login' } = props;
   const { pathname } = useLocation();
 

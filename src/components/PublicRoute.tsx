@@ -7,7 +7,7 @@ interface Props {
   to?: string;
 }
 
-export default function PublicRoute(props: Props): JSX.Element {
+export default function PublicRoute(props: Props): React.ReactElement {
   const { children, isAuthenticated, to = '/' } = props;
   const { state } = useLocation();
 

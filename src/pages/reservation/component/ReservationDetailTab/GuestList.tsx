@@ -13,7 +13,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Card, Col, message, Modal, Radio, Row, Typography } from 'antd';
 import CreateGuestModal from 'pages/reservation/modal/CreateGuestModal';
 import { selectSetMainGuest, selectUser } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 

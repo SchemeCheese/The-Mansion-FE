@@ -13,13 +13,14 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import FullCalendar, {
+import FullCalendar from '@fullcalendar/react';
+import {
   DateSelectArg,
   EventApi,
   EventClickArg,
   EventContentArg,
   EventChangeArg,
-} from '@fullcalendar/react';
+} from '@fullcalendar/core';
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';

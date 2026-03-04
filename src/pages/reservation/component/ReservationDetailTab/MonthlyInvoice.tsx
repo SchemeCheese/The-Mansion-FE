@@ -11,7 +11,7 @@ import AddInvoiceModal from 'pages/reservation/modal/TransactionModal/AddInvoice
 import PaySelectedModal from 'pages/reservation/modal/TransactionModal/PaySelectedModal';
 import SelectedPayMethodModal from 'pages/reservation/modal/TransactionModal/SelectedPayMethodModal';
 import { selectGetMonthlyInvoices, selectPaymentMonthlyInvoices } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 

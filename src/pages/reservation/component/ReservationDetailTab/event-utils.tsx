@@ -6,7 +6,7 @@ Updated Date : 15/09/2022
 Main functions : Event Utils
 ************************************ */
 
-import { EventInput } from '@fullcalendar/react';
+import { EventInput } from '@fullcalendar/core';
 
 let eventGuid = 0;
 const todayString = new Date().toISOString().replace(/T.*$/, ''); // YYYY-MM-DD of today

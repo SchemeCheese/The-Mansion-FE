@@ -10,7 +10,7 @@ import { Col, Radio, RadioChangeEvent, Row, Spin, Steps, Table } from 'antd';
 import { formatNumber, randomKey } from 'helpers';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectCreatePayment, selectCreateQRCodeVNPayState, selectGuestCheckin } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 

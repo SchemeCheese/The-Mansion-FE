@@ -33,7 +33,7 @@ import ReservationDetailCard from 'pages/reservation/component/ReservationDetail
 import Message from 'pages/reservation/component/ReservationDetailTab/Message';
 import CheckinModal from 'pages/reservation/create/Checkin';
 import { selectAddItem, selectCreateReservation, selectDeleteItem, selectUser } from 'selectors';
-import useTreeChanges from 'tree-changes-hook/lib';
+import useTreeChanges from 'tree-changes-hook';
 import { isEmpty, reduce } from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';

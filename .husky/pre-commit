@@ -3,4 +3,4 @@
 
 # repo-tools check-remote && lint-staged
 
-yarn lint-staged
+npx --no-install lint-staged
