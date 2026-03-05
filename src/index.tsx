@@ -25,6 +25,31 @@ const HelmetProviderCompat: any = HelmetProvider;
 
 window.store = store;
 
+if (process.env.NODE_ENV === 'development') {
+  const ignoredResizeObserverMessages = [
+    'ResizeObserver loop completed with undelivered notifications.',
+    'ResizeObserver loop limit exceeded',
+  ];
+
+  const shouldIgnoreResizeObserverError = (message?: string | null) =>
+    !!message && ignoredResizeObserverMessages.some(item => message.includes(item));
+
+  window.addEventListener('error', event => {
+    if (shouldIgnoreResizeObserverError(event.message)) {
+      event.stopImmediatePropagation();
+    }
+  });
+
+  window.addEventListener('unhandledrejection', event => {
+    const reason = event.reason as { message?: string } | string | undefined;
+    const message = typeof reason === 'string' ? reason : reason?.message;
+
+    if (shouldIgnoreResizeObserverError(message)) {
+      event.preventDefault();
+    }
+  });
+}
+
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
