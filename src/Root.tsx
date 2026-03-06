@@ -43,6 +43,7 @@ const Guest = lazy(() => import('pages/guest'));
 const GuestCheckin = lazy(() => import('pages/guest/checkin'));
 const GuestCheckinBookerInfo = lazy(() => import('pages/guest/checkin/BookerInfo'));
 const ConfirmReservation = lazy(() => import('pages/guest/checkin/ConfirmReservation'));
+const BookingConfirmation = lazy(() => import('pages/public/BookingConfirmation'));
 const FinishCheckin = lazy(() => import('pages/guest/checkin/FinishCheckin'));
 const Payment = lazy(() => import('pages/guest/checkin/Payment'));
 const GuestCheckinPersonalId = lazy(() => import('pages/guest/checkin/PersonalId'));
@@ -82,7 +83,7 @@ function Root() {
         }),
       );
     }
-  }, [dispatch, changed]);
+  }, [dispatch, changed, username]);
 
   const reservationBreadCrum = (
     <>
@@ -701,6 +702,8 @@ function Root() {
                   path="/report"
                 />
               )}
+              {/* Public booking confirmation route - no auth required */}
+              <Route element={<BookingConfirmation />} path="/booking/:reservationNumber" />
               <Route element={<NotFound />} path="*" />
             </Routes>
           </Suspense>
