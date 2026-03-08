@@ -1,0 +1,344 @@
+.reservationTabs {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tabsShell {
+  background: #ffffff;
+  border-radius: 12px;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.tabsShell :global(.ant-tabs-tab) {
+  font-size: 12px;
+}
+
+.panelContent {
+  background: #f6f8fb;
+  padding: 20px;
+}
+
+.pagePanel {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+  padding: 20px;
+}
+
+.alertRow {
+  cursor: pointer;
+  padding-bottom: 16px;
+}
+
+.toolbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.tableWrap {
+  margin-top: 16px;
+}
+
+.reservationTable {
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.reservationTable :global(.ant-table-thead > tr > th) {
+  background: #fafafa;
+  font-weight: 600;
+}
+
+.reservationTable :global(.ant-table-tbody > tr > td) {
+  padding-bottom: 14px;
+  padding-top: 14px;
+}
+
+.paginationWrap {
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 12px;
+}
+
+.filterGroup {
+  width: 100%;
+}
+
+.filterRow {
+  row-gap: 10px;
+}
+
+.filterInput {
+  font-size: 12px;
+  height: 34px;
+}
+
+.filterSelect {
+  font-size: 12px;
+  width: 100%;
+}
+
+.filterAction {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.resetIcon {
+  color: rgb(0 0 0 / 65%);
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+.showMoreButton {
+  color: #1d39c4;
+  padding-right: 0;
+}
+
+.extraFilterRow {
+  padding-top: 12px;
+}
+
+.dateField {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.dateLabel {
+  color: rgb(0 0 0 / 65%);
+  font-size: 12px;
+  min-width: 24px;
+}
+
+.datePicker {
+  border-radius: 6px;
+  height: 34px;
+  width: calc(50% - 4px);
+}
+
+.unreadTag {
+  cursor: pointer;
+  margin-left: 14px;
+}
+
+.calendarFilterBar {
+  background: #fafafa;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.calendarFilterInline {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.calendarFilterLabel {
+  color: rgb(0 0 0 / 65%);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.calendarFilterSelect {
+  min-width: 180px;
+}
+
+.calendarFilterInput {
+  width: 180px;
+}
+
+.calendarDisplayLabel {
+  color: rgb(0 0 0 / 65%);
+  font-size: 13px;
+  margin-left: auto;
+}
+
+.calendarTimelineRow {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  margin-top: 16px;
+  overflow: hidden;
+}
+
+.calendarTimeline {
+  padding: 14px 10px 0;
+  text-align: center;
+}
+
+.scheduleCalendar :global(.ant-picker) {
+  left: 41%;
+  position: absolute;
+  visibility: hidden;
+}
+
+.scheduleCalendar :global(.fc-view-harness) {
+  max-height: 500px;
+}
+
+.scheduleCalendar :global(.fc-header-toolbar) {
+  margin-bottom: -20px !important;
+}
+
+.calendarTitleDate {
+  color: #1d39c4;
+  cursor: pointer;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.calendarArrow {
+  cursor: pointer;
+}
+
+.calendarNotesCard :global(.ant-card-body) {
+  padding: 0;
+}
+
+.calendarNotesCard :global(.ant-card-head) {
+  background-color: #dce2ea;
+  min-height: 31px;
+  padding-left: 12px;
+}
+
+.calendarNotesCard :global(.ant-card-head .ant-card-head-title) {
+  padding: 8px 0;
+}
+
+.modalTitleCol {
+  padding: 0;
+}
+
+.channelPanel {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%);
+  padding: 16px;
+}
+
+.channelHeaderRow {
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.channelDatePickerCol {
+  border-right: 1px solid #f0f0f0;
+  color: #1d39c4;
+  font-weight: 700;
+  padding-top: 18px;
+  text-align: center;
+}
+
+.channelDateCells {
+  height: 100%;
+}
+
+.channelFilterRow {
+  margin-top: 16px;
+}
+
+.channelFilterBar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+}
+
+.channelFilterBar :global(.ant-select-selector) {
+  font-size: 14px;
+  min-height: 38px !important;
+  padding-right: 20px !important;
+}
+
+.channelDatePickerCol :global(.ant-picker > .ant-picker-input > input) {
+  color: #1d39c4;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.channelDataCell {
+  padding: 0 !important;
+}
+
+.channelRowGreen > :global(.ant-table-cell:first-child) {
+  background: rgb(29 57 196 / 10%);
+}
+
+.channelRowGreen > :global(.ant-table-cell:nth-child(2)) {
+  padding: 0;
+  padding-left: 16px;
+  width: 130px;
+}
+
+.channelRowGreen > :global(.ant-table-cell:nth-child(2) .ant-select-selector) {
+  border: none;
+  color: #1d39c4;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: -15px;
+  width: 99px;
+}
+
+.channelRowGreen :global(.ant-select-selection-item) {
+  color: #1d39c4;
+  font-weight: 600;
+}
+
+.channelTable :global(.ant-table-thead > tr > th) {
+  color: rgb(0 0 0 / 65%);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.loadingDate {
+  height: 100% !important;
+}
+
+.channelClearFilters {
+  color: #1890ff;
+  cursor: pointer;
+  font-size: 13px;
+  margin: 0;
+  padding-top: 0;
+}
+
+.channelLoadingRow {
+  margin-top: 16px;
+}
+
+.channelResultsRow {
+  margin-top: 16px;
+}
+
+.channelTableSection {
+  margin-top: 20px;
+}
+
+.channelTable {
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.channelTable :global(.ant-table-thead > tr > th) {
+  background: #fafafa;
+}
+
+.channelShowMoreWrap {
+  padding-top: 12px;
+  text-align: center;
+}

@@ -1,0 +1,5 @@
+.reservationList :global(.ant-table-row),
+.customerList :global(.ant-table-row),
+.feedbackList :global(.ant-table-row) {
+  cursor: pointer;
+}

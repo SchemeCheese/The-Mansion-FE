@@ -1,0 +1,273 @@
+.guestListCard :global(.ant-card-actions > li:not(:last-child)) {
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.guestListCard :global(.ant-card-actions) {
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  background: #f7f9fa;
+}
+
+.newGuestModal :global(.ant-upload-list-picture-card-container) {
+  width: 300px;
+  height: 300px;
+}
+
+.newGuestModal :global(.ant-upload-select-picture-card) {
+  width: 300px !important;
+  height: 300px !important;
+}
+
+.newGuestModal :global(.ant-modal-title) {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.newGuestModal :global(.ant-btn-primary) {
+  background: #1d39c4;
+}
+
+:global(.ant-select-selector) {
+  border-radius: 4px !important;
+}
+
+.downloadSelect :global(.ant-select-selection-placeholder),
+.downloadSelect :global(.ant-select-arrow) {
+  color: rgba(0, 0, 0, 0.85);
+}
+
+.channelFilter :global(.ant-select-selector) {
+  font-size: 14px;
+  padding-right: 20px !important;
+}
+
+:global(.fc-resource-timeline tr) {
+  height: 50px;
+}
+
+:global(.fc-h-event) {
+  background: #1d39c4;
+  border-radius: 30px;
+  border-color: #1d39c4;
+  top: 10px;
+  font-size: 13px;
+  text-align: center;
+  color: #ffffff;
+  font-weight: 400;
+  height: 28px;
+}
+
+:global(.fc-h-event i) {
+  font-style: normal;
+}
+
+:global(.fc-datagrid-header colgroup),
+:global(.fc-timeline-header colgroup) {
+  background: #fafafa;
+}
+
+:global(.fc-icon-chevron-left::before) {
+  content: '<';
+}
+
+:global(.fc-icon-chevron-right::before) {
+  content: '>';
+}
+
+:global(.fc-timeline-header-row .fc-timeline-slot-cushion) {
+  color: rgba(0, 0, 0, 0.85);
+  text-transform: uppercase;
+  font-weight: 400;
+  padding-top: 10px;
+  white-space: pre;
+}
+
+:global(.fc-datagrid-header .fc-datagrid-cell-main) {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 400;
+}
+
+:global(.fc-day-sat .fc-timeline-slot-cushion),
+:global(.fc-day-sat) {
+  color: #f5222d;
+}
+
+:global(.fc-day-sun .fc-timeline-slot-cushion),
+:global(.fc-day-sun) {
+  color: #f5222d;
+}
+
+:global(.fc-scrollgrid-section-body .fc-datagrid-cell-main) {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+:global(.fc-theme-standard td),
+:global(.fc-theme-standard th) {
+  border: none;
+  box-shadow: inset 0 -1px 0 #e8e8e8;
+}
+
+:global(.fc .fc-resource-timeline-divider) {
+  width: 0;
+}
+
+:global(.slot-fc-day-monthly),
+:global(.slot-fc-day-weekly) {
+  white-space: pre;
+  line-height: 50px;
+}
+
+:global(.slot-fc-day-monthly > div) {
+  padding-left: 39% !important;
+}
+
+:global(.slot-fc-day-weekly > div) {
+  padding-left: 45% !important;
+}
+
+:global(.fc-header-toolbar .fc-toolbar-chunk:last-child) {
+  position: relative;
+  top: -113px;
+}
+
+:global(.fc-timeGridWeekly-button) {
+  border-radius: 4px !important;
+  background-color: #1d39c4 !important;
+  border-color: #1d39c4 !important;
+  margin-right: 15px !important;
+}
+
+:global(.fc-timeGridMonthly-button) {
+  border-radius: 4px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #d9d9d9 !important;
+  color: rgba(0, 0, 0, 0.65) !important;
+}
+
+:global(.fc-toolbar-title) {
+  color: #000000;
+  font-size: 20px !important;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1440px) {
+  :global(.slot-fc-day-monthly > div) {
+    padding-left: 34% !important;
+  }
+
+  :global(.slot-fc-day-weekly > div) {
+    padding-left: 41% !important;
+  }
+}
+
+:global(.fc-timeline-slots .disabled > div),
+:global(.fc-timeline-header .disabled) {
+  background-color: #f5f5f5;
+  color: #00000040;
+}
+
+:global(.fc .fc-cell-shaded),
+:global(.fc .fc-day-disabled) {
+  background-color: unset;
+}
+
+:global(.fc-event-main i) {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+:global(.fc-day-today > div) {
+  background: rgba(29, 57, 196, 0.5);
+}
+
+.reservationTabs :global(.ant-tabs-content-holder) {
+  background-color: #f0f2f5;
+}
+
+.roomingTable :global(.ant-table-row),
+.reservationList :global(.ant-table-row) {
+  cursor: pointer;
+}
+
+.roomingTable .disabledClick,
+.diskTable .disabledClick {
+  background: #e5e5e5;
+  cursor: inherit;
+}
+
+.roomingTable .disabledClick :global(.ant-table-cell-row-hover),
+.diskTable .disabledClick :global(.ant-table-cell-row-hover) {
+  background: #e5e5e5 !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.notificationTabs :global(.ant-tabs-nav-wrap) {
+  justify-content: center;
+}
+
+.notificationTabs :global(.ant-tabs-content) {
+  height: 100%;
+}
+
+.newReservation,
+.newReservation:hover > td {
+  font-weight: bold;
+}
+
+.newReservation:hover > td {
+  background: unset !important;
+}
+
+.notificationBadge :global(.ant-badge-count) {
+  right: 25px;
+  top: 1.5rem;
+}
+
+.checkin {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  padding-top: 24px;
+}
+
+.checkin :global(.ant-upload-select-picture-card) {
+  width: 255px !important;
+  height: 255px !important;
+}
+
+.paymentDetail :global(.ant-upload.ant-upload-drag) {
+  height: auto;
+}
+
+.paymentDetail :global(.ant-upload-list-item-card-actions-btn.ant-btn-sm) {
+  display: contents;
+}
+
+.fitModal :global(.ant-modal-body) {
+  max-height: 75vh;
+  overflow: auto;
+}
+
+@media screen and (max-device-width: 640px) {
+  .notificationBadge {
+    position: absolute;
+    top: 1px;
+    right: 15%;
+  }
+
+  .notificationBadge :global(.ant-badge-count) {
+    right: 19px;
+  }
+}
+
+@media screen and (max-device-width: 900px) and (orientation: landscape) {
+  .notificationBadge :global(.ant-badge-count) {
+    right: 19px;
+  }
+}

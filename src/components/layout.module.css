@@ -1,0 +1,243 @@
+.breadcrumb {
+  margin: 16px 0;
+  font-size: 13px;
+  padding: 0 24px 0 24px;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  text-align: center;
+}
+
+.companyName {
+  visibility: hidden;
+  animation: appearCompanyName 0s 0.15s forwards;
+}
+
+@keyframes appearCompanyName {
+  to {
+    visibility: visible;
+  }
+}
+
+.siteLayout .siteLayoutBackground {
+  background: #f0f2f5;
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.1);
+  padding: 0;
+}
+
+.siteLayout .siteLayoutBackground.header {
+  background: #ffffff;
+}
+
+.customBgHeader {
+  background: #ffffff;
+}
+
+.siteLayout :global(.ant-avatar) {
+  width: 24px;
+  height: 24px;
+}
+
+:global(.ant-layout-has-sider) {
+  min-height: 100vh;
+}
+
+.title {
+  margin-bottom: 0;
+  padding-bottom: 1rem;
+  font-size: 14px;
+  padding-left: 24px;
+  padding-right: 24px;
+  color: rgba(0, 0, 0, 0.85);
+  background: #ffffff;
+}
+
+.reservationTabs :global(.ant-tabs-tab) {
+  font-size: 12px;
+}
+
+:global(.ant-tabs-nav) {
+  margin-bottom: 0 !important;
+  padding-left: 24px;
+}
+
+.content {
+  background-color: #e5e5e5;
+  padding: 24px;
+}
+
+:global(.ant-card-head) {
+  background: #fafafa;
+  box-shadow: inset 0 -1px 0 #e8e8e8;
+  border-radius: 2px;
+  border-bottom: none;
+}
+
+:global(.ant-card-head .ant-card-head-title) {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+:global(.ant-checkbox-checked .ant-checkbox-inner) {
+  background-color: #1d39c4;
+  border-color: #1d39c4;
+}
+
+:global(.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn) {
+  color: #1d39c4;
+}
+
+:global(.ant-tabs-tab:hover),
+:global(.ant-picker-today-btn),
+:global(.ant-picker-header-view button:hover) {
+  color: #1d39c4;
+}
+
+:global(.ant-select-selector:hover),
+:global(textarea:hover),
+:global(.ant-checkbox-input:focus + .ant-checkbox-inner),
+:global(.ant-checkbox-wrapper:hover .ant-checkbox-inner),
+:global(.ant-checkbox:hover .ant-checkbox-inner) {
+  border-color: #1d39c4 !important;
+}
+
+:global(.ant-picker:hover),
+:global(.ant-picker-focused) {
+  border-color: #1d39c4;
+}
+
+:global(.ant-picker-cell-in-view.ant-picker-cell-today .ant-picker-cell-inner:before) {
+  border-color: #1d39c4;
+}
+
+:global(.ant-tabs-ink-bar) {
+  background: #1d39c4;
+}
+
+:global(.ant-checkbox) {
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+:global(.ant-steps-item-process .ant-steps-item-icon) {
+  background-color: #1d39c4 !important;
+  border-color: #1d39c4 !important;
+}
+
+:global(.ant-steps-item-finish .ant-steps-item-icon) {
+  background-color: #fff;
+  border-color: #1d39c4;
+}
+
+:global(.ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon) {
+  color: #1d39c4 !important;
+}
+
+:global(
+  .ant-steps-item-finish
+    > .ant-steps-item-container
+    > .ant-steps-item-content
+    > .ant-steps-item-title:after
+) {
+  background-color: #1d39c4;
+}
+
+:global(.ant-modal-footer > .ant-btn-primary:disabled) {
+  color: rgba(0, 0, 0, 0.25);
+  background: #f5f5f5 !important;
+}
+
+.tabsCart > :global(.ant-tabs-nav) {
+  background: #fafafa;
+}
+
+:global(.ant-table-tbody) {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+:global(.ant-table-thead > tr > th::before) {
+  display: none;
+}
+
+:global(.ant-pagination > .ant-pagination-item),
+:global(.ant-pagination > .ant-pagination-prev > button),
+:global(.ant-pagination > .ant-pagination-next > button) {
+  border-radius: 6px;
+}
+
+:global(.ant-pagination > .ant-pagination-item:hover),
+:global(.ant-pagination > .ant-pagination-prev > button:hover),
+:global(.ant-pagination > .ant-pagination-next > button:hover) {
+  border-color: #1d39c4;
+}
+
+:global(.ant-pagination-item a:hover) {
+  color: #1d39c4;
+}
+
+:global(.ant-pagination > .ant-pagination-item-active) {
+  background: #1d39c4;
+  border-color: #1d39c4;
+}
+
+:global(.ant-pagination-item-active a),
+:global(.ant-pagination-item-active a:hover) {
+  color: #ffffff;
+}
+
+.cardCalendarNotes :global(.ant-card-body) {
+  padding: 0;
+}
+
+.cardCalendarNotes :global(.ant-card-head) {
+  min-height: 31px;
+  background-color: #dce2ea;
+  padding-left: 12px;
+}
+
+.cardCalendarNotes :global(.ant-card-head .ant-card-head-title) {
+  padding: 8px 0;
+}
+
+:global(.fc-license-message) {
+  display: none;
+}
+
+@media screen and (max-device-width: 640px) {
+  .header {
+    position: relative;
+    height: 100px !important;
+  }
+
+  .headerBranchName {
+    margin-left: 8% !important;
+  }
+
+  .headerLogo {
+    position: absolute;
+    top: 10px;
+    right: 2%;
+  }
+
+  .headerUserName {
+    display: none;
+  }
+}
+
+@media screen and (max-device-width: 900px) and (orientation: landscape) {
+  .headerBranchName {
+    margin-left: 2% !important;
+  }
+}
+
+:global(.ant-layout-sider-zero-width-trigger) {
+  background-color: white;
+  color: black;
+  top: 5px;
+  right: -50px;
+}
