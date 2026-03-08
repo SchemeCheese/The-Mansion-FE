@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button } from 'ui/antd';
 import { ButtonProps } from 'antd/lib/button/button';
 import styled from 'styled-components';
 

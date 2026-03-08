@@ -20,7 +20,7 @@ import {
   Select,
   Steps,
   TimePicker,
-} from 'antd';
+} from 'ui/antd';
 import moment from 'moment';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGuestCheckin } from 'selectors';
@@ -30,6 +30,7 @@ import useTreeChanges from 'tree-changes-hook';
 import { useAppSelector } from 'modules/hooks';
 
 import { getReservationGuestCheckinAction, resetReservationGuestCheckinAction } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import Icon from 'components/Icon';
 import MButton from 'components/MButton';
@@ -173,7 +174,7 @@ function GuestCheckin() {
       />
       <RoomDetailModal setVisiable={setVisibleRoomDetail} visible={visibleRoomDetail} />
       <Row
-        className="content guest-payment-content guest-checkout-content"
+        className={`${layoutStyles.content} guest-payment-content guest-checkout-content`}
         style={{
           background: 'white',
           width: '90%',

@@ -9,7 +9,7 @@ Main functions: Guest Checkin
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Col, Modal, Row } from 'antd';
+import { Col, Modal, Row } from 'ui/antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
 import { postAPI } from 'helpers/apiService';

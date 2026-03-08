@@ -10,19 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {
-  Checkbox,
-  Col,
-  DatePicker,
-  Form,
-  Input,
-  message,
-  Modal,
-  Radio,
-  Row,
-  Select,
-  Space,
-} from 'antd';
+import { Checkbox, Col, DatePicker, Form, Input, Modal, Radio, Row, Select, Space } from 'ui/antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -146,14 +134,14 @@ function Deposit({ grandTotal, isModalVisible, setModalVisible }: Props) {
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4' } }}
       okText="Save"
       onCancel={handleCancel}
       onOk={handleOk}
+      open={isModalVisible}
       style={{ top: 80, borderRadius: 4 }}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>Deposit</b>}
-      visible={isModalVisible}
       width={518}
     >
       <Form

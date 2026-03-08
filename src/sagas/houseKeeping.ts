@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -12,6 +12,7 @@ import {
   updateHouseKeepingAction,
   updateHouseKeepingSuccessAction,
 } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* getHouseKeepingSaga({ payload }: ReturnType<typeof getHouseKeepingAction>): any {
   try {
@@ -38,7 +39,7 @@ export function* getHouseKeepingSaga({ payload }: ReturnType<typeof getHouseKeep
       console.log('Error house keeping', error);
     }
 
-    message.error('Error house keeping!');
+    notify.error('Error house keeping!');
   }
 }
 
@@ -69,16 +70,16 @@ export function* postUpdateHouseKeepingSaga({
 
     if (success) {
       yield put(updateHouseKeepingSuccessAction());
-      message.success('Update house keeping successfully!');
+      notify.success('Update house keeping successfully!');
     } else {
-      message.error('Update House Keeping Failed!');
+      notify.error('Update House Keeping Failed!');
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
       console.log('Error Update House Keeping', error);
     }
 
-    message.error('Update House Keeping Failed!');
+    notify.error('Update House Keeping Failed!');
   }
 }
 

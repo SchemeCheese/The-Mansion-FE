@@ -11,7 +11,7 @@ import 'styles/reservation_message.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Card, Col, Row, Space } from 'antd';
+import { Card, Col, Row, Space } from 'ui/antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { UploadFile } from 'antd/lib/upload';
 import { getAPI, postAPI } from 'helpers/apiService';
@@ -78,7 +78,7 @@ function Message() {
   }, []);
 
   return (
-    <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
+    <Card size="small" style={{ border: '1px solid #D9D9D9' }} variant="borderless">
       <Row className="reservation-message">
         <Col
           span={24}

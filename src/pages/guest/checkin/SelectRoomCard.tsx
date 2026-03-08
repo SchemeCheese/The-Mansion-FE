@@ -7,7 +7,7 @@ Main functions: Guest Checkin
 ************************************ */
 
 import React from 'react';
-import { Card, Col, Radio, Row } from 'antd';
+import { Card, Col, Radio, Row } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import { t } from 'i18next';
 

@@ -2,7 +2,7 @@ import 'styles/chart_pie.css';
 
 import React, { useMemo, useState } from 'react';
 import { Pie as AntPie } from '@ant-design/plots';
-import { Divider } from 'antd';
+import { Divider } from 'ui/antd';
 import numeral from 'numeral';
 
 interface PieDataItem {
@@ -87,8 +87,8 @@ function Pie({
   );
 
   const handleLegendClick = (key: string) => {
-    setHiddenKeys(prev =>
-      prev.includes(key) ? prev.filter(item => item !== key) : [...prev, key],
+    setHiddenKeys(previous =>
+      previous.includes(key) ? previous.filter(item => item !== key) : [...previous, key],
     );
   };
 

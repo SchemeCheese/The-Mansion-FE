@@ -8,12 +8,20 @@ Main functions : Transaction AddDiscount
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
+import { Col, Form, Input, Modal, Row, Select, Table } from 'ui/antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import { selectGetReservationDetail } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
+
+interface DataTypePaySelected {
+  amount: number;
+  date: string;
+  description: string;
+  total: string;
+  unit_price: string;
+}
 
 interface Props {
   discountAmount: any;
@@ -27,14 +35,6 @@ interface Props {
   setPaySelectedRows: (value: any) => void;
   totalAmount: number;
   visible: boolean;
-}
-
-interface DataTypePaySelected {
-  amount: number;
-  date: string;
-  description: string;
-  total: string;
-  unit_price: string;
 }
 
 function PaySelectedModal({
@@ -115,14 +115,14 @@ function PaySelectedModal({
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4 } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       okText={t('paySelected.Select Payment Method')}
       onCancel={() => setIsModalOpen(false)}
       onOk={handleSelectPaymentMethod}
+      open={visible}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('paySelected.Pay Selected')}</b>}
-      visible={visible}
       width={850}
     >
       <Form colon={false} layout="horizontal">

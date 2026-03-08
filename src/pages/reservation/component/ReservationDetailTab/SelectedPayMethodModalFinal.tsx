@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Button, Col, Form, Modal, Row } from 'antd';
+import { Button, Col, Form, Modal, Row } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import PaymentMethod from 'pages/reservation/modal/TransactionModal/PaymentMethod';
 import { selectGetReservationDetail } from 'selectors';
@@ -138,14 +138,14 @@ function SelectedPayMethodModalFinal({ setIsModalSelectedPaymentMethod, visible 
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4, width: '111px' } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       okText={t('reservation.Continue to checkout')}
       onCancel={() => setIsModalSelectedPaymentMethod(false)}
       onOk={handleSubmitPayment}
+      open={visible}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('payDetail.Select Payment Method')}</b>}
-      visible={visible}
       width={850}
     >
       <Form

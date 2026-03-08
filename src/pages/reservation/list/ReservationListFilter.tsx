@@ -9,11 +9,12 @@ Main functions : Reservation List Filter
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DownOutlined, ReloadOutlined, UpOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Input, Row, Select, Tag, Tooltip } from 'antd';
+import { Button, Col, DatePicker, Row, Select, Space, Tag, Tooltip } from 'ui/antd';
 import { t } from 'i18next';
 import moment from 'moment';
 
 import { getAgentInfos, searchReservation } from 'actions';
+import reservationListStyles from 'pages/reservation/list/reservation-list.module.css';
 
 import MInput from 'components/MInput';
 
@@ -135,10 +136,13 @@ function ReservationListFilter({
   }, [searchCondition]);
 
   return (
-    <Input.Group>
-      <Row gutter={8}>
+    <Space.Compact block className={reservationListStyles.filterGroup} orientation="vertical">
+      <Row className={reservationListStyles.filterRow} gutter={8}>
         <Col span={5}>
           <MInput
+            aria-label="Search by email phone or name"
+            className={reservationListStyles.filterInput}
+            name="booker_info"
             onChange={e =>
               setSearchCondition({
                 ...searchCondition,
@@ -147,12 +151,14 @@ function ReservationListFilter({
             }
             onKeyUp={event => searchInput(event)}
             placeholder="Email/Phone/Name"
-            style={{ height: 32, fontSize: 12 }}
             value={searchCondition.booker_info}
           />
         </Col>
         <Col span={3}>
           <MInput
+            aria-label="Search by folio id"
+            className={reservationListStyles.filterInput}
+            name="folio_number"
             onChange={e =>
               setSearchCondition({
                 ...searchCondition,
@@ -161,11 +167,13 @@ function ReservationListFilter({
             }
             onKeyUp={event => searchInput(event)}
             placeholder="Folio ID"
-            style={{ height: 32, fontSize: 12 }}
           />
         </Col>
         <Col span={4}>
           <MInput
+            aria-label={String(t('common.Travel Agent'))}
+            className={reservationListStyles.filterInput}
+            name="agent_name"
             onChange={e =>
               setSearchCondition({
                 ...searchCondition,
@@ -174,13 +182,15 @@ function ReservationListFilter({
             }
             onKeyUp={event => searchInput(event)}
             placeholder={t('common.Travel Agent')}
-            style={{ height: 32, fontSize: 12 }}
             value={searchCondition.agent_name}
           />
         </Col>
         <Col span={3}>
           <Select
             allowClear
+            aria-label="Filter by status"
+            className={reservationListStyles.filterSelect}
+            id="reservation-filter-status"
             onChange={value => {
               setSearchCondition({
                 ...searchCondition,
@@ -189,7 +199,6 @@ function ReservationListFilter({
               searchSelect(value, 'status');
             }}
             placeholder="Status"
-            style={{ width: '100%', fontSize: 12 }}
             value={searchCondition.status === '' ? undefined : searchCondition.status}
           >
             <Option value="reserved">Reserved</Option>
@@ -202,9 +211,11 @@ function ReservationListFilter({
         <Col span={3}>
           <Select
             allowClear
+            aria-label={String(t('common.Market'))}
+            className={reservationListStyles.filterSelect}
+            id="reservation-filter-market"
             onChange={value => searchSelect(value, 'market')}
             placeholder={String(t('common.Market'))}
-            style={{ width: '100%', fontSize: 12 }}
             value={searchCondition.market === '' ? undefined : searchCondition.market}
           >
             <Option value="1">OTA</Option>
@@ -217,74 +228,76 @@ function ReservationListFilter({
         <Col span={3}>
           <Select
             allowClear
+            aria-label={String(t('common.Source'))}
+            className={reservationListStyles.filterSelect}
+            id="reservation-filter-source"
             onChange={value => searchSelect(value, 'source')}
             placeholder={String(t('common.Source'))}
-            style={{ width: '100%', fontSize: 12 }}
             value={searchCondition.source === '' ? undefined : searchCondition.source}
           >
             {sourceOptions}
           </Select>
         </Col>
-        <Col span={3} style={{ textAlign: 'center', cursor: 'pointer' }}>
+        <Col className={reservationListStyles.filterAction} span={3}>
           <Tooltip placement="top" title="Reset search">
-            <ReloadOutlined onClick={handleResetCondition} />
+            <ReloadOutlined
+              className={reservationListStyles.resetIcon}
+              onClick={handleResetCondition}
+            />
           </Tooltip>
-          <Button onClick={() => handleChange()} style={{ color: '#1D39C4' }} type="text">
+          <Button
+            className={reservationListStyles.showMoreButton}
+            onClick={() => handleChange()}
+            type="text"
+          >
             <span style={{ paddingRight: 6 }}>{String(t('common.Show more'))}</span>
             {showMore ? <UpOutlined /> : <DownOutlined />}
           </Button>
         </Col>
       </Row>
       {showMore ? (
-        <Row gutter={8} style={{ paddingTop: 16 }}>
+        <Row className={reservationListStyles.extraFilterRow} gutter={8}>
           <Col span={8}>
-            <span style={{ paddingRight: 11 }}>C/I</span>
-            <DatePicker
-              onChange={date => searchDate(date, 'checkin_from')}
-              style={{
-                height: 32,
-                borderRadius: 4,
-                marginRight: 11,
-                width: '40%',
-              }}
-              value={searchCondition.checkin_from ? moment(searchCondition.checkin_from) : null}
-            />
-            <DatePicker
-              onChange={date => searchDate(date, 'checkin_to')}
-              style={{ height: 32, borderRadius: 4, width: '40%' }}
-              value={searchCondition.checkin_to ? moment(searchCondition.checkin_to) : null}
-            />
+            <div className={reservationListStyles.dateField}>
+              <span className={reservationListStyles.dateLabel}>C/I</span>
+              <DatePicker
+                className={reservationListStyles.datePicker}
+                onChange={date => searchDate(date, 'checkin_from')}
+                value={searchCondition.checkin_from ? moment(searchCondition.checkin_from) : null}
+              />
+              <DatePicker
+                className={reservationListStyles.datePicker}
+                onChange={date => searchDate(date, 'checkin_to')}
+                value={searchCondition.checkin_to ? moment(searchCondition.checkin_to) : null}
+              />
+            </div>
           </Col>
           <Col span={8}>
-            <span style={{ paddingRight: 11 }}>C/O</span>
-            <DatePicker
-              onChange={date => searchDate(date, 'checkout_from')}
-              style={{
-                height: 32,
-                borderRadius: 4,
-                marginRight: 11,
-                width: '40%',
-              }}
-              value={searchCondition.checkout_from ? moment(searchCondition.checkout_from) : null}
-            />
-            <DatePicker
-              onChange={date => searchDate(date, 'checkout_to')}
-              style={{ height: 32, borderRadius: 4, width: '40%' }}
-              value={searchCondition.checkout_to ? moment(searchCondition.checkout_to) : null}
-            />
+            <div className={reservationListStyles.dateField}>
+              <span className={reservationListStyles.dateLabel}>C/O</span>
+              <DatePicker
+                className={reservationListStyles.datePicker}
+                onChange={date => searchDate(date, 'checkout_from')}
+                value={searchCondition.checkout_from ? moment(searchCondition.checkout_from) : null}
+              />
+              <DatePicker
+                className={reservationListStyles.datePicker}
+                onChange={date => searchDate(date, 'checkout_to')}
+                value={searchCondition.checkout_to ? moment(searchCondition.checkout_to) : null}
+              />
+            </div>
           </Col>
           <Col span={8}>
-            <span style={{ paddingRight: 11 }}>I/H</span>
-            <DatePicker
-              onChange={date => searchDate(date, 'inhouse_date')}
-              style={{
-                height: 32,
-                borderRadius: 4,
-                width: '40%',
-              }}
-              value={searchCondition.inhouse_date ? moment(searchCondition.inhouse_date) : null}
-            />
+            <div className={reservationListStyles.dateField}>
+              <span className={reservationListStyles.dateLabel}>I/H</span>
+              <DatePicker
+                className={reservationListStyles.datePicker}
+                onChange={date => searchDate(date, 'inhouse_date')}
+                value={searchCondition.inhouse_date ? moment(searchCondition.inhouse_date) : null}
+              />
+            </div>
             <Tag
+              className={reservationListStyles.unreadTag}
               color="red"
               onClick={() => {
                 dispatch(
@@ -294,17 +307,13 @@ function ReservationListFilter({
                   }),
                 );
               }}
-              style={{
-                marginLeft: 20,
-                cursor: 'pointer',
-              }}
             >
               Unread Message
             </Tag>
           </Col>
         </Row>
       ) : null}
-    </Input.Group>
+    </Space.Compact>
   );
 }
 

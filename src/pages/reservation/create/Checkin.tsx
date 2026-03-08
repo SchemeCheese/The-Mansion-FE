@@ -1,11 +1,11 @@
-import 'styles/reservation.css';
+import 'styles/reservation.module.css';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { LoadingOutlined } from '@ant-design/icons';
-import { Card, Checkbox, Col, message, Modal, Row, Select, Table, Upload } from 'antd';
+import { Card, Checkbox, Col, Modal, Row, Select, Table, Upload } from 'ui/antd';
 import { ColumnsType } from 'antd/lib/table';
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/lib/upload';
 import { formatNumber } from 'helpers';
@@ -18,16 +18,19 @@ import { useAppSelector } from 'modules/hooks';
 import { checkinAction, getReservation, printCheckinConfirmPDFReservationDetail } from 'actions';
 
 import MInput from 'components/MInput';
+import { notify } from 'ui/notification';
 
 const { Option } = Select;
 
-interface Props {
-  openModalCheckin: any;
-  reservationId?: string | number;
-  resetSelectedRows?: () => void;
-  selectedRowKeys?: any;
-  selectedRows: any;
-  setIsModalCheckinOpen: any;
+interface DataTypeEarly {
+  actual_CI_time: string;
+  default_CI_time: string;
+  early_CI_fee: string;
+  early_CI_time: string;
+  id: string;
+  name: string;
+  room_no: string;
+  unit_price: string;
 }
 
 interface DataTypeRoomDeposit {
@@ -40,15 +43,13 @@ interface DataTypeRoomDeposit {
   task: string;
 }
 
-interface DataTypeEarly {
-  actual_CI_time: string;
-  default_CI_time: string;
-  early_CI_fee: string;
-  early_CI_time: string;
-  id: string;
-  name: string;
-  room_no: string;
-  unit_price: string;
+interface Props {
+  openModalCheckin: any;
+  reservationId?: string | number;
+  resetSelectedRows?: () => void;
+  selectedRowKeys?: any;
+  selectedRows: any;
+  setIsModalCheckinOpen: any;
 }
 
 function CheckinModal({
@@ -287,7 +288,7 @@ function CheckinModal({
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success(t('message.Checkin successfully!'));
+      notify.success(t('message.Checkin successfully!'));
 
       dispatch(
         getReservation({

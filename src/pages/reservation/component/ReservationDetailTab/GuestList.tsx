@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : KienNT
@@ -10,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Card, Col, message, Modal, Radio, Row, Typography } from 'antd';
+import { Card, Col, Modal, Radio, Row, Typography } from 'ui/antd';
 import CreateGuestModal from 'pages/reservation/modal/CreateGuestModal';
 import { selectSetMainGuest, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
@@ -23,6 +24,8 @@ import {
   removeGuestAction,
   setMainGuestAction,
 } from 'actions';
+import reservationStyles from 'styles/reservation.module.css';
+import detailStyles from 'pages/reservation/detail/reservation-detail.module.css';
 
 const { Text, Title } = Typography;
 
@@ -74,7 +77,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success(t('message.Set main guest successfully!'));
+      notify.success(t('message.Set main guest successfully!'));
 
       dispatch(
         getReservation({
@@ -111,50 +114,16 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
         />
       )}
 
-      <Row
-        className="guest-list"
-        style={{
-          paddingLeft: 16,
-          paddingTop: 24,
-          paddingBottom: 24,
-          paddingRight: 16,
-          backgroundColor: 'white',
-          minHeight: 300,
-        }}
-      >
+      <Row className={detailStyles.guestListPane}>
         {user.permission.reservation.edit && (
           <Col onClick={showModal} span={8}>
-            <div
-              style={{
-                width: '95%',
-                height: '95%',
-                border: '2px dashed rgba(0, 0, 0, 0.15)',
-                borderRadius: 2,
-                cursor: 'pointer',
-              }}
-            >
-              <p
-                style={{
-                  position: 'absolute',
-                  fontStyle: 'normal',
-                  fontWeight: 400,
-                  fontSize: 14,
-                  lineHeight: 22,
-                  color: 'rgba(0, 0, 0, 0.45)',
-                  margin: 0,
-                  top: '50%',
-                  left: '50%',
-                  msTransform: 'translate(-50%, -50%)',
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-                + {t('common.Add New')}
-              </p>
+            <div className={detailStyles.guestAddCard}>
+              <p className={detailStyles.guestAddText}>+ {t('common.Add New')}</p>
             </div>
           </Col>
         )}
         {data.map((value: any) => (
-          <Col span={8}>
+          <Col key={value.key} span={8}>
             <Card
               actions={[
                 <Text onClick={() => confirmRemoveGuest(value)} type="secondary">
@@ -164,12 +133,7 @@ function GuestList({ guests, reservationDetailId, reservationId }: Props) {
                   {t('common.Update')}
                 </Text>,
               ]}
-              className="guest-list-card"
-              style={{
-                width: '95%',
-                marginBottom: 16,
-                border: '1px solid rgba(0, 0, 0, 0.15)',
-              }}
+              className={`${reservationStyles.guestListCard} ${detailStyles.guestCard}`}
             >
               <Row>
                 <Col span={12}>

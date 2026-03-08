@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, Pagination, Row, Table, Tag } from 'antd';
+import { Col, Pagination, Row, Table, Tag } from 'ui/antd';
 import { formatNumber, mappingStatus } from 'helpers';
 import {
   selectReservationRoomCheckinTodayState,
@@ -29,6 +29,7 @@ import {
   resetReservationRoomCheckoutFilter,
   resetReservationRoomInhouseFilter,
 } from 'actions';
+import reservationStyles from 'styles/reservation.module.css';
 
 import ReservationRoomListFilter from './ReservationRoomListFilter';
 
@@ -330,7 +331,7 @@ function ReservationRoomList({ type }: Props) {
       </Col>
       <Col span={24} style={{ paddingTop: 16 }}>
         <Table
-          className="reservation-list"
+          className={reservationStyles.reservationList}
           columns={tableColumns}
           dataSource={tableData}
           onRow={(record: any) => {

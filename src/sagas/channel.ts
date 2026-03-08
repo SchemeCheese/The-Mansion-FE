@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -13,6 +13,7 @@ import {
   updateRoomAvailableAction,
   updateRoomAvailableSuccessAction,
 } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* fetchChannelSaga({ payload }: ReturnType<typeof fetchChannelsAction>) {
   try {
@@ -48,7 +49,7 @@ export function* fetchChannelSaga({ payload }: ReturnType<typeof fetchChannelsAc
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not fetch channel info!');
+      notify.error('Can not fetch channel info!');
     }
   }
 }
@@ -77,7 +78,7 @@ export function* postUpdateRoomAvailableSaga({
     if (success) {
       yield put(updateRoomAvailableSuccessAction());
     } else {
-      message.error('Can not update room available!');
+      notify.error('Can not update room available!');
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
@@ -87,7 +88,7 @@ export function* postUpdateRoomAvailableSaga({
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not update room available!');
+      notify.error('Can not update room available!');
     }
   }
 }

@@ -9,8 +9,9 @@ Main functions : Customer Detail Page
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
-import { Col, Row, Table, Tabs } from 'antd';
+import { Col, Row, Table, Tabs } from 'ui/antd';
 import CreateCustomerFeedbackModal from 'pages/customer/modal/CreateCustomerFeedbackModal';
+import customerStyles from 'styles/customer.module.css';
 
 import PattonButton from 'components/PattonButton';
 
@@ -105,7 +106,7 @@ function CustomerDetailFeedback({ directFeedback, socialFeedback, statusMapping 
           </Col>
           <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
             <Table
-              className="feedback-list"
+              className={customerStyles.feedbackList}
               columns={feedbackColumns}
               dataSource={directFeedback}
               pagination={false}

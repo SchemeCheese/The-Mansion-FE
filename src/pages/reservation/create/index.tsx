@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -10,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { message } from 'antd';
+
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import ReservationForm from 'pages/reservation/component/ReservationForm';
@@ -29,6 +30,7 @@ import {
   resetReservation,
   searchRoomReset,
 } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import { RootState } from 'types';
 
@@ -106,7 +108,7 @@ function Create() {
       setRoomSelected([]);
       setIsModalVisible(true);
     } else {
-      message.warning(t('message.Please select market and source!'));
+      notify.warning(t('message.Please select market and source!'));
     }
   };
 
@@ -132,7 +134,7 @@ function Create() {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success(t('message.Create reservation successfully!'));
+      notify.success(t('message.Create reservation successfully!'));
 
       if (redirectDetail === true) {
         navigate(`/reservation/${createReservationData.reservation_created?.id}`);
@@ -196,9 +198,9 @@ function Create() {
 
   return (
     <>
-      <p className="title">{t('reservation.Create New Reservation')}</p>
+      <p className={layoutStyles.title}>{t('reservation.Create New Reservation')}</p>
       <p
-        className="custom-bg-header"
+        className={layoutStyles.customBgHeader}
         style={{
           fontSize: 13,
           color: 'rgba(0, 0, 0, 0.45)',

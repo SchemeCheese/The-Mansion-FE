@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -10,8 +11,8 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import type { RadioChangeEvent } from 'antd';
-import { Checkbox, Col, message, Modal, Radio, Row, Skeleton, Space } from 'antd';
+import type { RadioChangeEvent } from 'ui/antd';
+import { Checkbox, Col, Modal, Radio, Row, Skeleton, Space } from 'ui/antd';
 import { formatNumber, mappingStatus } from 'helpers';
 import moment from 'moment';
 import DownloadFile from 'pages/reservation/component/DownloadFile';
@@ -40,6 +41,7 @@ import {
   searchRoomReset,
   updateReservation,
 } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -281,7 +283,7 @@ function ReservationCheckoutTodayDetail() {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Update reservation successfully!');
+      notify.success('Update reservation successfully!');
 
       dispatch(
         getReservation({
@@ -293,7 +295,7 @@ function ReservationCheckoutTodayDetail() {
 
   useEffect(() => {
     if (resendEmailChanged('status', 'SUCCESS')) {
-      message.success('Resend email successfully!');
+      notify.success('Resend email successfully!');
     }
   }, [resendEmailChanged]);
 
@@ -308,7 +310,7 @@ function ReservationCheckoutTodayDetail() {
 
   // useEffect(() => {
   //   if (downloadPDFReservationDetailChanged('status', 'SUCCESS')) {
-  //     message.success('Download file pdf successfully!');
+  //     notify.success('Download file pdf successfully!');
   //   }
   // }, [downloadPDFReservationDetailChanged]);
 
@@ -354,7 +356,7 @@ function ReservationCheckoutTodayDetail() {
         </Radio.Group>
       </Modal>
       <Row
-        className="custom-bg-header"
+        className={layoutStyles.customBgHeader}
         style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}
       >
         <Col span={8}>
@@ -395,7 +397,7 @@ function ReservationCheckoutTodayDetail() {
         </Col>
       </Row>
       <Row
-        className="custom-bg-header"
+        className={layoutStyles.customBgHeader}
         justify="space-between"
         style={{ paddingRight: 20, paddingLeft: 20 }}
       >

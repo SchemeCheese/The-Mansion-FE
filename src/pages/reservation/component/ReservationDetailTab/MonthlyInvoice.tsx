@@ -1,9 +1,7 @@
-import 'styles/transaction.css';
-
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, message, Row } from 'antd';
+import { Card, Col, Row } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import DiskMonthlyInvoice from 'pages/reservation/detail/DiskMonthlyInvoice';
 import Paid from 'pages/reservation/detail/Paid';
@@ -19,6 +17,8 @@ import { getMonthlyInvoicesAction } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
+import { notify } from 'ui/notification';
+import detailStyles from 'pages/reservation/detail/reservation-detail.module.css';
 
 interface Props {
   reservationDetailId: string;
@@ -57,7 +57,7 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (paymentMonthlyInvoiceChanged('status', 'SUCCESS')) {
-      message.success(t('message.Paid successfully!'));
+      notify.success(t('message.Paid successfully!'));
 
       dispatch(
         getMonthlyInvoicesAction({
@@ -202,19 +202,11 @@ function MonthlyInvoice({ reservationDetailId, reservationId }: Props) {
         visible={isModalOpenSelectedPaymentMethod}
       />
 
-      <Row
-        style={{
-          paddingTop: 16,
-          background: '#F0F2F5',
-          paddingBottom: 25,
-          paddingRight: 15,
-          paddingLeft: 15,
-        }}
-      >
+      <Row className={detailStyles.transactionPane}>
         <Col span={24}>
           <Card
             activeTabKey={activeTabKey}
-            className="transaction-tabs"
+            className={detailStyles.transactionTabs}
             onTabChange={key => {
               setActiveTabKey(key.toString());
             }}

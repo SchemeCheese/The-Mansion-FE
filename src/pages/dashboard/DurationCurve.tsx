@@ -12,7 +12,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EllipsisOutlined, ExportOutlined } from '@ant-design/icons';
 import { Line as AntLine } from '@ant-design/plots';
-import { Button, Card, Col, DatePicker, Dropdown, Menu, Row, Select, Space, Spin } from 'antd';
+import { Button, Card, Col, DatePicker, Dropdown, Menu, Row, Select, Space, Spin } from 'ui/antd';
 import moment from 'moment';
 import { selectDurationCurveState } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
@@ -180,7 +180,7 @@ function DurationCurve() {
             >
               <RangePicker
                 ranges={{
-                  Today: [moment(), moment()],
+                  Today: [moment() as any, moment() as any],
                 }}
               />
             </Space>

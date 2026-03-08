@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -9,8 +10,6 @@ Main functions : Calendar Tab
 /* Demo: https://github.com/fullcalendar/fullcalendar-example-projects/tree/master/react-typescript */
 /* eslint no-underscore-dangle: 0 */
 
-import 'styles/calendar.css';
-
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -18,8 +17,8 @@ import interactionPlugin from '@fullcalendar/interaction';
 import React, { useEffect, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import { EventApi, EventClickArg, EventContentArg } from '@fullcalendar/core';
-import { Button, Card, Col, DatePicker, Input, message, Modal, Row, Select } from 'antd';
-import moment, { now } from 'moment';
+import { Button, Card, Col, DatePicker, Input, Modal, Row, Select } from 'ui/antd';
+import moment from 'moment';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -28,6 +27,7 @@ import {
   INITIAL_EVENTS,
 } from 'pages/reservation/component/ReservationDetailTab/event-utils';
 import MInput from 'components/MInput';
+import reservationListStyles from 'pages/reservation/list/reservation-list.module.css';
 import { getRoomType, searchScheduleAction, updateNoteReservationDetail } from 'actions';
 import {
   selectRoomTypes,
@@ -174,7 +174,7 @@ function Calendar() {
 
   useEffect(() => {
     if (changedNote('status', 'SUCCESS')) {
-      message.success(t('message.Update note successfully!'));
+      notify.success(t('message.Update note successfully!'));
       dispatch(searchScheduleAction(searchCondition));
     }
   }, [changedNote]);
@@ -219,66 +219,73 @@ function Calendar() {
 
   return (
     <>
-      <Row style={{ background: 'white', padding: 16 }}>
+      <Row className={reservationListStyles.calendarFilterBar}>
         <Col span={24}>
-          <span> {t('common.Filter')} </span>
-          <Select
-            allowClear
-            onChange={value => {
-              const searchConditionStateTemporary = {
-                ...searchCondition,
-                room_type: value ?? '',
-              };
+          <div className={reservationListStyles.calendarFilterInline}>
+            <span className={reservationListStyles.calendarFilterLabel}>
+              {' '}
+              {t('common.Filter')}{' '}
+            </span>
+            <Select
+              allowClear
+              aria-label={String(t('common.Room Type'))}
+              className={reservationListStyles.calendarFilterSelect}
+              id="calendar-filter-room-type"
+              onChange={value => {
+                const searchConditionStateTemporary = {
+                  ...searchCondition,
+                  room_type: value ?? '',
+                };
 
-              setSearchCondition(searchConditionStateTemporary);
-              dispatch(searchScheduleAction(searchConditionStateTemporary));
-            }}
-            placeholder={t('common.Room Type')}
-            style={{
-              width: 150,
-              marginLeft: 15,
-            }}
-          >
-            {_.keys(roomTypesData).map((key: any) => {
-              return (
-                <Option key={key} value={key}>
-                  {roomTypesData[key]}
-                </Option>
-              );
-            })}
-          </Select>
-          <MInput
-            onChange={event =>
-              setSearchCondition({
-                ...searchCondition,
-                room_number: event.target.value,
-              })
-            }
-            onKeyUp={event => {
-              if (event.key === 'Enter') {
-                dispatch(searchScheduleAction(searchCondition));
+                setSearchCondition(searchConditionStateTemporary);
+                dispatch(searchScheduleAction(searchConditionStateTemporary));
+              }}
+              placeholder={t('common.Room Type')}
+            >
+              {_.keys(roomTypesData).map((key: any) => {
+                return (
+                  <Option key={key} value={key}>
+                    {roomTypesData[key]}
+                  </Option>
+                );
+              })}
+            </Select>
+            <MInput
+              aria-label={String(t('common.Room Number'))}
+              className={reservationListStyles.calendarFilterInput}
+              name="calendar_room_number"
+              onChange={event =>
+                setSearchCondition({
+                  ...searchCondition,
+                  room_number: event.target.value,
+                })
               }
-            }}
-            placeholder={t('common.Room Number')}
-            style={{
-              width: 150,
-              marginLeft: 15,
-            }}
-          />
-          <div style={{ float: 'right', paddingTop: 5 }}>
-            <span style={{ marginRight: 165 }}>{t('common.Display')}</span>
+              onKeyUp={event => {
+                if (event.key === 'Enter') {
+                  dispatch(searchScheduleAction(searchCondition));
+                }
+              }}
+              placeholder={t('common.Room Number')}
+            />
+            <span className={reservationListStyles.calendarDisplayLabel}>
+              {t('common.Display')}
+            </span>
           </div>
         </Col>
       </Row>
-      <Row style={{ background: 'white', padding: 16, marginTop: 20 }}>
-        <Col className="schedule-calendar" span={24} style={{ textAlign: 'center' }}>
+      <Row className={reservationListStyles.calendarTimelineRow}>
+        <Col
+          className={`${reservationListStyles.scheduleCalendar} ${reservationListStyles.calendarTimeline}`}
+          span={24}
+        >
           <svg
+            className={reservationListStyles.calendarArrow}
             fill="none"
             height="14"
             onClick={() =>
               handleChangePickDate(moment(searchCondition.start_week_date).subtract(1, 'day'))
             }
-            style={{ marginRight: 25, cursor: 'pointer' }}
+            style={{ marginRight: 25 }}
             viewBox="0 0 8 14"
             width="8"
             xmlns="http://www.w3.org/2000/svg"
@@ -290,7 +297,7 @@ function Calendar() {
           </svg>
           <b
             aria-hidden="true"
-            className="title-date"
+            className={reservationListStyles.calendarTitleDate}
             onClick={toggleShowDatePicker}
             role="button"
             tabIndex={0}
@@ -299,31 +306,39 @@ function Calendar() {
           </b>
           <DatePicker
             allowClear={false}
-            dateRender={current => {
+            aria-label="Calendar month picker"
+            cellRender={(current, info) => {
+              if (info.type !== 'date') {
+                return info.originNode;
+              }
+
+              const cellDate: any = current;
               const style: React.CSSProperties = {};
 
-              if (current.day() === 0 || current.day() === 6) {
+              if (cellDate.day() === 0 || cellDate.day() === 6) {
                 style.color = 'red';
               }
 
               return (
                 <div className="ant-picker-cell-inner" style={style}>
-                  {current.date()}
+                  {cellDate.date()}
                 </div>
               );
             }}
             defaultValue={moment()}
             format="MMMM Y"
+            id="reservation-calendar-month-picker"
             onChange={date => handleChangePickDate(date)}
             open={isShowDatePicker}
           />
           <svg
+            className={reservationListStyles.calendarArrow}
             fill="none"
             height="14"
             onClick={() =>
               handleChangePickDate(moment(searchCondition.start_week_date).add(1, 'day'))
             }
-            style={{ marginLeft: 25, cursor: 'pointer' }}
+            style={{ marginLeft: 25 }}
             viewBox="0 0 8 14"
             width="8"
             xmlns="http://www.w3.org/2000/svg"
@@ -438,12 +453,13 @@ function Calendar() {
         ]}
         onCancel={handleCancel}
         onOk={handleOk}
+        open={isEventInfoModalOpen}
         title={
           <Row>
-            <Col className="gutter-row" span={12}>
+            <Col className={reservationListStyles.modalTitleCol} span={12}>
               <b>{t('common.Notes')}</b>
             </Col>
-            <Col className="gutter-row" span={12}>
+            <Col className={reservationListStyles.modalTitleCol} span={12}>
               <Button
                 onClick={() =>
                   navigate(`/reservation/${infoReservationSelected.reservation_info_id}`)
@@ -455,11 +471,10 @@ function Calendar() {
             </Col>
           </Row>
         }
-        visible={isEventInfoModalOpen}
         width={644}
       >
         <Card
-          className="card-calendar-notes"
+          className={reservationListStyles.calendarNotesCard}
           style={{ width: '100%' }}
           title={
             <span style={{ color: '#1D39C4', fontWeight: 400, fontSize: 13 }}>

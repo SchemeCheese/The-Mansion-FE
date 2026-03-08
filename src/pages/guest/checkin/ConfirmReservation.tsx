@@ -10,7 +10,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, Input, Row } from 'antd';
+import { Col, Input, Row } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import { sumBy } from 'lodash';
 import moment from 'moment';
@@ -20,6 +20,7 @@ import useTreeChanges from 'tree-changes-hook';
 import { useAppSelector } from 'modules/hooks';
 
 import { checkinAction } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import PattonButton from 'components/PattonButton';
 
@@ -69,7 +70,7 @@ function ConfirmReservation() {
 
   return (
     <Row
-      className="content guest-payment-content guest-checkout-content"
+      className={`${layoutStyles.content} guest-payment-content guest-checkout-content`}
       style={{
         background: 'white',
         width: '90%',

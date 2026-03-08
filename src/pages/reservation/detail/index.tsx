@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -6,14 +7,14 @@ Updated Date : 11/03/2023
 Main functions : Reservation Detail Page
 ************************************ */
 
-import 'styles/reservation.css';
+import 'styles/reservation.module.css';
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import type { RadioChangeEvent } from 'antd';
-import { Checkbox, Col, message, Modal, Radio, Row, Select, Skeleton, Space } from 'antd';
+import type { RadioChangeEvent } from 'ui/antd';
+import { Checkbox, Col, Modal, Radio, Row, Select, Skeleton, Space } from 'ui/antd';
 import { formatNumber, mappingStatus } from 'helpers';
 import moment from 'moment';
 import DownloadFile from 'pages/reservation/component/DownloadFile';
@@ -22,7 +23,6 @@ import SelectRoomModal from 'pages/reservation/create/SelectRoomModal';
 import useColumns from 'pages/reservation/create/useColumns';
 import CancelBookingModal from 'pages/reservation/modal/CancelBookingModal';
 import { selectResendEmailReservation, selectUpdateReservation, selectUser } from 'selectors';
-import styled from 'styled-components';
 import useTreeChanges from 'tree-changes-hook';
 import _ from 'underscore';
 
@@ -41,18 +41,10 @@ import {
 import MButton from 'components/MButton';
 import MInfoButton from 'components/MInfoButton';
 import PattonButton from 'components/PattonButton';
+import layoutStyles from 'components/layout.module.css';
+import detailStyles from 'pages/reservation/detail/reservation-detail.module.css';
 
 import { RootState } from 'types';
-
-const BreadscrumTitle = styled.p`
-  color: rgba(0 0 0 85%);
-  font-size: 14px;
-`;
-
-const BreadscrumData = styled.p`
-  color: rgba(0 0 0 65%);
-  font-size: 14px;
-`;
 
 function ReservationDetail() {
   const navigate = useNavigate();
@@ -275,7 +267,7 @@ function ReservationDetail() {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Update reservation successfully!');
+      notify.success('Update reservation successfully!');
 
       dispatch(
         getReservation({
@@ -287,7 +279,7 @@ function ReservationDetail() {
 
   useEffect(() => {
     if (resendEmailChanged('status', 'SUCCESS')) {
-      message.success('Resend email successfully!');
+      notify.success('Resend email successfully!');
     }
   }, [resendEmailChanged]);
 
@@ -330,8 +322,8 @@ function ReservationDetail() {
         okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
         onCancel={() => setIsSelectLanguageModalOpen(false)}
         onOk={handleResendReservationConfirmationEmail}
+        open={isSelectLanguageModalOpen}
         title="Select Email Language"
-        visible={isSelectLanguageModalOpen}
       >
         <Radio.Group onChange={onChange} value={language}>
           <Space direction="vertical">
@@ -341,160 +333,143 @@ function ReservationDetail() {
           </Space>
         </Radio.Group>
       </Modal>
-      <Row
-        className="custom-bg-header"
-        style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 15 }}
-      >
-        <Col span={8}>
-          <svg
-            fill="none"
-            height="20"
-            viewBox="0 0 18 20"
-            width="18"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M15.0148 3.43912L9.4037 14.9198L4.60435 4.75035C4.42343 4.18284 4.20583 3.66109 3.95156 3.18511C2.8269 1.11186 1.75603 0.0500579 0.736505 0.00200232C0.421112 -0.0140162 0.257303 0.0660764 0.247523 0.24228C0.242633 0.333815 0.381993 0.441368 0.663158 0.562651C1.08613 0.73199 1.41374 0.910482 1.64846 1.09584C2.26946 1.56953 2.57508 1.90821 2.5653 2.10958C2.56285 2.13704 2.4895 2.18052 2.34281 2.24002C2.19611 2.29952 2.11788 2.41165 2.1081 2.57183C2.09587 2.77321 2.28902 3.08443 2.68265 3.50777C3.25476 4.11419 3.65084 4.59246 3.87821 4.938L3.932 5.14166L3.82442 5.13709C3.72418 5.13251 3.60683 5.0959 3.4748 5.02953C3.34033 4.96317 3.25965 4.92885 3.23276 4.92656C2.91736 4.91054 2.74866 5.07759 2.7291 5.42771C2.71933 5.58789 2.9736 6.00895 3.49192 6.68631C3.72663 6.99295 3.90511 7.22865 4.03224 7.40028V7.92431C3.99312 7.89914 3.92466 7.83278 3.82442 7.72294C3.69484 7.58106 3.5457 7.50783 3.37212 7.49868C2.95648 7.47808 2.73644 7.68403 2.71199 8.11425C2.69977 8.32935 2.78045 8.58336 2.95159 8.87398C3.24498 9.29275 3.5457 9.70466 3.85621 10.1097C3.92466 10.2127 3.9809 10.3134 4.03224 10.4141V11.588C3.53592 10.6292 2.96626 10.128 2.32325 10.096C1.83427 10.0731 1.58 10.2493 1.56044 10.6246C1.54577 10.906 1.90517 11.6772 2.64353 12.9381C3.37945 14.199 3.73641 15.0503 3.71196 15.4942C3.70951 15.5354 3.6924 15.5812 3.66061 15.6338C3.5237 15.5194 3.38434 15.2768 3.24743 14.9061C3.07384 14.4004 2.92714 14.0434 2.80979 13.8352C2.65331 13.5583 2.42349 13.3111 2.12766 13.096C1.82938 12.8786 1.58733 12.7665 1.40152 12.7573C0.897869 12.7322 0.631374 13.0159 0.59959 13.6086C0.580031 13.945 0.822076 14.3935 1.32328 14.9564C1.93451 15.6315 2.32569 16.2105 2.50173 16.691L2.47483 16.81C2.38926 16.8054 2.31592 16.7963 2.25968 16.7803C1.89295 16.627 1.55066 16.4302 1.23527 16.1853C0.958991 15.9839 0.812297 15.8832 0.797627 15.8809C0.293976 15.8581 0.0274815 16.0938 0.000587477 16.5926C-0.0116371 16.8352 0.166841 17.0778 0.543357 17.3249C1.44553 17.9061 1.87828 18.5538 1.83916 19.2654C1.83427 19.373 1.8196 19.4737 1.80248 19.5675L1.81471 19.7506C1.91006 19.849 2.02986 19.9016 2.17411 19.9085C2.54818 19.9268 3.06406 19.0274 3.72418 17.2151C4.59701 14.842 5.086 12.8328 5.19602 11.1784L9.36214 20L14.0344 10.4049L15.5575 19.3226H18L15.0148 3.43912Z"
-              fill="black"
-              fillOpacity="0.45"
-            />
-          </svg>
-          <span style={{ paddingLeft: 10, fontSize: 20 }}>
-            {t('reservation.Folio')}：{reservationRedux.reservation_number}
-          </span>
-        </Col>
-        <Col span={16} style={{ textAlign: 'right' }}>
-          <Space size="middle">
-            {user.permission.reservation.create && (
-              <MInfoButton
-                onClick={() =>
-                  navigate('/reservation/create', {
-                    state: {
-                      reservationInfo: reservationRedux,
-                    },
-                  })
-                }
+      <div className={`${layoutStyles.customBgHeader} ${detailStyles.headerPanel}`}>
+        <Row className={detailStyles.headerTopRow} gutter={[16, 16]}>
+          <Col lg={8} span={24}>
+            <div className={detailStyles.folioWrap}>
+              <svg
+                fill="none"
+                height="20"
+                viewBox="0 0 18 20"
+                width="18"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                {t('reservation.Copy to new reservation')}
-              </MInfoButton>
-            )}
-            <DownloadFile />
-            {user.permission.reservation.edit && (
-              <>
-                <MButton
-                  disabled={!reservationRedux.booker?.email_address1}
-                  onClick={() => setIsSelectLanguageModalOpen(true)}
-                >
-                  {t('common.Resend Email')}
-                </MButton>
-                <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
-              </>
-            )}
-          </Space>
-        </Col>
-      </Row>
-      <Row
-        className="custom-bg-header"
-        justify="space-between"
-        style={{ paddingRight: 20, paddingLeft: 20 }}
-      >
-        <Col span={6}>
-          <Row>
-            <Col span={12}>
-              <BreadscrumTitle>{t('common.Branch Code')}:</BreadscrumTitle>
-            </Col>
-            <Col span={12}>
-              <p style={{ color: '#1D39C4', fontSize: 14 }}>{reservationRedux.branch_code}</p>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <BreadscrumTitle>{t('common.Status')}:</BreadscrumTitle>
-            </Col>
-            <Col span={12}>
-              <BreadscrumData>{reservationRedux.status}</BreadscrumData>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <BreadscrumTitle>{t('common.Created By')}:</BreadscrumTitle>
-            </Col>
-            <Col span={12}>
-              <BreadscrumData>{reservationRedux.created_user}</BreadscrumData>
-            </Col>
-          </Row>
-        </Col>
-        <Col span={6}>
-          <div>
-            <Checkbox
-              checked={isHidenRoomRate}
-              disabled={!user.permission.reservation.edit}
-              onChange={e => setIsHideRoomRate(e.target.checked)}
-            >
-              {t('reservation.Hide room rates')}
-            </Checkbox>
-          </div>
-          {reservationRedux.pay_at && reservationRedux.pay_at.includes('hotel') && (
-            <div style={{ paddingTop: 10 }}>
-              <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
-                {t('reservation.Pay at hotel')}
-              </Checkbox>
+                <path
+                  d="M15.0148 3.43912L9.4037 14.9198L4.60435 4.75035C4.42343 4.18284 4.20583 3.66109 3.95156 3.18511C2.8269 1.11186 1.75603 0.0500579 0.736505 0.00200232C0.421112 -0.0140162 0.257303 0.0660764 0.247523 0.24228C0.242633 0.333815 0.381993 0.441368 0.663158 0.562651C1.08613 0.73199 1.41374 0.910482 1.64846 1.09584C2.26946 1.56953 2.57508 1.90821 2.5653 2.10958C2.56285 2.13704 2.4895 2.18052 2.34281 2.24002C2.19611 2.29952 2.11788 2.41165 2.1081 2.57183C2.09587 2.77321 2.28902 3.08443 2.68265 3.50777C3.25476 4.11419 3.65084 4.59246 3.87821 4.938L3.932 5.14166L3.82442 5.13709C3.72418 5.13251 3.60683 5.0959 3.4748 5.02953C3.34033 4.96317 3.25965 4.92885 3.23276 4.92656C2.91736 4.91054 2.74866 5.07759 2.7291 5.42771C2.71933 5.58789 2.9736 6.00895 3.49192 6.68631C3.72663 6.99295 3.90511 7.22865 4.03224 7.40028V7.92431C3.99312 7.89914 3.92466 7.83278 3.82442 7.72294C3.69484 7.58106 3.5457 7.50783 3.37212 7.49868C2.95648 7.47808 2.73644 7.68403 2.71199 8.11425C2.69977 8.32935 2.78045 8.58336 2.95159 8.87398C3.24498 9.29275 3.5457 9.70466 3.85621 10.1097C3.92466 10.2127 3.9809 10.3134 4.03224 10.4141V11.588C3.53592 10.6292 2.96626 10.128 2.32325 10.096C1.83427 10.0731 1.58 10.2493 1.56044 10.6246C1.54577 10.906 1.90517 11.6772 2.64353 12.9381C3.37945 14.199 3.73641 15.0503 3.71196 15.4942C3.70951 15.5354 3.6924 15.5812 3.66061 15.6338C3.5237 15.5194 3.38434 15.2768 3.24743 14.9061C3.07384 14.4004 2.92714 14.0434 2.80979 13.8352C2.65331 13.5583 2.42349 13.3111 2.12766 13.096C1.82938 12.8786 1.58733 12.7665 1.40152 12.7573C0.897869 12.7322 0.631374 13.0159 0.59959 13.6086C0.580031 13.945 0.822076 14.3935 1.32328 14.9564C1.93451 15.6315 2.32569 16.2105 2.50173 16.691L2.47483 16.81C2.38926 16.8054 2.31592 16.7963 2.25968 16.7803C1.89295 16.627 1.55066 16.4302 1.23527 16.1853C0.958991 15.9839 0.812297 15.8832 0.797627 15.8809C0.293976 15.8581 0.0274815 16.0938 0.000587477 16.5926C-0.0116371 16.8352 0.166841 17.0778 0.543357 17.3249C1.44553 17.9061 1.87828 18.5538 1.83916 19.2654C1.83427 19.373 1.8196 19.4737 1.80248 19.5675L1.81471 19.7506C1.91006 19.849 2.02986 19.9016 2.17411 19.9085C2.54818 19.9268 3.06406 19.0274 3.72418 17.2151C4.59701 14.842 5.086 12.8328 5.19602 11.1784L9.36214 20L14.0344 10.4049L15.5575 19.3226H18L15.0148 3.43912Z"
+                  fill="black"
+                  fillOpacity="0.45"
+                />
+              </svg>
+              <span className={detailStyles.folioTitle}>
+                {t('reservation.Folio')}：{reservationRedux.reservation_number}
+              </span>
             </div>
-          )}
-          {reservationRedux.pay_at && reservationRedux.pay_at.includes('ota') && (
-            <div style={{ paddingTop: 10 }}>
-              <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
-                {t('reservation.Pay at OTA')}
-              </Checkbox>
+          </Col>
+          <Col lg={16} span={24}>
+            <div className={detailStyles.headerActions}>
+              <Space size="middle" wrap>
+                {user.permission.reservation.create && (
+                  <MInfoButton
+                    onClick={() =>
+                      navigate('/reservation/create', {
+                        state: {
+                          reservationInfo: reservationRedux,
+                        },
+                      })
+                    }
+                  >
+                    {t('reservation.Copy to new reservation')}
+                  </MInfoButton>
+                )}
+                <DownloadFile />
+                {user.permission.reservation.edit && (
+                  <>
+                    <MButton
+                      disabled={!reservationRedux.booker?.email_address1}
+                      onClick={() => setIsSelectLanguageModalOpen(true)}
+                    >
+                      {t('common.Resend Email')}
+                    </MButton>
+                    <PattonButton onClick={e => submitUpdateForm(e)}>
+                      {t('common.Update')}
+                    </PattonButton>
+                  </>
+                )}
+              </Space>
             </div>
-          )}
-          {reservationRedux.pay_at && reservationRedux.vcc_approved_status && (
-            <div style={{ paddingTop: 10 }}>
-              <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
-                {t('reservation.VCC Transaction Approved')}
-              </Checkbox>
+          </Col>
+        </Row>
+        <Row className={detailStyles.headerSummaryRow} gutter={[16, 16]}>
+          <Col lg={8} span={24}>
+            <div className={detailStyles.summaryBlock}>
+              <div className={detailStyles.summaryItem}>
+                <span className={detailStyles.summaryLabel}>{t('common.Branch Code')}:</span>
+                <span className={detailStyles.summaryValueAccent}>
+                  {reservationRedux.branch_code}
+                </span>
+              </div>
+              <div className={detailStyles.summaryItem}>
+                <span className={detailStyles.summaryLabel}>{t('common.Status')}:</span>
+                <span className={detailStyles.summaryValue}>{reservationRedux.status}</span>
+              </div>
+              <div className={detailStyles.summaryItem}>
+                <span className={detailStyles.summaryLabel}>{t('common.Created By')}:</span>
+                <span className={detailStyles.summaryValue}>{reservationRedux.created_user}</span>
+              </div>
             </div>
-          )}
-        </Col>
-        <Col span={8} style={{ paddingRight: 20 }}>
-          <Row>
-            <Col span={12}>
-              <BreadscrumTitle>{t('reservation.Total Amount')}</BreadscrumTitle>
-            </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              {reservationRedux.price ? (
-                <p>{formatNumber(reservationRedux.price.total)}</p>
-              ) : (
-                <Skeleton.Button />
+          </Col>
+          <Col lg={8} span={24}>
+            <div className={detailStyles.summaryChecks}>
+              <Checkbox
+                checked={isHidenRoomRate}
+                disabled={!user.permission.reservation.edit}
+                onChange={e => setIsHideRoomRate(e.target.checked)}
+              >
+                {t('reservation.Hide room rates')}
+              </Checkbox>
+              {reservationRedux.pay_at && reservationRedux.pay_at.includes('hotel') && (
+                <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
+                  {t('reservation.Pay at hotel')}
+                </Checkbox>
               )}
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <BreadscrumTitle>{t('reservation.Deposit')}</BreadscrumTitle>
-            </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              {reservationRedux.price ? (
-                <p>{formatNumber(reservationRedux.price.deposit)}</p>
-              ) : (
-                <Skeleton.Button />
+              {reservationRedux.pay_at && reservationRedux.pay_at.includes('ota') && (
+                <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
+                  {t('reservation.Pay at OTA')}
+                </Checkbox>
               )}
-            </Col>
-          </Row>
-          <Row>
-            <Col span={12}>
-              <BreadscrumTitle>{t('reservation.Amount Due')}</BreadscrumTitle>
-            </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              {reservationRedux.price ? (
-                <p>{formatNumber(reservationRedux.price.amount_due)}</p>
-              ) : (
-                <Skeleton.Button />
+              {reservationRedux.pay_at && reservationRedux.vcc_approved_status && (
+                <Checkbox checked onChange={e => setIsHideRoomRate(e.target.checked)}>
+                  {t('reservation.VCC Transaction Approved')}
+                </Checkbox>
               )}
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+            </div>
+          </Col>
+          <Col lg={8} span={24}>
+            <div className={detailStyles.summaryBlock}>
+              <div className={detailStyles.summaryItem}>
+                <span className={detailStyles.summaryLabel}>{t('reservation.Total Amount')}</span>
+                <span className={detailStyles.summaryAmount}>
+                  {reservationRedux.price ? (
+                    <p>{formatNumber(reservationRedux.price.total)}</p>
+                  ) : (
+                    <Skeleton.Button />
+                  )}
+                </span>
+              </div>
+              <div className={detailStyles.summaryItem}>
+                <span className={detailStyles.summaryLabel}>{t('reservation.Deposit')}</span>
+                <span className={detailStyles.summaryAmount}>
+                  {reservationRedux.price ? (
+                    <p>{formatNumber(reservationRedux.price.deposit)}</p>
+                  ) : (
+                    <Skeleton.Button />
+                  )}
+                </span>
+              </div>
+              <div className={detailStyles.summaryItem}>
+                <span className={detailStyles.summaryLabel}>{t('reservation.Amount Due')}</span>
+                <span className={detailStyles.summaryAmount}>
+                  {reservationRedux.price ? (
+                    <p>{formatNumber(reservationRedux.price.amount_due)}</p>
+                  ) : (
+                    <Skeleton.Button />
+                  )}
+                </span>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </div>
       {!_.isEmpty(reservationRedux) && id && (
         <ReservationForm
           formRef={formRef}

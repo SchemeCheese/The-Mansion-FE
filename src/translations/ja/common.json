@@ -1,5 +1,8 @@
 {
   "branch_code": "支店コード",
   "status": "状態",
-  "created_by": "作成者"
+  "created_by": "作成者",
+  "Settings": "設定",
+  "Search": "検索",
+  "Save": "保存"
 }

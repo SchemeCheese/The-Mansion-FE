@@ -25,7 +25,7 @@ import {
   Spin,
   Table,
   Tag,
-} from 'antd';
+} from 'ui/antd';
 import { ColumnsType } from 'antd/lib/table';
 import { getAPI } from 'helpers/apiService';
 import { t } from 'i18next';

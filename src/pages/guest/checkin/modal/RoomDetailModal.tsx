@@ -8,7 +8,7 @@ Main functions: Guest Checkin
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Modal, Row } from 'antd';
+import { Col, Modal, Row } from 'ui/antd';
 
 import Icon from 'components/Icon';
 import PattonButton from 'components/PattonButton';

@@ -8,20 +8,13 @@ Main functions : Payment Detail Modal
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Form, Modal, Row, Select, Table } from 'antd';
+import { Button, Col, Form, Modal, Row, Select, Table } from 'ui/antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import { selectGetReservationDetail } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
-
-interface Props {
-  closeModal: () => void;
-  payment: any;
-  setIsModalOpen: () => void;
-  visible: boolean;
-}
 
 interface DataTypeDescription {
   amount: number;
@@ -38,6 +31,13 @@ interface DataTypePayment {
   date: string;
   exchange_rate: number;
   payment_method: string;
+}
+
+interface Props {
+  closeModal: () => void;
+  payment: any;
+  setIsModalOpen: () => void;
+  visible: boolean;
 }
 
 function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props) {
@@ -137,7 +137,6 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       footer={[
         <Button onClick={closeModal} style={{ borderRadius: 4, width: '109px' }}>
           {t('common.Cancel')}
@@ -152,8 +151,9 @@ function PaymentSummary({ closeModal, payment, setIsModalOpen, visible }: Props)
       ]}
       onCancel={closeModal}
       onOk={() => setIsModalOpen()}
+      open={visible}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('payDetail.Payment Detail')}</b>}
-      visible={visible}
       width={850}
     >
       <Form colon={false} layout="horizontal">

@@ -9,7 +9,7 @@ Main functions : Select Disk Modal
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Modal, Select } from 'antd';
+import { Form, Modal, Select } from 'ui/antd';
 import { getAPI } from 'helpers/apiService';
 import { selectGetReservationDetail } from 'selectors';
 
@@ -71,13 +71,13 @@ function SelectDiskModal({ saleDetailIds, setIsModalOpen, visible }: Props) {
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4 } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       onCancel={() => setIsModalOpen(false)}
       onOk={handleButtonSubmit}
+      open={visible}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('paySelected.Change Disk')}</b>}
-      visible={visible}
     >
       <Form layout="vertical">
         <Form.Item label={t('paySelected.Select Disk')}>

@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -24,7 +25,7 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { Checkbox, Col, DatePicker, Form, message, Row, Select } from 'antd';
+import { Checkbox, Col, DatePicker, Form, Row, Select } from 'ui/antd';
 import moment from 'moment';
 import useTreeChanges from 'tree-changes-hook';
 import { useAppSelector } from 'modules/hooks';
@@ -38,6 +39,7 @@ import {
 
 import PattonButton from 'components/PattonButton';
 import { RootState } from 'types';
+import detailStyles from 'pages/reservation/detail/reservation-detail.module.css';
 
 import {
   createEventId,
@@ -222,7 +224,7 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
     const calendarApi = selectInfo.view.calendar;
 
     if (isError) {
-      message.warn(t('message.Selecting room is invalid'));
+      notify.warn(t('message.Selecting room is invalid'));
     } else {
       calendarApi.addEvent({
         id: createEventId(),
@@ -246,7 +248,7 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
         resetSelectedRows([]);
       }
 
-      message.success(t('message.Booking room successfully!'));
+      notify.success(t('message.Booking room successfully!'));
 
       dispatch(
         getReservation({
@@ -376,7 +378,7 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
 
   const updateBookingRoom = () => {
     if (reservationDetailInfo.status === 'in_house' && bookRoomInfo.length === 0) {
-      message.warn('Booking is inhouse, please assign the corresponding room for today!');
+      notify.warn('Booking is inhouse, please assign the corresponding room for today!');
     } else {
       dispatch(
         bookRoom({
@@ -448,7 +450,7 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
     const isError = isValidSelectRoom(bookRoomInfoTemporary);
 
     if (isError) {
-      message.warn(t('message.Selecting room is invalid'));
+      notify.warn(t('message.Selecting room is invalid'));
       event.revert();
     } else {
       setBookRoomInfo(bookRoomInfoTemporary);
@@ -536,10 +538,8 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
 
   return (
     <Row
+      className={detailStyles.schedulePane}
       style={{
-        paddingLeft: 15,
-        backgroundColor: 'white',
-        paddingTop: 15,
         pointerEvents:
           user.permission.reservation.edit && reservationDetailInfo.status !== 'checkout'
             ? 'inherit'
@@ -549,7 +549,7 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
       {reservationDetailData.is_finish === true &&
       searchAvailableEventsData.is_searching === false ? (
         <>
-          <Col offset={16} span={8} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
+          <Col className={detailStyles.scheduleHeader} offset={16} span={8}>
             <Checkbox
               checked={searchScheduleCondition.isSmocking === true}
               onChange={value => {
@@ -563,7 +563,10 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
               Smoking Room
             </Checkbox>
             {user.permission.reservation.edit && (
-              <PattonButton onClick={updateBookingRoom} style={{ float: 'right' }}>
+              <PattonButton
+                className={detailStyles.scheduleUpdateAction}
+                onClick={updateBookingRoom}
+              >
                 {t('common.Update')}
               </PattonButton>
             )}
@@ -700,7 +703,7 @@ function Schedule({ reservationDetailId, reservationId, resetSelectedRows }: Pro
               </Select>
             </Form.Item>
           </Col>
-          <Col className="schedule-tab" span={24}>
+          <Col className={detailStyles.scheduleTab} span={24}>
             <FullCalendar
               ref={fullCalendarRef}
               dayMaxEvents

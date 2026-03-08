@@ -9,13 +9,14 @@ Main functions: House Keeping Index
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Col, Form, Pagination, Row, Spin } from 'antd';
+import { Col, Form, Pagination, Row, Spin } from 'ui/antd';
 import { selectHouseKeepingState, selectUpdateHouseKeeping } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { getHouseKeepingAction } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import MInput from 'components/MInput';
 import Room from 'components/Room';
@@ -69,7 +70,7 @@ function HouseKeeping() {
     <>
       <Row>
         <Col span={24}>
-          <p className="title">
+          <p className={layoutStyles.title}>
             <span
               style={{
                 fontStyle: 'normal',
@@ -80,7 +81,7 @@ function HouseKeeping() {
             </span>
           </p>
         </Col>
-        <Col className="custom-bg-header" span={24}>
+        <Col className={layoutStyles.customBgHeader} span={24}>
           <p className="">
             <span
               style={{
@@ -96,7 +97,7 @@ function HouseKeeping() {
         </Col>
       </Row>
       {houseKeepingData ? (
-        <Row className="content house-keeping-content">
+        <Row className={`${layoutStyles.content} house-keeping-content`}>
           <Row style={{ background: 'white', width: '100%' }}>
             <Col span={24}>
               <Col lg={5} xs={24}>

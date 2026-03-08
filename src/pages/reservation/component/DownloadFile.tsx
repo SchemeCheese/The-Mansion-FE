@@ -10,8 +10,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import type { RadioChangeEvent } from 'antd';
-import { Col, Modal, Radio, Row, Space } from 'antd';
+import type { RadioChangeEvent } from 'ui/antd';
+import { Col, Modal, Radio, Row, Space } from 'ui/antd';
 import moment from 'moment';
 import _ from 'underscore';
 
@@ -74,8 +74,8 @@ function DownloadFile() {
         okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
         onCancel={() => setIsSelectDownloadModalOpen(false)}
         onOk={handleDownloadReservationConfirmation}
+        open={isSelectDownloadModalOpen}
         title={t('common.Download File')}
-        visible={isSelectDownloadModalOpen}
       >
         <Row>
           <Col span={12}>

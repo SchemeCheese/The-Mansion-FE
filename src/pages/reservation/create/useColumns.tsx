@@ -8,7 +8,7 @@ Main functions : useColumns hook
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Badge, Button } from 'antd';
+import { Badge, Button } from 'ui/antd';
 
 const useColumns = (callback?: any) => {
   const { t } = useTranslation();

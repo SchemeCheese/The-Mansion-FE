@@ -10,7 +10,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, DatePicker, Form, Input, Row, Steps, TimePicker } from 'antd';
+import { Col, DatePicker, Form, Input, Row, Steps, TimePicker } from 'ui/antd';
 import moment from 'moment';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
@@ -18,6 +18,7 @@ import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
 import { useAppSelector } from 'modules/hooks';
 
 import { getReservationCheckoutByRoomNoAction } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -77,7 +78,7 @@ function GuestCustomerInfo() {
   return (
     <>
       <Row
-        className="content guest-payment-content guest-checkout-content"
+        className={`${layoutStyles.content} guest-payment-content guest-checkout-content`}
         style={{
           background: 'white',
           width: '90%',

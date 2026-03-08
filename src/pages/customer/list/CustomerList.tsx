@@ -6,14 +6,14 @@ Updated Date : 23/06/2023
 Main functions : Customer List Page
 ************************************ */
 
-import 'styles/customer.css';
+import customerStyles from 'styles/customer.module.css';
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
-import { Col, Form, Input, Pagination, Row, Select, Spin, Table } from 'antd';
+import { Col, Form, Input, Pagination, Row, Select, Spin, Table } from 'ui/antd';
 
 import { searchCustomer } from 'actions';
 
@@ -365,7 +365,7 @@ function CustomerList({ type }: Props) {
         {!isSearching ? (
           <>
             <Table
-              className="customer-list"
+              className={customerStyles.customerList}
               columns={listColumns}
               dataSource={convertData(items)}
               onRow={(record: any) => {

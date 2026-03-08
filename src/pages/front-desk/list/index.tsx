@@ -9,7 +9,7 @@ Main functions : Front Desk List
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Tabs } from 'antd';
+import { Tabs } from 'ui/antd';
 import {
   selectReservationRoomCheckoutTodayState,
   selectReservationRoomInhouseState,
@@ -23,6 +23,7 @@ import {
   getReservationRoomCheckoutTodayAction,
   getReservationRoomInhouseAction,
 } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import ReservationRoomList from './ReservationRoomList';
 import WalkIn from './WalkIn';
@@ -74,28 +75,28 @@ function FrontDesk() {
 
   return (
     <>
-      <p className="title">{t('frontDesk.Front Desk')}</p>
+      <p className={layoutStyles.title}>{t('frontDesk.Front Desk')}</p>
 
       <Tabs
-        className="reservation-tabs custom-bg-header"
+        className={`${layoutStyles.reservationTabs} ${layoutStyles.customBgHeader}`}
         defaultActiveKey="1"
         onChange={activeKey => handeleActive(activeKey)}
         style={{ minHeight: '100%' }}
       >
         {user.permission.frontDeskWalkin.view && (
-          <TabPane key="1" className="content" tab={t('frontDesk.Walk In')}>
+          <TabPane key="1" className={layoutStyles.content} tab={t('frontDesk.Walk In')}>
             <WalkIn />
           </TabPane>
         )}
         {user.permission.frontDeskCheckin.view && (
           <>
-            <TabPane key="2" className="content" tab={t('frontDesk.CheckIn Today')}>
+            <TabPane key="2" className={layoutStyles.content} tab={t('frontDesk.CheckIn Today')}>
               <ReservationRoomList type="checkin_today" />
             </TabPane>
-            <TabPane key="3" className="content" tab={t('frontDesk.In House')}>
+            <TabPane key="3" className={layoutStyles.content} tab={t('frontDesk.In House')}>
               <ReservationRoomList type="inhouse_today" />
             </TabPane>
-            <TabPane key="4" className="content" tab={t('frontDesk.Checkout Today')}>
+            <TabPane key="4" className={layoutStyles.content} tab={t('frontDesk.Checkout Today')}>
               <ReservationRoomList type="checkout_today" />
             </TabPane>
           </>

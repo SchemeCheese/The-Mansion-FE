@@ -11,7 +11,7 @@ import 'styles/branch_manager.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Pagination, Row, Select, Space, Spin, Table, Tabs } from 'antd';
+import { Col, Pagination, Row, Select, Space, Spin, Table, Tabs } from 'ui/antd';
 import * as _ from 'lodash';
 import DownLoadCSV from 'pages/branch-manager/DownLoadCSV';
 import { selectBranchManagerState } from 'selectors';
@@ -20,6 +20,7 @@ import useTreeChanges from 'tree-changes-hook';
 import { useAppSelector } from 'modules/hooks';
 
 import { branchManager } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import { RootState } from 'types';
 
@@ -262,7 +263,7 @@ function Branch() {
 
   return !isLoading ? (
     <>
-      <Row align="middle" className="custom-bg-header">
+      <Row align="middle" className={layoutStyles.customBgHeader}>
         {/* START Branch Select */}
         <Col span={2}>
           <span style={{ paddingLeft: '24px', fontSize: '12px' }}>Branch</span>
@@ -344,11 +345,11 @@ function Branch() {
         {/* END Filter time */}
       </Row>
       <Tabs
-        className="branch-manager custom-bg-header"
+        className={`branch-manager ${layoutStyles.customBgHeader}`}
         defaultActiveKey="1"
         style={{ minHeight: '100%' }}
       >
-        <TabPane key="e" className="content" tab={t('branchManager.tab_electricity')}>
+        <TabPane key="e" className={layoutStyles.content} tab={t('branchManager.tab_electricity')}>
           <Header avg={avgE} consum={Econsum} type={1} yoy={EYOY} />
           <Row>
             <Col span={24} style={{ paddingTop: 16 }}>
@@ -373,7 +374,7 @@ function Branch() {
             </Col>
           </Row>
         </TabPane>
-        <TabPane key="w" className="content" tab={t('branchManager.tab_water')}>
+        <TabPane key="w" className={layoutStyles.content} tab={t('branchManager.tab_water')}>
           <Header avg={avgW} consum={Wconsum} type={0} yoy={WYOY} />
           <Row>
             <Col span={24} style={{ paddingTop: 16 }}>
@@ -398,7 +399,7 @@ function Branch() {
             </Col>
           </Row>
         </TabPane>
-        <TabPane key="d" className="content" tab={t('branchManager.tab_dowload')}>
+        <TabPane key="d" className={layoutStyles.content} tab={t('branchManager.tab_dowload')}>
           <Row>
             <Col span={24} style={{ paddingTop: 16 }}>
               <DownLoadCSV />

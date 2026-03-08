@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from 'antd';
+import { Card } from 'ui/antd';
 
 interface Props {
   action?: React.ReactNode;

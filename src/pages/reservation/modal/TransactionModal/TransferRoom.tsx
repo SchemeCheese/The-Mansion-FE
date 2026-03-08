@@ -9,7 +9,7 @@ Main functions : Transfer Room Modal
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, Form, Input, Modal, Row, Select, Table } from 'antd';
+import { Col, Form, Input, Modal, Row, Select, Table } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import useColumns from 'pages/reservation/create/useColumns';
@@ -19,6 +19,7 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import { changeRoomAction, getReservationByFolio, resetReservationByFolio } from 'actions';
+import reservationStyles from 'styles/reservation.module.css';
 
 import PattonButton from 'components/PattonButton';
 
@@ -190,14 +191,14 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visibl
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4 } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       okText={t('common.Transfer')}
       onCancel={() => setIsModalOpen(false)}
       onOk={handleTransferRoom}
+      open={visible}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('transaction.Transfer to Folio ID')}</b>}
-      visible={visible}
       width={1400}
     >
       <Form layout="vertical" wrapperCol={{ span: 23 }}>
@@ -262,7 +263,7 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visibl
           };
         }}
         pagination={false}
-        rowClassName="pointer"
+        rowClassName={reservationStyles.pointer}
         rowSelection={{
           type: 'radio',
           ...rowSelection,

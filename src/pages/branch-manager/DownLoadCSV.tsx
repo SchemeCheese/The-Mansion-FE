@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Button, Card, Col, DatePicker, Row, Select } from 'antd';
+import { Button, Card, Col, DatePicker, Row, Select } from 'ui/antd';
 import moment from 'moment';
 
 import { downloadCSVBranchManagerAction } from 'actions';

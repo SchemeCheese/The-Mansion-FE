@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : IOT
 Developer Name : DungNT
@@ -10,11 +11,12 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Card, Col, Form, Input, message, Row, Select, Space } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Select, Space } from 'ui/antd';
 import { getAPI, postAPI } from 'helpers/apiService';
 import styled from 'styled-components';
 import _ from 'underscore';
 
+import layoutStyles from 'components/layout.module.css';
 import MInput from 'components/MInput';
 
 const { Option } = Select;
@@ -50,7 +52,7 @@ function DeviceManagerCreate() {
     );
 
     if (response.status === 200 && response.data.success) {
-      message.success('Create device successfully!');
+      notify.success('Create device successfully!');
     }
 
     navigate(`/power/device`);
@@ -217,7 +219,7 @@ function DeviceManagerCreate() {
           </Row>
         </Col>
       </Row>
-      <Row className="content">
+      <Row className={layoutStyles.content}>
         <Col span={24}>
           <Card bordered={false} size="small" title="Business Unit Informations">
             <Row>

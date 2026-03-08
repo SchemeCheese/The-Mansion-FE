@@ -9,7 +9,7 @@ Main functions: Scan QRCode Modal
 import React, { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Scanner } from '@yudiel/react-qr-scanner';
-import { Modal } from 'antd';
+import { Modal } from 'ui/antd';
 
 import { getReservationGuestCheckinAction } from 'actions';
 

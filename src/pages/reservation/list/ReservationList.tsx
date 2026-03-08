@@ -11,13 +11,15 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
-import { Alert, Col, Pagination, Row, Spin, Table, Tag } from 'antd';
+import { Alert, Col, Pagination, Row, Spin, Table, Tag } from 'ui/antd';
 import { selectReservationSearch, selectUser } from 'selectors';
 import useTreeChanges from 'tree-changes-hook';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { readNotifcationsAction, searchReservation } from 'actions';
+import reservationStyles from 'styles/reservation.module.css';
+import reservationListStyles from 'pages/reservation/list/reservation-list.module.css';
 
 import PattonButton from 'components/PattonButton';
 
@@ -493,9 +495,10 @@ function ReservationList({ type }: Props) {
   };
 
   return (
-    <Row style={{ background: 'white', padding: 16 }}>
+    <Row className={reservationListStyles.pagePanel}>
       {unreadMessage > 0 && (
         <Col
+          className={reservationListStyles.alertRow}
           onClick={() => {
             dispatch(
               searchReservation({
@@ -506,10 +509,6 @@ function ReservationList({ type }: Props) {
             );
           }}
           span={24}
-          style={{
-            paddingBottom: 20,
-            cursor: 'pointer',
-          }}
         >
           <Alert
             closable
@@ -526,18 +525,19 @@ function ReservationList({ type }: Props) {
           setSearchCondition={setSearchCondition}
         />
       </Col>
-      {user.permission.reservation.create && (
-        <Col span={24} style={{ paddingTop: 16 }}>
+      <Col className={reservationListStyles.toolbar} span={24}>
+        <span />
+        {user.permission.reservation.create && (
           <PattonButton onClick={() => navigate(`/reservation/create`)}>
             <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> {t('common.New')}
           </PattonButton>
-        </Col>
-      )}
-      <Col span={24} style={{ paddingTop: 16 }}>
+        )}
+      </Col>
+      <Col className={reservationListStyles.tableWrap} span={24}>
         {!isSearching ? (
           <>
             <Table
-              className="reservation-list"
+              className={`${reservationStyles.reservationList} ${reservationListStyles.reservationTable}`}
               columns={columnsWaitlist}
               dataSource={convertData(items)}
               onChange={handleChange}
@@ -559,7 +559,7 @@ function ReservationList({ type }: Props) {
               pagination={false}
               rowClassName={(record: any) => {
                 if (record.is_new) {
-                  return 'new-reservation';
+                  return reservationStyles.newReservation;
                 }
 
                 return '';
@@ -568,14 +568,15 @@ function ReservationList({ type }: Props) {
               style={{ overflowX: 'hidden', overflowY: 'auto', minHeight: 450 }}
             />
             {total > 0 && (
-              <Pagination
-                defaultCurrent={currentPage}
-                onChange={onChangeCurrentPage}
-                pageSize={10}
-                showSizeChanger={false}
-                style={{ float: 'right', marginTop: 15 }}
-                total={total}
-              />
+              <div className={reservationListStyles.paginationWrap}>
+                <Pagination
+                  defaultCurrent={currentPage}
+                  onChange={onChangeCurrentPage}
+                  pageSize={10}
+                  showSizeChanger={false}
+                  total={total}
+                />
+              </div>
             )}
           </>
         ) : (

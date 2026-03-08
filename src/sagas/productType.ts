@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -7,6 +7,7 @@ import { ProductTypeEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import { logOut, productTypeFinish } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* getProductTypeSaga() {
   try {
@@ -31,7 +32,7 @@ export function* getProductTypeSaga() {
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not get product type!');
+      notify.error('Can not get product type!');
     }
   }
 }

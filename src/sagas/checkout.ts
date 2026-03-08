@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -12,6 +12,7 @@ import {
   checkoutAction,
   checkoutSuccessAction,
 } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* postAddLateCheckoutFee({ payload }: ReturnType<typeof addLateCheckoutFeeAction>) {
   const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
@@ -40,7 +41,7 @@ export function* postAddLateCheckoutFee({ payload }: ReturnType<typeof addLateCh
       console.log('Error add late checkout fee: ', error);
     }
 
-    message.error('Cannot add late checkout fee!');
+    notify.error('Cannot add late checkout fee!');
   }
 }
 
@@ -71,7 +72,7 @@ export function* postCheckout({ payload }: ReturnType<typeof checkoutAction>) {
       console.log('Error cannot checkout', error);
     }
 
-    message.error('Cannot checkout!');
+    notify.error('Cannot checkout!');
   }
 }
 

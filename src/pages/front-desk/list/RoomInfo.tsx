@@ -9,7 +9,7 @@ Main functions : RoomInfo Card
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row } from 'ui/antd';
 import moment from 'moment';
 import { selectBranchInfo } from 'selectors';
 

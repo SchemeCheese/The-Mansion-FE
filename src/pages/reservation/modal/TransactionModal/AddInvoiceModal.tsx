@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Monthly Invoice
 Developer Name : HanhTV
@@ -8,7 +9,7 @@ Main functions : Ann monthly invoice modal
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Checkbox, Col, DatePicker, Form, message, Modal, Row, Select, Upload } from 'antd';
+import { Checkbox, Col, DatePicker, Form, Modal, Row, Select, Upload } from 'ui/antd';
 import { AxiosError } from 'axios';
 import { getAPI, postAPI } from 'helpers/apiService';
 import { selectBranchInfo, selectGetReservation, selectGetReservationDetail } from 'selectors';
@@ -68,8 +69,8 @@ function AddInvoiceModal({
         );
 
         response.data?.success
-          ? message.success('Create Monthly Invoice successfully.')
-          : message.error('Create Monthly Invoice failed.');
+          ? notify.success('Create Monthly Invoice successfully.')
+          : notify.error('Create Monthly Invoice failed.');
 
         form.resetFields();
 
@@ -78,7 +79,7 @@ function AddInvoiceModal({
       })
       .catch(error => {
         if (error instanceof AxiosError) {
-          message.error('Create Monthly Invoice failed.');
+          notify.error('Create Monthly Invoice failed.');
         }
       });
   };
@@ -116,9 +117,9 @@ function AddInvoiceModal({
       setFile(info.fileList[0]?.originFileObj);
 
       if (status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully.`);
+        notify.success(`${info.file.name} file uploaded successfully.`);
       } else if (status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
+        notify.error(`${info.file.name} file upload failed.`);
       }
     },
     onDrop(e: any) {
@@ -128,14 +129,14 @@ function AddInvoiceModal({
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4 } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       okText="Upload"
       onCancel={() => setModalVisible(false)}
       onOk={handleButtonSubmit}
+      open={isModalOpen}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('monthlyInvoice.Add new invoice')}</b>}
-      visible={isModalOpen}
       width={850}
     >
       <Form

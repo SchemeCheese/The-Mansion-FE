@@ -13,12 +13,13 @@ import { useTranslation } from 'react-i18next';
 import SVG from 'react-inlinesvg';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Col, Row, Spin } from 'antd';
+import { Col, Row, Spin } from 'ui/antd';
 import { selectCheckoutState, selectGetReservationCheckoutFromRoomNo } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { checkoutAction, resetReservationCheckoutByRoomNoAction } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import PattonButton from 'components/PattonButton';
 
@@ -101,7 +102,7 @@ function GuestThank() {
   return (
     <>
       <Row
-        className="content guest-thank"
+        className={`${layoutStyles.content} guest-thank`}
         style={{
           // background: 'white',
           width: '90%',

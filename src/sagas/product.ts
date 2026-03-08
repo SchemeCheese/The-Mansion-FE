@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -7,6 +7,7 @@ import { ProductEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import { logOut, searchProduct, searchProductFinish } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* getSearchProductSaga({ payload }: ReturnType<typeof searchProduct>) {
   try {
@@ -35,7 +36,7 @@ export function* getSearchProductSaga({ payload }: ReturnType<typeof searchProdu
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not search product!');
+      notify.error('Can not search product!');
     }
   }
 }

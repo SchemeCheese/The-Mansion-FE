@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, DatePicker, Form, Row, Select, Spin } from 'antd';
+import { Card, Col, DatePicker, Form, Row, Select, Spin } from 'ui/antd';
 import { headerWithAuthorization } from 'helpers';
 import { getAPI } from 'helpers/apiService';
 import moment from 'moment';

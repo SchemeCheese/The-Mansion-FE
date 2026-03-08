@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -21,85 +21,7 @@ import {
   downloadPDFInvoiceTransactionSuccess,
   logOut,
 } from 'actions';
-
-export function* postAddDiskSaga({ payload }: ReturnType<typeof addDiskAction>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.ADD_DISK)}`, {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        branch_code,
-        operator_code,
-        facility_code,
-      },
-    }));
-
-    if (success) {
-      yield put(addDiskActionSuccess());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    ({ success } = yield call(
-      request,
-      `${apiEndPoint(
-        TransactionEndpoint.ADD_ITEM(
-          payload.payload.reservation_id,
-          payload.payload.reservation_detail_id,
-        ),
-      )}`,
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          branch_code,
-          operator_code,
-          facility_code,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(addItemActionSuccess());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error.response);
-    }
-
-    if (error.status === 422) {
-      message.warning(error.response.message);
-    } else if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
+import { notify } from 'ui/notification';
 
 export function* deleteItemSaga({ payload }: ReturnType<typeof deleteItemAction>) {
   try {
@@ -129,7 +51,7 @@ export function* deleteItemSaga({ payload }: ReturnType<typeof deleteItemAction>
     if (success) {
       yield put(deleteItemActionSuccess());
     } else {
-      message.error('Something went wrong!');
+      notify.error('Something went wrong!');
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
@@ -139,78 +61,7 @@ export function* deleteItemSaga({ payload }: ReturnType<typeof deleteItemAction>
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* postChangeDiskSaga({ payload }: ReturnType<typeof changeDiskAction>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.CHANGE_DISK)}`, {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        ...payloadBranch,
-      },
-    }));
-
-    if (success) {
-      yield put(changeDiskActionSuccess());
-    } else {
-      message.error('Transfer disk failed!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Transfer disk failed!');
-    }
-  }
-}
-
-export function* postChangeRoomSaga({ payload }: ReturnType<typeof changeRoomAction>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.CHANGE_ROOM)}`, {
-      method: 'POST',
-      headers: headerWithAuthorization(),
-      body: {
-        ...payload.payload,
-        operator_code,
-        branch_code,
-        facility_code,
-      },
-    }));
-
-    if (success) {
-      yield put(changeRoomActionSuccess());
-    } else {
-      message.error('Transfer room failed!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Transfer room failed!');
+      notify.error('Something went wrong!');
     }
   }
 }
@@ -264,7 +115,157 @@ export function* getDownloadPDFInvoiceTransactionSaga({
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Cannot download file!');
+      notify.error('Cannot download file!');
+    }
+  }
+}
+
+export function* postAddDiskSaga({ payload }: ReturnType<typeof addDiskAction>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.ADD_DISK)}`, {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        branch_code,
+        operator_code,
+        facility_code,
+      },
+    }));
+
+    if (success) {
+      yield put(addDiskActionSuccess());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* postAddItemSaga({ payload }: ReturnType<typeof addItemAction>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(
+        TransactionEndpoint.ADD_ITEM(
+          payload.payload.reservation_id,
+          payload.payload.reservation_detail_id,
+        ),
+      )}`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          branch_code,
+          operator_code,
+          facility_code,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(addItemActionSuccess());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error.response);
+    }
+
+    if (error.status === 422) {
+      notify.warning(error.response.message);
+    } else if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* postChangeDiskSaga({ payload }: ReturnType<typeof changeDiskAction>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.CHANGE_DISK)}`, {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        ...payloadBranch,
+      },
+    }));
+
+    if (success) {
+      yield put(changeDiskActionSuccess());
+    } else {
+      notify.error('Transfer disk failed!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Transfer disk failed!');
+    }
+  }
+}
+
+export function* postChangeRoomSaga({ payload }: ReturnType<typeof changeRoomAction>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    ({ success } = yield call(request, `${apiEndPoint(TransactionEndpoint.CHANGE_ROOM)}`, {
+      method: 'POST',
+      headers: headerWithAuthorization(),
+      body: {
+        ...payload.payload,
+        operator_code,
+        branch_code,
+        facility_code,
+      },
+    }));
+
+    if (success) {
+      yield put(changeRoomActionSuccess());
+    } else {
+      notify.error('Transfer room failed!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Transfer room failed!');
     }
   }
 }

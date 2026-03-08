@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
@@ -7,6 +7,7 @@ import { LanguageCodeEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import { getLanguageCodeActionFinish, logOut } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* getLanguageCodesSaga() {
   try {
@@ -26,7 +27,7 @@ export function* getLanguageCodesSaga() {
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Cannot get language code!');
+      notify.error('Cannot get language code!');
     }
   }
 }

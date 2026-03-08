@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -14,7 +15,6 @@ import {
   Col,
   Form,
   Input,
-  message,
   Modal,
   Radio,
   RadioChangeEvent,
@@ -25,7 +25,7 @@ import {
   Upload,
   UploadFile,
   UploadProps,
-} from 'antd';
+} from 'ui/antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -42,16 +42,11 @@ import {
   getReservationDetail,
   updatePaymentDetail,
 } from 'actions';
+import reservationStyles from 'styles/reservation.module.css';
 
 import MButton from 'components/MButton';
 
 const { Dragger } = Upload;
-
-interface Props {
-  payment: any;
-  setIsModalOpen: (visible: boolean) => void;
-  visible: boolean;
-}
 
 interface DataTypeDescription {
   amount: number;
@@ -68,6 +63,12 @@ interface DataTypePayment {
   date: string;
   exchange_rate: number;
   payment_method: string;
+}
+
+interface Props {
+  payment: any;
+  setIsModalOpen: (visible: boolean) => void;
+  visible: boolean;
 }
 
 function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
@@ -183,7 +184,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Update payment detail successfully!');
+      notify.success('Update payment detail successfully!');
 
       dispatch(
         getReservationDetail({
@@ -289,8 +290,8 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
         okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
         onCancel={() => setIsSelectDownloadInvoiceModalOpen(false)}
         onOk={handleInvoiceDownloadPdf}
+        open={isSelectDownloadInvoiceModalOpen}
         title={t('common.Download File')}
-        visible={isSelectDownloadInvoiceModalOpen}
       >
         <Row>
           <Col span={12}>
@@ -306,8 +307,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
       </Modal>
 
       <Modal
-        bodyStyle={{ backgroundColor: '#F0F2F5' }}
-        className="fit-modal"
+        className={reservationStyles.fitModal}
         footer={[
           // <Button
           //   onClick={handleClickPayBalance}
@@ -351,11 +351,12 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
         ]}
         onCancel={() => setIsModalOpen(false)}
         onOk={() => setIsModalOpen(false)}
+        open={visible}
         style={{
           top: 40,
         }}
+        styles={{ body: { backgroundColor: '#F0F2F5' } }}
         title={<b>{t('payDetail.Payment Detail')}</b>}
-        visible={visible}
         width={1000}
       >
         <Form colon={false} layout="horizontal">
@@ -441,7 +442,7 @@ function PayDetailModal({ payment, setIsModalOpen, visible }: Props) {
                 </Col>
                 <Col span={24} style={{ marginTop: 5 }}>
                   <Row>
-                    <Col className="payment-detail" span={24}>
+                    <Col className={reservationStyles.paymentDetail} span={24}>
                       <Dragger
                         {...props}
                         action={`${process.env.REACT_APP_API_HOST}/${FileEndpoint.UPLOAD}`}

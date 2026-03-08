@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Customer
 Developer Name : MinhNV
@@ -10,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Card, Checkbox, Col, DatePicker, Form, message, Row, Select, Space, Tag } from 'antd';
+import { Card, Checkbox, Col, DatePicker, Form, Row, Select, Space, Tag } from 'ui/antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatDate } from 'helpers';
@@ -59,7 +60,7 @@ function CustomerDetailAbout() {
     });
 
     if (result.data.success) {
-      message.success('Update more info successfully!');
+      notify.success('Update more info successfully!');
 
       dispatch(
         getCustomerDetailAction({

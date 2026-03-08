@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -13,6 +13,7 @@ import {
   paymentMonthlyInvoiceAction,
   paymentMonthlyInvoiceActionSuccess,
 } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* getMonthlyInvoiceSaga({ payload }: ReturnType<typeof getMonthlyInvoicesAction>) {
   try {
@@ -45,7 +46,7 @@ export function* getMonthlyInvoiceSaga({ payload }: ReturnType<typeof getMonthly
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not get monthly info!');
+      notify.error('Can not get monthly info!');
     }
   }
 }
@@ -82,7 +83,7 @@ export function* postPaymentMonthlyInvoiceSaga({
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not payment!');
+      notify.error('Can not payment!');
     }
   }
 }

@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import SVG from 'react-inlinesvg';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, Input, Row } from 'antd';
+import { Col, Input, Row } from 'ui/antd';
 import GuestBgIcon from 'pages/guest/GuestBgIcon';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGetReservationCheckoutFromRoomNo } from 'selectors';
@@ -22,6 +22,7 @@ import useTreeChanges from 'tree-changes-hook';
 import { useAppSelector } from 'modules/hooks';
 
 import { getReservationCheckoutByRoomNoAction } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import PattonButton from 'components/PattonButton';
 
@@ -52,7 +53,7 @@ function GuestRoomNumber() {
   return (
     <>
       <Row
-        className="content guest-room-number"
+        className={`${layoutStyles.content} guest-room-number`}
         style={{
           // background: 'white',
           width: '90%',

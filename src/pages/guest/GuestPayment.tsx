@@ -14,7 +14,7 @@ import QRCode from 'react-qr-code';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { ExpandOutlined } from '@ant-design/icons';
-import { Col, Radio, RadioChangeEvent, Row, Spin, Steps, Table } from 'antd';
+import { Col, Radio, RadioChangeEvent, Row, Spin, Steps, Table } from 'ui/antd';
 import { formatNumber, randomKey } from 'helpers';
 import GuestFooter from 'pages/guest/GuestFooter';
 import Pusher from 'pusher-js';
@@ -28,6 +28,7 @@ import {
   paymentMomoPayReservationDetail,
   paymentVNPayReservationDetail,
 } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -276,7 +277,7 @@ function GuestPayment() {
     <>
       {reservationCheckoutData.client_info && (
         <Row
-          className="content guest-payment-content"
+          className={`${layoutStyles.content} guest-payment-content`}
           style={{
             background: 'white',
             width: '90%',

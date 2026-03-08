@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -10,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { Checkbox, Col, DatePicker, message, Modal, Row, Select, Spin, TimePicker } from 'antd';
+import { Checkbox, Col, DatePicker, Modal, Row, Select, Spin, TimePicker } from 'ui/antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import TextArea from 'antd/lib/input/TextArea';
 import moment from 'moment';
@@ -24,6 +25,7 @@ import { getReservation, getReservationDetail, getRoomType, updateGeneralInfo } 
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
+import detailStyles from 'pages/reservation/detail/reservation-detail.module.css';
 
 import { RootState } from 'types';
 
@@ -105,7 +107,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success(t('message.Update general info successfully!'));
+      notify.success(t('message.Update general info successfully!'));
 
       dispatch(
         getReservation({
@@ -206,15 +208,18 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
   }
 
   return reservationDetailInfo.is_finish && isUpdateReservationDetail === true ? (
-    <Row style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
-      <Col span={24} style={{ marginTop: 15, marginBottom: 15, paddingRight: 15 }}>
+    <Row className={detailStyles.generalInfoPane}>
+      <Col className={detailStyles.generalInfoHeader} span={24}>
         <span style={{ paddingRight: 15 }}>{t('common.Created Date')}: </span>
         <span>
           {reservationDetailInfo &&
             moment(reservationDetailInfo.data.created_date).format('DD/MM/YYYY')}
         </span>
         {user.permission.reservation.edit && (
-          <PattonButton onClick={() => handleUpdateGeneralInfo()} style={{ float: 'right' }}>
+          <PattonButton
+            className={detailStyles.generalInfoUpdateAction}
+            onClick={() => handleUpdateGeneralInfo()}
+          >
             {t('common.Update')}
           </PattonButton>
         )}
@@ -335,7 +340,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
             <TimePicker
               defaultValue={
                 generalInfoState.checkin_time
-                  ? moment(generalInfoState.checkin_time, format)
+                  ? (moment(generalInfoState.checkin_time, format) as any)
                   : undefined
               }
               disabled={data.status !== 'reserved' && data.status !== 'waitlist'}
@@ -388,7 +393,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
             <TimePicker
               defaultValue={
                 generalInfoState.pickup_time
-                  ? moment(generalInfoState.pickup_time, format)
+                  ? (moment(generalInfoState.pickup_time, format) as any)
                   : undefined
               }
               format={format}
@@ -443,7 +448,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
             <TimePicker
               defaultValue={
                 generalInfoState.checkout_time
-                  ? moment(generalInfoState.checkout_time, format)
+                  ? (moment(generalInfoState.checkout_time, format) as any)
                   : undefined
               }
               disabled={
@@ -501,7 +506,7 @@ function GeneralInfo({ reservationDetailId, reservationId }: Props) {
             <TimePicker
               defaultValue={
                 generalInfoState.dropoff_time
-                  ? moment(generalInfoState.dropoff_time, format)
+                  ? (moment(generalInfoState.dropoff_time, format) as any)
                   : undefined
               }
               format={format}

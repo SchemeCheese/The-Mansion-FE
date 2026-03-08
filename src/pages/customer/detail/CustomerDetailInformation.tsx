@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Customer
 Developer Name : MinhNV
@@ -10,7 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Col, DatePicker, Form, message, Row, Select, Tabs } from 'antd';
+import { Col, DatePicker, Form, Row, Select, Tabs } from 'ui/antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import { formatDate } from 'helpers';
 import { getAPI, putAPI } from 'helpers/apiService';
@@ -59,7 +60,7 @@ function CustomerDetailInformation() {
     const result = await putAPI(`api/v1/guests/${id}/update`, values);
 
     if (result.data.success) {
-      message.success('Update contact info successfully!');
+      notify.success('Update contact info successfully!');
 
       dispatch(
         getCustomerDetailAction({
@@ -80,7 +81,7 @@ function CustomerDetailInformation() {
     });
 
     if (result.data.success) {
-      message.success('Update contact info successfully!');
+      notify.success('Update contact info successfully!');
 
       dispatch(
         getCustomerDetailAction({

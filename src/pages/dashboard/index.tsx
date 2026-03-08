@@ -10,7 +10,8 @@ import 'styles/night_audit.css';
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Row } from 'antd';
+import { Col, Row } from 'ui/antd';
+import layoutStyles from 'components/layout.module.css';
 
 import ActualPower from './ActualPower';
 import DurationCurve from './DurationCurve';
@@ -33,7 +34,7 @@ function Dashboard() {
   const { t } = useTranslation();
 
   return (
-    <Row className="content">
+    <Row className={layoutStyles.content}>
       <Col span={24} style={{ paddingBottom: 10 }}>
         <IntroduceRow />
       </Col>

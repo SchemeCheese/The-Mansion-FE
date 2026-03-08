@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Col, message, Modal, Row, Table } from 'antd';
+import { Col, Modal, Row, Table } from 'ui/antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -23,6 +23,7 @@ import { addLateCheckoutFeeAction, getReservation, getReservationDetail } from '
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
+import { notify } from 'ui/notification';
 
 interface DataTypeLate {
   actual_CO_time: string;
@@ -196,7 +197,7 @@ function CheckoutModal({
 
   useEffect(() => {
     if (addLateCheckoutFeeChanged('status', 'SUCCESS')) {
-      message.success(t('message.Add late checkout fee successfully!'));
+      notify.success(t('message.Add late checkout fee successfully!'));
 
       setIsModalShowLateFee(false);
       setIsModalShowPaymentDetail(true);
@@ -218,7 +219,7 @@ function CheckoutModal({
 
   useEffect(() => {
     if (checkoutChanged('status', 'SUCCESS')) {
-      message.success(t('message.Checkout successfully!'));
+      notify.success(t('message.Checkout successfully!'));
 
       setIsModalShowLateFee(false);
       setIsModalShowPaymentDetail(false);
@@ -248,8 +249,8 @@ function CheckoutModal({
         okText={t('common.Continue to checkout')}
         onCancel={() => setIsModalShowLateFee(false)}
         onOk={handleAddCheckoutLateFee}
+        open={isModalShowLateFee}
         title={<b>{t('common.Late Checkout Fee')}</b>}
-        visible={isModalShowLateFee}
         width={1000}
       >
         <Table columns={columnsEarly} dataSource={lateCOFee} pagination={false} size="small" />
@@ -266,7 +267,7 @@ function CheckoutModal({
         setIsModalSelectedPaymentMethod={setIsModalSelectedPaymentMethod}
         visible={isModalSelectedPaymentMethod}
       />
-      <Modal footer={null} onCancel={() => setIsFinishModalOpen(false)} visible={isFinishModalOpen}>
+      <Modal footer={null} onCancel={() => setIsFinishModalOpen(false)} open={isFinishModalOpen}>
         <Row style={{ marginTop: 15 }}>
           <Col span={4} style={{ textAlign: 'right' }}>
             <svg

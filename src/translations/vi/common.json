@@ -1,5 +1,8 @@
 {
   "branch_code": "Mã chi nhánh",
   "status": "Trạng thái",
-  "created_by": "Được tạo bởi"
+  "created_by": "Được tạo bởi",
+  "Settings": "Cài đặt",
+  "Search": "Tìm kiếm",
+  "Save": "Lưu"
 }

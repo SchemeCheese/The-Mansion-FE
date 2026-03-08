@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -16,13 +17,12 @@ import {
   DatePicker,
   Form,
   Input,
-  message,
   Modal,
   Row,
   Select,
   Upload,
   UploadFile,
-} from 'antd';
+} from 'ui/antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import moment from 'moment';
 import {
@@ -48,6 +48,7 @@ import {
   getRoomsAction,
   updateGuestAction,
 } from 'actions';
+import reservationStyles from 'styles/reservation.module.css';
 
 const { Option } = Select;
 
@@ -181,7 +182,7 @@ function CreateGuestModal({
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success('Add guest successfully!');
+      notify.success('Add guest successfully!');
 
       resetForm();
 
@@ -200,7 +201,7 @@ function CreateGuestModal({
 
   useEffect(() => {
     if (updateGuestChanged('status', 'SUCCESS')) {
-      message.success('Update guest successfully!');
+      notify.success('Update guest successfully!');
 
       resetForm();
 
@@ -218,7 +219,7 @@ function CreateGuestModal({
 
   useEffect(() => {
     if (removeGuestChanged('status', 'SUCCESS')) {
-      message.success('Remove guest successfully!');
+      notify.success('Remove guest successfully!');
 
       dispatch(
         getReservation({
@@ -371,7 +372,7 @@ function CreateGuestModal({
 
   return (
     <>
-      <Modal footer={null} onCancel={handleImgCancel} title={previewTitle} visible={previewVisible}>
+      <Modal footer={null} onCancel={handleImgCancel} open={previewVisible} title={previewTitle}>
         <img
           alt="example"
           src={previewImage}
@@ -381,18 +382,20 @@ function CreateGuestModal({
         />
       </Modal>
       <Modal
-        bodyStyle={{
-          backgroundColor: '#F0F2F5',
-        }}
-        className="new-guest-modal"
+        className={reservationStyles.newGuestModal}
         okText="Save"
         onCancel={handleCancel}
         onOk={handleOk}
+        open={isModalVisible}
         style={{
           top: 40,
         }}
+        styles={{
+          body: {
+            backgroundColor: '#F0F2F5',
+          },
+        }}
         title={currentGuest ? 'Update Guest' : 'Create New Guest'}
-        visible={isModalVisible}
         width={1000}
       >
         <Form
@@ -434,7 +437,7 @@ function CreateGuestModal({
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Card bordered={false} size="small" title={t('common.General Informations')}>
+              <Card size="small" title={t('common.General Informations')} variant="borderless">
                 <Row>
                   <Col span={8}>
                     <Form.Item
@@ -521,7 +524,7 @@ function CreateGuestModal({
               </Card>
             </Col>
             <Col span={24} style={{ marginTop: 20 }}>
-              <Card bordered={false} size="small" title="Other Informations">
+              <Card size="small" title="Other Informations" variant="borderless">
                 <Row>
                   <Col span={8}>
                     <Form.Item label={t('common.Date Of Birth')} name="date_of_birth">
@@ -714,7 +717,7 @@ function CreateGuestModal({
               </Card>
             </Col>
             <Col span={24} style={{ marginTop: 20 }}>
-              <Card bordered={false} size="small" title={t('guest.Pictures')}>
+              <Card size="small" title={t('guest.Pictures')} variant="borderless">
                 <Row>
                   <Col span={24}>
                     <Upload
@@ -736,7 +739,7 @@ function CreateGuestModal({
               </Card>
             </Col>
             <Col span={24} style={{ marginTop: 20 }}>
-              <Card bordered={false} size="small" title={t('guest.Guest Face Recognition')}>
+              <Card size="small" title={t('guest.Guest Face Recognition')} variant="borderless">
                 <Row>
                   <Col span={24}>
                     <Upload
@@ -758,7 +761,7 @@ function CreateGuestModal({
               </Card>
             </Col>
             <Col span={24} style={{ marginTop: 20 }}>
-              <Card bordered={false} size="small" title={t('common.Invoice Information')}>
+              <Card size="small" title={t('common.Invoice Information')} variant="borderless">
                 <Row>
                   <Col span={16}>
                     <Form.Item label={t('guest.Company Name.title')} name="vat_company">

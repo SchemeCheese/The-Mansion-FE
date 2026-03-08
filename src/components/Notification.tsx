@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BellOutlined } from '@ant-design/icons';
-import { Badge, Dropdown, Menu, Tabs, Tooltip } from 'antd';
+import { Badge, Dropdown, Menu, Tabs, Tooltip } from 'ui/antd';
 import moment from 'moment';
 import { selectNotifications } from 'selectors';
 import _ from 'underscore';
@@ -10,6 +10,7 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import { getNotifcationsAction, getReservation, readNotifcationsAction } from 'actions';
+import reservationStyles from 'styles/reservation.module.css';
 
 function Notification() {
   const dispatch = useDispatch();
@@ -62,11 +63,11 @@ function Notification() {
   };
 
   return (
-    <Badge className="notification-badge" color="green" count={unReadTotal}>
+    <Badge className={reservationStyles.notificationBadge} color="green" count={unReadTotal}>
       <Dropdown
         overlay={
           <Tabs
-            className="notification-tabs"
+            className={reservationStyles.notificationTabs}
             defaultActiveKey="1"
             style={{
               padding: 4,
@@ -91,8 +92,8 @@ function Notification() {
                 {notifications.data.map((item: any) => (
                   <Menu.Item key={item.id} style={{ background: item.is_read ? '' : '#e4f6f3' }}>
                     <p
-                      aria-hidden="true"
                       dangerouslySetInnerHTML={{ __html: generateNotificationContent(item) }}
+                      aria-hidden="true"
                       onClick={() => readBookingNotification(item)}
                       style={{ marginBottom: '0.5rem' }}
                     />

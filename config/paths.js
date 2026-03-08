@@ -16,6 +16,7 @@ const publicUrlOrPath = getPublicUrlOrPath(
 const moduleFileExtensions = [
   'web.mjs',
   'mjs',
+  'cjs',
   'web.js',
   'js',
   'web.ts',

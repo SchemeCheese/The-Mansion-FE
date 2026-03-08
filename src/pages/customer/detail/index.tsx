@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Col, Row, Space } from 'antd';
+import { Col, Row, Space } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import CustomerDetailAbout from 'pages/customer/detail/CustomerDetailAbout';
 import CustomerDetailFeedback from 'pages/customer/detail/CustomerDetailFeedback';
@@ -25,6 +25,7 @@ import styled from 'styled-components';
 import { useAppSelector } from 'modules/hooks';
 
 import { getCustomerDetailAction } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
@@ -202,7 +203,7 @@ function CustomerDetail() {
   return (
     <>
       <Row
-        className="custom-bg-header"
+        className={layoutStyles.customBgHeader}
         style={{ paddingRight: 20, paddingLeft: 20, paddingBottom: 35 }}
       >
         <Col span={8}>
@@ -291,7 +292,7 @@ function CustomerDetail() {
         </Col>
       </Row>
       <Row
-        className="custom-bg-header"
+        className={layoutStyles.customBgHeader}
         justify="space-between"
         style={{ paddingRight: 20, paddingLeft: 20 }}
       >

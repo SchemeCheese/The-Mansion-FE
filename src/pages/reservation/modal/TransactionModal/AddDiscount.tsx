@@ -10,7 +10,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Form, Input, Modal, Row, Select } from 'antd';
+import { Form, Input, Modal, Row, Select } from 'ui/antd';
 import { selectGetReservationDetail } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
@@ -74,14 +74,14 @@ function AddDiscount({ setIsModalOpen, visible }: Props) {
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4 } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       okText={t('common.Save')}
       onCancel={() => setIsModalOpen(false)}
       onOk={handleAddDiscount}
+      open={visible}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('common.Add Discount')}</b>}
-      visible={visible}
       width={352}
     >
       <Form

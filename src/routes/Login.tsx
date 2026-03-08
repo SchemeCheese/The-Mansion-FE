@@ -1,9 +1,7 @@
-import 'antd/dist/antd.min.css';
-
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Checkbox, Form, Input } from 'antd';
+import { Checkbox, Form, Input } from 'ui/antd';
 
 import { colors } from 'modules/theme';
 

@@ -9,7 +9,7 @@ Main functions : Room Audit Charge Modal
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Col, Form, Input, Modal, Row, Table } from 'antd';
+import { Col, Form, Input, Modal, Row, Table } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import { selectGetReservationDetail } from 'selectors';
 import _ from 'underscore';
@@ -118,14 +118,14 @@ function RoomAuditCharge({ reservationDetailId, reservationId, setIsModalOpen, v
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4 } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       okText={t('common.Save')}
       onCancel={() => setIsModalOpen(false)}
       onOk={handleAddRoomCharges}
+      open={visible}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('auditRoomCharge.Add Pre Audit Room Charge')}</b>}
-      visible={visible}
       width={1000}
     >
       <Form>

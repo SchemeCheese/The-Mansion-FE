@@ -1,4 +1,5 @@
 import './i18n';
+import 'antd/dist/reset.css';
 
 import React from 'react';
 import { createRoot } from 'react-dom/client';
@@ -15,6 +16,8 @@ import ErrorHandler from 'components/ErrorHandler';
 import Loader from 'components/Loader';
 import Reload from 'components/Reload';
 import GlobalStyles from 'containers/GlobalStyles';
+import { appColor, colors } from 'modules/theme';
+import { AntdApp, ConfigProvider } from 'ui/antd';
 
 import reportWebVitals from './reportWebVitals';
 import Root from './Root';
@@ -26,19 +29,36 @@ const HelmetProviderCompat: any = HelmetProvider;
 window.store = store;
 
 if (process.env.NODE_ENV === 'development') {
-  const ignoredResizeObserverMessages = [
-    'ResizeObserver loop completed with undelivered notifications.',
-    'ResizeObserver loop limit exceeded',
-  ];
+  const shouldIgnoreResizeObserverError = (message?: string | null) => {
+    if (!message) {
+      return false;
+    }
 
-  const shouldIgnoreResizeObserverError = (message?: string | null) =>
-    !!message && ignoredResizeObserverMessages.some(item => message.includes(item));
+    return message.toLowerCase().includes('resizeobserver loop');
+  };
 
-  window.addEventListener('error', event => {
-    if (shouldIgnoreResizeObserverError(event.message)) {
+  const suppressResizeObserverError = (event: ErrorEvent) => {
+    const message = event.message || event.error?.message;
+
+    if (shouldIgnoreResizeObserverError(message)) {
+      event.preventDefault();
       event.stopImmediatePropagation();
     }
-  });
+  };
+
+  // React refresh overlay may capture this in the capture phase.
+  window.addEventListener('error', suppressResizeObserverError, true);
+
+  // Some browsers/frameworks still route this via window.onerror.
+  window.onerror = (message, source, lineno, colno, error) => {
+    const normalized = (typeof message === 'string' ? message : '') || error?.message || '';
+
+    if (shouldIgnoreResizeObserverError(normalized)) {
+      return true;
+    }
+
+    return false;
+  };
 
   window.addEventListener('unhandledrejection', event => {
     const reason = event.reason as { message?: string } | string | undefined;
@@ -57,16 +77,32 @@ if (rootElement) {
 
   root.render(
     <Provider store={store}>
-      <PersistGate loading={<Loader block size={100} />} persistor={persistor}>
-        <ErrorBoundary FallbackComponent={ErrorHandler}>
-          <HelmetProviderCompat>
-            <BrowserRouter>
-              <Root />
-            </BrowserRouter>
-          </HelmetProviderCompat>
-        </ErrorBoundary>
-        <GlobalStyles />
-      </PersistGate>
+      <ConfigProvider
+        theme={{
+          token: {
+            colorPrimary: colors.pattron,
+            colorInfo: appColor,
+          },
+        }}
+      >
+        <AntdApp>
+          <PersistGate loading={<Loader block size={100} />} persistor={persistor}>
+            <ErrorBoundary FallbackComponent={ErrorHandler}>
+              <HelmetProviderCompat>
+                <BrowserRouter
+                  future={{
+                    v7_relativeSplatPath: true,
+                    v7_startTransition: true,
+                  }}
+                >
+                  <Root />
+                </BrowserRouter>
+              </HelmetProviderCompat>
+            </ErrorBoundary>
+            <GlobalStyles />
+          </PersistGate>
+        </AntdApp>
+      </ConfigProvider>
     </Provider>,
   );
 }

@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Front Desk
 Developer Name : MinhNV
@@ -17,13 +18,12 @@ import {
   DatePicker,
   Form,
   Input,
-  message,
   Modal,
   Row,
   Select,
   Table,
   TimePicker,
-} from 'antd';
+} from 'ui/antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
@@ -35,6 +35,7 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import { createReservation, searchRoom } from 'actions';
+import reservationStyles from 'styles/reservation.module.css';
 
 import { RootState } from 'types';
 
@@ -251,7 +252,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
       hoursTime = Math.ceil(moment.duration(checkoutTime.diff(checkinTime)).asHours());
 
       if (hoursTime <= 0) {
-        message.warn(t('message.The checkin time or checkout time is invalid'));
+        notify.warn(t('message.The checkin time or checkout time is invalid'));
 
         return;
       }
@@ -275,7 +276,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
 
   useEffect(() => {
     if (createReservationChanged('status', 'SUCCESS')) {
-      message.success(t('message.Create reservation successfully!'));
+      notify.success(t('message.Create reservation successfully!'));
 
       navigate(`/reservation/${createReservationData.reservation_created.id}`);
     }
@@ -371,7 +372,7 @@ function WalkinCheckinModal({ isModalVisible, room, setIsModalVisible }: Props) 
       bodyStyle={{
         backgroundColor: '#F0F2F5',
       }}
-      className="new-guest-modal"
+      className={reservationStyles.newGuestModal}
       okText="Save"
       onCancel={handleCancel}
       onOk={handleOk}

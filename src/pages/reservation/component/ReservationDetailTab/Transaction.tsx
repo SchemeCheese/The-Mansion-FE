@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -6,12 +7,10 @@ Updated Date : 04/06/2023
 Main functions : Transaction Tab
 ************************************ */
 
-import 'styles/transaction.css';
-
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Alert, Card, Col, Input, message, Modal, Radio, RadioChangeEvent, Row, Space } from 'antd';
+import { Alert, Card, Col, Input, Modal, Radio, RadioChangeEvent, Row, Space } from 'ui/antd';
 import { formatNumber, headerWithAuthorization } from 'helpers';
 import moment from 'moment';
 import Disk from 'pages/reservation/detail/Disk';
@@ -42,6 +41,7 @@ import { deleteItemAction, getReservationDetail } from 'actions';
 
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
+import detailStyles from 'pages/reservation/detail/reservation-detail.module.css';
 
 import CheckoutModal from './CheckoutModal';
 
@@ -306,7 +306,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
 
   useEffect(() => {
     if (changeDiskChanged('status', 'SUCCESS')) {
-      message.success(t('message.Change disk successfully!'));
+      notify.success(t('message.Change disk successfully!'));
 
       resetSelectedSelect();
 
@@ -321,7 +321,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
 
   useEffect(() => {
     if (changeRoomChanged('status', 'SUCCESS')) {
-      message.success(t('message.Transfer room successfully!'));
+      notify.success(t('message.Transfer room successfully!'));
 
       resetSelectedSelect();
 
@@ -336,7 +336,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
 
   useEffect(() => {
     if (createPaymentChanged('status', 'SUCCESS')) {
-      message.success(t('message.Paid successfully!'));
+      notify.success(t('message.Paid successfully!'));
 
       resetSelectedSelect();
 
@@ -386,13 +386,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
 
   return (
     <Row
-      style={{
-        paddingTop: noPadding ? 10 : 16,
-        background: noPadding ? '' : '#F0F2F5',
-        paddingBottom: noPadding ? 10 : 25,
-        paddingRight: noPadding ? 6 : 15,
-        paddingLeft: noPadding ? 6 : 15,
-      }}
+      className={`${detailStyles.transactionPane} ${noPadding ? detailStyles.transactionPaneCompact : ''}`}
     >
       {type === 'checkout_today' && (
         <CheckoutModal
@@ -408,8 +402,8 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
         okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
         onCancel={() => setIsSelectDownloadInvoiceModalOpen(false)}
         onOk={handleInvoiceDownloadPdf}
+        open={isSelectDownloadInvoiceModalOpen}
         title={t('common.Download File')}
-        visible={isSelectDownloadInvoiceModalOpen}
       >
         <Row>
           <Col span={12}>
@@ -431,8 +425,8 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
         okText={t('common.Delete')}
         onCancel={handleDeleteItemCancel}
         onOk={handleDeleteItemOk}
+        open={isDeleteItemModalOpen}
         title={t('common.The reason for deletion')}
-        visible={isDeleteItemModalOpen}
       >
         <div style={{ marginTop: -15, paddingBottom: 10 }}>
           Reason <span style={{ color: 'red' }}>*</span>
@@ -446,7 +440,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
       <Col span={16} style={{ paddingRight: 16 }}>
         <Card
           activeTabKey={activeTabKey}
-          className="transaction-tabs"
+          className={detailStyles.transactionTabs}
           onTabChange={key => {
             setActiveTabKey(key);
           }}
@@ -728,22 +722,19 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
         </Card>
       </Col>
       <Col span={8}>
-        <div
-          className="site-card-border-less-wrapper transaction-checkout"
-          // style={{ height: '90%' }}
-        >
+        <div className={detailStyles.transactionCheckout}>
           <Card
-            bordered={false}
             style={{ border: '1px solid #1D39C4', height: '100%' }}
             title="Checkout"
+            variant="borderless"
           >
             <div style={{ flexGrow: 1, background: '#F7F9FA', marginTop: 1, paddingBottom: 25 }}>
               <Space direction="vertical" size="small" style={{ display: 'flex', paddingTop: 20 }}>
-                <div className="checkout-card-grid">
+                <div className={detailStyles.checkoutCardGrid}>
                   <span style={gridStyleLeft}>{t('common.Sub total')}</span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.sub_total)}</span>
                 </div>
-                <div className="checkout-card-grid">
+                <div className={detailStyles.checkoutCardGrid}>
                   <span style={gridStyleLeft}>
                     {t('common.Deposit')}{' '}
                     {reservationDetailInfo.data.status !== 'checkout' &&
@@ -776,7 +767,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                 {reservationDetailInfo.data.tax_info.map((taxInfo: any, index: number) => {
                   return (
                     amountInfo?.total_tax[index] > 0 && (
-                      <div className="checkout-card-grid">
+                      <div className={detailStyles.checkoutCardGrid}>
                         <span style={gridStyleLeft}>{taxInfo.name}</span>
                         <span style={gridStyleRight}>
                           {formatNumber(amountInfo?.total_tax[index])}
@@ -785,15 +776,15 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                     )
                   );
                 })}
-                <div className="checkout-card-grid">
+                <div className={detailStyles.checkoutCardGrid}>
                   <span style={gridStyleLeft}>{t('common.Grand Total')}</span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.grand_total)}</span>
                 </div>
-                <div className="checkout-card-grid">
+                <div className={detailStyles.checkoutCardGrid}>
                   <span style={gridStyleLeft}>{t('common.Paid')}</span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.paid)}</span>
                 </div>
-                <div className="checkout-card-grid">
+                <div className={detailStyles.checkoutCardGrid}>
                   <span style={gridStyleLeft}>
                     {t('common.Discount')}{' '}
                     {reservationDetailInfo.data.status !== 'checkout' &&
@@ -822,7 +813,7 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                   </span>
                   <span style={gridStyleRight}>{formatNumber(amountInfo?.discount)}</span>
                 </div>
-                <div className="checkout-card-grid">
+                <div className={detailStyles.checkoutCardGrid}>
                   <span style={gridStyleLeft}>
                     {t('common.Exchange currency')}{' '}
                     {reservationDetailInfo.data.status !== 'checkout' &&
@@ -845,11 +836,11 @@ function Transaction({ noPadding, reservationDetailId, reservationId, type }: Pr
                   <span style={gridStyleRight}>USD</span>
                 </div>
 
-                <div className="checkout-card-grid">
+                <div className={detailStyles.checkoutCardGrid}>
                   <span style={gridStyleLeft}>{t('common.Exchange rate')}</span>
                   <span style={gridStyleRight}>23.000</span>
                 </div>
-                <div className="checkout-card-grid">
+                <div className={detailStyles.checkoutCardGrid}>
                   <span style={gridStyleLeft}>{t('common.Amount')}</span>
                   <span style={gridStyleRight}>
                     {formatNumber(parseInt(amountInfo?.grand_total, 10) / 23000)}

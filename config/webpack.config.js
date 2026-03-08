@@ -298,7 +298,7 @@ module.exports = webpackEnv => {
         shouldUseSourceMap && {
           enforce: 'pre',
           exclude: /@babel(?:\/|\\{1,2})runtime/,
-          test: /\.(js|mjs|jsx|ts|tsx|css)$/,
+          test: /\.(js|mjs|cjs|jsx|ts|tsx|css)$/,
           use: 'source-map-loader',
         },
         {
@@ -314,7 +314,7 @@ module.exports = webpackEnv => {
               },
             },
             {
-              test: /\.(js|mjs|jsx|ts|tsx)$/,
+              test: /\.(js|mjs|cjs|jsx|ts|tsx)$/,
               loader: require.resolve('babel-loader'),
               options: {
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
@@ -459,7 +459,7 @@ module.exports = webpackEnv => {
               // its runtime that would otherwise be processed through "file" loader.
               // Also exclude `html` and `json` extensions so they get processed
               // by webpacks internal loaders.
-              exclude: [/\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+              exclude: [/\.(js|mjs|cjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               options: {
                 // Avoid MD4 hashing from loader-utils on modern Node/OpenSSL.
                 name: 'static/[sha256:hash:hex:20].[git-hash].[ext]',

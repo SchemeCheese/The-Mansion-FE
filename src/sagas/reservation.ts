@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -49,43 +49,40 @@ import {
   updateRateSuccess,
   updateReservationSuccess,
 } from 'actions';
+import { notify } from 'ui/notification';
 
-export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchReservation>) {
+export function* getDownloadDocxReservationDetailSaga({
+  payload,
+}: ReturnType<typeof downloadDocxReservationDetail>) {
   try {
-    let data = [];
-    let total = 0;
-    let currentPage = 0;
-    let unreadMessage = 0;
-
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
-    const payloadWithBranch = {
-      ...payload,
+    const payloadBranch = {
       operator_code,
       branch_code,
       facility_code,
     };
 
-    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
-    ({
-      current_page: currentPage,
-      data,
-      total,
-      unread_msg: unreadMessage,
-    } = yield call(request, `${apiEndPoint(ReservationEndpoint.SEARCH)}?${query}`, {
+    const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_DOCX)}/${
+      payload.payload.reservation_info_id
+    }/reservation-detail/${payload.payload.language}/download-docx?${query}`;
+
+    fetch(urlApi, {
       method: 'GET',
       headers: headerWithAuthorization(),
-    }));
+    }).then(response => {
+      response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
 
-    yield put(
-      searchReservationFinish({
-        data,
-        total,
-        current_page: currentPage,
-        unread_msg: unreadMessage,
-      }),
-    );
+        a.href = url;
+        a.download = payload.payload.file_name;
+        a.click();
+      });
+    });
+    yield put(downloadDocxReservationDetailSuccess());
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
       console.log('Error', error);
@@ -94,552 +91,7 @@ export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchR
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* postCreateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
-  try {
-    let success = '';
-    let reservationCreated = null;
-
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    ({ reservation_info: reservationCreated, success } = yield call(
-      request,
-      apiEndPoint(ReservationEndpoint.CREATE),
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          online_reservation: true,
-          branch_code,
-          operator_code,
-          facility_code,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(
-        createReservationSuccess({
-          reservation_info: reservationCreated,
-        }),
-      );
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* patchUpdateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    ({ success } = yield call(
-      request,
-      apiEndPoint(`${ReservationEndpoint.UPDATE}/${payload.payload.reservation_id}/update`),
-      {
-        method: 'PATCH',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          online_reservation: true,
-          branch_code,
-          operator_code,
-          facility_code,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(updateReservationSuccess());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* getReservationDetailSaga({ payload }: ReturnType<typeof getReservationDetail>) {
-  try {
-    let data = [];
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    const query = new URLSearchParams(Object(payloadBranch)).toString();
-
-    ({ data } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${
-        payload.reservation_id
-      }/reservation-detail/${payload.reservation_detail_id}/show?${query}`,
-      {
-        method: 'GET',
-        headers: headerWithAuthorization(),
-      },
-    ));
-
-    yield put(getReservationDetailFinish({ data }));
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* getReservationSaga({ payload }: ReturnType<typeof getReservation>) {
-  try {
-    let data = [];
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-    const query = new URLSearchParams(Object(payloadBranch)).toString();
-
-    ({ data } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.DETAIL)}/${payload.reservation_id}?${query}`,
-      {
-        method: 'GET',
-        headers: headerWithAuthorization(),
-      },
-    ));
-
-    yield put(getReservationFinish({ data }));
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      window.location.href = '/';
-    }
-  }
-}
-
-export function* getReservationFolioSaga({ payload }: ReturnType<typeof getReservationByFolio>) {
-  try {
-    let data = [];
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-    const query = new URLSearchParams(Object(payloadBranch)).toString();
-
-    ({ data } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.GET_BY_FOLIO)}/${payload.folio}?${query}`,
-      {
-        method: 'GET',
-        headers: headerWithAuthorization(),
-      },
-    ));
-
-    yield put(getReservationByFolioFinish({ data }));
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.warning('No reservation found!');
-    }
-  }
-}
-
-export function* getReservationNumberSaga({ payload }: ReturnType<typeof getReservationNumber>) {
-  try {
-    let success = '';
-    let reservationNumber = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    ({ reservation_number: reservationNumber, success } = yield call(
-      request,
-      apiEndPoint(ReservationEndpoint.GET_RESERVATION_NUMBER),
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-        body: { ...payload, ...payloadBranch },
-      },
-    ));
-
-    if (success) {
-      yield put(getReservationNumberFinish({ reservation_number: reservationNumber }));
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* putUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    ({ success } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
-        payload.payload.reservation_id
-      }/reservation-detail/${payload.payload.reservation_detail_id}/update-rate`,
-      {
-        method: 'PUT',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          ...payloadBranch,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(updateRateSuccess());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    ({ success } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
-        payload.payload.reservation_id
-      }/reservation-detail/${payload.payload.reservation_detail_id}/book-room`,
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          online_reservation: true,
-          branch_code,
-          operator_code,
-          facility_code,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(bookRoomSuccess());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error(
-        'Booking room is not success! The room you selected may have already been booked. Please F5 to get the latest data',
-      );
-    }
-  }
-}
-
-export function* postAddReservationDetailSaga({
-  payload,
-}: ReturnType<typeof addReservationDetail>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    ({ success } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.ADD_RESERVATION_DETAIL)}/${
-        payload.payload.reservation_id
-      }/add-reservation-detail`,
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          ...payloadBranch,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(addReservationDetailSuccess());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* postCancelReservationDetailSaga({
-  payload,
-}: ReturnType<typeof cancelReservationDetail>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    ({ success } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.CANCEL_RESERVATION_DETAIL)}/${
-        payload.payload.reservation_id
-      }/cancel-reservation-detail`,
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          ...payloadBranch,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(cancelReservationDetailSuccess());
-      yield put(updateGeneralInfoSuccess());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* putUpdateGeneralInfoSaga({ payload }: ReturnType<typeof updateGeneralInfo>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    ({ success } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.UPDATE_GENERAL_INFO)}/${
-        payload.payload.reservation_id
-      }/reservation-detail/${payload.payload.reservation_detail_id}/update`,
-      {
-        method: 'PUT',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          ...payloadBranch,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(updateGeneralInfoSuccess());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* putUpdateNoteReservationDetailSaga({
-  payload,
-}: ReturnType<typeof updateNoteReservationDetail>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    ({ success } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.UPDATE)}/${
-        payload.payload.reservation_info_id
-      }/reservation-detail/${payload.payload.reservation_detail_id}/update-note`,
-      {
-        method: 'PUT',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          ...payloadBranch,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(updateNoteReservationDetailSuccess());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
-    }
-  }
-}
-
-export function* getResendEmailReservationSaga({
-  payload,
-}: ReturnType<typeof resendEmailReservationAction>) {
-  try {
-    let success = '';
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    ({ success } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.RESEND_EMAIL)}/${
-        payload.reservation_id
-      }/resend-confirmation-email/${payload.language}`,
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payloadBranch,
-          is_hide_room_rate: payload.is_hide_room_rate,
-        },
-      },
-    ));
-
-    if (success) {
-      yield put(resendEmailReservationSuccessAction());
-    } else {
-      message.error('Something went wrong!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Something went wrong!');
+      notify.error('Cannot download file!');
     }
   }
 }
@@ -683,141 +135,7 @@ export function* getDownloadPDFReservationDetailSaga({
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Cannot download file!');
-    }
-  }
-}
-
-export function* getDownloadDocxReservationDetailSaga({
-  payload,
-}: ReturnType<typeof downloadDocxReservationDetail>) {
-  try {
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    const query = new URLSearchParams(Object(payloadBranch)).toString();
-
-    const urlApi = `${apiEndPoint(ReservationEndpoint.DOWNLOAD_DOCX)}/${
-      payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.language}/download-docx?${query}`;
-
-    fetch(urlApi, {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    }).then(response => {
-      response.blob().then(blob => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-
-        a.href = url;
-        a.download = payload.payload.file_name;
-        a.click();
-      });
-    });
-    yield put(downloadDocxReservationDetailSuccess());
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Cannot download file!');
-    }
-  }
-}
-
-export function* getPrintRegistrationCardPDFReservationDetailSaga({
-  payload,
-}: ReturnType<typeof printRegistrationCardPDFReservationDetail>) {
-  try {
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    const query = new URLSearchParams(Object(payloadBranch)).toString();
-
-    const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_REGISTRATION_CARD_PDF)}/${
-      payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/${
-      payload.payload.language
-    }/download-registration-card?${query}`;
-
-    fetch(urlApi, {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    }).then(response => {
-      response.blob().then(blob => {
-        const url = window.URL.createObjectURL(blob);
-
-        window.open(url)?.print();
-      });
-    });
-
-    yield put(printRegistrationCardPDFReservationDetailSuccess());
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Cannot download file!');
-    }
-  }
-}
-
-export function* getPrintDepositPDFReservationDetailSaga({
-  payload,
-}: ReturnType<typeof printDepositPDFReservationDetail>) {
-  try {
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadBranch = {
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-    const query = new URLSearchParams(Object(payloadBranch)).toString();
-
-    const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_DEPOSIT_PDF)}/${
-      payload.payload.reservation_info_id
-    }/reservation-detail/${payload.payload.reservation_detail_id}/${
-      payload.payload.language
-    }/download-deposit-pdf?payment_method=${payload.payload.payment_method}&${query}`;
-
-    fetch(urlApi, {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    }).then(response => {
-      response.blob().then(blob => {
-        const url = window.URL.createObjectURL(blob);
-
-        window.open(url)?.print();
-      });
-    });
-
-    yield put(printDepositPDFReservationDetailSuccess());
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Cannot download file!');
+      notify.error('Cannot download file!');
     }
   }
 }
@@ -864,42 +182,42 @@ export function* getPrintCheckinConfirmPDFReservationDetailSaga({
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Cannot download file!');
+      notify.error('Cannot download file!');
     }
   }
 }
 
-export function* paymentVNPaySaga({ payload }: ReturnType<typeof paymentVNPayReservationDetail>) {
+export function* getPrintDepositPDFReservationDetailSaga({
+  payload,
+}: ReturnType<typeof printDepositPDFReservationDetail>) {
   try {
-    let url = '';
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
     const payloadBranch = {
       operator_code,
       branch_code,
       facility_code,
     };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
 
-    ({ url } = yield call(
-      request,
-      `${apiEndPoint(ReservationEndpoint.VN_PAYMENT)}/${
-        payload.payload.reservation_id
-      }/reservation-detail/${payload.payload.reservation_detail_id}/payments/vnpay`,
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-        body: {
-          ...payload.payload,
-          ...payloadBranch,
-        },
-      },
-    ));
+    const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_DEPOSIT_PDF)}/${
+      payload.payload.reservation_info_id
+    }/reservation-detail/${payload.payload.reservation_detail_id}/${
+      payload.payload.language
+    }/download-deposit-pdf?payment_method=${payload.payload.payment_method}&${query}`;
 
-    window.location.href = url;
-    // const win = window.open(url, '_blank');
+    fetch(urlApi, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }).then(response => {
+      response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob);
 
-    // if (win != null) {
-    //   win.focus();
-    // }
+        window.open(url)?.print();
+      });
+    });
+
+    yield put(printDepositPDFReservationDetailSuccess());
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
       console.log('Error', error);
@@ -908,7 +226,331 @@ export function* paymentVNPaySaga({ payload }: ReturnType<typeof paymentVNPayRes
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not create payment!');
+      notify.error('Cannot download file!');
+    }
+  }
+}
+
+export function* getPrintRegistrationCardPDFReservationDetailSaga({
+  payload,
+}: ReturnType<typeof printRegistrationCardPDFReservationDetail>) {
+  try {
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
+    const urlApi = `${apiEndPoint(ReservationEndpoint.PRINT_REGISTRATION_CARD_PDF)}/${
+      payload.payload.reservation_info_id
+    }/reservation-detail/${payload.payload.reservation_detail_id}/${
+      payload.payload.language
+    }/download-registration-card?${query}`;
+
+    fetch(urlApi, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }).then(response => {
+      response.blob().then(blob => {
+        const url = window.URL.createObjectURL(blob);
+
+        window.open(url)?.print();
+      });
+    });
+
+    yield put(printRegistrationCardPDFReservationDetailSuccess());
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Cannot download file!');
+    }
+  }
+}
+
+export function* getResendEmailReservationSaga({
+  payload,
+}: ReturnType<typeof resendEmailReservationAction>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.RESEND_EMAIL)}/${
+        payload.reservation_id
+      }/resend-confirmation-email/${payload.language}`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payloadBranch,
+          is_hide_room_rate: payload.is_hide_room_rate,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(resendEmailReservationSuccessAction());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* getReservationDetailSaga({ payload }: ReturnType<typeof getReservationDetail>) {
+  try {
+    let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
+    ({ data } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.GET_DETAIL)}/${
+        payload.reservation_id
+      }/reservation-detail/${payload.reservation_detail_id}/show?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    yield put(getReservationDetailFinish({ data }));
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* getReservationFolioSaga({ payload }: ReturnType<typeof getReservationByFolio>) {
+  try {
+    let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
+    ({ data } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.GET_BY_FOLIO)}/${payload.folio}?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    yield put(getReservationByFolioFinish({ data }));
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.warning('No reservation found!');
+    }
+  }
+}
+
+export function* getReservationNumberSaga({ payload }: ReturnType<typeof getReservationNumber>) {
+  try {
+    let success = '';
+    let reservationNumber = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    ({ reservation_number: reservationNumber, success } = yield call(
+      request,
+      apiEndPoint(ReservationEndpoint.GET_RESERVATION_NUMBER),
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: { ...payload, ...payloadBranch },
+      },
+    ));
+
+    if (success) {
+      yield put(getReservationNumberFinish({ reservation_number: reservationNumber }));
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* getReservationSaga({ payload }: ReturnType<typeof getReservation>) {
+  try {
+    let data = [];
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+    const query = new URLSearchParams(Object(payloadBranch)).toString();
+
+    ({ data } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.DETAIL)}/${payload.reservation_id}?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    yield put(getReservationFinish({ data }));
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      window.location.href = '/';
+    }
+  }
+}
+
+export function* getSearchReservationSaga({ payload }: ReturnType<typeof searchReservation>) {
+  try {
+    let data = [];
+    let total = 0;
+    let currentPage = 0;
+    let unreadMessage = 0;
+
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadWithBranch = {
+      ...payload,
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
+
+    ({
+      current_page: currentPage,
+      data,
+      total,
+      unread_msg: unreadMessage,
+    } = yield call(request, `${apiEndPoint(ReservationEndpoint.SEARCH)}?${query}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    }));
+
+    yield put(
+      searchReservationFinish({
+        data,
+        total,
+        current_page: currentPage,
+        unread_msg: unreadMessage,
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* patchUpdateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    ({ success } = yield call(
+      request,
+      apiEndPoint(`${ReservationEndpoint.UPDATE}/${payload.payload.reservation_id}/update`),
+      {
+        method: 'PATCH',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          online_reservation: true,
+          branch_code,
+          operator_code,
+          facility_code,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(updateReservationSuccess());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
     }
   }
 }
@@ -953,7 +595,366 @@ export function* paymentMomoPaySaga({
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not create payment!');
+      notify.error('Can not create payment!');
+    }
+  }
+}
+
+export function* paymentVNPaySaga({ payload }: ReturnType<typeof paymentVNPayReservationDetail>) {
+  try {
+    let url = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    ({ url } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.VN_PAYMENT)}/${
+        payload.payload.reservation_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/payments/vnpay`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          ...payloadBranch,
+        },
+      },
+    ));
+
+    window.location.href = url;
+    // const win = window.open(url, '_blank');
+
+    // if (win != null) {
+    //   win.focus();
+    // }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Can not create payment!');
+    }
+  }
+}
+
+export function* postAddReservationDetailSaga({
+  payload,
+}: ReturnType<typeof addReservationDetail>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.ADD_RESERVATION_DETAIL)}/${
+        payload.payload.reservation_id
+      }/add-reservation-detail`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          ...payloadBranch,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(addReservationDetailSuccess());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* postBookRoomSaga({ payload }: ReturnType<typeof bookRoom>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
+        payload.payload.reservation_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/book-room`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          online_reservation: true,
+          branch_code,
+          operator_code,
+          facility_code,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(bookRoomSuccess());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error(
+        'Booking room is not success! The room you selected may have already been booked. Please F5 to get the latest data',
+      );
+    }
+  }
+}
+
+export function* postCancelReservationDetailSaga({
+  payload,
+}: ReturnType<typeof cancelReservationDetail>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.CANCEL_RESERVATION_DETAIL)}/${
+        payload.payload.reservation_id
+      }/cancel-reservation-detail`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          ...payloadBranch,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(cancelReservationDetailSuccess());
+      yield put(updateGeneralInfoSuccess());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* postCreateReservationSaga({ payload }: ReturnType<typeof createReservation>) {
+  try {
+    let success = '';
+    let reservationCreated = null;
+
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    ({ reservation_info: reservationCreated, success } = yield call(
+      request,
+      apiEndPoint(ReservationEndpoint.CREATE),
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          online_reservation: true,
+          branch_code,
+          operator_code,
+          facility_code,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(
+        createReservationSuccess({
+          reservation_info: reservationCreated,
+        }),
+      );
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* putUpdateGeneralInfoSaga({ payload }: ReturnType<typeof updateGeneralInfo>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.UPDATE_GENERAL_INFO)}/${
+        payload.payload.reservation_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/update`,
+      {
+        method: 'PUT',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          ...payloadBranch,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(updateGeneralInfoSuccess());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* putUpdateNoteReservationDetailSaga({
+  payload,
+}: ReturnType<typeof updateNoteReservationDetail>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.UPDATE)}/${
+        payload.payload.reservation_info_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/update-note`,
+      {
+        method: 'PUT',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          ...payloadBranch,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(updateNoteReservationDetailSuccess());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  }
+}
+
+export function* putUpdateRateSaga({ payload }: ReturnType<typeof updateRate>) {
+  try {
+    let success = '';
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadBranch = {
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    ({ success } = yield call(
+      request,
+      `${apiEndPoint(ReservationEndpoint.UPDATE_RATE)}/${
+        payload.payload.reservation_id
+      }/reservation-detail/${payload.payload.reservation_detail_id}/update-rate`,
+      {
+        method: 'PUT',
+        headers: headerWithAuthorization(),
+        body: {
+          ...payload.payload,
+          ...payloadBranch,
+        },
+      },
+    ));
+
+    if (success) {
+      yield put(updateRateSuccess());
+    } else {
+      notify.error('Something went wrong!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Something went wrong!');
     }
   }
 }

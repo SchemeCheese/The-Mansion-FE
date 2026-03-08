@@ -56,6 +56,7 @@ const HouseKeeping = lazy(() => import('pages/house-keeping'));
 const NightAudit = lazy(() => import('pages/night_audit'));
 const StatusPayment = lazy(() => import('pages/payment/StatusPayment'));
 const Report = lazy(() => import('pages/report/list'));
+const Settings = lazy(() => import('pages/settings'));
 const Create = lazy(() => import('pages/reservation/create'));
 const ReservationDetail = lazy(() => import('pages/reservation/detail'));
 const Reservation = lazy(() => import('pages/reservation/list'));
@@ -67,6 +68,7 @@ function Root() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const user = useAppSelector(selectUser);
+  const canViewSettings = user.permission?.settings?.view ?? user.permission?.setup?.view ?? false;
   const branchInfoSelected: BranchInfoState = useAppSelector(selectBranchInfo);
   const { changed } = useTreeChanges(user);
   const navigate = useNavigate();
@@ -252,6 +254,25 @@ function Root() {
         style={{ paddingLeft: 8, cursor: 'pointer' }}
       >
         {t('report.Reports')}
+      </span>
+    </>
+  );
+
+  const settingsBreadCrum = (
+    <>
+      <span className="ant-breadcrumb-link" style={{ paddingRight: 8, color: 'rgba(0,0,0,.45)' }}>
+        {branchInfoSelected.abbreviation}
+      </span>
+      /
+      <span
+        aria-hidden="true"
+        className="ant-breadcrumb-link"
+        onClick={() => {
+          navigate('/settings');
+        }}
+        style={{ paddingLeft: 8, cursor: 'pointer' }}
+      >
+        {t('common.Settings')}
       </span>
     </>
   );
@@ -700,6 +721,20 @@ function Root() {
                     </PrivateRoute>
                   }
                   path="/report"
+                />
+              )}
+              {canViewSettings === true && (
+                <Route
+                  element={
+                    <PrivateRoute
+                      breadCrumb={settingsBreadCrum}
+                      isAuthenticated={isAuthenticated}
+                      to="/"
+                    >
+                      <Settings />
+                    </PrivateRoute>
+                  }
+                  path="/settings"
                 />
               )}
               {/* Public booking confirmation route - no auth required */}

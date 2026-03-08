@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Night Audit
 Developer Name : MinhNV
@@ -11,7 +12,7 @@ import 'styles/night_audit.css';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Alert, Card, Col, message, Pagination, Row, Table } from 'antd';
+import { Alert, Card, Col, Pagination, Row, Table } from 'ui/antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -35,6 +36,8 @@ import {
   handleNightAuditAction,
   handleNoShowReservationDetailAction,
 } from 'actions';
+import layoutStyles from 'components/layout.module.css';
+import reservationStyles from 'styles/reservation.module.css';
 
 import PattonButton from 'components/PattonButton';
 
@@ -387,7 +390,7 @@ function NightAudit() {
 
   useEffect(() => {
     if (selectNightAuditDateChanged('is_finish', true)) {
-      message.success(t('message.Handle night audit successfully!'));
+      notify.success(t('message.Handle night audit successfully!'));
 
       dispatch(
         getFacilityAction({ facility_id: window.localStorage.getItem('facility_id') ?? '1' }),
@@ -435,7 +438,7 @@ function NightAudit() {
 
   useEffect(() => {
     if (selectNoShowChanged('is_finish', true)) {
-      message.success(t('message.Handle no show successfully!'));
+      notify.success(t('message.Handle no show successfully!'));
 
       dispatch(
         getReservationRoomCheckinTodayAction({
@@ -533,9 +536,9 @@ function NightAudit() {
   return (
     <>
       {/* <Button onClick={showModal}>Payment Method</Button> */}
-      <Row className="custom-bg-header">
+      <Row className={layoutStyles.customBgHeader}>
         <Col span={12}>
-          <p className="title">
+          <p className={layoutStyles.title}>
             {' '}
             <span style={{ fontSize: 13, color: 'rgba(0, 0, 0, 0.45)' }}>
               {t('nightAudit.Current Date')}:{' '}
@@ -571,10 +574,10 @@ function NightAudit() {
           </Col>
         </Row>
       )}
-      <Row className="content">
+      <Row className={layoutStyles.content}>
         <Card bordered={false} style={{ width: '100%' }} title={t('nightAudit.I. Checkin Today')}>
           <Table
-            className="rooming-table"
+            className={reservationStyles.roomingTable}
             columns={checkinTodayColumns}
             dataSource={checkinTodayDataTable}
             onRow={(record: any) => {
@@ -591,7 +594,7 @@ function NightAudit() {
             pagination={false}
             rowClassName={(record: any) => {
               if (record.room_no === '-') {
-                return 'new-reservation';
+                return reservationStyles.newReservation;
               }
 
               return '';
@@ -616,7 +619,7 @@ function NightAudit() {
           title={t('nightAudit.II. Checkout Today')}
         >
           <Table
-            className="rooming-table"
+            className={reservationStyles.roomingTable}
             columns={checkoutTodayColumns}
             dataSource={checkoutTodayDataTable}
             onRow={(record: any) => {
@@ -651,7 +654,7 @@ function NightAudit() {
           title={t('nightAudit.III. Inhouse')}
         >
           <Table
-            className="rooming-table"
+            className={reservationStyles.roomingTable}
             columns={inhouseTodayColumns}
             dataSource={inhouseDataTable}
             onRow={(record: any) => {

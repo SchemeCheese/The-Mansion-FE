@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { iotApiEndPoint } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
@@ -7,6 +7,7 @@ import { IOTEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import { fetchFuelInfoAction, fetchFuelInfoFinishAction, logOut } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* fetchFuelSaga({ payload }: ReturnType<typeof fetchFuelInfoAction>) {
   try {
@@ -43,7 +44,7 @@ export function* fetchFuelSaga({ payload }: ReturnType<typeof fetchFuelInfoActio
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not fetch channel info!');
+      notify.error('Can not fetch channel info!');
     }
   }
 }

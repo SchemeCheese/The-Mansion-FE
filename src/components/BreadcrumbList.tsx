@@ -1,5 +1,6 @@
 import React from 'react';
-import { Breadcrumb } from 'antd';
+import { Breadcrumb } from 'ui/antd';
+import layoutStyles from 'components/layout.module.css';
 
 interface Props {
   data?: string[];
@@ -7,7 +8,7 @@ interface Props {
 
 function BreadcrumbList({ data }: Props) {
   return (
-    <Breadcrumb className="breadcrumb">
+    <Breadcrumb className={layoutStyles.breadcrumb}>
       {data?.map((item: string, index: number) => {
         return <Breadcrumb.Item key={index}>{item}</Breadcrumb.Item>;
       })}

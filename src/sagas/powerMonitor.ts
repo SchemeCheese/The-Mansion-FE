@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { iotApiEndPoint } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
@@ -12,6 +12,7 @@ import {
   getDeviceManagerFinishAction,
   logOut,
 } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* getDeviceManagerSaga(): any {
   try {
@@ -34,7 +35,7 @@ export function* getDeviceManagerSaga(): any {
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not fetch channel info!');
+      notify.error('Can not fetch channel info!');
     }
   }
 }
@@ -67,7 +68,7 @@ export function* getDownloadCSVBranchManagerSaga({
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Cannot download file!');
+      notify.error('Cannot download file!');
     }
   }
 }

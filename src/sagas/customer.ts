@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -12,6 +12,50 @@ import {
   searchCustomer,
   searchCustomerFinish,
 } from 'actions';
+import { notify } from 'ui/notification';
+
+export function* getCustomerDetailSaga({ payload }: ReturnType<typeof getCustomerDetailAction>) {
+  try {
+    let data = {};
+    let success = false;
+
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    const payloadWithBranch = {
+      ...payload,
+      operator_code,
+      branch_code,
+      facility_code,
+    };
+
+    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
+
+    ({ data, success } = yield call(
+      request,
+      `${apiEndPoint(CustomerEndpoint.GET_DETAIL(payload.id))}?${query}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    ));
+
+    if (success) {
+      yield put(
+        getCustomerDetailSuccessAction({
+          data,
+        }),
+      );
+    } else {
+      notify.error('Error get customer!');
+    }
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error get customer', error);
+    }
+
+    window.location.href = '/';
+  }
+}
 
 export function* getSearchCustomer({ payload }: ReturnType<typeof searchCustomer>) {
   try {
@@ -48,49 +92,6 @@ export function* getSearchCustomer({ payload }: ReturnType<typeof searchCustomer
     if (process.env.NODE_ENV === 'development') {
       console.log('Error get customer', error);
     }
-  }
-}
-
-export function* getCustomerDetailSaga({ payload }: ReturnType<typeof getCustomerDetailAction>) {
-  try {
-    let data = {};
-    let success = false;
-
-    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
-
-    const payloadWithBranch = {
-      ...payload,
-      operator_code,
-      branch_code,
-      facility_code,
-    };
-
-    const query = new URLSearchParams(Object(payloadWithBranch)).toString();
-
-    ({ data, success } = yield call(
-      request,
-      `${apiEndPoint(CustomerEndpoint.GET_DETAIL(payload.id))}?${query}`,
-      {
-        method: 'GET',
-        headers: headerWithAuthorization(),
-      },
-    ));
-
-    if (success) {
-      yield put(
-        getCustomerDetailSuccessAction({
-          data,
-        }),
-      );
-    } else {
-      message.error('Error get customer!');
-    }
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error get customer', error);
-    }
-
-    window.location.href = '/';
   }
 }
 

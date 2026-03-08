@@ -8,7 +8,7 @@ Main functions : Reservation List Filter
 
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Checkbox, Col, Input, Row, Select } from 'antd';
+import { Checkbox, Col, Input, Row, Select } from 'ui/antd';
 import { t } from 'i18next';
 import { selectRoomTypes } from 'selectors';
 import { keys } from 'underscore';

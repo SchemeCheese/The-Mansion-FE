@@ -9,10 +9,11 @@ Main functions : Customer Detail Page
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Col, Pagination, Row, Table, Tabs } from 'antd';
+import { Col, Pagination, Row, Table, Tabs } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import { getAPI } from 'helpers/apiService';
 import { selectGetCustomerDetail } from 'selectors';
+import customerStyles from 'styles/customer.module.css';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -185,7 +186,7 @@ function CustomerDetailReservation({ statusMapping }: Props) {
             {incomingReservations && (
               <>
                 <Table
-                  className="reservation-list"
+                  className={customerStyles.reservationList}
                   columns={reservationsColumns}
                   dataSource={incomingReservations.data}
                   onRow={(record: any) => {
@@ -216,7 +217,7 @@ function CustomerDetailReservation({ statusMapping }: Props) {
           {pastReservations && (
             <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
               <Table
-                className="reservation-list"
+                className={customerStyles.reservationList}
                 columns={pastReservationColumns}
                 dataSource={pastReservations.data}
                 onRow={(record: any) => {

@@ -10,6 +10,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import Table from 'antd/lib/table';
 import { formatNumber } from 'helpers';
+import reservationStyles from 'styles/reservation.module.css';
 
 interface Props {
   items: any;
@@ -92,13 +93,13 @@ function DiskMonthlyInvoice({ items, rowSelectionDisk }: Props) {
 
   return (
     <Table
-      className="disk-table"
+      className={reservationStyles.diskTable}
       columns={columns}
       dataSource={data}
       pagination={false}
       rowClassName={(record: any) => {
         if (record.description === 'Deposit' || record.description === 'Discount') {
-          return 'disabled-click';
+          return reservationStyles.disabledClick;
         }
 
         return '';

@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Button, Col, Form, Modal, Row } from 'antd';
+import { Button, Col, Form, Modal, Row } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import { postAPI } from 'helpers/apiService';
 import { selectGetReservationDetail } from 'selectors';
@@ -158,7 +158,6 @@ function SelectedPayMethodModal({
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4, width: '111px' } }}
       okButtonProps={{
         style: { backgroundColor: '#1D39C4', borderRadius: 4, width: '111px' },
@@ -167,8 +166,9 @@ function SelectedPayMethodModal({
       okText={t('common.Pay')}
       onCancel={() => setIsModalOpenSelectedPaymentMethod(false)}
       onOk={handleSubmitPayment}
+      open={visible}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('payDetail.Select Payment Method')}</b>}
-      visible={visible}
       width={850}
     >
       <Form

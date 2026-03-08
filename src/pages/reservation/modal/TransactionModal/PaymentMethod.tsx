@@ -8,7 +8,7 @@ Main functions : Payment Method Modal
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Form, Input, Row, Select } from 'antd';
+import { Col, Form, Input, Row, Select } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import { selectGetReservationDetail } from 'selectors';
 import _ from 'underscore';

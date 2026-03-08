@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { Col, Row, Tooltip } from 'antd';
+import { Col, Row, Tooltip } from 'ui/antd';
 import numeral from 'numeral';
 import Field from 'pages/dashboard/component/chart/Field';
 import { selectElectricYesterdayState, selectWaterYesterdayState } from 'selectors';

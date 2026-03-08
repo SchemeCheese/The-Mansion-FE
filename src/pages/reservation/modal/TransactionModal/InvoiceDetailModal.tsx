@@ -8,23 +8,23 @@ Main functions : Show detail monthly invoice
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Form, Modal, Row } from 'antd';
+import { Col, Form, Modal, Row } from 'ui/antd';
 import { getAPI } from 'helpers/apiService';
 import { selectGetReservation, selectGetReservationDetail } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
-
-interface Props {
-  invoiceId?: string | number;
-  isModalOpen: boolean;
-  setModalVisible: (value: boolean) => void;
-}
 
 interface DataDetail {
   description: string;
   file_url: string;
   month: string;
   total: string;
+}
+
+interface Props {
+  invoiceId?: string | number;
+  isModalOpen: boolean;
+  setModalVisible: (value: boolean) => void;
 }
 
 function InvoiceDetailModal({ invoiceId, isModalOpen, setModalVisible }: Props) {
@@ -45,11 +45,11 @@ function InvoiceDetailModal({ invoiceId, isModalOpen, setModalVisible }: Props) 
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4 } }}
       onCancel={() => setModalVisible(false)}
+      open={isModalOpen}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('monthlyInvoice.Invoice Detail')}</b>}
-      visible={isModalOpen}
       width={850}
     >
       <Form layout="vertical">

@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -15,6 +15,7 @@ import {
   updatePaymentDetail,
   updatePaymentDetailSuccess,
 } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* postCreatePaymentSaga({ payload }: ReturnType<typeof createPaymentAction>) {
   try {
@@ -35,7 +36,7 @@ export function* postCreatePaymentSaga({ payload }: ReturnType<typeof createPaym
     if (success) {
       yield put(createPaymentSuccess());
     } else {
-      message.error('Can not create payment!');
+      notify.error('Can not create payment!');
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
@@ -45,7 +46,7 @@ export function* postCreatePaymentSaga({ payload }: ReturnType<typeof createPaym
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not create payment!');
+      notify.error('Can not create payment!');
     }
   }
 }
@@ -82,7 +83,7 @@ export function* postCreateQRCodeVNPaySaga({
         }),
       );
     } else {
-      message.error('Can not create QRCode VNPay!');
+      notify.error('Can not create QRCode VNPay!');
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
@@ -92,7 +93,7 @@ export function* postCreateQRCodeVNPaySaga({
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not create payment!');
+      notify.error('Can not create payment!');
     }
   }
 }
@@ -125,7 +126,7 @@ export function* putUpdatePaymentDetailSaga({ payload }: ReturnType<typeof updat
     if (success) {
       yield put(updatePaymentDetailSuccess());
     } else {
-      message.error('Update Payment Detail Failed!');
+      notify.error('Update Payment Detail Failed!');
     }
   } catch (error: any) {
     if (process.env.NODE_ENV === 'development') {
@@ -135,7 +136,7 @@ export function* putUpdatePaymentDetailSaga({ payload }: ReturnType<typeof updat
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Update Payment Detail Failed!');
+      notify.error('Update Payment Detail Failed!');
     }
   }
 }

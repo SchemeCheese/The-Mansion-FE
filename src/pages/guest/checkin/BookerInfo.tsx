@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
-import { Col, Form, Row, Steps } from 'antd';
+import { Col, Form, Row, Steps } from 'ui/antd';
 import GuestFooter from 'pages/guest/GuestFooter';
 import {
   selectBranchInfo,
@@ -32,6 +32,7 @@ import {
   getReservationNumber,
   searchRoom,
 } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import MButton from 'components/MButton';
 import MInput from 'components/MInput';
@@ -215,7 +216,7 @@ function GuestCheckinBookerInfo() {
       }}
     >
       <Row
-        className="content guest-payment-content guest-checkout-content"
+        className={`${layoutStyles.content} guest-payment-content guest-checkout-content`}
         style={{
           background: 'white',
           width: '90%',

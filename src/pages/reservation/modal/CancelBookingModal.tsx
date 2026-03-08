@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -9,7 +10,7 @@ Main functions : Cancel Booking Modal
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Checkbox, Col, Form, Input, message, Modal, Row, Select } from 'antd';
+import { Checkbox, Col, Form, Input, Modal, Row, Select } from 'ui/antd';
 import TextArea from 'antd/lib/input/TextArea';
 import _ from 'lodash';
 import { selectCancelReservationDetail, selectRoomOptions, selectUser } from 'selectors';
@@ -82,7 +83,7 @@ function CancelBookingModal({
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success(t('message.Cancel reservation successfully!'));
+      notify.success(t('message.Cancel reservation successfully!'));
 
       setSelectedRowKeys([]);
 

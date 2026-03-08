@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -13,6 +13,7 @@ import {
   readNotifcationsAction,
   readNotifcationsActionFinish,
 } from 'actions/notification';
+import { notify } from 'ui/notification';
 
 export function* getNotificationsSaga() {
   try {
@@ -41,7 +42,7 @@ export function* getNotificationsSaga() {
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not get notification info!');
+      notify.error('Can not get notification info!');
     }
   }
 }
@@ -76,7 +77,7 @@ export function* postReadNotificationsSaga({ payload }: ReturnType<typeof readNo
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not read notification!');
+      notify.error('Can not read notification!');
     }
   }
 }

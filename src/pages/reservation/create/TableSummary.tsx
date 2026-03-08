@@ -8,8 +8,8 @@ Main functions : Table Summary Componnent
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import PlusOutlined from '@ant-design/icons/lib/icons/PlusOutlined';
-import { Table } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Table } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import _ from 'underscore';
 

@@ -1,11 +1,11 @@
-import 'antd/dist/antd.min.css';
-import './layout.css';
+import 'styles/customer.module.css';
+import 'styles/reservation.module.css';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, Dropdown, Form, Layout, Menu, Modal, Select, Tooltip } from 'antd';
+import { Avatar, Dropdown, Form, Layout, Menu, Modal, Select, Tooltip } from 'ui/antd';
 import moment from 'moment';
 import {
   selectBranchInfo,
@@ -31,6 +31,7 @@ import Footer from 'components/Footer';
 
 import { BranchInfoState } from 'types';
 
+import layoutStyles from './layout.module.css';
 import MButton from './MButton';
 import Notification from './Notification';
 
@@ -45,7 +46,6 @@ interface Props {
 
 function MLayout(props: Props) {
   const { breadCrumb, children } = props;
-  const [collapsed, setCollapsed] = useState(false);
   const currentFacilityId = useRef('');
   const currentFacility = useAppSelector(selectGetFacility);
   const [isLoadData, setIsLoadData] = useState(false);
@@ -59,6 +59,7 @@ function MLayout(props: Props) {
   };
 
   const user = useAppSelector(selectUser);
+  const canViewSettings = user.permission?.settings?.view ?? user.permission?.setup?.view ?? false;
   const branchInfoSelected: BranchInfoState = useAppSelector(selectBranchInfo);
 
   const menu = (
@@ -249,6 +250,10 @@ function MLayout(props: Props) {
       return 'report';
     }
 
+    if (urlPath.includes('settings')) {
+      return 'settings';
+    }
+
     if (urlPath.includes('power-monitoring')) {
       return 'power-monitoring';
     }
@@ -274,8 +279,8 @@ function MLayout(props: Props) {
 
   return (
     <Layout>
-      <Sider breakpoint="lg" collapsedWidth="0" collapsible>
-        <div className="logo">
+      <Sider>
+        <div className={layoutStyles.logo}>
           <svg
             fill="none"
             height="24"
@@ -288,23 +293,21 @@ function MLayout(props: Props) {
               fill="white"
             />
           </svg>
-          {!collapsed && (
-            <span
-              className={isFirstLoad.current ? 'company-name' : ''}
-              style={{
-                color: 'white',
-                fontSize: 20,
-                position: 'relative',
-                top: -4,
-                paddingLeft: 10,
-                fontFamily: 'Avenir,"Helvetica Neue",Arial,Helvetica,sans-serif',
-                fontWeight: 600,
-              }}
-            >
-              {' '}
-              SClound PMS{' '}
-            </span>
-          )}
+          <span
+            className={isFirstLoad.current ? layoutStyles.companyName : ''}
+            style={{
+              color: 'white',
+              fontSize: 20,
+              position: 'relative',
+              top: -4,
+              paddingLeft: 10,
+              fontFamily: 'Avenir,"Helvetica Neue",Arial,Helvetica,sans-serif',
+              fontWeight: 600,
+            }}
+          >
+            {' '}
+            SClound PMS{' '}
+          </span>
         </div>
         <Menu
           defaultSelectedKeys={[defaultSelectedMenu()]}
@@ -581,6 +584,28 @@ function MLayout(props: Props) {
               },
               hidden: user.permission.report.view === false,
             },
+            {
+              key: 'settings',
+              icon: (
+                <span>
+                  <svg
+                    aria-hidden="true"
+                    fill="currentColor"
+                    focusable="false"
+                    height="1em"
+                    viewBox="0 0 1024 1024"
+                    width="1em"
+                  >
+                    <path d="M512 320a192 192 0 100 384 192 192 0 000-384zm0 320a128 128 0 110-256 128 128 0 010 256zm387.2-128c0-27.2-2.4-53.6-8-79.2l87.2-68.8-83.2-144-104 42.4a397.18 397.18 0 00-136-79.2L640 64H384l-15.2 119.2a397.18 397.18 0 00-136 79.2l-104-42.4-83.2 144 87.2 68.8A395.77 395.77 0 00124.8 512c0 27.2 2.4 53.6 8 79.2l-87.2 68.8 83.2 144 104-42.4a397.18 397.18 0 00136 79.2L384 960h256l15.2-119.2a397.18 397.18 0 00136-79.2l104 42.4 83.2-144-87.2-68.8c5.6-25.6 8-52 8-79.2zM834.4 704l-90.4-36.8-13.6 12a332.64 332.64 0 01-145.6 84.8l-17.6 4-13.6 108.8H470.4L456.8 768l-17.6-4a332.64 332.64 0 01-145.6-84.8l-13.6-12L189.6 704l-41.6-72 80.8-64-4-17.6a330.35 330.35 0 010-76.8l4-17.6-80.8-64 41.6-72 90.4 36.8 13.6-12a332.64 332.64 0 01145.6-84.8l17.6-4L470.4 128h83.2l13.6 108.8 17.6 4a332.64 332.64 0 01145.6 84.8l13.6 12 90.4-36.8 41.6 72-80.8 64 4 17.6a330.35 330.35 0 010 76.8l-4 17.6 80.8 64-41.6 72z" />
+                  </svg>
+                </span>
+              ),
+              label: t('common.Settings'),
+              onClick: () => {
+                navigate('/settings');
+              },
+              hidden: !canViewSettings,
+            },
           ].filter((item: any) => {
             return !item.hidden;
           })}
@@ -590,9 +615,9 @@ function MLayout(props: Props) {
           theme="dark"
         />
       </Sider>
-      <Layout className="site-layout">
+      <Layout className={layoutStyles.siteLayout}>
         <Header
-          className="site-layout-background header"
+          className={`${layoutStyles.siteLayoutBackground} ${layoutStyles.header}`}
           style={{
             height: 50,
             lineHeight: '48px',
@@ -602,7 +627,7 @@ function MLayout(props: Props) {
           <span style={{ fontSize: 13, paddingLeft: 60 }}>{breadCrumb}</span>
 
           <MButton
-            className="header-branch-name"
+            className={layoutStyles.headerBranchName}
             disabled={!user.can_switch_branch}
             onClick={showModal}
             style={{ marginLeft: '31%', fontSize: 12, display: isMobile() ? 'block' : 'unset' }}
@@ -610,13 +635,13 @@ function MLayout(props: Props) {
             {branchInfoSelected.name}
           </MButton>
           <Modal
-            bodyStyle={{ backgroundColor: '#F0F2F5' }}
             okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
             okText={t('common.Save')}
             onCancel={handleCancel}
             onOk={handleSubmitChangeFacility}
+            open={isModalOpen}
+            styles={{ body: { backgroundColor: '#F0F2F5' } }}
             title={<b>Switch Branchs</b>}
-            visible={isModalOpen}
           >
             <p style={{ paddingBottom: 0 }}>Please select your branch & outlet</p>
             <Form
@@ -666,7 +691,7 @@ function MLayout(props: Props) {
             </Form>
           </Modal>
 
-          <div className="header-info" style={{ float: 'right', paddingRight: '15px' }}>
+          <div className={layoutStyles.headerInfo} style={{ float: 'right', paddingRight: '15px' }}>
             <Tooltip placement="top" title="System Date">
               <span
                 style={{
@@ -687,7 +712,7 @@ function MLayout(props: Props) {
 
             <Dropdown overlay={menu} placement="bottom" trigger={['click']}>
               <Avatar
-                className="header-logo"
+                className={layoutStyles.headerLogo}
                 style={{ marginBottom: 0, marginRight: 10, background: '#7265e6' }}
               >
                 <svg
@@ -705,7 +730,7 @@ function MLayout(props: Props) {
               </Avatar>
             </Dropdown>
             <span
-              className="header-user-name"
+              className={layoutStyles.headerUserName}
               style={{ fontSize: 14, color: 'rgba(0, 0, 0, 0.65)' }}
             >
               {user.username}
@@ -713,14 +738,14 @@ function MLayout(props: Props) {
           </div>
         </Header>
         <Content
-          className="site-layout-background"
+          className={layoutStyles.siteLayoutBackground}
           style={{
             minHeight: 280,
             // paddingTop: 14,
           }}
         >
           <div
-            className="custom-bg-header"
+            className={layoutStyles.customBgHeader}
             style={{
               paddingTop: 14,
             }}

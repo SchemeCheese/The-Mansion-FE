@@ -11,13 +11,14 @@ import 'styles/guest_checkin_select_room.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Col, Row, Steps } from 'antd';
+import { Col, Row, Steps } from 'ui/antd';
 import { getAPI } from 'helpers/apiService';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectBranchInfo } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
+import layoutStyles from 'components/layout.module.css';
 import MButton from 'components/MButton';
 import PattonButton from 'components/PattonButton';
 
@@ -96,7 +97,7 @@ function GuestCheckinSelectRoom() {
   return (
     <>
       <Row
-        className="content guest-payment-content guest-checkout-content"
+        className={`${layoutStyles.content} guest-payment-content guest-checkout-content`}
         style={{
           background: 'white',
           width: '90%',

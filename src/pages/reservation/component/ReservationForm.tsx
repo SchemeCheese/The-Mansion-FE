@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -16,7 +17,6 @@ import {
   Checkbox,
   Col,
   Form,
-  message,
   Modal,
   Radio,
   RadioChangeEvent,
@@ -25,7 +25,7 @@ import {
   Space,
   Table,
   Tabs,
-} from 'antd';
+} from 'ui/antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
@@ -37,7 +37,7 @@ import useTreeChanges from 'tree-changes-hook';
 import { isEmpty, reduce } from 'underscore';
 
 import { useAppSelector } from 'modules/hooks';
-import { colors } from 'modules/theme';
+import detailStyles from 'pages/reservation/detail/reservation-detail.module.css';
 
 import {
   getAgentInfos,
@@ -45,6 +45,8 @@ import {
   getReservationDetail,
   printRegistrationCardPDFReservationDetail,
 } from 'actions';
+import layoutStyles from 'components/layout.module.css';
+import reservationStyles from 'styles/reservation.module.css';
 
 import MButton from 'components/MButton';
 import MInput from 'components/MInput';
@@ -54,8 +56,6 @@ import { RootState } from 'types';
 
 import FinancialDetail from './ReservationDetailTab/FinancialDetail';
 import Transaction from './ReservationDetailTab/Transaction';
-
-const { TabPane } = Tabs;
 
 const { Option } = Select;
 
@@ -70,8 +70,8 @@ interface Props {
   reservationNumber: number;
   resetSelectedRows?: () => void;
   roomCondition: any;
-  roomTotalForm: any;
   roomingListColumns: any;
+  roomTotalForm: any;
   rowSelection: any;
   selectedRowKeys: any;
   selectedRows?: any;
@@ -221,7 +221,7 @@ function ReservationForm({
 
   useEffect(() => {
     if (addItemChanged('status', 'SUCCESS')) {
-      message.success(t('message.Add item successfully!'));
+      notify.success(t('message.Add item successfully!'));
 
       dispatch(
         getReservation({
@@ -244,7 +244,7 @@ function ReservationForm({
 
   useEffect(() => {
     if (deleteItemChanged('status', 'SUCCESS')) {
-      message.success(t('message.Delete item successfully!'));
+      notify.success(t('message.Delete item successfully!'));
 
       dispatch(
         getReservation({
@@ -291,8 +291,8 @@ function ReservationForm({
         okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
         onCancel={() => setIsPrintRegistrationCardOpen(false)}
         onOk={handlePrintRegistrationCard}
+        open={isModalPrintRegistrationCardOpen}
         title={t('common.Select language')}
-        visible={isModalPrintRegistrationCardOpen}
       >
         <Radio.Group onChange={onChangeLanguage} value={language}>
           <Space direction="vertical">
@@ -336,518 +336,577 @@ function ReservationForm({
         }}
       >
         {type !== 'inhouse_today' ? (
-          <Row className="content" style={{ padding: 0 }}>
+          <Row className={`${layoutStyles.content} ${detailStyles.formShell}`}>
             <Col span={24}>
-              <Tabs className="tabs-cart" defaultActiveKey="1">
-                <TabPane key="1" style={{ padding: 20 }} tab={t('common.General Infos')}>
-                  <Card
-                    bordered={false}
-                    size="small"
-                    style={{
-                      pointerEvents: user.permission.reservation.edit ? 'inherit' : 'none',
-                    }}
-                    title="General Informations"
-                  >
-                    <Row>
-                      <Col span={8}>
-                        <Form.Item label={t('reservation.Folio ID')} name="reservation_number">
-                          <MInput disabled />
-                        </Form.Item>
-                        <Form.Item
-                          label={t('reservation.OTA Booking ID.title')}
-                          name="external_reservation_number"
+              <Tabs
+                className={`${layoutStyles.tabsCart} ${detailStyles.detailTabs}`}
+                defaultActiveKey="1"
+                items={[
+                  {
+                    key: '1',
+                    label: t('common.General Infos'),
+                    children: (
+                      <div className={detailStyles.tabPane}>
+                        <Card
+                          className={detailStyles.sectionCard}
+                          size="small"
+                          style={{
+                            pointerEvents: user.permission.reservation.edit ? 'inherit' : 'none',
+                          }}
+                          title="General Informations"
+                          variant="borderless"
                         >
-                          <MInput
-                            disabled={Boolean(reservationInfo?.external_reservation_number)}
-                            placeholder={t('reservation.OTA Booking ID.placeholder')}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item
-                          label={t('reservation.Market.title')}
-                          name="market_segment_id"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Please select a market',
-                            },
-                          ]}
+                          <Row>
+                            <Col span={8}>
+                              <Form.Item
+                                label={t('reservation.Folio ID')}
+                                name="reservation_number"
+                              >
+                                <MInput disabled />
+                              </Form.Item>
+                              <Form.Item
+                                label={t('reservation.OTA Booking ID.title')}
+                                name="external_reservation_number"
+                              >
+                                <MInput
+                                  disabled={Boolean(reservationInfo?.external_reservation_number)}
+                                  placeholder={t('reservation.OTA Booking ID.placeholder')}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                              <Form.Item
+                                label={t('reservation.Market.title')}
+                                name="market_segment_id"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: 'Please select a market',
+                                  },
+                                ]}
+                              >
+                                <Select
+                                  allowClear
+                                  onChange={value =>
+                                    setRoomCondition({
+                                      ...roomCondition,
+                                      source_type: value,
+                                    })
+                                  }
+                                  placeholder={t('reservation.Market.placeholder')}
+                                >
+                                  <Option value="1">OTA</Option>
+                                  <Option value="2">CDT</Option>
+                                  <Option value="4">CORPORATE</Option>
+                                  <Option value="5">WHOLESALE</Option>
+                                  <Option value="7">FIT</Option>
+                                </Select>
+                              </Form.Item>
+                              <Form.Item
+                                label={t('reservation.Source.title')}
+                                name="agent_info_id"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: 'Please select a source',
+                                  },
+                                ]}
+                              >
+                                <Select
+                                  allowClear
+                                  onChange={value =>
+                                    setRoomCondition({
+                                      ...roomCondition,
+                                      source_id: value,
+                                    })
+                                  }
+                                  placeholder={t('reservation.Source.placeholder')}
+                                >
+                                  {sourceOptions}
+                                </Select>
+                              </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                              <Form.Item label={t('reservation.Notes.title')} name="note">
+                                <TextArea
+                                  placeholder={t('reservation.Notes.placeholder')}
+                                  rows={5}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                        </Card>
+                        <Card
+                          className={detailStyles.sectionCard}
+                          size="small"
+                          title={t('common.Booker Informations')}
+                          variant="borderless"
                         >
-                          <Select
-                            allowClear
-                            onChange={value =>
-                              setRoomCondition({
-                                ...roomCondition,
-                                source_type: value,
-                              })
+                          <Row
+                            className={
+                              user.permission.reservation.edit
+                                ? detailStyles.editableSection
+                                : detailStyles.readOnlySection
                             }
-                            placeholder={t('reservation.Market.placeholder')}
                           >
-                            <Option value="1">OTA</Option>
-                            <Option value="2">CDT</Option>
-                            <Option value="4">CORPORATE</Option>
-                            <Option value="5">WHOLESALE</Option>
-                            <Option value="7">FIT</Option>
-                          </Select>
-                        </Form.Item>
-                        <Form.Item
-                          label={t('reservation.Source.title')}
-                          name="agent_info_id"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Please select a source',
-                            },
-                          ]}
-                        >
-                          <Select
-                            allowClear
-                            onChange={value =>
-                              setRoomCondition({
-                                ...roomCondition,
-                                source_id: value,
-                              })
-                            }
-                            placeholder={t('reservation.Source.placeholder')}
-                          >
-                            {sourceOptions}
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item label={t('reservation.Notes.title')} name="note">
-                          <TextArea placeholder={t('reservation.Notes.placeholder')} rows={5} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Card>
-                  <Card
-                    bordered={false}
-                    size="small"
-                    style={{ marginTop: 20 }}
-                    title={t('common.Booker Informations')}
-                  >
-                    <Row
-                      style={{
-                        pointerEvents: user.permission.reservation.edit ? 'inherit' : 'none',
-                      }}
-                    >
-                      <Col span={8}>
-                        <Form.Item
-                          label={t('reservation.Type.title')}
-                          name="booker_type"
-                          rules={[
-                            {
-                              required: true,
-                              message: 'Please input type',
-                            },
-                          ]}
-                        >
-                          <Select allowClear placeholder={t('reservation.Type.placeholder')}>
-                            <Option value="1">Personal</Option>
-                            <Option value="2">Group</Option>
-                          </Select>
-                        </Form.Item>
-                        <Form.Item
-                          label={t('reservation.First Name.title')}
-                          name="booker_firstname"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input booker's first name",
-                            },
-                          ]}
-                        >
-                          <MInput placeholder="Steve" />
-                        </Form.Item>
-                        <Form.Item label={t('reservation.Last Name.title')} name="booker_lastname">
-                          <MInput placeholder="Nagaoka" />
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item
-                          label={t('reservation.Email.title')}
-                          name="booker_email"
-                          rules={[
-                            {
-                              type: 'email',
-                              message: 'The input is not valid E-mail!',
-                            },
-                          ]}
-                        >
-                          <MInput placeholder={t('reservation.Email.placeholder')} />
-                        </Form.Item>
-                        <Form.Item
-                          label={t('reservation.Mobile Phone.title')}
-                          name="booker_phone_number"
-                        >
-                          <MInput placeholder={t('reservation.Mobile Phone.placeholder')} />
-                        </Form.Item>
-                        <Form.Item
-                          label={t('reservation.Rank.title')}
-                          name="booker_rank"
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please input booker's rank",
-                            },
-                          ]}
-                        >
-                          <Select allowClear placeholder={t('reservation.Rank.placeholder')}>
-                            <Option value="1">VIP</Option>
-                            <Option value="2">Dominant Person</Option>
-                            <Option value="3">General Person</Option>
-                            <Option value="9">Undesirable Guest</Option>
-                          </Select>
-                        </Form.Item>
-                      </Col>
-                      <Col span={8}>
-                        <Form.Item
-                          label={t('reservation.Additional Email.title')}
-                          name="booker_email_2"
-                          rules={[
-                            {
-                              type: 'email',
-                              message: 'The input is not valid E-mail!',
-                            },
-                          ]}
-                        >
-                          <MInput placeholder={t('reservation.Additional Email.placeholder')} />
-                        </Form.Item>
-                        <Form.Item label={t('reservation.Notes.title')} name="booker_note">
-                          <TextArea placeholder={t('reservation.Notes.placeholder')} rows={5} />
-                        </Form.Item>
-                      </Col>
-                    </Row>
-                  </Card>
-                </TabPane>
-                <TabPane
-                  key="2"
-                  style={{ padding: 20, minHeight: '100%' }}
-                  tab={t('reservation.Rooming List')}
-                >
-                  {type !== 'inhouse_today' && type !== 'checkout_today' && (
-                    <>
-                      <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
-                        <Row>
-                          <Col span={24}>
-                            {user.permission.reservation.edit && (
-                              <>
-                                <PattonButton onClick={showModal} type="primary">
-                                  {' '}
-                                  <PlusOutlined style={{ marginLeft: 0, marginRight: 4 }} />{' '}
-                                  {t('common.New')}
-                                </PattonButton>
+                            <Col span={8}>
+                              <Form.Item
+                                label={t('reservation.Type.title')}
+                                name="booker_type"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: 'Please input type',
+                                  },
+                                ]}
+                              >
+                                <Select allowClear placeholder={t('reservation.Type.placeholder')}>
+                                  <Option value="1">Personal</Option>
+                                  <Option value="2">Group</Option>
+                                </Select>
+                              </Form.Item>
+                              <Form.Item
+                                label={t('reservation.First Name.title')}
+                                name="booker_firstname"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please input booker's first name",
+                                  },
+                                ]}
+                              >
+                                <MInput placeholder="Steve" />
+                              </Form.Item>
+                              <Form.Item
+                                label={t('reservation.Last Name.title')}
+                                name="booker_lastname"
+                              >
+                                <MInput placeholder="Nagaoka" />
+                              </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                              <Form.Item
+                                label={t('reservation.Email.title')}
+                                name="booker_email"
+                                rules={[
+                                  {
+                                    type: 'email',
+                                    message: 'The input is not valid E-mail!',
+                                  },
+                                ]}
+                              >
+                                <MInput placeholder={t('reservation.Email.placeholder')} />
+                              </Form.Item>
+                              <Form.Item
+                                label={t('reservation.Mobile Phone.title')}
+                                name="booker_phone_number"
+                              >
+                                <MInput placeholder={t('reservation.Mobile Phone.placeholder')} />
+                              </Form.Item>
+                              <Form.Item
+                                label={t('reservation.Rank.title')}
+                                name="booker_rank"
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please input booker's rank",
+                                  },
+                                ]}
+                              >
+                                <Select allowClear placeholder={t('reservation.Rank.placeholder')}>
+                                  <Option value="1">VIP</Option>
+                                  <Option value="2">Dominant Person</Option>
+                                  <Option value="3">General Person</Option>
+                                  <Option value="9">Undesirable Guest</Option>
+                                </Select>
+                              </Form.Item>
+                            </Col>
+                            <Col span={8}>
+                              <Form.Item
+                                label={t('reservation.Additional Email.title')}
+                                name="booker_email_2"
+                                rules={[
+                                  {
+                                    type: 'email',
+                                    message: 'The input is not valid E-mail!',
+                                  },
+                                ]}
+                              >
+                                <MInput
+                                  placeholder={t('reservation.Additional Email.placeholder')}
+                                />
+                              </Form.Item>
+                              <Form.Item label={t('reservation.Notes.title')} name="booker_note">
+                                <TextArea
+                                  placeholder={t('reservation.Notes.placeholder')}
+                                  rows={5}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                        </Card>
+                      </div>
+                    ),
+                  },
+                  {
+                    key: '2',
+                    label: t('reservation.Rooming List'),
+                    children: (
+                      <div className={detailStyles.tabPane}>
+                        {type !== 'inhouse_today' && type !== 'checkout_today' && (
+                          <>
+                            <Card
+                              className={detailStyles.sectionCard}
+                              size="small"
+                              variant="borderless"
+                            >
+                              <Row>
+                                <Col span={24}>
+                                  <div className={detailStyles.roomingToolbar}>
+                                    {user.permission.reservation.edit && (
+                                      <PattonButton onClick={showModal} type="primary">
+                                        {' '}
+                                        <PlusOutlined
+                                          style={{ marginLeft: 0, marginRight: 4 }}
+                                        />{' '}
+                                        {t('common.New')}
+                                      </PattonButton>
+                                    )}
 
-                                {isCreateForm ? (
-                                  <MButton
-                                    disabled={selectedRowKeys.length === 0}
-                                    onClick={confirm}
-                                    style={{ marginLeft: 15 }}
-                                  >
-                                    {t('common.Cancel Selected')}
-                                  </MButton>
-                                ) : (
-                                  <MButton
-                                    disabled={selectedRowKeys.length === 0}
-                                    onClick={() => {
-                                      setCancelCurrentItem(null);
-                                      setIsCancelBookingModalVisible(true);
+                                    {user.permission.reservation.edit &&
+                                      (isCreateForm ? (
+                                        <MButton
+                                          disabled={selectedRowKeys.length === 0}
+                                          onClick={confirm}
+                                        >
+                                          {t('common.Cancel Selected')}
+                                        </MButton>
+                                      ) : (
+                                        <MButton
+                                          disabled={selectedRowKeys.length === 0}
+                                          onClick={() => {
+                                            setCancelCurrentItem(null);
+                                            setIsCancelBookingModalVisible(true);
+                                          }}
+                                        >
+                                          {t('common.Cancel Selected')}
+                                        </MButton>
+                                      ))}
+                                    {!isCreateForm && (
+                                      <MButton
+                                        disabled={selectedRowKeys.length !== 1}
+                                        onClick={() => {
+                                          setIsPrintRegistrationCardOpen(true);
+                                        }}
+                                      >
+                                        {t('common.Print Registration Card')}
+                                      </MButton>
+                                    )}
+                                    {type === 'checkin_today' &&
+                                      user.permission.frontDeskCheckin.edit && (
+                                        <PattonButton
+                                          disabled={selectedRowKeys.length === 0 || !canCheckin}
+                                          onClick={showModalCheckin}
+                                          type="primary"
+                                        >
+                                          {t('common.Checkin')}
+                                        </PattonButton>
+                                      )}
+                                  </div>
+                                  {type === 'checkin_today' && !canCheckin && (
+                                    <Alert
+                                      banner
+                                      message={`Cannot checkin. ${cannotCheckinMessage()}`}
+                                      style={{ marginTop: 10 }}
+                                    />
+                                  )}
+                                </Col>
+                                <Col className={detailStyles.roomingTableWrap} span={24}>
+                                  <Table
+                                    className={reservationStyles.roomingTable}
+                                    columns={roomingListColumns}
+                                    dataSource={roomTotalForm}
+                                    onRow={(record: any) => {
+                                      if (record.status?.toLowerCase() !== 'canceled') {
+                                        return {
+                                          onClick: () => {
+                                            if (record.reservation_detail_id) {
+                                              dispatch(
+                                                getReservationDetail({
+                                                  reservation_id: reservationInfo.id,
+                                                  reservation_detail_id:
+                                                    record.reservation_detail_id,
+                                                }),
+                                              );
+                                            }
+                                          },
+                                        };
+                                      }
+
+                                      return {};
                                     }}
-                                    style={{ marginLeft: 15 }}
-                                  >
-                                    {t('common.Cancel Selected')}
-                                  </MButton>
-                                )}
-                              </>
-                            )}
-                            {!isCreateForm && (
-                              <MButton
-                                disabled={selectedRowKeys.length !== 1}
-                                onClick={() => {
-                                  setIsPrintRegistrationCardOpen(true);
-                                }}
-                                style={{ marginLeft: 15 }}
-                              >
-                                {t('common.Print Registration Card')}
-                              </MButton>
-                            )}
-                            {type === 'checkin_today' && user.permission.frontDeskCheckin.edit && (
-                              <PattonButton
-                                disabled={selectedRowKeys.length === 0 || !canCheckin}
-                                onClick={showModalCheckin}
-                                style={{ marginLeft: 15 }}
-                                type="primary"
-                              >
-                                {t('common.Checkin')}
-                              </PattonButton>
-                            )}
-                            {type === 'checkin_today' && !canCheckin && (
-                              <Alert
-                                banner
-                                message={`Cannot checkin. ${cannotCheckinMessage()}`}
-                                style={{ marginTop: 10 }}
+                                    pagination={false}
+                                    rowClassName={(record: any) => {
+                                      let nameClassRow = '';
+
+                                      if (record.status?.toLowerCase() === 'canceled') {
+                                        nameClassRow = reservationStyles.disabledClick;
+                                      }
+
+                                      if (
+                                        !isEmpty(reservationDetailInfo) &&
+                                        reservationDetailInfo.id === record.reservation_detail_id
+                                      ) {
+                                        nameClassRow += ' ant-table-row-selected';
+                                      }
+
+                                      return nameClassRow;
+                                    }}
+                                    rowSelection={rowSelection}
+                                    size="small"
+                                    summary={pageData => {
+                                      let nightTotal = 0;
+                                      let adlTotal = 0;
+                                      let childTotal = 0;
+                                      let babyTotal = 0;
+                                      let subTotal = 0;
+
+                                      pageData.forEach(
+                                        ({
+                                          actual_amount: actualAmount,
+                                          adl,
+                                          baby,
+                                          child,
+                                          nights,
+                                          status,
+                                        }) => {
+                                          if (status?.toLowerCase() !== 'canceled') {
+                                            if (baby !== '-') {
+                                              babyTotal += parseInt(baby, 10);
+                                            }
+
+                                            if (child !== '-') {
+                                              childTotal += parseInt(child, 10);
+                                            }
+
+                                            nightTotal += nights;
+                                            subTotal += actualAmount;
+                                            adlTotal += adl;
+                                          }
+                                        },
+                                      );
+
+                                      return (
+                                        <Table.Summary.Row
+                                          style={{
+                                            fontWeight: 'bold',
+                                            color: 'rgba(0, 0, 0, 0.65)',
+                                          }}
+                                        >
+                                          <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
+                                          <Table.Summary.Cell index={1} />
+                                          <Table.Summary.Cell index={2} />
+                                          <Table.Summary.Cell index={2} />
+                                          <Table.Summary.Cell index={2} />
+                                          <Table.Summary.Cell index={2} />
+                                          <Table.Summary.Cell index={2} />
+                                          <Table.Summary.Cell index={2}>
+                                            <div className={detailStyles.summaryCenter}>
+                                              {nightTotal}
+                                            </div>
+                                          </Table.Summary.Cell>
+                                          <Table.Summary.Cell index={2}>
+                                            <div className={detailStyles.summaryCenter}>
+                                              {adlTotal}
+                                            </div>
+                                          </Table.Summary.Cell>
+                                          <Table.Summary.Cell index={2}>
+                                            <div className={detailStyles.summaryCenter}>
+                                              {childTotal}
+                                            </div>
+                                          </Table.Summary.Cell>
+                                          <Table.Summary.Cell index={2}>
+                                            <div className={detailStyles.summaryCenter}>
+                                              {babyTotal}
+                                            </div>
+                                          </Table.Summary.Cell>
+                                          <Table.Summary.Cell index={2} />
+                                          <Table.Summary.Cell index={2}>
+                                            <div className={detailStyles.summaryRight}>
+                                              {formatNumber(subTotal)}
+                                            </div>
+                                          </Table.Summary.Cell>
+                                          <Table.Summary.Cell index={2}>
+                                            <div className={detailStyles.summaryRight}>
+                                              {reservationRedux.price
+                                                ? formatNumber(reservationRedux.price.deposit)
+                                                : 0}
+                                            </div>
+                                          </Table.Summary.Cell>
+                                        </Table.Summary.Row>
+                                      );
+                                    }}
+                                  />
+                                </Col>
+                              </Row>
+                            </Card>
+                            {!isEmpty(reservationDetailInfo) && !isCreateForm && (
+                              <ReservationDetailCard
+                                reservationDetail={reservationDetailInfo}
+                                reservationId={reservationId}
+                                resetSelectedRows={resetSelectedRows}
                               />
                             )}
-                          </Col>
-                          <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
-                            <Table
-                              className="rooming-table"
-                              columns={roomingListColumns}
-                              dataSource={roomTotalForm}
-                              onRow={(record: any) => {
-                                if (record.status?.toLowerCase() !== 'canceled') {
-                                  return {
-                                    onClick: () => {
-                                      if (record.reservation_detail_id) {
-                                        dispatch(
-                                          getReservationDetail({
-                                            reservation_id: reservationInfo.id,
-                                            reservation_detail_id: record.reservation_detail_id,
-                                          }),
-                                        );
-                                      }
-                                    },
-                                  };
-                                }
-
-                                return {};
-                              }}
-                              pagination={false}
-                              rowClassName={(record: any) => {
-                                let nameClassRow = '';
-
-                                if (record.status?.toLowerCase() === 'canceled') {
-                                  nameClassRow = 'disabled-click';
-                                }
-
-                                if (
-                                  !isEmpty(reservationDetailInfo) &&
-                                  reservationDetailInfo.id === record.reservation_detail_id
-                                ) {
-                                  nameClassRow += ' ant-table-row-selected';
-                                }
-
-                                return nameClassRow;
-                              }}
-                              rowSelection={rowSelection}
-                              size="small"
-                              summary={pageData => {
-                                let nightTotal = 0;
-                                let adlTotal = 0;
-                                let childTotal = 0;
-                                let babyTotal = 0;
-                                let subTotal = 0;
-
-                                pageData.forEach(
-                                  ({
-                                    actual_amount: actualAmount,
-                                    adl,
-                                    baby,
-                                    child,
-                                    nights,
-                                    status,
-                                  }) => {
-                                    if (status?.toLowerCase() !== 'canceled') {
-                                      if (baby !== '-') {
-                                        babyTotal += parseInt(baby, 10);
-                                      }
-
-                                      if (child !== '-') {
-                                        childTotal += parseInt(child, 10);
-                                      }
-
-                                      nightTotal += nights;
-                                      subTotal += actualAmount;
-                                      adlTotal += adl;
-                                    }
-                                  },
-                                );
-
-                                return (
-                                  <Table.Summary.Row
-                                    style={{ fontWeight: 'bold', color: 'rgba(0, 0, 0, 0.65)' }}
+                          </>
+                        )}
+                        {isCreateForm && (
+                          <Card
+                            className={detailStyles.sectionCard}
+                            size="small"
+                            title={t('common.Payment Informations')}
+                            variant="borderless"
+                          >
+                            <Row style={{ paddingTop: 10 }}>
+                              <Col span={8}>
+                                <p style={{ marginBottom: 25 }}>
+                                  <span>{t('reservation.Total Amount')}</span>
+                                  <span
+                                    style={{ float: 'right', paddingRight: '12.5%', fontSize: 16 }}
                                   >
-                                    <Table.Summary.Cell index={0}>Total</Table.Summary.Cell>
-                                    <Table.Summary.Cell index={1} />
-                                    <Table.Summary.Cell index={2} />
-                                    <Table.Summary.Cell index={2} />
-                                    <Table.Summary.Cell index={2} />
-                                    <Table.Summary.Cell index={2} />
-                                    <Table.Summary.Cell index={2} />
-                                    <Table.Summary.Cell index={2}>
-                                      <div style={{ textAlign: 'center' }}>{nightTotal}</div>
-                                    </Table.Summary.Cell>
-                                    <Table.Summary.Cell index={2}>
-                                      <div style={{ textAlign: 'center' }}>{adlTotal}</div>
-                                    </Table.Summary.Cell>
-                                    <Table.Summary.Cell index={2}>
-                                      <div style={{ textAlign: 'center' }}>{childTotal}</div>
-                                    </Table.Summary.Cell>
-                                    <Table.Summary.Cell index={2}>
-                                      <div style={{ textAlign: 'center' }}>{babyTotal}</div>
-                                    </Table.Summary.Cell>
-                                    <Table.Summary.Cell index={2} />
-                                    <Table.Summary.Cell index={2}>
-                                      <div style={{ textAlign: 'right', paddingRight: 20 }}>
-                                        {formatNumber(subTotal)}
-                                      </div>
-                                    </Table.Summary.Cell>
-                                    <Table.Summary.Cell index={2}>
-                                      <div style={{ textAlign: 'right', paddingRight: 20 }}>
-                                        {reservationRedux.price
-                                          ? formatNumber(reservationRedux.price.deposit)
-                                          : 0}
-                                      </div>
-                                    </Table.Summary.Cell>
-                                  </Table.Summary.Row>
-                                );
-                              }}
+                                    {formatNumber(totalPriceReservation)}
+                                  </span>
+                                </p>
+                                <Form.Item
+                                  label={t('reservation.Payment Method.title')}
+                                  name="payment_method"
+                                  wrapperCol={{
+                                    span: 21,
+                                  }}
+                                >
+                                  <Select
+                                    allowClear
+                                    placeholder={t('reservation.Payment Method.placeholder')}
+                                  >
+                                    <Option value="1">Cash</Option>
+                                    <Option value="2">Credit Card</Option>
+                                    <Option value="3">Coupon</Option>
+                                    <Option value="4">VNPay</Option>
+                                    <Option value="5">Momo</Option>
+                                    <Option value="99">Other</Option>
+                                  </Select>
+                                </Form.Item>
+                              </Col>
+                              <Col span={8} style={{ marginTop: -6 }}>
+                                <Form.Item
+                                  name="paid"
+                                  style={{ marginBottom: 12 }}
+                                  valuePropName="checked"
+                                >
+                                  <Checkbox>{t('reservation.Paid')}</Checkbox>
+                                </Form.Item>
+                                <Form.Item name="no_deposit" valuePropName="checked">
+                                  <Checkbox>
+                                    {t('reservation.Confirm reservation without deposit')}
+                                  </Checkbox>
+                                </Form.Item>
+                                <Form.Item
+                                  name="hide_room_rate"
+                                  style={{ marginBottom: 12 }}
+                                  valuePropName="checked"
+                                >
+                                  <Checkbox>{t('reservation.Hide room rates')}</Checkbox>
+                                </Form.Item>
+                              </Col>
+                              <Col span={8} style={{ marginTop: -6 }}>
+                                <Form.Item
+                                  name="send_mail"
+                                  style={{ marginBottom: 12 }}
+                                  valuePropName="checked"
+                                >
+                                  <Checkbox
+                                    onChange={e => setIsSendConfirmationEmail(e.target.checked)}
+                                  >
+                                    {t('reservation.Email reservation confirmation')}
+                                  </Checkbox>
+                                </Form.Item>
+                                <Form.Item
+                                  label={t('reservation.Email Language')}
+                                  name="email_language"
+                                  wrapperCol={{
+                                    span: 21,
+                                  }}
+                                >
+                                  <Select disabled={!isSendConfirmationEmail}>
+                                    <Option value="1">{t('common.Vietnamese')}</Option>
+                                    <Option value="2">{t('common.English')}</Option>
+                                    <Option value="3">{t('common.Japanese')}</Option>
+                                  </Select>
+                                </Form.Item>
+                              </Col>
+                            </Row>
+                          </Card>
+                        )}
+                        {type === 'checkout_today' && (
+                          <Card
+                            className={detailStyles.sectionCard}
+                            size="small"
+                            title={t('common.Detail Informations')}
+                            variant="borderless"
+                          >
+                            <Transaction
+                              noPadding
+                              reservationDetailId={reservationDetailInfo.id}
+                              reservationId={reservationId}
+                              type={type}
                             />
-                          </Col>
-                        </Row>
-                      </Card>
-                      {!isEmpty(reservationDetailInfo) && !isCreateForm && (
-                        <ReservationDetailCard
-                          reservationDetail={reservationDetailInfo}
-                          reservationId={reservationId}
-                          resetSelectedRows={resetSelectedRows}
-                        />
-                      )}
-                    </>
-                  )}
-                  {isCreateForm && (
-                    <Card
-                      bordered={false}
-                      size="small"
-                      style={{ marginTop: 20 }}
-                      title={t('common.Payment Informations')}
-                    >
-                      <Row style={{ paddingTop: 10 }}>
-                        <Col span={8}>
-                          <p style={{ marginBottom: 25 }}>
-                            <span>{t('reservation.Total Amount')}</span>
-                            <span style={{ float: 'right', paddingRight: '12.5%', fontSize: 16 }}>
-                              {formatNumber(totalPriceReservation)}
-                            </span>
-                          </p>
-                          <Form.Item
-                            label={t('reservation.Payment Method.title')}
-                            name="payment_method"
-                            wrapperCol={{
-                              span: 21,
-                            }}
-                          >
-                            <Select
-                              allowClear
-                              placeholder={t('reservation.Payment Method.placeholder')}
-                            >
-                              <Option value="1">Cash</Option>
-                              <Option value="2">Credit Card</Option>
-                              <Option value="3">Coupon</Option>
-                              <Option value="4">VNPay</Option>
-                              <Option value="5">Momo</Option>
-                              <Option value="99">Other</Option>
-                            </Select>
-                          </Form.Item>
-                        </Col>
-                        <Col span={8} style={{ marginTop: -6 }}>
-                          <Form.Item
-                            name="paid"
-                            style={{ marginBottom: 12 }}
-                            valuePropName="checked"
-                          >
-                            <Checkbox>{t('reservation.Paid')}</Checkbox>
-                          </Form.Item>
-                          <Form.Item name="no_deposit" valuePropName="checked">
-                            <Checkbox>
-                              {t('reservation.Confirm reservation without deposit')}
-                            </Checkbox>
-                          </Form.Item>
-                          <Form.Item
-                            name="hide_room_rate"
-                            style={{ marginBottom: 12 }}
-                            valuePropName="checked"
-                          >
-                            <Checkbox>{t('reservation.Hide room rates')}</Checkbox>
-                          </Form.Item>
-                        </Col>
-                        <Col span={8} style={{ marginTop: -6 }}>
-                          <Form.Item
-                            name="send_mail"
-                            style={{ marginBottom: 12 }}
-                            valuePropName="checked"
-                          >
-                            <Checkbox onChange={e => setIsSendConfirmationEmail(e.target.checked)}>
-                              {t('reservation.Email reservation confirmation')}
-                            </Checkbox>
-                          </Form.Item>
-                          <Form.Item
-                            label={t('reservation.Email Language')}
-                            name="email_language"
-                            wrapperCol={{
-                              span: 21,
-                            }}
-                          >
-                            <Select disabled={!isSendConfirmationEmail}>
-                              <Option value="1">{t('common.Vietnamese')}</Option>
-                              <Option value="2">{t('common.English')}</Option>
-                              <Option value="3">{t('common.Japanese')}</Option>
-                            </Select>
-                          </Form.Item>
-                        </Col>
-                      </Row>
-                    </Card>
-                  )}
-                  {type === 'checkout_today' && (
-                    <Card
-                      bordered={false}
-                      size="small"
-                      style={{ marginTop: 20 }}
-                      title={t('common.Detail Informations')}
-                    >
-                      <Transaction
-                        noPadding
-                        reservationDetailId={reservationDetailInfo.id}
-                        reservationId={reservationId}
-                        type={type}
-                      />
-                    </Card>
-                  )}
-                </TabPane>
-                {/* If form is not create booking */}
-                {reservationId !== '' && reservationRedux.can_send_message && (
-                  <TabPane
-                    key="3"
-                    style={{ padding: 20, minHeight: '61rem' }}
-                    tab={t('reservation.Message')}
-                  >
-                    <Message />
-                  </TabPane>
-                )}
-                {reservationId !== '' && reservationRedux.financial_details?.length > 0 && (
-                  <TabPane key="4" style={{ padding: 20 }} tab={t('reservation.Financial Detail')}>
-                    <Card bordered={false} size="small" style={{ border: '1px solid #D9D9D9' }}>
-                      <FinancialDetail />
-                    </Card>
-                  </TabPane>
-                )}
-              </Tabs>
+                          </Card>
+                        )}
+                      </div>
+                    ),
+                  },
+                  ...(reservationId !== '' && reservationRedux.can_send_message
+                    ? [
+                        {
+                          key: '3',
+                          label: t('reservation.Message'),
+                          children: (
+                            <div className={detailStyles.tabPaneTall}>
+                              <Message />
+                            </div>
+                          ),
+                        },
+                      ]
+                    : []),
+                  ...(reservationId !== '' && reservationRedux.financial_details?.length > 0
+                    ? [
+                        {
+                          key: '4',
+                          label: t('reservation.Financial Detail'),
+                          children: (
+                            <div className={detailStyles.tabPane}>
+                              <Card
+                                className={detailStyles.sectionCard}
+                                size="small"
+                                variant="borderless"
+                              >
+                                <FinancialDetail />
+                              </Card>
+                            </div>
+                          ),
+                        },
+                      ]
+                    : []),
+                ]}
+              />
             </Col>
             <Col span={24} />
             {isCreateForm && (
-              <Col span={24} style={{ textAlign: 'center', marginTop: 20, marginBottom: 140 }}>
+              <Col className={detailStyles.footerActions} span={24}>
                 <MButton
+                  className={detailStyles.saveMoreButton}
                   disabled={roomTotalForm.length === 0 || createReservationData.status === 'INIT'}
                   htmlType="submit"
                   onClick={handleSubmitAndMoreDetail}
-                  style={{
-                    color: colors.pattron,
-                    borderColor: colors.pattron,
-                    marginRight: 32,
-                    backgroundColor: '#e5e5e5',
-                  }}
                 >
                   {t('reservation.Save and add more details')}
                 </MButton>
@@ -863,7 +922,7 @@ function ReservationForm({
         ) : null}
 
         {type === 'inhouse_today' && (
-          <Row className="content" style={{ marginTop: 0, padding: 0 }}>
+          <Row className={`${layoutStyles.content} ${detailStyles.formShell}`}>
             <ReservationDetailCard
               reservationDetail={reservationDetailInfo}
               reservationId={reservationId}

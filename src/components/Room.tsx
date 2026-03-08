@@ -11,7 +11,7 @@ import 'styles/room.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, Radio, RadioChangeEvent, Row } from 'antd';
+import { Card, Col, Radio, RadioChangeEvent, Row } from 'ui/antd';
 import { selectHouseKeepingState } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';

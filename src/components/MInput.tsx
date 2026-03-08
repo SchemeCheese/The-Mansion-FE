@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from 'antd';
+import { Input } from 'ui/antd';
 import { InputProps } from 'antd/lib/input/Input';
 import styled from 'styled-components';
 

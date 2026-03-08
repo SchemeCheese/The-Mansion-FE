@@ -3,7 +3,7 @@ import 'styles/area_card_consumption.css';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { EllipsisOutlined, ExportOutlined } from '@ant-design/icons';
-import { Button, Card, Dropdown, Menu, Radio, RadioChangeEvent, Row, Select, Tabs } from 'antd';
+import { Button, Card, Dropdown, Menu, Radio, RadioChangeEvent, Row, Select, Tabs } from 'ui/antd';
 import { selectElectricAreaState, selectWaterAreaState } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';

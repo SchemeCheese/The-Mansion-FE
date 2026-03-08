@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Checkbox, Col, Pagination, Row, Select } from 'antd';
+import { Checkbox, Col, Pagination, Row, Select } from 'ui/antd';
 import { selectGetWalkinRooms, selectRoomTypes } from 'selectors';
 import _ from 'underscore';
 

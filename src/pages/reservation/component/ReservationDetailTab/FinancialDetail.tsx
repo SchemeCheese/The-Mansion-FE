@@ -7,7 +7,7 @@ Main functions : Financial Detail
 ************************************ */
 
 import React from 'react';
-import { Col, Table } from 'antd';
+import { Col, Table } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import useColumns from 'pages/reservation/create/useColumns';

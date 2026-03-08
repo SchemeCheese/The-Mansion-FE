@@ -9,7 +9,7 @@ Main functions : Transaction Add Item
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Form, Input, Modal, Row, Select, Spin, Table } from 'antd';
+import { Button, Form, Input, Modal, Row, Select, Spin, Table } from 'ui/antd';
 import { ColumnsType } from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import { getAPI } from 'helpers/apiService';
@@ -17,13 +17,6 @@ import { getAPI } from 'helpers/apiService';
 import { addItemAction, productType, searchProduct } from 'actions';
 
 import { RootState } from 'types';
-
-interface Props {
-  reservationDetailId: string;
-  reservationId: string;
-  setIsModalOpen: (visible: boolean) => void;
-  visible: boolean;
-}
 
 interface DataType {
   description_category_id: string | number;
@@ -33,6 +26,13 @@ interface DataType {
   total: string;
   unit_price: string;
   update_price: string | number;
+}
+
+interface Props {
+  reservationDetailId: string;
+  reservationId: string;
+  setIsModalOpen: (visible: boolean) => void;
+  visible: boolean;
 }
 
 function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }: Props) {
@@ -322,15 +322,15 @@ function AddItem({ reservationDetailId, reservationId, setIsModalOpen, visible }
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
       cancelButtonProps={{ style: { borderRadius: 4 } }}
       okButtonProps={{ style: { backgroundColor: '#1D39C4', borderRadius: 4 } }}
       okText={t('common.Save')}
       onCancel={() => setIsModalOpen(false)}
       onOk={handleAddItem}
+      open={visible}
       style={{ top: 50 }}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('transaction.Add Product / Service')}</b>}
-      visible={visible}
       width={1000}
     >
       <Row>

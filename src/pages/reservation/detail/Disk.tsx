@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import Table from 'antd/lib/table';
 import { formatNumber } from 'helpers';
 import { selectGetReservationDetail } from 'selectors';
+import reservationStyles from 'styles/reservation.module.css';
 
 import { useAppSelector } from 'modules/hooks';
 
@@ -172,13 +173,13 @@ function Disk({ handleDeleteItem, items, rowSelectionDisk, tabKey }: Props) {
 
   return (
     <Table
-      className="disk-table"
+      className={reservationStyles.diskTable}
       columns={columnsDisk}
       dataSource={data}
       pagination={false}
       rowClassName={(record: any) => {
         if (record.description === 'Discount') {
-          return 'disabled-click';
+          return reservationStyles.disabledClick;
         }
 
         return '';

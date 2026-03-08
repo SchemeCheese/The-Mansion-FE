@@ -11,7 +11,7 @@ import 'styles/night_audit.css';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Card, Col, Row, Select, Tabs } from 'antd';
+import { Card, Col, Row, Select, Tabs } from 'ui/antd';
 import * as _ from 'lodash';
 import numeral from 'numeral';
 import { selectFuelState } from 'selectors';

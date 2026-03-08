@@ -3,7 +3,7 @@ import 'styles/actual_power_card.css';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { EllipsisOutlined, ExportOutlined } from '@ant-design/icons';
-import { Button, Card, DatePicker, Dropdown, Menu, Select, Space } from 'antd';
+import { Button, Card, DatePicker, Dropdown, Menu, Select, Space } from 'ui/antd';
 import moment from 'moment';
 import { selectElectricPowerState } from 'selectors';
 
@@ -82,7 +82,7 @@ function ActualPower() {
             >
               <RangePicker
                 ranges={{
-                  Today: [moment(), moment()], // 'This 2.Septh': [moment().startOf('2.Septh'), moment().endOf('2.Septh')],
+                  Today: [moment() as any, moment() as any], // 'This 2.Septh': [moment().startOf('2.Septh'), moment().endOf('2.Septh')],
                 }} // onChange={handleChange}
               />
             </Space>

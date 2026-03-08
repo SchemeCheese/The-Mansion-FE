@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : KienNT
@@ -9,7 +10,7 @@ Main functions : Rate Tab
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Col, message, Row, Table } from 'antd';
+import { Col, Row, Table } from 'ui/antd';
 import { formatNumber } from 'helpers';
 import moment from 'moment';
 import { selectGetReservation, selectUpdateRate, selectUser } from 'selectors';
@@ -22,6 +23,7 @@ import { getReservation, getReservationDetail, updateRate } from 'actions';
 
 import MInput from 'components/MInput';
 import PattonButton from 'components/PattonButton';
+import detailStyles from 'pages/reservation/detail/reservation-detail.module.css';
 
 import { RootState } from 'types';
 
@@ -213,7 +215,7 @@ function Rate({ reservationDetailId, reservationId }: Props) {
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success(t('message.Update rate successfully!'));
+      notify.success(t('message.Update rate successfully!'));
 
       dispatch(
         getReservation({
@@ -230,18 +232,18 @@ function Rate({ reservationDetailId, reservationId }: Props) {
   }, [changed]);
 
   return (
-    <Row justify="end" style={{ paddingLeft: 15, backgroundColor: 'white', paddingTop: 15 }}>
+    <Row className={detailStyles.ratePane} justify="end">
       {user.permission.reservation.edit && (
-        <Col span={24}>
+        <Col className={detailStyles.rateHeader} span={24}>
           <PattonButton
+            className={detailStyles.rateUpdateAction}
             onClick={() => handleUpdateRate()}
-            style={{ float: 'right', marginRight: 20 }}
           >
             {t('common.Update')}
           </PattonButton>
         </Col>
       )}
-      <Col span={24} style={{ marginTop: 20, marginBottom: 15 }}>
+      <Col className={detailStyles.rateTableCol} span={24}>
         <Table
           columns={columns}
           dataSource={data}

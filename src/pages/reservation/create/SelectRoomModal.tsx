@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Reservation
 Developer Name : MinhNV
@@ -16,13 +17,12 @@ import {
   Col,
   DatePicker,
   Input,
-  message,
   Modal,
   Row,
   Select,
   Table,
   TimePicker,
-} from 'antd';
+} from 'ui/antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import { formatNumber, randomKey } from 'helpers';
 import moment from 'moment';
@@ -33,6 +33,7 @@ import _ from 'underscore';
 import { useAppSelector } from 'modules/hooks';
 
 import { addReservationDetail, getReservation, getRoomType, searchRoom } from 'actions';
+import reservationStyles from 'styles/reservation.module.css';
 
 import PattonButton from 'components/PattonButton';
 
@@ -268,7 +269,7 @@ function SelectRoomModal({
 
   useEffect(() => {
     if (changed('status', 'SUCCESS')) {
-      message.success(t('message.Add reservation booking successfully!'));
+      notify.success(t('message.Add reservation booking successfully!'));
 
       dispatch(
         getReservation({
@@ -497,7 +498,7 @@ function SelectRoomModal({
         hoursTime = Math.ceil(moment.duration(checkoutTime.diff(checkinTime)).asHours());
 
         if (hoursTime <= 0) {
-          message.warn(t('message.The checkin time or checkout time is invalid'));
+          notify.warn(t('message.The checkin time or checkout time is invalid'));
 
           return;
         }
@@ -533,19 +534,19 @@ function SelectRoomModal({
 
   return (
     <Modal
-      bodyStyle={{ backgroundColor: '#F0F2F5' }}
-      className="fit-modal"
-      destroyOnClose
+      className={reservationStyles.fitModal}
+      destroyOnHidden
       okButtonProps={{ style: { backgroundColor: '#1D39C4' }, disabled: roomSelected.length === 0 }}
       okText={t('common.Save')}
       onCancel={handleCancel}
       onOk={handleOk}
+      open={isModalVisible}
       style={{ top: 60, borderRadius: 4 }}
+      styles={{ body: { backgroundColor: '#F0F2F5' } }}
       title={<b>{t('message.Select room and rate')}</b>}
-      visible={isModalVisible}
       width={1000}
     >
-      <Card bordered={false} size="small" title={t('message.Search room')}>
+      <Card size="small" title={t('message.Search room')} variant="borderless">
         <Row>
           <Col span={5}>
             <span style={{ paddingBottom: 5, display: 'inherit' }}>
@@ -732,10 +733,10 @@ function SelectRoomModal({
         </Row>
       </Card>
       <Card
-        bordered={false}
         size="small"
         style={{ marginTop: 16 }}
         title={t('message.Selected Rooms Result')}
+        variant="borderless"
       >
         <Row>
           <Col span={24}>

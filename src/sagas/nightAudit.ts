@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -13,6 +13,32 @@ import {
   handleNoShowReservationDetailFinishAction,
   logOut,
 } from 'actions';
+import { notify } from 'ui/notification';
+
+export function* postHandleNightAuditSaga({ payload }: ReturnType<typeof handleNightAuditAction>) {
+  try {
+    yield call(
+      request,
+      `${apiEndPoint(NightAuditEndpoint.HANDLE_NIGHT_AUDIT)}/${payload.facility_id}`,
+      {
+        method: 'POST',
+        headers: headerWithAuthorization(),
+      },
+    );
+
+    yield put(handleNightAuditFinishAction());
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Cannot process night audit!');
+    }
+  }
+}
 
 export function* postHandleNoShowSaga({
   payload,
@@ -44,32 +70,7 @@ export function* postHandleNoShowSaga({
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Cannot process no show!');
-    }
-  }
-}
-
-export function* postHandleNightAuditSaga({ payload }: ReturnType<typeof handleNightAuditAction>) {
-  try {
-    yield call(
-      request,
-      `${apiEndPoint(NightAuditEndpoint.HANDLE_NIGHT_AUDIT)}/${payload.facility_id}`,
-      {
-        method: 'POST',
-        headers: headerWithAuthorization(),
-      },
-    );
-
-    yield put(handleNightAuditFinishAction());
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Cannot process night audit!');
+      notify.error('Cannot process no show!');
     }
   }
 }

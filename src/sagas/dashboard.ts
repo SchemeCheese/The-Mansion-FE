@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { iotApiEndPoint } from 'helpers';
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
@@ -15,6 +15,86 @@ import {
   getWaterYesterdayFinishAction,
   logOut,
 } from 'actions';
+import { notify } from 'ui/notification';
+
+export function* getDurationCurveSaga(): any {
+  try {
+    let data: any = [];
+
+    data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.water)}/duration`, {
+      method: 'GET',
+    });
+
+    yield put(
+      getDurationCurveFinishAction({
+        data: data.data,
+        status: 'SUCCESS',
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Can not fetch channel info!');
+    }
+  }
+}
+
+export function* getElectricAreaSaga(): any {
+  try {
+    let data: any = [];
+
+    data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.electric)}/area`, {
+      method: 'GET',
+    });
+
+    yield put(
+      getElectricAreaFinishAction({
+        data: data.data,
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Can not fetch channel info!');
+    }
+  }
+}
+
+export function* getElectricPowerSaga(): any {
+  try {
+    let data: any = [];
+
+    data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.electric)}/power`, {
+      method: 'GET',
+    });
+
+    yield put(
+      getElectricPowerFinishAction({
+        data: data.data,
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Can not fetch channel info!');
+    }
+  }
+}
 
 export function* getElectricYesterdaySaga(): any {
   try {
@@ -41,7 +121,33 @@ export function* getElectricYesterdaySaga(): any {
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not fetch channel info!');
+      notify.error('Can not fetch channel info!');
+    }
+  }
+}
+
+export function* getWaterAreaSaga(): any {
+  try {
+    let data: any = [];
+
+    data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.water)}/area`, {
+      method: 'GET',
+    });
+
+    yield put(
+      getWaterAreaFinishAction({
+        data: data.data,
+      }),
+    );
+  } catch (error: any) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Error', error);
+    }
+
+    if (error.status === 401) {
+      yield put(logOut());
+    } else {
+      notify.error('Can not fetch channel info!');
     }
   }
 }
@@ -71,112 +177,7 @@ export function* getWaterYesterdaySaga(): any {
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not fetch channel info!');
-    }
-  }
-}
-
-export function* getElectricAreaSaga(): any {
-  try {
-    let data: any = [];
-
-    data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.electric)}/area`, {
-      method: 'GET',
-    });
-
-    yield put(
-      getElectricAreaFinishAction({
-        data: data.data,
-      }),
-    );
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Can not fetch channel info!');
-    }
-  }
-}
-
-export function* getWaterAreaSaga(): any {
-  try {
-    let data: any = [];
-
-    data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.water)}/area`, {
-      method: 'GET',
-    });
-
-    yield put(
-      getWaterAreaFinishAction({
-        data: data.data,
-      }),
-    );
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Can not fetch channel info!');
-    }
-  }
-}
-
-export function* getElectricPowerSaga(): any {
-  try {
-    let data: any = [];
-
-    data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.electric)}/power`, {
-      method: 'GET',
-    });
-
-    yield put(
-      getElectricPowerFinishAction({
-        data: data.data,
-      }),
-    );
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Can not fetch channel info!');
-    }
-  }
-}
-
-export function* getDurationCurveSaga(): any {
-  try {
-    let data: any = [];
-
-    data = yield call(request, `${iotApiEndPoint(IOTEndpoint.dashboard.fuel.water)}/duration`, {
-      method: 'GET',
-    });
-
-    yield put(
-      getDurationCurveFinishAction({
-        data: data.data,
-        status: 'SUCCESS',
-      }),
-    );
-  } catch (error: any) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Error', error);
-    }
-
-    if (error.status === 401) {
-      yield put(logOut());
-    } else {
-      message.error('Can not fetch channel info!');
+      notify.error('Can not fetch channel info!');
     }
   }
 }

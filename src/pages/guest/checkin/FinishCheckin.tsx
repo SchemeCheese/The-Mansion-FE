@@ -13,13 +13,14 @@ import { useTranslation } from 'react-i18next';
 import SVG from 'react-inlinesvg';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Col, Row } from 'antd';
+import { Col, Row } from 'ui/antd';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectUser } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { getFacilityAction } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import PattonButton from 'components/PattonButton';
 
@@ -46,7 +47,7 @@ function FinishCheckin() {
   return (
     <>
       <Row
-        className="content guest-thank"
+        className={`${layoutStyles.content} guest-thank`}
         style={{
           // background: 'white',
           width: '90%',

@@ -1,5 +1,5 @@
 import { now, request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -9,17 +9,24 @@ import { AgentInfoEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import { getAgentInfosFinish, logOut } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* getAgentInfosSaga() {
   try {
     const total = 0;
     const { cached = false, updatedAt = 0 } = yield select(s => s.agentInfos || {});
+    const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
     const hasCache = cached && hasValidCache(updatedAt);
 
     if (!hasCache) {
       let data = [];
+      const query = new URLSearchParams({
+        operator_code: operator_code || '',
+        branch_code: branch_code || '',
+        facility_code: facility_code || '',
+      }).toString();
 
-      ({ data } = yield call(request, `${apiEndPoint(AgentInfoEndpoint.GET_AGENT)}`, {
+      ({ data } = yield call(request, `${apiEndPoint(AgentInfoEndpoint.GET_AGENT)}?${query}`, {
         method: 'GET',
         headers: headerWithAuthorization(),
       }));
@@ -34,7 +41,7 @@ export function* getAgentInfosSaga() {
     if (error.status === 401) {
       yield put(logOut());
     } else {
-      message.error('Can not get agent info!');
+      notify.error('Can not get agent info!');
     }
   }
 }

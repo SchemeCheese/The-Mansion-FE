@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row } from 'ui/antd';
 import numeral from 'numeral';
 
 interface Props {

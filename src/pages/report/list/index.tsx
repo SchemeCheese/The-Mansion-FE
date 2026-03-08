@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tabs } from 'antd';
+import { Tabs } from 'ui/antd';
 import HotelFacility from 'pages/report/list/HotelFacility';
+import layoutStyles from 'components/layout.module.css';
 
 const { TabPane } = Tabs;
 
@@ -10,13 +11,13 @@ function Report() {
 
   return (
     <>
-      <p className="title">{t('report.Report List')}</p>
+      <p className={layoutStyles.title}>{t('report.Report List')}</p>
       <Tabs
-        className="reservation-tabs custom-bg-header"
+        className={`${layoutStyles.reservationTabs} ${layoutStyles.customBgHeader}`}
         defaultActiveKey="1"
         style={{ minHeight: '100%' }}
       >
-        <TabPane key="1" className="content" tab={t('report.Hotel Facility')}>
+        <TabPane key="1" className={layoutStyles.content} tab={t('report.Hotel Facility')}>
           <HotelFacility />
         </TabPane>
       </Tabs>

@@ -1,5 +1,5 @@
 import { request } from '@gilbarbara/helpers';
-import { message } from 'antd';
+
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 
@@ -7,6 +7,7 @@ import { FileEndpoint } from 'config';
 import { ActionTypes } from 'literals';
 
 import { uploadFileAction, uploadFileSuccessAction } from 'actions';
+import { notify } from 'ui/notification';
 
 export function* postUploadFileSaga({ payload }: ReturnType<typeof uploadFileAction>) {
   try {
@@ -31,7 +32,7 @@ export function* postUploadFileSaga({ payload }: ReturnType<typeof uploadFileAct
     yield put(uploadFileSuccessAction({ url }));
   } catch (error) {
     console.log('Error', error);
-    message.error('Upload file error!');
+    notify.error('Upload file error!');
   }
 }
 

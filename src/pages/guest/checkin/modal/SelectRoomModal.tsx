@@ -8,7 +8,7 @@ Main functions: Guest Checkin
 
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Modal, Row } from 'antd';
+import { Col, Modal, Row } from 'ui/antd';
 import { apiEndPoint } from 'helpers';
 import { getAPI } from 'helpers/apiService';
 import { selectGuestCheckin } from 'selectors';

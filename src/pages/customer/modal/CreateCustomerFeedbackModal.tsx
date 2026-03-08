@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd';
+import { Col, DatePicker, Form, Input, Modal, Row, Select } from 'ui/antd';
 import TextArea from 'antd/lib/input/TextArea';
 
 const { Option } = Select;

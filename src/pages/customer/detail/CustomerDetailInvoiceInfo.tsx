@@ -1,3 +1,4 @@
+import { notify } from 'ui/notification';
 /** ***********************************
 Module Name : Customer
 Developer Name : MinhNV
@@ -10,7 +11,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Col, Form, message, Row, Tabs } from 'antd';
+import { Col, Form, Row, Tabs } from 'ui/antd';
 import { putAPI } from 'helpers/apiService';
 import { selectGetCustomerDetail } from 'selectors';
 
@@ -34,7 +35,7 @@ function CustomerDetailInvoiceInfo() {
     const result = await putAPI(`api/v1/guests/${id}/update`, values);
 
     if (result.data.success) {
-      message.success('Update invoice info successfully!');
+      notify.success('Update invoice info successfully!');
 
       dispatch(
         getCustomerDetailAction({

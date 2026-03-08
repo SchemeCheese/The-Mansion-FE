@@ -13,13 +13,14 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
-import { Col, Radio, RadioChangeEvent, Row, Steps } from 'antd';
+import { Col, Radio, RadioChangeEvent, Row, Steps } from 'ui/antd';
 import GuestFooter from 'pages/guest/GuestFooter';
 import { selectGuestCheckin } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { addItemAction } from 'actions';
+import layoutStyles from 'components/layout.module.css';
 
 import Icon from 'components/Icon';
 import MButton from 'components/MButton';
@@ -107,7 +108,7 @@ function GuestCheckinPersonalId() {
   return (
     <>
       <Row
-        className="content guest-payment-content guest-checkout-content"
+        className={`${layoutStyles.content} guest-payment-content guest-checkout-content`}
         style={{
           background: 'white',
           width: '90%',

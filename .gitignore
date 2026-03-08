@@ -9,3 +9,4 @@ node_modules/
 reports/
 webpack.stats.json
 **/.DS_Store
+/docs/antd-component-data
