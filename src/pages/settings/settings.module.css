@@ -30,3 +30,19 @@
 .schemaWarning {
   margin-bottom: 12px;
 }
+
+.equipmentEntitySelect {
+  width: 280px;
+}
+
+.equipmentRouteContainer {
+  margin-top: 12px;
+}
+
+.equipmentFormCard {
+  max-width: 1100px;
+}
+
+.equipmentValueText {
+  word-break: break-word;
+}

@@ -4,16 +4,19 @@ import { Button, Card, Checkbox, Form, Input, Modal, Select, Space, Table, Tabs 
 import { getAPI, postAPI, putAPI } from 'helpers/apiService';
 import { apiEndPoint, headerWithAuthorization } from 'helpers';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { selectBranchInfo, selectUser } from 'selectors';
 
 import { useAppSelector } from 'modules/hooks';
 
 import { notify } from 'ui/notification';
 
+import EquipmentMasterData from './equipment/EquipmentMasterData';
 import MasterDataSettings from './MasterDataSettings';
 import styles from './settings.module.css';
 
 const BASE = 'api/v1/settings';
+const EQUIPMENT_TAB_KEY = 'equipment-master-data';
 
 type EntityType = 'agent' | 'credit' | 'currency' | 'conversion';
 
@@ -36,8 +39,12 @@ const getAgentKindLabel = (value: unknown): string => {
 
 function SettingsPage() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('agent');
+  const [activeTab, setActiveTab] = useState(
+    location.pathname.startsWith('/settings/equipment') ? EQUIPMENT_TAB_KEY : 'agent',
+  );
 
   const [agents, setAgents] = useState<any[]>([]);
   const [credits, setCredits] = useState<any[]>([]);
@@ -135,36 +142,40 @@ function SettingsPage() {
   }, [integrationForm, scopeParams]);
 
   const fetchTabData = useCallback(async () => {
+    if (activeTab === EQUIPMENT_TAB_KEY) {
+      return;
+    }
+
     setLoading(true);
 
     try {
       switch (activeTab) {
-      case 'agent': {
-        await fetchAgents();
-      
-      break;
-      }
-      case 'credit': {
-        await fetchCredits();
-      
-      break;
-      }
-      case 'currency': {
-        await fetchCurrencies();
-      
-      break;
-      }
-      case 'conversion': {
-        await fetchConversions();
-      
-      break;
-      }
-      case 'integration': {
-        await fetchIntegration();
-      
-      break;
-      }
-      // No default
+        case 'agent': {
+          await fetchAgents();
+
+          break;
+        }
+        case 'credit': {
+          await fetchCredits();
+
+          break;
+        }
+        case 'currency': {
+          await fetchCurrencies();
+
+          break;
+        }
+        case 'conversion': {
+          await fetchConversions();
+
+          break;
+        }
+        case 'integration': {
+          await fetchIntegration();
+
+          break;
+        }
+        // No default
       }
     } catch (error: any) {
       notify.error(error?.message || 'Cannot load settings data');
@@ -180,6 +191,18 @@ function SettingsPage() {
 
     fetchTabData();
   }, [fetchTabData, scopeParams]);
+
+  useEffect(() => {
+    if (location.pathname.startsWith('/settings/equipment')) {
+      setActiveTab(EQUIPMENT_TAB_KEY);
+
+      return;
+    }
+
+    if (activeTab === EQUIPMENT_TAB_KEY) {
+      setActiveTab('agent');
+    }
+  }, [activeTab, location.pathname]);
 
   const openCreate = (type: EntityType) => {
     setEditingType(type);
@@ -250,23 +273,32 @@ function SettingsPage() {
 
     try {
       switch (editingType) {
-      case 'agent': {
-        await (editingRecord ? putAPI(`${BASE}/agent-infos/${editingRecord.id}`, payload) : postAPI(`${BASE}/agent-infos`, payload));
-      
-      break;
-      }
-      case 'credit': {
-        await (editingRecord ? putAPI(`${BASE}/creditcard-companies/${editingRecord.id}`, payload) : postAPI(`${BASE}/creditcard-companies`, payload));
-      
-      break;
-      }
-      case 'currency': {
-        await (editingRecord ? putAPI(`${BASE}/currencies/${editingRecord.id}`, payload) : postAPI(`${BASE}/currencies`, payload));
-      
-      break;
-      }
+        case 'agent': {
+          await (editingRecord
+            ? putAPI(`${BASE}/agent-infos/${editingRecord.id}`, payload)
+            : postAPI(`${BASE}/agent-infos`, payload));
 
-      default: await (editingRecord ? putAPI(`${BASE}/currency-conversions/${editingRecord.id}`, payload) : postAPI(`${BASE}/currency-conversions`, payload));
+          break;
+        }
+        case 'credit': {
+          await (editingRecord
+            ? putAPI(`${BASE}/creditcard-companies/${editingRecord.id}`, payload)
+            : postAPI(`${BASE}/creditcard-companies`, payload));
+
+          break;
+        }
+        case 'currency': {
+          await (editingRecord
+            ? putAPI(`${BASE}/currencies/${editingRecord.id}`, payload)
+            : postAPI(`${BASE}/currencies`, payload));
+
+          break;
+        }
+
+        default:
+          await (editingRecord
+            ? putAPI(`${BASE}/currency-conversions/${editingRecord.id}`, payload)
+            : postAPI(`${BASE}/currency-conversions`, payload));
       }
 
       notify.success('Saved successfully');
@@ -572,10 +604,30 @@ function SettingsPage() {
               />
             ),
           },
+          {
+            key: EQUIPMENT_TAB_KEY,
+            label: 'Equipment/Facility Master Data',
+            children:
+              activeTab === EQUIPMENT_TAB_KEY ? (
+                <EquipmentMasterData base={BASE} canEdit={canEdit} scopeParams={scopeParams} />
+              ) : (
+                <div />
+              ),
+          },
         ]}
         onChange={key => {
           setSearch('');
           setActiveTab(key);
+
+          if (key === EQUIPMENT_TAB_KEY) {
+            navigate('/settings/equipment/equipment-infos');
+
+            return;
+          }
+
+          if (location.pathname.startsWith('/settings/equipment')) {
+            navigate('/settings');
+          }
         }}
       />
 

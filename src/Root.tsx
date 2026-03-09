@@ -734,7 +734,7 @@ function Root() {
                       <Settings />
                     </PrivateRoute>
                   }
-                  path="/settings"
+                  path="/settings/*"
                 />
               )}
               {/* Public booking confirmation route - no auth required */}
