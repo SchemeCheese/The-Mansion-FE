@@ -152,39 +152,18 @@ function ReservationForm({
     dispatch(getAgentInfos());
   }, []);
 
-  let sourceOptions = null;
-
-  if (roomCondition.source_type?.toString() === '1') {
-    sourceOptions = agentInfos
-      ?.filter((item: any) => {
-        return item.agent_kind === 2;
-      })
-      .map((agent: any) => (
-        <Option key={agent.id} value={agent.id.toString()}>
-          {agent.name}
-        </Option>
-      ));
-  } else if (roomCondition.source_type?.toString() === '5') {
-    sourceOptions = agentInfos
-      ?.filter((item: any) => {
-        return item.agent_kind === 1;
-      })
-      .map((agent: any) => (
-        <Option key={agent.id} value={agent.id.toString()}>
-          {agent.name}
-        </Option>
-      ));
-  } else if (roomCondition.source_type?.toString() === '7') {
-    sourceOptions = agentInfos
-      ?.filter((item: any) => {
-        return item.agent_kind === 0;
-      })
-      .map((agent: any) => (
-        <Option key={agent.id} value={agent.id.toString()}>
-          {agent.name}
-        </Option>
-      ));
-  }
+  const selectedMarketSegmentId = Number(roomCondition.source_type);
+  const sourceOptions = Number.isFinite(selectedMarketSegmentId)
+    ? agentInfos
+        ?.filter((item: any) => {
+          return Number(item.market_segment_id) === selectedMarketSegmentId;
+        })
+        .map((agent: any) => (
+          <Option key={agent.id} value={agent.id.toString()}>
+            {agent.name}
+          </Option>
+        ))
+    : null;
 
   const [isModalCheckinOpen, setIsModalCheckinOpen] = useState(false);
   const [isModalPrintRegistrationCardOpen, setIsPrintRegistrationCardOpen] = useState(false);
@@ -629,7 +608,17 @@ function ReservationForm({
                                     onRow={(record: any) => {
                                       if (record.status?.toLowerCase() !== 'canceled') {
                                         return {
-                                          onClick: () => {
+                                          onClick: (event: React.MouseEvent<HTMLElement>) => {
+                                            const target = event.target as HTMLElement;
+
+                                            if (
+                                              target.closest('td.ant-table-selection-column') ||
+                                              target.closest('.ant-checkbox-wrapper') ||
+                                              target.closest('.ant-checkbox')
+                                            ) {
+                                              return;
+                                            }
+
                                             if (record.reservation_detail_id) {
                                               dispatch(
                                                 getReservationDetail({
