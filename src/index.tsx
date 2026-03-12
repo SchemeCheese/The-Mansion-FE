@@ -16,6 +16,7 @@ import ErrorHandler from 'components/ErrorHandler';
 import Loader from 'components/Loader';
 import Reload from 'components/Reload';
 import GlobalStyles from 'containers/GlobalStyles';
+import { clearAuthenticatedSession } from 'helpers';
 import { appColor, colors } from 'modules/theme';
 import { AntdApp, ConfigProvider } from 'ui/antd';
 
@@ -30,10 +31,11 @@ const syncReleaseSession = () => {
   const previousRelease = window.localStorage.getItem(APP_RELEASE_STORAGE_KEY);
 
   if (previousRelease && previousRelease !== APP_RELEASE) {
-    window.localStorage.removeItem('access_token');
-    window.localStorage.removeItem('facility_id');
-    window.localStorage.removeItem('branch_id');
-    window.localStorage.removeItem('persist:rrsb');
+    clearAuthenticatedSession();
+    window.localStorage.setItem(APP_RELEASE_STORAGE_KEY, APP_RELEASE);
+    window.location.replace('/login');
+
+    return;
   }
 
   window.localStorage.setItem(APP_RELEASE_STORAGE_KEY, APP_RELEASE);
