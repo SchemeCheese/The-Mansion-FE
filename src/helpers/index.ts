@@ -1,5 +1,7 @@
 import { AnyObject } from '@gilbarbara/helpers/lib';
 
+const AUTH_STORAGE_KEYS = ['access_token', 'facility_id', 'branch_id', 'persist:rrsb'] as const;
+
 export const headerWithAuthorization = (headers = {}): AnyObject => {
   const accessToken = localStorage.getItem('access_token');
 
@@ -87,3 +89,9 @@ export const mappingStatus = (status: string) => {
 };
 
 export const formatDate = 'YYYY-MM-DD';
+
+export const clearAuthenticatedSession = () => {
+  AUTH_STORAGE_KEYS.forEach(key => {
+    window.localStorage.removeItem(key);
+  });
+};

@@ -1,11 +1,14 @@
 declare global {
   interface Window {
-    HIDE_LOGS: boolean;
     __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
+    HIDE_LOGS: boolean;
     store: any;
   }
 
-  const VERSION: string;
+  const APP__BRANCH: string;
+  const APP__BUILD_DATE: string;
+  const APP__GITHASH: string;
+  const APP__VERSION: string;
 }
 
 export {};

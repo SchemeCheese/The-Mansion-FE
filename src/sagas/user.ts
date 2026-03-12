@@ -1,6 +1,6 @@
 import { request } from '@gilbarbara/helpers';
 
-import { apiEndPoint, headerWithAuthorization } from 'helpers';
+import { apiEndPoint, clearAuthenticatedSession, headerWithAuthorization } from 'helpers';
 import { all, call, delay, put, takeLatest } from 'redux-saga/effects';
 
 import { AuthPath } from 'config';
@@ -68,9 +68,7 @@ export function* loginSaga({ payload }: ReturnType<typeof login>) {
 export function* logoutSaga() {
   yield delay(200);
 
-  window.localStorage.removeItem('facility_id');
-  window.localStorage.removeItem('branch_id');
-  window.localStorage.removeItem('persist:rrsb');
+  clearAuthenticatedSession();
 
   yield put(logOutSuccess());
 }

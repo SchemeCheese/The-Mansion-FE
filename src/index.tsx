@@ -23,6 +23,24 @@ import reportWebVitals from './reportWebVitals';
 import Root from './Root';
 import { register } from './serviceWorkerRegistration';
 
+const APP_RELEASE_STORAGE_KEY = 'pms_app_release';
+const APP_RELEASE = [APP__VERSION, APP__GITHASH].filter(Boolean).join(':');
+
+const syncReleaseSession = () => {
+  const previousRelease = window.localStorage.getItem(APP_RELEASE_STORAGE_KEY);
+
+  if (previousRelease && previousRelease !== APP_RELEASE) {
+    window.localStorage.removeItem('access_token');
+    window.localStorage.removeItem('facility_id');
+    window.localStorage.removeItem('branch_id');
+    window.localStorage.removeItem('persist:rrsb');
+  }
+
+  window.localStorage.setItem(APP_RELEASE_STORAGE_KEY, APP_RELEASE);
+};
+
+syncReleaseSession();
+
 const { persistor, store } = configStore();
 const HelmetProviderCompat: any = HelmetProvider;
 
