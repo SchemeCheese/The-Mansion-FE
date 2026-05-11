@@ -388,7 +388,7 @@ function ReservationCheckoutTodayDetail() {
                 >
                   {t('common.Resend Email')}
                 </MButton>
-                <PattonButton disabled onClick={e => submitUpdateForm(e)}>
+                <PattonButton disabled onClick={submitUpdateForm}>
                   {t('common.Update')}
                 </PattonButton>
               </>

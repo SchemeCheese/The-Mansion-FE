@@ -20,6 +20,13 @@ export function* getNotificationsSaga() {
     let data = [];
 
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!branch_code || !facility_code || !operator_code) {
+      yield put(getNotifcationsActionFinish({ data: [] }));
+
+      return;
+    }
+
     const query = new URLSearchParams(
       Object({ branch_code, facility_code, operator_code }),
     ).toString();
@@ -51,6 +58,13 @@ export function* postReadNotificationsSaga({ payload }: ReturnType<typeof readNo
   try {
     let data = [];
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!branch_code || !facility_code || !operator_code) {
+      yield put(readNotifcationsActionFinish());
+
+      return;
+    }
+
     const payloadBranch = {
       operator_code,
       branch_code,

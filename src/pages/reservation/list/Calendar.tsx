@@ -84,6 +84,9 @@ function Calendar() {
   const { data: roomTypesData } = useAppSelector(selectRoomTypes);
   const { changed } = useTreeChanges(searchScheduleRedux);
   const { changed: changedNote } = useTreeChanges(updateNoteReservationDetailData);
+  const scheduleData = searchScheduleRedux?.data ?? {};
+  const scheduleResources = Array.isArray(scheduleData?.resources) ? scheduleData.resources : [];
+  const scheduleEvents = Array.isArray(scheduleData?.events) ? scheduleData.events : [];
 
   const fullCalendarRef: any = React.createRef();
 
@@ -144,33 +147,35 @@ function Calendar() {
           };
     dispatch(searchScheduleAction(temporaryState));
 
-    if (roomTypesData.length === 0) {
+    if ((roomTypesData?.length ?? 0) === 0) {
       dispatch(getRoomType());
     }
   }, []);
 
   useEffect(() => {
-    setResources(searchScheduleRedux.data.resources);
+    setResources(scheduleResources as any);
 
-    if (changed('is_searching', false)) {
+    if (changed('is_searching', false) && fullCalendarRef.current?.getApi) {
       const calendarApi = fullCalendarRef.current.getApi().view.calendar;
 
-      searchScheduleRedux.data.events.forEach((item: any) => {
+      calendarApi.removeAllEvents();
+
+      scheduleEvents.forEach((item: any) => {
         calendarApi.addEvent({
           id: createEventId(),
-          title: user.permission.reservation.view ? item.title : '',
-          start: item.start,
-          end: item.end,
+          title: user.permission?.reservation?.view === true ? (item?.title ?? '') : '',
+          start: item?.start,
+          end: item?.end,
           allDay: true,
-          resourceId: item.resourceId,
-          reservationDetailId: item.reservationDetailId,
-          reservationInfoId: item.reservationInfoId,
-          note: item.note,
-          folioId: item.folioId,
+          resourceId: item?.resourceId,
+          reservationDetailId: item?.reservationDetailId,
+          reservationInfoId: item?.reservationInfoId,
+          note: item?.note ?? '',
+          folioId: item?.folioId ?? '',
         });
       });
     }
-  }, [changed]);
+  }, [changed, scheduleEvents, scheduleResources, user.permission]);
 
   useEffect(() => {
     if (changedNote('status', 'SUCCESS')) {
@@ -195,7 +200,7 @@ function Calendar() {
   };
 
   const showEventInfo = (clickInfo: EventClickArg) => {
-    if (user.permission.reservation.view) {
+    if (user.permission?.reservation?.view === true) {
       const reservation = clickInfo.event.extendedProps;
 
       setInfoReservationSelected({
@@ -242,7 +247,7 @@ function Calendar() {
               }}
               placeholder={t('common.Room Type')}
             >
-              {_.keys(roomTypesData).map((key: any) => {
+              {_.keys(roomTypesData ?? {}).map((key: any) => {
                 return (
                   <Option key={key} value={key}>
                     {roomTypesData[key]}

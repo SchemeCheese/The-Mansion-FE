@@ -1,5 +1,5 @@
 import React from 'react';
-import { ButtonProps } from 'antd/lib/button/button';
+import type { ButtonProps } from 'ui/antd';
 import styled from 'styled-components';
 
 import MButton from './MButton';

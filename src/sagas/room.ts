@@ -24,6 +24,14 @@ import {
 } from 'actions';
 import { notify } from 'ui/notification';
 
+function hasBranchContext(branchInfo: {
+  branch_code?: string;
+  facility_code?: string;
+  operator_code?: string;
+}) {
+  return !!branchInfo.operator_code && !!branchInfo.branch_code && !!branchInfo.facility_code;
+}
+
 export function* getReservationRoomCheckinTodaySaga({
   payload,
 }: ReturnType<typeof getReservationRoomCheckinTodayAction>) {
@@ -31,6 +39,18 @@ export function* getReservationRoomCheckinTodaySaga({
     let items = [];
     let total = 0;
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      yield put(
+        getReservationRoomCheckinTodayActionFinish({
+          data: { items: [] },
+          total: 0,
+        }),
+      );
+
+      return;
+    }
+
     const newPayload = {
       ...payload.filter,
       operator_code,
@@ -77,6 +97,18 @@ export function* getReservationRoomCheckoutTodaySaga({
     let items = [];
     let total = 0;
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      yield put(
+        getReservationRoomCheckoutTodayActionFinish({
+          data: { items: [] },
+          total: 0,
+        }),
+      );
+
+      return;
+    }
+
     const newPayload = {
       ...payload.filter,
       operator_code,
@@ -123,6 +155,18 @@ export function* getReservationRoomInhouseSaga({
     let items = [];
     let total = 0;
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      yield put(
+        getReservationRoomInhouseActionFinish({
+          data: { items: [] },
+          total: 0,
+        }),
+      );
+
+      return;
+    }
+
     const newPayload = {
       ...payload.filter,
       operator_code,
@@ -167,6 +211,12 @@ export function* getRoomOptionSaga() {
     let data = [];
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      yield put(getRoomOptionFinish({ data: [] }));
+
+      return;
+    }
+
     const payload = {
       operator_code,
       branch_code,
@@ -201,6 +251,12 @@ export function* getRoomsSaga() {
   try {
     let items = [];
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      yield put(getRoomsActionFinish({ items: [], total: 0 }));
+
+      return;
+    }
 
     let total = 0;
     const payload = {
@@ -240,6 +296,12 @@ export function* getRoomTypeSaga() {
     let data = [];
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
 
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      yield put(getRoomTypeFinish({ data: [] }));
+
+      return;
+    }
+
     const payload = {
       operator_code,
       branch_code,
@@ -276,6 +338,19 @@ export function* getSearchRoomnSaga({ payload }: ReturnType<typeof searchRoom>) 
     let rates = [];
     let total = 0;
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      yield put(
+        searchRoomFinish({
+          charges: [],
+          total: 0,
+          rates: [],
+        }),
+      );
+
+      return;
+    }
+
     const payloadWithBranch = {
       ...payload,
       operator_code,
@@ -323,6 +398,13 @@ export function* getWalkinRoomsSaga({ payload }: ReturnType<typeof getWalkinRoom
     let items = [];
     let total = 0;
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      yield put(getWalkinRoomsActionFinish({ items: [], total: 0 }));
+
+      return;
+    }
+
     const newPayload = {
       ...payload,
       operator_code,

@@ -393,7 +393,7 @@ function ReservationCheckinTodayDetail() {
                 >
                   {t('common.Resend Email')}
                 </MButton>
-                <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
+                <PattonButton onClick={submitUpdateForm}>{t('common.Update')}</PattonButton>
               </>
             )}
           </Space>

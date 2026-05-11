@@ -16,42 +16,58 @@ import {
   getFacilityFinishAction,
 } from 'actions';
 
-export function* getBranchsSaga(): any {
-  let data: any = [];
+export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFacilites>): any {
+  try {
+    let data: any = [];
 
-  data = yield call(request, `${apiEndPoint(GetAllBranchsEndpoint.GET)}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  });
+    data = yield call(request, `${apiEndPoint(GetFacilitiesByBranch.GET)}/${payload.branchId}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    });
 
-  yield put(branchsFinish({ data }));
+    yield put(branchFacilitesFinish({ data }));
+  } catch (error) {
+    console.log('Error', error);
+  }
 }
 
-export function* getBranchFacitiesSaga({ payload }: ReturnType<typeof branchFacilites>): any {
-  let data: any = [];
+export function* getBranchsSaga(): any {
+  try {
+    let data: any = [];
 
-  data = yield call(request, `${apiEndPoint(GetFacilitiesByBranch.GET)}/${payload.branchId}`, {
-    method: 'GET',
-    headers: headerWithAuthorization(),
-  });
+    data = yield call(request, `${apiEndPoint(GetAllBranchsEndpoint.GET)}`, {
+      method: 'GET',
+      headers: headerWithAuthorization(),
+    });
 
-  yield put(branchFacilitesFinish({ data }));
+    yield put(branchsFinish({ data }));
+  } catch (error) {
+    console.log('Error', error);
+  }
 }
 
 export function* getFacilitySaga({ payload }: ReturnType<typeof getFacilityAction>): any {
-  let data: any = [];
+  try {
+    if (!payload.facility_id) {
+      return;
+    }
 
-  data = yield call(
-    request,
-    `${apiEndPoint(GetFacilitiesByBranch.GET_FACILITY_DETAIL)}/${payload.facility_id}`,
-    {
-      method: 'GET',
-      headers: headerWithAuthorization(),
-    },
-  );
+    let data: any = [];
 
-  yield put(getFacilityFinishAction({ data }));
-  yield put(branchSelected(data));
+    data = yield call(
+      request,
+      `${apiEndPoint(GetFacilitiesByBranch.GET_FACILITY_DETAIL)}/${payload.facility_id}`,
+      {
+        method: 'GET',
+        headers: headerWithAuthorization(),
+      },
+    );
+
+    yield put(getFacilityFinishAction({ data }));
+    yield put(branchSelected(data));
+  } catch (error) {
+    console.log('Error', error);
+  }
 }
 
 export default function* root() {

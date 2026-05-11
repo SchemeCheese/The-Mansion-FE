@@ -18,6 +18,12 @@ export function* getAgentInfosSaga() {
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
     const hasCache = cached && hasValidCache(updatedAt);
 
+    if (!branch_code || !facility_code || !operator_code) {
+      yield put(getAgentInfosFinish({ data: [], total, updatedAt: now() }));
+
+      return;
+    }
+
     if (!hasCache) {
       let data = [];
       const query = new URLSearchParams({

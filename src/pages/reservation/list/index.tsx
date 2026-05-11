@@ -9,7 +9,7 @@ Main functions : Reservation List
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Tabs } from 'ui/antd';
+import { Alert, Tabs } from 'ui/antd';
 import moment from 'moment';
 import { selectBranchInfo, selectUser } from 'selectors';
 
@@ -31,6 +31,10 @@ function Reservation() {
 
   const user = useAppSelector(selectUser);
   const branchInfoSelected: any = useAppSelector(selectBranchInfo);
+  const canViewReservation = user.permission?.reservation?.view === true;
+  const canViewReservationCreate = user.permission?.reservation?.create === true;
+  const canViewCalendar = user.permission?.calendar?.view === true;
+  const canUseChannelManager = canViewReservation && branchInfoSelected?.channel_manager === true;
 
   const handeleActive = (activeKey: string) => {
     if (activeKey === '4') {
@@ -43,7 +47,7 @@ function Reservation() {
   };
 
   const tabItems = [
-    user.permission.reservation.view
+    canViewReservation
       ? {
           key: '1',
           label: t('reservation.Reserved'),
@@ -54,7 +58,7 @@ function Reservation() {
           ),
         }
       : null,
-    user.permission.reservation.view
+    canViewReservation
       ? {
           key: '2',
           label: t('reservation.Waitlist'),
@@ -65,7 +69,7 @@ function Reservation() {
           ),
         }
       : null,
-    user.permission.reservation.view || user.permission.calendar.view
+    canViewReservation || canViewCalendar
       ? {
           key: '3',
           label: t('reservation.Calendar'),
@@ -76,7 +80,7 @@ function Reservation() {
           ),
         }
       : null,
-    user.permission.reservation.view && branchInfoSelected.channel_manager
+    canUseChannelManager
       ? {
           key: '4',
           label: t('reservation.Channel Manager'),
@@ -88,17 +92,26 @@ function Reservation() {
         }
       : null,
   ].filter(Boolean);
+  const defaultActiveKey = (tabItems[0] as { key: string } | undefined)?.key;
 
   return (
     <>
       <p className={layoutStyles.title}>{t('reservation.Reservation List')}</p>
 
-      <Tabs
-        className={`${reservationListStyles.tabsShell} ${reservationListStyles.reservationTabs}`}
-        defaultActiveKey="1"
-        items={tabItems as any}
-        onChange={activeKey => handeleActive(activeKey)}
-      />
+      {defaultActiveKey ? (
+        <Tabs
+          className={`${reservationListStyles.tabsShell} ${reservationListStyles.reservationTabs}`}
+          defaultActiveKey={defaultActiveKey}
+          items={tabItems as any}
+          onChange={activeKey => handeleActive(activeKey)}
+        />
+      ) : (
+        <Alert
+          message={t('common.You do not have permission to access this page')}
+          showIcon
+          type="warning"
+        />
+      )}
     </>
   );
 }

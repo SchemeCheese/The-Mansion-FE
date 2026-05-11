@@ -60,13 +60,31 @@ function ReservationList({ type }: Props) {
   const searchReservationData: any = useAppSelector(selectReservationSearch);
   const { changed: searchReservationChanged } = useTreeChanges(searchReservationData);
   const user = useAppSelector(selectUser);
+  const reservationState = searchReservationData?.[type] ?? {
+    current_page: 1,
+    data: [],
+    total: 0,
+    unread_msg: 0,
+    agent_name: '',
+    booker_info: '',
+    checkin_from: '',
+    checkin_to: '',
+    checkout_from: '',
+    checkout_to: '',
+    inhouse_date: '',
+    market: '',
+    per_page: 10,
+    sort: '',
+    source: '',
+    status: '',
+  };
 
   const {
     current_page: currentPage,
     data: items,
     total,
     unread_msg: unreadMessage,
-  } = searchReservationData[type];
+  } = reservationState;
 
   const [columnSort, setColumnSort] = useState('');
   const [orderSort, setOrderSort] = useState(undefined);
@@ -85,7 +103,7 @@ function ReservationList({ type }: Props) {
       sort,
       source,
       status,
-    } = searchReservationData[type];
+    } = reservationState;
 
     if (sort) {
       const sortInfo: any = sort.split(',');
@@ -111,7 +129,7 @@ function ReservationList({ type }: Props) {
       inhouse_date: inhouse_date ?? '',
       per_page: per_page ?? 10,
     });
-  }, [searchReservationData]);
+  }, [reservationState]);
 
   useEffect(() => {
     const {
@@ -128,7 +146,7 @@ function ReservationList({ type }: Props) {
       sort,
       source,
       status,
-    } = searchReservationData[type];
+    } = reservationState;
 
     dispatch(
       searchReservation({
@@ -153,7 +171,7 @@ function ReservationList({ type }: Props) {
 
   useEffect(() => {
     if (searchReservationChanged('is_searching', false)) {
-      if (searchCondition.folio_number && items.length > 0) {
+      if (searchCondition.folio_number && Array.isArray(items) && items.length > 0) {
         navigate(`/reservation/${items[0].id}`);
       }
     }
@@ -186,18 +204,20 @@ function ReservationList({ type }: Props) {
   };
 
   const convertData = (data: any) => {
-    if (data) {
+    if (Array.isArray(data)) {
       return data.map((item: any) => {
+        const booker = item?.booker ?? {};
+
         return {
           ...item,
-          key: item.id,
-          folio_id: item.reservation_number,
-          source_ta: item.source,
-          booker_name: item.booker.name,
-          booker_email: item.booker.email,
-          phone: item.booker.phone_number,
-          total_room: item.room_total,
-          room_no: item.assigned_rooms,
+          key: item?.id ?? '',
+          folio_id: item?.reservation_number ?? '',
+          source_ta: item?.source ?? '',
+          booker_name: booker?.name ?? '-',
+          booker_email: booker?.email ?? '-',
+          phone: booker?.phone_number ?? '-',
+          total_room: item?.room_total ?? 0,
+          room_no: item?.assigned_rooms ?? '',
         };
       });
     }
@@ -527,7 +547,7 @@ function ReservationList({ type }: Props) {
       </Col>
       <Col className={reservationListStyles.toolbar} span={24}>
         <span />
-        {user.permission.reservation.create && (
+        {user.permission?.reservation?.create === true && (
           <PattonButton onClick={() => navigate(`/reservation/create`)}>
             <PlusOutlined style={{ marginLeft: 0, marginRight: 8 }} /> {t('common.New')}
           </PattonButton>

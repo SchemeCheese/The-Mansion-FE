@@ -382,7 +382,7 @@ function ReservationInhouseTodayDetail() {
                   {t('common.Resend Email')}
                 </MButton>
                 <MButton>{t('common.Rollback Checkin')}</MButton>
-                <PattonButton onClick={e => submitUpdateForm(e)}>{t('common.Update')}</PattonButton>
+                <PattonButton onClick={submitUpdateForm}>{t('common.Update')}</PattonButton>
               </>
             )}
           </Space>
