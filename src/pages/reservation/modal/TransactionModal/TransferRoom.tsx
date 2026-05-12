@@ -242,7 +242,7 @@ function TransferRoom({ selectedSaleRowKeys, setIsModalOpen, totalAmount, visibl
                     <Input defaultValue="VND" readOnly />
                   </Col>
                   <Col span={4}>
-                    <PattonButton onClick={event => handleSearchReservationByFolio()}>
+                    <PattonButton onClick={() => handleSearchReservationByFolio()}>
                       {t('common.Search')}
                     </PattonButton>
                   </Col>

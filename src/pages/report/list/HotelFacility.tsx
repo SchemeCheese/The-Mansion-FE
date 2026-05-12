@@ -26,6 +26,11 @@ function HotelFacility() {
   const [branchs, setBranchs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const branchInfoSelected: any = useAppSelector(selectBranchInfo);
+  const hasBranchContext =
+    !!branchInfoSelected?.id &&
+    !!branchInfoSelected?.operator_code &&
+    !!branchInfoSelected?.branch_code &&
+    !!branchInfoSelected?.facility_code;
 
   const onReportFormFinish = async (values: any) => {
     const { branch_code, facility_code, operator_code } = branchInfoSelected;
@@ -66,20 +71,28 @@ function HotelFacility() {
   };
 
   const changeBranch = async (value: string) => {
-    const response = await getAPI(`api/v1/branchs/${value}`);
+    try {
+      const response = await getAPI(`api/v1/branchs/${value}`);
 
-    setFacilities(response.data.facilities);
-    form.setFieldsValue({
-      facility_id: undefined,
-    });
+      setFacilities(response.data.facilities || []);
+      form.setFieldsValue({
+        facility_id: undefined,
+      });
+    } catch {
+      setFacilities([]);
+    }
   };
 
   const resetForm = () => {
     form.setFieldsValue({
       start_date: moment().subtract(15, 'days'),
       end_date: moment(),
-      branch_id: window.localStorage.getItem('branch_id') ?? '1',
-      facility_id: window.localStorage.getItem('facility_id') ?? '1',
+      branch_id:
+        window.localStorage.getItem('branch_id') ??
+        (branchInfoSelected?.id ? branchInfoSelected.id.toString() : undefined),
+      facility_id:
+        window.localStorage.getItem('facility_id') ??
+        (branchInfoSelected?.id ? branchInfoSelected.id.toString() : undefined),
       report_type: undefined,
       sort_order_by: undefined,
       sort_order_type: undefined,
@@ -88,34 +101,59 @@ function HotelFacility() {
   };
 
   useEffect(() => {
+    if (!hasBranchContext) {
+      return;
+    }
+
     dispatch(getRoomsAction());
 
     form.setFieldsValue({
       start_date: moment().subtract(15, 'days'),
       end_date: moment(),
-      branch_id: window.localStorage.getItem('branch_id') ?? '1',
-      facility_id: window.localStorage.getItem('facility_id') ?? '1',
+      branch_id: window.localStorage.getItem('branch_id') ?? branchInfoSelected.id?.toString(),
+      facility_id: window.localStorage.getItem('facility_id') ?? branchInfoSelected.id?.toString(),
     });
-  }, []);
+  }, [dispatch, form, hasBranchContext, branchInfoSelected?.id]);
 
   useEffect(() => {
-    const branchId = window.localStorage.getItem('branch_id') ?? '1';
+    if (!hasBranchContext) {
+      setBranchs([]);
+      setFacilities([]);
+
+      return;
+    }
+
+    const branchId = window.localStorage.getItem('branch_id') ?? branchInfoSelected.id?.toString();
 
     async function fetchBranchInfo() {
-      const response = await getAPI(`api/v1/branchs`);
+      try {
+        const response = await getAPI(`api/v1/branchs`);
 
-      setBranchs(response.data);
+        setBranchs(response.data || []);
+      } catch {
+        setBranchs([]);
+      }
     }
 
     async function fetchFacilityInfo() {
-      const response = await getAPI(`api/v1/branchs/${branchId}`);
+      if (!branchId) {
+        setFacilities([]);
 
-      setFacilities(response.data.facilities);
+        return;
+      }
+
+      try {
+        const response = await getAPI(`api/v1/branchs/${branchId}`);
+
+        setFacilities(response.data.facilities || []);
+      } catch {
+        setFacilities([]);
+      }
     }
 
     fetchBranchInfo();
     fetchFacilityInfo();
-  }, []);
+  }, [hasBranchContext, branchInfoSelected?.id]);
 
   return (
     <Spin spinning={isLoading}>

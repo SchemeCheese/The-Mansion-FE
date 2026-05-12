@@ -1,6 +1,6 @@
 import React from 'react';
+import type { ButtonProps } from 'ui/antd';
 import { Button } from 'ui/antd';
-import { ButtonProps } from 'antd/lib/button/button';
 import styled from 'styled-components';
 
 const MButton: React.FunctionComponent<ButtonProps> = styled(Button)`

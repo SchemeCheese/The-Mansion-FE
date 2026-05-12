@@ -39,7 +39,9 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndex])) {
 
 // Tools like Cloud9 rely on this.
 const DEFAULT_PORT = parseInt(process.env.PORT, 10) || 3000;
-const HOST = process.env.HOST || '0.0.0.0';
+// WSL in this environment can reject binding to 0.0.0.0 with EPERM.
+// Default to localhost unless the caller explicitly provides HOST.
+const HOST = process.env.HOST || '127.0.0.1';
 
 if (process.env.HOST) {
   console.log(

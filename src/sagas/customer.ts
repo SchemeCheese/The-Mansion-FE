@@ -14,12 +14,24 @@ import {
 } from 'actions';
 import { notify } from 'ui/notification';
 
+function hasBranchContext(branchInfo: {
+  branch_code?: string;
+  facility_code?: string;
+  operator_code?: string;
+}) {
+  return !!branchInfo.operator_code && !!branchInfo.branch_code && !!branchInfo.facility_code;
+}
+
 export function* getCustomerDetailSaga({ payload }: ReturnType<typeof getCustomerDetailAction>) {
   try {
     let data = {};
     let success = false;
 
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      return;
+    }
 
     const payloadWithBranch = {
       ...payload,
@@ -63,6 +75,18 @@ export function* getSearchCustomer({ payload }: ReturnType<typeof searchCustomer
     let total = 0;
     let currentPage = 0;
     const { branch_code, facility_code, operator_code } = yield select(s => s.branchInfo || {});
+
+    if (!hasBranchContext({ branch_code, facility_code, operator_code })) {
+      yield put(
+        searchCustomerFinish({
+          data: [],
+          total: 0,
+          current_page: 1,
+        }),
+      );
+
+      return;
+    }
 
     const query = new URLSearchParams(Object(payload)).toString();
 

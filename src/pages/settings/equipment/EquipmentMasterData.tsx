@@ -1,32 +1,36 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Alert, Button, Card, Checkbox, Form, Input, Select, Space, Spin, Table } from 'ui/antd';
+import {
+  Alert,
+  Button,
+  Card,
+  Checkbox,
+  Form,
+  Input,
+  Space,
+  Spin,
+  Table,
+  Typography,
+} from 'ui/antd';
 import { getAPI, postAPI, putAPI } from 'helpers/apiService';
-import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom';
 
 import { notify } from 'ui/notification';
 
 import styles from '../settings.module.css';
 
+const { Text } = Typography;
+
 type EquipmentEntityKey =
-  | 'amenity-categories'
-  | 'amenity-details'
   | 'equipment-infos'
   | 'equipment-types'
-  | 'equipment-states'
-  | 'equipment-amenities'
-  | 'equipment-areas'
-  | 'equipment-area-categories'
-  | 'equipment-area-details'
-  | 'facility-area-amenities'
-  | 'facility-area-image-infos'
-  | 'facility-building-infos'
-  | 'facility-categories'
   | 'facility-infos'
-  | 'facility-map-infos';
+  | 'facility-building-infos'
+  | 'facility-area-image-infos';
 
 type EquipmentMasterDataProps = {
   base: string;
   canEdit: boolean;
+  initialMode?: WorkspaceMode;
   scopeParams: Record<string, any>;
 };
 
@@ -35,6 +39,8 @@ type EquipmentScreenProps = {
   canEdit: boolean;
   scopeParams: Record<string, any>;
 };
+
+type EquipmentSubTab = 'rooms' | 'room-types' | 'amenities';
 
 type MasterDataField = {
   name: string;
@@ -50,6 +56,7 @@ type MasterDataMeta = {
   per_page?: number;
   total?: number;
 };
+type WorkspaceMode = 'facility' | 'equipment';
 
 const SYSTEM_FIELDS = [
   'id',
@@ -64,46 +71,14 @@ const SYSTEM_FIELDS = [
 
 const FORM_EXCLUDED_FIELDS = ['operator_code', 'branch_code', 'facility_code'];
 
-const EQUIPMENT_ENTITIES: {
-  key: EquipmentEntityKey;
-  label: string;
-  preferredColumns: string[];
-}[] = [
-  {
-    key: 'amenity-categories',
-    label: 'Amenity Category',
-    preferredColumns: [
-      'id',
-      'name',
-      'abbreviation',
-      'upper_amenity_category_id',
-      'display_order',
-      'status',
-      'branch_code',
-      'facility_code',
-    ],
-  },
-  {
-    key: 'amenity-details',
-    label: 'Amenity Detail',
-    preferredColumns: [
-      'id',
-      'amenity_category_id',
-      'name',
-      'display_order',
-      'status',
-      'icon_url',
-      'branch_code',
-      'facility_code',
-    ],
-  },
-  {
-    key: 'equipment-infos',
-    label: 'Equipment Info',
+const ENTITY_CONFIG: Record<EquipmentEntityKey, { label: string; preferredColumns: string[] }> = {
+  'equipment-infos': {
+    label: 'Room List',
     preferredColumns: [
       'id',
       'equipment_code',
       'name',
+      'abbreviation',
       'equipment_type_id',
       'regular_capacity',
       'extra_capacity',
@@ -112,9 +87,8 @@ const EQUIPMENT_ENTITIES: {
       'facility_code',
     ],
   },
-  {
-    key: 'equipment-types',
-    label: 'Equipment Type',
+  'equipment-types': {
+    label: 'Room Type',
     preferredColumns: [
       'id',
       'name',
@@ -124,168 +98,34 @@ const EQUIPMENT_ENTITIES: {
       'facility_code',
     ],
   },
-  {
-    key: 'equipment-states',
-    label: 'Equipment State',
-    preferredColumns: [
-      'id',
-      'equipment_info_id',
-      'sale_enable',
-      'clean_state',
-      'occupied_state',
-      'operator_code',
-    ],
-  },
-  {
-    key: 'equipment-amenities',
-    label: 'Equipment Amenity',
-    preferredColumns: [
-      'id',
-      'equipment_info_id',
-      'amenity_detail_id',
-      'equipment_area_detail_id',
-      'quantity',
-      'operator_code',
-    ],
-  },
-  {
-    key: 'equipment-areas',
-    label: 'Equipment Area',
-    preferredColumns: [
-      'id',
-      'equipment_info_id',
-      'equipment_area_detail_id',
-      'quantity',
-      'operator_code',
-    ],
-  },
-  {
-    key: 'equipment-area-categories',
-    label: 'Equipment Area Category',
-    preferredColumns: [
-      'id',
-      'equipment_area_type',
-      'area_code',
-      'area_name',
-      'abbreviation',
-      'operator_code',
-    ],
-  },
-  {
-    key: 'equipment-area-details',
-    label: 'Equipment Area Detail',
-    preferredColumns: [
-      'id',
-      'equipment_area_category_id',
-      'name',
-      'display_order',
-      'status',
-      'branch_code',
-      'facility_code',
-    ],
-  },
-  {
-    key: 'facility-area-amenities',
-    label: 'Facility Area Amenity',
-    preferredColumns: [
-      'id',
-      'facility_area_info_id',
-      'amenity_detail_id',
-      'quantity',
-      'operator_code',
-      'branch_code',
-      'facility_code',
-    ],
-  },
-  {
-    key: 'facility-area-image-infos',
-    label: 'Facility Area Image',
-    preferredColumns: [
-      'id',
-      'facility_area_info_id',
-      'url_image',
-      'is_base',
-      'display_order',
-      'branch_code',
-      'facility_code',
-    ],
-  },
-  {
-    key: 'facility-building-infos',
-    label: 'Facility Building',
-    preferredColumns: [
-      'id',
-      'building_name',
-      'abbreviation',
-      'facility_info_id',
-      'branch_info_id',
-      'building_floor_number',
-      'building_year_build',
-      'building_size',
-      'operator_code',
-    ],
-  },
-  {
-    key: 'facility-categories',
-    label: 'Facility Category',
-    preferredColumns: [
-      'id',
-      'name',
-      'abbreviation',
-      'upper_facility_category_id',
-      'facility_kind',
-      'display_order',
-      'status',
-      'branch_code',
-    ],
-  },
-  {
-    key: 'facility-infos',
-    label: 'Facility Info',
+  'facility-infos': {
+    label: 'Facility List',
     preferredColumns: [
       'id',
       'facility_code',
       'name',
       'abbreviation',
-      'facility_category_id',
       'telephone_number',
       'email_address',
       'branch_code',
     ],
   },
-  {
-    key: 'facility-map-infos',
-    label: 'Facility Map',
-    preferredColumns: [
-      'id',
-      'facility_code',
-      'lat',
-      'lng',
-      'place_id',
-      'operator_code',
-      'branch_code',
-    ],
+  'facility-building-infos': {
+    label: 'Building',
+    preferredColumns: ['id', 'building_name', 'abbreviation', 'facility_info_id'],
   },
-];
+  'facility-area-image-infos': {
+    label: 'Area',
+    preferredColumns: ['id', 'facility_area_info_id', 'url_image'],
+  },
+};
 
 const resolveEntityKey = (value?: string): EquipmentEntityKey | null => {
   if (!value) {
     return null;
   }
 
-  const entity = EQUIPMENT_ENTITIES.find(item => item.key === value);
-
-  return entity?.key ?? null;
-};
-
-const getEntityConfig = (value?: string) => {
-  const entityKey = resolveEntityKey(value);
-
-  if (!entityKey) {
-    return null;
-  }
-
-  return EQUIPMENT_ENTITIES.find(entity => entity.key === entityKey) ?? null;
+  return (Object.keys(ENTITY_CONFIG) as EquipmentEntityKey[]).find(item => item === value) ?? null;
 };
 
 const isBooleanField = (field: MasterDataField): boolean => {
@@ -356,7 +196,8 @@ function EquipmentDetailScreen({ base, canEdit, scopeParams }: EquipmentScreenPr
   const params = useParams();
   const { id } = params;
 
-  const entityConfig = useMemo(() => getEntityConfig(params.entity), [params.entity]);
+  const entityKey = resolveEntityKey(params.entity);
+  const entityConfig = entityKey ? ENTITY_CONFIG[entityKey] : null;
 
   const [loading, setLoading] = useState(false);
   const [fields, setFields] = useState<MasterDataField[]>([]);
@@ -364,13 +205,13 @@ function EquipmentDetailScreen({ base, canEdit, scopeParams }: EquipmentScreenPr
   const [warning, setWarning] = useState('');
 
   useEffect(() => {
-    if (!entityConfig) {
-      navigate(`/settings/equipment/${EQUIPMENT_ENTITIES[0].key}`, { replace: true });
+    if (!entityKey) {
+      navigate('/settings/equipment', { replace: true });
     }
-  }, [entityConfig, navigate]);
+  }, [entityKey, navigate]);
 
   const loadDetail = useCallback(async () => {
-    if (!entityConfig || !id) {
+    if (!entityKey || !id) {
       return;
     }
 
@@ -378,8 +219,8 @@ function EquipmentDetailScreen({ base, canEdit, scopeParams }: EquipmentScreenPr
 
     try {
       const [schemaResponse, detailResponse] = await Promise.all([
-        getAPI(`${base}/${entityConfig.key}/schema`, 'pms', scopeParams),
-        getAPI(`${base}/${entityConfig.key}/${id}`, 'pms', scopeParams),
+        getAPI(`${base}/${entityKey}/schema`, 'pms', scopeParams),
+        getAPI(`${base}/${entityKey}/${id}`, 'pms', scopeParams),
       ]);
 
       const schemaPayload = schemaResponse.data ?? {};
@@ -390,14 +231,11 @@ function EquipmentDetailScreen({ base, canEdit, scopeParams }: EquipmentScreenPr
       setWarning(schemaPayload?.warning?.message || detailPayload?.warning?.message || '');
     } catch (error: any) {
       notify.error(error?.response?.data?.message || 'Cannot load detail data');
-
-      if (entityConfig) {
-        navigate(`/settings/equipment/${entityConfig.key}`);
-      }
+      navigate('/settings/equipment');
     } finally {
       setLoading(false);
     }
-  }, [base, entityConfig, id, navigate, scopeParams]);
+  }, [base, entityKey, id, navigate, scopeParams]);
 
   useEffect(() => {
     if (!scopeParams.operator_code || !scopeParams.branch_code || !scopeParams.facility_code) {
@@ -434,19 +272,16 @@ function EquipmentDetailScreen({ base, canEdit, scopeParams }: EquipmentScreenPr
     <Card
       extra={
         <Space>
-          <Button onClick={() => navigate(`/settings/equipment/${entityConfig.key}`)}>
-            Back to list
-          </Button>
+          <Button onClick={() => navigate('/settings/equipment')}>Back</Button>
           <Button
             disabled={!canEdit}
-            onClick={() => navigate(`/settings/equipment/${entityConfig.key}/${id}/edit`)}
-            type="primary"
+            onClick={() => navigate(`/settings/equipment/${entityKey}/${id}/edit`)}
           >
             Edit
           </Button>
         </Space>
       }
-      title={`${entityConfig.label} Detail #${id}`}
+      title={`${entityConfig.label} #${id}`}
     >
       {warning ? (
         <Alert className={styles.schemaWarning} message={warning} showIcon type="warning" />
@@ -457,12 +292,7 @@ function EquipmentDetailScreen({ base, canEdit, scopeParams }: EquipmentScreenPr
       ) : (
         <Table
           columns={[
-            {
-              title: 'Field',
-              dataIndex: 'field',
-              key: 'field',
-              width: '30%',
-            },
+            { title: 'Field', dataIndex: 'field', key: 'field', width: '30%' },
             {
               title: 'Value',
               dataIndex: 'value',
@@ -479,6 +309,31 @@ function EquipmentDetailScreen({ base, canEdit, scopeParams }: EquipmentScreenPr
   );
 }
 
+function EquipmentFacilityWorkspace({
+  base,
+  canEdit,
+  initialMode = 'facility',
+  scopeParams,
+}: EquipmentScreenProps & { initialMode?: WorkspaceMode }) {
+  const params = useParams();
+
+  if (params.entity || params.id) {
+    return <Navigate replace to="/settings/equipment" />;
+  }
+
+  return (
+    <div className={styles.workspaceShell}>
+      <div className={styles.equipmentRouteContainer}>
+        {initialMode === 'equipment' ? (
+          <EquipmentWorkspace base={base} canEdit={canEdit} scopeParams={scopeParams} />
+        ) : (
+          <FacilityWorkspace base={base} canEdit={canEdit} scopeParams={scopeParams} />
+        )}
+      </div>
+    </div>
+  );
+}
+
 function EquipmentFormScreen({
   base,
   canEdit,
@@ -490,18 +345,13 @@ function EquipmentFormScreen({
   const { id } = params;
   const [form] = Form.useForm();
 
-  const entityConfig = useMemo(() => getEntityConfig(params.entity), [params.entity]);
+  const entityKey = resolveEntityKey(params.entity);
+  const entityConfig = entityKey ? ENTITY_CONFIG[entityKey] : null;
 
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [fields, setFields] = useState<MasterDataField[]>([]);
   const [warning, setWarning] = useState('');
-
-  useEffect(() => {
-    if (!entityConfig) {
-      navigate(`/settings/equipment/${EQUIPMENT_ENTITIES[0].key}`, { replace: true });
-    }
-  }, [entityConfig, navigate]);
 
   const editableFields = useMemo(() => {
     return fields.filter(field => {
@@ -513,14 +363,14 @@ function EquipmentFormScreen({
   }, [fields]);
 
   const loadFormData = useCallback(async () => {
-    if (!entityConfig) {
+    if (!entityKey) {
       return;
     }
 
     setLoading(true);
 
     try {
-      const schemaResponse = await getAPI(`${base}/${entityConfig.key}/schema`, 'pms', scopeParams);
+      const schemaResponse = await getAPI(`${base}/${entityKey}/schema`, 'pms', scopeParams);
       const schemaPayload = schemaResponse.data ?? {};
       const schemaFields = schemaPayload?.data?.fields ?? [];
 
@@ -538,18 +388,10 @@ function EquipmentFormScreen({
       form.setFieldsValue(defaultValues);
 
       if (mode === 'edit' && id) {
-        const detailResponse = await getAPI(
-          `${base}/${entityConfig.key}/${id}`,
-          'pms',
-          scopeParams,
-        );
+        const detailResponse = await getAPI(`${base}/${entityKey}/${id}`, 'pms', scopeParams);
         const detailPayload = detailResponse.data ?? {};
         const detailRecord = detailPayload?.data ?? {};
-
-        const values: Record<string, any> = {
-          ...defaultValues,
-          ...detailRecord,
-        };
+        const values: Record<string, any> = { ...defaultValues, ...detailRecord };
 
         schemaFields.forEach((field: MasterDataField) => {
           if (isBooleanField(field)) {
@@ -565,11 +407,11 @@ function EquipmentFormScreen({
       }
     } catch (error: any) {
       notify.error(error?.response?.data?.message || 'Cannot load form data');
-      navigate(`/settings/equipment/${entityConfig.key}`);
+      navigate('/settings/equipment');
     } finally {
       setLoading(false);
     }
-  }, [base, entityConfig, form, id, mode, navigate, scopeParams]);
+  }, [base, entityKey, form, id, mode, navigate, scopeParams]);
 
   useEffect(() => {
     if (!scopeParams.operator_code || !scopeParams.branch_code || !scopeParams.facility_code) {
@@ -580,15 +422,12 @@ function EquipmentFormScreen({
   }, [loadFormData, scopeParams]);
 
   const submitForm = async () => {
-    if (!canEdit || !entityConfig) {
+    if (!canEdit || !entityKey) {
       return;
     }
 
     const values = await form.validateFields();
-    const payload: Record<string, any> = {
-      ...scopeParams,
-      ...values,
-    };
+    const payload: Record<string, any> = { ...scopeParams, ...values };
 
     editableFields.forEach(field => {
       if (isBooleanField(field) && Object.prototype.hasOwnProperty.call(payload, field.name)) {
@@ -600,19 +439,19 @@ function EquipmentFormScreen({
 
     try {
       if (mode === 'edit' && id) {
-        await putAPI(`${base}/${entityConfig.key}/${id}`, payload);
+        await putAPI(`${base}/${entityKey}/${id}`, payload);
         notify.success('Updated successfully');
-        navigate(`/settings/equipment/${entityConfig.key}/${id}`);
+        navigate(`/settings/equipment/${entityKey}/${id}`);
       } else {
-        const response = await postAPI(`${base}/${entityConfig.key}`, payload);
+        const response = await postAPI(`${base}/${entityKey}`, payload);
         const createdId = response?.data?.data?.id;
 
         notify.success('Created successfully');
 
         if (createdId) {
-          navigate(`/settings/equipment/${entityConfig.key}/${createdId}`);
+          navigate(`/settings/equipment/${entityKey}/${createdId}`);
         } else {
-          navigate(`/settings/equipment/${entityConfig.key}`);
+          navigate('/settings/equipment');
         }
       }
     } catch (error: any) {
@@ -645,11 +484,7 @@ function EquipmentFormScreen({
   return (
     <Card
       className={styles.equipmentFormCard}
-      extra={
-        <Button onClick={() => navigate(`/settings/equipment/${entityConfig.key}`)}>
-          Back to list
-        </Button>
-      }
+      extra={<Button onClick={() => navigate('/settings/equipment')}>Back</Button>}
       title={mode === 'edit' ? `Update ${entityConfig.label}` : `Create ${entityConfig.label}`}
     >
       {warning ? (
@@ -683,9 +518,7 @@ function EquipmentFormScreen({
           </div>
 
           <Space>
-            <Button onClick={() => navigate(`/settings/equipment/${entityConfig.key}`)}>
-              Cancel
-            </Button>
+            <Button onClick={() => navigate('/settings/equipment')}>Cancel</Button>
             <Button
               disabled={!canEdit || saving || editableFields.length === 0}
               loading={saving}
@@ -701,310 +534,473 @@ function EquipmentFormScreen({
   );
 }
 
-function EquipmentListScreen({ base, canEdit, scopeParams }: EquipmentScreenProps) {
+function EquipmentMasterData({
+  base,
+  canEdit,
+  initialMode = 'facility',
+  scopeParams,
+}: EquipmentMasterDataProps) {
+  return (
+    <Routes>
+      <Route
+        element={
+          <EquipmentFacilityWorkspace
+            base={base}
+            canEdit={canEdit}
+            initialMode={initialMode}
+            scopeParams={scopeParams}
+          />
+        }
+        path="equipment"
+      />
+      <Route
+        element={<EquipmentDetailScreen base={base} canEdit={canEdit} scopeParams={scopeParams} />}
+        path="equipment/:entity/:id"
+      />
+      <Route
+        element={
+          <EquipmentFormScreen
+            base={base}
+            canEdit={canEdit}
+            mode="create"
+            scopeParams={scopeParams}
+          />
+        }
+        path="equipment/:entity/create"
+      />
+      <Route
+        element={
+          <EquipmentFormScreen
+            base={base}
+            canEdit={canEdit}
+            mode="edit"
+            scopeParams={scopeParams}
+          />
+        }
+        path="equipment/:entity/:id/edit"
+      />
+      <Route element={<Navigate replace to="/settings/equipment" />} path="*" />
+    </Routes>
+  );
+}
+
+function EquipmentWorkspace({ base, canEdit, scopeParams }: EquipmentScreenProps) {
   const navigate = useNavigate();
-  const params = useParams();
-
-  const entityConfig = useMemo(() => getEntityConfig(params.entity), [params.entity]);
-
+  const [subTab, setSubTab] = useState<EquipmentSubTab>('rooms');
   const [loading, setLoading] = useState(false);
-  const [searchInput, setSearchInput] = useState('');
+  const [search, setSearch] = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(20);
-  const [total, setTotal] = useState(0);
-  const [rows, setRows] = useState<any[]>([]);
-  const [fields, setFields] = useState<MasterDataField[]>([]);
-  const [warning, setWarning] = useState('');
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [roomTypes, setRoomTypes] = useState<any[]>([]);
+  const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
 
-  useEffect(() => {
-    if (!entityConfig) {
-      navigate(`/settings/equipment/${EQUIPMENT_ENTITIES[0].key}`, { replace: true });
-    }
-  }, [entityConfig, navigate]);
-
-  useEffect(() => {
-    setSearchInput('');
-    setSearchKeyword('');
-    setPage(1);
-    setPerPage(20);
-    setRows([]);
-    setFields([]);
-    setWarning('');
-  }, [entityConfig?.key]);
-
-  const loadData = useCallback(async () => {
-    if (!entityConfig) {
-      return;
-    }
-
+  const loadRooms = useCallback(async () => {
     setLoading(true);
 
     try {
-      const [schemaResponse, listResponse] = await Promise.all([
-        getAPI(`${base}/${entityConfig.key}/schema`, 'pms', scopeParams),
-        getAPI(`${base}/${entityConfig.key}`, 'pms', {
-          ...scopeParams,
-          page,
-          per_page: perPage,
-          search: searchKeyword,
-        }),
-      ]);
+      const response = await getAPI(`${base}/equipment-infos`, 'pms', {
+        ...scopeParams,
+        per_page: 200,
+        search: searchKeyword,
+      });
 
-      const schemaPayload = schemaResponse.data ?? {};
-      const listPayload = listResponse.data ?? {};
-
-      setFields(schemaPayload?.data?.fields ?? []);
-      setRows(extractList(listPayload));
-      const meta = extractMeta(listPayload);
-
-      setTotal(Number(meta.total ?? 0));
-      setPage(Number(meta.current_page ?? page));
-      setPerPage(Number(meta.per_page ?? perPage));
-
-      const warningMessage = schemaPayload?.warning?.message || listPayload?.warning?.message || '';
-
-      setWarning(warningMessage);
+      setRooms(extractList(response.data));
     } catch (error: any) {
-      notify.error(error?.response?.data?.message || 'Cannot load equipment data');
+      notify.error(error?.response?.data?.message || 'Cannot load room list');
     } finally {
       setLoading(false);
     }
-  }, [base, entityConfig, page, perPage, scopeParams, searchKeyword]);
+  }, [base, scopeParams, searchKeyword]);
+
+  const loadRoomTypes = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const response = await getAPI(`${base}/equipment-types`, 'pms', {
+        ...scopeParams,
+        per_page: 200,
+        search: searchKeyword,
+      });
+
+      setRoomTypes(extractList(response.data));
+    } catch (error: any) {
+      notify.error(error?.response?.data?.message || 'Cannot load room types');
+    } finally {
+      setLoading(false);
+    }
+  }, [base, scopeParams, searchKeyword]);
 
   useEffect(() => {
     if (!scopeParams.operator_code || !scopeParams.branch_code || !scopeParams.facility_code) {
       return;
     }
 
-    loadData();
-  }, [loadData, scopeParams]);
+    if (subTab === 'rooms') {
+      loadRooms();
 
-  const tableColumns = useMemo(() => {
-    if (!entityConfig) {
-      return [];
+      return;
     }
 
-    const fieldNames = fields
-      .map(field => field.name)
-      .filter(name => !['deleted_at', 'deleted_date'].includes(name));
+    if (subTab === 'room-types') {
+      loadRoomTypes();
+    }
+  }, [loadRoomTypes, loadRooms, scopeParams, subTab]);
 
-    const namesFromRows = rows.length > 0 ? Object.keys(rows[0]) : [];
-    const allNames = fieldNames.length > 0 ? fieldNames : namesFromRows;
-
-    const sortedNames = [...allNames].sort((left, right) => {
-      const leftPriority = entityConfig.preferredColumns.indexOf(left);
-      const rightPriority = entityConfig.preferredColumns.indexOf(right);
-
-      if (leftPriority === -1 && rightPriority === -1) {
-        return left.localeCompare(right);
-      }
-
-      if (leftPriority === -1) {
-        return 1;
-      }
-
-      if (rightPriority === -1) {
-        return -1;
-      }
-
-      return leftPriority - rightPriority;
-    });
-
-    const visibleNames = sortedNames.slice(0, 10);
-
-    const dataColumns = visibleNames.map(name => {
-      const field = fields.find(item => item.name === name);
-
-      return {
-        title: name,
-        dataIndex: name,
-        key: name,
-        render: (value: any) => {
-          if (field && isBooleanField(field)) {
-            return value ? 'Yes' : 'No';
-          }
-
-          return valueAsText(value);
-        },
-      };
-    });
-
-    return [
-      ...dataColumns,
-      {
-        title: 'Action',
-        key: 'action',
-        render: (_: any, record: any) => {
-          return (
-            <Space>
-              <Button
-                onClick={() => navigate(`/settings/equipment/${entityConfig.key}/${record.id}`)}
-                size="small"
-                type="link"
-              >
-                Detail
-              </Button>
-              <Button
-                disabled={!canEdit}
-                onClick={() =>
-                  navigate(`/settings/equipment/${entityConfig.key}/${record.id}/edit`)
-                }
-                size="small"
-                type="link"
-              >
-                Update
-              </Button>
-            </Space>
-          );
-        },
-      },
-    ];
-  }, [canEdit, entityConfig, fields, navigate, rows]);
-
-  if (!entityConfig) {
-    return null;
-  }
-
-  return (
-    <Card title={entityConfig.label}>
-      {warning ? (
-        <Alert className={styles.schemaWarning} message={warning} showIcon type="warning" />
-      ) : null}
-
-      <div className={styles.toolbar}>
-        <Input
-          allowClear
-          className={styles.searchInput}
-          onChange={event => setSearchInput(event.target.value || '')}
-          onPressEnter={() => {
-            setPage(1);
-            setSearchKeyword(searchInput.trim());
-          }}
-          placeholder="Search"
-          value={searchInput}
-        />
+  const roomColumns = [
+    { title: 'Mã phòng', dataIndex: 'equipment_code', key: 'equipment_code' },
+    { title: 'Tên phòng', dataIndex: 'name', key: 'name' },
+    { title: 'Viết tắt', dataIndex: 'abbreviation', key: 'abbreviation' },
+    { title: 'Loại phòng', dataIndex: 'equipment_type_id', key: 'equipment_type_id' },
+    { title: 'Sức chứa', dataIndex: 'regular_capacity', key: 'regular_capacity' },
+    {
+      title: 'Thao tác',
+      key: 'action',
+      render: (_: any, record: any) => (
         <Space>
           <Button
-            onClick={() => {
-              setPage(1);
-              setSearchKeyword(searchInput.trim());
-            }}
+            onClick={() => navigate(`/settings/equipment/equipment-infos/${record.id}`)}
+            size="small"
+            type="link"
           >
-            Search
+            View
           </Button>
           <Button
             disabled={!canEdit}
-            onClick={() => navigate(`/settings/equipment/${entityConfig.key}/create`)}
-            type="primary"
+            onClick={() => navigate(`/settings/equipment/equipment-infos/${record.id}/edit`)}
+            size="small"
+            type="link"
           >
-            Create
+            Edit
           </Button>
         </Space>
+      ),
+    },
+  ];
+
+  const roomTypeColumns = [
+    { title: 'Tên loại phòng', dataIndex: 'name', key: 'name' },
+    { title: 'Viết tắt', dataIndex: 'abbreviation', key: 'abbreviation' },
+    { title: 'Mã operator', dataIndex: 'operator_code', key: 'operator_code' },
+  ];
+
+  const notReady = () => {
+    notify.info('Tiện nghi chưa phát triển');
+  };
+
+  return (
+    <div className={styles.workspaceSection}>
+      <div className={styles.workspaceHeader}>
+        <div>
+          <h3 className={styles.masterDataTitle}>Equipment</h3>
+          <Text className={styles.masterDataDescription}>
+            Quản lý danh sách phòng, loại phòng và các phần liên quan đến phòng theo cách trực quan
+            hơn.
+          </Text>
+        </div>
       </div>
 
-      <Table
-        columns={tableColumns as any}
-        dataSource={rows}
-        loading={loading}
-        onChange={pagination => {
-          const nextPage = pagination.current || 1;
-          const nextPerPage = pagination.pageSize || perPage;
+      <Card className={styles.workspaceMainCard}>
+        <div className={styles.workspaceEntryTabs}>
+          <WorkspaceEntryButton
+            active={subTab === 'rooms'}
+            description="Danh sách phòng hiện có"
+            label="Danh sách phòng"
+            onClick={() => setSubTab('rooms')}
+          />
+          <WorkspaceEntryButton
+            active={subTab === 'room-types'}
+            description="Quản lý loại phòng"
+            label="Loại phòng"
+            onClick={() => setSubTab('room-types')}
+          />
+          <WorkspaceEntryButton
+            active={subTab === 'amenities'}
+            description="Chưa phát triển"
+            label="Tiện nghi"
+            onClick={() => {
+              setSubTab('amenities');
+              notReady();
+            }}
+          />
+        </div>
 
-          if (nextPage !== page) {
-            setPage(nextPage);
-          }
+        <div className={styles.toolbar}>
+          <div className={styles.searchBlock}>
+            <span className={styles.searchLabel}>
+              {subTab === 'rooms' ? 'Tìm kiếm phòng' : 'Tìm kiếm loại phòng'}
+            </span>
+            <Input
+              allowClear
+              className={styles.searchInput}
+              onChange={event => setSearch(event.target.value || '')}
+              onPressEnter={() => {
+                setSearchKeyword(search.trim());
+              }}
+              placeholder={
+                subTab === 'rooms' ? 'Tìm theo mã phòng hoặc tên phòng' : 'Tìm theo tên loại phòng'
+              }
+              value={search}
+            />
+          </div>
 
-          if (nextPerPage !== perPage) {
-            setPerPage(nextPerPage);
-            setPage(1);
-          }
-        }}
-        pagination={{
-          current: page,
-          pageSize: perPage,
-          showSizeChanger: true,
-          total,
-        }}
-        rowKey={record => String(record.id)}
-        scroll={{ x: true }}
-      />
-    </Card>
+          <Space>
+            {subTab === 'rooms' ? (
+              <div className={styles.viewSwitch}>
+                <button
+                  className={`${styles.viewSwitchButton} ${viewMode === 'table' ? styles.viewSwitchButtonActive : ''}`}
+                  onClick={() => setViewMode('table')}
+                  type="button"
+                >
+                  Bảng
+                </button>
+                <button
+                  className={`${styles.viewSwitchButton} ${viewMode === 'grid' ? styles.viewSwitchButtonActive : ''}`}
+                  onClick={() => setViewMode('grid')}
+                  type="button"
+                >
+                  Lưới
+                </button>
+              </div>
+            ) : null}
+
+            {subTab === 'rooms' ? (
+              <Button
+                disabled={!canEdit}
+                onClick={() => navigate('/settings/equipment/equipment-infos/create')}
+                type="primary"
+              >
+                Thêm phòng
+              </Button>
+            ) : null}
+          </Space>
+        </div>
+
+        {subTab === 'rooms' && viewMode === 'grid' ? (
+          <div className={styles.roomGrid}>
+            {rooms.map(room => (
+              <div key={room.id} className={styles.roomGridCard}>
+                <span className={styles.roomGridCode}>{room.equipment_code || 'No code'}</span>
+                <strong className={styles.roomGridName}>{room.name || 'Unnamed room'}</strong>
+                <span className={styles.roomGridMeta}>Sức chứa: {room.regular_capacity || 0}</span>
+                <div className={styles.roomGridActions}>
+                  <Button
+                    onClick={() => navigate(`/settings/equipment/equipment-infos/${room.id}`)}
+                    size="small"
+                  >
+                    View
+                  </Button>
+                  <Button
+                    disabled={!canEdit}
+                    onClick={() => navigate(`/settings/equipment/equipment-infos/${room.id}/edit`)}
+                    size="small"
+                    type="primary"
+                  >
+                    Edit
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : subTab === 'rooms' ? (
+          <Table
+            className={styles.masterDataTable}
+            columns={roomColumns as any}
+            dataSource={rooms}
+            loading={loading}
+            pagination={{ pageSize: 10 }}
+            rowKey={record => String(record.id)}
+          />
+        ) : subTab === 'room-types' ? (
+          <Table
+            className={styles.masterDataTable}
+            columns={roomTypeColumns as any}
+            dataSource={roomTypes}
+            loading={loading}
+            pagination={{ pageSize: 10 }}
+            rowKey={record => String(record.id)}
+          />
+        ) : (
+          <div className={styles.notReadyPanel}>
+            <strong>Tính năng chưa phát triển</strong>
+            <Text className={styles.masterDataTopbarText}>
+              Mục tiện nghi hiện mới để placeholder theo yêu cầu.
+            </Text>
+          </div>
+        )}
+      </Card>
+    </div>
   );
 }
 
-function EquipmentMasterData({ base, canEdit, scopeParams }: EquipmentMasterDataProps) {
+function FacilityWorkspace({ base, canEdit, scopeParams }: EquipmentScreenProps) {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [facilities, setFacilities] = useState<any[]>([]);
 
-  const activeEntityKey = useMemo(() => {
-    const pathParts = location.pathname.split('/');
-    const entityFromPath = pathParts.length >= 4 ? pathParts[3] : undefined;
+  const loadFacilities = useCallback(async () => {
+    setLoading(true);
 
-    return resolveEntityKey(entityFromPath) ?? EQUIPMENT_ENTITIES[0].key;
-  }, [location.pathname]);
+    try {
+      const response = await getAPI(`${base}/facility-infos`, 'pms', {
+        ...scopeParams,
+        per_page: 200,
+        search: searchKeyword,
+      });
+
+      setFacilities(extractList(response.data));
+    } catch (error: any) {
+      notify.error(error?.response?.data?.message || 'Cannot load facility data');
+    } finally {
+      setLoading(false);
+    }
+  }, [base, scopeParams, searchKeyword]);
+
+  useEffect(() => {
+    if (!scopeParams.operator_code || !scopeParams.branch_code || !scopeParams.facility_code) {
+      return;
+    }
+
+    loadFacilities();
+  }, [loadFacilities, scopeParams]);
+
+  const facilityColumns = [
+    { title: 'Mã cơ sở', dataIndex: 'facility_code', key: 'facility_code' },
+    { title: 'Tên cơ sở', dataIndex: 'name', key: 'name' },
+    { title: 'Viết tắt', dataIndex: 'abbreviation', key: 'abbreviation' },
+    { title: 'Điện thoại', dataIndex: 'telephone_number', key: 'telephone_number' },
+    { title: 'Email', dataIndex: 'email_address', key: 'email_address' },
+    {
+      title: 'Thao tác',
+      key: 'action',
+      render: (_: any, record: any) => (
+        <Space className={styles.iconActionGroup}>
+          <button
+            className={styles.iconActionButton}
+            onClick={() => navigate(`/settings/equipment/facility-infos/${record.id}`)}
+            title="Xem"
+            type="button"
+          >
+            <span aria-hidden="true">◉</span>
+          </button>
+          <button
+            className={styles.iconActionButton}
+            disabled={!canEdit}
+            onClick={() => navigate(`/settings/equipment/facility-infos/${record.id}/edit`)}
+            title="Sửa"
+            type="button"
+          >
+            <span aria-hidden="true">✎</span>
+          </button>
+        </Space>
+      ),
+    },
+  ];
+
+  const notReady = (label: string) => {
+    notify.info(`${label} chưa phát triển`);
+  };
 
   return (
-    <>
-      <Card>
-        <div className={styles.toolbar}>
-          <Select
-            className={styles.equipmentEntitySelect}
-            onChange={value => {
-              navigate(`/settings/equipment/${value}`);
-            }}
-            options={EQUIPMENT_ENTITIES.map(entity => ({
-              value: entity.key,
-              label: entity.label,
-            }))}
-            value={activeEntityKey}
-          />
+    <div className={styles.workspaceSection}>
+      <div className={styles.workspaceHeader}>
+        <div>
+          <h3 className={styles.masterDataTitle}>Facility</h3>
+          <Text className={styles.masterDataDescription}>
+            Quản lý cơ sở hiện có và xem cấu trúc cơ sở, tòa nhà, khu vực theo một cách dễ nhìn hơn.
+          </Text>
         </div>
-      </Card>
-
-      <div className={styles.equipmentRouteContainer}>
-        <Routes>
-          <Route
-            element={
-              <EquipmentListScreen base={base} canEdit={canEdit} scopeParams={scopeParams} />
-            }
-            path="equipment/:entity"
-          />
-          <Route
-            element={
-              <EquipmentDetailScreen base={base} canEdit={canEdit} scopeParams={scopeParams} />
-            }
-            path="equipment/:entity/:id"
-          />
-          <Route
-            element={
-              <EquipmentFormScreen
-                base={base}
-                canEdit={canEdit}
-                mode="create"
-                scopeParams={scopeParams}
-              />
-            }
-            path="equipment/:entity/create"
-          />
-          <Route
-            element={
-              <EquipmentFormScreen
-                base={base}
-                canEdit={canEdit}
-                mode="edit"
-                scopeParams={scopeParams}
-              />
-            }
-            path="equipment/:entity/:id/edit"
-          />
-          <Route
-            element={<Navigate replace to={`equipment/${EQUIPMENT_ENTITIES[0].key}`} />}
-            path="*"
-          />
-        </Routes>
       </div>
-    </>
+
+      <div className={styles.facilityWorkspaceLayout}>
+        <Card className={styles.workspaceMainCard}>
+          <div className={styles.toolbar}>
+            <div className={styles.searchBlock}>
+              <span className={styles.searchLabel}>Tìm kiếm cơ sở</span>
+              <Input
+                allowClear
+                className={styles.searchInput}
+                onChange={event => setSearch(event.target.value || '')}
+                onPressEnter={() => setSearchKeyword(search.trim())}
+                placeholder="Tìm theo mã cơ sở hoặc tên cơ sở"
+                value={search}
+              />
+            </div>
+            <Button
+              disabled={!canEdit}
+              onClick={() => navigate('/settings/equipment/facility-infos/create')}
+              type="primary"
+            >
+              Thêm cơ sở
+            </Button>
+          </div>
+
+          <Table
+            className={styles.masterDataTable}
+            columns={facilityColumns as any}
+            dataSource={facilities}
+            loading={loading}
+            pagination={{ pageSize: 10 }}
+            rowKey={record => String(record.id)}
+          />
+        </Card>
+
+        <Card className={styles.workspaceSideCard} title="Cây cơ sở">
+          <div className={styles.treePanel}>
+            <button
+              className={styles.treePanelNode}
+              onClick={() => navigate('/settings/equipment/facility-infos')}
+              type="button"
+            >
+              <span className={styles.treePanelNodeTitle}>Các cơ sở khác của khách sạn</span>
+              <span className={styles.treePanelNodeMeta}>Hiển thị danh sách cơ sở hiện có</span>
+            </button>
+
+            <button
+              className={`${styles.treePanelNode} ${styles.treePanelNodeMuted}`}
+              onClick={() => notReady('Tòa nhà')}
+              type="button"
+            >
+              <span className={styles.treePanelNodeTitle}>Tòa nhà</span>
+              <span className={styles.treePanelNodeMeta}>Chưa phát triển</span>
+            </button>
+
+            <button
+              className={`${styles.treePanelNode} ${styles.treePanelNodeMuted}`}
+              onClick={() => notReady('Khu vực')}
+              type="button"
+            >
+              <span className={styles.treePanelNodeTitle}>Khu vực</span>
+              <span className={styles.treePanelNodeMeta}>Chưa phát triển</span>
+            </button>
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+function WorkspaceEntryButton({
+  active,
+  description,
+  label,
+  onClick,
+}: {
+  active: boolean;
+  description: string;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className={`${styles.workspaceEntryButton} ${active ? styles.workspaceEntryButtonActive : ''}`}
+      onClick={onClick}
+      type="button"
+    >
+      <span className={styles.workspaceEntryLabel}>{label}</span>
+      <span className={styles.workspaceEntryDescription}>{description}</span>
+    </button>
   );
 }
 

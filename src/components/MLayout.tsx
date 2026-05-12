@@ -48,7 +48,7 @@ function MLayout(props: Props) {
   const { breadCrumb, children } = props;
   const currentFacilityId = useRef('');
   const currentFacility = useAppSelector(selectGetFacility);
-  const [isLoadData, setIsLoadData] = useState(false);
+  const [isLoadData, setIsLoadData] = useState(true);
   const { changed } = useTreeChanges(currentFacility);
 
   const dispatch = useDispatch();
@@ -130,10 +130,10 @@ function MLayout(props: Props) {
   const branchFacilities: any = useAppSelector(selectFacilitesByBranch);
 
   useEffect(() => {
-    if (window.localStorage.getItem('facility_id')) {
-      dispatch(
-        getFacilityAction({ facility_id: window.localStorage.getItem('facility_id') ?? '' }),
-      );
+    const facilityId = window.localStorage.getItem('facility_id');
+
+    if (facilityId && facilityId !== '' && facilityId !== 'undefined' && facilityId !== 'null') {
+      dispatch(getFacilityAction({ facility_id: facilityId }));
     }
   }, []);
 
@@ -151,10 +151,14 @@ function MLayout(props: Props) {
     if (changed('status', 'FINISH')) {
       setIsLoadData(true);
     }
-  }, [dispatch, changed]);
+  }, [changed]);
 
   useEffect(() => {
-    if (user && !window.localStorage.getItem('facility_id')) {
+    const facilityId = window.localStorage.getItem('facility_id');
+    const hasStoredFacilityId =
+      facilityId && facilityId !== '' && facilityId !== 'undefined' && facilityId !== 'null';
+
+    if (user && !hasStoredFacilityId && user.facility_id && user.branch_id) {
       window.localStorage.setItem('branch_id', user.branch_id.toString());
       window.localStorage.setItem('facility_id', user.facility_id.toString());
 
@@ -272,10 +276,6 @@ function MLayout(props: Props) {
 
     return 'dashboard';
   };
-
-  if (!isLoadData) {
-    return null;
-  }
 
   return (
     <Layout>
@@ -406,8 +406,8 @@ function MLayout(props: Props) {
                 navigate('/reservation');
               },
               hidden:
-                user.permission.reservation.view === false &&
-                user.permission.calendar.view === false,
+                user.permission.reservation?.view === false &&
+                user.permission.calendar?.view === false,
             },
             {
               key: 'front-desk',
@@ -435,8 +435,8 @@ function MLayout(props: Props) {
                 navigate('/front-desk');
               },
               hidden:
-                user.permission.frontDeskWalkin.view === false &&
-                user.permission.frontDeskCheckin.view === false,
+                user.permission.frontDeskWalkin?.view === false &&
+                user.permission.frontDeskCheckin?.view === false,
             },
             {
               key: 'night-audit',
@@ -481,7 +481,7 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/night-audit');
               },
-              hidden: user.permission.nightAudit.view === false,
+              hidden: user.permission.nightAudit?.view === false,
             },
             {
               key: 'house-keeping',
@@ -508,7 +508,7 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/house-keeping');
               },
-              hidden: user.permission.houseKeeping.view === false,
+              hidden: user.permission.houseKeeping?.view === false,
             },
             {
               key: 'customer',
@@ -542,7 +542,7 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/customer');
               },
-              hidden: user.permission.customer.view === false,
+              hidden: user.permission.customer?.view === false,
             },
             {
               key: 'report',
@@ -582,7 +582,7 @@ function MLayout(props: Props) {
               onClick: () => {
                 navigate('/report');
               },
-              hidden: user.permission.report.view === false,
+              hidden: user.permission.report?.view === false,
             },
             {
               key: 'settings',

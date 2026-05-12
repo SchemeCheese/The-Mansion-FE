@@ -10,6 +10,7 @@ Main functions : Night Audit Index
 import 'styles/night_audit.css';
 
 import React, { useEffect } from 'react';
+import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Alert, Card, Col, Pagination, Row, Table } from 'ui/antd';
@@ -232,7 +233,7 @@ function NightAudit() {
         return (
           record.is_can_noshow && (
             <PattonButton
-              onClick={event => {
+              onClick={(event: MouseEvent<HTMLElement>) => {
                 event.stopPropagation();
                 dispatch(
                   handleNoShowReservationDetailAction({
